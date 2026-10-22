@@ -430,16 +430,20 @@ function counts(){
 }
 function lights(){const l=(S.health&&S.health.lights)||{};return ["leads","outreach","replies","site","runs"].map(k=>({k,v:l[k]||"none"}))}
 function needsYou(){
+  /* Only true blockers. Everything else runs by itself (Grayson, Oct 22: "I don't have to approve anything"). */
   const c=counts();const st=settings();const out=[];
-  if(!addressOk(st.mailingAddress))out.push({t:st.mailingAddress?"Finish the mailing address in Settings (city, state, ZIP)":"Add a mailing address in Settings",s:"Required by email law in every footer before anything can go out. A PO Box or UPS Store box works; a home address goes to strangers.",go:"settings"});
-  if(c.ready.length)out.push({t:"Approve "+c.ready.length+" email"+(c.ready.length>1?"s":"")+" waiting for your OK",s:"Outreach Center → Ready. Approve on the page or tap Send inside Gmail.",go:"outreach"});
-  S.leads.filter(l=>(l.status==="Qualified"||l.status==="Researching")&&(l.score||0)>=35&&!(l.profile&&l.profile.reviews!=null)).sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,3).forEach(l=>out.push({t:"Type the Google review count for "+l.businessName,s:"10 seconds on Google Maps. Lead Desk → lead → Google facts. The crew can't read Maps itself.",go:"leads",lead:l.id}));
-  c.myTasks.forEach(t=>out.push({t:t.title,s:t.details||"",go:t.leadId?"leads":"floor",lead:t.leadId,task:t.id}));
+  if(!addressOk(st.mailingAddress))out.push({t:"Finish the mailing address in Settings",s:"Email law needs street, city, state and ZIP in every footer. Nothing sends until it's there.",go:"settings"});
+  if(st.paused)out.push({t:"The office is paused",s:"Nothing runs until you tap Resume.",go:"settings"});
+  if(c.ready.length&&!st.autoSend)out.push({t:c.ready.length+" email"+(c.ready.length>1?"s":"")+" waiting because autosend is off",s:"Turn autosend on in Settings and they go out by themselves.",go:"settings"});
   c.pendingApprovals.forEach(a=>out.push({t:a.summary,s:a.detail||"",go:"settings"}));
-  S.clients.filter(k=>k.status==="active").forEach(k=>{if(!k.reviewLink)out.push({t:"Paste the Google review link for "+k.businessName,s:"Maps → their profile → Get more reviews → copy link. Analytics → Clients → tap the client.",go:"analytics",client:k.id});if(k.managerAccess!==true)out.push({t:"Confirm "+k.businessName+" added Ridgeline as Manager",s:"Tick it on the client card once Google shows the invite accepted.",go:"analytics",client:k.id})});
-  if(S.health&&Array.isArray(S.health.needsYou))S.health.needsYou.forEach(x=>out.push({t:x,s:"From Patch's last check.",go:"settings"}));
-  if(c.callList.length&&!st.paused)out.push({t:"Call list: "+c.callList.length+" ready to call",s:"Best windows 7:00–8:15 AM or 4:00–6:00 PM their time, Tue–Thu.",go:"leads",view:"calls"});
-  if(!st.dayShiftTriggerId)out.push({t:"Scheduled runs are not turned on yet",s:"Say the word in chat and the Day Shift runs every weekday at 6:41 AM.",go:"settings"});
+  if(S.health&&S.health.lights&&Object.values(S.health.lights).includes("red"))(S.health.needsYou||[]).forEach(x=>out.push({t:x,s:"Patch could not fix this by itself.",go:"settings"}));
+  return out;
+}
+function optionalForYou(){
+  const c=counts();const out=[];
+  if(c.ready.length&&settings().autoSend)out.push({t:c.ready.length+" email"+(c.ready.length>1?"s":"")+" queued",s:"They go out by themselves at 7:00 AM on the next weekday. Nothing to do.",go:"outreach"});
+  S.leads.filter(l=>l.status==="Qualified"&&!(l.profile&&l.profile.reviews!=null)).sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,3).forEach(l=>out.push({t:"Optional: Google review count for "+l.businessName,s:"Makes their email sharper. Skip it and the crew still sends.",go:"leads",lead:l.id}));
+  if(c.callList.length)out.push({t:"Optional: "+c.callList.length+" businesses you could call",s:"Only if you want to. Email is already handling them.",go:"leads",view:"calls"});
   return out;
 }
 
@@ -487,12 +491,13 @@ function rToday(){
   S.clients.filter(k=>k.status==="active"&&(k.work||[]).filter(w=>w.status==="done").length<3).forEach(k=>{h+='<button type="button" class="row click" data-client="'+esc(k.id)+'" style="width:100%;text-align:left;margin:12px 0 0;padding:16px;border-radius:18px;border:2px solid var(--good);background:var(--good-soft);display:flex;gap:12px;align-items:center"><span style="font-size:28px">💰</span><span class="t"><b style="font-family:var(--display);font-size:18px;color:var(--good)">NEW CLIENT: '+esc(k.businessName)+'</b><small style="color:var(--text)">$'+esc(k.monthly)+'/mo. Tap for the checklist: send the welcome email, get Manager access, save the review link. The crew drafts the rest.</small></span></button>'});
   h+='<div class="grid g4" style="margin-top:12px">'
     +tile(c.by.Qualified,"Qualified leads","ready to contact")
-    +tile(c.ready.length,"Awaiting your OK","emails drafted",c.ready.length?"hot":"")
+    +tile(c.ready.length,settings().autoSend?"Queued to send":"Awaiting your OK",settings().autoSend?"go out at 7 AM":"emails drafted",c.ready.length?"hot":"")
     +tile(c.by.Contacted,"Contacted","waiting on replies")
     +tile(c.by.Replied+c.by.Meeting,"Replies","in conversation")
     +'</div>';
   h+='<div class="grid g2" style="margin-top:12px"><div class="card"><h3>Needs you <span class="sp">'+ny.length+' item'+(ny.length===1?"":"s")+'</span></h3>';
-  h+=ny.length?'<div class="list">'+ny.map(n=>'<div class="row click" data-ny="'+esc(n.go)+'" data-lead="'+esc(n.lead||"")+'" data-view="'+esc(n.view||"")+'" data-clientid="'+esc(n.client||"")+'"><div class="t"><b>'+esc(n.t)+'</b><small>'+esc(n.s)+'</small></div><span class="pill ember">open</span></div>').join("")+'</div>':'<div class="empty"><b>Nothing waiting on you</b>The crew will add items here when it needs a tap.</div>';
+  h+=ny.length?'<div class="list">'+ny.map(n=>'<div class="row click" data-ny="'+esc(n.go)+'" data-lead="'+esc(n.lead||"")+'" data-view="'+esc(n.view||"")+'" data-clientid="'+esc(n.client||"")+'"><div class="t"><b>'+esc(n.t)+'</b><small>'+esc(n.s)+'</small></div><span class="pill ember">open</span></div>').join("")+'</div>':'<div class="empty"><b>Nothing waiting on you</b>The office runs by itself. You get a notification when a business says yes or pays.</div>';
+  const opt=optionalForYou();if(opt.length)h+='<div class="list" style="margin-top:8px;opacity:.8">'+opt.map(n=>'<div class="row click" data-ny="'+esc(n.go)+'" data-lead="'+esc(n.lead||"")+'" data-view="'+esc(n.view||"")+'" data-clientid=""><div class="t"><b style="font-weight:600">'+esc(n.t)+'</b><small>'+esc(n.s)+'</small></div></div>').join("")+'</div>';
   h+='</div><div class="card"><h3>The lights <span class="sp">'+(S.health?ago(S.health.at):"no check yet")+'</span></h3><div class="list">'+lights().map(x=>'<div class="row"><span class="light" data-l="'+x.v+'"><i></i>'+esc(lightName[x.k])+'</span><div class="t"><small>'+esc(lightText(x.k,x.v))+'</small></div></div>').join("")+'</div></div></div>';
   h+='<div class="card" style="margin-top:12px"><h3>Agent floor <span class="sp"><a href="#floor">open the floor</a></span></h3>'+floorHtml(true)+'</div>';
   h+='<div class="grid g2" style="margin-top:12px"><div class="card"><h3>Recent runs</h3>'+(S.runs.length?'<div class="list">'+S.runs.slice(0,6).map(r=>'<div class="row click" data-run="'+esc(r.id)+'"><div class="t"><b>'+esc(r.day||"")+' · '+esc(r.town||r.task||"")+'</b><small>'+esc(r.summary||"")+'</small></div><span class="pill '+(r.status==="done"?"good":r.status==="failed"?"bad":"warn")+'">'+esc(r.status||"")+'</span></div>').join("")+'</div>':'<div class="empty"><b>No runs yet</b>Each Day Shift leaves a line here with what it did.</div>')+'</div>';
@@ -547,7 +552,7 @@ function rFloor(){
 function rOutreach(){
   const c=counts();const st=settings();
   const tabs=[["ready","Ready",c.ready.length],["approved","Approved",c.approved.length],["followups","Follow-ups due",c.followDue.length],["sent","Sent",S.drafts.filter(d=>d.status==="sent").length],["rejected","Rejected",S.drafts.filter(d=>d.status==="rejected").length],["suppression","Suppression",S.suppression.length]];
-  let h=pageHead("outreach","Every email the crew writes waits here for your OK unless autosend is on. Approve on the page or tap Send inside Gmail; either way the office records it.");
+  let h=pageHead("outreach",settings().autoSend?"Autosend is on: every email that passes Echo's quality check goes out by itself, weekdays 7:00 to 9:30 AM, within the daily cap. You don't need to do anything here.":"Every email the crew writes waits here for your OK. Turn autosend on in Settings to skip this.");
   h+=dbBanner();
   h+='<div class="grid g4" style="margin-bottom:12px">'+tile(c.sentToday.length+" / "+st.dailyEmailCap,"Sent today","daily cap")+tile(c.ready.length,"Ready for OK","",c.ready.length?"hot":"")+tile(c.followDue.length,"Follow-ups due","")+tile(st.autoSend?"ON":"OFF","Autosend",st.autoSend?"QA-passed emails go out":"you approve each one")+'</div>';
   if(!addressOk(st.mailingAddress))h+='<div class="note bad" style="margin-bottom:12px"><b>Nothing can be sent yet:</b> the mailing address in Settings needs street, city, state and ZIP. Email law requires a complete one in the footer.</div>';

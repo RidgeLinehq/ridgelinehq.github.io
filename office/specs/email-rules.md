@@ -66,7 +66,9 @@ next run and deletes the Gmail draft). Reject on the page = status rejected, lea
 Qualified with a note.
 
 ## Reply handling
-The reply desk task answers replies and labels threads "Ridgeline-Handled". Sage reads those
+The reply desk task (every 2 hours) SENDS the answers itself since Oct 22, 2026 (Grayson: no
+approvals), welcomes paying clients, and labels threads "Ridgeline-Handled". It only escalates
+what it cannot answer from the offer. Sage reads those
 threads each run: reply → lead status Replied (with the thread id and one-line gist); "yes" or
 "send it" → status Meeting and a "freecheck" draft for Echo: the exact ChatGPT and Gemini
 answers for their town (gateway, under 7 days old; run a new job if older), whether they were
