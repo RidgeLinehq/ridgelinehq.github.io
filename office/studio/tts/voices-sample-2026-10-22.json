@@ -1,0 +1,29 @@
+{
+ "id": "voices-sample-2026-10-22",
+ "lines": [
+  {
+   "voice": "en-US-AndrewMultilingualNeural",
+   "text": "Ask ChatGPT who the best roofer in town is... and it hands you a list. We asked ChatGPT and Gemini the exact same question. They didn't name one company in common.",
+   "path": "office/studio/media/voices/andrew.mp3",
+   "rate": "+4%"
+  },
+  {
+   "voice": "en-US-BrianMultilingualNeural",
+   "text": "Ask ChatGPT who the best roofer in town is... and it hands you a list. We asked ChatGPT and Gemini the exact same question. They didn't name one company in common.",
+   "path": "office/studio/media/voices/brian.mp3",
+   "rate": "+4%"
+  },
+  {
+   "voice": "en-US-GuyNeural",
+   "text": "Ask ChatGPT who the best roofer in town is... and it hands you a list. We asked ChatGPT and Gemini the exact same question. They didn't name one company in common.",
+   "path": "office/studio/media/voices/guy.mp3",
+   "rate": "+4%"
+  },
+  {
+   "voice": "en-US-ChristopherNeural",
+   "text": "Ask ChatGPT who the best roofer in town is... and it hands you a list. We asked ChatGPT and Gemini the exact same question. They didn't name one company in common.",
+   "path": "office/studio/media/voices/christopher.mp3",
+   "rate": "+4%"
+  }
+ ]
+}
