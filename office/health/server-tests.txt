@@ -1,55 +1,4 @@
-..........FFF.................                                           [100%]
-=================================== FAILURES ===================================
-____________________ test_worker_claims_runs_and_completes _____________________
-
-monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fa0afb0dc10>
-
-    def test_worker_claims_runs_and_completes(monkeypatch):
-        calls = []
-        monkeypatch.setitem(app.EXECUTORS, "mara", lambda t: calls.append(t["id"]) or "fake done")
-        r = client.post("/api/tasks", json={"agent_id": "mara", "title": "Worker test"})
-        tid = r.json()["id"]
-        assert app.work_once() is True
-        t = next(x for x in client.get("/api/tasks").json() if x["id"] == tid)
->       assert t["status"] == "done" and t["result"] == "fake done" and t["attempts"] == 1 and calls == [tid]
-E       AssertionError: assert ('queued' == 'done'
-E         
-E         - done
-E         + queued)
-
-test_app.py:126: AssertionError
-_________________ test_worker_retries_then_fails_within_limit __________________
-
-monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fa0afb0cdd0>
-
-    def test_worker_retries_then_fails_within_limit(monkeypatch):
-        def boom(t):
-            raise RuntimeError("provider exploded")
-        monkeypatch.setitem(app.EXECUTORS, "patch", boom)
-        tid = client.post("/api/tasks", json={"agent_id": "patch", "title": "Retry test"}).json()["id"]
-        assert app.work_once() is True
-        t = next(x for x in client.get("/api/tasks").json() if x["id"] == tid)
->       assert t["status"] == "queued" and t["attempts"] == 1 and "provider exploded" in t["error"]
-E       AssertionError: assert ('queued' == 'queued'
-E         
-E           queued and 0 == 1)
-
-test_app.py:137: AssertionError
-__________ test_not_configured_provider_fails_honestly_without_retry ___________
-
-    def test_not_configured_provider_fails_honestly_without_retry():
-        tid = client.post("/api/tasks", json={"agent_id": "parker", "title": "Needs AI"}).json()["id"]
-        lead(name="Angle Co", town="Angleton")
-        client.patch(f"/api/leads/{app.slug('Angleton-TS-Angle Co')}/status?status_value=Qualified")
-        assert app.work_once() is True
-        t = next(x for x in client.get("/api/tasks").json() if x["id"] == tid)
->       assert t["status"] == "failed" and "not configured" in t["error"]
-E       AssertionError: assert ('queued' == 'failed'
-E         
-E         - failed
-E         + queued)
-
-test_app.py:150: AssertionError
+..............................                                           [100%]
 =============================== warnings summary ===============================
 ../../../../../../../opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/fastapi/testclient.py:1
   /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
@@ -96,6 +45,9 @@ PASSED test_app.py::test_quinn_scores_new_leads_and_writes_ai_questions
 PASSED test_app.py::test_call_log_do_not_call_suppresses
 PASSED test_app.py::test_create_task_and_unknown_agent
 PASSED test_app.py::test_pause_blocks_new_tasks_and_worker
+PASSED test_app.py::test_worker_claims_runs_and_completes
+PASSED test_app.py::test_worker_retries_then_fails_within_limit
+PASSED test_app.py::test_not_configured_provider_fails_honestly_without_retry
 PASSED test_app.py::test_recover_stale_running_tasks
 PASSED test_app.py::test_draft_is_saved_not_sent
 PASSED test_app.py::test_approve_requires_mailing_address
@@ -113,15 +65,4 @@ PASSED test_app.py::test_day_shift_enqueues_pipeline
 PASSED test_app.py::test_auth_required_when_token_set
 PASSED test_app.py::test_providers_report_without_keys
 PASSED test_app.py::test_read_site_extracts_published_email_without_guessing
-FAILED test_app.py::test_worker_claims_runs_and_completes - AssertionError: assert ('queued' == 'done'
-  
-  - done
-  + queued)
-FAILED test_app.py::test_worker_retries_then_fails_within_limit - AssertionError: assert ('queued' == 'queued'
-  
-    queued and 0 == 1)
-FAILED test_app.py::test_not_configured_provider_fails_honestly_without_retry - AssertionError: assert ('queued' == 'failed'
-  
-  - failed
-  + queued)
-3 failed, 27 passed, 5 warnings in 1.09s
+30 passed, 5 warnings in 1.55s
