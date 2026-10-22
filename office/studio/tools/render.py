@@ -95,13 +95,13 @@ filt = ("[1:a]aresample=44100,highpass=f=70,acompressor=threshold=-20dB:ratio=3:
         "[2:a]aresample=44100,volume=0.55[mu];"
         "[mu][sc]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=350[duck];"
         "[3:a]aresample=44100,volume=0.9[fx];"
-        "[vo][duck][fx]amix=inputs=3:normalize=0,alimiter=limit=0.95,loudnorm=I=-14:TP=-1.5:LRA=11[a]")
+        "[vo][duck][fx]amix=inputs=3:normalize=0,alimiter=limit=0.95,loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=out:st=" + str(cfg["dur"] - 1.3) + ":d=1.3[a]")
 cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
        "-framerate", str(fps), "-i", os.path.join(work, "f%05d.jpg"),
        "-i", vo, "-i", music, "-i", os.path.join(work, "fx.wav"),
        "-filter_complex", filt, "-map", "0:v", "-map", "[a]",
        "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-pix_fmt", "yuv420p", "-profile:v", "high",
-       "-af", f"afade=t=out:st={cfg['dur']-1.3}:d=1.3", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-t", str(cfg["dur"]), "-movflags", "+faststart", out]
+       "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-t", str(cfg["dur"]), "-movflags", "+faststart", out]
 subprocess.run(cmd, check=True)
 shutil.rmtree(work)
 print("wrote", out)
