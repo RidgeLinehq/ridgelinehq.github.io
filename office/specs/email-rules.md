@@ -28,8 +28,9 @@ Follow-ups reply in the same Gmail thread (replyToMessageId = the first message'
    fit another business fails.
 3. Length: first email under 120 words, follow-up under 80, break-up under 60 (before footer).
 4. Ask: exactly one ask, phrased as a one-tap reply.
-5. Law: true From, honest subject, opt-out line present, mailing address present (empty
-   address = no send, NEEDS YOU), identifies itself as a service offer.
+5. Law: true From, honest subject, opt-out line present, mailing address complete (street,
+   city, state and a 5-digit ZIP; anything less counts as empty = no draft created, no send,
+   NEEDS YOU), identifies itself as a service offer.
 6. Words: none from the banned list in shared/rules.md; no emoji; no ALL CAPS; at most one link.
 7. Promises: no rankings, no "#1", no lead counts, no invented results, no fake limits.
 8. Levers: at least three of the ten in specs/sales-psychology.md, named in the draft's qa
