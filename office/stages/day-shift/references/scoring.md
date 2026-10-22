@@ -28,8 +28,12 @@ help. Evidence only; every point names its source. Unknown fields score 0, never
 The crew cannot read Google Maps, Yelp or HomeAdvisor profile pages (WebFetch is blocked
 there), so the Google signals are usually unknown until Grayson types them on the page.
 1. Full evidence: score >= settings.scoreGate (60).
-2. Reachable evidence: Google facts unknown (profile.reviews is null) AND score >= 35 AND a
-   published email or phone AND searchCheck.namedYou is false. Status Qualified, with the
+2. Reachable evidence: Google facts unknown (profile.reviews is null) AND score >= 30 AND a
+   published email or phone AND the business is not named where it counts: searchCheck.namedYou
+   is false, OR the real AI check (aiCheck from the gateway) shows it not named by ChatGPT AND
+   not named by Gemini. The AI check is what we sell, so it beats a directory-based search
+   check (added Oct 22, 2026 evening: two runs qualified 0 of 15 because directory lists made
+   leads look "named" and no-site leads stopped at 30). Status Qualified, with the
    why-line "qualified on reachable evidence; Google count unknown". These leads get a
    "Type the Google review count" tap on the page (Lead Desk → lead → Google facts); the next
    run re-scores them with the real numbers and Echo can cite the count in the email.
