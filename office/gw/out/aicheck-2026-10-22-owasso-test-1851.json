@@ -1,0 +1,50 @@
+{
+ "id": "aicheck-2026-10-22-owasso-test-1851",
+ "at": "2026-10-22T18:43:53Z",
+ "results": [
+  {
+   "key": "owasso-ok-roofing",
+   "question": "Who are the best roofers in Owasso, OK?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were an Owasso homeowner, I\u2019d call these **first**:\n\n1. **GoldenRite Roofing & Construction** \u2014 my top call for a full replacement; very strong local review volume and BestProsInTown lists them #1 in Owasso with 5.0/126 reviews. ([bestprosintown.com](https://www.bestprosintown.com/ok/owasso/roofing/?utm_source=openai))  \n2. **Dun-Rite Roofing** \u2014 long-time Owasso name, good choice if you want a more established local contractor; GAF lists them in Owasso and notes an **A+ BBB rating**. ([gaf.com](https://www.gaf.com/en-us/roofing-contractors/residential/usa/ok/owasso/dun-rite-roofing-inc-1119163?utm_source=openai))  \n3. **Ridgeback Roofing & Construction** \u2014 strong for storm/insurance work; listed with 5.0 ratings on local review roundups, and recent reviews mention clean, fast jobs. ([bestprosintown.com](https://www.bestprosintown.com/ok/owasso/roofing/?utm_source=openai))  \n4. **Rescue Roofing** \u2014 worth a bid; American Roofing Registry shows them as an Owasso contractor with 155 reviews. ([americanroofingregistry.com](https://www.americanroofingregistry.com/owasso-oklahoma-roofers/?utm_source=openai))  \n5. **GZI Roofing and Construction** \u2014 smaller, but homeowners consistently praise roof-and-gutter work; good \u201clocal owner involved\u201d option. ([reviews.birdeye.com](https://reviews.birdeye.com/gzi-roofing-and-construction-llc-165456766277492?utm_source=openai))  \n\nGet **three written bids**, compare shingle brand/warranty, and verify Oklahoma CIB roofing registration before signing; Oklahoma CIB specifically recommends checking current registration. ([oklahoma.gov](https://www.oklahoma.gov/cib/consumers/home-repair-tips.html?utm_source=openai))",
+    "sources": [
+     {
+      "url": "https://www.bestprosintown.com/ok/owasso/roofing/?utm_source=openai",
+      "title": "8 Best Roofing Companies Near Owasso, OK - 2026 BestProsInTown"
+     },
+     {
+      "url": "https://www.gaf.com/en-us/roofing-contractors/residential/usa/ok/owasso/dun-rite-roofing-inc-1119163?utm_source=openai",
+      "title": "Dun Rite Roofing Inc | GAF Residential Roofers"
+     },
+     {
+      "url": "https://www.bestprosintown.com/ok/owasso/roofing/?utm_source=openai",
+      "title": "8 Best Roofing Companies Near Owasso, OK - 2026 BestProsInTown"
+     },
+     {
+      "url": "https://www.americanroofingregistry.com/owasso-oklahoma-roofers/?utm_source=openai",
+      "title": "Best Roofing Contractors in Owasso, Oklahoma | American Roofing Registry"
+     },
+     {
+      "url": "https://reviews.birdeye.com/gzi-roofing-and-construction-llc-165456766277492?utm_source=openai",
+      "title": "GZI Roofing and Construction LLC - 12 Reviews - Roofing in Owasso, OK - Birdeye"
+     },
+     {
+      "url": "https://www.oklahoma.gov/cib/consumers/home-repair-tips.html?utm_source=openai",
+      "title": "Home Repair Tips"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy roofers in Owasso, I\u2019d get quotes from these three top-rated local companies:\n\n1. **Anchor Roofing & Construction:** Based right in Owasso, they are a go-to for storm damage and full replacements. Homeowners love them because they\u2019re local neighbors who excel at navigating insurance claims without pushy sales tactics.\n2. **Pro-Tech Roofing:** Serving Owasso and the greater Tulsa metro, they have a stellar reputation for craftsmanship and honesty. They stand out for great communication, clear timelines, and meticulous cleanups (no stray nails left in your driveway).\n3. **Perfection Roofing:** A Green Country staple with over 40 years in the area. As a GAF Master Elite contractor, they can offer top-tier manufacturer warranties that newer or out-of-town companies simply can't match. \n\n**A quick tip for any Owasso homeowner:** Before hiring anyone, make sure they are registered with the Oklahoma Construction Industries Board (CIB), carry active general liability insurance, and give you a detailed written contract.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
