@@ -3,617 +3,740 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Ridgeline Local — Get recommended when homeowners ask AI</title>
-<meta name="description" content="Ridgeline Local tightens the Google profile, review and listing signals that ChatGPT, Gemini and Google use to recommend roofers and tree services — and proves it every month with what those tools actually say.">
-<meta name="theme-color" content="#0b141d">
-<meta property="og:title" content="Ridgeline Local — Get recommended when homeowners ask AI">
-<meta property="og:description" content="Local AI visibility for independent roofers and tree services. Free AI check, no sales calls, no passwords, no fake reviews.">
+<title>Ridgeline Local — Great local work. Make it easier to find.</title>
+<meta name="description" content="Ridgeline Local helps independent roofers and tree services strengthen their local profiles, reviews, and business information. Start with a free AI visibility check.">
+<meta name="theme-color" content="#fffdf8">
+<meta property="og:title" content="Ridgeline Local — Great local work. Make it easier to find.">
+<meta property="og:description" content="Local visibility for owner-run roofing and tree service businesses. Clear priorities, practical improvements, and monthly proof.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ridgelinehq.github.io/">
+<meta property="og:image" content="https://ridgelinehq.github.io/assets/hero-roof.jpg">
 <link rel="canonical" href="https://ridgelinehq.github.io/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b141d'/%3E%3Cpath d='M4 25 L12 11 L17 18 L22 9 L28 25 Z' fill='%23ff8a2a'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23142f27'/%3E%3Cpath d='M4 25 L12 11.5 L16.5 18 L20.5 12.5 L28 25 Z' fill='%23d2b375'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"ProfessionalService","name":"Ridgeline Local","url":"https://ridgelinehq.github.io/","email":"ridgelinemarketinghq@gmail.com","description":"Local AI search visibility service for independent roofers and tree services.","areaServed":"United States","priceRange":"$147 - $197 per month"}
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"Ridgeline Local","url":"https://ridgelinehq.github.io/","email":"ridgelinemarketinghq@gmail.com","description":"Local visibility service for independent roofing companies and tree services: Google Business Profile, reviews, and listing details.","areaServed":"United States","priceRange":"$147 - $197 per month"}
 </script>
 <style>
 /* =====================================================================
-   RIDGELINE LOCAL — design tokens
+   RIDGELINE LOCAL — forest green, warm ivory, brass
    ===================================================================== */
 :root{
-  color-scheme:dark;
-  --night:#0b141d;          /* page background */
-  --night-2:#0e1a26;        /* alternate band */
-  --slate:#132130;          /* surface */
-  --slate-2:#1a2c3e;        /* raised surface */
-  --line:rgba(159,176,192,.16);
-  --line-strong:rgba(159,176,192,.3);
-  --pale:#eef3f7;           /* primary text */
-  --mist:#a7b6c4;           /* secondary text */
-  --dim:#7b8b9a;            /* tertiary text */
-  --ember:#ff8a2a;          /* brand orange */
-  --ember-2:#ffa857;
-  --ember-ink:#1a1008;      /* text on orange */
-  --ember-soft:rgba(255,138,42,.14);
-  --signal:#7dd3ff;         /* AI / data accent, used sparingly */
-  --signal-soft:rgba(125,211,255,.14);
-  --good:#4fd18b;
-  --warn:#ffb020;
-  --bad:#ff6b6b;
-  --r-sm:8px;--r-md:14px;--r-lg:22px;
-  --max:1120px;
-  --display:Archivo,"Arial Narrow",Arial,sans-serif;
-  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color-scheme:light;
+  --forest:#142f27;        /* deep green: hero, dark bands, footer */
+  --forest-2:#1b3b31;      /* lighter green for surfaces on dark */
+  --pine:#235444;          /* hover green */
+  --ink:#15271f;           /* body text on light */
+  --ivory:#f5f1e6;         /* warm ivory band */
+  --ivory-2:#ede8da;       /* deeper ivory (report sheet, chips on ivory) */
+  --white:#fffdf8;         /* warm white */
+  --brass:#d2b375;         /* buttons, accents on dark */
+  --brass-2:#e4cc99;       /* button hover */
+  --brass-text:#7f6233;    /* brass for small text on light (AA) */
+  --brass-num:#9a7a45;     /* brass for large numerals on light */
+  --muted:#5a6a60;         /* secondary text on light */
+  --muted-dark:#cfd9cf;    /* secondary text on dark */
+  --line:#e3ded0;          /* hairlines on light */
+  --line-dark:rgba(255,255,255,.16);
+  --sage:#e9eee3;          /* chip background */
+  --good:#2f7d5a;
+  --bad:#b23a2d;
+  --max:1160px;
+  --r:18px;
+  --display:"Inter Tight","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --body:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
   --ease:cubic-bezier(.16,1,.3,1);
-  --shadow:0 24px 70px rgba(0,0,0,.45);
+  --shadow:0 24px 60px rgba(10,30,22,.18);
 }
 
 /* ---------- base ---------- */
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--night);color:var(--pale);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:
-    radial-gradient(900px 520px at 85% -10%,rgba(255,138,42,.12),transparent 60%),
-    radial-gradient(700px 480px at -10% 30%,rgba(125,211,255,.07),transparent 60%),
-    var(--night)}
-a{color:inherit;text-decoration:none}
+body{margin:0;background:var(--white);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
 button,input,select,textarea{font:inherit;color:inherit}
 button,a{-webkit-tap-highlight-color:transparent}
+button{cursor:pointer}
 img,svg{max-width:100%;display:block}
 h1,h2,h3,h4,p,ul,ol,figure{margin:0}
-h1,h2,h3,h4,.display{font-family:var(--display);font-weight:900;letter-spacing:-.03em;line-height:1.02;text-wrap:balance}
-h2{font-size:clamp(30px,4.4vw,48px)}
-h3{font-size:clamp(19px,2.2vw,22px);font-weight:800;letter-spacing:-.015em;line-height:1.2}
-:where(a,button,summary,input,select,textarea):focus-visible{outline:3px solid var(--signal);outline-offset:3px;border-radius:4px}
-.wrap{width:min(var(--max),calc(100% - 40px));margin-inline:auto}
-.section{padding-block:clamp(72px,9vw,120px);position:relative}
-.section.band{background:var(--night-2);border-block:1px solid var(--line)}
-.kicker{display:inline-flex;align-items:center;gap:10px;color:var(--ember);font-weight:700;font-size:14px;letter-spacing:.01em}
-.kicker::before{content:"";width:22px;height:10px;background:currentColor;clip-path:polygon(0 100%,35% 0,55% 60%,75% 20%,100% 100%)}
-.lede{color:var(--mist);font-size:clamp(17px,1.9vw,19px);max-width:62ch}
-.head{max-width:720px;display:grid;gap:14px;margin-bottom:clamp(34px,5vw,56px)}
+h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.035em;line-height:1.04;text-wrap:balance}
+h2{font-size:clamp(2.05rem,4.4vw,3.6rem)}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.02em;line-height:1.25}
+em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.01em}
+:where(a,button,summary,input,select,textarea):focus-visible{outline:3px solid #b98f4a;outline-offset:3px;border-radius:4px}
+[hidden]{display:none!important}
+.wrap{width:min(var(--max),calc(100% - 48px));margin-inline:auto}
+.section{padding-block:clamp(64px,8vw,112px);position:relative}
+.on-ivory{background:var(--ivory)}
+.on-dark{background:var(--forest);color:#fff}
+.kicker{display:block;font-size:.74rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--brass-text)}
+.kicker::after{content:"";display:block;width:44px;height:2px;background:var(--brass);margin-top:12px}
+.on-dark .kicker{color:var(--brass)}
+.lede{color:var(--muted);font-size:clamp(1.05rem,1.6vw,1.2rem);max-width:60ch;line-height:1.6}
+.on-dark .lede{color:var(--muted-dark)}
+.head{max-width:760px;display:grid;gap:18px;margin-bottom:clamp(34px,5vw,56px)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:fixed;left:16px;top:-100px;z-index:100;background:var(--brass);color:var(--forest);padding:12px 18px;border-radius:8px;font-weight:600;text-decoration:none}
+.skip:focus{top:12px}
 
 /* ---------- buttons ---------- */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:52px;padding:13px 22px;border-radius:12px;border:1px solid transparent;font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:-.01em;cursor:pointer;transition:transform .2s var(--ease),box-shadow .2s,background .2s,border-color .2s;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:14px 24px;border-radius:9px;border:1px solid transparent;font-family:var(--body);font-weight:600;font-size:1rem;line-height:1.3;text-decoration:none;transition:transform .2s var(--ease),background .2s,border-color .2s,box-shadow .2s;white-space:nowrap}
 .btn svg{width:18px;height:18px;flex:none}
-.btn-primary{background:linear-gradient(135deg,var(--ember-2),var(--ember));color:var(--ember-ink);box-shadow:0 10px 30px rgba(255,138,42,.28),inset 0 1px 0 rgba(255,255,255,.35)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 38px rgba(255,138,42,.4),inset 0 1px 0 rgba(255,255,255,.35)}
-.btn-primary:active{transform:translateY(0)}
-.btn-ghost{background:rgba(255,255,255,.04);border-color:var(--line-strong);color:var(--pale)}
-.btn-ghost:hover{background:rgba(255,255,255,.08);border-color:rgba(159,176,192,.5)}
+.btn-brass{background:var(--brass);color:var(--forest);box-shadow:0 10px 28px rgba(0,0,0,.18)}
+.btn-brass:hover{background:var(--brass-2)}
+.btn-forest{background:var(--forest);color:#fff}
+.btn-forest:hover{background:var(--pine)}
+.btn-ghost{background:transparent;border-color:rgba(255,255,255,.35);color:#fff}
+.btn-ghost:hover{border-color:rgba(255,255,255,.7);background:rgba(255,255,255,.06)}
+.btn-light{background:var(--white);color:var(--forest);border-color:var(--line)}
 .btn-block{width:100%}
+@media(hover:hover){.btn:hover{transform:translateY(-2px)}}
+.link{font-weight:600;color:inherit;text-decoration:underline;text-underline-offset:5px;text-decoration-color:var(--brass);text-decoration-thickness:2px}
+.link:hover{text-decoration-color:currentColor}
+
+/* ---------- decorative contour lines ---------- */
+.contours{position:absolute;pointer-events:none;width:min(720px,80%);height:auto;opacity:.22;color:var(--brass)}
+.on-ivory .contours,.band .contours{color:#5f5a47}
 
 /* ---------- nav ---------- */
-.nav{position:sticky;top:0;z-index:50;background:rgba(11,20,29,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.nav-in{height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px}
-.brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:900;font-size:19px;letter-spacing:-.02em;white-space:nowrap}
-.brand svg{width:34px;height:34px}
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,253,248,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-in{height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:800;font-size:.95rem;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;text-decoration:none;color:var(--forest)}
+.brand svg{width:34px;height:34px;color:var(--forest)}
 .nav-links{display:flex;align-items:center;gap:26px}
-.nav-links a:not(.btn){color:var(--mist);font-weight:600;font-size:15px;transition:color .2s}
-.nav-links a:not(.btn):hover{color:var(--pale)}
-.nav .btn{min-height:44px;padding:10px 16px;font-size:15px}
-.menu-btn{display:none;width:44px;height:44px;border:1px solid var(--line-strong);border-radius:10px;background:rgba(255,255,255,.04);place-items:center;cursor:pointer}
+.nav-links a:not(.btn){color:var(--ink);font-weight:500;font-size:.93rem;text-decoration:none;padding-block:10px;transition:color .2s}
+.nav-links a:not(.btn):hover{color:var(--brass-text)}
+.nav .btn{min-height:44px;padding:10px 18px;font-size:.93rem}
+.menu-btn{display:none;width:44px;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--white);place-items:center;color:var(--forest)}
 .menu-btn svg{width:20px;height:20px}
 .sheet{display:none}
 @media(max-width:860px){
   .nav-links a:not(.btn){display:none}
   .menu-btn{display:grid}
-  .sheet{display:block;position:fixed;inset:var(--navh,72px) 0 0;z-index:49;background:rgba(11,20,29,.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:24px 20px;transform:translateY(-8px);opacity:0;visibility:hidden;transition:opacity .25s,transform .25s var(--ease),visibility .25s}
+  .sheet{display:block;position:fixed;inset:var(--navh,68px) 0 0;z-index:49;background:var(--ivory);padding:20px 24px calc(24px + env(safe-area-inset-bottom));transform:translateY(-8px);opacity:0;visibility:hidden;transition:opacity .25s,transform .25s var(--ease),visibility .25s;overflow:auto}
   .sheet[data-open="true"]{opacity:1;transform:none;visibility:visible}
-  .sheet a{display:flex;justify-content:space-between;align-items:center;padding:18px 4px;border-bottom:1px solid var(--line);font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.02em}
-  .sheet a svg{width:20px;height:20px;color:var(--ember)}
-  .sheet .btn{margin-top:22px;border-bottom:0;font-size:17px;justify-content:center}
+  .sheet a{display:flex;justify-content:space-between;align-items:center;padding:18px 2px;border-bottom:1px solid var(--line);font-family:var(--display);font-weight:800;font-size:1.45rem;letter-spacing:-.03em;color:var(--forest);text-decoration:none}
+  .sheet a svg{width:20px;height:20px;color:var(--brass-text)}
+  .sheet .btn{margin-top:22px;border-bottom:0;font-size:1.05rem;justify-content:center;font-family:var(--body);letter-spacing:0;color:#fff}
 }
 
 /* ---------- hero ---------- */
-.hero{position:relative;overflow:hidden;padding:clamp(56px,8vw,104px) 0 clamp(70px,9vw,120px)}
-.hero-ridge{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;pointer-events:none;opacity:.9}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(36px,6vw,72px);align-items:center;position:relative}
-.hero h1{font-size:clamp(42px,6.2vw,72px);letter-spacing:-.045em;max-width:13ch;margin:18px 0 20px}
-.hero .lede{max-width:54ch}
-.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin:30px 0 22px}
-.assure{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--mist);font-size:14px;font-weight:600}
-.assure span{display:inline-flex;align-items:center;gap:7px}
-.assure svg{width:16px;height:16px;color:var(--ember)}
-.hero-enter>*{animation:rise .9s var(--ease) both}
-.hero-enter>*:nth-child(2){animation-delay:.08s}.hero-enter>*:nth-child(3){animation-delay:.16s}.hero-enter>*:nth-child(4){animation-delay:.24s}.hero-enter>*:nth-child(5){animation-delay:.32s}
-@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.hero{position:relative;overflow:hidden;background:var(--forest);color:#fff}
+.hero-media{position:absolute;top:0;bottom:0;left:38%;right:0;z-index:0}
+.hero-media img{width:100%;height:100%;object-fit:cover;object-position:62% 42%}
+.hero-media::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(90deg,var(--forest) 0%,rgba(20,47,39,.92) 14%,rgba(20,47,39,.55) 34%,rgba(20,47,39,.12) 58%,rgba(20,47,39,0) 80%),
+  linear-gradient(180deg,rgba(20,47,39,.28) 0%,rgba(20,47,39,0) 30%,rgba(20,47,39,0) 70%,rgba(20,47,39,.5) 100%)}
+.hero .contours{left:-80px;bottom:-40px;opacity:.16}
+.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,640px) minmax(0,1fr);gap:40px;align-items:end;padding:clamp(56px,7vw,92px) 0 clamp(44px,6vw,64px)}
+.hero-copy .kicker{color:var(--brass)}
+.hero h1{font-size:clamp(2.45rem,5.3vw,4.4rem);margin:26px 0 22px;text-shadow:0 2px 24px rgba(0,0,0,.25)}
+.hero h1 em{display:block;color:var(--brass);font-size:1.08em;line-height:1}
+.hero .lede{color:#dbe3db;max-width:34em;text-shadow:0 1px 12px rgba(0,0,0,.3)}
+.cta-row{display:flex;gap:14px 22px;flex-wrap:wrap;align-items:center;margin:30px 0 24px}
+.cta-row .link{color:#fff;padding-block:10px}
+.assure{display:flex;flex-wrap:wrap;gap:8px 20px;padding:0;list-style:none;color:#d7dfd7;font-size:.86rem;font-weight:500}
+.assure li{display:inline-flex;align-items:center;gap:7px}
+.assure svg{width:15px;height:15px;color:var(--brass)}
+.hero-grid>*{animation:rise .9s var(--ease) both}
+.hero-grid>:nth-child(2){animation-delay:.18s}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 
-/* AI answer panel */
-.panel{position:relative;isolation:isolate;border:1px solid var(--line-strong);border-radius:var(--r-lg);background:linear-gradient(160deg,#16263a,#0d1722 70%);box-shadow:var(--shadow);padding:18px;animation:rise 1s var(--ease) .3s both}
-.panel::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;
-  background-image:linear-gradient(rgba(159,176,192,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(159,176,192,.05) 1px,transparent 1px);background-size:30px 30px;
-  -webkit-mask-image:linear-gradient(to bottom,#000,transparent 85%);mask-image:linear-gradient(to bottom,#000,transparent 85%)}
-.panel-top{display:flex;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1px solid var(--line);font-size:13px;color:var(--mist);font-weight:600}
-.panel-top .dot{width:9px;height:9px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px var(--signal-soft);animation:pulse 2.4s ease-in-out infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 3px var(--signal-soft)}50%{box-shadow:0 0 0 7px rgba(125,211,255,.05)}}
-.panel-top em{margin-left:auto;font-style:normal;color:var(--dim);font-weight:600}
-.ask{margin:16px 0 14px;display:flex;gap:10px;align-items:flex-start}
-.ask .avatar{flex:none;width:28px;height:28px;border-radius:50%;background:var(--slate-2);border:1px solid var(--line-strong);display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--mist)}
-.ask p{background:var(--slate-2);border-radius:12px 12px 12px 4px;padding:10px 13px;font-size:15px;min-height:42px;font-weight:600}
-.ask p::after{content:"";display:inline-block;width:2px;height:1em;background:var(--pale);margin-left:2px;vertical-align:-2px;animation:blink 1s steps(2) infinite}
-@keyframes blink{50%{opacity:0}}
-.answer{font-size:13.5px;color:var(--mist);margin-bottom:8px}
-.result{display:flex;align-items:center;gap:11px;padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.03);margin:6px 0;opacity:0;transform:translateX(-8px);transition:opacity .4s var(--ease),transform .4s var(--ease)}
-.panel.live .result{opacity:1;transform:none}
-.panel.live .result:nth-child(2){transition-delay:.12s}.panel.live .result:nth-child(3){transition-delay:.24s}
-.result .n{width:24px;height:24px;border-radius:7px;background:var(--signal-soft);color:var(--signal);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:12px;flex:none}
-.result b{display:block;font-size:14px}
-.result small{display:block;font-size:12px;color:var(--dim)}
-.result .stars{margin-left:auto;font-size:12px;color:var(--mist);white-space:nowrap}
-.missing{margin-top:12px;padding:12px 13px;border:1px solid rgba(255,138,42,.45);background:var(--ember-soft);border-radius:10px;display:flex;gap:10px;align-items:center;font-size:14px;opacity:0;transition:opacity .5s .4s}
-.panel.live .missing{opacity:1}
-.missing svg{width:18px;height:18px;color:var(--ember);flex:none}
-.missing b{color:var(--ember-2)}
-.panel-foot{margin-top:10px;font-size:11.5px;color:var(--dim)}
-@media(max-width:860px){.hero-grid{grid-template-columns:1fr}.hero h1{max-width:14ch}.panel{max-width:560px}}
+/* illustrative AI question card */
+.ai-card{justify-self:end;width:min(100%,400px);background:var(--white);color:var(--ink);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.05)}
+.ai-top{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.pill{border:1px solid var(--line);border-radius:20px;padding:4px 9px;white-space:nowrap;letter-spacing:.06em}
+.ai-q{font-family:var(--serif);font-size:1.6rem;line-height:1.2;letter-spacing:-.01em;margin-bottom:14px;min-height:2.4em;transition:opacity .45s ease}
+.ai-q.fade{opacity:0}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips span{background:var(--sage);border-radius:6px;padding:5px 10px;font-size:.78rem;font-weight:500}
+.ai-note{font-size:.76rem;color:var(--muted);margin-top:12px;line-height:1.45}
 
-/* ---------- proof strip ---------- */
-.proof{padding:26px 0;border-block:1px solid var(--line);background:var(--night-2)}
-.proof ul{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:center;color:var(--mist);font-weight:600;font-size:15px}
-.proof li{display:inline-flex;align-items:center;gap:9px}
-.proof svg{width:18px;height:18px;color:var(--ember)}
+/* ---------- ivory band ---------- */
+.band{position:relative;overflow:hidden;background:var(--ivory);border-block:1px solid var(--line);padding:34px 0}
+.band .contours{right:-120px;top:-30px;width:520px;opacity:.14}
+.band-in{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:40px}
+.sprig{width:110px;height:auto;color:#5f5a47;opacity:.85}
+.band-title{font-size:clamp(1.6rem,2.6vw,2.3rem);padding-left:28px;border-left:1px solid #b9b3a1;line-height:1.08}
+.band-title em{display:block;color:var(--brass-text)}
+.band-items{display:flex;list-style:none;padding:0;margin:0}
+.band-items li{display:flex;flex-direction:column;align-items:center;gap:12px;padding:6px 34px;font-size:.92rem;font-weight:500;border-left:1px solid #c9c3b2;text-align:center}
+.band-items li:first-child{border-left:0}
+.band-items svg{width:44px;height:44px;color:var(--ink)}
 
-/* ---------- stats ---------- */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
-.stat{padding:26px 24px;border-left:3px solid var(--ember);background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.01));border-radius:0 var(--r-md) var(--r-md) 0}
-.stat b{display:block;font-family:var(--display);font-weight:900;font-size:clamp(44px,5vw,58px);letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
-.stat p{margin:10px 0 0;font-size:15px;color:var(--mist)}
-.stat cite{display:block;font-style:normal;font-size:12px;color:var(--dim);margin-top:10px}
-@media(max-width:860px){.stats{grid-template-columns:1fr}}
+/* ---------- cards (sound familiar) ---------- */
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.card{background:var(--ivory);border:1px solid var(--line);border-radius:var(--r);padding:30px 28px}
+.num{display:block;font-family:var(--serif);font-size:2.2rem;line-height:1;color:var(--brass-num);margin-bottom:26px}
+.card h3{margin-bottom:10px}
+.card p{color:var(--muted);font-size:.97rem}
 
-/* ---------- how it works (sequence) ---------- */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative;counter-reset:step}
-.steps::before{content:"";position:absolute;left:8%;right:8%;top:30px;height:2px;background:linear-gradient(90deg,var(--ember),var(--line-strong) 50%,var(--line-strong))}
-.step{padding:0 22px 0 0;position:relative}
-.step .mark{position:relative;z-index:1;width:60px;height:60px;border-radius:50%;background:var(--slate);border:2px solid var(--line-strong);display:grid;place-items:center;margin-bottom:22px}
-.step:first-child .mark{border-color:var(--ember);background:linear-gradient(var(--ember-soft),var(--ember-soft)),var(--slate)}
-.step .mark svg{width:24px;height:24px;color:var(--pale)}
-.step:first-child .mark svg{color:var(--ember)}
-.step .mark::after{counter-increment:step;content:counter(step);position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:var(--night);border:1px solid var(--line-strong);font-family:var(--display);font-size:11px;font-weight:800;display:grid;place-items:center;color:var(--mist)}
-.step h3{margin-bottom:8px}
-.step p{color:var(--mist);font-size:15.5px;max-width:34ch}
-@media(max-width:860px){
-  .steps{grid-template-columns:1fr;gap:34px}
-  .steps::before{left:29px;right:auto;top:0;bottom:0;width:2px;height:auto;background:linear-gradient(180deg,var(--ember),var(--line-strong) 40%,var(--line-strong))}
-  .step{padding:0 0 0 84px}
-  .step .mark{position:absolute;left:0;top:-4px;margin:0}
-}
+/* ---------- deliverables ---------- */
+.deliverables{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px}
+.deliverable{display:flex;gap:18px;padding:26px 0;border-top:1px solid #d9d3c2}
+.deliverable .dnum{font-family:var(--serif);font-size:1.4rem;line-height:1;color:var(--brass-num);min-width:34px;padding-top:3px}
+.deliverable h3{margin-bottom:6px}
+.deliverable p{color:var(--muted);font-size:.95rem;max-width:44ch}
 
-/* ---------- services ---------- */
-.services{display:grid;grid-template-columns:1fr 1fr;gap:14px 40px}
-.svc{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(--line)}
-.svc .ic{flex:none;width:44px;height:44px;border-radius:12px;background:var(--ember-soft);display:grid;place-items:center}
-.svc .ic svg{width:22px;height:22px;color:var(--ember-2)}
-.svc h3{font-size:18px;margin-bottom:4px}
-.svc p{color:var(--mist);font-size:15px}
-@media(max-width:760px){.services{grid-template-columns:1fr;gap:0}}
+/* ---------- how it works (steps) ---------- */
+.steps{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
+.step{padding:6px 36px 6px 0}
+.step+.step{border-left:1px solid var(--line);padding-left:36px}
+.step-top{display:flex;align-items:center;gap:22px;margin-bottom:22px}
+.step-num{font-family:var(--serif);font-size:3.9rem;line-height:1;color:var(--brass-num);letter-spacing:-.02em;padding-right:22px;border-right:1px solid var(--line)}
+.step-top svg{width:46px;height:46px;color:var(--ink)}
+.step h3{font-size:1.35rem;margin-bottom:10px}
+.step p{color:var(--muted);font-size:.97rem;max-width:34ch}
+.note{margin-top:36px;color:var(--muted);font-size:.9rem}
+.on-dark .note{color:var(--muted-dark)}
 
 /* ---------- signal check (interactive) ---------- */
-.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,56px);align-items:start}
+.check-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,56px);align-items:start}
 .check-list{display:grid;gap:10px}
-.sig{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.025);cursor:pointer;transition:border-color .2s,background .2s;user-select:none}
-.sig:hover{border-color:var(--line-strong)}
-.sig:has(input:checked){border-color:rgba(255,138,42,.55);background:var(--ember-soft)}
-.sig:has(input:focus-visible){outline:3px solid var(--signal);outline-offset:2px}
-.sig input{position:absolute;opacity:0;width:0;height:0}
-.sig .box{flex:none;width:24px;height:24px;border-radius:7px;border:2px solid var(--line-strong);display:grid;place-items:center;transition:background .2s,border-color .2s}
-.sig .box svg{width:14px;height:14px;color:var(--ember-ink);opacity:0;transform:scale(.6);transition:opacity .15s,transform .2s var(--ease)}
-.sig:has(input:checked) .box{background:var(--ember);border-color:var(--ember)}
-.sig:has(input:checked) .box svg{opacity:1;transform:none}
-.sig span{font-weight:600;font-size:15.5px}
-.score{position:sticky;top:96px;border:1px solid var(--line-strong);border-radius:var(--r-lg);background:linear-gradient(160deg,#16263a,#0d1722 70%);padding:22px;box-shadow:var(--shadow);overflow:hidden}
-.score-ridge{width:100%;height:auto;margin:-6px 0 10px}
+.sig{position:relative;display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--line-dark);border-radius:12px;background:rgba(255,255,255,.04);cursor:pointer;transition:border-color .2s,background .2s;user-select:none;-webkit-user-select:none}
+.sig:hover{border-color:rgba(255,255,255,.35)}
+.sig.on{border-color:rgba(210,179,117,.7);background:rgba(210,179,117,.12)}
+.sig:focus-within{outline:3px solid var(--brass);outline-offset:2px}
+.sig input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.sig .box{flex:none;width:24px;height:24px;border-radius:7px;border:2px solid rgba(255,255,255,.45);display:grid;place-items:center;transition:background .2s,border-color .2s}
+.sig .box svg{width:14px;height:14px;color:var(--forest);opacity:0;transform:scale(.6);transition:opacity .15s,transform .2s var(--ease)}
+.sig.on .box{background:var(--brass);border-color:var(--brass)}
+.sig.on .box svg{opacity:1;transform:none}
+.sig span:last-child{font-weight:500;font-size:.97rem}
+.score{position:sticky;top:96px;background:var(--white);color:var(--ink);border-radius:var(--r);padding:24px;box-shadow:var(--shadow);overflow:hidden}
+.score-ridge{width:100%;height:auto;margin:-6px 0 8px}
 .score-row{display:flex;align-items:baseline;gap:10px}
-.score-row b{font-family:var(--display);font-weight:900;font-size:64px;letter-spacing:-.05em;line-height:1;font-variant-numeric:tabular-nums}
-.score-row span{color:var(--dim);font-weight:600}
-.verdict{margin-top:6px;font-weight:700;font-size:17px}
-.verdict[data-tone="low"]{color:var(--bad)}.verdict[data-tone="mid"]{color:var(--warn)}.verdict[data-tone="high"]{color:var(--good)}
-.score p.note{color:var(--mist);font-size:14.5px;margin-top:8px}
+.score-row b{font-family:var(--display);font-weight:800;font-size:4rem;letter-spacing:-.05em;line-height:1;font-variant-numeric:tabular-nums}
+.score-row span{color:var(--muted);font-weight:500;font-size:.95rem}
+.verdict{margin-top:6px;font-weight:600;font-size:1.05rem}
+.verdict[data-tone="low"]{color:var(--bad)}.verdict[data-tone="mid"]{color:var(--brass-text)}.verdict[data-tone="high"]{color:var(--good)}
+.score p.note{color:var(--muted);font-size:.93rem;margin-top:8px}
 .score .btn{margin-top:18px}
-.score small{display:block;margin-top:10px;color:var(--dim);font-size:12px}
-@media(max-width:860px){.check-grid{grid-template-columns:1fr}.score{position:static}}
+.score small{display:block;margin-top:12px;color:var(--muted);font-size:.78rem;line-height:1.45}
+
+/* ---------- split layouts ---------- */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:clamp(36px,6vw,80px)}
+.split .kicker{margin-bottom:22px}
+.split h2{margin-bottom:20px}
+.split .lede{margin-bottom:16px}
+.split .btn{margin-top:14px}
+.sheet-card{position:relative;background:var(--ivory);border:1px solid var(--line);border-radius:var(--r);padding:32px;box-shadow:0 18px 48px rgba(20,48,38,.08)}
+.sheet-card>p:first-child{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:10px}
+.sheet-card h3{font-family:var(--serif);font-weight:400;font-size:2rem;letter-spacing:-.01em;margin-bottom:10px}
+.report-row{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:16px 0;border-top:1px solid #d9d3c2}
+.report-row span{font-family:var(--serif);color:var(--brass-num);font-size:1.1rem;padding-top:2px}
+.report-row strong{font-size:.95rem;font-weight:600}
+.report-row p{font-size:.88rem;margin-top:3px;color:var(--muted)}
 
 /* ---------- pricing ---------- */
-.price-grid{display:grid;grid-template-columns:1fr .9fr;gap:clamp(28px,5vw,60px);align-items:center}
-.promises{display:grid;gap:18px;margin-top:28px}
-.promise{padding-left:18px;border-left:2px solid var(--ember)}
-.promise h3{font-size:18px;margin-bottom:4px}
-.promise p{color:var(--mist);font-size:15px}
-.price-card{position:relative;border-radius:var(--r-lg);padding:2px;background:conic-gradient(from var(--ang,0deg),var(--ember),transparent 30%,transparent 70%,var(--ember-2));animation:spin 8s linear infinite}
-@property --ang{syntax:"<angle>";initial-value:0deg;inherits:false}
-@keyframes spin{to{--ang:360deg}}
-.price-in{border-radius:calc(var(--r-lg) - 2px);background:linear-gradient(170deg,#17283b,#0e1826 75%);padding:30px 28px;position:relative}
-.tag{display:inline-block;padding:6px 10px;border-radius:7px;background:var(--ember-soft);color:var(--ember-2);font-weight:700;font-size:13px}
-.was{margin-top:16px;color:var(--dim);font-size:14px;text-decoration:line-through}
-.amount{font-family:var(--display);font-weight:900;font-size:clamp(52px,6vw,66px);letter-spacing:-.05em;line-height:1;margin-top:6px}
-.amount small{font-family:var(--body);font-weight:600;font-size:15px;letter-spacing:0;color:var(--mist);margin-left:6px}
-.then{color:var(--mist);font-size:14.5px;margin-top:6px}
+.values{display:grid;gap:18px;margin-top:8px}
+.values div{border-left:2px solid var(--brass);padding-left:18px}
+.values strong{font-size:1rem;font-weight:600}
+.values p{margin-top:4px;font-size:.93rem;color:var(--muted)}
+.price-card{background:var(--white);border:1px solid var(--line);border-top:4px solid var(--brass);border-radius:var(--r);padding:34px;box-shadow:0 22px 60px rgba(20,48,38,.10)}
+.tag{display:inline-flex;padding:6px 10px;background:var(--ivory-2);color:var(--brass-text);font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-radius:5px}
+.setup{color:var(--muted);font-size:.9rem;margin-top:18px}
+.setup s{color:var(--muted)}
+.price{font-family:var(--display);font-weight:800;font-size:clamp(3.4rem,6vw,4.6rem);letter-spacing:-.055em;line-height:1.1;margin:6px 0 4px}
+.price small{font-family:var(--body);font-weight:500;font-size:1rem;letter-spacing:0;color:var(--muted);margin-left:6px}
+.then{font-size:.9rem;color:var(--muted)}
 .inc{list-style:none;padding:0;margin:22px 0}
-.inc li{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.inc li{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.95rem}
 .inc svg{width:16px;height:16px;color:var(--good);flex:none}
-.guarantee{padding:14px 15px;border-radius:10px;background:rgba(79,209,139,.08);border:1px solid rgba(79,209,139,.3);font-size:14px;margin-bottom:18px}
-.guarantee b{color:var(--good)}
-.secure{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:12px;font-size:13px;color:var(--dim)}
+.guarantee{padding:15px 16px;border-radius:10px;background:var(--sage);font-size:.88rem;margin-bottom:20px;line-height:1.5}
+.guarantee a{display:inline-block;margin-top:6px}
+.secure{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:12px;font-size:.82rem;color:var(--muted)}
 .secure svg{width:14px;height:14px}
-@media(max-width:860px){.price-grid{grid-template-columns:1fr}}
 
 /* ---------- faq ---------- */
-.faq{max-width:800px;display:grid;gap:4px}
+.faq{max-width:860px;display:grid;gap:2px}
 .faq details{border-bottom:1px solid var(--line)}
-.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:20px 4px;font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:-.01em}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:68px;padding:18px 2px;font-family:var(--display);font-weight:700;font-size:1.1rem;letter-spacing:-.02em}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary .plus{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--line-strong);display:grid;place-items:center;transition:transform .3s var(--ease),background .2s}
+.faq summary .plus{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid #c9c3b2;display:grid;place-items:center;color:var(--brass-text);transition:transform .3s var(--ease),background .2s}
 .faq summary .plus svg{width:14px;height:14px}
-.faq details[open] summary .plus{transform:rotate(45deg);background:var(--ember);border-color:var(--ember);color:var(--ember-ink)}
-.faq .a{padding:0 4px 22px;color:var(--mist);max-width:66ch;font-size:16px}
+.faq details[open] summary .plus{transform:rotate(45deg);background:var(--forest);border-color:var(--forest);color:#fff}
+.faq .a{padding:0 2px 22px;color:var(--muted);max-width:70ch;font-size:.98rem}
 
-/* ---------- CTA band ---------- */
-.cta-band{background:linear-gradient(135deg,var(--ember-2),var(--ember));color:var(--ember-ink);padding:clamp(40px,6vw,64px) 0}
-.cta-band .wrap{display:flex;justify-content:space-between;align-items:center;gap:26px;flex-wrap:wrap}
-.cta-band h2{max-width:20ch;font-size:clamp(28px,3.6vw,42px)}
-.cta-band .btn{background:var(--night);color:var(--pale);box-shadow:0 12px 30px rgba(0,0,0,.25)}
-.cta-band .btn:hover{transform:translateY(-2px)}
+/* ---------- closing band ---------- */
+.close{position:relative;overflow:hidden;background:var(--forest);color:#fff}
+.close-media{position:absolute;top:0;bottom:0;left:52%;right:0}
+.close-media img{width:100%;height:100%;object-fit:cover;object-position:60% 50%}
+.close-media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--forest) 0%,rgba(20,47,39,.9) 18%,rgba(20,47,39,.35) 50%,rgba(20,47,39,.05) 100%)}
+.close .contours{left:42%;top:10px;width:560px;opacity:.2}
+.close-in{position:relative;z-index:1;padding:clamp(56px,7vw,88px) 0 clamp(40px,5vw,56px);max-width:620px}
+.close h2{font-size:clamp(2rem,3.8vw,3.2rem);margin-bottom:16px;text-shadow:0 2px 20px rgba(0,0,0,.25)}
+.close p{color:var(--muted-dark);max-width:52ch;margin-bottom:28px}
+.close-brand{display:flex;align-items:center;gap:10px;margin-top:44px;font-family:var(--display);font-weight:800;font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;color:#fff}
+.close-brand svg{width:30px;height:30px;color:#fff}
 
 /* ---------- lead form ---------- */
-.contact{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,64px);align-items:start}
-.contact .lede{margin-top:14px}
-.email-line{margin-top:22px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.email-line a{font-weight:700;color:var(--ember-2);text-decoration:underline;text-underline-offset:4px;word-break:break-all}
-.note-sm{margin-top:18px;font-size:14px;color:var(--dim)}
-.copy{min-height:36px;padding:6px 12px;border-radius:8px;border:1px solid var(--line-strong);background:rgba(255,255,255,.04);font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.contact{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(30px,5vw,72px);align-items:start}
+.contact-list{padding-left:20px;color:var(--muted);font-size:.97rem;margin:0 0 22px}
+.contact-list li{padding:3px 0}
+.email-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+.email-line a{font-weight:600;color:var(--forest);text-decoration:underline;text-decoration-color:var(--brass);text-decoration-thickness:2px;text-underline-offset:4px;overflow-wrap:anywhere}
+.copy{min-height:38px;padding:7px 12px;border-radius:8px;border:1px solid #c9c3b2;background:var(--white);font-size:.82rem;font-weight:600;display:inline-flex;align-items:center;gap:6px}
 .copy svg{width:14px;height:14px}
-.form{border:1px solid var(--line-strong);border-radius:var(--r-lg);background:linear-gradient(170deg,#15253a,#0e1826 75%);padding:26px;box-shadow:var(--shadow)}
-.form h3{font-size:22px;margin-bottom:4px}
-.form .hint{color:var(--mist);font-size:14px;margin-bottom:8px}
-.field{margin-top:14px}
-.field label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
-.field input,.field select,.field textarea{width:100%;min-height:50px;padding:12px 14px;border-radius:10px;border:1px solid var(--line-strong);background:rgba(11,20,29,.6);color:var(--pale);transition:border-color .2s,box-shadow .2s}
+.note-sm{margin-top:18px;font-size:.88rem;color:var(--muted)}
+.form{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:30px;box-shadow:0 22px 60px rgba(20,48,38,.10)}
+.form h3{font-family:var(--serif);font-weight:400;font-size:2rem;letter-spacing:-.01em;margin-bottom:6px}
+.form .hint{color:var(--muted);font-size:.9rem}
+.field{margin-top:16px}
+.field label{display:block;font-weight:600;font-size:.86rem;margin-bottom:6px}
+.field label span{color:var(--muted);font-weight:500}
+.field input,.field select,.field textarea,.fallback textarea{width:100%;min-height:50px;padding:12px 14px;border-radius:9px;border:1px solid #b9b3a1;background:#fffefb;color:var(--ink);font-size:1rem;transition:border-color .2s,box-shadow .2s}
 .field textarea{min-height:96px;resize:vertical}
-.field select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a7b6c4' stroke-width='2.2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:16px}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--ember);box-shadow:0 0 0 4px var(--ember-soft)}
-.field.err input{border-color:var(--bad);box-shadow:0 0 0 4px rgba(255,107,107,.15)}
-.field .msg{display:none;color:var(--bad);font-size:13px;margin-top:6px;font-weight:600}
+.field select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a6a60' stroke-width='2.2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:16px;padding-right:40px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--brass-text);box-shadow:0 0 0 4px rgba(210,179,117,.3)}
+.field.err input{border-color:var(--bad);box-shadow:0 0 0 4px rgba(178,58,45,.12)}
+.field .msg{display:none;color:var(--bad);font-size:.84rem;margin-top:6px;font-weight:500}
 .field.err .msg{display:block}
-.form .btn{margin-top:20px}
-.form .tiny{font-size:13px;color:var(--dim);margin-top:12px}
-.done{display:none;text-align:center;padding:12px 4px}
-.done .ok{width:62px;height:62px;border-radius:50%;background:rgba(79,209,139,.14);border:1px solid rgba(79,209,139,.4);display:grid;place-items:center;margin:0 auto 16px}
+.fields-2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.form .btn{margin-top:22px}
+.form .tiny{font-size:.84rem;color:var(--muted);margin-top:12px}
+.form-status{font-size:.9rem;margin-top:12px;color:var(--good);font-weight:500;min-height:1.2em}
+.done{display:none;text-align:center;padding:8px 2px}
+.done .ok{width:62px;height:62px;border-radius:50%;background:var(--sage);display:grid;place-items:center;margin:0 auto 16px}
 .done .ok svg{width:28px;height:28px;color:var(--good)}
-.done h3{margin-bottom:8px}
-.done p{color:var(--mist);font-size:15px}
-.done .fallback{margin-top:16px;padding:14px;border:1px dashed var(--line-strong);border-radius:10px;text-align:left;font-size:14px}
-.done .fallback pre{white-space:pre-wrap;font:inherit;color:var(--mist);margin:8px 0 0;max-height:150px;overflow:auto}
-.form[data-state="sent"] .fields{display:none}.form[data-state="sent"] .done{display:block}
-@media(max-width:860px){.contact{grid-template-columns:1fr}}
+.done h3{font-family:var(--display);font-weight:800;font-size:1.5rem;letter-spacing:-.03em;margin-bottom:8px}
+.done p{color:var(--muted);font-size:.95rem}
+.fallback{margin-top:18px;padding:16px;background:var(--ivory);border-radius:10px;text-align:left;font-size:.9rem}
+.fallback label{display:block;font-weight:600;margin-bottom:8px}
+.fallback textarea{font-size:.84rem;min-height:150px;resize:vertical}
+.fallback .btn{margin-top:10px;min-height:46px}
+.fallback p{margin-top:10px;font-size:.84rem;color:var(--muted)}
+.form[data-state="ready"] .fields{display:none}.form[data-state="ready"] .done{display:block}
+.edit-btn{margin-top:16px;background:none;border:0;padding:8px;font-weight:600;color:var(--forest);text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--brass);text-decoration-thickness:2px}
 
 /* ---------- footer ---------- */
-footer{border-top:1px solid var(--line);padding:36px 0 calc(28px + env(safe-area-inset-bottom));color:var(--mist);font-size:14px;background:#08111a}
-footer .wrap{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:28px}
-footer b{color:var(--pale);display:flex;align-items:center;gap:8px;font-family:var(--display);margin-bottom:6px}
-footer b svg{width:20px;height:20px}
-footer a{color:var(--pale);text-decoration:underline;text-underline-offset:3px;word-break:break-all}
-@media(max-width:760px){footer .wrap{grid-template-columns:1fr}}
+footer{background:#0f241d;padding:40px 0 calc(32px + env(safe-area-inset-bottom));color:var(--muted-dark);font-size:.88rem;border-top:1px solid var(--line-dark)}
+footer .wrap{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:28px}
+footer b{display:flex;align-items:center;gap:9px;color:#fff;font-family:var(--display);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.82rem;margin-bottom:8px}
+footer b svg{width:24px;height:24px}
+footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass);text-underline-offset:4px;overflow-wrap:anywhere}
+
+/* ---------- sticky mobile CTA ---------- */
+.sticky-cta{position:fixed;bottom:0;inset-inline:0;z-index:40;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(20,47,39,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line-dark);box-shadow:0 -10px 30px rgba(0,0,0,.18)}
+.sticky-cta .btn{width:100%;min-height:50px}
 
 /* ---------- reveal + motion safety ---------- */
-.reveal{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
-.reveal.in{opacity:1;transform:none}
+.reveal-wait{opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal-wait.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-  .reveal{opacity:1;transform:none}
-  .panel .result,.panel .missing{opacity:1;transform:none}
-  .ask p::after{display:none}
+  .reveal-wait{opacity:1;transform:none}
 }
-@media(max-width:480px){
-  .wrap{width:calc(100% - 32px)}
-  .nav-in{height:66px}
-  .sheet{--navh:66px}
-  .brand{font-size:16px;gap:8px}.brand svg{width:30px;height:30px}
-  .nav .btn{padding:10px 12px;font-size:14px}
+
+/* ---------- responsive ---------- */
+@media(max-width:1000px){
+  .hero-grid{grid-template-columns:minmax(0,560px) minmax(0,1fr);gap:28px}
+  .hero-media{left:30%}
+  .band-in{grid-template-columns:1fr auto;gap:28px}
+  .sprig{display:none}
+  .band-title{padding-left:0;border-left:0}
+  .band-items li{padding:6px 22px}
+  .deliverables{gap:0 32px}
+  .steps{gap:0}
+  .step{padding-right:22px}
+  .step+.step{padding-left:22px}
+  .split,.contact{gap:36px}
+}
+@media(max-width:860px){
+  .hero-grid{grid-template-columns:minmax(0,1fr);align-items:start}
+  .hero-copy{max-width:600px}
+  .ai-card{justify-self:start;width:min(100%,440px)}
+  .hero-media{left:0;right:0;bottom:auto;height:min(46vh,380px);position:relative;z-index:0}
+  .hero-media img{object-position:50% 48%}
+  .hero-media::after{background:linear-gradient(180deg,rgba(20,47,39,.12) 0%,rgba(20,47,39,0) 30%,rgba(20,47,39,.25) 62%,var(--forest) 100%)}
+  .hero-grid{margin-top:-80px;padding-top:0}
+  .hero .contours{display:none}
+  .grid-3{grid-template-columns:minmax(0,1fr)}
+  .deliverables{grid-template-columns:minmax(0,1fr);gap:0}
+  .steps{grid-template-columns:minmax(0,1fr);gap:26px}
+  .step{padding:0}
+  .step+.step{border-left:0;padding-left:0;padding-top:26px;border-top:1px solid var(--line)}
+  .step-top{margin-bottom:14px}
+  .step-num{font-size:3.2rem}
+  .step p{max-width:none}
+  .check-grid{grid-template-columns:minmax(0,1fr)}
+  .score{position:static}
+  .split,.contact{grid-template-columns:minmax(0,1fr)}
+  .close-media{left:0;right:0}
+  .close-media img{object-position:70% 50%}
+  .close-media::after{background:linear-gradient(90deg,rgba(20,47,39,.96) 0%,rgba(20,47,39,.86) 50%,rgba(20,47,39,.55) 100%)}
+  .close .contours{left:auto;right:-100px;width:420px}
+  footer .wrap{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:760px){
+  html{scroll-padding-top:76px}
+  .wrap{width:calc(100% - 36px)}
+  .section{padding-block:clamp(56px,10vw,72px)}
+  .nav-in{height:60px}
+  .sheet{--navh:60px}
+  .brand{font-size:.8rem;letter-spacing:.12em;gap:8px}
+  .brand svg{width:30px;height:30px}
+  .nav .btn{padding:9px 13px;font-size:.84rem;min-height:40px}
+  .band{padding:26px 0 30px}
+  .band-in{grid-template-columns:1fr;gap:22px}
+  .band-title{font-size:1.75rem}
+  .band-items{justify-content:space-between}
+  .band-items li{padding:6px 8px;font-size:.78rem;gap:9px;flex:1}
+  .band-items svg{width:36px;height:36px}
+  .band .contours{right:-220px;top:auto;bottom:-60px;width:460px}
+  .card{padding:24px 22px}
+  .num{margin-bottom:18px}
+  .sheet-card,.price-card,.form{padding:24px 20px}
   .cta-row .btn{width:100%}
-  .panel{padding:14px}
+  footer{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+}
+@media(max-width:400px){
+  .wrap{width:calc(100% - 32px)}
+  .btn{white-space:normal;text-align:center;padding-inline:18px}
+  .hero h1{font-size:2.3rem}
+  .ai-q{font-size:1.4rem}
+  .ai-top{gap:8px;font-size:.6rem}
+  .fields-2{grid-template-columns:minmax(0,1fr);gap:0}
+  .band-items li{font-size:.72rem}
+  .price{font-size:3.2rem}
+  .brand{font-size:.72rem;letter-spacing:.1em}
+  .nav .btn{padding-inline:11px;font-size:.8rem}
+}
+@media(max-width:340px){
+  .brand span{display:none}
+  .wrap{width:calc(100% - 28px)}
+  .hero h1{font-size:2.05rem}
 }
 </style>
 </head>
 <body>
+<a class="skip" href="#top">Skip to content</a>
 
 <!-- Icon sprite -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-logo" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#ff8a2a"/><path d="M5 24 L12.5 11.5 L17 18 L22 9.5 L27 24 Z" fill="#0b141d"/></symbol>
+  <symbol id="i-logo" viewBox="0 0 40 40"><path d="M2 31 13.5 11l6 9.5 5-7.5L38 31Z" fill="currentColor"/><path d="M13.5 11 19.5 20.5 16.4 24.9 9.6 17.7Z" fill="#d2b375"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
-  <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></symbol>
-  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
-  <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M15 8l2 2M18 5l2 2"/></symbol>
-  <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
-  <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
-  <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9Z"/></symbol>
-  <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
-  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></symbol>
-  <symbol id="i-post" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H8l-4 4V4Z"/><path d="M8 9h8M8 12h5"/></symbol>
-  <symbol id="i-report" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v15H6Z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></symbol>
+  <symbol id="i-profile" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="10" width="36" height="28" rx="3"/><circle cx="17" cy="22" r="4"/><path d="M11 32c1.5-3.5 4-5 6-5s4.5 1.5 6 5M28 19h9M28 25h9M28 31h6"/></symbol>
+  <symbol id="i-bubble" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12a4 4 0 0 1 4-4h24a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H22l-9 8v-8h-1a4 4 0 0 1-4-4Z"/><path d="M16 17h16M16 23h10"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M24 42s13-12 13-22a13 13 0 1 0-26 0c0 10 13 22 13 22Z"/><circle cx="24" cy="20" r="5"/></symbol>
+  <symbol id="i-docsearch" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6h16l8 8v12M12 6v36h12"/><path d="M28 6v8h8M17 20h12M17 26h7"/><circle cx="33" cy="33" r="6"/><path d="m37.5 37.5 5 5"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="6"/><path d="M24 4v6M24 38v6M4 24h6M38 24h6M9.9 9.9l4.2 4.2M33.9 33.9l4.2 4.2M9.9 38.1l4.2-4.2M33.9 14.1l4.2-4.2"/><circle cx="24" cy="24" r="14"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 40h32"/><rect x="11" y="26" width="7" height="14"/><rect x="21" y="18" width="7" height="22"/><rect x="31" y="10" width="7" height="30"/><path d="m10 16 8-6 7 4 11-9"/></symbol>
   <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
   <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
   <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
   <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-contours" viewBox="0 0 720 360" fill="none" stroke="currentColor" stroke-width="1"><path d="M-20 60q180-110 360 0t400 0"/><path d="M-20 90q180-110 360 0t400 0"/><path d="M-20 120q180-110 360 0t400 0"/><path d="M-20 150q180-110 360 0t400 0"/><path d="M-20 180q180-110 360 0t400 0"/><path d="M-20 210q180-110 360 0t400 0"/><path d="M-20 240q180-110 360 0t400 0"/><path d="M-20 270q180-110 360 0t400 0"/><path d="M-20 300q180-110 360 0t400 0"/></symbol>
 </svg>
 
 <header class="nav">
   <div class="wrap nav-in">
     <a class="brand" href="#top" aria-label="Ridgeline Local home"><svg aria-hidden="true"><use href="#i-logo"/></svg><span>Ridgeline Local</span></a>
     <nav class="nav-links" aria-label="Primary">
-      <a href="#how">How it works</a>
       <a href="#services">What we do</a>
+      <a href="#how">How it works</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
-      <a class="btn btn-primary" href="#free-check">Free AI check</a>
-      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="sheet" aria-label="Open menu"><svg aria-hidden="true"><use href="#i-menu"/></svg></button>
+      <a class="btn btn-forest" href="#free-check">Free AI check</a>
+      <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sheet" aria-label="Open menu"><svg aria-hidden="true"><use href="#i-menu"/></svg></button>
     </nav>
   </div>
 </header>
-  <div class="sheet" id="sheet" data-open="false">
-    <a href="#how">How it works <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-    <a href="#services">What we do <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-    <a href="#check">Check my signals <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-    <a href="#pricing">Pricing <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-    <a href="#faq">FAQ <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-    <a class="btn btn-primary" href="#free-check">Get my free AI check</a>
-  </div>
+<div class="sheet" id="sheet" data-open="false">
+  <a href="#services">What we do <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  <a href="#how">How it works <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  <a href="#check">Check my signals <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  <a href="#pricing">Pricing <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  <a href="#faq">FAQ <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  <a class="btn btn-forest" href="#free-check">Get my free AI check</a>
+</div>
 
 <main id="top">
 
 <!-- ===================== HERO ===================== -->
-<section class="hero">
-  <svg class="hero-ridge" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
-    <defs>
-      <linearGradient id="ridgeFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ff8a2a" stop-opacity=".18"/><stop offset="1" stop-color="#ff8a2a" stop-opacity="0"/></linearGradient>
-      <linearGradient id="ridgeBack" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1a2c3e"/><stop offset="1" stop-color="#0e1a26"/></linearGradient>
-    </defs>
-    <path d="M0 160 L120 120 L230 150 L340 90 L470 130 L600 70 L720 118 L860 60 L980 110 L1120 50 L1260 100 L1370 70 L1440 95 L1440 220 L0 220Z" fill="url(#ridgeBack)"/>
-    <path d="M0 190 L160 150 L300 175 L430 120 L560 160 L700 105 L820 150 L960 95 L1100 140 L1240 85 L1360 125 L1440 110 L1440 220 L0 220Z" fill="url(#ridgeFill)" stroke="#ff8a2a" stroke-opacity=".55" stroke-width="1.5"/>
-  </svg>
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-media">
+    <img src="assets/hero-roof.jpg" width="536" height="531" alt="A freshly shingled roof on a hillside home at sunset, with wooded ridges behind it" fetchpriority="high" decoding="async">
+  </div>
+  <svg class="contours" aria-hidden="true"><use href="#i-contours"/></svg>
   <div class="wrap hero-grid">
-    <div class="hero-enter">
-      <span class="kicker">Built for roofers and tree services</span>
-      <h1>When a homeowner asks AI who to call, be the answer.</h1>
-      <p class="lede">Homeowners now ask ChatGPT, Gemini and Google for a roofer or tree crew. Ridgeline Local tightens the profile, review and listing signals those tools rely on — then proves what changed every month with what ChatGPT and Gemini actually say.</p>
+    <div class="hero-copy">
+      <span class="kicker">For independent roofers &amp; tree services</span>
+      <h1 id="hero-title">Great local work. <em class="accent">Make it easier<br>to find.</em></h1>
+      <p class="lede">When homeowners ask AI who to hire, your online reputation should tell the right story. We strengthen your local profiles, review process, and business details so your online presence better reflects the work you do.</p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="#free-check">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <a class="btn btn-ghost" href="#check">Check my signals in 30 seconds</a>
+        <a class="btn btn-brass" href="#free-check">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="link" href="#how">See how it works</a>
       </div>
-      <div class="assure">
-        <span><svg aria-hidden="true"><use href="#i-check"/></svg>No contracts</span>
-        <span><svg aria-hidden="true"><use href="#i-check"/></svg>No passwords</span>
-        <span><svg aria-hidden="true"><use href="#i-check"/></svg>No fake reviews</span>
-        <span><svg aria-hidden="true"><use href="#i-check"/></svg>No sales calls</span>
-      </div>
+      <ul class="assure" aria-label="Service approach">
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Month to month</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Email-first service</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Your passwords stay yours</li>
+      </ul>
     </div>
 
-    <figure class="panel" id="aiPanel" aria-label="Illustration of an AI recommendation that leaves a local business out">
-      <div class="panel-top"><span class="dot"></span>What AI is answering right now<em>Illustration</em></div>
-      <div class="ask"><span class="avatar">You</span><p id="askText" aria-live="polite"></p></div>
-      <div class="answer">Here are three local companies to compare:</div>
-      <div id="results">
-        <div class="result"><span class="n">1</span><div><b>Summit Peak Roofing</b><small>Roof replacement · 184 reviews</small></div><span class="stars">4.8 ★</span></div>
-        <div class="result"><span class="n">2</span><div><b>Oak &amp; Stone Roofing</b><small>Storm repair · 126 reviews</small></div><span class="stars">4.7 ★</span></div>
-        <div class="result"><span class="n">3</span><div><b>Northline Roof Co.</b><small>Local roofing · 98 reviews</small></div><span class="stars">4.9 ★</span></div>
-      </div>
-      <div class="missing"><svg aria-hidden="true"><use href="#i-alert"/></svg><span><b>Your business:</b> not mentioned. This is the gap we check for.</span></div>
-      <figcaption class="panel-foot">Example only — company names are made up. AI answers change by question, town and time.</figcaption>
+    <figure class="ai-card" aria-label="Illustration of a homeowner's question to an AI assistant">
+      <div class="ai-top"><span>A homeowner's next question</span><span class="pill">Illustrative example</span></div>
+      <p class="ai-q" id="askText">“Who’s a good roofer in my town?”</p>
+      <div class="chips"><span>Clear business details</span><span>Customer reviews</span><span>Consistent profiles</span></div>
+      <figcaption class="ai-note">The local information we help you strengthen. This is an illustration, not a live AI result.</figcaption>
     </figure>
   </div>
 </section>
 
-<!-- ===================== PROOF STRIP ===================== -->
-<div class="proof">
-  <div class="wrap">
-    <ul>
-      <li><svg aria-hidden="true"><use href="#i-mail"/></svg>Everything runs by email</li>
-      <li><svg aria-hidden="true"><use href="#i-key"/></svg>Manager access only — your password stays yours</li>
-      <li><svg aria-hidden="true"><use href="#i-report"/></svg>AI proof every month</li>
-      <li><svg aria-hidden="true"><use href="#i-lock"/></svg>Month to month, cancel by email</li>
+<!-- ===================== IVORY BAND ===================== -->
+<section class="band" aria-label="What we improve">
+  <svg class="contours" aria-hidden="true"><use href="#i-contours"/></svg>
+  <div class="wrap band-in">
+    <svg class="sprig" viewBox="0 0 120 150" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M14 144C34 112 52 84 76 48c8-12 16-22 30-34"/>
+      <path d="M40 104c-20 2-34-8-38-26 16-2 30 8 38 26Z"/><path d="M40 104C30 94 20 86 8 80"/>
+      <path d="M44 98c2-20 14-32 32-36-2 18-14 32-32 36Z"/><path d="M44 98c8-10 16-18 28-28"/>
+      <path d="M62 70c-18-2-28-14-30-32 16 2 28 14 30 32Z"/><path d="M62 70C54 60 46 52 36 44"/>
+      <path d="M66 64c0-18 10-30 26-36 0 18-10 30-26 36Z"/><path d="M66 64c6-10 12-18 22-28"/>
+      <path d="M84 38c-14 0-22-10-24-26 14 0 22 10 24 26Z"/><path d="M84 38 70 20"/>
+      <path d="M90 30c2-14 10-22 22-26-2 14-10 22-22 26Z"/><path d="M90 30c4-8 10-14 18-20"/>
+    </svg>
+    <h2 class="band-title">Good at your trade. <em class="accent">Clearer online.</em></h2>
+    <ul class="band-items">
+      <li><svg aria-hidden="true"><use href="#i-profile"/></svg>Business profiles</li>
+      <li><svg aria-hidden="true"><use href="#i-bubble"/></svg>Review presence</li>
+      <li><svg aria-hidden="true"><use href="#i-pin"/></svg>Local listings</li>
     </ul>
   </div>
-</div>
+</section>
 
-<!-- ===================== THE PROBLEM ===================== -->
-<section class="section" id="problem">
+<!-- ===================== SOUND FAMILIAR ===================== -->
+<section class="section" id="problem" aria-labelledby="problem-title">
   <div class="wrap">
-    <div class="head reveal">
-      <span class="kicker">Why this matters now</span>
-      <h2>Good work gets you referrals. It doesn't get you into the AI answer.</h2>
-      <p class="lede">AI tools don't see your crew or your workmanship. They see your Google profile, your review count, your photos and whether your details match across the web. Thin or inconsistent signals mean another company gets named instead.</p>
+    <div class="head" data-reveal>
+      <span class="kicker">Sound familiar?</span>
+      <h2 id="problem-title">You’ve built the reputation. Let’s make it easier to see.</h2>
+      <p class="lede">You’re busy quoting jobs, looking after customers, and keeping a crew moving. Meanwhile, outdated listings and a quiet review page can leave your online presence telling only half the story.</p>
     </div>
-    <div class="stats reveal">
-      <div class="stat"><b><span class="count" data-to="45">45</span>%</b><p>of US consumers used AI tools to find a local business in the past year — up from 6% the year before.</p><cite>BrightLocal, Consumer Search Behavior 2026</cite></div>
-      <div class="stat"><b><span class="count" data-to="133">133</span> vs 11</b><p>average Google reviews for businesses both ChatGPT and Perplexity surfaced, versus businesses neither one did.</p><cite>Insites, AI Visibility Report 2026 (10,000 US businesses)</cite></div>
-      <div class="stat"><b><span class="count" data-to="1.2" data-dec="1">1.2</span>%</b><p>of business locations get recommended by ChatGPT. Being named is rare — which is exactly why it's worth earning.</p><cite>SOCi, Local Visibility Index 2026</cite></div>
+    <div class="grid-3">
+      <article class="card" data-reveal><span class="num">01</span><h3>Happy customers. Few recent reviews.</h3><p>Your customers know your work. A simple, repeatable way to ask for honest feedback helps more of that experience become visible.</p></article>
+      <article class="card" data-reveal><span class="num">02</span><h3>A good business. Incomplete profiles.</h3><p>Missing services, old hours, and mismatched contact details make it harder to understand what you do and where you work.</p></article>
+      <article class="card" data-reveal><span class="num">03</span><h3>Marketing work. Unclear progress.</h3><p>You deserve to know what was checked, what was improved, and what comes next. Our reports keep the work visible.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHAT WE HANDLE ===================== -->
+<section class="section on-ivory" id="services" aria-labelledby="services-title">
+  <div class="wrap">
+    <div class="head" data-reveal>
+      <span class="kicker">What we handle</span>
+      <h2 id="services-title">A stronger local presence. A clearer plan behind it.</h2>
+      <p class="lede">Practical improvements to the business information homeowners and online tools can find. You keep running jobs. We keep the agreed work moving.</p>
+    </div>
+    <div class="deliverables">
+      <article class="deliverable" data-reveal><span class="dnum">01</span><div><h3>Google Business Profile cleanup</h3><p>Review your categories, services, description, photos, and hours so the essentials reflect your business.</p></div></article>
+      <article class="deliverable" data-reveal><span class="dnum">02</span><div><h3>An honest review request kit</h3><p>A short message and QR code your crew can share with real customers after a completed job.</p></div></article>
+      <article class="deliverable" data-reveal><span class="dnum">03</span><div><h3>Yelp profile help</h3><p>Help claiming and completing your business profile where eligible, with accurate information about your services.</p></div></article>
+      <article class="deliverable" data-reveal><span class="dnum">04</span><div><h3>Consistent business details</h3><p>Check your name, address, and phone information across relevant listings and identify mismatches.</p></div></article>
+      <article class="deliverable" data-reveal><span class="dnum">05</span><div><h3>Weekly Google post drafts</h3><p>Useful post drafts and review reply drafts for your approval and use, based on your actual business.</p></div></article>
+      <article class="deliverable" data-reveal><span class="dnum">06</span><div><h3>A monthly proof report</h3><p>Documented ChatGPT and Gemini checks, review growth, completed work, and the priorities ahead.</p></div></article>
     </div>
   </div>
 </section>
 
 <!-- ===================== HOW IT WORKS ===================== -->
-<section class="section band" id="how">
+<section class="section" id="how" aria-labelledby="how-title">
   <div class="wrap">
-    <div class="head reveal">
+    <div class="head" data-reveal>
       <span class="kicker">How it works</span>
-      <h2>Three steps. All online. You keep running jobs.</h2>
-      <p class="lede">No in-person visits, no phone pitches, no handing over logins. Most owners spend under ten minutes on the whole thing.</p>
+      <h2 id="how-title">A clear next step. Then a plan you understand.</h2>
+      <p class="lede">Start with a look at your current visibility. Choose the work that makes sense for your business.</p>
     </div>
-    <ol class="steps reveal" style="list-style:none;padding:0;margin:0">
-      <li class="step"><span class="mark"><svg aria-hidden="true"><use href="#i-search"/></svg></span><h3>Get your free AI check</h3><p>Send your business name and town. We ask ChatGPT and Gemini the questions your customers ask, then email you their exact answers and the first three fixes we'd make.</p></li>
-      <li class="step"><span class="mark"><svg aria-hidden="true"><use href="#i-key"/></svg></span><h3>Add us as a manager</h3><p>If you want the fixes done for you, you add Ridgeline as a manager on your Google Business Profile. Takes two taps. Your password never leaves you.</p></li>
-      <li class="step"><span class="mark"><svg aria-hidden="true"><use href="#i-chart"/></svg></span><h3>Watch the signals climb</h3><p>We work through the fixes and send one clear report every month: what the AI tools say, review growth, and exactly what we did. Read it in two minutes.</p></li>
+    <ol class="steps">
+      <li class="step" data-reveal><div class="step-top"><span class="step-num" aria-hidden="true">01</span><svg aria-hidden="true"><use href="#i-docsearch"/></svg></div><h3>Tell us about your business.</h3><p>Start with what you do, where you work, and the kinds of jobs you want more of. Send your business name and town for your free AI check.</p></li>
+      <li class="step" data-reveal><div class="step-top"><span class="step-num" aria-hidden="true">02</span><svg aria-hidden="true"><use href="#i-gear"/></svg></div><h3>Agree on the work that matters.</h3><p>We define the scope, priorities, and price with you before the work begins. If access is needed, we guide you through manager access.</p></li>
+      <li class="step" data-reveal><div class="step-top"><span class="step-num" aria-hidden="true">03</span><svg aria-hidden="true"><use href="#i-chart"/></svg></div><h3>See the work. Track the progress.</h3><p>We work through the agreed improvements and send a monthly report with the evidence, completed tasks, and next priorities.</p></li>
     </ol>
-  </div>
-</section>
-
-<!-- ===================== SERVICES ===================== -->
-<section class="section" id="services">
-  <div class="wrap">
-    <div class="head reveal">
-      <span class="kicker">What we handle for you</span>
-      <h2>The unglamorous online work that decides who gets named.</h2>
-      <p class="lede">Every item below is a signal AI tools and Google actually weigh. We do the work; you approve by email.</p>
-    </div>
-    <div class="services reveal">
-      <div class="svc"><span class="ic"><svg aria-hidden="true"><use href="#i-pin"/></svg></span><div><h3>Google Business Profile build-out</h3><p>Categories, services, description, service areas, hours and photos — completed the way recommended businesses have them.</p></div></div>
-      <div class="svc"><span class="ic"><svg aria-hidden="true"><use href="#i-star"/></svg></span><div><h3>Review request kit</h3><p>A short text message and a QR card your crew hands over after a job, so real customers leave real reviews while it's fresh.</p></div></div>
-      <div class="svc"><span class="ic"><svg aria-hidden="true"><use href="#i-list"/></svg></span><div><h3>Matching details everywhere</h3><p>Same name, address and phone on Google, Yelp, Facebook and the directories that AI tools pull from.</p></div></div>
-      <div class="svc"><span class="ic"><svg aria-hidden="true"><use href="#i-shield"/></svg></span><div><h3>Yelp claim and cleanup</h3><p>We claim and complete your Yelp profile where eligible, so a second major source backs up your Google profile.</p></div></div>
-      <div class="svc"><span class="ic"><svg aria-hidden="true"><use href="#i-post"/></svg></span><div><h3>Weekly Google posts and review replies</h3><p>Fresh posts and professional replies drafted every week. You approve with one word; we publish.</p></div></div>
-      <div class="svc"><span class="ic"><svg aria-hidden="true"><use href="#i-report"/></svg></span><div><h3>Monthly proof report</h3><p>What ChatGPT and Gemini say about you, your review total, and a checklist of completed work. No mystery metrics.</p></div></div>
-    </div>
+    <p class="note">Handled online and by email. Your passwords stay with you.</p>
   </div>
 </section>
 
 <!-- ===================== SIGNAL CHECK (interactive) ===================== -->
-<section class="section band" id="check">
+<section class="section on-dark" id="check" aria-labelledby="check-title">
   <div class="wrap">
-    <div class="head reveal">
+    <div class="head" data-reveal>
       <span class="kicker">30-second self check</span>
-      <h2>How strong are your signals today?</h2>
-      <p class="lede">Tap everything that's true for your business. These are the same signals we fix — and the same ones the 2026 studies above tie to being recommended.</p>
+      <h2 id="check-title">How strong are your signals today?</h2>
+      <p class="lede">Tap everything that’s true for your business. These are the same signals we strengthen for you.</p>
     </div>
-    <div class="check-grid reveal">
+    <div class="check-grid" data-reveal>
       <div class="check-list" id="sigList" role="group" aria-label="Signals your business already has">
-        <label class="sig"><input type="checkbox" value="14"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>My Google Business Profile is claimed and verified</span></label>
-        <label class="sig"><input type="checkbox" value="16"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>Services, hours, description and service area are all filled in</span></label>
-        <label class="sig"><input type="checkbox" value="12"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>I have 10 or more real job photos on Google</span></label>
-        <label class="sig"><input type="checkbox" value="20"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>I have 50 or more Google reviews</span></label>
-        <label class="sig"><input type="checkbox" value="10"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>I've replied to reviews in the last 30 days</span></label>
-        <label class="sig"><input type="checkbox" value="14"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>My name, address and phone match on Google, Yelp and Facebook</span></label>
-        <label class="sig"><input type="checkbox" value="8"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>I've posted an update on Google in the last two weeks</span></label>
-        <label class="sig"><input type="checkbox" value="6"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>My Yelp profile is claimed and complete</span></label>
+        <label class="sig" for="sig1"><input type="checkbox" id="sig1" value="14"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>My Google Business Profile is claimed and verified</span></label>
+        <label class="sig" for="sig2"><input type="checkbox" id="sig2" value="16"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>Services, hours, description and service area are all filled in</span></label>
+        <label class="sig" for="sig3"><input type="checkbox" id="sig3" value="12"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>I have 10 or more real job photos on Google</span></label>
+        <label class="sig" for="sig4"><input type="checkbox" id="sig4" value="20"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>I have 50 or more Google reviews</span></label>
+        <label class="sig" for="sig5"><input type="checkbox" id="sig5" value="10"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>I’ve replied to reviews in the last 30 days</span></label>
+        <label class="sig" for="sig6"><input type="checkbox" id="sig6" value="14"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>My name, address and phone match on Google, Yelp and Facebook</span></label>
+        <label class="sig" for="sig7"><input type="checkbox" id="sig7" value="8"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>I’ve posted an update on Google in the last two weeks</span></label>
+        <label class="sig" for="sig8"><input type="checkbox" id="sig8" value="6"><span class="box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span>My Yelp profile is claimed and complete</span></label>
       </div>
       <div class="score" aria-live="polite">
         <svg class="score-ridge" viewBox="0 0 400 140" aria-hidden="true">
           <defs>
-            <linearGradient id="sFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ff8a2a" stop-opacity=".45"/><stop offset="1" stop-color="#ff8a2a" stop-opacity="0"/></linearGradient>
-            <linearGradient id="sStroke" x1="0" x2="1"><stop offset="0" stop-color="#ffa857"/><stop offset="1" stop-color="#ff8a2a"/></linearGradient>
+            <linearGradient id="sFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#d2b375" stop-opacity=".5"/><stop offset="1" stop-color="#d2b375" stop-opacity="0"/></linearGradient>
           </defs>
-          <g stroke="rgba(159,176,192,.14)" stroke-dasharray="3 5"><line x1="0" x2="400" y1="30" y2="30"/><line x1="0" x2="400" y1="70" y2="70"/><line x1="0" x2="400" y1="110" y2="110"/></g>
-          <text x="6" y="26" fill="#7b8b9a" font-size="10" font-family="Source Sans 3,sans-serif" font-weight="600">Recommended range</text>
+          <g stroke="#e3ded0" stroke-dasharray="3 5"><line x1="0" x2="400" y1="30" y2="30"/><line x1="0" x2="400" y1="70" y2="70"/><line x1="0" x2="400" y1="110" y2="110"/></g>
+          <text x="6" y="24" fill="#5a6a60" font-size="10" font-family="Inter,sans-serif" font-weight="600">Recommended range</text>
           <path id="ridgeFillPath" d="M0 130 L400 130 L400 140 L0 140Z" fill="url(#sFill)"/>
-          <path id="ridgePath" d="M0 130 L400 130" fill="none" stroke="url(#sStroke)" stroke-width="2.5" stroke-linejoin="round"/>
-          <circle id="summit" cx="230" cy="130" r="5" fill="#ff8a2a"><animate attributeName="r" values="5;7;5" dur="2.4s" repeatCount="indefinite"/></circle>
+          <path id="ridgePath" d="M0 130 L400 130" fill="none" stroke="#9a7a45" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle id="summit" cx="230" cy="130" r="5" fill="#142f27"/>
         </svg>
         <div class="score-row"><b id="scoreNum">0</b><span>/ 100 signal strength</span></div>
         <div class="verdict" id="verdict" data-tone="low">Nothing checked yet</div>
-        <p class="note" id="scoreNote">Tap the signals you already have. We'll show where you stand and what moves the needle most.</p>
-        <a class="btn btn-primary btn-block" href="#free-check" id="scoreCta">See what AI says about me — free <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <p class="note" id="scoreNote">Tap the signals you already have. We’ll show where you stand and what moves the needle most.</p>
+        <a class="btn btn-forest btn-block" href="#free-check" id="scoreCta">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <small>A readiness score for the signals we work on, not a ranking prediction. Your free check uses live AI answers.</small>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ===================== SEE THE STARTING POINT ===================== -->
+<section class="section" id="proof" aria-labelledby="proof-title">
+  <div class="wrap split">
+    <div data-reveal>
+      <span class="kicker">See the starting point</span>
+      <h2 id="proof-title">Before you pay for help, see what needs attention.</h2>
+      <p class="lede">Your free AI check looks at sample questions for your service and town. We email the screenshots and three practical fixes we’d prioritize.</p>
+      <p class="lede" style="font-size:1rem">Use it to understand where you stand and decide whether you want help with the next steps.</p>
+      <a class="btn btn-forest" href="#free-check">Show me my starting point <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+    <div class="sheet-card" data-reveal>
+      <p>Example report outline · Not a client result</p>
+      <h3>A clear view of what’s next.</h3>
+      <div class="report-row"><span>01</span><div><strong>What was checked</strong><p>The exact questions, tools, dates, and screenshots.</p></div></div>
+      <div class="report-row"><span>02</span><div><strong>Where the gaps are</strong><p>Specific business information or profile details to review.</p></div></div>
+      <div class="report-row"><span>03</span><div><strong>Three first fixes</strong><p>A practical order of action, with a reason for each priority.</p></div></div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== PRICING ===================== -->
-<section class="section" id="pricing">
-  <div class="wrap price-grid">
-    <div class="reveal">
+<section class="section on-ivory" id="pricing" aria-labelledby="pricing-title">
+  <div class="wrap split">
+    <div data-reveal>
       <span class="kicker">Founding client pricing</span>
-      <h2 style="margin-top:14px">One plan. No setup fee. No long contract.</h2>
-      <p class="lede" style="margin-top:14px">Early clients get the $297 setup waived while Ridgeline builds its track record with real roofers and tree services. When the founding spots are gone, the rate goes to $197 from month one.</p>
-      <div class="promises">
-        <div class="promise"><h3>No fake reviews. Ever.</h3><p>Review requests go to real customers only. We don't buy, write or gate reviews — it's against platform rules and it's bad for you.</p></div>
-        <div class="promise"><h3>No "#1 on ChatGPT" promises.</h3><p>AI answers move. What we promise is stronger signals, honest work and a report you can check yourself.</p></div>
-        <div class="promise"><h3>Cancel by replying to any email.</h3><p>Month to month. No retention calls, no forms, no hoops.</p></div>
+      <h2 id="pricing-title">Know the work. Know the price.</h2>
+      <p class="lede">One monthly plan for the local visibility work listed here. Start at $147 a month for your first three months, then $197 a month.</p>
+      <div class="values">
+        <div><strong>Month to month</strong><p>Keep the service because it works for your business. Cancel anytime by replying to any email.</p></div>
+        <div><strong>Work you can follow</strong><p>Clear priorities, useful updates, and a monthly record of what was done.</p></div>
+        <div><strong>Real customers. Honest feedback.</strong><p>A practical review process built around asking your customers about their actual experience.</p></div>
       </div>
     </div>
-    <div class="price-card reveal">
-      <div class="price-in">
-        <span class="tag">Founding client offer</span>
-        <div class="was">Setup $297 — waived</div>
-        <div class="amount">$147<small>/ month, first 3 months</small></div>
-        <div class="then">Then $197 / month. Month to month.</div>
-        <ul class="inc">
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Google Business Profile build-out</li>
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Review request kit (text + QR card)</li>
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Listing consistency across Google, Yelp, Facebook</li>
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Weekly Google posts and review replies</li>
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Monthly AI proof report</li>
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Cancel anytime by email</li>
-        </ul>
-        <div class="guarantee"><b>Review-growth guarantee.</b> If you don't gain at least 15 genuine Google reviews in your first 60 days, month three is free. Counted from your review total on the day we start.</div>
-        <a class="btn btn-primary btn-block" href="https://buy.stripe.com/dRm00jgNddCI53cbOlaEE00" target="_blank" rel="noopener">Start as a founding client <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <div class="secure"><svg aria-hidden="true"><use href="#i-lock"/></svg>Secure checkout by Stripe</div>
-      </div>
+    <div class="price-card" data-reveal>
+      <span class="tag">Founding client offer</span>
+      <p class="setup"><s>$297 setup</s> — waived</p>
+      <p class="price">$147<small>/ month</small></p>
+      <p class="then">For the first 3 months. Then $197/month.<br>Month to month. Cancel anytime.</p>
+      <ul class="inc">
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Google Business Profile cleanup</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Review request kit (text + QR code)</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Yelp profile help, where eligible</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Listing consistency checks</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Weekly Google post and review reply drafts</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Monthly proof report</li>
+      </ul>
+      <div class="guarantee"><strong>Review-growth guarantee:</strong> If you don’t get at least 15 new genuine reviews in 60 days, month 3 is free. Counted from your review total on the day we start.<br><a class="link" href="mailto:ridgelinemarketinghq@gmail.com?subject=Review-growth%20guarantee%20terms">Request the written guarantee terms</a></div>
+      <a class="btn btn-forest btn-block" href="https://buy.stripe.com/dRm00jgNddCI53cbOlaEE00" target="_blank" rel="noopener noreferrer">Get started with Ridgeline <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <div class="secure"><svg aria-hidden="true"><use href="#i-lock"/></svg>Secure checkout through Stripe · Opens a new tab</div>
     </div>
   </div>
 </section>
 
 <!-- ===================== FAQ ===================== -->
-<section class="section band" id="faq">
+<section class="section" id="faq" aria-labelledby="faq-title">
   <div class="wrap">
-    <div class="head reveal">
-      <span class="kicker">Straight answers</span>
-      <h2>Questions owners actually ask.</h2>
+    <div class="head" data-reveal>
+      <span class="kicker">A few useful answers</span>
+      <h2 id="faq-title">Clear before you start.</h2>
     </div>
-    <div class="faq reveal">
-      <details><summary>Can you guarantee ChatGPT will recommend me?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary><div class="a">No — and anyone who says they can is selling you something. AI answers change by question, town and time. What we control is the information those tools find about you, and we show you exactly what changed each month.</div></details>
-      <details><summary>Do you buy or write reviews?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary><div class="a">Never. We give you a simple way to ask real customers for honest feedback right after a job. Fake or gated reviews break platform rules and can get a profile suspended — the opposite of what you're paying for.</div></details>
-      <details><summary>Do I have to give you my password?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary><div class="a">No. You add Ridgeline as a manager on your Google Business Profile — two taps, and you can remove us any time. Never send passwords by email to anyone.</div></details>
-      <details><summary>Do I have to get on a call?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary><div class="a">No. The whole service runs by email so it fits around jobs. If something needs clarifying, we email you a short question.</div></details>
-      <details><summary>What does the free AI check actually include?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary><div class="a">What ChatGPT and Gemini actually answer when asked for your trade in your town, word for word, plus the three fixes we'd make first. It's yours whether or not you hire us.</div></details>
-      <details><summary>How fast will I see something change?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary><div class="a">Profile and listing fixes go live within the first two weeks. Reviews build from your first jobs after the kit arrives. Your first full report lands 30 days after you start.</div></details>
-      <details><summary>Is Ridgeline only for roofers and tree services?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary><div class="a">For now, yes. Focusing on two trades means the checks, review scripts and posts are built for how your customers actually search. If you're a different trade, email us anyway — we'll tell you honestly whether we're a fit.</div></details>
+    <div class="faq" data-reveal>
+      <details><summary>Who is Ridgeline Local for?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary><div class="a">Independent roofing companies and tree services that want their online business information, review process, and local profiles to better reflect the work they do.</div></details>
+      <details><summary>How much of my time does this take?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary><div class="a">We start with your business details and agree on the priorities. You provide any needed business information, grant appropriate manager access, and approve work when required. We keep the process moving by email.</div></details>
+      <details><summary>Do I need to share my password?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary><div class="a">You keep your passwords. Where supported, you add us with the appropriate manager access, including for your Google Business Profile.</div></details>
+      <details><summary>Do you buy or write reviews?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary><div class="a">Never. We give you a simple way to ask real customers for honest feedback right after a job. Fake or gated reviews break platform rules and can get a profile suspended — the opposite of what you’re paying for.</div></details>
+      <details><summary>How does this relate to AI recommendations?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary><div class="a">We strengthen the public business information AI tools may find when answering local questions, then document sample checks in ChatGPT and Gemini. Answers vary by question, location, and time; your report shows what was checked and what changed.</div></details>
+      <details><summary>What will I actually receive each month?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary><div class="a">The agreed profile and listing work, weekly Google post drafts, and a monthly proof report showing completed tasks, review growth, documented AI checks, and the next priorities.</div></details>
+      <details><summary>Do I have to sign up after the free check?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary><div class="a">The check gives you screenshots and three recommended fixes. Review them first, then decide whether you want our help putting the next steps into practice.</div></details>
     </div>
   </div>
 </section>
 
-<!-- ===================== CTA BAND ===================== -->
-<section class="cta-band">
-  <div class="wrap">
-    <h2>Find out what AI says about your business today.</h2>
-    <a class="btn" href="#free-check">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-  </div>
+<!-- ===================== CLOSING BAND ===================== -->
+<section class="close" aria-labelledby="close-title">
+  <div class="close-media" aria-hidden="true"><img src="assets/close-ridge.jpg" width="502" height="298" alt="" decoding="async"></div>
+  <svg class="contours" aria-hidden="true"><use href="#i-contours"/></svg>
+  <div class="wrap"><div class="close-in">
+    <h2 id="close-title">Your next customer should be able to find the business you’ve built.</h2>
+    <p>Start by seeing how your business appears today. Get a clear starting point and three practical next steps.</p>
+    <a class="btn btn-brass" href="#free-check">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    <div class="close-brand"><svg aria-hidden="true"><use href="#i-logo"/></svg>Ridgeline Local</div>
+  </div></div>
 </section>
 
-<!-- ===================== LEAD FORM ===================== -->
-<section class="section" id="free-check">
+<!-- ===================== FREE CHECK (lead form) ===================== -->
+<section class="section on-ivory" id="free-check" aria-labelledby="contact-title">
+  <div id="contact"></div>
   <div class="wrap contact">
-    <div class="reveal">
-      <span class="kicker">Start here — it's free</span>
-      <h2 style="margin-top:14px">Get your free AI check.</h2>
-      <p class="lede">Tell us your business name, town and trade. We'll ask ChatGPT and Gemini the questions your customers ask, then email you their exact answers and the first three fixes, usually within one business day.</p>
+    <div data-reveal>
+      <span class="kicker">Your first step</span>
+      <h2 id="contact-title" style="margin:22px 0 18px">Let’s see where you stand.</h2>
+      <p class="lede" style="margin-bottom:16px">Tell us your business name, town, and service. We’ll use those details to prepare your free AI check.</p>
+      <ul class="contact-list">
+        <li>Sample checks for your service and town</li>
+        <li>Screenshots of what we find</li>
+        <li>Three practical fixes to prioritize</li>
+      </ul>
+      <p class="lede" style="font-size:.95rem;margin-bottom:0">Prefer to email us directly?</p>
       <div class="email-line">
-        <svg aria-hidden="true" style="width:18px;height:18px;color:var(--ember)"><use href="#i-mail"/></svg>
         <a href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a>
         <button class="copy" type="button" id="copyEmail"><svg aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button>
       </div>
       <p class="note-sm">No sales call. No commitment. The check is yours to keep.</p>
     </div>
 
-    <form class="form reveal" id="leadForm" data-state="idle" novalidate>
+    <form class="form" id="leadForm" data-state="idle" action="mailto:ridgelinemarketinghq@gmail.com" method="post" enctype="text/plain" novalidate aria-describedby="form-note">
       <div class="fields">
-        <h3>Request your free check</h3>
-        <p class="hint">Takes about a minute. Tapping the button opens a ready-to-send email in your mail app.</p>
-        <div class="field"><label for="business">Business name</label><input id="business" name="business" required autocomplete="organization" placeholder="e.g. Pine Hill Roofing"><div class="msg">Add your business name so we know who to check.</div></div>
-        <div class="field"><label for="town">Town and state</label><input id="town" name="town" required autocomplete="address-level2" placeholder="e.g. Cabot, AR"><div class="msg">Add the town you serve — AI answers are local.</div></div>
-        <div class="field"><label for="service">Trade</label><select id="service" name="service"><option>Roofing</option><option>Tree service</option><option>Both</option><option>Other (tell us below)</option></select></div>
-        <div class="field"><label for="website">Website <span style="color:var(--dim);font-weight:600">(optional)</span></label><input id="website" name="website" type="url" inputmode="url" autocomplete="url" placeholder="https://"><div class="msg">That doesn't look like a web address. Leave it blank if you don't have one.</div></div>
-        <div class="field"><label for="notes">Anything we should know? <span style="color:var(--dim);font-weight:600">(optional)</span></label><textarea id="notes" name="notes" rows="3" placeholder="Years in business, main services, anything else"></textarea></div>
-        <button class="btn btn-primary btn-block" type="submit" id="submitBtn">Email my free-check request <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
-        <p class="tiny">Prefer to type it yourself? Email us your business name and town and we'll take it from there.</p>
+        <h3>Request your free check.</h3>
+        <p class="hint" id="form-note">Takes about a minute. The button opens a ready-to-send email draft in your mail app for you to review and send.</p>
+        <div class="field"><label for="business">Business name</label><input id="business" name="business" required autocomplete="organization" maxlength="120" placeholder="e.g. Pine Hill Roofing"><div class="msg">Add your business name so we know who to check.</div></div>
+        <div class="fields-2">
+          <div class="field"><label for="town">Town and state</label><input id="town" name="town" required autocomplete="address-level2" maxlength="100" placeholder="e.g. Cabot, AR"><div class="msg">Add the town you serve — AI answers are local.</div></div>
+          <div class="field"><label for="service">Service</label><select id="service" name="service"><option>Roofing</option><option>Tree service</option><option>Both</option><option>Other (tell us below)</option></select></div>
+        </div>
+        <div class="field"><label for="website">Website <span>(optional)</span></label><input id="website" name="website" type="url" inputmode="url" autocomplete="url" maxlength="200" placeholder="https://yourwebsite.com"><div class="msg">That doesn’t look like a web address. Leave it blank if you don’t have one.</div></div>
+        <div class="field"><label for="notes">Anything we should know? <span>(optional)</span></label><textarea id="notes" name="notes" rows="3" maxlength="400" placeholder="Your service area or the types of jobs you want more of"></textarea></div>
+        <button class="btn btn-forest btn-block" type="submit" id="submitBtn">Open my email request <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <p class="tiny">Send the draft from your mail app to request your check.</p>
       </div>
       <div class="done">
         <div class="ok"><svg aria-hidden="true"><use href="#i-check"/></svg></div>
-        <h3>Your email is ready to send</h3>
-        <p>Your mail app should have opened with everything filled in. Hit send and we'll get to work.</p>
-        <div class="fallback">
-          <b>Didn't open?</b> Copy this and email it to <a href="mailto:ridgelinemarketinghq@gmail.com" style="color:var(--ember-2)">ridgelinemarketinghq@gmail.com</a>
-          <pre id="fallbackText"></pre>
-          <button class="copy" type="button" id="copyBody" style="margin-top:10px"><svg aria-hidden="true"><use href="#i-copy"/></svg><span>Copy message</span></button>
+        <h3>Your email draft is ready</h3>
+        <p>Your mail app should have opened with everything filled in. Review it and tap send — your request reaches us once you send it.</p>
+        <div class="fallback" id="emailFallback">
+          <label for="requestCopy">If your mail app didn’t open, copy this request and email it to <a class="link" href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a>.</label>
+          <textarea id="requestCopy" readonly rows="8"></textarea>
+          <button class="btn btn-light btn-block" type="button" id="copyRequest"><svg aria-hidden="true"><use href="#i-copy"/></svg><span>Copy request</span></button>
         </div>
+        <button class="edit-btn" type="button" id="editRequest">Edit my details</button>
       </div>
+      <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+      <noscript><p class="tiny">Email your business name, town, and service to <a href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a> to request your check.</p></noscript>
     </form>
   </div>
 </section>
@@ -622,11 +745,15 @@ footer a{color:var(--pale);text-decoration:underline;text-underline-offset:3px;w
 
 <footer>
   <div class="wrap">
-    <div><b><svg aria-hidden="true"><use href="#i-logo"/></svg>Ridgeline Local</b>Local AI visibility for independent roofers and tree services. Plain talk, real proof, all online.</div>
+    <div><b><svg aria-hidden="true"><use href="#i-logo"/></svg>Ridgeline Local</b>Great local work. Make it easier to find. Local visibility for independent roofers and tree services — plain talk, documented work, all online.</div>
     <div><b>Contact</b><a href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a><br>Replies within two business days.</div>
     <div><b>Serving</b>Roofers and tree services across the South and Midwest.<br>© <span id="year">2026</span> Ridgeline Local</div>
   </div>
 </footer>
+
+<aside class="sticky-cta" id="stickyCta" aria-label="Request your free AI check" hidden>
+  <a class="btn btn-brass" href="#free-check">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</aside>
 
 <script>
 (function(){
@@ -640,65 +767,62 @@ footer a{color:var(--pale);text-decoration:underline;text-underline-offset:3px;w
   $("#year").textContent=new Date().getFullYear();
 
   /* ---- mobile menu ---- */
-  var menuBtn=$("#menuBtn"),sheet=$("#sheet");
+  var menuBtn=$("#menuBtn"),sheet=$("#sheet"),menuOpen=false;
   function setMenu(open){
+    menuOpen=open;
     sheet.setAttribute("data-open",open?"true":"false");
     menuBtn.setAttribute("aria-expanded",open?"true":"false");
     menuBtn.setAttribute("aria-label",open?"Close menu":"Open menu");
     menuBtn.innerHTML='<svg aria-hidden="true"><use href="#'+(open?"i-x":"i-menu")+'"/></svg>';
     document.body.style.overflow=open?"hidden":"";
+    scheduleSticky();
   }
   menuBtn.addEventListener("click",function(){setMenu(sheet.getAttribute("data-open")!=="true")});
   $$("a",sheet).forEach(function(a){a.addEventListener("click",function(){setMenu(false)})});
-  window.addEventListener("resize",function(){if(window.innerWidth>860)setMenu(false)});
-  document.addEventListener("keydown",function(e){if(e.key==="Escape")setMenu(false)});
+  window.addEventListener("resize",function(){if(window.innerWidth>860&&menuOpen)setMenu(false)});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&menuOpen)setMenu(false)});
 
-  /* ---- hero: rotating AI questions + results ---- */
-  var scenes=[
-    {q:"Who's the best roofer near Cabot, Arkansas?",r:[["Summit Peak Roofing","Roof replacement · 184 reviews","4.8 ★"],["Oak & Stone Roofing","Storm repair · 126 reviews","4.7 ★"],["Northline Roof Co.","Local roofing · 98 reviews","4.9 ★"]]},
-    {q:"I need a big oak removed in Owasso OK. Who should I call?",r:[["Timberline Tree Care","Removal & trimming · 211 reviews","4.9 ★"],["Red Dirt Tree Service","Storm cleanup · 142 reviews","4.8 ★"],["Cedar Creek Arborists","Certified arborist · 77 reviews","4.7 ★"]]},
-    {q:"Roof leaking after the storm in Foley AL — who do I trust?",r:[["Gulf Shore Roofing Co.","Leak repair · 163 reviews","4.8 ★"],["Baldwin Roof & Gutter","Insurance claims · 119 reviews","4.7 ★"],["Pelican Roofing","Local roofing · 85 reviews","4.9 ★"]]}
+  /* ---- hero: rotating illustrative questions ---- */
+  var questions=[
+    "“Who’s a good roofer in my town?”",
+    "“Who can take down a big oak near me?”",
+    "“My roof is leaking after the storm. Who do I call?”"
   ];
-  var panel=$("#aiPanel"),askText=$("#askText"),results=$("#results"),si=0,typing=null;
-  function renderResults(r){
-    results.innerHTML=r.map(function(x,i){return '<div class="result"><span class="n">'+(i+1)+'</span><div><b>'+x[0]+'</b><small>'+x[1]+'</small></div><span class="stars">'+x[2]+'</span></div>'}).join("");
+  var ask=$("#askText"),qi=0;
+  if(!reduce){
+    setInterval(function(){
+      qi=(qi+1)%questions.length;
+      ask.classList.add("fade");
+      setTimeout(function(){ask.textContent=questions[qi];ask.classList.remove("fade")},460);
+    },6500);
   }
-  function playScene(idx){
-    var s=scenes[idx];
-    clearTimeout(typing);
-    panel.classList.remove("live");
-    renderResults(s.r);
-    if(reduce){askText.textContent=s.q;panel.classList.add("live");return}
-    askText.textContent="";
-    var i=0;
-    (function type(){
-      askText.textContent=s.q.slice(0,i++);
-      if(i<=s.q.length){typing=setTimeout(type,28+Math.random()*30)}
-      else{typing=setTimeout(function(){panel.classList.add("live")},350)}
-    })();
-  }
-  playScene(0);
-  if(!reduce){setInterval(function(){si=(si+1)%scenes.length;playScene(si)},8200)}
 
-  /* ---- reveal on scroll ---- */
-  var io="IntersectionObserver" in window?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{rootMargin:"0px 0px -8% 0px",threshold:.08}):null;
-  $$(".reveal").forEach(function(el){io?io.observe(el):el.classList.add("in")});
-
-  /* ---- stat count-up ---- */
-  function countUp(el){
-    var to=parseFloat(el.dataset.to),dec=parseInt(el.dataset.dec||"0",10),t0=null,dur=1400;
-    if(reduce){el.textContent=to.toFixed(dec);return}
-    function frame(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/dur);p=1-Math.pow(1-p,3);el.textContent=(to*p).toFixed(dec);if(p<1)requestAnimationFrame(frame)}
-    requestAnimationFrame(frame);
+  /* ---- reveal on scroll (content is visible before JavaScript runs) ---- */
+  var targets=$$("[data-reveal]");
+  if("IntersectionObserver" in window&&!reduce){
+    try{
+      var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{rootMargin:"0px 0px -8% 0px",threshold:.08});
+      targets.forEach(function(el){el.classList.add("reveal-wait");io.observe(el)});
+    }catch(_){targets.forEach(function(el){el.classList.remove("reveal-wait")})}
   }
-  var cio="IntersectionObserver" in window?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){countUp(e.target);cio.unobserve(e.target)}})},{threshold:.5}):null;
-  $$(".count").forEach(function(el){cio?cio.observe(el):countUp(el)});
+
+  /* ---- sticky mobile CTA: available while scrolling, hidden over the form ---- */
+  var sticky=$("#stickyCta"),contact=$("#free-check"),scheduled=false;
+  function updateSticky(){
+    var r=contact.getBoundingClientRect();
+    var contactVisible=r.top<window.innerHeight&&r.bottom>0;
+    sticky.hidden=!(window.innerWidth<=760&&window.scrollY>420&&!contactVisible&&!menuOpen);
+    scheduled=false;
+  }
+  function scheduleSticky(){if(!scheduled){scheduled=true;requestAnimationFrame(updateSticky)}}
+  window.addEventListener("scroll",scheduleSticky,{passive:true});
+  window.addEventListener("resize",scheduleSticky);
+  updateSticky();
 
   /* ---- signal check ---- */
   var boxes=$$("#sigList input"),scoreNum=$("#scoreNum"),verdict=$("#verdict"),note=$("#scoreNote"),ridge=$("#ridgePath"),ridgeFill=$("#ridgeFillPath"),summit=$("#summit");
   var shown=0,raf=null,lastScore=0;
   function ridgeFor(score){
-    // ridge rises with score; summit lands in the "recommended range" (y<=30) only near 100
     var base=130,h=score/100,pts=[[0,base-18*h],[60,base-46*h],[110,base-28*h],[160,base-70*h],[230,base-100*h],[290,base-60*h],[340,base-82*h],[400,base-40*h]];
     var d=pts.map(function(p,i){return (i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)}).join(" ");
     return {d:d,fill:d+" L400 140 L0 140Z",top:pts[4][1]};
@@ -716,34 +840,41 @@ footer a{color:var(--pale);text-decoration:underline;text-underline-offset:3px;w
   }
   function update(){
     var total=0,checked=0;
-    boxes.forEach(function(b){if(b.checked){total+=parseInt(b.value,10);checked++}});
+    boxes.forEach(function(b){b.closest(".sig").classList.toggle("on",b.checked);if(b.checked){total+=parseInt(b.value,10);checked++}});
     lastScore=total;
     animateTo(total);
     var tone,txt,n;
-    if(checked===0){tone="low";txt="Nothing checked yet";n="Tap the signals you already have. We'll show where you stand and what moves the needle most."}
-    else if(total<40){tone="low";txt="Weak signals — AI has little to go on";n="Businesses that get named have a complete profile, matching details and a steady review flow. Right now other companies are easier to recommend than you. The free check shows you exactly who."}
-    else if(total<75){tone="mid";txt="Solid base, big gaps left";n=(boxes[3].checked?"":"Review count is the strongest single signal in the 2026 studies — ")+"Finish the profile, match your details across the web and keep posting. That's the work we do for you."}
-    else{tone="high";txt="Strong signals — now keep them fresh";n="You've done the hard part. The risk now is drift: stale posts, unanswered reviews, a mismatched phone number. The free check confirms what AI actually says about you today."}
+    if(checked===0){tone="low";txt="Nothing checked yet";n="Tap the signals you already have. We’ll show where you stand and what moves the needle most."}
+    else if(total<40){tone="low";txt="Weak signals — AI has little to go on";n="Businesses that get named have a complete profile, matching details and a steady review flow. Right now other companies are easier to recommend than you. The free check shows you exactly where you stand."}
+    else if(total<75){tone="mid";txt="Solid base, big gaps left";n=(boxes[3].checked?"":"Review count is the strongest single signal — ")+"finish the profile, match your details across the web and keep posting. That’s the work we do for you."}
+    else{tone="high";txt="Strong signals — now keep them fresh";n="You’ve done the hard part. The risk now is drift: stale posts, unanswered reviews, a mismatched phone number. The free check confirms what AI actually says about you today."}
     verdict.dataset.tone=tone;verdict.textContent=txt;note.textContent=n;
   }
   boxes.forEach(function(b){b.addEventListener("change",update)});
   update();
 
   /* ---- copy helpers ---- */
-  function copyText(txt,btn){
+  function copyText(txt,btn,status){
     var label=btn.querySelector("span"),orig=label.textContent;
-    function ok(){label.textContent="Copied";setTimeout(function(){label.textContent=orig},1600)}
-    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok,function(){fallback()})}else{fallback()}
-    function fallback(){var ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");ok()}catch(e){label.textContent="Select and copy"}document.body.removeChild(ta)}
+    function ok(){label.textContent="Copied";if(status)status.textContent="Request copied. Paste it into an email to "+EMAIL+" and send it.";setTimeout(function(){label.textContent=orig},1800)}
+    function fallback(){
+      var ta=$("#requestCopy");
+      if(ta&&ta.value===txt){ta.focus();ta.select();ta.setSelectionRange(0,ta.value.length);if(status)status.textContent="Your request is selected. Use your device’s Copy command, then paste it into your email app.";return}
+      var t=document.createElement("textarea");t.value=txt;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();
+      try{document.execCommand("copy");ok()}catch(e){label.textContent="Select and copy"}
+      document.body.removeChild(t);
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){navigator.clipboard.writeText(txt).then(ok,fallback)}else{fallback()}
   }
   $("#copyEmail").addEventListener("click",function(){copyText(EMAIL,this)});
 
-  /* ---- lead form ---- */
-  var form=$("#leadForm");
+  /* ---- lead form: opens a mailto draft; the visitor sends it. A real backend, if added later, should replace this handler. ---- */
+  var form=$("#leadForm"),status=$("#formStatus"),requestCopy=$("#requestCopy"),submitBtn=$("#submitBtn");
+  var submitLabel=submitBtn.innerHTML;
   function fieldOf(input){return input.closest(".field")}
   function validate(){
     var good=true;
-    ["business","town"].forEach(function(id){var el=$("#"+id),f=fieldOf(el);var bad=!el.value.trim();f.classList.toggle("err",bad);if(bad&&good){el.focus();good=false}});
+    ["business","town"].forEach(function(id){var el=$("#"+id),f=fieldOf(el);el.value=el.value.trim();var bad=!el.value;f.classList.toggle("err",bad);if(bad&&good){el.focus();good=false}});
     var web=$("#website"),wf=fieldOf(web),v=web.value.trim();
     var webBad=v&&!/^(https?:\/\/)?[\w-]+(\.[\w-]+)+(\/\S*)?$/i.test(v);
     wf.classList.toggle("err",!!webBad);if(webBad&&good){web.focus();good=false}
@@ -754,15 +885,27 @@ footer a{color:var(--pale);text-decoration:underline;text-underline-offset:3px;w
     e.preventDefault();
     if(!validate())return;
     var d=new FormData(form);
+    var get=function(name){return String(d.get(name)||"").trim()};
     var checkedSignals=boxes.filter(function(b){return b.checked}).length;
-    var body="Hello Ridgeline Local,\n\nI'd like my free AI check.\n\nBusiness: "+d.get("business").trim()+"\nTown/state: "+d.get("town").trim()+"\nTrade: "+d.get("service")+"\nWebsite: "+(d.get("website").trim()||"Not provided")+"\nNotes: "+(d.get("notes").trim()||"None")+(checkedSignals?"\nSignal self-check: "+checkedSignals+" of "+boxes.length+" signals, score "+lastScore+"/100":"")+"\n\nThank you.";
-    var subject="Free AI check request — "+d.get("business").trim();
-    $("#fallbackText").textContent="Subject: "+subject+"\n\n"+body;
-    $("#copyBody").onclick=function(){copyText("Subject: "+subject+"\n\n"+body,this)};
-    var btn=$("#submitBtn");btn.disabled=true;btn.innerHTML="Opening your mail app…";
-    window.location.href="mailto:"+EMAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
-    setTimeout(function(){form.setAttribute("data-state","sent");form.scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"})},700);
+    var request=[
+      "Hello Ridgeline Local,","","I would like my free AI check.","",
+      "Business: "+get("business"),"Town/state: "+get("town"),"Service: "+get("service"),
+      "Website: "+(get("website")||"Not provided"),"Notes: "+(get("notes")||"None")
+    ].concat(checkedSignals?["Signal self-check: "+checkedSignals+" of "+boxes.length+" signals, score "+lastScore+"/100"]:[])
+     .concat(["","Thank you."]).join("\r\n");
+    var subject="Free AI check request — "+get("business");
+    requestCopy.value="Subject: "+subject+"\r\n\r\n"+request;
+    submitBtn.disabled=true;submitBtn.innerHTML="Opening your mail app…";
+    window.location.href="mailto:"+EMAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(request);
+    setTimeout(function(){
+      form.setAttribute("data-state","ready");
+      status.textContent="Your draft is ready. Review and send it in your email app. A copy is available below.";
+      submitBtn.disabled=false;submitBtn.innerHTML=submitLabel;
+      form.scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"});
+    },700);
   });
+  $("#copyRequest").addEventListener("click",function(){copyText(requestCopy.value,this,status)});
+  $("#editRequest").addEventListener("click",function(){form.setAttribute("data-state","idle");status.textContent="";$("#business").focus()});
 })();
 </script>
 </body>
