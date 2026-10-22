@@ -28,6 +28,14 @@ before updating it and pass if_version). Day key = TZ=America/Chicago date +%F.
 3. Suppression list in memory: never email an address, domain or business on it (except a
    client's own service emails).
 
+## Heartbeat (every run, even when every lane finds nothing; this is how the Emergency Watch
+## knows the desk is alive)
+At the START write health/desk (set; read first, pass if_version) = {at: now ISO, state:
+"running", startedAt: now}. At the END overwrite it with {at: now, state:"idle", startedAt,
+finishedAt, minutes, lanes:{replies, checks, clients, deliveries, grayson}, inboxSeen: <threads
+the search returned>, note: "<one line: what happened, or 'nothing new'>", needsYou:[...]}.
+The run-log line in the repo is in addition to this, never instead of it.
+
 ## Lane A: replies from prospects
 Search `in:inbox newer_than:3d -label:Ridgeline-Handled -from:stripe.com -from:github.com
 -from:google.com -from:accounts.google.com -category:promotions -category:social`. Skip
