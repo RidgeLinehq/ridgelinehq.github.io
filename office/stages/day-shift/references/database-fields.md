@@ -32,7 +32,7 @@
  notes, source:"scout <day>", runId, createdAt, updatedAt}
 
 ## drafts/<id>
-{kind:"outreach"|"followup"|"breakup"|"freecheck"|"reply"|"script"|"caption"|"calendar"|"post",
+{kind:"outreach"|"followup"|"breakup"|"freecheck"|"reply"|"script"|"caption"|"calendar"|"post"|"kit"|"plan"|"report", clientId (client work only),
  leadId, businessName, town, title, subject, body, touch:1|2|3,
  status:"draft"|"ready"|"approved"|"sent"|"rejected"|"failed"|"brief"|"filmed"|"posted",
  qa:{score, levers:[], flags:[], at}, gmailDraftId, gmailDraftUrl,
@@ -53,9 +53,12 @@
 {email, domain, businessName, reason, by, at}
 
 ## clients/<id>
-{leadId, businessName, town, state, plan:"founding"|"standard", monthly:147|197, startedAt,
- stripe:{customerEmail, lastPaymentAt}, reviewsAtStart, reviewsNow, managerAccess:bool,
- work:[{t, item, status}], reportDue, status:"active"|"paused"|"cancelled", notes}
+{leadId, businessName, town, state, contactEmail, plan:"founding"|"standard", monthly:147|197, startedAt,
+ stripe:{customerEmail, lastPaymentAt, messageId}, reviewsAtStart, reviewsNow, managerAccess:bool,
+ reviewLink, yelpClaimed:bool, work:[{item, status:"todo"|"drafted"|"done", t, draftId}], guarantee:{checkedAt, gained, met},
+ reportDue, status:"active"|"paused"|"cancelled", notes, createdAt, updatedAt}
+ Standard work items (the page shows them as ticks): welcome-sent, manager-access, review-link,
+ profile-audit, buildout-plan, buildout-applied, review-kit, listing-fixes, yelp-claim, week-post, report-30
 
 ## lessons/<id>
 {title, observation, evidence, confidence:0-100, agent, predicted, observed, workflowVersion,

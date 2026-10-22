@@ -1,6 +1,6 @@
 # Day Shift pipeline
 
-Nine sub-stages, in order, run by FRESH WORKERS so no worker carries another's context. You
+Ten sub-stages, in order, run by FRESH WORKERS so no worker carries another's context. You
 (the scheduled session) are Mara, the coordinator: you keep almost nothing in your own context.
 The Day Shift finds businesses, scores them, writes the outreach, prepares video briefs, learns
 from replies, checks health and reports, every weekday morning. It sends email ONLY through the
@@ -41,7 +41,8 @@ gates in specs/email-rules.md. It never texts, calls, DMs or posts.
 | Outreach | 03-parker, 04-echo | once | paused; or no Qualified lead with an email and no follow-up due |
 | Studio | 05-nova | Monday and Thursday only | a brief already exists for this week's slot |
 | Review | 06-sage, 07-patch | once | never (sub-steps have their own skips) |
-| Report | 08-report | once | never |
+| Clients | 09-clients | once | no client with status active |
+| Report | 08-report | once, last | never |
 
 ## Assigned tasks (tasks collection, status queued)
 Before launching the Research worker, Mara lists tasks with status queued (ArtifactData query).
@@ -75,6 +76,7 @@ only, no prose padding.
 | 06 | `specs/email-rules.md` ("Reply handling"), `skills/sage/SKILL.md`, `LESSONS.md`, `references/database-fields.md` (lessons, workflow, clients) |
 | 07 | `skills/patch/SKILL.md`, `shared/repo.md` ("Write paths"), `references/database-fields.md` (health) |
 | 08 | `skills/mara/SKILL.md`, `shared/logging.md`, `shared/repo.md` ("Committing") |
+| 09 | `specs/client-delivery.md`, `specs/offer.md` (Included), `skills/echo/SKILL.md`, `skills/parker/SKILL.md` |
 
 Do NOT load: every skill, every spec, `office/server/`, `office/page/`, `index.html` (Patch
 fetches the live site instead). If a stage file cannot be read, stop that stage, write the run
