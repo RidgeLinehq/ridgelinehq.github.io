@@ -1,0 +1,13 @@
+{
+ "id": "ad2-2026-10-22",
+ "files": [
+  {
+   "url": "https://ai-voiceovers.s3.us-east-1.amazonaws.com/5167f1b8-a768-4fb0-bd86-165476a38adc/b69dac3e-292f-414d-9a16-858dc628b708.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAQLTYEZQZ5WZBN7OR%2F20261022%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261022T214207Z&X-Amz-Expires=43200&X-Amz-Security-Token=IQoJb3JpZ2luX2VjELb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQCFvQBKSt4xY1LgwaXeZ3NZ90YIfo63dGl6BB2XFOMQ2gIhALbBVvgCJIarOK2t%2FJEad4ZPvjM9oGVsQNtQbQWYJXZbKoAFCH4QABoMMDI0OTQ4MDM0NjExIgxDKc6jY9MRuwaPZOMq3QQtA7rpsYFXZYUo90A9RsGUL%2BAml7I8ygAB2XicXQPWzW4dbruV%2FCqFPiILOPnexQ6Sx%2F51wVuZqJsFcCKwdmFiqzQZcow%2Be%2FjePuwODVvTo01OUZvoNb2KQsmk%2BmTfyyZu%2FdC6aaM%2BZxlZi%2BjMYGZ4KtdnQqJiolDTVRu%2FBlETyePb%2B8lPepYK5jHEPnWmz8Ok4EFWol%2FwyS0II%2FBjBMTBAB6luYhfHobFbgwG0IcCz3ZhL7FN9okUcW9Kbdf0gKGF%2B0eRvm9dfGBN1kqNwxuDihfOlLf0jHGszRR8TJbZ5jWcQdQpcz%2FbwiPxVJmBfkazi6zwg4frKM2ESnAn4Cgv4xb17IG0Em%2Fg9LpsyDq289rmTq2pdSXVcGWEcbexZOAwGS%2BXGsR9uD0pwYhPND49BecxFEBhSqQfb%2Ffgb9WAeM1UBDwtYblMT8L2yZIUvR4qOKGLh5Tc6Jztk7Ty6pI9MvXqNKHOYQ0G5E%2FTiFluNQZ2I%2FbMz9UphL4McoEfJazt6tvWCyKuR0nbf%2BZiap67HhdocWP9lE2UlGyhYIrsaN0LRSYjNl0rEy7Xq6EOgLfrEsiZEt5VfUix2RDnh7qpxwVD6SJVVXAby9sD6ZXzKkfwJG9nRT0Uj7JSEb2KDKf5zTkyfxXYJjTPbtwwFIxPqQ%2Bb9wOOrj5VacU79FZKkgETW5AjNATZlFb1Mx8yEszSw5tEKzP738Z2J82De2aOCqbvWih3D7W%2FNftjLg0uFj0gA0UASWwSBMt%2BD83U24XKGqgWwHsIIweGgw%2By7vmIH4ANEx9joMplZG2AFTCvhurWBjqXAdioH0%2FbFFA23S6YJfz7mOULwr27utR3zuqEikPc2T0tQuF%2FC1bi3Y7XG%2FhaNgkRbLsTNSqR7JjVzYhadbilwsJdzaoHqLx3v7dm1PD0O40BD5FpC8E1N%2FSxzCy1i0G3e0iczRnEXSW9GaIkzMeSDY0N9IvqP%2F8j6AMtiGX99tG76AUctayoQ%2FwS7rmGTDYj0XwiA7A9kc8%3D&X-Amz-Signature=bffa5e72198282a1aac5c9635fde1e13cc2d1ec70cee4baee29e8d0d1703bfcc&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+   "path": "office/studio/media/ad2/vo.mp3"
+  },
+  {
+   "url": "https://ai-music-tracks.s3.us-east-1.amazonaws.com/5167f1b8-a768-4fb0-bd86-165476a38adc/a994b18d-a750-466c-a681-99a98d177245.wav",
+   "path": "office/studio/media/ad2/music.wav"
+  }
+ ]
+}
