@@ -8,19 +8,32 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    defaults:
-      run:
-        working-directory: office/server
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -r requirements.txt
-      - run: python -m pytest -q
+      - run: pip install -r office/server/requirements.txt
+      - name: Run the tests (output saved to office/health/server-tests.txt)
+        id: tests
+        run: |
+          mkdir -p office/health
+          set +e
+          (cd office/server && python -m pytest -q -rA 2>&1) | tee office/health/server-tests.txt
+          echo "exit=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+      - name: Record the result in the repo
+        run: |
+          git config user.name "ridgeline-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add office/health/server-tests.txt
+          git commit -m "server tests: exit ${{ steps.tests.outputs.exit }} [skip ci]" || echo "nothing to commit"
+          git pull --rebase
+          git push
+      - name: Fail the job if tests failed
+        run: test "${{ steps.tests.outputs.exit }}" = "0"

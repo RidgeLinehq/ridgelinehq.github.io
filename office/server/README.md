@@ -37,7 +37,7 @@ pip install -r requirements.txt
 cp .env.example .env   # fill in what you have; export the variables (or let the host set them)
 uvicorn app:app --host 127.0.0.1 --port 8000
 ```
-Open http://127.0.0.1:8000. Tests: `pytest -q` (34 tests; all providers mocked, nothing sent).
+Open http://127.0.0.1:8000. Tests: `pytest -q` (30 tests; all providers mocked, nothing sent).
 
 Worker in its own process (optional): `RIDGELINE_WORKER=false uvicorn app:app ...` plus
 `python worker.py`. Both may run at once; task claims are atomic.
