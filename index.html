@@ -167,6 +167,38 @@ em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spac
 .band-items li:first-child{border-left:0}
 .band-items svg{width:44px;height:44px;color:var(--ink)}
 
+/* ---------- real AI check (word for word) ---------- */
+.ai-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.ai-answer{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:26px 26px 22px;box-shadow:0 18px 48px rgba(20,48,38,.08);display:flex;flex-direction:column;min-width:0}
+.ai-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.ai-head strong{display:block;font-family:var(--display);font-weight:800;font-size:1.3rem;letter-spacing:-.03em}
+.ai-head span{display:block;font-size:.8rem;color:var(--muted);margin-top:3px}
+.ai-head time{flex:none;font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brass-text);background:var(--ivory-2);border-radius:20px;padding:6px 10px;white-space:nowrap}
+.ai-ask{margin:18px 0 16px;padding:12px 14px;background:var(--sage);border-radius:12px 12px 12px 4px;font-family:var(--serif);font-size:1.3rem;line-height:1.3}
+.ai-ask span{display:block;font-family:var(--body);font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.ai-lead{font-size:.92rem;color:var(--muted);margin-bottom:4px}
+.ai-list{list-style:none;padding:0;margin:0;counter-reset:ai}
+.ai-list li{counter-increment:ai;display:flex;align-items:center;gap:14px;padding:10px 0;border-top:1px solid var(--line);font-weight:600;font-size:1rem;line-height:1.35}
+.ai-list li::before{content:counter(ai,decimal-leading-zero);font-family:var(--serif);font-weight:400;font-size:1.2rem;color:var(--brass-num);min-width:28px}
+.ai-sources{margin-top:14px;font-size:.8rem;color:var(--muted);line-height:1.55;overflow-wrap:anywhere}
+.ai-sources span{font-weight:600;color:var(--ink)}
+.ai-full{margin-top:auto;padding-top:12px}
+.ai-full summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;font-weight:600;font-size:.9rem;color:var(--forest);text-decoration:underline;text-decoration-color:var(--brass);text-decoration-thickness:2px;text-underline-offset:4px}
+.ai-full summary::-webkit-details-marker{display:none}
+.ai-full summary::after{content:"+";font-size:1.15rem;color:var(--brass-text);text-decoration:none}
+.ai-full[open] summary::after{content:"\2212"}
+.ai-full .raw{margin-top:8px;padding:16px;background:var(--ivory);border-radius:12px;font-size:.88rem;line-height:1.6}
+.ai-full .raw p{margin-bottom:10px}
+.ai-full .raw ol{padding-left:20px;margin:0 0 10px}
+.ai-full .raw li{margin-bottom:8px}
+.ai-full .raw small{display:block;margin-top:12px;padding-top:10px;border-top:1px solid #d9d3c2;font-size:.76rem;color:var(--muted);line-height:1.5}
+.ai-takeaway{margin-top:26px;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:28px 30px;background:var(--forest);color:#fff;border-radius:var(--r);position:relative;overflow:hidden}
+.ai-takeaway .contours{right:-160px;top:-60px;width:520px;opacity:.18}
+.ai-takeaway>div{position:relative;max-width:62ch}
+.ai-takeaway strong{display:block;font-family:var(--display);font-weight:800;font-size:1.35rem;letter-spacing:-.03em;line-height:1.15;margin-bottom:8px}
+.ai-takeaway p{color:var(--muted-dark);font-size:.97rem}
+.ai-takeaway .btn{flex:none;position:relative}
+
 /* ---------- cards (sound familiar) ---------- */
 .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
 .card{background:var(--ivory);border:1px solid var(--line);border-radius:var(--r);padding:30px 28px}
@@ -356,6 +388,9 @@ footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass)
   .hero-grid{margin-top:-80px;padding-top:0}
   .hero .contours{display:none}
   .grid-3{grid-template-columns:minmax(0,1fr)}
+  .ai-grid{grid-template-columns:minmax(0,1fr)}
+  .ai-takeaway{flex-direction:column;align-items:flex-start}
+  .ai-takeaway .btn{width:100%}
   .deliverables{grid-template-columns:minmax(0,1fr);gap:0}
   .steps{grid-template-columns:minmax(0,1fr);gap:26px}
   .step{padding:0}
@@ -389,6 +424,9 @@ footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass)
   .band-items svg{width:36px;height:36px}
   .band .contours{right:-220px;top:auto;bottom:-60px;width:460px}
   .card{padding:24px 22px}
+  .ai-answer{padding:22px 18px 16px}
+  .ai-ask{font-size:1.15rem}
+  .ai-takeaway{padding:24px 20px}
   .num{margin-bottom:18px}
   .sheet-card,.price-card,.form{padding:24px 20px}
   .cta-row .btn{width:100%}
@@ -452,6 +490,7 @@ footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass)
 <div class="sheet" id="sheet" data-open="false">
   <a href="#services">What we do <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#how">How it works <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  <a href="#real-check">See a real AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#check">Check my signals <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#pricing">Pricing <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#faq">FAQ <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
@@ -486,7 +525,7 @@ footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass)
       <div class="ai-top"><span>A homeowner's next question</span><span class="pill">Illustrative example</span></div>
       <p class="ai-q" id="askText">“Who’s a good roofer in my town?”</p>
       <div class="chips"><span>Clear business details</span><span>Customer reviews</span><span>Consistent profiles</span></div>
-      <figcaption class="ai-note">The local information we help you strengthen. This is an illustration, not a live AI result.</figcaption>
+      <figcaption class="ai-note">The local information we help you strengthen. This card is an illustration — <a class="link" href="#real-check">see a real check below</a>.</figcaption>
     </figure>
   </div>
 </section>
@@ -510,6 +549,70 @@ footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass)
       <li><svg aria-hidden="true"><use href="#i-bubble"/></svg>Review presence</li>
       <li><svg aria-hidden="true"><use href="#i-pin"/></svg>Local listings</li>
     </ul>
+  </div>
+</section>
+
+<!-- ===================== REAL AI CHECK (word for word) ===================== -->
+<section class="section" id="real-check" aria-labelledby="real-title">
+  <div class="wrap">
+    <div class="head" data-reveal>
+      <span class="kicker">A real check, word for word</span>
+      <h2 id="real-title">We asked two AI tools the same question. Here’s exactly what they said.</h2>
+      <p class="lede">A real check we ran on October 22, 2026 for one of the towns we focus on. Not a client result — just what ChatGPT and Gemini answer today, shown as returned.</p>
+    </div>
+    <div class="ai-grid">
+      <article class="ai-answer" data-reveal aria-labelledby="ai-chatgpt">
+        <header class="ai-head"><div><strong id="ai-chatgpt">ChatGPT</strong><span>Model gpt-5.5 · live web search on</span></div><time datetime="2026-10-22">Oct 22, 2026</time></header>
+        <p class="ai-ask"><span>We asked</span>“Who are the best roofers in Owasso, OK?”</p>
+        <p class="ai-lead">It named five companies, in this order:</p>
+        <ol class="ai-list">
+          <li>GoldenRite Roofing &amp; Construction</li>
+          <li>Dun-Rite Roofing</li>
+          <li>Ridgeback Roofing &amp; Construction</li>
+          <li>Rescue Roofing</li>
+          <li>GZI Roofing and Construction</li>
+        </ol>
+        <p class="ai-sources"><span>Where it looked:</span> bestprosintown.com · gaf.com · americanroofingregistry.com · reviews.birdeye.com · oklahoma.gov</p>
+        <details class="ai-full"><summary>Read the full answer</summary><div class="raw">
+          <p>If I were an Owasso homeowner, I’d call these <strong>first</strong>:</p>
+          <ol>
+            <li><strong>GoldenRite Roofing &amp; Construction</strong> — my top call for a full replacement; very strong local review volume and BestProsInTown lists them #1 in Owasso with 5.0/126 reviews. (bestprosintown.com)</li>
+            <li><strong>Dun-Rite Roofing</strong> — long-time Owasso name, good choice if you want a more established local contractor; GAF lists them in Owasso and notes an <strong>A+ BBB rating</strong>. (gaf.com)</li>
+            <li><strong>Ridgeback Roofing &amp; Construction</strong> — strong for storm/insurance work; listed with 5.0 ratings on local review roundups, and recent reviews mention clean, fast jobs. (bestprosintown.com)</li>
+            <li><strong>Rescue Roofing</strong> — worth a bid; American Roofing Registry shows them as an Owasso contractor with 155 reviews. (americanroofingregistry.com)</li>
+            <li><strong>GZI Roofing and Construction</strong> — smaller, but homeowners consistently praise roof-and-gutter work; good “local owner involved” option. (reviews.birdeye.com)</li>
+          </ol>
+          <p>Get <strong>three written bids</strong>, compare shingle brand/warranty, and verify Oklahoma CIB roofing registration before signing; Oklahoma CIB specifically recommends checking current registration. (oklahoma.gov)</p>
+          <small>Shown exactly as ChatGPT returned it on October 22, 2026, with its links shortened to site names. We don’t edit AI answers — including anything a tool gets wrong.</small>
+        </div></details>
+      </article>
+      <article class="ai-answer" data-reveal aria-labelledby="ai-gemini">
+        <header class="ai-head"><div><strong id="ai-gemini">Gemini</strong><span>Model gemini-3.6-flash · answered from memory, no live search</span></div><time datetime="2026-10-22">Oct 22, 2026</time></header>
+        <p class="ai-ask"><span>We asked</span>“Who are the best roofers in Owasso, OK?”</p>
+        <p class="ai-lead">It named three companies, in this order:</p>
+        <ol class="ai-list">
+          <li>Anchor Roofing &amp; Construction</li>
+          <li>Pro-Tech Roofing</li>
+          <li>Perfection Roofing</li>
+        </ol>
+        <p class="ai-sources"><span>Where it looked:</span> nowhere live — this answer came from what the model already knew.</p>
+        <details class="ai-full"><summary>Read the full answer</summary><div class="raw">
+          <p>If you’re looking for trustworthy roofers in Owasso, I’d get quotes from these three top-rated local companies:</p>
+          <ol>
+            <li><strong>Anchor Roofing &amp; Construction:</strong> Based right in Owasso, they are a go-to for storm damage and full replacements. Homeowners love them because they’re local neighbors who excel at navigating insurance claims without pushy sales tactics.</li>
+            <li><strong>Pro-Tech Roofing:</strong> Serving Owasso and the greater Tulsa metro, they have a stellar reputation for craftsmanship and honesty. They stand out for great communication, clear timelines, and meticulous cleanups (no stray nails left in your driveway).</li>
+            <li><strong>Perfection Roofing:</strong> A Green Country staple with over 40 years in the area. As a GAF Master Elite contractor, they can offer top-tier manufacturer warranties that newer or out-of-town companies simply can’t match.</li>
+          </ol>
+          <p><strong>A quick tip for any Owasso homeowner:</strong> Before hiring anyone, make sure they are registered with the Oklahoma Construction Industries Board (CIB), carry active general liability insurance, and give you a detailed written contract.</p>
+          <small>Shown exactly as Gemini returned it on October 22, 2026. This check ran without live Google Search, so Gemini answered from what it already knew. We don’t edit AI answers — including anything a tool gets wrong.</small>
+        </div></details>
+      </article>
+    </div>
+    <div class="ai-takeaway" data-reveal>
+      <svg class="contours" aria-hidden="true"><use href="#i-contours"/></svg>
+      <div><strong>Two tools. Two different lists. Not one company on both.</strong><p>Each tool builds its answer from the public information it can find about local businesses — review sites, directories, manufacturer listings, Google profiles. That’s the information we strengthen. Is your business on a list like this?</p></div>
+      <a class="btn btn-brass" href="#free-check">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
   </div>
 </section>
 
