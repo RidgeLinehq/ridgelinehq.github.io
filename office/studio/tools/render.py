@@ -30,7 +30,7 @@ def chunks(captions):
         res[-1]["t1"] = round(t1 + 0.25, 3)  # hold the last chunk through the breath
     return res
 
-data = {"dur": cfg["dur"], "captions": chunks(cfg["captions"]), "tl": cfg.get("tl", {})}
+data = {"dur": cfg["dur"], "captions": chunks(cfg["captions"]), "tl": cfg.get("tl", {}), "bgs": cfg.get("bgs", [])}
 
 class Q(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *a): pass
@@ -81,8 +81,22 @@ def pop():
     t = np.arange(int(0.08 * SR)) / SR
     f = 900 + 900 * np.exp(-t * 60)
     return np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 50) * 0.35
-FX = {"whoosh": whoosh, "tap": tap, "thud": thud, "pop": pop}
-gains = {"whoosh": 0.35, "tap": 0.5, "thud": 0.7, "pop": 0.4}
+def riser(L=1.3):
+    N = int(L * SR); x = rng.standard_normal(N); out = np.zeros(N); a = 0.0
+    for k in range(N):
+        c = 0.004 + 0.12 * (k / N) ** 2; a += c * (x[k] - a); out[k] = a
+    t = np.arange(N) / SR
+    tone = np.sin(2 * np.pi * np.cumsum(200 + 1400 * (t / L) ** 2) / SR) * 0.25
+    env = (t / L) ** 1.6
+    return (out * 3 + tone) * env
+def impact():
+    t = np.arange(int(1.2 * SR)) / SR
+    f = 38 + 160 * np.exp(-t * 18)
+    sub = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 4) * 1.4
+    burst = rng.standard_normal(len(t)) * np.exp(-t * 28) * 0.5
+    return sub + burst
+FX = {"whoosh": whoosh, "tap": tap, "thud": thud, "pop": pop, "riser": riser, "impact": impact}
+gains = {"whoosh": 0.35, "tap": 0.5, "thud": 0.7, "pop": 0.4, "riser": 0.45, "impact": 0.9}
 for t, kind in cfg.get("sfx", []):
     put(FX[kind](), t, gains[kind])
 fx = np.clip(fx, -1, 1)
@@ -99,7 +113,7 @@ filt = ("[1:a]aresample=44100,highpass=f=70,equalizer=f=140:t=q:w=1:g=2.5,equali
 cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
        "-framerate", str(fps), "-i", os.path.join(work, "f%05d.jpg"),
        "-i", vo, "-i", music, "-i", os.path.join(work, "fx.wav"),
-       "-filter_complex", filt, "-map", "0:v", "-map", "[a]",
+       "-filter_complex", filt, "-map", "0:v", "-map", "[a]", "-vf", cfg.get("grade", "eq=contrast=1.05:saturation=1.08,noise=alls=3:allf=t"),
        "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-pix_fmt", "yuv420p", "-profile:v", "high",
        "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-t", str(cfg["dur"]), "-movflags", "+faststart", out]
 subprocess.run(cmd, check=True)
