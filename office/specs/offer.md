@@ -22,6 +22,9 @@ return, and never label a Claude answer as ChatGPT or Gemini.
   any email.
 - Review-growth guarantee: if they don't gain at least 15 genuine Google reviews in the first
   60 days (counted from their review total on the day we start), month three is free.
+  Written terms (Oct 22, 2026): https://ridgelinehq.github.io/guarantee.html — day 1 = first
+  payment; Google reviews only; month 3 payment refunded in full within 7 days if under 15;
+  client uses the review kit; Sage emails the day-1 and day-60 counts. Link it, never reword it.
 - Founding spots: settings.foundingSpots is the real number left (Grayson sets it). The crew may
   say "N founding spots left" only with that live number, and never invents a deadline.
 - Payment link (recurring $147): https://buy.stripe.com/dRm00jgNddCI53cbOlaEE00
