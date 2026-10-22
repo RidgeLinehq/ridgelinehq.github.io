@@ -26,3 +26,4 @@ using specs/sales-psychology.md. Rotate subject patterns so Sage can score them.
 
 ## What I've learned (append-only, newest last)
 - 2026-10-22: Office opened. No runs yet. First real lesson comes from the first run's numbers.
+- 2026-10-22 (run 1317): Angles set in a dry run stay valid when Grayson qualifies the lead by hand; re-affirm with the run stamp instead of rewriting (2 leads, 0 hook changes).

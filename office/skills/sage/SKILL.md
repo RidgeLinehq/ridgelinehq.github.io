@@ -28,3 +28,4 @@ suppression and lessons with numbers. Propose and judge workflow changes against
 
 ## What I've learned (append-only, newest last)
 - 2026-10-22: Office opened. No runs yet. First real lesson comes from the first run's numbers.
+- 2026-10-22 (run 1317): Second reply check same day: 0 of 8 Charleston threads have a second message (search_threads messageCount 1 on all 8; one call, not eight). Judged Research's door-2 suggestion with numbers: removing the directory 'named' penalty would qualify 0 of 7 Cabot leads (scores reach 20, floor 35); the real blocker is 0 of 7 business sites readable. Wrote lessons/2026-10-22-cabot-door-2-not-the-blocker (confidence 60), no workflow doc (Thursday, 0 sends to evaluate).

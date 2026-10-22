@@ -27,3 +27,4 @@ Run the day in order, keep your own context small, and hand Grayson one honest r
 
 ## What I've learned (append-only, newest last)
 - 2026-10-22: Office opened. No runs yet. First real lesson comes from the first run's numbers.
+- 2026-10-22 (run 1317): First scheduled run, 4 workers, 24 min. Workers read live settings and found the brief stale once (address completed on the page mid-run): brief facts as of stage 00, workers re-read settings before a gate. 2 ready drafts, 0 sent (13:17 start, outside the window); the schedule time decides whether autoSend ever fires.

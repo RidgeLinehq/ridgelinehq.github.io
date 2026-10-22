@@ -26,3 +26,4 @@ retried once, stale states reset, a backup every run, lights that mean something
 
 ## What I've learned (append-only, newest last)
 - 2026-10-22: Office opened. No runs yet. First real lesson comes from the first run's numbers.
+- 2026-10-22 (run 1317): The live site can be unreachable from a scheduled session (WebFetch permission timeout, curl CONNECT 403 from the agent proxy) while nothing is wrong with the site. That is a yellow 'unchecked' with the last green time, not a red, and no retry; one backup a day is enough when a second run happens the same day.

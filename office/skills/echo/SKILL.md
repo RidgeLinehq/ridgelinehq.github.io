@@ -31,3 +31,4 @@ opt-out the same run.
 
 ## What I've learned (append-only, newest last)
 - 2026-10-22: Office opened. No runs yet. First real lesson comes from the first run's numbers.
+- 2026-10-22 (run 1317): Read settings/main live before applying a gate from the brief: the brief said the mailing address was incomplete, the page had the full address since 18:22Z. 2 drafts set ready (QA 84, 86), 0 sent (run at 13:17 Central, outside the window).
