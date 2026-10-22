@@ -6,7 +6,7 @@ until that folder's CONTEXT.md tells you to.
 | Scheduled task (name in the task list) | Folder | What it is |
 |---|---|---|
 | Ridgeline Office · Day Shift | `stages/day-shift/` | The daily run: Scout finds businesses, Quinn scores, Parker picks the angle, Echo writes and (when allowed) sends, Nova writes video briefs, Sage learns from replies, Patch checks health, Mara reports |
-| Ridgeline · reply desk | `stages/reply-desk/` | Every 2 hours: answers prospect replies and payments in the Ridgeline Gmail (its instructions live in its own task prompt; the folder explains how the office reads its work) |
+| Ridgeline · reply desk | `stages/reply-desk/` | Every 2 hours, every day: answers prospect replies, runs and sends the free AI check in the same run, welcomes paying clients, emails the crew's client work (`stages/reply-desk/CONTEXT.md`) |
 | A task assigned from the office page (tasks collection, status queued) | `stages/day-shift/CONTEXT.md` section "Assigned tasks" | Grayson queued a one-off job for a named agent |
 
 ## The crew (8 agents, one skill file each in `skills/`)

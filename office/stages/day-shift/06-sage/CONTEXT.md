@@ -14,10 +14,10 @@
 1. Crew doc working: "Reading replies".
 2. Replies: for each Contacted lead with a gmailThreadId, get_thread (PLAIN_TEXT). A message
    from the prospect = status Replied, replyGist (one line, their words summarized), and the
-   routing in email-rules.md "Reply handling": yes/send it → status Meeting + a task for Grayson
-   ("Take the ChatGPT + Gemini screenshots for <business>: ask '<q1>' and '<q2>'", agent
-   "grayson") + a drafts doc kind "freecheck" (status draft) with the three fixes written from
-   the lead's profile facts; price/how → Meeting; no/stop → Suppressed + suppression doc;
+   routing in email-rules.md "Reply handling": yes/send it → the reply desk already sent the
+   check if lead.freeCheck.sentAt is set (just confirm status Meeting); if it is NOT set after
+   4 hours, write a drafts doc kind "freecheck" (status draft, specs/free-check.md shape) so
+   Echo sends it this run, and a lesson line "reply desk missed a yes"; price/how → Meeting; no/stop → Suppressed + suppression doc;
    question → Replied with the gist (the reply desk drafts the answer). Also search
    `label:Ridgeline-Handled newer_than:2d` for threads the reply desk touched that no lead
    owns (prospects Grayson contacted by hand): create the lead from the thread's facts with

@@ -4,16 +4,16 @@ Grayson's standing orders. The website (index.html) and this file must agree; if
 tell Grayson (NEEDS YOU) and use the website's wording until he decides.
 
 ## What Ridgeline Local does
-Gets independent roofers and tree services recommended when homeowners ask ChatGPT, Gemini and
-Google who to call, by fixing the signals those tools rely on: the Google Business Profile,
+Gets local businesses of every kind (Oct 22, 2026: "anybody can get it") recommended when people
+ask ChatGPT, Gemini and Google who to call, by fixing the signals those tools rely on: the Google Business Profile,
 review flow, matching name/address/phone across listings, Yelp, weekly Google posts. Proof every
 month: what ChatGPT and Gemini answer (exact words, dated), review count, completed work.
 
 ## The free AI check (the only thing the first email offers)
 What ChatGPT and Gemini actually answer when asked for their trade in their town (their exact
 words, from the AI check gateway, shared/gateway.md), plus the three fixes we would make first.
-Free, no call, no commitment, theirs to keep. Fully automatic since Oct 22, 2026: when a
-prospect says yes, the crew writes and sends it. Never send an answer the gateway did not
+Free, no call, no commitment, theirs to keep. Fully automatic since Oct 22, 2026: the reply
+desk runs and sends it inside the same run, any day (specs/free-check.md). Never send an answer the gateway did not
 return, and never label a Claude answer as ChatGPT or Gemini.
 
 ## Founding client pricing (the website's pricing card, Oct 22, 2026)
@@ -48,11 +48,12 @@ or jobs, never "guaranteed results".
 | Owasso | OK | roofing, tree service | mid-size suburb, storm market, far from home |
 | Cabot | AR | roofing, tree service | small city, few agencies pitching |
 | Foley | AL | roofing, tree service | Gulf coast, storm roofing, growing |
-Rotate one town per run. Add a town only when Grayson adds it on the page. Hometown promotion
-is Grayson's own (his personal Facebook); the crew never promotes locally and never names his
-town.
+Rotate one town per run. Add a town only when Grayson adds it on the page. The cold-email crew
+stays on roofers and tree services in these towns (the biggest measured gap); anyone else who
+asks (website form, Facebook or Instagram message passed on by Grayson, email) gets the same
+check and the same offer. The crew never names Grayson's town in outreach.
 
 ## What a client gets each month (Sage tracks it in clients/<id>)
 Week 1: profile build-out done, review kit sent, listing fixes started. Weekly: 1 Google post
-draft + review reply drafts (Grayson approves and posts until the client's profile is connected
-to the office). Day 30: first report (AI answers, review count vs start, work done).
+draft + review reply drafts, emailed to the client by the reply desk the same day (the client
+pastes them in, or we do as Manager). Day 30: first report (AI answers, review count vs start, work done).

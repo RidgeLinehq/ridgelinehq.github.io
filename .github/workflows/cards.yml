@@ -1,0 +1,46 @@
+name: Ridgeline review cards
+
+# The reply desk pushes office/cards/jobs/<clientId>.json = {"id","business","reviewLink","slug"}.
+# This builds cards/<slug>.png (a QR card to the client's Google review link) and pushes it. Public URL:
+# https://ridgelinehq.github.io/cards/<slug>.png
+on:
+  push:
+    paths:
+      - "office/cards/jobs/*.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cards
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q pillow "qrcode[pil]"
+      - name: Build every card not yet built
+        run: |
+          python3 - <<'PY'
+          import json, glob, os, subprocess
+          for f in sorted(glob.glob("office/cards/jobs/*.json")):
+              job = json.load(open(f)); slug = job.get("slug", "")
+              if not slug or os.path.exists(f"cards/{slug}.png"): continue
+              r = subprocess.run(["python3", "office/tools/review_card.py", f, "cards"])
+              print(("ok " if r.returncode == 0 else "FAILED ") + f)
+          PY
+      - name: Push the cards
+        run: |
+          git config user.name "ridgeline-studio"
+          git config user.email "ridgeline-studio@users.noreply.github.com"
+          git add cards || true
+          git diff --cached --quiet && exit 0
+          git commit -m "review cards"
+          for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && break; sleep 5; done
