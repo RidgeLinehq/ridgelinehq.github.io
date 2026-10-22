@@ -30,7 +30,7 @@ def chunks(captions):
         res[-1]["t1"] = round(t1 + 0.25, 3)  # hold the last chunk through the breath
     return res
 
-data = {"dur": cfg["dur"], "captions": chunks(cfg["captions"])}
+data = {"dur": cfg["dur"], "captions": chunks(cfg["captions"]), "tl": cfg.get("tl", {})}
 
 class Q(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *a): pass
@@ -91,8 +91,8 @@ with wave.open(os.path.join(work, "fx.wav"), "wb") as w:
 
 # ---- mux: frames + voice (front) + music (ducked under the voice) + fx
 vo, music = cfg["vo"], cfg["music"]
-filt = ("[1:a]aresample=44100,highpass=f=70,acompressor=threshold=-20dB:ratio=3:attack=5:release=120,volume=1.6,asplit=2[vo][sc];"
-        "[2:a]aresample=44100,volume=0.55[mu];"
+filt = ("[1:a]aresample=44100,highpass=f=70,equalizer=f=140:t=q:w=1:g=2.5,equalizer=f=3200:t=q:w=1.2:g=3,equalizer=f=9000:t=q:w=1:g=1.5,acompressor=threshold=-20dB:ratio=3:attack=5:release=120,volume=1.6,asplit=2[vo][sc];"
+        "[2:a]aresample=44100,volume=" + str(cfg.get("musicVol", 0.55)) + "[mu];"
         "[mu][sc]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=350[duck];"
         "[3:a]aresample=44100,volume=0.9[fx];"
         "[vo][duck][fx]amix=inputs=3:normalize=0,alimiter=limit=0.95,loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=out:st=" + str(cfg["dur"] - 1.3) + ":d=1.3[a]")
