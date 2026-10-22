@@ -29,6 +29,12 @@ def _fresh_settings():
     yield
 
 
+def clear_queue():
+    """Earlier tests leave tasks queued; the worker always claims the oldest, so drain first."""
+    with app.db() as conn:
+        conn.execute("UPDATE tasks SET status='blocked', error='cleared by test' WHERE status IN ('queued','running')")
+
+
 def lead(name="Example Roofing Test", town="Test City", state="TS", email="owner@example-roofing.test", **extra):
     data = {"business_name": name, "website": "https://example-roofing.test", "trade": "roofing", "town": town, "state": state,
             "source_url": "https://example-roofing.test/contact", "contact_email": email, "phone": "(555) 010-0100"}
@@ -117,6 +123,7 @@ def test_pause_blocks_new_tasks_and_worker():
 
 
 def test_worker_claims_runs_and_completes(monkeypatch):
+    clear_queue()
     calls = []
     monkeypatch.setitem(app.EXECUTORS, "mara", lambda t: calls.append(t["id"]) or "fake done")
     r = client.post("/api/tasks", json={"agent_id": "mara", "title": "Worker test"})
@@ -131,6 +138,7 @@ def test_worker_retries_then_fails_within_limit(monkeypatch):
     def boom(t):
         raise RuntimeError("provider exploded")
     monkeypatch.setitem(app.EXECUTORS, "patch", boom)
+    clear_queue()
     tid = client.post("/api/tasks", json={"agent_id": "patch", "title": "Retry test"}).json()["id"]
     assert app.work_once() is True
     t = next(x for x in client.get("/api/tasks").json() if x["id"] == tid)
@@ -142,6 +150,7 @@ def test_worker_retries_then_fails_within_limit(monkeypatch):
 
 
 def test_not_configured_provider_fails_honestly_without_retry():
+    clear_queue()
     tid = client.post("/api/tasks", json={"agent_id": "parker", "title": "Needs AI"}).json()["id"]
     lead(name="Angle Co", town="Angleton")
     client.patch(f"/api/leads/{app.slug('Angleton-TS-Angle Co')}/status?status_value=Qualified")
