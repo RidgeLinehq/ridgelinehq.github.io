@@ -1,0 +1,23 @@
+{
+ "dur": 34.5,
+ "vo": "office/studio/media/ad1/vo.mp3",
+ "music": "office/studio/media/ad1/music.wav",
+ "capTop": 1430,
+ "captions": [
+  [0.0, 2.9, "Ask *ChatGPT* | who's the best | roofer in town..."],
+  [3.98, 5.17, "and it'll give you | a *list.*"],
+  [5.7, 8.87, "We asked | *ChatGPT* & *Gemini* | the exact same question."],
+  [9.33, 12.09, "They didn't name | a *single* company | in common."],
+  [12.52, 15.2, "So when customers | ask *AI* | who to call..."],
+  [15.7, 17.13, "is *YOUR* *business* | on that list?"],
+  [17.72, 19.52, "*Ridgeline* *Local* | checks for you."],
+  [20.05, 23.93, "We show you | exactly what | *ChatGPT* & *Gemini* say | about your business..."],
+  [24.47, 26.79, "plus the | *3* *fixes* | that matter most."],
+  [27.41, 28.06, "It's *FREE.*"],
+  [28.47, 29.45, "About a *minute.*"],
+  [30.0, 32.76, "Tap the link | and get your | *free* *AI* *check* | today."]
+ ],
+ "sfx": [[0.05,"whoosh"],[3.85,"pop"],[4.07,"pop"],[4.29,"pop"],[4.51,"pop"],[4.73,"pop"],
+         [5.4,"whoosh"],[9.5,"thud"],[12.3,"whoosh"],[15.7,"pop"],[17.5,"whoosh"],
+         [20.0,"whoosh"],[24.25,"whoosh"],[27.75,"tap"],[28.7,"tap"],[29.38,"pop"],[30.1,"whoosh"],[31.4,"tap"]]
+}
