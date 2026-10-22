@@ -9,8 +9,13 @@ prospects, no backups.
 - Check first: `git -C /home/claude/ridgeline remote -v` (a scheduled run may already have it,
   possibly at /home/claude/ridgelinehq.github.io; use whichever exists). Then `cd` there and
   `git pull --rebase`.
-- Only if missing: `git clone --depth 1 https://github.com/RidgeLinehq/ridgelinehq.github.io /home/claude/ridgeline`
-  (generous timeout). Do not use add_repo; it is not available in scheduled runs.
+- Only if missing, the LIGHT clone (about 1 second and 500 KB; the full tree carries the
+  studio's videos and photos, which no crew needs):
+  `git clone --depth 1 --filter=blob:none --sparse https://github.com/RidgeLinehq/ridgelinehq.github.io /home/claude/ridgeline`
+  then `git -C /home/claude/ridgeline sparse-checkout set office/shared office/specs office/stages office/skills office/gw office/cards office/health office/playbooks office/tools`
+  (root files such as index.html and office/CLAUDE.md, CONTEXT.md, LESSONS.md, runlog.jsonl come
+  along automatically). Commits and pushes work normally from this clone. Do not use add_repo;
+  it is not available in scheduled runs. Never `git add` anything under office/studio/.
 
 ## Committing
 - `git config user.email noreply@anthropic.com` and `git config user.name Claude`.

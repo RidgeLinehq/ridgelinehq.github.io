@@ -66,8 +66,7 @@ town, state if known, trade, status, source "reply desk").
 2. For each: business, town, state, trade phrase. Missing town or trade → one reply asking for
    just that ("Which town, and what kind of work? I'll run it as soon as you answer.").
 3. Repo: /home/claude/ridgeline (git remote -v shows RidgeLinehq/ridgelinehq.github.io; if
-   missing: `git clone --depth 1 https://github.com/RidgeLinehq/ridgelinehq.github.io
-   /home/claude/ridgeline`); `git pull --rebase`. Reuse an `office/gw/out/aicheck-*` file for
+   missing, the light clone in shared/repo.md "Getting it"); `git pull --rebase`. Reuse an `office/gw/out/aicheck-*` file for
    the same town + trade phrase under 7 days old; otherwise write ONE job file with all of this
    run's new queries (max 6), commit as "ridgeline-desk" ("Co-Authored-By: Claude
    <noreply@anthropic.com>"), `git pull --rebase`, `git push origin HEAD:main`, then poll
