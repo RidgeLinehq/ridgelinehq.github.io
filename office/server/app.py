@@ -1183,8 +1183,12 @@ def run_quinn(task: dict[str, Any]) -> str:
         s, why = score_lead(l, st["score_gate"])
         p = l.get("profile") or {}
         known = isinstance(p.get("reviews"), (int, float)) or (l.get("search_check") or {}).get("namedYou") is not None or p.get("chainOrFranchise") or p.get("hasAgency")
+        named = (l.get("search_check") or {}).get("namedYou")
         if s >= st["score_gate"]:
             status_value = "Qualified"
+        elif not isinstance(p.get("reviews"), (int, float)) and s >= 35 and (l.get("contact_email") or l.get("phone")) and named is False:
+            status_value = "Qualified"
+            why.append("qualified on reachable evidence; Google count unknown")
         elif known:
             status_value = "Not a fit"
         else:

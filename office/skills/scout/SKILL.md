@@ -26,3 +26,5 @@ and the exact text of any email or phone found on their own site.
 
 ## What I've learned (append-only, newest last)
 - 2026-10-22: Office opened. No runs yet. First real lesson comes from the first run's numbers.
+- 2026-10-22: Owasso, OK: 12 searches, 30 candidates, 8 verified in 10 min. Readable sources: business sites, This Old House and Angi list pages, BBB, The Builder Market, homeyou. Blocked: Yelp, Google Maps, bestprosintown, some business sites (stormproroof, 1roofok, point2pointgc). Three emails printed on sites (darrell@, jared@, info@). Lists that say "Owasso and surrounding" without an address are not proof of town; skip them.
+

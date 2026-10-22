@@ -22,7 +22,10 @@ A. Already-approved drafts first. For each drafts doc with status "approved": ru
 B. "Ready" drafts Grayson sent himself from Gmail: for each drafts doc with status ready, search
    Gmail `in:sent to:<contactEmail> newer_than:7d`; a hit = record it as sent with that
    message id (evidence), update the lead the same way.
-C. New drafts. For each lead with a fresh angle (up to today's remaining cap, plus follow-ups
+C. New drafts. A lead that already has a draft with status "draft" from a dry run or a failed
+   QA: re-run the QA gate on that draft (refresh the footer from settings) and promote it
+   (ready / sent / draft, same rules as below) instead of writing a new one. Then, for each
+   lead with a fresh angle (up to today's remaining cap, plus follow-ups
    due): write subject + body per the shape in email-rules.md, using the angle and the lead's
    verified facts. Run the QA gate; record qa {score, levers, flags}. Under 80 = rewrite once.
    Passing drafts:

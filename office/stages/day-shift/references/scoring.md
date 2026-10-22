@@ -24,6 +24,18 @@ help. Evidence only; every point names its source. Unknown fields score 0, never
 | Contacted before (in the DB) with no reply | -40 | follow-ups handle them, not new scoring |
 | On the suppression list or Not a fit | score 0, status unchanged | never |
 
+## Two doors to Qualified (added Oct 22, 2026 after the first run)
+The crew cannot read Google Maps, Yelp or HomeAdvisor profile pages (WebFetch is blocked
+there), so the Google signals are usually unknown until Grayson types them on the page.
+1. Full evidence: score >= settings.scoreGate (60).
+2. Reachable evidence: Google facts unknown (profile.reviews is null) AND score >= 35 AND a
+   published email or phone AND searchCheck.namedYou is false. Status Qualified, with the
+   why-line "qualified on reachable evidence; Google count unknown". These leads get a
+   "Type the Google review count" tap on the page (Lead Desk → lead → Google facts); the next
+   run re-scores them with the real numbers and Echo can cite the count in the email.
+A lead that is named in the search check and has no other gap is a weak target: leave it at
+Researching, never force it through door 2.
+
 scoreWhy = one short line per signal that scored, with the number and the source URL. The top
 five of the run are listed in the run notes with their why lines. Scores that later predict
 replies are kept; Sage re-weights this table only through a workflow/<version> doc with

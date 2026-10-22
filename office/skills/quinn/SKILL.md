@@ -27,3 +27,5 @@ and rank the call list.
 
 ## What I've learned (append-only, newest last)
 - 2026-10-22: Office opened. No runs yet. First real lesson comes from the first run's numbers.
+- 2026-10-22: First run: 0 of 8 Owasso leads passed the 60 gate because every Google signal was unknown (Maps, Yelp, HomeAdvisor pages are blocked for WebFetch; max reachable score about 45). Fix: scoring.md now has a second door, "reachable evidence" (score 35+, email or phone published, not named in the search check). Ask Grayson for the Google count on the page instead of scoring unknowns as fails forever.
+
