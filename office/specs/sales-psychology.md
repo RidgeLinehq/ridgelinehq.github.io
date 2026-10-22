@@ -25,7 +25,7 @@ checked what it says about him. That gap is the whole sale.
    makes a reply feel like the fair thing to do. Say what they get in plain words and that it
    is theirs to keep.
 4. Tiny ask. The first email asks for ONE thing: "Want me to send it?" or "What's the best
-   email for the screenshots?" Never ask for a call, a meeting or a sale in email one. Small yes
+   email for the results?" Never ask for a call, a meeting or a sale in email one. Small yes
    now, bigger yes later.
 5. Proof over promises. Numbers from the 2026 studies on the site (45% of consumers used AI to
    find a local business; AI-named businesses average 133 reviews vs 11; 1.2% of locations get
@@ -34,7 +34,7 @@ checked what it says about him. That gap is the whole sale.
    "I'm taking 10 founding clients at $147 instead of $197 and I'm at 3." When the number is
    real, say it hard. When there is no real limit, say nothing about limits.
 7. Authority through evidence, not titles. We never claim to be an agency with a team. We show
-   the screenshot, the number, the fix. "Here's what AI says. Here's why. Here's the fix." The
+   what ChatGPT actually said, the number, the fix. "Here's what AI says. Here's why. Here's the fix." The
    person who shows you the problem is the person you hire to fix it.
 8. Remove risk. The guarantee (15 genuine reviews in 60 days or month 3 free), month to month,
    cancel by replying to an email, no contract, no password. Say it once, late, when they are
@@ -50,13 +50,13 @@ checked what it says about him. That gap is the whole sale.
 - "We get all our work from referrals." → "That's exactly why you should be the one AI names.
   Referrals are the best lead. AI is the new referral: it's the neighbor people ask now."
 - "I don't believe people use ChatGPT for that." → "45% did last year, up from 6% the year
-  before (BrightLocal 2026). Want the screenshot of what it says about your town? Takes me two
+  before (BrightLocal 2026). Want to see exactly what it says about your town? Takes me two
   minutes."
 - "How much?" → price + guarantee + "want me to start Monday?"
 - "Is this a scam?" → "Fair question. It's one person, no contract, no password, cancel by
   email, and the first thing you get is free. Here's the website: ridgelinehq.github.io."
 - "Can you guarantee I'll be #1?" → "No, and anyone who says they can is lying to you. What I
-  guarantee is the review growth, and I show you the AI screenshots every month."
+  guarantee is the review growth, and I show you what the AI tools say every month."
 - "Not now." → "No problem. I'll send the free check anyway so you have it. Mind if I check
   back in a month?"
 - "Too expensive." → "It's less than one small repair job a month. One extra job a month pays
@@ -86,7 +86,7 @@ Read it out loud: if it sounds like an ad, rewrite it.
 
 ## For Nova (videos) and the call list
 - Video hook, first 2 seconds: the loss. "Your competitor just got recommended by ChatGPT.
-  Here's the screenshot." Then the demo (pop-up of the AI answer), then the proof number, then
+  Here's what it said." Then the demo (pop-up of the AI answer), then the proof number, then
   one CTA ("Free AI check, link in bio").
 - Call opener: the loss in one breath, then the tiny ask (their email for the free check).
   Never pitch the price on a cold call unless asked. The call's only job is the email address

@@ -19,7 +19,7 @@ price. If they ask the price, answer it straight and ask for the start (specs/sa
 ## The script (say it like a person; 20 seconds to the ask)
 "Hey, is this the owner? [wait] This is Grayson with Ridgeline Local. Real quick: I asked
 ChatGPT who the best roofer in Cabot is and it named <competitor 1> and <competitor 2>. You
-didn't come up. I can email you the screenshot and the three things I'd fix. Free, no catch.
+didn't come up. I can email you exactly what it said and the three things I'd fix. Free, no catch.
 What's the best email for that?"
 
 If they hesitate: "It takes me two minutes and it's yours to keep either way. Where should I
@@ -38,7 +38,7 @@ office suppresses them the same day.
 
 ## Voicemail (10 seconds, leave the email)
 "Hi, this is Grayson with Ridgeline Local. I checked what ChatGPT says when someone asks for a
-roofer in Owasso and you're not on it. I'll email the screenshot to the address on your website.
+roofer in Owasso and you're not on it. I'll email what it said to the address on your website.
 If you'd rather I didn't, no problem. Thanks."
 (Then the office drafts the email to the published address as touch 1, marked "after voicemail".)
 

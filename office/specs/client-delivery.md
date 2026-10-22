@@ -38,8 +38,7 @@ Grayson, or is one tap for the client; nothing else exists.
   from the Google Business app, or the client does. Status ticked on the client card.
 
 ## Day 30, 60, 90 (crew + Grayson)
-- Report: reviews at start vs now (Grayson types the count), the two AI screenshots (Grayson,
-  2 minutes), the work done list, next month's plan. Echo drafts it; the reply desk or Grayson
+- Report: reviews at start vs now (Grayson types the count), the ChatGPT and Gemini answers (gateway, automatic), the work done list, next month's plan. Echo drafts it; the reply desk or Grayson
   sends it. At day 60 Sage checks the guarantee (15 genuine reviews or month 3 free) and writes
   the result on the client; Grayson applies the credit in Stripe if owed.
 

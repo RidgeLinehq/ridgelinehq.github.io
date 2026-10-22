@@ -14,7 +14,7 @@ Subject: <specific, lowercase ok, no tricks>
 
 <Line 3: the free check: what they get, that it's free and theirs to keep>
 
-<The one ask: "Want me to send it?" / "Best email for the screenshots?">
+<The one ask: "Want me to send it?" / "Best email for the results?">
 
 <signature from settings.signature>
 <settings.optOutLine>
@@ -68,7 +68,10 @@ Qualified with a note.
 ## Reply handling
 The reply desk task answers replies and labels threads "Ridgeline-Handled". Sage reads those
 threads each run: reply → lead status Replied (with the thread id and one-line gist); "yes" or
-"send it" → Meeting-stage work: create a task for Grayson on the page ("Take the ChatGPT +
-Gemini screenshots for <business>", with the exact two questions to ask) and a draft of the
-free-check email for Echo to finish once screenshots are attached; payment → Client; no/stop →
+"send it" → status Meeting and a "freecheck" draft for Echo: the exact ChatGPT and Gemini
+answers for their town (gateway, under 7 days old; run a new job if older), whether they were
+named, the 3 fixes from their profile facts, then the founding offer in 2 lines and one ask. A
+free check is a reply to someone who asked for it: with autoSend on it goes out on the next run
+after the QA gate (no send window or cap applies to replies, the suppression list always does),
+otherwise it waits as "ready"; payment → Client; no/stop →
 Suppressed + suppression doc.

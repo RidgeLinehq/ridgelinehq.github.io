@@ -13,7 +13,7 @@ to be renamed, a Ridgeline Facebook Page) carry the same videos.
 | 0-2 | The loss, as a hook. "Your competitor just got recommended by ChatGPT." | none (face, eye contact) |
 | 2-8 | The demo. "Watch. 'Best roofer in Cabot, Arkansas.'" | mock AI answer card: 3 competitor names, "Your business: not mentioned" (names from a real check Scout ran; marked Example on screen) |
 | 8-16 | Why. "45% of people used AI to find a local business last year. AI names businesses with reviews, photos and a complete profile." | "45%" big; "133 reviews vs 11" |
-| 16-26 | What I do. "I fix the signals, I ask your real customers for reviews, and every month I send you the screenshot." | checklist: Google profile · reviews · Yelp · monthly proof |
+| 16-26 | What I do. "I fix the signals, I ask your real customers for reviews, and every month I show you what the AI says." | checklist: Google profile · reviews · Yelp · monthly proof |
 | 26-34 | Risk gone + CTA. "No contract, no password. Free AI check first. Link in bio." | arrow to "Free AI check → ridgelinehq.github.io" |
 
 ## Brief fields (drafts/<id>, kind "script")
@@ -25,7 +25,7 @@ posted (Grayson taps) · results {views, clicks} (Grayson types; Sage reads).
 
 ## Rules
 - The AI answer on screen is a real check (Scout's) and is labeled Example; never a fake
-  screenshot passed off as ChatGPT.
+  answer passed off as ChatGPT.
 - Numbers only from specs/offer.md and the site's cited studies.
 - One video per brief, two briefs a week (Monday and Thursday runs), never more unless Grayson
   asks. Each brief must differ from the last three (different hook, different town, different

@@ -6,17 +6,19 @@
 | references/scoring.md | all |
 | skills/quinn/SKILL.md | all |
 | specs/call-script.md | Ranking the call list |
+| shared/gateway.md | all |
 | database: leads where status in (New, Researching) in today's town; plus any lead with scoredAt older than 30 days and status Qualified (re-score) | out_dir |
 
 ## Process
 1. Crew doc working: "Scoring <n> leads".
 2. For each lead: compute the score from the rubric, one why-line per scoring signal with its
-   source URL. Set status Qualified when score >= settings.scoreGate, else Not a fit (with the
-   why). Set scoredAt.
-3. Prepare the AI check for every Qualified lead: aiCheck.questions = the two exact questions
-   Grayson will paste ("Who are the best <trade>s in <town>, <state>?" and "I need a <trade> in
-   <town> <state>, who should I call?"), aiCheck.chatgpt and gemini = "unknown" until he taps.
-   Never fill them yourself.
+   source URL. Status by references/scoring.md (two doors to Qualified; Researching when the Google
+   facts are unknown and door 2 does not apply; Not a fit only with known facts). Set scoredAt.
+3. AI check (shared/gateway.md): one job for today's town with one query per trade, unless a
+   job for that town+trade is under 7 days old (reuse it). Apply the answers to every lead of
+   that town and trade: aiCheck.chatgpt / gemini named / not named / unknown, competitors,
+   answers, by "gateway". Re-score: "not named by ChatGPT" counts as the search-check signal
+   (+15) when the search check is missing. Never fill a result the gateway did not return.
 4. Call list: every Qualified lead with a published phone gets callRank (1 = first) by the
    call-script ranking rules, and callWindow ("7:00-8:15 AM" or "4:00-6:00 PM" Central).
 5. Crew doc idle: "<q> qualified of <n>; top: <business> <score>".

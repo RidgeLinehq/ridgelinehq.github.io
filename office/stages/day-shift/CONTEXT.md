@@ -69,7 +69,7 @@ only, no prose padding.
 |-------|-------|
 | 00 | `shared/repo.md` ("Getting it") |
 | 01 | `specs/offer.md` (Targets), `shared/outreach-law.md` ("Where leads come from"), `skills/scout/SKILL.md`, `LESSONS.md`, `references/database-fields.md` (leads) |
-| 02 | `references/scoring.md`, `skills/quinn/SKILL.md`, `specs/call-script.md` ("Ranking the call list") |
+| 02 | `references/scoring.md`, `skills/quinn/SKILL.md`, `specs/call-script.md` ("Ranking the call list"), `shared/gateway.md` |
 | 03 | `specs/sales-psychology.md`, `specs/offer.md`, `skills/parker/SKILL.md` |
 | 04 | `specs/email-rules.md`, `specs/sales-psychology.md` ("Follow-up cadence", "Subject lines", "Voice"), `shared/outreach-law.md`, `skills/echo/SKILL.md`, `LESSONS.md`, `references/database-fields.md` (drafts, suppression, stats) |
 | 05 | `specs/video-briefs.md`, `specs/sales-psychology.md` ("For Nova"), `skills/nova/SKILL.md` |
