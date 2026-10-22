@@ -1,0 +1,21 @@
+{
+ "id": "ad1-2026-10-22",
+ "files": [
+  {
+   "url": "https://ai-voiceovers.s3.us-east-1.amazonaws.com/5167f1b8-a768-4fb0-bd86-165476a38adc/84e82fc3-b8af-4fc0-9542-4b048e91a126.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAQLTYEZQZTOX4AL5L%2F20261022%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261022T212601Z&X-Amz-Expires=43200&X-Amz-Security-Token=IQoJb3JpZ2luX2VjELb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIQCpKxs2nSn6o6f%2BNzq%2BE1Jh0pNocnmmpYg8C8NVn30spwIgDX5XeofFgnmznKY3d8Q9hk0kRzeHBfi6hD52P7vObP8qgAUIfhAAGgwwMjQ5NDgwMzQ2MTEiDExDWxhfaDOKJLwWMirdBPZ%2Bkvl%2Bu7HXko8%2F2kxrNf0BwRZRFbY%2FR632bDqgeN6vIPtlOxFtcWQ6aw2bAp0Miaft1zZViALV8Y1z9UtYt%2BT72XRlpMzdJC2BD7H3BEIxLcf%2F4mAaa2TzwLDWEtDBRBTx7kLwWyHquxwaSGUrCThFE2XaJuK%2Fdh8IxuzRg%2F66R7n4YUVUlwpnQX0mT4f06j9dAcHDJ7Criajs89iUpNnlCMk4PTvk7quribA0ssj66Ik6odHNK2Xd6Km72iQBlGtmQBUedxnKHRScX7BvwsVSf9wl4yaRjbxe8OthT9JFBJEAoHOUGTeN2oAXhQP%2FXsARAGkVak1bmfGwfylig1sXhnDo7b9Pns%2BjnFrh73YczNnqLaqOvXY5NCDQ9o7%2Fx44AxahR2Fm%2BpyBj7b3wExzjW4CzojhcynbOoCe30VglS77FJmx0i5HgNZb17TnrgXV98cVQpYeAMyIP8BLpvMKyjWWd7KUkZBrB3rkqEcHGz3yFUw6IlJxrAcdAi6WWeJCxiJoWxmR%2BpHIYOTE9aAc9x7EMtdRmUgCzRa8yeexVaQA0MSm98dRPO%2F6NriwFJ%2BepVGqTY%2Bac0Ycm5Kpv11S26MfaFCEdxgBFJ%2FtukRIxWfyN0DY0rxiVZIZrBxBI5hzaF8ZTcJjfcUyWEcc4kKbHy3fepbUzAI4uimBnQkdk0AebBc%2F3RWg5FkrCSdd6Majf%2FVUDyJTZm%2BSAZrFXRCr0Zbe%2BRtV75gtoBDr8jasZMbkclsxuk0XYSbIz67amK31zF0Rgc1SNm7Q4pRegdKLZiBDfeM6an3uiFzb1MOn%2B6dYGOpgBH2SAV8yxE9sWNR1WIpGxVCpEAy6m9HZRmtNt51BDyNshWnKyXp3hmYTHUVv6bLkv894VrIVAOzLCQkT%2FjVQVW9P3u5BegXBKsOGMCljCMsAQglFe7242J3V%2FmHY%2BlQytz2Dc5p0B92Df4PZfRGQOyiH4HoScsLD3y2zY0ZSIfHkmrE2c8T4Unlq2%2BeceyFGlxfqcSNQ6UFk%3D&X-Amz-Signature=f4a39269a6c8a0a7b1b34a03f3307af932d544907f1bfdda062bafc977353801&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+   "path": "office/studio/media/ad1/vo.mp3"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/intertight/InterTight%5Bwght%5D.ttf",
+   "path": "office/studio/media/fonts/InterTight.ttf"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/instrumentserif/InstrumentSerif-Regular.ttf",
+   "path": "office/studio/media/fonts/InstrumentSerif-Regular.ttf"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/instrumentserif/InstrumentSerif-Italic.ttf",
+   "path": "office/studio/media/fonts/InstrumentSerif-Italic.ttf"
+  }
+ ]
+}

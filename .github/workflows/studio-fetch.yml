@@ -1,0 +1,48 @@
+name: Ridgeline studio fetch
+
+# The office pushes office/studio/fetch/<id>.json = {"id":..., "files":[{"url":"https://...","path":"office/studio/media/<name>"}]}.
+# This downloads each file (https only, under 50 MB, only into office/studio/media/) and pushes it back.
+on:
+  push:
+    paths:
+      - "office/studio/fetch/*.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: studio-fetch
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download every file not yet fetched
+        run: |
+          python3 - <<'PY'
+          import json, glob, os, subprocess, re
+          for f in sorted(glob.glob("office/studio/fetch/*.json")):
+              job = json.load(open(f))
+              for it in job.get("files", []):
+                  url, path = it.get("url",""), it.get("path","")
+                  if not url.startswith("https://"): print("skip non-https", path); continue
+                  if not re.fullmatch(r"office/studio/media/[A-Za-z0-9._/-]+", path) or ".." in path: print("skip bad path", path); continue
+                  if os.path.exists(path): continue
+                  os.makedirs(os.path.dirname(path), exist_ok=True)
+                  ua = it.get("ua","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130 Safari/537.36")
+                  r = subprocess.run(["curl","-sSfL","--max-filesize","52428800","-A",ua,"-o",path,url])
+                  print(("ok " if r.returncode==0 else "FAILED ")+path)
+                  if r.returncode and os.path.exists(path): os.remove(path)
+          PY
+      - name: Push the files
+        run: |
+          git config user.name "ridgeline-studio"
+          git config user.email "ridgeline-studio@users.noreply.github.com"
+          git add office/studio/media || true
+          git diff --cached --quiet && exit 0
+          git commit -m "studio fetch: media"
+          for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && break; sleep 5; done
