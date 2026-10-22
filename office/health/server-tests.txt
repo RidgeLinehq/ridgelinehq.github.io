@@ -65,4 +65,4 @@ PASSED test_app.py::test_day_shift_enqueues_pipeline
 PASSED test_app.py::test_auth_required_when_token_set
 PASSED test_app.py::test_providers_report_without_keys
 PASSED test_app.py::test_read_site_extracts_published_email_without_guessing
-30 passed, 5 warnings in 1.55s
+30 passed, 5 warnings in 1.41s
