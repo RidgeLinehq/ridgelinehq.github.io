@@ -65,7 +65,10 @@ office/
 
 ## Rules that never change
 
-Real numbers only. No invented businesses, contacts, reviews, results or clients. No email goes
+Mission (Grayson, Oct 23, 2026): the office exists to make Grayson money until it has made him
+rich; it pays for itself first, works money-first, pushes every cap with QA 80+ work and never
+past it, and learns from numbers every run (`shared/rules.md`, "Mission" and "The agent
+update"; the week's standing order is `specs/push-week-2026-10-23.md`). Real numbers only. No invented businesses, contacts, reviews, results or clients. No email goes
 out without the gates in `shared/rules.md` (approval or the autoSend switch, the daily cap, the
 suppression list, the legal footer). No texting, no robocalls, no scraping behind logins. No
 money spent, no scheduled task created or changed, no website offer or price changed without
