@@ -35,8 +35,10 @@ there), so the Google signals are usually unknown until Grayson types them on th
    check (added Oct 22, 2026 evening: two runs qualified 0 of 15 because directory lists made
    leads look "named" and no-site leads stopped at 30). Status Qualified, with the
    why-line "qualified on reachable evidence; Google count unknown". These leads get a
-   "Type the Google review count" tap on the page (Lead Desk → lead → Google facts); the next
-   run re-scores them with the real numbers and Echo can cite the count in the email.
+   optional "Type the Google review count" tap on the page (Lead Desk → lead → Google facts);
+   if Grayson ever types one, the next run re-scores with it. Never put this tap in NEEDS YOU
+   (Oct 22, 2026: the crew finds what it can itself, e.g. Yellow Pages or HomeAdvisor review
+   counts with their source, and moves on).
 A lead that is named in the search check and has no other gap is a weak target: leave it at
 Researching, never force it through door 2.
 

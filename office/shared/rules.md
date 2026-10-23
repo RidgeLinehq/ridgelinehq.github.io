@@ -43,6 +43,19 @@ something stricter, the prompt wins.
 When one of these is needed, write it as a NEEDS YOU line (one line, the one tap he must do)
 and stop that branch.
 
+## Do it yourself first (Grayson, Oct 22, 2026: "start trying to make it where these things don't wait on me")
+A NEEDS YOU line is ONLY for the list above (money, settings switches, schedules, website copy,
+phone calls) or a login only he can renew. Everything else the crew finishes itself:
+- Missing facts (review counts, owner names, emails, hours, photos): search deeper yourself
+  (several WebSearch phrasings, the business's own site, Yellow Pages, HomeAdvisor, Facebook,
+  the gateway AI check). Use what you find with its source; what stays unknown stays "unknown"
+  and the lead moves on through door 2 of scoring. Never ask Grayson to look something up or
+  type a number in.
+- A time, rubric or workflow snag the crew can solve inside the workspace files: fix it in the
+  same run (Bug rule) and note it in the run notes, not in NEEDS YOU.
+- If a NEEDS YOU line would still be needed, write the exact one-tap step and keep working on
+  everything else.
+
 ## Caps (read the live value from settings/main; these are the ceilings)
 - Emails: the ramp is 10 a day in the first 7 days of sending, 15 a day for the next 7, then
   20 a day. settings.dailyEmailCap is the live value; the crew moves up the ramp on schedule and
