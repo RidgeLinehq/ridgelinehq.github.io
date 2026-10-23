@@ -38,6 +38,18 @@
    steps, surgical edit); otherwise rolled back (leave the steps alone). Never adopt on feel.
 7. Crew doc idle: "<r> replies, <l> lessons, <w> workflow verdicts".
 
+## Offer review (added Oct 22, 2026; Grayson's order: the office learns and proposes, he decides)
+Each run, count free checks sent (leads with freeCheck.sentAt) and paying clients (clients).
+- 15+ checks and 0 clients: write approvals/<offer-test-day> {type:"other", summary:"Offer test:
+  <one change>", detail: the numbers, the one change to try (e.g. first month $47, or a
+  one-time $97 setup-only package), how it would be measured, status:"pending", by:"sage"}
+  and a NEEDS YOU line "Free checks aren't converting (<n> checks, 0 clients). Proposed: <change>.
+  Say yes in chat to try it." One open offer proposal at a time.
+- Also propose (same way) when a pattern in replies points at the site or the offer (3+
+  prospects asking the same question the site doesn't answer = propose the site line).
+Never change the price, Stripe, the guarantee or the website copy yourself. Grayson approves in
+chat and Claude makes the change in the website and Stripe link.
+
 ## Audit
 Every status change cites a thread id or a Stripe message id. Every lesson has a number.
 No workflow adopted under 30 sends. Suppression written before anything else for a "no".
