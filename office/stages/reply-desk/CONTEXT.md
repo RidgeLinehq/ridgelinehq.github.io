@@ -107,8 +107,9 @@ subscription for a real customer (never an account notice):
 ## Lane D: deliver the crew's client work
 For every drafts doc with status "ready" and a clientId (kinds kit, plan, post, reply, report)
 whose client is active: send it to the client's contactEmail in their thread as plain text
-with a two-line intro in Grayson's voice and the exact next step for them (for a plan: "apply
-these in the Google Business app, or add me as Manager and I'll do it"; for a post: "paste
+with a two-line intro in Grayson's voice and the exact next step for them (for a plan: "paste
+these into the Google Business app: Edit profile → the field named in each step; about 10
+minutes, and it's the biggest single fix"; for a post: "paste
 this into Google Business → Add update, with the photo described"; for the kit: the text to
 send customers + the card link https://ridgelinehq.github.io/cards/<slug>.png; if the card
 isn't built yet, send the text now and the card when it exists). Mark the draft sent with

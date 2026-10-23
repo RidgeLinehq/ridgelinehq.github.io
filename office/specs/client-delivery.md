@@ -31,7 +31,7 @@ Grayson, or is one tap for the client; nothing else exists.
 | Review request kit | Echo | the text message (under 300 chars, their name, the review link), the QR card (the "Ridgeline review cards" Action builds cards/<slug>.png from office/cards/jobs/<clientId>.json; public URL https://ridgelinehq.github.io/cards/<slug>.png), a 3-line "how to ask" script for the crew |
 | Listing consistency | Scout | name/address/phone as it should read everywhere; a list of the directories to fix (Yelp, Facebook, BBB, Angi, Nextdoor) with what is wrong on each |
 | Yelp claim | Grayson or client | one-tap instructions; status on the checklist |
-| Apply the build-out | the client, from the plan email (exact text to paste), or Grayson as Manager (Google Business app, 10 minutes) when the client asked us to | checklist item ticked on the page |
+| Apply the build-out | the client, from the plan email (exact text to paste, about 10 minutes); automatic once the Make "Google Business Profile" lane exists. Grayson is NEVER the one who applies it (his standing order, Oct 22, 2026) | checklist item ticked on the page |
 
 ## How the work reaches the client (added Oct 22, 2026)
 Stage 09 writes each item as a drafts doc with status "ready" and clientId. The reply desk's
@@ -42,8 +42,8 @@ to <business>" and can read every email in the Ridgeline Gmail.
 ## Every week (crew)
 - Monday: one Google post draft (under 1,500 chars, one photo ask, a plain CTA) + reply drafts
   for any new reviews (3 lines, specific, thank by first name, no templates). The reply desk
-  emails them to the client the same day (Lane D); the client pastes them in, or Grayson does
-  as Manager when the client asked. Status ticked on the client card.
+  emails them to the client the same day (Lane D); the client pastes them in (automatic once the
+  Make Google Business Profile lane exists; never Grayson). Status ticked on the client card.
 
 ## Day 30, 60, 90 (crew + Grayson)
 - Report: reviews at start vs now (the client's count from their own reply, or Grayson types
