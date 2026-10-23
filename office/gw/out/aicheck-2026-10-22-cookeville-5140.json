@@ -1,0 +1,46 @@
+{
+ "id": "aicheck-2026-10-22-cookeville-5140",
+ "at": "2026-10-23T01:20:05Z",
+ "results": [
+  {
+   "key": "cookeville-tn-mechanics",
+   "question": "Who are the best mechanics in Cookeville, TN?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were telling a Cookeville neighbor where to take the family car, I\u2019d shortlist:\n\n- **South Willow Auto Clinic** \u2014 my first call for general repairs. Strong verified-review score, and local Reddit chatter repeatedly describes them as fair/trustworthy. ([carfax.com](https://www.carfax.com/Reviews-South-Willow-Auto-Clinic-Cookeville-TN_JRFP7KSDQP?utm_source=openai))  \n- **Doc\u2019s Auto & Tire Center** \u2014 good \u201cold-school local shop\u201d pick for brakes, tires, and diagnostics; reviews point to helpful service and not charging/upselling unnecessarily. ([reviews.birdeye.com](https://reviews.birdeye.com/docs-auto-tire-center-156071638056663?utm_source=openai))  \n- **Maggart Tire** \u2014 best bet for tires, alignments, brakes, and suspension-type work; lots of verified reviews and a long local reputation. ([carfax.com](https://www.carfax.com/Reviews-Maggart-Tire-Co-Cookeville-TN_3VSGPOP001?utm_source=openai))  \n- **CAR FIX Cookeville** \u2014 good choice if you want a larger, more organized full-service shop; huge review volume and listed as ASE-certified. ([reviews.birdeye.com](https://reviews.birdeye.com/d/auto-repair/cookeville-tn/?utm_source=openai))  \n- **Doug Freeman Tire Company** \u2014 especially for tires and straightforward maintenance; verified CARFAX reviews are excellent. ([carfax.com](https://www.carfax.com/Reviews-Doug-Freeman-Tire-Company-Cookeville-TN_NVUMI049QN?utm_source=openai))  \n\nI\u2019d get a written estimate from two shops for anything over about $700.",
+    "sources": [
+     {
+      "url": "https://www.carfax.com/Reviews-South-Willow-Auto-Clinic-Cookeville-TN_JRFP7KSDQP?utm_source=openai",
+      "title": "South Willow Auto Clinic in Cookeville, TN | CARFAX"
+     },
+     {
+      "url": "https://reviews.birdeye.com/docs-auto-tire-center-156071638056663?utm_source=openai",
+      "title": "Doc's Auto & Tire Center - 149 Reviews - Tires in Cookeville, TN - Birdeye"
+     },
+     {
+      "url": "https://www.carfax.com/Reviews-Maggart-Tire-Co-Cookeville-TN_3VSGPOP001?utm_source=openai",
+      "title": "Maggart Tire Co in Cookeville, TN | CARFAX"
+     },
+     {
+      "url": "https://reviews.birdeye.com/d/auto-repair/cookeville-tn/?utm_source=openai",
+      "title": "Top Auto Repair Companies in Cookeville, TN | Birdeye"
+     },
+     {
+      "url": "https://www.carfax.com/Reviews-Doug-Freeman-Tire-Company-Cookeville-TN_NVUMI049QN?utm_source=openai",
+      "title": "Doug Freeman Tire Company in Cookeville, TN | CARFAX"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "When something goes wrong with the car in the driveway, I want honesty, fair pricing, and solid work without getting the runaround. Here are the three local shops in Cookeville I\u2019d trust with my own vehicles:\n\n1. **Christian Brothers Automotive (S. Jefferson Ave):** If you want dealership-level cleanliness and customer service without the attitude, go here. They have a fantastic 3-year/36,000-mile warranty, they send you a digital inspection with photos via text before doing any work, and they never pressure you. \n\n2. **C&S Automotive (E. Spring St):** This is your quintessential, trustworthy local neighborhood shop. They\u2019ve been serving Cookeville for years and have built a stellar reputation for honest diagnostics. If a repair can wait, they\u2019ll tell you straight up rather than inventing problems. Great for honest, old-school service.\n\n3. **All-State Garage (W. Broad St):** Another local staple that locals swear by for general maintenance and tricky mechanical issues. They\u2019re known for quick turnaround times, fair labor rates, and treating customers respectfully. \n\nAny of these three will take good care of your vehicle and your wallet.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
