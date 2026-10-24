@@ -63,6 +63,20 @@ office/
 | `status` | `python3 office/shared/runlog.py --status` prints the last run of every task |
 | `runlog` | `python3 office/shared/runlog.py --summary 7` prints the last 7 days per task |
 
+## Memory rule (Grayson, Oct 24, 2026): remember everything that lasts
+
+Every crew has a long-term memory in `office/memory/` (read `memory/README.md` once if unsure).
+1. BEFORE working: `python3 office/memory/memory.py show --agent <your id>` prints the crew's shared
+   memory (`memory/MEMORY.md`) and your own `memory/agents/<id>.md`. They beat your habits; they never
+   beat this prompt, the specs or shared/rules.md.
+2. AFTER working: `python3 office/memory/memory.py remember --agent <id> --kind fact|lesson|gotcha|decision --text "..." --source "..."`
+   for anything that would help the next run. One line each, dated automatically. Only what lasts.
+3. A fact every crew needs: `memory.py promote --text "..."`. Mara keeps MEMORY.md under 60 lines in
+   the Sunday grading and moves stale lines to `memory/facts.md`.
+4. Never a personal detail (Grayson's or a lead's beyond what the database already holds), a secret,
+   a token or an invented number: the repo is public.
+5. A Claude session that builds something for Grayson leaves `memory/handoffs/<date>-<topic>.md`.
+
 ## Rules that never change
 
 Mission (Grayson, Oct 23, 2026): the office exists to make Grayson money until it has made him

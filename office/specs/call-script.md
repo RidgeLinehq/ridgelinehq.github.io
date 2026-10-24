@@ -1,5 +1,32 @@
 # Cold-call script and call list (Grayson calls; the office prepares)
 
+## V8 "The Turning Point" (Oct 24, 2026): the Calls screen (this section wins over the rest)
+The Office page has a **Calls** screen. Every morning it shows today's call list: up to 15 real
+local businesses with weak AI visibility, each with name, town, phone (tap to call), the free
+AI-check result in one line, and the best time to call. The words and the rules are CODE, one
+home: `office/call_kit/call_kit.py` (`kit.json` is generated from it; the page reads it from
+https://ridgelinehq.github.io/office/call_kit/kit.json and carries the same text as a fallback).
+- Tone: Christian-honest. True, kind, no pressure, no lies, no invented claims. The AI-check line
+  on the screen is whatever the gateway returned ("isn't mentioned by ChatGPT or Gemini", or "AI
+  check not run yet"); the script never says a business is unseen when the check was not run.
+- Who is on the list: a published phone; status New, Researching, Qualified, or Contacted more
+  than 2 days ago; never Suppressed, Not a fit, Client, Meeting or Replied. Order: scheduled
+  call-backs first, then businesses the AI does not name, then Quinn's rank, then score.
+- After each call Grayson taps ONE outcome: No answer · Not interested · Call back · Send the
+  free check · Interested (and Do not call). Each tap writes the lead and queues the follow-up:
+
+| Tap | What the office does, with no second tap |
+|---|---|
+| No answer | logs it; the business comes back on the next call day, up to 3 tries, then email only |
+| Not interested | status Not a fit; no more calls or emails |
+| Call back | asks when (today 4:30 PM / tomorrow 7:30 AM / pick); sets nextCallAt; back on the list then |
+| Send the free check | asks for the email if none is on file; the reply desk (Lane G, within 2 hours) runs the real ChatGPT + Gemini check and emails the one-page report |
+| Interested | same, plus the founding offer and payment link in the email; Grayson gets one line when it went out |
+| Do not call | Suppressed the same minute, with a suppression doc "asked on call" |
+
+The old long-form script below still applies for voicemail and the objections it covers.
+
+
 The office never dials. It builds the call list (Lead Desk → Call list) from leads with a
 published business phone, ranks them, picks the time window, and gives Grayson these words.
 Grayson logs every call on the page (answered, voicemail, interested, not interested, do not

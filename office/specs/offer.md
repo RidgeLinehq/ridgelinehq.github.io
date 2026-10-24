@@ -4,7 +4,8 @@ Grayson's standing orders. The website (index.html) and this file must agree; if
 tell Grayson (NEEDS YOU) and use the website's wording until he decides.
 
 ## What Ridgeline Local does
-Gets local businesses of every kind (Oct 22, 2026: "anybody can get it") recommended when people
+Gets any local business, anywhere (Grayson, Oct 22, 2026: "anybody can get it"; V8, Oct 24, 2026:
+"Ridgeline is for any local business, anywhere") recommended when people
 ask ChatGPT, Gemini and Google who to call, by fixing the signals those tools rely on: the Google Business Profile,
 review flow, matching name/address/phone across listings, Yelp, weekly Google posts. Proof every
 month: what ChatGPT and Gemini answer (exact words, dated), review count, completed work.

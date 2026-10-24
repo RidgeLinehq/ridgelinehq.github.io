@@ -1,0 +1,5 @@
+# Grayson's decisions (dated; the full text lives where the link says)
+- 2026-10-24 V8: Cold Call Kit first; the reply desk sends replies itself (normal questions, call follow-ups, free checks) and hands off price negotiation and angry replies; outreach keeps the Day Shift schedule; the free AI check fully automatic; Ridgeline is for any local business, anywhere; his face is fine in promo videos; website upgrade in the same green design with the free-check button above the fold, 3 steps, simple pricing, fast, honest. [specs/offer.md, stages/reply-desk/CONTEXT.md Lanes G and H, memory/handoffs/2026-10-24-v8-turning-point.md]
+- 2026-10-24 Agents with drive and weekly grading by Mara on evidence; notes on everything; keep chatting out of the apps. [shared/rules.md "Weekly grading (V8)"]
+- 2026-10-22 "Anybody can get it": every kind of local business; the free check is the only thing the first email offers; founding pricing $147 then $197 with the review-growth guarantee. [specs/offer.md]
+- 2026-10-22 The Zernio TikTok slot went to the Ridgeline Facebook page on purpose. [GM Factory specs/thrive-plan-2026-10-23.md 6]

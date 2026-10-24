@@ -43,7 +43,8 @@ prospects, no backups.
 | Day Shift (all workers) | office/skills/<own agent>/SKILL.md ("What I've learned" lines, or a proven rewrite of "Exact steps" after Sage's go), office/LESSONS.md, office/playbooks/, office/stages/day-shift/output/, office/runlog.jsonl |
 | Sage | the above plus office/skills/*/SKILL.md "Exact steps" (only when a workflow/<version> doc says adopted) |
 | Patch | the above plus index.html (a broken element only, after a 3-line plan and a before/after check; never copy, prices or the offer), office/health/ (site check outputs) |
-| Reply desk | nothing in the repo |
+| Reply desk | nothing in the repo, office/medic/queue/*.json (ticket status, note, by, at only) |
+| The Medic (GitHub Action, medic-bot) | office/medic/db/, office/medic/lessons/, office/medic/queue/, office/medic/public/ (nothing else, ever) |
 | Server work (only when Grayson asks for it in chat) | office/server/ |
 
 Never touch: `.github/`, `office/page/` (backups), `office/shared/` and `office/specs/` (Grayson's

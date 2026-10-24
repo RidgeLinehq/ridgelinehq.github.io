@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ridgeline Local — Great local work. Make it easier to find.</title>
 <meta name="description" content="Ridgeline Local helps local businesses show up when people ask ChatGPT, Gemini or Google who to call: stronger profiles, real reviews, correct business details. Start with a free AI visibility check.">
-<meta name="theme-color" content="#fffdf8">
+<meta name="theme-color" content="#F6F4EF">
 <meta property="og:title" content="Ridgeline Local — Great local work. Make it easier to find.">
-<meta property="og:description" content="AI search visibility for local businesses of every kind. Clear priorities, practical improvements, and monthly proof.">
+<meta property="og:description" content="AI search visibility for any local business, anywhere. Clear priorities, practical improvements, and monthly proof.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ridgelinehq.github.io/">
 <meta property="og:image" content="https://ridgelinehq.github.io/assets/hero-roof.jpg">
@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"ProfessionalService","name":"Ridgeline Local","url":"https://ridgelinehq.github.io/","email":"ridgelinemarketinghq@gmail.com","description":"AI search visibility service for local businesses of every kind: Google Business Profile, reviews, and listing details.","areaServed":"United States","priceRange":"$147 - $197 per month"}
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"Ridgeline Local","url":"https://ridgelinehq.github.io/","email":"ridgelinemarketinghq@gmail.com","description":"AI search visibility service for local businesses of every kind: Google Business Profile, reviews, and listing details.","areaServed":"Worldwide","priceRange":"$147 - $197 per month"}
 </script>
 <style>
 /* =====================================================================
@@ -25,31 +25,32 @@
    ===================================================================== */
 :root{
   color-scheme:light;
-  --forest:#142f27;        /* deep green: hero, dark bands, footer */
-  --forest-2:#1b3b31;      /* lighter green for surfaces on dark */
-  --pine:#235444;          /* hover green */
-  --ink:#15271f;           /* body text on light */
-  --ivory:#f5f1e6;         /* warm ivory band */
-  --ivory-2:#ede8da;       /* deeper ivory (report sheet, chips on ivory) */
-  --white:#fffdf8;         /* warm white */
-  --brass:#d2b375;         /* buttons, accents on dark */
-  --brass-2:#e4cc99;       /* button hover */
-  --brass-text:#7f6233;    /* brass for small text on light (AA) */
-  --brass-num:#9a7a45;     /* brass for large numerals on light */
-  --muted:#5a6a60;         /* secondary text on light */
+  /* V8 "Ridgeline Local" design (Oct 24, 2026): the same green as the Office app */
+  --forest:#1E4D2B;        /* brand green: hero, dark bands, footer, primary buttons */
+  --forest-2:#27603a;      /* lighter green for surfaces on dark */
+  --pine:#2a6b3f;          /* hover green */
+  --ink:#111511;           /* body text on light */
+  --ivory:#F6F4EF;         /* warm cream band */
+  --ivory-2:#ECE9E2;       /* deeper cream (report sheet, chips on cream) */
+  --white:#FFFFFF;         /* cards */
+  --brass:#d2b375;         /* small accents on dark and the logo mark */
+  --brass-2:#e4cc99;
+  --brass-text:#1E4D2B;    /* small accent text on light is the brand green */
+  --brass-num:#1E4D2B;     /* large numerals on light */
+  --muted:#5E655F;         /* secondary text on light */
   --muted-dark:#cfd9cf;    /* secondary text on dark */
-  --line:#e3ded0;          /* hairlines on light */
+  --line:#ECE9E2;          /* hairlines on light */
   --line-dark:rgba(255,255,255,.16);
-  --sage:#e9eee3;          /* chip background */
-  --good:#2f7d5a;
-  --bad:#b23a2d;
+  --sage:#E8EFE9;          /* chip background */
+  --good:#3BAA4A;
+  --bad:#D94B3D;
   --max:1160px;
-  --r:18px;
+  --r:22px;
   --display:"Inter Tight","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
   --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
   --body:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
   --ease:cubic-bezier(.16,1,.3,1);
-  --shadow:0 24px 60px rgba(10,30,22,.18);
+  --shadow:0 6px 24px rgba(20,30,20,.10);
 }
 
 /* ---------- base ---------- */
@@ -73,7 +74,8 @@ em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spac
 .on-ivory{background:var(--ivory)}
 .on-dark{background:var(--forest);color:#fff}
 .kicker{display:block;font-size:.74rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--brass-text)}
-.kicker::after{content:"";display:block;width:44px;height:2px;background:var(--brass);margin-top:12px}
+.kicker::after{content:"";display:block;width:44px;height:2px;background:var(--forest);margin-top:12px}
+.on-dark .kicker::after,.hero .kicker::after{background:var(--brass)}
 .on-dark .kicker{color:var(--brass)}
 .lede{color:var(--muted);font-size:clamp(1.05rem,1.6vw,1.2rem);max-width:60ch;line-height:1.6}
 .on-dark .lede{color:var(--muted-dark)}
@@ -83,10 +85,10 @@ em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spac
 .skip:focus{top:12px}
 
 /* ---------- buttons ---------- */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:14px 24px;border-radius:9px;border:1px solid transparent;font-family:var(--body);font-weight:600;font-size:1rem;line-height:1.3;text-decoration:none;transition:transform .2s var(--ease),background .2s,border-color .2s,box-shadow .2s;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:14px 24px;border-radius:14px;border:1px solid transparent;font-family:var(--body);font-weight:600;font-size:1rem;line-height:1.3;text-decoration:none;transition:transform .2s var(--ease),background .2s,border-color .2s,box-shadow .2s;white-space:nowrap}
 .btn svg{width:18px;height:18px;flex:none}
-.btn-brass{background:var(--brass);color:var(--forest);box-shadow:0 10px 28px rgba(0,0,0,.18)}
-.btn-brass:hover{background:var(--brass-2)}
+.btn-brass{background:#fff;color:var(--forest);box-shadow:0 10px 28px rgba(0,0,0,.18)}
+.btn-brass:hover{background:var(--ivory)}
 .btn-forest{background:var(--forest);color:#fff}
 .btn-forest:hover{background:var(--pine)}
 .btn-ghost{background:transparent;border-color:rgba(255,255,255,.35);color:#fff}
@@ -94,7 +96,8 @@ em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spac
 .btn-light{background:var(--white);color:var(--forest);border-color:var(--line)}
 .btn-block{width:100%}
 @media(hover:hover){.btn:hover{transform:translateY(-2px)}}
-.link{font-weight:600;color:inherit;text-decoration:underline;text-underline-offset:5px;text-decoration-color:var(--brass);text-decoration-thickness:2px}
+.link{font-weight:600;color:inherit;text-decoration:underline;text-underline-offset:5px;text-decoration-color:var(--forest);text-decoration-thickness:2px}
+.on-dark .link,.hero .link,.close .link{text-decoration-color:var(--brass)}
 .link:hover{text-decoration-color:currentColor}
 
 /* ---------- decorative contour lines ---------- */
@@ -128,8 +131,8 @@ em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spac
 .hero-media{position:absolute;top:0;bottom:0;left:38%;right:0;z-index:0}
 .hero-media img{width:100%;height:100%;object-fit:cover;object-position:62% 42%}
 .hero-media::after{content:"";position:absolute;inset:0;background:
-  linear-gradient(90deg,var(--forest) 0%,rgba(20,47,39,.92) 14%,rgba(20,47,39,.55) 34%,rgba(20,47,39,.12) 58%,rgba(20,47,39,0) 80%),
-  linear-gradient(180deg,rgba(20,47,39,.28) 0%,rgba(20,47,39,0) 30%,rgba(20,47,39,0) 70%,rgba(20,47,39,.5) 100%)}
+  linear-gradient(90deg,var(--forest) 0%,rgba(30,77,43,.92) 14%,rgba(30,77,43,.55) 34%,rgba(30,77,43,.12) 58%,rgba(30,77,43,0) 80%),
+  linear-gradient(180deg,rgba(30,77,43,.28) 0%,rgba(30,77,43,0) 30%,rgba(30,77,43,0) 70%,rgba(30,77,43,.5) 100%)}
 .hero .contours{left:-80px;bottom:-40px;opacity:.16}
 .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,640px) minmax(0,1fr);gap:40px;align-items:end;padding:clamp(56px,7vw,92px) 0 clamp(44px,6vw,64px)}
 .hero-copy .kicker{color:var(--brass)}
@@ -146,7 +149,7 @@ em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spac
 @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 
 /* illustrative AI question card */
-.ai-card{justify-self:end;width:min(100%,400px);background:var(--white);color:var(--ink);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.05)}
+.ai-card{justify-self:end;width:min(100%,400px);background:var(--white);color:var(--ink);border-radius:var(--r);padding:20px 22px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.05)}
 .ai-top{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
 .pill{border:1px solid var(--line);border-radius:20px;padding:4px 9px;white-space:nowrap;letter-spacing:.06em}
 .ai-q{font-family:var(--serif);font-size:1.6rem;line-height:1.2;letter-spacing:-.01em;margin-bottom:14px;min-height:2.4em;transition:opacity .45s ease}
@@ -169,7 +172,7 @@ em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spac
 
 /* ---------- real AI check (word for word) ---------- */
 .ai-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
-.ai-answer{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:26px 26px 22px;box-shadow:0 18px 48px rgba(20,48,38,.08);display:flex;flex-direction:column;min-width:0}
+.ai-answer{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:26px 26px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:0}
 .ai-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line)}
 .ai-head strong{display:block;font-family:var(--display);font-weight:800;font-size:1.3rem;letter-spacing:-.03em}
 .ai-head span{display:block;font-size:.8rem;color:var(--muted);margin-top:3px}
@@ -201,7 +204,8 @@ em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spac
 
 /* ---------- cards (sound familiar) ---------- */
 .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
-.card{background:var(--ivory);border:1px solid var(--line);border-radius:var(--r);padding:30px 28px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:30px 28px;box-shadow:var(--shadow)}
+.on-ivory .card{box-shadow:none}
 .num{display:block;font-family:var(--serif);font-size:2.2rem;line-height:1;color:var(--brass-num);margin-bottom:26px}
 .card h3{margin-bottom:10px}
 .card p{color:var(--muted);font-size:.97rem}
@@ -255,7 +259,7 @@ em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spac
 .split h2{margin-bottom:20px}
 .split .lede{margin-bottom:16px}
 .split .btn{margin-top:14px}
-.sheet-card{position:relative;background:var(--ivory);border:1px solid var(--line);border-radius:var(--r);padding:32px;box-shadow:0 18px 48px rgba(20,48,38,.08)}
+.sheet-card{position:relative;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:32px;box-shadow:var(--shadow)}
 .sheet-card>p:first-child{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:10px}
 .sheet-card h3{font-family:var(--serif);font-weight:400;font-size:2rem;letter-spacing:-.01em;margin-bottom:10px}
 .report-row{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:16px 0;border-top:1px solid #d9d3c2}
@@ -265,10 +269,10 @@ em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spac
 
 /* ---------- pricing ---------- */
 .values{display:grid;gap:18px;margin-top:8px}
-.values div{border-left:2px solid var(--brass);padding-left:18px}
+.values div{border-left:2px solid var(--forest);padding-left:18px}
 .values strong{font-size:1rem;font-weight:600}
 .values p{margin-top:4px;font-size:.93rem;color:var(--muted)}
-.price-card{background:var(--white);border:1px solid var(--line);border-top:4px solid var(--brass);border-radius:var(--r);padding:34px;box-shadow:0 22px 60px rgba(20,48,38,.10)}
+.price-card{background:var(--white);border:1px solid var(--line);border-top:4px solid var(--forest);border-radius:var(--r);padding:34px;box-shadow:0 12px 36px rgba(20,48,38,.10)}
 .tag{display:inline-flex;padding:6px 10px;background:var(--ivory-2);color:var(--brass-text);font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-radius:5px}
 .setup{color:var(--muted);font-size:.9rem;margin-top:18px}
 .setup s{color:var(--muted)}
@@ -297,7 +301,7 @@ em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spac
 .close{position:relative;overflow:hidden;background:var(--forest);color:#fff}
 .close-media{position:absolute;top:0;bottom:0;left:52%;right:0}
 .close-media img{width:100%;height:100%;object-fit:cover;object-position:60% 50%}
-.close-media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--forest) 0%,rgba(20,47,39,.9) 18%,rgba(20,47,39,.35) 50%,rgba(20,47,39,.05) 100%)}
+.close-media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--forest) 0%,rgba(30,77,43,.9) 18%,rgba(30,77,43,.35) 50%,rgba(30,77,43,.05) 100%)}
 .close .contours{left:42%;top:10px;width:560px;opacity:.2}
 .close-in{position:relative;z-index:1;padding:clamp(56px,7vw,88px) 0 clamp(40px,5vw,56px);max-width:620px}
 .close h2{font-size:clamp(2rem,3.8vw,3.2rem);margin-bottom:16px;text-shadow:0 2px 20px rgba(0,0,0,.25)}
@@ -314,7 +318,7 @@ em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spac
 .copy{min-height:38px;padding:7px 12px;border-radius:8px;border:1px solid #c9c3b2;background:var(--white);font-size:.82rem;font-weight:600;display:inline-flex;align-items:center;gap:6px}
 .copy svg{width:14px;height:14px}
 .note-sm{margin-top:18px;font-size:.88rem;color:var(--muted)}
-.form{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:30px;box-shadow:0 22px 60px rgba(20,48,38,.10)}
+.form{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:30px;box-shadow:0 12px 36px rgba(20,48,38,.10)}
 .form h3{font-family:var(--serif);font-weight:400;font-size:2rem;letter-spacing:-.01em;margin-bottom:6px}
 .form .hint{color:var(--muted);font-size:.9rem}
 .field{margin-top:16px}
@@ -323,7 +327,7 @@ em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spac
 .field input,.field select,.field textarea,.fallback textarea{width:100%;min-height:50px;padding:12px 14px;border-radius:9px;border:1px solid #b9b3a1;background:#fffefb;color:var(--ink);font-size:1rem;transition:border-color .2s,box-shadow .2s}
 .field textarea{min-height:96px;resize:vertical}
 .field select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a6a60' stroke-width='2.2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:16px;padding-right:40px}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--brass-text);box-shadow:0 0 0 4px rgba(210,179,117,.3)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--forest);box-shadow:0 0 0 4px rgba(30,77,43,.16)}
 .field.err input{border-color:var(--bad);box-shadow:0 0 0 4px rgba(178,58,45,.12)}
 .field .msg{display:none;color:var(--bad);font-size:.84rem;margin-top:6px;font-weight:500}
 .field.err .msg{display:block}
@@ -345,14 +349,14 @@ em.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spac
 .edit-btn{margin-top:16px;background:none;border:0;padding:8px;font-weight:600;color:var(--forest);text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--brass);text-decoration-thickness:2px}
 
 /* ---------- footer ---------- */
-footer{background:#0f241d;padding:40px 0 calc(32px + env(safe-area-inset-bottom));color:var(--muted-dark);font-size:.88rem;border-top:1px solid var(--line-dark)}
+footer{background:#163a21;padding:40px 0 calc(32px + env(safe-area-inset-bottom));color:var(--muted-dark);font-size:.88rem;border-top:1px solid var(--line-dark)}
 footer .wrap{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:28px}
 footer b{display:flex;align-items:center;gap:9px;color:#fff;font-family:var(--display);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.82rem;margin-bottom:8px}
 footer b svg{width:24px;height:24px}
 footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass);text-underline-offset:4px;overflow-wrap:anywhere}
 
 /* ---------- sticky mobile CTA ---------- */
-.sticky-cta{position:fixed;bottom:0;inset-inline:0;z-index:40;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(20,47,39,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line-dark);box-shadow:0 -10px 30px rgba(0,0,0,.18)}
+.sticky-cta{position:fixed;bottom:0;inset-inline:0;z-index:40;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(30,77,43,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line-dark);box-shadow:0 -10px 30px rgba(0,0,0,.18)}
 .sticky-cta .btn{width:100%;min-height:50px}
 
 /* ---------- reveal + motion safety ---------- */
@@ -382,10 +386,12 @@ footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass)
   .hero-grid{grid-template-columns:minmax(0,1fr);align-items:start}
   .hero-copy{max-width:600px}
   .ai-card{justify-self:start;width:min(100%,440px)}
-  .hero-media{left:0;right:0;bottom:auto;height:min(46vh,380px);position:relative;z-index:0}
+  .hero-media{left:0;right:0;bottom:auto;height:min(34vh,300px);position:relative;z-index:0}
   .hero-media img{object-position:50% 48%}
-  .hero-media::after{background:linear-gradient(180deg,rgba(20,47,39,.12) 0%,rgba(20,47,39,0) 30%,rgba(20,47,39,.25) 62%,var(--forest) 100%)}
-  .hero-grid{margin-top:-80px;padding-top:0}
+  .hero-media::after{background:linear-gradient(180deg,rgba(30,77,43,.12) 0%,rgba(30,77,43,0) 30%,rgba(30,77,43,.25) 62%,var(--forest) 100%)}
+  .hero-grid{margin-top:-72px;padding-top:0}
+  .hero h1{margin:18px 0 16px}
+  .cta-row{margin:22px 0 18px}
   .hero .contours{display:none}
   .grid-3{grid-template-columns:minmax(0,1fr)}
   .ai-grid{grid-template-columns:minmax(0,1fr)}
@@ -403,7 +409,7 @@ footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass)
   .split,.contact{grid-template-columns:minmax(0,1fr)}
   .close-media{left:0;right:0}
   .close-media img{object-position:70% 50%}
-  .close-media::after{background:linear-gradient(90deg,rgba(20,47,39,.96) 0%,rgba(20,47,39,.86) 50%,rgba(20,47,39,.55) 100%)}
+  .close-media::after{background:linear-gradient(90deg,rgba(30,77,43,.96) 0%,rgba(30,77,43,.86) 50%,rgba(30,77,43,.55) 100%)}
   .close .contours{left:auto;right:-100px;width:420px}
   footer .wrap{grid-template-columns:minmax(0,1fr)}
 }
@@ -507,7 +513,7 @@ footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass)
   <svg class="contours" aria-hidden="true"><use href="#i-contours"/></svg>
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <span class="kicker">For local businesses of every kind</span>
+      <span class="kicker">For any local business, anywhere</span>
       <h1 id="hero-title">Great local work. <em class="accent">Make it easier<br>to find.</em></h1>
       <p class="lede">When people ask AI who to call, your online reputation should tell the right story. We strengthen your local profiles, review process, and business details so your online presence better reflects the work you do.</p>
       <div class="cta-row">
@@ -782,7 +788,7 @@ footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass)
 
 <!-- ===================== CLOSING BAND ===================== -->
 <section class="close" aria-labelledby="close-title">
-  <div class="close-media" aria-hidden="true"><img src="assets/close-ridge.jpg" width="502" height="298" alt="" decoding="async"></div>
+  <div class="close-media" aria-hidden="true"><img src="assets/close-ridge.jpg" width="502" height="298" alt="" decoding="async" loading="lazy"></div>
   <svg class="contours" aria-hidden="true"><use href="#i-contours"/></svg>
   <div class="wrap"><div class="close-in">
     <h2 id="close-title">Your next customer should be able to find the business you’ve built.</h2>
