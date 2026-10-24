@@ -1,0 +1,186 @@
+{
+ "id": "aicheck-2026-10-24-calls-83f3",
+ "at": "2026-10-24T06:14:16Z",
+ "results": [
+  {
+   "key": "owasso-ok-tree-services",
+   "question": "Who are the best tree services in Owasso, OK?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If this were my house in **Owasso**, I\u2019d call these first:\n\n1. **Rickert Tree Service** \u2014 Best \u201carborist-minded\u201d pick. They\u2019re actually based in Owasso, handle pruning, removals, stump grinding, cabling/bracing, disease and insect issues, and Todd Rickert is noted as having 20+ years\u2019 experience. Good choice if you\u2019re trying to save a tree, not just cut it down. ([expertise.com](https://www.expertise.com/home-improvement/tree-services/oklahoma/tulsa))\n\n2. **Tree-Line / Treeline Tree Services** \u2014 Strong all-around local option for trimming, removals, stump grinding and storm cleanup. They\u2019re listed as fully insured, offer emergency service/free estimates, and BBB shows Tree-Line with an A+ rating serving Owasso. ([homeadvisor.com](https://www.homeadvisor.com/rated.treelinetreeservices.159022099.html))\n\n3. **Rafael\u2019s Tree Service** \u2014 I\u2019d price them for removal/stump work: HomeAdvisor shows 4.9 from 144 reviews, free estimates, emergency service, and BBB lists them A+. ([homeadvisor.com](https://www.homeadvisor.com/c.Tree-Service.Owasso.OK.-12074.html?utm_source=openai))\n\n4. **T & M Tree Service** \u2014 Good for big, risky removals: they\u2019re described as having crane/bucket/chipper equipment and 25+ years\u2019 experience. ([expertise.com](https://www.expertise.com/home-improvement/tree-services/oklahoma/tulsa))\n\nGet **two or three written bids** and confirm insurance before work starts.",
+    "sources": [
+     {
+      "url": "https://www.expertise.com/home-improvement/tree-services/oklahoma/tulsa",
+      "title": "14 Best Tulsa, OK Tree Services | Expertise.com"
+     },
+     {
+      "url": "https://www.homeadvisor.com/rated.treelinetreeservices.159022099.html",
+      "title": "TREELINE TREE SERVICES Reviews - Claremore, OK | HomeAdvisor"
+     },
+     {
+      "url": "https://www.homeadvisor.com/c.Tree-Service.Owasso.OK.-12074.html?utm_source=openai",
+      "title": "Top-Rated Tree Services Experts in Owasso, OK | HomeAdvisor"
+     },
+     {
+      "url": "https://www.expertise.com/home-improvement/tree-services/oklahoma/tulsa",
+      "title": "14 Best Tulsa, OK Tree Services | Expertise.com"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If I were looking for reliable tree work for my own home in Owasso, here are the top three local companies I\u2019d recommend:\n\n1. **Aaron's Tree Service:** They are a go-to in the Tulsa/Owasso area. They have ISA-certified arborists on staff, meaning they know tree biology and health\u2014not just how to cut branches. They\u2019re fantastic for hazardous removals and precision trimming around power lines or roofs.\n2. **Monster Tree Service of Green Country:** Locally owned with strong professional backing. They are fully insured, highly responsive, and known for leaving your yard spotless after a job. They're great for large oak removals, deep-root fertilization, and emergency storm response.\n3. **Rick\u2019s Lawn & Tree Service:** A trusted, budget-friendly local option. If you need straightforward canopy raising, deadwood trimming, or stump grinding without a massive price tag, Rick\u2019s is reliable and easy to work with.\n\n**Quick Homeowner Tip:** Always ask to see a current copy of their General Liability and Worker\u2019s Compensation insurance certificates *before* they start any work on your property.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "cabot-ar-roofers",
+   "question": "Who are the best roofers in Cabot, AR?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "I\u2019d start with these **Cabot-area roofers**:\n\n1. **Premier Roofing, LLC \u2014 Cabot**: My first call. Longstanding local company, **BBB A+ accredited**, in business 17 years, and very strong review volume/rating locally. Good fit for roof replacement, storm repairs, gutters, and related exterior work. ([bbb.org](https://www.bbb.org/us/ar/cabot/profile/roofing-contractors/premier-roofing-llc-0935-90211660?utm_source=openai))\n\n2. **Top Notch Roofing & Remodeling \u2014 Cabot**: Strong second bid. **BBB A+ accredited**, based in Cabot, and consistently highly rated; I\u2019d consider them especially if you also need siding/windows or remodeling tied into the roof job. ([bbb.org](https://www.bbb.org/us/ar/cabot/profile/bathroom-remodel/top-notch-roofing-remodeling-0935-90358147?utm_source=openai))\n\n3. **EZ Roofing \u2014 Cabot**: Worth a third estimate, especially for repairs, metal roofing, emergency tarping, or specialty roof types. BBB lists them as accredited with an **A rating**, though I\u2019d ask directly about any past complaints and how they were resolved. ([bbb.org](https://www.bbb.org/us/ar/cabot/profile/roofing-contractors/ez-roofing-0935-90391033?utm_source=openai))\n\n4. **Thomas Roofing & Restoration \u2014 Jacksonville**: Not Cabot proper, but close; a good backup bid for storm/wind damage repairs with strong local review scores. ([bestprosintown.com](https://www.bestprosintown.com/ar/cabot/roofing/?utm_source=openai))\n\nBefore hiring: verify Arkansas contractor license, insurance, written warranty, and get photo-documented estimates.",
+    "sources": [
+     {
+      "url": "https://www.bbb.org/us/ar/cabot/profile/roofing-contractors/premier-roofing-llc-0935-90211660?utm_source=openai",
+      "title": "Premier Roofing, LLC | BBB Business Profile"
+     },
+     {
+      "url": "https://www.bbb.org/us/ar/cabot/profile/bathroom-remodel/top-notch-roofing-remodeling-0935-90358147?utm_source=openai",
+      "title": "Top Notch Roofing & Remodeling | BBB Business Profile | Better Business Bureau"
+     },
+     {
+      "url": "https://www.bbb.org/us/ar/cabot/profile/roofing-contractors/ez-roofing-0935-90391033?utm_source=openai",
+      "title": "EZ Roofing | BBB Business Profile | Better Business Bureau"
+     },
+     {
+      "url": "https://www.bestprosintown.com/ar/cabot/roofing/?utm_source=openai",
+      "title": "Roofing Companies Near Cabot, AR - 2026 BestProsInTown"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If I were replacing a roof in Cabot, here are the top local contractors I\u2019d put on my shortlist:\n\n*   **Jetton Roofing:** Based right here in Cabot, Jetton is a standout family-owned operation. They have a stellar reputation locally for quick turnarounds, honest pricing, and thorough cleanups. They're ideal if you want attentive, friendly service from a neighbor.\n*   **Cates Roofing:** With decades of experience in Lonoke County, Cates is a staple for local reliability. They specialize in both full replacements and minor leak repairs, and they're known for straightforward estimates without high-pressure sales tactics.\n*   **Riley Hays Roofing & Construction:** Serving Cabot and greater Central Arkansas, they are top-tier if you're dealing with hail or wind damage. They excel at navigating the headache of insurance claims and offer industry-leading warranties.\n\n**Advice for Cabot homeowners:** Cabot gets its fair share of severe spring weather, so make sure whoever you hire is fully licensed with the state of Arkansas, locally insured, and willing to provide a written craftsmanship warranty. Get at least two estimates before making your final call!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "cabot-ar-tree-services",
+   "question": "Who are the best tree services in Cabot, AR?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a Cabot homeowner, I\u2019d shortlist these first:\n\n1. **Rowland Tree Service Inc.** \u2014 My first call for big removals or storm work. They\u2019re Cabot-based and show strong review volume: 4.9 with 211 reviews on Birdeye; other local rankings also list them highly. ([reviews.birdeye.com](https://reviews.birdeye.com/d/home-services/cabot-ar/?utm_source=openai))\n\n2. **A&M Tree Care LLC** \u2014 Good choice if you want a smaller, local company and competitive pricing. They\u2019re Cabot-based, family-owned/operated, and show about 4.9 stars with 30 reviews. ([reviews.birdeye.com](https://reviews.birdeye.com/am-tree-care-llc-170486504608022?utm_source=openai))\n\n3. **Natural State Tree Service** \u2014 I\u2019d call them for emergency removal or routine maintenance around Cabot; their site specifically lists Cabot and Central Arkansas service areas. ([naturalstatetreeservice.com](https://www.naturalstatetreeservice.com/?utm_source=openai))\n\n4. **ArborTech Tree Care LLC** \u2014 Worth getting a bid from if you want another highly rated local option; TreeOps lists them at 5.0 with 17 reviews. ([cabot-ar.treeopsusa.com](https://cabot-ar.treeopsusa.com/tree-service?utm_source=openai))\n\nBefore hiring: get **two written quotes**, ask for **proof of liability/workers\u2019 comp insurance**, and clarify whether **stump grinding and debris haul-off** are included.",
+    "sources": [
+     {
+      "url": "https://reviews.birdeye.com/d/home-services/cabot-ar/?utm_source=openai",
+      "title": "Top Home Services Companies in Cabot, AR | Birdeye"
+     },
+     {
+      "url": "https://reviews.birdeye.com/am-tree-care-llc-170486504608022?utm_source=openai",
+      "title": "A&M Tree Care LLC - 30 Reviews - Home Services in Cabot, AR - Birdeye"
+     },
+     {
+      "url": "https://www.naturalstatetreeservice.com/?utm_source=openai",
+      "title": "Tree Service | Natural State Tree Service | Central AR"
+     },
+     {
+      "url": "https://cabot-ar.treeopsusa.com/tree-service?utm_source=openai",
+      "title": "6+ Tree Service in Cabot, AR | TreeOps USA"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable tree work in Cabot, here are three top local options I\u2019d recommend based on safety, fair pricing, and customer feedback:\n\n1. **Cabot Tree Service:** They are the go-to local choice for heavy lifting. Fully licensed and insured, they\u2019re fast to respond for emergency storm damage and have the heavy equipment needed to safely drop large, hazardous trees near houses. \n2. **Family Tree Care:** Excellent for routine trimming, shaping, and medium-sized removals. Homeowners consistently praise them for fair, upfront pricing, great communication, and immaculate yard cleanup\u2014you won't be left raking up stray branches.\n3. **Central Arkansas Tree Care:** If you\u2019re concerned about tree health rather than just taking one down, go with them. They feature ISA Certified Arborists who specialize in proper pruning techniques, oak wilt prevention, and evaluating whether a sick tree can be saved.\n\n**Homeowner Tip:** No matter who you hire, always ask for proof of current general liability and worker\u2019s compensation insurance before work begins, and get a written estimate upfront!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "foley-al-roofers",
+   "question": "Who are the best roofers in Foley, AL?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were a Foley homeowner, I\u2019d call these **first**:\n\n1. **High Tide Contracting & Roofing** \u2014 My top pick for most homeowners. They\u2019re Foley-based, GAF-listed, FORTIFIED Roof certified, and show a very strong review profile: 5.0 with 157 Google reviews on GAF; local rankings also place them near the top. ([gaf.com](https://www.gaf.com/en-us/roofing-contractors/residential/usa/al/foley/high-tide-contracting-roofing-llc-1136320?utm_source=openai))\n\n2. **Ben Murphy Company / Ben Murphy Roofing** \u2014 A safe \u201cestablished local\u201d choice. They\u2019re BBB accredited with an A+ rating, listed for residential, metal, commercial, flat roofing, and FORTIFIED roof installations. ([bbb.org](https://www.bbb.org/us/al/foley/profile/roofing-contractors/ben-murphy-company-inc-0463-90122551?utm_source=openai))\n\n3. **Wise Builders Roofing & Renovations** \u2014 Good if your roof project overlaps with siding, gutters, or remodeling. They list a Foley office, Alabama license, BBB accreditation, Atlas Pro/FORTIFIED credentials, and 160+ 5-star reviews. ([wisebuildersrnr.com](https://wisebuildersrnr.com/?utm_source=openai))\n\n4. **Heard Roofing Company** \u2014 Worth a quote if you value longevity: Foley address, BBB A+, accredited since 2011, and 55 years in business. ([bbb.org](https://www.bbb.org/us/al/foley/profile/roofing-contractors/heard-roofing-company-0463-15064?utm_source=openai))\n\nGet **3 written bids**, confirm Alabama license/insurance, and ask specifically about **FORTIFIED** eligibility.",
+    "sources": [
+     {
+      "url": "https://www.gaf.com/en-us/roofing-contractors/residential/usa/al/foley/high-tide-contracting-roofing-llc-1136320?utm_source=openai",
+      "title": "High Tide Contracting & Roofing LLC | GAF Residential Roofers"
+     },
+     {
+      "url": "https://www.bbb.org/us/al/foley/profile/roofing-contractors/ben-murphy-company-inc-0463-90122551?utm_source=openai",
+      "title": "Ben Murphy Company, Inc. | BBB Business Profile"
+     },
+     {
+      "url": "https://wisebuildersrnr.com/?utm_source=openai",
+      "title": "THE REMODELING COMPANY NEAR YOU ON THE ALABAMA GULF COAST: HIGH-END DESIGN-BUILD HOME REMODELING CONTRACTOR | Kitchen Remodeling, Bathroom Remodeling, Whole-House Remodeling, Home Additions, ADU Construction & Mother-In-Law Suites - Residential Roofing, Roof Repair, Roof Replacement, Metal Roofing, FORTIFIED Roofing, Storm Restoration, Roof Insurance Claims & Commercial Roofing - James Hardie Siding, Gutters, Painting, Attic Insulation & Skylights - Design-Build Under One Contract From the Shingles to the Baseboards, Managed by Your Dedicated Project Manager - Alabama HBLB Licensed #28471, Bonded, Insured, BBB Accredited, Atlas Pro Certified, FORTIFIED Roofing Contractor & VA SAH & SHA Grant Contractor - Two Offices Serving Mobile County, Baldwin County & the Gulf Coast: Theodore, Mobile, Saraland, Semmes, Foley, Gulf Shores, Orange Beach, Fairhope & Daphne - 5.0 Rating Across 160+ Google Reviews & 100% Satisfaction Guarantee - Free In-Home Consultation & Free Roof Inspection - Call (251) 305-7282 or (251) 270-5270 - Wise Builders Roofing & Renovations"
+     },
+     {
+      "url": "https://www.bbb.org/us/al/foley/profile/roofing-contractors/heard-roofing-company-0463-15064?utm_source=openai",
+      "title": "Heard Roofing Company | BBB Business Profile | Better Business Bureau"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in Foley, you need a contractor who understands Gulf Coast weather and **IBHS Fortified Roof** standards, which can significantly lower your home insurance. Here are three top local recommendations:\n\n*   **Guild Roofing:** Based right here in Foley, Guild is a top-rated local favorite. They specialize in Fortified roof installations, offer transparent pricing, and are known for excellent communication and thorough post-job cleanups.\n*   **Ridgeline Roofing & Restoration:** Serving Baldwin County, Ridgeline is exceptional if you\u2019re dealing with storm damage or insurance claims. They are fast, reliable, and highly praised by locals for taking the headache out of the insurance process.\n*   **Coastal Roofing Contractors:** With deep experience along the Alabama coast, they excel at high-wind resistance and metal roofing. They're a great pick if you want a heavy-duty, long-lasting upgrade built to withstand hurricane season.\n\n**Homeowner Tip:** Whichever you choose, confirm they are licensed in Alabama, fully insured, and certified to issue a **Fortified Designation** certificate\u2014it\u2019s a game-changer for your insurance premiums!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "foley-al-tree-services",
+   "question": "Who are the best tree services in Foley, AL?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a **Foley homeowner**, I\u2019d start with these:\n\n1. **Langford Tree Service LLC** \u2014 My first call for most jobs. They\u2019re very local, show strong Google volume/rating in Baldwin County, and their site says they\u2019re **licensed/insured**, with **20+ years\u2019 experience**, 24/7 emergency work, trimming, removal, stump grinding, land clearing and bucket-truck work. ([inspectree.com](https://inspectree.com/al/baldwin-county/?utm_source=openai))\n\n2. **GreenTech Forestry & Tree Removal** \u2014 Best Foley-based option if you want an experienced crew; they list **30+ years\u2019 experience**, Foley address, 24/7 availability, and tree/removal focus. ([greentechforestry.com](https://greentechforestry.com/?utm_source=openai))\n\n3. **Ultimate Tree Services Inc.** \u2014 I\u2019d call them for bigger removals or land-clearing. Review summaries mention professional crews, large-tree capability, cleanup, and insurance availability; they\u2019re nearby in Summerdale. ([bestprosintown.com](https://www.bestprosintown.com/al/summerdale/ultimate-tree-services-inc-/?utm_source=openai))\n\n4. **Ascent Tree Works** \u2014 Good pick for careful trimming/pruning, especially live oaks or larger shade trees; BestProsInTown shows strong reviews and specific praise for work on a century-old live oak. ([bestprosintown.com](https://www.bestprosintown.com/al/summerdale/tree-service/?utm_source=openai))\n\nBefore hiring, ask for current insurance, written scope, stump-grinding details, and who handles debris haul-off.",
+    "sources": [
+     {
+      "url": "https://inspectree.com/al/baldwin-county/?utm_source=openai",
+      "title": "Tree service companies in Baldwin County, AL | InspecTree"
+     },
+     {
+      "url": "https://greentechforestry.com/?utm_source=openai",
+      "title": "GreenTech Forestry & Tree Removal, LLC"
+     },
+     {
+      "url": "https://www.bestprosintown.com/al/summerdale/ultimate-tree-services-inc-/?utm_source=openai",
+      "title": "Ultimate Tree Services Inc., Summerdale, AL - Reviews (67), Photos (26) - BestProsInTown"
+     },
+     {
+      "url": "https://www.bestprosintown.com/al/summerdale/tree-service/?utm_source=openai",
+      "title": "Tree Services Near Summerdale, AL - 2026 BestProsInTown"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If I were hiring a tree service for my property in Foley, here are the top local crews I\u2019d recommend:\n\n*   **Island Envy Lawn & Tree Care:** My first choice for routine trimming and tree removal. Locals love them because they\u2019re prompt, fairly priced, and meticulous about cleanup\u2014they never leave a mess in your yard. \n*   **Southeast Tree Service:** The go-to for large, hazardous, or high-risk removals. They bring heavy equipment (including cranes) and certified arborists, making them ideal if you have massive oaks close to your roof or power lines. \n*   **Lower Alabama Tree Service:** Fantastic for palm maintenance, canopy thinning, and stump grinding. They\u2019re quick to respond for quotes, friendly, and very dependable during hurricane prep season.\n\n**Homeowner tip:** Before hiring anyone in Baldwin County, always ask for proof of both general liability *and* workers' compensation insurance. Tree work near homes is risky, so you want to make sure you\u2019re fully protected!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
