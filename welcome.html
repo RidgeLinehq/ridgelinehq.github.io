@@ -47,6 +47,20 @@ footer{background:#0f241d;color:#cfd9cf;padding:28px 0 calc(28px + env(safe-area
 footer a{color:#fff}
 @media(max-width:420px){ol.terms>li{grid-template-columns:34px 1fr}.brand span{font-size:.78rem}}
 .steps li{align-items:start}.tap{display:inline-block;margin-top:8px;padding:10px 14px;background:var(--forest);color:#fff;border-radius:10px;font-weight:600;text-decoration:none}.copy{font:600 .95rem/1.4 ui-monospace,Menlo,monospace;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:inline-block;margin-top:6px;word-break:break-all}
+
+form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 50px rgba(20,48,38,.08)}
+.f{margin-top:14px}.f label{display:block;font-weight:600;font-size:.88rem;margin-bottom:5px}.f label span{color:var(--muted);font-weight:500}
+.f input,.f textarea,.f select{width:100%;min-height:50px;padding:12px 14px;border-radius:9px;border:1px solid #b9b3a1;background:#fffefb;font:inherit;color:var(--ink)}
+.f textarea{min-height:90px;resize:vertical}
+.f.err input,.f.err textarea{border-color:#b23a2d}
+.f .msg{display:none;color:#b23a2d;font-size:.84rem;margin-top:5px}.f.err .msg{display:block}
+.go{display:flex;width:100%;justify-content:center;align-items:center;min-height:54px;margin-top:20px;border:0;border-radius:10px;background:var(--forest);color:#fff;font:600 1.02rem/1 Inter,system-ui,sans-serif;cursor:pointer}
+.go[disabled]{opacity:.6}
+.ok{display:none;padding:22px;background:var(--sage);border-radius:14px;margin-top:8px}
+.ok h2{margin-bottom:6px}
+.fallback{display:none;margin-top:14px}
+.fallback textarea{width:100%;min-height:140px;padding:10px;border-radius:9px;border:1px solid #b9b3a1;font:13px/1.4 ui-monospace,Menlo,monospace}
+.planline{font-weight:600}
 </style>
 </head>
 <body>
@@ -61,48 +75,96 @@ footer a{color:#fff}
   <div class="wrap">
     <span class="kicker">You're in</span>
     <h1>Welcome to <em>Ridgeline Local.</em></h1>
-    <div class="promise">Your first work lands within <strong>2 business days</strong>. Two quick steps on your side and we're off.</div>
-    <p class="meta">Founding client plan · $147/month for 3 months, then $197 · month to month, cancel by replying to any email.</p>
+    <div class="promise">One short form (about 2 minutes) and we start. We run your <strong>starting AI visibility check</strong> right away and email you the result.</div>
+    <p class="meta planline" id="planLine">Month to month. Cancel anytime by replying to any email.</p>
   </div>
 </header>
 
 <main>
   <div class="wrap">
-    <ol class="terms steps">
-      <li><div><h2>Add us as a Manager on your Google Business Profile (3 minutes)</h2>
-        <p>This lets us fix your categories, services, description, hours and photos without ever asking for a password. You stay the owner and can remove us any time.</p>
+    <form class="ob" id="ob" novalidate>
+      <h2 style="font-size:1.35rem">Tell us about your business</h2>
+      <div class="f"><label for="b">Business name</label><input id="b" required maxlength="120" autocomplete="organization"><div class="msg">Please add your business name.</div></div>
+      <div class="f"><label for="gp">Google Business Profile link <span>(optional, but it helps)</span></label><input id="gp" type="url" inputmode="url" maxlength="300" placeholder="Paste the link from Google Maps → Share"><div class="msg">That doesn't look like a link.</div></div>
+      <div class="f"><label for="ph">Business phone</label><input id="ph" type="tel" inputmode="tel" required maxlength="40" autocomplete="tel"><div class="msg">Please add a phone number.</div></div>
+      <div class="f"><label for="sv">What do you do? <span>(your main services)</span></label><textarea id="sv" required maxlength="500" placeholder="e.g. haircuts, beard trims, kids cuts"></textarea><div class="msg">Please list your main services.</div></div>
+      <div class="f"><label for="ct">City and state</label><input id="ct" required maxlength="100" placeholder="e.g. Tulsa, OK" autocomplete="address-level2"><div class="msg">Please add your city and state.</div></div>
+      <div class="f"><label for="em">Email for reports and leads</label><input id="em" type="email" required maxlength="160" autocomplete="email" inputmode="email"><div class="msg">Please add an email we can reach you at.</div></div>
+      <button class="go" id="go" type="submit">Start my work →</button>
+      <p class="meta">We never ask for a password. Leads and reports go to the email above.</p>
+    </form>
+
+    <div class="ok" id="ok" role="status" aria-live="polite">
+      <h2>Got it. We're starting now.</h2>
+      <p>Your starting AI visibility check is running. You'll get it by email, usually within a few hours, followed by your Google profile fixes.</p>
+      <div class="fallback" id="fb">
+        <p><strong>One more tap:</strong> our form didn't go through. Tap below to send these details by email.</p>
+        <a class="tap" id="fbMail" href="mailto:ridgelinemarketinghq@gmail.com">Send by email</a>
+        <textarea id="fbText" readonly></textarea>
+      </div>
+    </div>
+
+    <ol class="terms steps" style="margin-top:34px">
+      <li><div><h2>Optional: add us as a Manager on your Google profile (3 minutes)</h2>
+        <p>This lets Google send us your profile's message and call notices so we can log your leads, and lets us see your profile like you do. You stay the owner and can remove us any time. Never a password.</p>
         <ul>
-          <li>Open the <strong>Google Maps</strong> app (or go to <strong>google.com/business</strong>) signed in as the owner.</li>
-          <li>Tap your business profile → the <strong>menu (⋯)</strong> → <strong>Business Profile settings</strong> → <strong>People and access</strong> (or <strong>Managers</strong>).</li>
-          <li>Tap <strong>Add</strong>, enter this email, choose <strong>Manager</strong>, then <strong>Invite</strong>:</li>
+          <li>Google Maps app (or google.com/business) → your profile → <strong>⋯ menu</strong> → <strong>Business Profile settings</strong> → <strong>People and access</strong> (or <strong>Managers</strong>) → <strong>Add</strong>.</li>
+          <li>Enter this email, choose <strong>Manager</strong>, tap <strong>Invite</strong>:</li>
         </ul>
-        <span class="copy">ridgelinemarketinghq@gmail.com</span>
-        <p style="margin-top:10px">We'll get Google's email when the invite goes through. Nothing else to do.</p></div></li>
-
-      <li><div><h2>Send us your Google review link (1 minute)</h2>
-        <p>We turn it into your review request card and text, so asking happy customers takes your crew ten seconds.</p>
+        <span class="copy">ridgelinemarketinghq@gmail.com</span></div></li>
+      <li><div><h2>What happens next</h2>
         <ul>
-          <li>Google Maps app → your business profile → <strong>Get more reviews</strong> (or <strong>Ask for reviews</strong>) → <strong>Copy link</strong>.</li>
-          <li>Paste it in a reply to our welcome email, or send it to <a href="mailto:ridgelinemarketinghq@gmail.com?subject=My%20Google%20review%20link">ridgelinemarketinghq@gmail.com</a>.</li>
-        </ul></div></li>
-
-      <li><div><h2>What happens next (nothing for you to chase)</h2>
-        <ul>
-          <li><strong>Within 2 business days:</strong> your profile audit and build-out plan, your review request kit (text + QR card), and the list of listings we'll correct.</li>
-          <li><strong>Every week:</strong> one Google post ready to publish and replies drafted for any new reviews. If we're a Manager, we publish them for you.</li>
-          <li><strong>Day 30, 60, 90:</strong> your report: what ChatGPT and Gemini say when asked for your trade in your town, your review count then vs now, and the work done. Day 60 is when the <a href="guarantee.html">review-growth guarantee</a> is checked.</li>
+          <li><strong>Today:</strong> your starting AI visibility check (what ChatGPT and Gemini say, and your score).</li>
+          <li><strong>Within 2 business days:</strong> your Google profile fixes, written out and ready to paste, and your review request kit.</li>
+          <li><strong>Every week:</strong> we re-check ChatGPT and Gemini. Growth and Pro: leads go to your email as we find them.</li>
+          <li><strong>Every month:</strong> your report: leads sent, leads that became jobs, AI score then vs now, reviews gained.</li>
         </ul></div></li>
     </ol>
 
     <div class="box">
       <h2>Questions? Just reply.</h2>
-      <p>Every email you get from us is from a person who can answer. <a href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a></p>
+      <p>Every email from us can be answered. <a href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a></p>
     </div>
-
-    <p class="small">Didn't mean to sign up, or paid twice? Reply to your receipt and we'll sort it the same day.</p>
+    <p class="small">Paid by mistake or twice? Reply to your receipt and we'll fix it the same day. Growth and Pro include the <a href="guarantee.html">Second Month Free Guarantee</a>.</p>
   </div>
 </main>
 
 <footer><div class="wrap">© 2026 Ridgeline Local · <a href="./">ridgelinehq.github.io</a></div></footer>
+<script>
+(function(){
+  "use strict";
+  var EMAIL="ridgelinemarketinghq@gmail.com";
+  var q=new URLSearchParams(location.search);
+  var plans={starter:"Starter ($75/month)",growth:"Growth ($125/month)",pro:"Pro ($199/month)"};
+  var plan=(q.get("plan")||"").toLowerCase(),billing=(q.get("billing")||"monthly").toLowerCase(),session=q.get("session_id")||"";
+  if(plans[plan]){document.getElementById("planLine").textContent="Your plan: "+plans[plan].replace("/month",billing==="yearly"?"/month, billed yearly":"/month")+". Month to month. Cancel anytime by replying to any email."}
+  var $=function(id){return document.getElementById(id)};
+  var req=["b","ph","sv","ct","em"];
+  function val(){
+    var good=true;
+    req.concat(["gp"]).forEach(function(id){
+      var el=$(id),f=el.closest(".f");el.value=el.value.trim();
+      var bad=(req.indexOf(id)>-1&&!el.value)||(id==="em"&&el.value&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value))||(id==="gp"&&el.value&&!/^https?:\/\/\S+$/i.test(el.value)&&!/^(maps\.app\.goo\.gl|g\.page|goo\.gl|www\.google|google)\S*/i.test(el.value));
+      f.classList.toggle("err",bad);if(bad&&good){el.focus();good=false}
+    });
+    return good;
+  }
+  $("ob").addEventListener("submit",function(e){
+    e.preventDefault();if(!val())return;
+    var d={business:$("b").value,google_profile:$("gp").value||"Not given",phone:$("ph").value,services:$("sv").value,city:$("ct").value,email:$("em").value,plan:plan||"unknown",billing:billing,stripe_session:session||"none"};
+    var subject="Onboarding — "+d.business;
+    var text=Object.keys(d).map(function(k){return k+": "+d[k]}).join("\n");
+    $("go").disabled=true;$("go").textContent="Sending…";
+    var payload=Object.assign({_subject:subject,_template:"box",_captcha:"false"},d);
+    function done(ok){
+      $("ob").style.display="none";$("ok").style.display="block";
+      if(!ok){$("fb").style.display="block";$("fbText").value="Subject: "+subject+"\n\n"+text;$("fbMail").href="mailto:"+EMAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(text)}
+      $("ok").scrollIntoView({block:"center"});
+    }
+    fetch("https://formsubmit.co/ajax/"+EMAIL,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(payload)})
+      .then(function(r){return r.json().then(function(j){return r.ok&&String(j.success)!=="false"})}).then(done,function(){done(false)});
+  });
+})();
+</script>
 </body>
 </html>

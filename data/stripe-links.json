@@ -1,0 +1,9 @@
+{
+  "note": "Filled in automatically by the 'Ridgeline Stripe' GitHub Action once the STRIPE_SECRET_KEY secret is added (see SETUP_NEEDED.md). Empty = checkout not live yet; the site falls back to an email signup.",
+  "updatedAt": "",
+  "links": {
+    "starter": {"monthly": "", "yearly": ""},
+    "growth": {"monthly": "", "yearly": ""},
+    "pro": {"monthly": "", "yearly": ""}
+  }
+}
