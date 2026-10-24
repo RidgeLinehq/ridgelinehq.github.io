@@ -1,1 +1,4 @@
 __pycache__/
+
+# dated zips made by scripts/backup.sh (never committed)
+backups/

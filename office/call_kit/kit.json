@@ -1,0 +1,80 @@
+{
+ "version": "8.0",
+ "script": {
+  "opener": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. I'll be quick. I ran a free check on how {business} shows up when people ask ChatGPT and Google's AI for a {trade} in {town}. Got 30 seconds?",
+  "value": "Right now when someone asks for a {trade} in {town}, the AI recommends {competitor_or_others} and {business} {ai_result}. We fix that: your Google profile, reviews and site details, so the AI starts recommending you.",
+  "close": "Can I email you the free one-page report so you can see it yourself? No cost, no pressure."
+ },
+ "objections": {
+  "Not interested": "Totally fair. Can I still send the free report? If it's not useful, just delete it.",
+  "We get enough work": "That's great to hear. This just makes sure the AI keeps sending people your way as more folks search that way.",
+  "How much is it?": "The check is free. If you want it done for you, it's $147 a month for the first three months, then $197, month to month, cancel by email. If you don't gain 15 real Google reviews in 60 days, the third month is free. Let me send the check first so you only pay for what you actually need.",
+  "Is this a scam?": "Fair question. I'll email the report from ridgelinemarketinghq@gmail.com and you can check it against ChatGPT yourself.",
+  "How did you find me?": "Your website or your Google listing. I only work with a few local businesses at a time, and {town} is one of the towns I'm calling.",
+  "Call me later": "No problem. What's a better day and time? I'll put it down.",
+  "Don't call again": "Understood, I won't. Have a good one."
+ },
+ "outcomes": {
+  "no_answer": {
+   "label": "No answer",
+   "next": "retry_call",
+   "after_days": 1,
+   "max_tries": 3,
+   "then": "A second and third try on the next two call days; after 3 misses the lead stays on email only."
+  },
+  "not_interested": {
+   "label": "Not interested",
+   "next": "close_lead",
+   "then": "Status Not a fit. No more calls or emails."
+  },
+  "call_back": {
+   "label": "Call back",
+   "next": "schedule_call",
+   "ask": "when",
+   "then": "Back on the list at the time you pick."
+  },
+  "send_check": {
+   "label": "Send the free check",
+   "next": "email_ai_check",
+   "template": "after_call_report",
+   "ask": "email",
+   "then": "The reply desk runs the real ChatGPT + Gemini check and emails the one-page report within 2 hours."
+  },
+  "interested": {
+   "label": "Interested",
+   "next": "email_ai_check_plus_offer",
+   "template": "after_call_offer",
+   "ask": "email",
+   "alert_grayson": true,
+   "then": "The desk sends the report plus the founding offer and payment link, and tells you when it went out."
+  },
+  "do_not_call": {
+   "label": "Do not call",
+   "next": "suppress",
+   "then": "Suppressed the same minute. Never contacted again."
+  }
+ },
+ "rules": {
+  "list_size": 15,
+  "skip_if_emailed_within_days": 2,
+  "eligible_statuses": [
+   "New",
+   "Researching",
+   "Qualified",
+   "Contacted"
+  ],
+  "never_statuses": [
+   "Suppressed",
+   "Not a fit",
+   "Client",
+   "Meeting",
+   "Replied"
+  ],
+  "legal": [
+   "Dial by hand to the business's published number only.",
+   "8 AM to 8 PM their time.",
+   "Honor 'don't call again' at once (suppression).",
+   "Never a recorded voicemail, never a text."
+  ]
+ }
+}
