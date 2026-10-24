@@ -170,10 +170,19 @@ their client doc first. Answer in their thread, warm, plain, specific to their b
   again tomorrow" and check on the next Day Shift.
 - A review link, customer emails, photos, new info → Lane C step 5 + confirm what happens next.
 - "Cancel" → Lane C step 7. Be kind, no guilt, confirm the date the service ends.
-- A refund request → terms.html: if the latest charge is 14 days old or less, refund it in full
-  automatically (Stripe job {"action":"refund_last", ...}, cancel renewal unless they only want the
-  refund), confirm when the out file says ok. Older than 14 days → kind reply that explains the
-  terms, offer to cancel future charges, and alert Grayson at once (he may still choose to refund).
+- A refund request → terms.html: payments are final (no refunds). Reply kindly, never cold:
+  acknowledge, restate the policy in one plain line, offer to cancel future charges, and offer one
+  concrete way to make it right (a call from Grayson, an extra profile review, a fresh lead push).
+  Alert Grayson at once with the gist (subject "🚨 Ridgeline: refund request <business>"); only he
+  can approve a refund (Stripe job refund_last with "approvedBy":"grayson" after he says so in
+  this inbox or in chat). EXCEPTION, automatic: a duplicate or mistaken charge (two charges for one
+  period, a charge after a confirmed cancel) → refund_last with "reason":"duplicate" now, and tell
+  the client it's done.
+- A dispute / chargeback (Stripe email "dispute" or "chargeback") → alert Grayson at once and, in
+  the same run, build a dispute evidence PDF with office/tools/make_pack.js: what they bought and
+  when, the Terms they agreed to at checkout (the checkout text), every email + PDF we delivered
+  with dates, their replies, the work log. Email it to ridgelinemarketinghq@gmail.com with "Upload
+  this in Stripe → Payments → Disputes → Submit evidence" and the dispute deadline.
 - Unhappy, angry, mentions a lawyer, a chargeback, the BBB, or a complaint → do NOT argue and do
   NOT promise anything new. One short, kind reply: "I'm sorry this hasn't felt right. I want to fix
   it. Grayson will personally reply today." Then alert Grayson at once with the gist (subject

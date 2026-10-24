@@ -16,8 +16,8 @@ Two jobs, both idempotent:
    -> yearly plan: one month's price is refunded on the latest paid invoice.
    {"id": "...", "action": "lookup", "session": "cs_..."} -> writes plan, billing, status only.
    {"id": "...", "action": "cancel", "session"|"emailHash": ...} -> cancel at period end (no more charges).
-   {"id": "...", "action": "refund_last", "session"|"emailHash": ..., "cancel": true} -> terms.html refund:
-      the latest charge refunded in full if it is 14 days old or less (and renewal cancelled unless cancel false).
+   {"id": "...", "action": "refund_last", "session"|"emailHash": ..., "cancel": true, "reason": "duplicate"|"grayson",
+      "approvedBy": "grayson"} -> ONLY a duplicate/mistaken charge or a refund Grayson approved (payments are final, terms.html).
    The public repo never holds an email, a name or a card detail: jobs carry an opaque Checkout
    Session id or a salted hash; outputs carry ok/what/error only.
 
@@ -35,7 +35,7 @@ LINKS = os.path.join(ROOT, "data", "stripe-links.json")
 JOBS = os.path.join(ROOT, "office", "stripe", "jobs")
 OUT = os.path.join(ROOT, "office", "stripe", "out")
 COUPON = "rl-second-month-free"
-TERMS_TEXT = "By subscribing you agree to the Ridgeline Local Terms (ridgelinehq.github.io/terms.html). Cancel anytime by replying \"cancel\" to any email. Refund in full if you ask within 14 days of a charge."
+TERMS_TEXT = "By subscribing you agree to the Ridgeline Local Terms (ridgelinehq.github.io/terms.html). All payments are final and non-refundable; cancel anytime by replying \"cancel\" to any email to stop future charges."
 
 PLANS = {
     "starter": {"name": "Ridgeline Local Starter", "monthly": 7500, "yearly": 75000,
@@ -259,15 +259,15 @@ def cancel(job):
 
 
 def refund_last(job):
-    """Terms: a refund asked for within 14 days of a charge = that charge refunded in full."""
+    """Only for a charge made by mistake (duplicate) or one Grayson approved: terms.html says payments are final."""
     sub = find_subscription(job)
     invs = paid_invoices(sub["id"])
     if not invs:
         return {"what": "nothing to refund (no paid charge)"}
     inv = invs[0]
     age_days = (time.time() - (inv.get("status_transitions", {}).get("paid_at") or inv.get("created") or 0)) / 86400
-    if age_days > 14.5:
-        raise StripeError(f"latest charge is {int(age_days)} days old (refund window is 14 days): Grayson decides")
+    if age_days > 45 and not job.get("approvedBy"):
+        raise StripeError(f"latest charge is {int(age_days)} days old: needs approvedBy (Grayson)")
     rid = refund_invoice(inv, inv["amount_paid"], job["id"])
     if job.get("cancel", True) and not sub.get("cancel_at_period_end"):
         call("POST", f"subscriptions/{sub['id']}", {"cancel_at_period_end": True}, idem=f"rl-cancel-{job['id']}")
