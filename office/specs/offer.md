@@ -46,6 +46,8 @@ second month is free. No arguing." How it is measured and paid: specs/guarantee.
 the terms, never reword them.
 
 ## Promises the crew may NOT make
+(Never bring these up unprompted: lead with what we do and the guarantee. If a prospect asks
+"can you get me #1?", answer with what we do and the guarantee, positively.)
 Never rankings, never "#1", never a number of leads, jobs or reviews, never "guaranteed results",
 never "we post for you on Google" (we write it, the owner pastes it), never "we text your
 customers" (we email them; the owner can text the ready message). If the work can't deliver a

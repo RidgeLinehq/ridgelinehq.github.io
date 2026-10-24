@@ -15,6 +15,7 @@ first emails and client work; this desk sends and answers, any day.
 | specs/guarantee.md | all (baseline, day-28 check, paying it) |
 | specs/lead-tracking.md | The lead log, Sending leads, "Did this lead turn into a job?" |
 | shared/alerts.md | all |
+| specs/quality.md | all (every client deliverable passes it; Speed) |
 | specs/email-rules.md | QA gate 5 to 7, "Reply handling" |
 | shared/gateway.md | Protocol |
 | shared/rules.md | Honesty, Who we are in writing |
@@ -120,7 +121,11 @@ Search `(from:stripe.com OR subject:"Onboarding —") newer_than:7d -label:Ridge
    (c) data/founding.json spotsLeft - 1 (never below 0; commit "reply-desk: founding spots N";
    when it hits 0, tell Grayson); (d) Pro: write office/landing/<slug>.json from the form's
    facts and run office/tools/make_landing.py, commit p/<slug>/, include the link in the
-   baseline email; (e) work items welcome-sent, onboarding, baseline done.
+   baseline email; (e) FIRST DELIVERY in this same run (specs/quality.md "Speed"): build the
+   profile fixes (kind "plan", from the onboarding facts + a WebSearch of their public Google
+   listing) and the review kit (kind "kit"), QA them to 85+, and send them now in the client's
+   thread; Day Shift 09 refines them later; (f) work items welcome-sent, onboarding, baseline,
+   buildout-plan, review-kit done.
 4. Reminders: client "awaiting-onboarding" 24 h and 72 h after payment → one short reminder
    with the form link each; at 96 h → alert Grayson ("<email> paid <plan> 4 days ago and hasn't
    filled the form").
@@ -163,7 +168,9 @@ these into the Google Business app: Edit profile → the field named in each ste
 minutes, and it's the biggest single fix"; for a post: "paste
 this into Google Business → Add update, with the photo described"; for the kit: the text to
 send customers + the card link https://ridgelinehq.github.io/cards/<slug>.png; if the card
-isn't built yet, send the text now and the card when it exists). Mark the draft sent with
+isn't built yet, send the text now and the card when it exists). Before sending, check
+the draft's qa.score is 85+ (or 75+ with an alert already sent); a draft with no qa score gets
+scored now per specs/quality.md. Mark the draft sent with
 evidence, tick the client's work item ("review-kit", "buildout-plan", "listing-fixes",
 "week-post", "report-<month>") to done, events line. One email per draft; max 3 deliveries per
 client per run so nobody gets flooded (Pro "leads" drafts don't count toward the 3: priority).

@@ -11,6 +11,7 @@ owns the work.
 | File | Section |
 |---|---|
 | specs/client-delivery.md | all |
+| specs/quality.md | all (every drafted item passes it before status ready) |
 | specs/lead-tracking.md | all |
 | specs/offer.md | The plans, Promises the crew may NOT make |
 | shared/gateway.md | Protocol |
@@ -68,7 +69,8 @@ owns the work.
 10. Crew doc idle: "<n> clients: <items drafted>, <leads> leads, <flat> flat".
 
 ## Audit
-Every drafted item names the client and uses only facts from the client, the lead log, the
+Every drafted item has qa {score, weakest, rewrites} per specs/quality.md and 85+ (or 75+ with
+an alert). Every drafted item names the client and uses only facts from the client, the lead log, the
 gateway text or a source URL. No invented review counts, leads or scores. Nothing from leadlog
 or client.customers in the repo. Lead finder and gateway jobs carry town + trade only.
 

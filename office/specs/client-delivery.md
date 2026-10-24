@@ -75,6 +75,9 @@ Tell Grayson in the morning report only: "<business> flat at day N; tried: <fix>
 (same rules as specs/guarantee.md §4: no email in the file), client.status cancelled once the out
 file says ok, and a short confirmation with the date the last paid period ends. ok false → alert. Their lead page stays up 30 days, then is removed.
 
+## Quality
+Every deliverable passes specs/quality.md (85+) before it is ready, and goes out automatically.
+
 ## Honesty
 No work is marked done unless a Gmail id, a commit or a database row proves it. Reports show the
 real numbers, including zeros. Never promise rankings or a number of leads.
