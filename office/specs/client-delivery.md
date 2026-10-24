@@ -70,6 +70,10 @@ Tell Grayson in the morning report only: "<business> flat at day N; tried: <fix>
 - Never write a review, never ask staff or friends to post one, never offer anything for one.
 - Texting customers is the owner's (we give them the ready text); the crew never sends SMS.
 
+## Refunds (terms.html)
+Asked within 14 days of a charge → that charge refunded in full automatically (Stripe job
+"refund_last"). Older → kind explanation + offer to cancel + alert Grayson. Reply desk Lane C2.
+
 ## Cancel or pause
 "cancel" from a client → Stripe job `{"id": "c-<clientId>-<day>", "action": "cancel", "session"|"emailHash": ...}`
 (same rules as specs/guarantee.md §4: no email in the file), client.status cancelled once the out

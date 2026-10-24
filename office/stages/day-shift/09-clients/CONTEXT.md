@@ -39,7 +39,7 @@ owns the work.
    Compare with client.audit and the fixes sent; append changes to client.profileLog
    [{at, field, before, after, source}]; reviewsNow = the public count with its date. A fix
    not live after 7 days → one nudge draft (kind "fix") with just that step.
-5. **Lead Finder** (Growth, Pro), every run:
+5. **Lead Finder** (Growth, Pro): the dedicated Lead Finder task (stages/lead-finder/, twice a day, every day) owns this. Here, only check its last run line in office/runlog.jsonl is under 14 hours old (else alert) and fold its stats into the report. The steps below are its fallback if it hasn't run today:
    a. Reddit: one lead-finder job for all due clients: `office/leadfinder/jobs/lf-<day>-<4 hex>.json`
       = {"id", "searches":[{"key":"<town>-<st>-<trade slug>", "town", "state", "terms":[3 to 5
       words people use for their service], "subreddits":[the town's and the nearest city's

@@ -16,6 +16,8 @@ Two jobs, both idempotent:
    -> yearly plan: one month's price is refunded on the latest paid invoice.
    {"id": "...", "action": "lookup", "session": "cs_..."} -> writes plan, billing, status only.
    {"id": "...", "action": "cancel", "session"|"emailHash": ...} -> cancel at period end (no more charges).
+   {"id": "...", "action": "refund_last", "session"|"emailHash": ..., "cancel": true} -> terms.html refund:
+      the latest charge refunded in full if it is 14 days old or less (and renewal cancelled unless cancel false).
    The public repo never holds an email, a name or a card detail: jobs carry an opaque Checkout
    Session id or a salted hash; outputs carry ok/what/error only.
 
@@ -33,6 +35,7 @@ LINKS = os.path.join(ROOT, "data", "stripe-links.json")
 JOBS = os.path.join(ROOT, "office", "stripe", "jobs")
 OUT = os.path.join(ROOT, "office", "stripe", "out")
 COUPON = "rl-second-month-free"
+TERMS_TEXT = "By subscribing you agree to the Ridgeline Local Terms (ridgelinehq.github.io/terms.html). Cancel anytime by replying \"cancel\" to any email. Refund in full if you ask within 14 days of a charge."
 
 PLANS = {
     "starter": {"name": "Ridgeline Local Starter", "monthly": 7500, "yearly": 75000,
@@ -139,12 +142,16 @@ def ensure_link(plan, billing, price):
     for link in all_pages("payment_links", {"active": "true"}):
         md = link.get("metadata") or {}
         if md.get("rl_plan") == plan and md.get("rl_billing") == billing and md.get("rl_price") == price:
+            if (((link.get("custom_text") or {}).get("submit") or {}).get("message") or "") != TERMS_TEXT:
+                call("POST", f"payment_links/{link['id']}", {"custom_text": {"submit": {"message": TERMS_TEXT}}})
+                print(f"terms line added to {plan} {billing} checkout")
             return link["url"]
     redirect = f"{SITE}/welcome.html?plan={plan}&billing={billing}&session_id={{CHECKOUT_SESSION_ID}}"
     link = call("POST", "payment_links", {
         "line_items": [{"price": price, "quantity": 1}],
         "after_completion": {"type": "redirect", "redirect": {"url": redirect}},
         "allow_promotion_codes": True,
+        "custom_text": {"submit": {"message": TERMS_TEXT}},
         "billing_address_collection": "auto",
         "phone_number_collection": {"enabled": True},
         "metadata": {"rl_plan": plan, "rl_billing": billing, "rl_price": price},
@@ -251,6 +258,22 @@ def cancel(job):
     return {"what": "cancels at the end of the paid period, no further charges", "periodEnd": sub.get("current_period_end")}
 
 
+def refund_last(job):
+    """Terms: a refund asked for within 14 days of a charge = that charge refunded in full."""
+    sub = find_subscription(job)
+    invs = paid_invoices(sub["id"])
+    if not invs:
+        return {"what": "nothing to refund (no paid charge)"}
+    inv = invs[0]
+    age_days = (time.time() - (inv.get("status_transitions", {}).get("paid_at") or inv.get("created") or 0)) / 86400
+    if age_days > 14.5:
+        raise StripeError(f"latest charge is {int(age_days)} days old (refund window is 14 days): Grayson decides")
+    rid = refund_invoice(inv, inv["amount_paid"], job["id"])
+    if job.get("cancel", True) and not sub.get("cancel_at_period_end"):
+        call("POST", f"subscriptions/{sub['id']}", {"cancel_at_period_end": True}, idem=f"rl-cancel-{job['id']}")
+    return {"what": f"refunded ${inv['amount_paid'] / 100:.2f} in full" + (" and cancelled renewal" if job.get("cancel", True) else ""), "refund": rid[-6:]}
+
+
 def lookup(job):
     sub = find_subscription(job)
     plan, billing, unit = plan_of(sub)
@@ -270,7 +293,7 @@ def run_jobs():
             job = json.load(open(f))
             job.setdefault("id", os.path.basename(f)[:-5])
             res["id"] = job["id"]
-            fn = {"guarantee": guarantee, "lookup": lookup, "cancel": cancel}.get(job.get("action"))
+            fn = {"guarantee": guarantee, "lookup": lookup, "cancel": cancel, "refund_last": refund_last}.get(job.get("action"))
             if not fn:
                 raise StripeError(f"unknown action {job.get('action')!r}")
             res.update(fn(job), ok=True)

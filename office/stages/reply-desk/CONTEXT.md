@@ -159,6 +159,28 @@ Search `(from:stripe.com OR subject:"Onboarding —") newer_than:7d -label:Ridge
 7. "cancel" from a client → Stripe cancel job (specs/client-delivery.md "Cancel or pause"),
    confirm to the client once the out file says ok; alert if not ok.
 
+## Lane C2: client care (every email from a paying client gets a real answer within the hour)
+Clients are paying real money: treat every message like it matters. Read their whole thread and
+their client doc first. Answer in their thread, warm, plain, specific to their business, under
+150 words, with the one next step. Never make them repeat themselves.
+- A question → answer it from their data (score, leads, what we sent); attach the relevant PDF
+  again if it helps. "How's it going?" → their real numbers this month.
+- "Done" / "I pasted it" → WebSearch their public listing to see if it's live; thank them and say
+  what you saw; log it in client.profileLog. Not live yet → "Google can take a day; we'll check
+  again tomorrow" and check on the next Day Shift.
+- A review link, customer emails, photos, new info → Lane C step 5 + confirm what happens next.
+- "Cancel" → Lane C step 7. Be kind, no guilt, confirm the date the service ends.
+- A refund request → terms.html: if the latest charge is 14 days old or less, refund it in full
+  automatically (Stripe job {"action":"refund_last", ...}, cancel renewal unless they only want the
+  refund), confirm when the out file says ok. Older than 14 days → kind reply that explains the
+  terms, offer to cancel future charges, and alert Grayson at once (he may still choose to refund).
+- Unhappy, angry, mentions a lawyer, a chargeback, the BBB, or a complaint → do NOT argue and do
+  NOT promise anything new. One short, kind reply: "I'm sorry this hasn't felt right. I want to fix
+  it. Grayson will personally reply today." Then alert Grayson at once with the gist (subject
+  "🚨 Ridgeline: unhappy client <business>"). Refund-within-14-days still applies automatically.
+- Never claim work we didn't do, never promise rankings or a number of leads, never blame the
+  client. If we made a mistake, say so plainly and say how we're fixing it.
+
 ## Lane G: lead intake (specs/lead-tracking.md)
 Search `(subject:"Lead for" OR from:businessprofile-noreply@google.com OR from:google.com subject:(message OR call OR lead) OR subject:lead) newer_than:7d -label:Ridgeline-Handled`.
 - "Lead for <slug> — <business>" (Pro lead page form): leadlog row source "lead-page", the
