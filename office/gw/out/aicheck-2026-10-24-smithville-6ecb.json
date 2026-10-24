@@ -1,0 +1,146 @@
+{
+ "id": "aicheck-2026-10-24-smithville-6ecb",
+ "at": "2026-10-24T18:03:26Z",
+ "results": [
+  {
+   "key": "smithville-tn-restaurants",
+   "question": "Who are the best restaurants in Smithville, TN?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were a Smithville homeowner sending neighbors somewhere local, I\u2019d start here:\n\n- **Cheryl\u2019s Beau Bees** \u2014 best all-around lunch/brunch pick; homemade caf\u00e9 food, strong local buzz, and Tripadvisor ranks it among Smithville\u2019s top restaurants. ([tripadvisor.com](https://www.tripadvisor.com/Restaurants-g55342-Smithville_Tennessee.html?utm_source=openai))  \n- **Ace\u2019s Steak, Seafood & Italian** \u2014 my \u201cnice dinner without driving to Cookeville\u201d choice: steaks, seafood, pasta, and consistently strong diner reviews. ([restaurantji.com](https://www.restaurantji.com/tn/smithville/?utm_source=openai))  \n- **Evins Mill** \u2014 best special-occasion option; DeKalb tourism describes it as upscale, scratch-made dining with reservations required. ([visitdekalbtn.com](https://www.visitdekalbtn.com/eat?utm_source=openai))  \n- **Patty\u2019s Restaurant** \u2014 dependable local comfort food: fried chicken, breakfast plates, burgers, good prices, and lots of positive local-style reviews. ([restaurantji.com](https://www.restaurantji.com/tn/smithville/?utm_source=openai))  \n- **Webb\u2019s Ice Cream & Soda Fountain** \u2014 great for burgers, sandwiches, ice cream, and a classic small-town stop when guests visit. ([tripadvisor.com](https://www.tripadvisor.com/Restaurants-g55342-Smithville_Tennessee.html?utm_source=openai))  \n- **Fiesta Jalisco Mexican Grill** \u2014 solid family Mexican spot when you want generous portions and easy takeout. ([tripadvisor.com](https://www.tripadvisor.com/Restaurants-g55342-Smithville_Tennessee.html?utm_source=openai))  \n\nI\u2019d call ahead on hours\u2014small-town restaurants can change schedules quickly.",
+    "sources": [
+     {
+      "url": "https://www.tripadvisor.com/Restaurants-g55342-Smithville_Tennessee.html?utm_source=openai",
+      "title": "THE 10 BEST Restaurants in Smithville (Updated October 2026)"
+     },
+     {
+      "url": "https://www.restaurantji.com/tn/smithville/?utm_source=openai",
+      "title": "THE 15 BEST Restaurants in Smithville, TN - With Menus, Reviews, Photos - Updated October 2026"
+     },
+     {
+      "url": "https://www.visitdekalbtn.com/eat?utm_source=openai",
+      "title": "VisitDeKalbCountyTennessee - Eat"
+     },
+     {
+      "url": "https://www.restaurantji.com/tn/smithville/?utm_source=openai",
+      "title": "THE 15 BEST Restaurants in Smithville, TN - With Menus, Reviews, Photos - Updated October 2026"
+     },
+     {
+      "url": "https://www.tripadvisor.com/Restaurants-g55342-Smithville_Tennessee.html?utm_source=openai",
+      "title": "THE 10 BEST Restaurants in Smithville (Updated October 2026)"
+     },
+     {
+      "url": "https://www.tripadvisor.com/Restaurants-g55342-Smithville_Tennessee.html?utm_source=openai",
+      "title": "THE 10 BEST Restaurants in Smithville (Updated October 2026)"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "Welcome to the neighborhood! As a local, here are the spots I always recommend depending on what you're craving:\n\n* **Helen\u2019s Restaurant:** The quintessential Smithville staple. Go here for a hearty, home-style Southern breakfast or a classic meat-and-three lunch. The food is pure comfort, and the staff treats everyone like family.\n* **Blue Water Grille (at Center Hill Marina):** This is our go-to when we have out-of-town guests. Situated right on the lake, it offers fantastic water views, great steaks, seafood, and a fun, relaxed atmosphere. \n* **Los Lobos Mexican Restaurant:** The local favorite for a reliable, fast, and delicious weeknight meal. The street tacos and fajitas are excellent, and the portions are huge.\n* **The Restaurant at Evins Mill:** For a date night or special occasion, head just a few minutes out of town to this scenic inn. You\u2019ll enjoy gourmet dining surrounded by lush woods and a private waterfall. \n\n*Bonus tip:* If you need a cozy spot for morning coffee or a fresh pastry while running errands, stop by **Button Willow Coffeehouse** right near the town square!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "smithville-tn-ice-cream-q1",
+   "question": "Who are the best ice cream shops in Smithville, TN?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a **Smithville homeowner**, I\u2019d keep it simple and local:\n\n1. **Enjoy Ice Cream Shop \u2014 best everyday treat spot.**  \n   This is the top pick for a quick cone with kids, visiting grandkids, or after Center Hill Lake. It\u2019s at **480 W. Broad St.**, gets strong local review scores, and is praised for lots of ice cream options, gelato/sorbet, Mexican snacks, good prices, and a friendly, clean atmosphere. ([restaurantji.com](https://www.restaurantji.com/tn/smithville/enjoy-ice-cream-shop-/?utm_source=openai))\n\n2. **Webb\u2019s Pharmacy, Gifts & Soda Fountain \u2014 best nostalgic outing.**  \n   Webb\u2019s is the place I\u2019d take out-of-town guests: an old-school soda fountain tied to a family business dating back to **1881**, with lunch plus banana splits, floats, and scoop desserts. It\u2019s more \u201cclassic small-town experience\u201d than just ice cream. ([visitdekalbtn.com](https://www.visitdekalbtn.com/eat?utm_source=openai))\n\n**Note:** Older lists mention **Harmony Lane Farm & Creamery**, but its own site says the farm/creamery closed at the end of 2025, so I wouldn\u2019t recommend it as a current ice cream stop. ([harmonylanefarms.com](https://harmonylanefarms.com/about-us/?utm_source=openai))",
+    "sources": [
+     {
+      "url": "https://www.restaurantji.com/tn/smithville/enjoy-ice-cream-shop-/?utm_source=openai",
+      "title": "Enjoy Ice Cream Shop, Smithville - Menu, Reviews (65), Photos (25) - Restaurantji"
+     },
+     {
+      "url": "https://www.visitdekalbtn.com/eat?utm_source=openai",
+      "title": "VisitDeKalbCountyTennessee - Eat"
+     },
+     {
+      "url": "https://harmonylanefarms.com/about-us/?utm_source=openai",
+      "title": "About | Harmony Lane Farms"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "Welcome to the neighborhood! If you're looking to beat the Tennessee heat after working in the yard or taking the family out for a weekend treat, here are the top local spots around Smithville I\u2019d recommend:\n\n*   **Button Willow General Store** (*Dowelltown, just 5 minutes down US-70*): Hands-down my top pick for authentic hometown charm. It\u2019s a historic general store serving fantastic hand-scooped ice cream, espresso, and baked goods in a cozy, vintage atmosphere. \n*   **Hurricane Marina & Grill** (*Center Hill Lake*): If you're spending a warm day out near the water, head down to the dock. Grabbing a cold ice cream here while watching the boats come in is a staple summer experience for local homeowners.\n*   **Sno-Biz of Smithville** (*Broad Street*): For a quick, classic neighborhood stop right in town, this popular seasonal stand is great for soft-serve, sundaes, and dozens of shaved ice flavors.\n\nIf you want that true nostalgic, small-town ice cream parlor feel, **Button Willow** is definitely the first place you should try!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "smithville-tn-ice-cream-q2",
+   "question": "Can you recommend a good ice cream shop in Smithville, TN?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were advising a Smithville homeowner, I\u2019d start with **Enjoy Ice Cream Shop** at **480 W. Broad St.** It\u2019s local, family-friendly, and a good \u201ctake the kids after dinner / after the lake\u201d spot; recent listings highlight lots of frozen-treat options and strong customer feedback. ([centerhilllaketourism.com](https://centerhilllaketourism.com/listing/enjoy-ice-cream-shop/?utm_source=openai))\n\nMy second pick would be **Webb\u2019s Ice Cream & Soda Fountain** at **608 S. Congress Blvd.** It has more of an old-school small-town feel, plus burgers, wraps, sundaes, hot fudge brownie, and classic soda-fountain items\u2014nice if you want dessert but someone in the family wants real food too. ([restaurantji.com](https://www.restaurantji.com/tn/smithville/webb-s-ice-cream-and-soda-fountain-/?utm_source=openai))\n\nI\u2019d **skip Harmony Lane Farm & Creamery as a routine ice-cream recommendation** for now: it was a well-known local goat-milk ice cream stop, but its own site says the attraction closed at the end of 2025. ([harmonylanefarms.com](https://harmonylanefarms.com/about-us/?utm_source=openai))",
+    "sources": [
+     {
+      "url": "https://centerhilllaketourism.com/listing/enjoy-ice-cream-shop/?utm_source=openai",
+      "title": "Enjoy Ice Cream Shop - Center Hill Lake Tourism"
+     },
+     {
+      "url": "https://www.restaurantji.com/tn/smithville/webb-s-ice-cream-and-soda-fountain-/?utm_source=openai",
+      "title": "Webb\u2019s Ice Cream & Soda Fountain, Smithville - Menu, Reviews (34), Photos (22) - Restaurantji"
+     },
+     {
+      "url": "https://harmonylanefarms.com/about-us/?utm_source=openai",
+      "title": "About | Harmony Lane Farms"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a great local treat in Smithville, I always recommend **Button Willow General Store & Coffeehouse** right near the historic downtown square. It\u2019s a wonderful community favorite with a cozy, small-town atmosphere. They serve delicious hand-scooped ice cream alongside specialty coffees and homemade baked goods, making it the perfect neighborhood spot to relax after a weekend project or a long day. \n\nIf you\u2019re spending the day out near the water, check out the concession spots at **Hurricane Marina** or **Hidden Harbor Marina** on Center Hill Lake. They serve classic ice cream cups, cones, and sundae treats right on the dock. Grabbing a cold scoop with a view of the lake is a favorite summer routine for local homeowners and visitors alike. \n\nBoth give you great quality and genuine DeKalb County hospitality without having to drive out to a big chain store!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "smithville-tn-ice-cream-q3",
+   "question": "Which ice cream shops in Smithville, TN have the best reviews?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a Smithville homeowner wanting reliable local sweet spots, I\u2019d shortlist:\n\n1. **Enjoy Ice Cream Shop \u2014 480 W. Broad St.**  \n   Best pure ice-cream pick: **4.9 rating with 65 reviews**. Reviewers call out lots of options, gelato, friendly service, and a clean, cozy shop\u2014great for kids, visiting family, or a quick treat after dinner. ([restaurantji.com](https://www.restaurantji.com/tn/smithville/enjoy-ice-cream-shop-/))\n\n2. **Jolly Kakes Bakery / Harmony Lane \u2014 285 Harmony Lane**  \n   Best \u201cmake an outing of it\u201d choice: **4.8 with 238 reviews**. It\u2019s more than ice cream/frozen yogurt\u2014families mention animals, a neat property, food, and a relaxed pavilion, so it\u2019s a good pick when guests are in town. ([restaurantji.com](https://www.restaurantji.com///tn/smithville/ice-cream/))\n\n3. **Webb\u2019s Ice Cream & Soda Fountain \u2014 608 S. Congress Blvd.**  \n   Best old-school lunch-and-dessert stop: **4.8 with 35 reviews**. People like the shakes, classic sundaes, hot fudge brownie, sandwiches, and soda-fountain feel. ([restaurantji.com](https://www.restaurantji.com///tn/smithville/ice-cream/))\n\nI\u2019d skip **Dairy Queen** as a \u201cbest local\u201d pick unless you just need convenience.",
+    "sources": [
+     {
+      "url": "https://www.restaurantji.com/tn/smithville/enjoy-ice-cream-shop-/",
+      "title": "Enjoy Ice Cream Shop, Smithville - Menu, Reviews (65), Photos (25) - Restaurantji"
+     },
+     {
+      "url": "https://www.restaurantji.com///tn/smithville/ice-cream/",
+      "title": "Where to Eat The Best Ice Cream in Smithville, TN - 2026 Restaurantji"
+     },
+     {
+      "url": "https://www.restaurantji.com///tn/smithville/ice-cream/",
+      "title": "Where to Eat The Best Ice Cream in Smithville, TN - 2026 Restaurantji"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re looking for a great cold treat around Smithville, here are the local spots homeowners in the area consistently recommend:\n\n**1. Snow Shack & Sweet Shop**\nThis is a local favorite right in town, especially during the warmer months. Homeowners love it not just for the shaved ice with an incredible variety of flavors, but also for their ice cream options. It\u2019s a fun, family-friendly spot with outdoor seating, making it the go-to place to pull up to after a hot afternoon working in the yard or visiting DeKalb County Courthouse. \n\n**2. Kilgore's Restaurant**\nWhile it's a staple for down-home cooking, locals know Kilgore\u2019s is also a great place to satisfy a sweet tooth. If you want a classic, old-school diner experience with traditional hand-dipped ice cream or a milkshake to wrap up a meal, this is where your neighbors go. \n\n**3. Sonic Drive-In**\nThough it's a regional chain rather than an independent mom-and-pop shop, it's worth mentioning because Smithville homeowners heavily rely on it for a quick ice cream run. Whether it's a Blast or a Sunday evening milkshake, the service is fast and dependable. \n\nFor a true local treat, head straight to Snow Shack!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
