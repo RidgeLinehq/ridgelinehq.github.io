@@ -1,0 +1,12 @@
+{
+ "at": "2026-10-24T18:03:25Z",
+ "id": "lk-2026-10-24-1370",
+ "what": "lookup",
+ "plan": "starter",
+ "billing": "monthly",
+ "status": "active",
+ "amount": 7500,
+ "startedAt": 1792864576,
+ "periodEnd": 1795542976,
+ "ok": true
+}
