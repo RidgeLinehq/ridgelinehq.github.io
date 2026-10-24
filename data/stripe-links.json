@@ -1,9 +1,18 @@
 {
-  "note": "Filled in automatically by the 'Ridgeline Stripe' GitHub Action once the STRIPE_SECRET_KEY secret is added (see SETUP_NEEDED.md). Empty = checkout not live yet; the site falls back to an email signup.",
-  "updatedAt": "",
+  "note": "Written by the 'Ridgeline Stripe' Action. Do not edit by hand; the next run rewrites it.",
+  "updatedAt": "2026-10-24T17:43:50Z",
   "links": {
-    "starter": {"monthly": "", "yearly": ""},
-    "growth": {"monthly": "", "yearly": ""},
-    "pro": {"monthly": "", "yearly": ""}
+    "starter": {
+      "monthly": "https://buy.stripe.com/7sYaEXfJ9eGM0MW5pXaEE01",
+      "yearly": "https://buy.stripe.com/eVqcN50Of7ek2V419HaEE02"
+    },
+    "growth": {
+      "monthly": "https://buy.stripe.com/5kQ7sL7cD2Y4eDM5pXaEE03",
+      "yearly": "https://buy.stripe.com/8x24gzeF5fKQeDMcSpaEE04"
+    },
+    "pro": {
+      "monthly": "https://buy.stripe.com/7sYbJ1fJ9buA9js7y5aEE05",
+      "yearly": "https://buy.stripe.com/4gM7sLgNd4288fog4BaEE06"
+    }
   }
 }
