@@ -169,13 +169,13 @@ def competitor_phrase(lead):
     if isinstance(comp, dict):
         comp = (comp.get("chatgpt") or comp.get("gemini") or [])
     if isinstance(comp, list) and comp:
-        names = [str(c) for c in comp if c][:2]
+        names = [str(c).split(" / ")[0].split(" (")[0].strip() for c in comp if c][:2]
         if names:
             return " and ".join(names)
     sc = lead.get("searchCheck") or {}
     top = sc.get("namedTop3") or []
     if top:
-        return " and ".join(str(x) for x in top[:2])
+        return " and ".join(str(x).split(" (")[0].strip() for x in top[:2])
     return "other companies"
 
 
