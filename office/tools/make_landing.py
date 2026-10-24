@@ -56,6 +56,7 @@ button{{width:100%;min-height:54px;margin-top:18px;border:0;border-radius:10px;b
   if(g("hp"))return; if(!g("n")||!g("p")){{alert("Please add your name and phone.");return}}
   var b=document.getElementById("b");b.disabled=true;b.textContent="Sending…";
   var body={{_subject:"Lead for {slug} — {biz_js}",_cc:"{cc}",_template:"box",_captcha:"false",lead_for:"{slug}",business:"{biz_js}",name:g("n"),phone:g("p"),email:g("e")||"not given",message:g("m")||"not given",source:src}};
+  if(g("e"))body._autoresponse="Thanks "+g("n")+"! {biz_js} got your request and will get back to you soon. If it\u2019s urgent, call {phone_js}.";
   function done(){{f.style.display="none";document.getElementById("ok").style.display="block"}}
   fetch("https://formsubmit.co/ajax/ridgelinemarketinghq@gmail.com",{{method:"POST",headers:{{"Content-Type":"application/json","Accept":"application/json"}},body:JSON.stringify(body)}})
    .then(function(r){{return r.json()}}).then(function(j){{if(String(j.success)==="false")throw 0;done()}})
@@ -77,7 +78,7 @@ def build(path):
     if cc and not re.fullmatch(r"[^\s@\"<>]+@[^\s@\"<>]+\.[^\s@\"<>]+", cc):
         raise SystemExit("bad leadEmail")
     svcs = [s for s in d.get("services", []) if s][:10]
-    out = TPL.format(biz=e(d["business"]), biz_js=js(d["business"]), town=e(d["town"]), state=e(d["state"]), slug=slug,
+    out = TPL.format(biz=e(d["business"]), biz_js=js(d["business"]), phone_js=js(d["phone"]), town=e(d["town"]), state=e(d["state"]), slug=slug,
                      phone=e(d["phone"]), tel=re.sub(r"[^0-9+]", "", d["phone"]), about=e(d.get("about", "")),
                      hours_line=(" · " + e(d["hours"])) if d.get("hours") else "", cc=js(cc),
                      svc_items="".join(f"<li>{e(s)}</li>" for s in svcs), svc_line=e(", ".join(svcs[:4])))

@@ -783,7 +783,7 @@ footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass)
     <div data-reveal>
       <span class="kicker">Free AI check</span>
       <h2 id="contact-title" style="margin:22px 0 18px">See if AI recommends you.</h2>
-      <p class="lede" style="margin-bottom:16px">Tell us your business and town. We’ll email you what ChatGPT and Gemini say, usually within a few hours.</p>
+      <p class="lede" style="margin-bottom:16px">Tell us your business and town. We’ll email you what ChatGPT and Gemini say, usually within the hour.</p>
       <ul class="contact-list">
         <li>Their exact answers, word for word</li>
         <li>You vs. the competitors they name</li>
@@ -816,7 +816,7 @@ footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass)
       <div class="done">
         <div class="ok"><svg aria-hidden="true"><use href="#i-check"/></svg></div>
         <h3 id="doneTitle">Got it. Your check is on the way.</h3>
-        <p id="doneText">We’ll email what ChatGPT and Gemini say about your business, usually within a few hours.</p>
+        <p id="doneText">We’ll email what ChatGPT and Gemini say about your business, usually within the hour.</p>
         <div class="fallback" id="emailFallback" hidden>
           <label for="requestCopy">Our form didn’t go through. Tap below to send it by email instead, or copy it to <a class="link" href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a>.</label>
           <a class="btn btn-forest btn-block" id="mailtoBtn" href="mailto:ridgelinemarketinghq@gmail.com">Send by email</a>
@@ -836,7 +836,7 @@ footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass)
 <footer>
   <div class="wrap">
     <div><b><svg aria-hidden="true"><use href="#i-logo"/></svg>Ridgeline Local</b>We get local businesses found on Google and recommended by AI, and we send them leads. Plain talk, real numbers, month to month.</div>
-    <div><b>Contact</b><a href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a><br>We answer within a few hours, every day.</div>
+    <div><b>Contact</b><a href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a><br>We answer within the hour, 6 AM to 11 PM Central, every day.</div>
     <div><b>More</b><a href="guarantee.html">Guarantee terms</a><br>Local businesses anywhere in the U.S.<br>© <span id="year">2026</span> Ridgeline Local</div>
   </div>
 </footer>
@@ -953,7 +953,8 @@ footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass)
     var subject="Free AI check request — "+g("business");
     var body=["Business: "+g("business"),"Town/state: "+g("town"),"Type of business: "+g("service"),"Email: "+g("email"),"Phone: "+(g("phone")||"Not given"),"Source: website form"].join("\n");
     submitBtn.disabled=true;submitBtn.textContent="Sending…";
-    var payload={_subject:subject,_template:"box",_captcha:"false",business:g("business"),town:g("town"),type_of_business:g("service"),email:g("email"),phone:g("phone")||"Not given",source:"website free check form"};
+    var auto="Thanks! We got your free AI check request for "+g("business")+".\n\nWe\u2019re asking ChatGPT and Gemini who they recommend for "+g("service")+" in "+g("town")+" right now. You\u2019ll get their exact answers, whether they name you, and the 3 fixes we\u2019d make first, usually within the hour.\n\nNo card, no catch. Reply to this email with any question.\n\nGrayson\nRidgeline Local";
+    var payload={_subject:subject,_template:"box",_captcha:"false",_autoresponse:auto,business:g("business"),town:g("town"),type_of_business:g("service"),email:g("email"),phone:g("phone")||"Not given",source:"website free check form"};
     fetch(FORM_URL,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(payload)})
       .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j}})})
       .then(function(res){if(!res.ok||String(res.j.success)==="false")throw new Error("not sent");status.textContent="Request sent."})
@@ -961,7 +962,7 @@ footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass)
       .then(function(){form.setAttribute("data-state","ready");submitBtn.disabled=false;submitBtn.innerHTML=submitLabel;form.scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"})});
   });
   $("#copyRequest").addEventListener("click",function(){copyText($("#requestCopy").value,this)});
-  $("#editRequest").addEventListener("click",function(){form.setAttribute("data-state","idle");status.textContent="";$("#emailFallback").hidden=true;$("#doneTitle").textContent="Got it. Your check is on the way.";$("#doneText").textContent="We’ll email what ChatGPT and Gemini say about your business, usually within a few hours.";$("#business").focus()});
+  $("#editRequest").addEventListener("click",function(){form.setAttribute("data-state","idle");status.textContent="";$("#emailFallback").hidden=true;$("#doneTitle").textContent="Got it. Your check is on the way.";$("#doneText").textContent="We’ll email what ChatGPT and Gemini say about your business, usually within the hour.";$("#business").focus()});
 })();
 </script>
 </body>

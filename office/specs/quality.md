@@ -47,7 +47,7 @@ again (up to 2 rewrites). Still under 85 after 2 rewrites: ship the best version
   readable on mute; 20 to 35 seconds; their phone or lead page at the end.
 
 ## Speed (the first impression is the product)
-- Within 2 hours of the onboarding form: the baseline score email AND the profile fixes AND the
+- Instantly: the form sends the buyer a confirmation email (FormSubmit autoresponse). Within the hour of the onboarding form: the baseline score email AND the profile fixes AND the
   review kit (the reply desk builds and sends these in the same run; Day Shift 09 refines later).
 - Pro lead page live within 24 hours of onboarding.
 - New leads: Growth same day, Pro the run they are found.

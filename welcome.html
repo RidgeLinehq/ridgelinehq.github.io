@@ -96,7 +96,7 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
 
     <div class="ok" id="ok" role="status" aria-live="polite">
       <h2>Got it. We're starting now.</h2>
-      <p>Your starting AI visibility check is running. You'll get it by email, usually within a few hours, followed by your Google profile fixes.</p>
+      <p>Your starting AI visibility check is running. Check your email: a confirmation is already there. Your score, Google profile fixes and review kit follow, usually within the hour.</p>
       <div class="fallback" id="fb">
         <p><strong>One more tap:</strong> our form didn't go through. Tap below to send these details by email.</p>
         <a class="tap" id="fbMail" href="mailto:ridgelinemarketinghq@gmail.com">Send by email</a>
@@ -155,7 +155,8 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
     var subject="Onboarding — "+d.business;
     var text=Object.keys(d).map(function(k){return k+": "+d[k]}).join("\n");
     $("go").disabled=true;$("go").textContent="Sending…";
-    var payload=Object.assign({_subject:subject,_template:"box",_captcha:"false"},d);
+    var auto="Thanks, "+d.business+"! You\u2019re all set with Ridgeline Local.\n\nYour work has started. Here\u2019s what lands in your inbox next, usually within the hour:\n1. Your starting AI visibility score: what ChatGPT and Gemini say about your kind of business in "+d.city+", and whether they name you.\n2. Your Google profile fixes, written out and ready to paste (about 10 minutes).\n3. Your review kit: a ready-to-send text and a QR card for your counter.\n\nQuestions? Just reply to this email. A real person answers.\n\nGrayson\nRidgeline Local";
+    var payload=Object.assign({_subject:subject,_template:"box",_captcha:"false",_autoresponse:auto},d);
     function done(ok){
       $("ob").style.display="none";$("ok").style.display="block";
       if(!ok){$("fb").style.display="block";$("fbText").value="Subject: "+subject+"\n\n"+text;$("fbMail").href="mailto:"+EMAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(text)}

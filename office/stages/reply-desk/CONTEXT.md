@@ -1,4 +1,4 @@
-# Reply desk: inbox, free checks, signups, baseline + guarantee, lead intake, deliveries, alerts (every 2 hours, 7 AM to 11 PM Central, every day)
+# Reply desk: inbox, free checks, signups, baseline + guarantee, lead intake, deliveries, alerts (every hour, 6 AM to 11 PM Central, every day)
 
 Since Oct 22, 2026 the reply desk is the office's always-on front desk. It answers every real
 email in the Ridgeline Gmail itself, runs and sends the free AI check inside the same run,
