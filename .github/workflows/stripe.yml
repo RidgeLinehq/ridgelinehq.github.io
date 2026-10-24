@@ -5,6 +5,7 @@ name: Ridgeline Stripe
 # (results in office/stripe/out/<id>.json). Runs hourly so nothing waits on a tap.
 on:
   push:
+    branches: [main]
     paths:
       - "office/stripe/jobs/*.json"
       - "office/stripe/stripe_ops.py"

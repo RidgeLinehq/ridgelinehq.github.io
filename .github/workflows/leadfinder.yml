@@ -5,6 +5,7 @@ name: Ridgeline lead finder
 # and pushes office/leadfinder/out/<id>.json. Secrets: REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET.
 on:
   push:
+    branches: [main]
     paths:
       - "office/leadfinder/jobs/*.json"
   workflow_dispatch:
