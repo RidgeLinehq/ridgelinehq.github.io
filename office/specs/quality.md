@@ -46,6 +46,24 @@ again (up to 2 rewrites). Still under 85 after 2 rewrites: ship the best version
 - **Promo video (Pro)**: office/studio quality gate; their real photos and facts; captions
   readable on mute; 20 to 35 seconds; their phone or lead page at the end.
 
+## Format: real, branded files (Grayson, Oct 24, 2026: "are they going to get sent a file?")
+Clients get designed deliverables, not walls of instructions:
+- Build every client deliverable as a branded PDF with `node office/tools/make_pack.js <spec.json> <out.pdf>`
+  (blocks: score gauge, AI answers table, competitors, paste-ready copy boxes, lists, stats, 30-day
+  steps; example spec: office/tools/pack-example.json). Specs live in the session scratchpad,
+  never in the repo (client facts are private).
+- Send it with mcp__Gmail__send_message: `attachments: [{filename: "<Business> - <Title>.pdf",
+  mimeType: "application/pdf", content: <base64 -w0 of the PDF>}]`, `htmlBody` = a SHORT designed
+  note (3 to 6 lines: the one best number, the one next step, "everything is in the attached
+  PDF"), `body` = the same note in plain text, `replyThreadId` = the client's thread.
+- ONE email per moment, not three: the Welcome Pack (starting score + profile fixes + review kit +
+  next 30 days) is one email with one PDF. The monthly report is one email with one PDF. The QR
+  card PNG (cards/<slug>.png, fetched with curl) rides as a second attachment when it exists.
+- If the PDF can't be built (Playwright missing), send the same design as htmlBody (the .html
+  file make_pack.js writes next to the PDF) and note it in the run log. Never fall back to plain text.
+- Instant (office/instant) sends the first welcome + score within minutes; the Welcome Pack PDF
+  follows from the reply desk within the hour and says "your full Welcome Pack".
+
 ## Speed (the first impression is the product)
 - Instantly: the form sends the buyer a confirmation email (FormSubmit autoresponse). Within the hour of the onboarding form: the baseline score email AND the profile fixes AND the
   review kit (the reply desk builds and sends these in the same run; Day Shift 09 refines later).

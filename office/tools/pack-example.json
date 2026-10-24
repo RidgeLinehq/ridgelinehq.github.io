@@ -1,0 +1,17 @@
+{"title": "Welcome Pack", "business": "Main St. Barbershop", "date": "Oct 24, 2026", "plan": "Growth",
+ "sections": [
+  {"type": "score", "score": 25, "label": "Your starting AI visibility score",
+   "note": "ChatGPT named you once, near the bottom. Gemini didn't name you. Here's what we fix first.",
+   "rows": [{"question": "Who are the best barbers in Tulsa, OK?", "chatgpt": "Named #5", "gemini": "Not named"},
+            {"question": "Can you recommend a good barber in Tulsa, OK?", "chatgpt": "Not named", "gemini": "Not named"},
+            {"question": "Which barbers in Tulsa, OK have the best reviews?", "chatgpt": "Named #2", "gemini": "Not named"}]},
+  {"type": "compare", "title": "Who AI recommends instead of you", "you": "Main St. Barbershop",
+   "items": [{"name": "(competitor named by the gateway)", "by": "ChatGPT"}]},
+  {"type": "heading", "text": "Your Google profile fixes", "sub": "About 10 minutes. Do the 3 marked DO FIRST today."},
+  {"type": "copy", "label": "DO FIRST", "title": "Description", "where": "Google Business app > Edit profile > Business information > Description", "text": "(750 characters written for them)"},
+  {"type": "list", "title": "10 photo ideas", "numbered": true, "items": ["..."]},
+  {"type": "heading", "text": "Your review kit", "sub": "Real customers only. Everyone gets the same link."},
+  {"type": "copy", "title": "Text to send customers", "text": "..."},
+  {"type": "steps", "title": "Your next 30 days", "items": [{"when": "Today", "what": "Paste the 3 DO FIRST fixes and reply with your review link."}]},
+  {"type": "note", "text": "Questions? Reply to the email this came with. A real person answers."}
+ ]}

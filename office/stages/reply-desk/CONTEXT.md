@@ -138,10 +138,12 @@ Search `(from:stripe.com OR subject:"Onboarding —") newer_than:7d -label:Ridge
    (c) data/founding.json spotsLeft - 1 (never below 0; commit "reply-desk: founding spots N";
    when it hits 0, tell Grayson); (d) Pro: write office/landing/<slug>.json from the form's
    facts and run office/tools/make_landing.py, commit p/<slug>/, include the link in the
-   baseline email; (e) FIRST DELIVERY in this same run (specs/quality.md "Speed"): build the
-   profile fixes (kind "plan", from the onboarding facts + a WebSearch of their public Google
-   listing) and the review kit (kind "kit"), QA them to 85+, and send them now in the client's
-   thread; Day Shift 09 refines them later; (f) work items welcome-sent, onboarding, baseline,
+   baseline email; (e) FIRST DELIVERY in this same run (specs/quality.md "Speed" and "Format"):
+   build the profile fixes (from the onboarding facts + a WebSearch of their public Google
+   listing) and the review kit, QA them to 85+, and send them as ONE "Welcome Pack" email with
+   ONE branded PDF (office/tools/make_pack.js: score, AI answers, competitors, profile fixes,
+   review kit, next 30 days), in the client's thread; record drafts kinds "plan" and "kit" as
+   sent with that one Gmail id; Day Shift 09 refines them later; (f) work items welcome-sent, onboarding, baseline,
    buildout-plan, review-kit done.
 4. Reminders: client "awaiting-onboarding" 24 h and 72 h after payment → one short reminder
    with the form link each; at 96 h → alert Grayson ("<email> paid <plan> 4 days ago and hasn't
@@ -185,7 +187,8 @@ these into the Google Business app: Edit profile → the field named in each ste
 minutes, and it's the biggest single fix"; for a post: "paste
 this into Google Business → Add update, with the photo described"; for the kit: the text to
 send customers + the card link https://ridgelinehq.github.io/cards/<slug>.png; if the card
-isn't built yet, send the text now and the card when it exists). Before sending, check
+isn't built yet, send the text now and the card when it exists). Every delivery goes out as a designed email + branded PDF per specs/quality.md "Format"
+(several ready drafts for one client go in ONE email/PDF, not one email each). Before sending, check
 the draft's qa.score is 85+ (or 75+ with an alert already sent); a draft with no qa score gets
 scored now per specs/quality.md. Mark the draft sent with
 evidence, tick the client's work item ("review-kit", "buildout-plan", "listing-fixes",

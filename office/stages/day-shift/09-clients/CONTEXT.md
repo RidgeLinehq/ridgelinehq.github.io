@@ -11,7 +11,7 @@ owns the work.
 | File | Section |
 |---|---|
 | specs/client-delivery.md | all |
-| specs/quality.md | all (every drafted item passes it before status ready) |
+| specs/quality.md | all (every drafted item passes it before status ready; reports and packs are branded PDFs via office/tools/make_pack.js) |
 | specs/lead-tracking.md | all |
 | specs/offer.md | The plans, Promises the crew may NOT make |
 | shared/gateway.md | Protocol |
