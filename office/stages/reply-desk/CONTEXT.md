@@ -216,7 +216,8 @@ scored now per specs/quality.md. Mark the draft sent with
 evidence, tick the client's work item ("review-kit", "buildout-plan", "listing-fixes",
 "week-post", "report-<month>") to done, events line. One email per draft; max 3 deliveries per
 client per run so nobody gets flooded (Pro "leads" drafts don't count toward the 3: priority).
-Kind "leads": the leads email to the owner; set sentToClientAt + sentGmailId on each leadlog row.
+Kind "leads": the leads email to the owner (the Lead Finder writes them finished; send FIRST in
+this lane, priority true before anything else); set sentToClientAt + sentGmailId on each leadlog row.
 Kind "jobcheck": the monthly "did it turn into a job?" email. Kind "reviewreq": one review
 request per customer in draft.recipients (specs/client-delivery.md "Review requests"; max 25 per
 client per day, 7:00 AM to 7:00 PM Central, skip suppressed, set customers[].askedAt). These go

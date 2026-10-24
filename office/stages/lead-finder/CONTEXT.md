@@ -33,13 +33,19 @@ the reply desk answers emails and the Day Shift does the rest of the client work
    and the near-misses with counted false + why.
 5. Send (specs/lead-tracking.md "Sending leads to the client", specs/quality.md "Leads"):
    Pro = each new lead at once, one email each, subject "New lead: <their ask in 6 words>";
-   Growth = one email with all of this run's new leads. Each lead: what they asked (their words),
+   Growth = one email with all of this run's new leads.
+   NO GMAIL TOOL in this session (the scheduled task may run without the Gmail connector): write
+   each email as a drafts doc kind "leads", status "ready", clientId, priority true for Pro, with
+   the finished subject + body + leadlog ids; the reply desk (hourly, Lane D) sends it and records
+   the Gmail ids. That is the normal path, not a failure. Each lead: what they asked (their words),
    when, where (link), and a copy-ready suggested reply in the owner's voice. Record
    sentToClientAt + sentGmailId on every row. No new leads → send nothing to the client.
 6. Learn: on the client, `leadSearch.stats` += {run, candidates, counted, bySource}. If a client
    has had 0 counted leads for 7 days, widen the plan this run (more towns, more synonyms, more
    subreddits) and write what changed. Never invent or pad a lead to fill a gap.
-7. Any failure (Action red, search tool error, Gmail error) → alert (shared/alerts.md).
+7. Any failure (Action red, search tool error, Gmail error) → alert (shared/alerts.md). Without
+   a Gmail tool, write the alert as `office/alerts/lf-<day>-<slot>.json` = {id, what, link:"",
+   fix, at, emailed:false} (commit, push); the reply desk emails it within the hour.
 
 ## Outputs
 | Where | What |
