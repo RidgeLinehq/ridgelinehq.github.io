@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Ridgeline Office</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -195,6 +196,30 @@ pre.body{white-space:pre-wrap;font:inherit;margin:8px 0 0;padding:12px;border-ra
 .stripe{border-left:3px solid var(--line2);padding-left:10px}
 .stripe.ready{border-color:var(--warn)}.stripe.sent{border-color:var(--good)}.stripe.rej{border-color:var(--bad)}.stripe.draft{border-color:var(--dim)}
 
+/* ---------- calls (V8) ---------- */
+.callcta{width:100%;text-align:left;background:var(--surface);border:1px solid rgba(79,209,139,.45);border-radius:var(--r2);padding:14px 16px;margin-top:12px;gap:12px}
+.crow .crank{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-family:var(--display);font-weight:900;font-size:13px;background:var(--raised);border:1px solid var(--line);flex:none}
+.crow .t small.ai-bad{color:var(--ember2);font-weight:600}
+.crow .t small.ai-unk{color:var(--dim)}
+.tel{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--good-soft);color:var(--good);border:1px solid rgba(79,209,139,.45);text-decoration:none}
+.tel svg{width:20px;height:20px}
+a.tel-big{min-height:54px;font-size:17px;text-decoration:none;background:linear-gradient(135deg,#3fc47f,var(--good));color:#06140b;border-color:transparent;box-shadow:0 8px 22px rgba(79,209,139,.25)}
+a.tel-big svg{width:18px;height:18px}
+.say p{margin:0 0 8px;padding:12px 14px;border-radius:12px;background:var(--raised);border:1px solid var(--line);font-size:15.5px;line-height:1.5}
+.say p:last-child{margin-bottom:0}
+.obj{border-bottom:1px solid var(--line)}
+.obj summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:44px;font-weight:700;font-size:14px}
+.obj summary::-webkit-details-marker{display:none}
+.obj summary::after{content:"+";color:var(--dim);font-size:18px;flex:none}
+.obj[open] summary::after{content:"\2212"}
+.obj p{padding:0 0 12px;color:var(--mist);font-size:14px;line-height:1.5}
+.outc{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.outc .btn{min-height:52px;white-space:normal;line-height:1.2;text-align:center}
+.cbpick{display:grid;gap:8px;margin-top:10px;padding:12px;border-radius:12px;background:var(--raised);border:1px solid var(--line)}
+.cbpick .chips .chip{min-height:40px;display:inline-flex;align-items:center}
+.then{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:3px;font-size:12px;color:var(--dim)}
+.then li b{color:var(--mist);font-weight:700}
+
 /* ---------- office floor ---------- */
 .floor{position:relative;border:1px solid var(--line2);border-radius:var(--r2);padding:18px 14px 14px;overflow:hidden;
   background:
@@ -298,6 +323,7 @@ pre.body{white-space:pre-wrap;font:inherit;margin:8px 0 0;padding:12px;border-ra
     <nav class="rail" id="rail" aria-label="Pages"></nav>
     <main class="main" id="main">
       <section class="page" id="p-today"></section>
+      <section class="page" id="p-calls"></section>
       <section class="page" id="p-leads"></section>
       <section class="page" id="p-floor"></section>
       <section class="page" id="p-outreach"></section>
@@ -347,17 +373,18 @@ const CLIENT_WORK=[["welcome-sent","Welcome email sent"],["manager-access","Adde
 const LEAD_STATUS=["New","Researching","Qualified","Contacted","Replied","Meeting","Client","Not a fit","Suppressed"];
 const PAGES=[
   {id:"today",label:"Today",icon:"i-home",title:"Command Center"},
+  {id:"calls",label:"Calls",icon:"i-phone",title:"Calls"},
   {id:"leads",label:"Leads",icon:"i-leads",title:"Lead Desk"},
-  {id:"floor",label:"Floor",icon:"i-floor",title:"Agent Floor"},
   {id:"outreach",label:"Outreach",icon:"i-mail",title:"Outreach Center"},
+  {id:"floor",label:"Floor",icon:"i-floor",title:"Agent Floor"},
   {id:"studio",label:"Studio",icon:"i-film",title:"Content Studio"},
   {id:"learning",label:"Learning",icon:"i-learn",title:"Learning Log"},
   {id:"analytics",label:"Analytics",icon:"i-chart",title:"Analytics"},
   {id:"settings",label:"Settings",icon:"i-gear",title:"Settings & Safety"}
 ];
-const DEFAULT_SETTINGS={businessName:"Ridgeline Local",paused:false,dryRun:true,autoSend:false,dailyEmailCap:10,followUpDays:4,maxTouches:3,scoreGate:60,foundingSpots:10,signature:"Grayson\nRidgeline Local",optOutLine:"If you'd rather not hear from me, reply 'no thanks' and I'll stop.",mailingAddress:"",gmail:"ridgelinemarketinghq@gmail.com",siteUrl:"https://ridgelinehq.github.io",stripeUrl:"https://buy.stripe.com/dRm00jgNddCI53cbOlaEE00",targets:[{town:"Owasso",state:"OK",trades:["roofing","tree service"]},{town:"Cabot",state:"AR",trades:["roofing","tree service"]},{town:"Foley",state:"AL",trades:["roofing","tree service"]}],nextTarget:0,dayShiftTriggerId:"",officeVersion:"v1"};
+const DEFAULT_SETTINGS={businessName:"Ridgeline Local",paused:false,dryRun:true,autoSend:false,dailyEmailCap:10,followUpDays:4,maxTouches:3,scoreGate:60,foundingSpots:10,signature:"Grayson\nRidgeline Local",optOutLine:"If you'd rather not hear from me, reply 'no thanks' and I'll stop.",mailingAddress:"",gmail:"ridgelinemarketinghq@gmail.com",siteUrl:"https://ridgelinehq.github.io",stripeUrl:"https://buy.stripe.com/dRm00jgNddCI53cbOlaEE00",targets:[{town:"Owasso",state:"OK",trades:["roofing","tree service"]},{town:"Cabot",state:"AR",trades:["roofing","tree service"]},{town:"Foley",state:"AL",trades:["roofing","tree service"]}],nextTarget:0,dayShiftTriggerId:"",officeVersion:"v8.1"};
 const S={settings:null,settingsExists:false,crew:{},leads:[],drafts:[],tasks:[],approvals:[],lessons:[],workflow:[],runs:[],events:[],stats:[],health:null,suppression:[],clients:[],
-  db:null,dbState:"loading",user:null,canWrite:null,readOnly:false,assets:null,page:"today",leadFilter:"all",leadQuery:"",leadView:"list",outreachTab:"ready",drawer:null,confirm:{},edits:{}};
+  db:null,dbState:"loading",user:null,canWrite:null,readOnly:false,assets:null,page:"today",leadFilter:"all",leadQuery:"",leadView:"list",outreachTab:"ready",drawer:null,confirm:{},edits:{},cb:{}};
 const $=(s,c)=>(c||document).querySelector(s);
 const esc=v=>String(v==null?"":v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const nowIso=()=>new Date().toISOString();
@@ -424,7 +451,7 @@ function counts(){
   const followDue=S.leads.filter(l=>l.status==="Contacted"&&l.nextTouchAt&&Date.parse(l.nextTouchAt)<=Date.now()&&(l.touches||[]).length<settings().maxTouches);
   const aiChecks=S.leads.filter(l=>(l.status==="Meeting"||l.status==="Replied")&&l.aiCheck&&(l.aiCheck.chatgpt==="unknown"||!l.aiCheck.chatgpt));
   const myTasks=S.tasks.filter(t=>t.agent==="grayson"&&t.status==="queued");
-  const callList=S.leads.filter(l=>l.status==="Qualified"&&l.phone).sort((a,b)=>(a.callRank||999)-(b.callRank||999)||(b.score||0)-(a.score||0));
+  const callList=callQueue();
   const revenue=S.clients.filter(c=>c.status!=="cancelled").reduce((a,c)=>a+(Number(c.monthly)||0),0);
   return {by,ready,approved,sentToday,newToday,followDue,aiChecks,myTasks,callList,revenue,pendingApprovals:S.approvals.filter(a=>a.status==="pending")};
 }
@@ -443,7 +470,7 @@ function optionalForYou(){
   const c=counts();const out=[];
   if(c.ready.length&&settings().autoSend)out.push({t:c.ready.length+" email"+(c.ready.length>1?"s":"")+" queued",s:"They go out by themselves at 7:00 AM on the next weekday. Nothing to do.",go:"outreach"});
   S.leads.filter(l=>l.status==="Qualified"&&!(l.profile&&l.profile.reviews!=null)).sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,3).forEach(l=>out.push({t:"Optional: Google review count for "+l.businessName,s:"Makes their email sharper. Skip it and the crew still sends.",go:"leads",lead:l.id}));
-  if(c.callList.length)out.push({t:"Optional: "+c.callList.length+" businesses you could call",s:"Only if you want to. Email is already handling them.",go:"leads",view:"calls"});
+  if(c.callList.length)out.push({t:Math.min(c.callList.length,(CALL_KIT.rules||{}).list_size||15)+" businesses on today's call list",s:"Tap for the list, the words and one-tap follow-ups.",go:"calls"});
   return out;
 }
 
@@ -462,14 +489,14 @@ function renderChrome(){
   const badges={outreach:c.ready.length,today:needsYou().length};
   $("#rail").innerHTML=PAGES.map(p=>'<a href="#'+p.id+'" '+(S.page===p.id?'aria-current="page"':'')+'><svg aria-hidden="true"><use href="#'+p.icon+'"/></svg>'+esc(p.title)+(badges[p.id]?'<span class="cnt">'+badges[p.id]+'</span>':'')+'</a>').join("");
   const tabs=PAGES.slice(0,4);
-  $("#tabs").innerHTML=tabs.map(p=>'<button type="button" data-go="'+p.id+'" '+(S.page===p.id?'aria-current="page"':'')+'><svg aria-hidden="true"><use href="#'+p.icon+'"/></svg>'+esc(p.label)+(badges[p.id]?'<span class="cnt">'+badges[p.id]+'</span>':'')+'</button>').join("")+'<button type="button" data-go="more" '+(["studio","learning","analytics","settings"].includes(S.page)?'aria-current="page"':'')+'><svg aria-hidden="true"><use href="#i-more"/></svg>More</button>';
+  $("#tabs").innerHTML=tabs.map(p=>'<button type="button" data-go="'+p.id+'" '+(S.page===p.id?'aria-current="page"':'')+'><svg aria-hidden="true"><use href="#'+p.icon+'"/></svg>'+esc(p.label)+(badges[p.id]?'<span class="cnt">'+badges[p.id]+'</span>':'')+'</button>').join("")+'<button type="button" data-go="more" '+(["floor","studio","learning","analytics","settings"].includes(S.page)?'aria-current="page"':'')+'><svg aria-hidden="true"><use href="#i-more"/></svg>More</button>';
   $("#sheetNavIn").innerHTML='<div class="lights">'+lights().map(x=>'<span class="light" data-l="'+x.v+'"><i></i>'+esc(x.k)+'</span>').join("")+'</div>'+PAGES.slice(4).map(p=>'<a href="#'+p.id+'"><svg aria-hidden="true"><use href="#'+p.icon+'"/></svg>'+esc(p.title)+'</a>').join("")+'<div class="inline" style="margin-top:12px"><button class="btn block '+(st.paused?"good":"bad")+'" type="button" id="sheetPause">'+(st.paused?"Resume the office":"Pause all")+'</button></div>';
   $("#brandSub").textContent=st.businessName+" · 8 agents"+(S.readOnly?" · view only":"");
 }
 function renderPage(){
   document.querySelectorAll(".page").forEach(p=>p.classList.toggle("on",p.id==="p-"+S.page));
   const el=$("#p-"+S.page);if(!el)return;
-  const fn={today:rToday,leads:rLeads,floor:rFloor,outreach:rOutreach,studio:rStudio,learning:rLearning,analytics:rAnalytics,settings:rSettings}[S.page];
+  const fn={today:rToday,calls:rCalls,leads:rLeads,floor:rFloor,outreach:rOutreach,studio:rStudio,learning:rLearning,analytics:rAnalytics,settings:rSettings}[S.page];
   el.innerHTML=fn?fn():"";
   if(S.drawer)renderDrawer();
 }
@@ -488,6 +515,7 @@ function rToday(){
   const c=counts();const st=settings();const ny=needsYou();const lastRun=S.runs[0];
   let h=pageHead("today",lastRun?("Last run "+fmtT(lastRun.startedAt)+" · "+esc(lastRun.status)+(lastRun.town?" · "+lastRun.town:"")):"The crew has not run yet. Everything below fills in after the first Day Shift.");
   h+=dbBanner();
+  {const cq=callQueue();const n=Math.min(cq.length,(CALL_KIT.rules||{}).list_size||15);if(n)h+='<button type="button" class="row click callcta" data-go="calls"><span class="tel" aria-hidden="true"><svg><use href="#i-phone"/></svg></span><span class="t"><b>'+n+' to call today</b><small>The list, the words and one-tap follow-ups. Best windows 7:30–8:30 AM and 4:30–6 PM.</small></span><span class="pill ember">open</span></button>'}
   S.clients.filter(k=>k.status==="active"&&(k.work||[]).filter(w=>w.status==="done").length<3).forEach(k=>{h+='<button type="button" class="row click" data-client="'+esc(k.id)+'" style="width:100%;text-align:left;margin:12px 0 0;padding:16px;border-radius:18px;border:2px solid var(--good);background:var(--good-soft);display:flex;gap:12px;align-items:center"><span style="font-size:28px">💰</span><span class="t"><b style="font-family:var(--display);font-size:18px;color:var(--good)">NEW CLIENT: '+esc(k.businessName)+'</b><small style="color:var(--text)">$'+esc(k.monthly)+'/mo. Tap for the checklist: send the welcome email, get Manager access, save the review link. The crew drafts the rest.</small></span></button>'});
   h+='<div class="grid g4" style="margin-top:12px">'
     +tile(c.by.Qualified,"Qualified leads","ready to contact")
@@ -508,11 +536,83 @@ function tile(n,label,small,cls){return '<div class="tile '+(cls||"")+'"><b clas
 function lightText(k,v){const t={leads:{green:"Scout is finding businesses",yellow:"Fewer new leads than usual",red:"No new leads in two runs",none:"No run yet"},outreach:{green:"Emails are moving",yellow:"Drafts have waited over two days",red:"A blocker is stopping sends",none:"No run yet"},replies:{green:"Replies are being read",yellow:"A reply has waited a day",red:"Reply desk failed or off",none:"No run yet"},site:{green:"ridgelinehq.github.io is up and correct",yellow:"Site slow or odd",red:"Site missing the price, link or email",none:"Not checked yet"},runs:{green:"Runs on time",yellow:"A run is slow",red:"Last run failed",none:"No run yet"}};return (t[k]||{})[v]||""}
 function eventsHtml(){const today=dayKey();const ev=S.events.find(e=>e.id===today||e.day===today);const items=ev&&Array.isArray(ev.items)?ev.items.slice(-12).reverse():[];return items.length?'<div class="list">'+items.map(i=>'<div class="row"><span class="pill">'+esc(i.agent)+'</span><div class="t"><small style="white-space:normal">'+esc(i.text)+'</small></div><small class="dim mono">'+esc(fmtT(i.t).split(", ").pop()||"")+'</small></div>').join("")+'</div>':'<div class="empty"><b>Quiet so far today</b>Every step the crew takes shows up here.</div>'}
 
+/* ---------- Calls (V8 "The Turning Point", Oct 24 2026) ---------- */
+/* The words and the rules have one home: office/call_kit/call_kit.py -> kit.json. This copy is the fallback. */
+const CALL_KIT_URL="https://raw.githubusercontent.com/RidgeLinehq/ridgelinehq.github.io/main/office/call_kit/kit.json";
+let CALL_KIT={"version": "8.0", "script": {"opener": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. I'll be quick. I ran a free check on how {business} shows up when people ask ChatGPT and Google's AI for a {trade} in {town}. Got 30 seconds?", "value": "Right now when someone asks for a {trade} in {town}, the AI recommends {competitor_or_others} and {business} {ai_result}. We fix that: your Google profile, reviews and site details, so the AI starts recommending you.", "close": "Can I email you the free one-page report so you can see it yourself? No cost, no pressure."}, "objections": {"Not interested": "Totally fair. Can I still send the free report? If it's not useful, just delete it.", "We get enough work": "That's great to hear. This just makes sure the AI keeps sending people your way as more folks search that way.", "How much is it?": "The check is free. If you want it done for you, it's $147 a month for the first three months, then $197, month to month, cancel by email. If you don't gain 15 real Google reviews in 60 days, the third month is free. Let me send the check first so you only pay for what you actually need.", "Is this a scam?": "Fair question. I'll email the report from ridgelinemarketinghq@gmail.com and you can check it against ChatGPT yourself.", "How did you find me?": "Your website or your Google listing. I only work with a few local businesses at a time, and {town} is one of the towns I'm calling.", "Call me later": "No problem. What's a better day and time? I'll put it down.", "Don't call again": "Understood, I won't. Have a good one."}, "outcomes": {"no_answer": {"label": "No answer", "next": "retry_call", "after_days": 1, "max_tries": 3, "then": "A second and third try on the next two call days; after 3 misses the lead stays on email only."}, "not_interested": {"label": "Not interested", "next": "close_lead", "then": "Status Not a fit. No more calls or emails."}, "call_back": {"label": "Call back", "next": "schedule_call", "ask": "when", "then": "Back on the list at the time you pick."}, "send_check": {"label": "Send the free check", "next": "email_ai_check", "template": "after_call_report", "ask": "email", "then": "The reply desk runs the real ChatGPT + Gemini check and emails the one-page report within 2 hours."}, "interested": {"label": "Interested", "next": "email_ai_check_plus_offer", "template": "after_call_offer", "ask": "email", "alert_grayson": true, "then": "The desk sends the report plus the founding offer and payment link, and tells you when it went out."}, "do_not_call": {"label": "Do not call", "next": "suppress", "then": "Suppressed the same minute. Never contacted again."}}, "rules": {"list_size": 15, "skip_if_emailed_within_days": 2, "eligible_statuses": ["New", "Researching", "Qualified", "Contacted"], "never_statuses": ["Suppressed", "Not a fit", "Client", "Meeting", "Replied"], "legal": ["Dial by hand to the business's published number only.", "8 AM to 8 PM their time.", "Honor 'don't call again' at once (suppression).", "Never a recorded voicemail, never a text."]}};
+(async()=>{try{const r=await fetch(CALL_KIT_URL,{cache:"no-store"});if(r.ok){const k=await r.json();if(k&&k.script&&k.outcomes&&k.rules){CALL_KIT=k;queue()}}}catch(e){}})();
+const JOB_SITE=new Set(["roofer","roofing","tree service","tree services","landscaper","landscaping","contractor","stump grinding","tree removal","construction","fencing","concrete","painter","painting"]);
+const fmtTpl=(t,ctx)=>String(t||"").replace(/\{(\w+)\}/g,(m,k)=>ctx[k]!=null?ctx[k]:m);
+function bestCallTime(trade){return JOB_SITE.has(String(trade||"").trim().toLowerCase())?"7:30-8:30 AM or 4:30-6 PM":"10-11:30 AM or 2-4 PM"}
+function tradeWord(t){t=String(t||"").trim().toLowerCase();const m={roofing:"roofer","tree service":"tree service",other:"business","":"business"};return m[t]!=null?m[t]:t}
+function telLink(p){let d=String(p||"").replace(/\D/g,"");if(d.length===10)d="1"+d;return d?"tel:+"+d:""}
+function aiResult(l){const ai=l.aiCheck||{};const g=ai.chatgpt,m=ai.gemini;
+  if(g==="not named"&&m==="not named")return "isn't mentioned by ChatGPT or Gemini";
+  if(g==="not named"&&m==="named")return "isn't mentioned by ChatGPT (Gemini names them)";
+  if(g==="named"&&m==="not named")return "isn't mentioned by Gemini (ChatGPT names them)";
+  if(g==="not named")return "isn't mentioned by ChatGPT";
+  if(m==="not named")return "isn't mentioned by Gemini";
+  if(g==="named"&&m==="named")return "is named by both (weak target)";
+  if(g==="named"||m==="named")return "is named by "+(g==="named"?"ChatGPT":"Gemini");
+  return "AI check not run yet"}
+function aiRankKey(l){const ai=l.aiCheck||{};const g=ai.chatgpt,m=ai.gemini;const named=(g==="named")+(m==="named");const nn=(g==="not named")+(m==="not named");if(nn===2)return 0;if(nn===1&&named===0)return 1;if(named===0)return 2;if(named===1)return 3;return 4}
+function callEligible(l,now){now=now||Date.now();const R=CALL_KIT.rules||{};
+  if(l.test===true||!l.phone)return false;const st=l.status||"New";
+  if((R.never_statuses||[]).includes(st)||!(R.eligible_statuses||["New","Researching","Qualified","Contacted"]).includes(st))return false;
+  const fu=l.followUp||{};if(fu.kind==="close_lead"||l.callDone===true)return false;
+  if(st==="Contacted"){const ts=(l.touches||[]).map(t=>Date.parse(t&&t.t||"")).filter(x=>!isNaN(x));if(ts.length&&now-Math.max(...ts)<(R.skip_if_emailed_within_days||2)*86400000)return false}
+  const nx=Date.parse(l.nextCallAt||"");if(!isNaN(nx)&&nx>now+12*3600000)return false;
+  return true}
+function callKey(l){const p=l.profile||{};const nx=Date.parse(l.nextCallAt||"");return [isNaN(nx)?1:0,aiRankKey(l),Number.isInteger(l.callRank)?l.callRank:999,-(Number(l.score)||0),typeof p.reviews==="number"?p.reviews:1e6]}
+function callCmp(a,b){const x=callKey(a),y=callKey(b);for(let i=0;i<x.length;i++){if(x[i]!==y[i])return x[i]-y[i]}return String(a.businessName||"").localeCompare(String(b.businessName||""))}
+function callQueue(){const now=Date.now();return S.leads.filter(l=>callEligible(l,now)).sort(callCmp)}
+function competitorPhrase(l){const ai=l.aiCheck||{};let c=ai.competitors;if(c&&!Array.isArray(c)&&typeof c==="object")c=(c.chatgpt&&c.chatgpt.length?c.chatgpt:c.gemini)||[];if(Array.isArray(c)&&c.length){const n=c.filter(Boolean).slice(0,2).map(x=>String(x).split(" / ")[0].split(" (")[0].trim());if(n.length)return n.join(" and ")}const top=(l.searchCheck||{}).namedTop3||[];if(top.length)return top.slice(0,2).map(x=>String(x).split(" (")[0]).join(" and ");return "other companies"}
+function fillScript(l){const s=CALL_KIT.script||{};const biz=l.businessName||"";const ctx={owner_or_business:l.contactName||biz,business:biz,trade:tradeWord(l.trade),town:l.town||"",competitor_or_others:competitorPhrase(l),ai_result:aiResult(l)};return {opener:fmtTpl(s.opener,ctx),value:fmtTpl(s.value,ctx),close:fmtTpl(s.close,ctx)}}
+function ctOffsetMin(d){const p=new Intl.DateTimeFormat("en-US",{timeZone:"America/Chicago",hour12:false,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit"}).formatToParts(d);const g=k=>Number((p.find(x=>x.type===k)||{}).value);const asUtc=Date.UTC(g("year"),g("month")-1,g("day"),g("hour")%24,g("minute"),g("second"));return Math.round((asUtc-d.getTime())/60000)}
+function ctIso(dayOffset,hh,mm){const key=dayKey(new Date(Date.now()+dayOffset*86400000));const naive=Date.parse(key+"T"+String(hh).padStart(2,"0")+":"+String(mm).padStart(2,"0")+":00Z");const off=ctOffsetMin(new Date(naive));return new Date(naive-off*60000).toISOString()}
+function callRow(l,i){const ai=aiResult(l);const rk=aiRankKey(l);const nx=Date.parse(l.nextCallAt||"");
+  return '<div class="row click crow" data-callid="'+esc(l.id)+'"><span class="crank">'+(i+1)+'</span><div class="t"><b>'+esc(l.businessName)+'</b><small>'+esc(tradeWord(l.trade))+' · '+esc(l.town||"")+(l.state?', '+esc(l.state):'')+' · '+esc(l.callWindow||bestCallTime(l.trade))+(isNaN(nx)?'':' · call back '+esc(fmtT(l.nextCallAt)))+'</small><small class="'+(rk<=1?"ai-bad":rk===2?"ai-unk":"")+'">'+esc(l.businessName)+' '+esc(ai)+'</small></div><a class="tel" href="'+esc(telLink(l.phone))+'" data-tel="'+esc(l.id)+'" aria-label="Call '+esc(l.businessName)+'"><svg aria-hidden="true"><use href="#i-phone"/></svg></a></div>'}
+function rCalls(){
+  const q=callQueue();const R=CALL_KIT.rules||{};const lim=R.list_size||15;const today=q.slice(0,lim);
+  let h=pageHead("calls",today.length?today.length+" to call today. Tap a business for the words and the one-tap follow-ups; tap the green phone to dial.":"No one to call yet. Businesses with a published phone land here as Scout finds them.");
+  h+=dbBanner();
+  h+=today.length?'<div class="card"><div class="list">'+today.map(callRow).join("")+'</div></div>':'<div class="empty"><b>No one to call yet</b>Add a business by hand on the Lead Desk, or wait for the next Day Shift.</div>';
+  if(q.length>lim)h+='<p class="dim small" style="margin-top:8px">'+(q.length-lim)+' more wait for another day (the list holds '+lim+').</p>';
+  h+='<p class="dim small" style="margin-top:10px">'+esc((R.legal||[]).join(" "))+'</p>';
+  return h;
+}
+function callDrawer(l){
+  const K=CALL_KIT;const O=K.outcomes||{};const sc=fillScript(l);const cb=S.cb||{};const email=l.contactEmail||"";const tries=(l.calls||[]).filter(c=>/no answer|voicemail/i.test(c.outcome||"")).length;
+  let h='<div class="inline"><span class="pill">'+esc(tradeWord(l.trade))+'</span><span class="pill">'+esc(l.town||"")+(l.state?', '+esc(l.state):'')+'</span>'+statusPill(l.status)+'<span class="pill signal">'+esc(l.callWindow||bestCallTime(l.trade))+'</span></div>';
+  h+=l.phone?'<a class="btn block tel-big" href="'+esc(telLink(l.phone))+'" data-tel="'+esc(l.id)+'"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call '+esc(l.phone)+'</a>':'<div class="note warn">No phone on file.</div>';
+  h+='<div class="kv"><dt>AI check</dt><dd>'+esc(l.businessName)+' '+esc(aiResult(l))+'</dd><dt>Owner</dt><dd>'+esc(l.contactName||"unknown")+'</dd><dt>Email</dt><dd>'+(email?esc(email):'<span class="dim">none on file: ask for it</span>')+'</dd>'+(l.website?'<dt>Site</dt><dd>'+esc(String(l.website).replace(/^https?:\/\//,""))+'</dd>':'')+(tries?'<dt>Tries</dt><dd>'+tries+' no answer</dd>':'')+'</div>';
+  h+='<div class="sec"><h4>Say this</h4><div class="say"><p>'+esc(sc.opener)+'</p><p>'+esc(sc.value)+'</p><p>'+esc(sc.close)+'</p></div></div>';
+  h+='<div class="sec"><h4>If they say</h4>'+Object.keys(K.objections||{}).map(k=>'<details class="obj"><summary>'+esc(k)+'</summary><p>'+esc(fmtTpl(K.objections[k],{town:l.town||""}))+'</p></details>').join("")+'</div>';
+  h+='<div class="sec"><h4>Outcome (tap one)</h4><div class="outc">'+["no_answer","not_interested","call_back","send_check","interested","do_not_call"].map(k=>'<button type="button" class="btn '+(k==="interested"?"good":k==="do_not_call"?"bad":k==="send_check"?"p":"")+'" data-outcome="'+k+'" data-id="'+esc(l.id)+'"'+(S.readOnly?" disabled":"")+'>'+esc((O[k]||{}).label||k)+'</button>').join("")+'</div>';
+  if(cb.id===l.id&&cb.mode==="when")h+='<div class="cbpick"><b>Call back when?</b><div class="chips"><button class="chip" type="button" data-cbwhen="0,16,30" data-id="'+esc(l.id)+'">Today 4:30 PM</button><button class="chip" type="button" data-cbwhen="1,7,30" data-id="'+esc(l.id)+'">Tomorrow 7:30 AM</button><button class="chip" type="button" data-cbwhen="1,16,30" data-id="'+esc(l.id)+'">Tomorrow 4:30 PM</button><button class="chip" type="button" data-cbwhen="3,7,30" data-id="'+esc(l.id)+'">In 3 days, 7:30 AM</button></div><div class="inline"><div class="field" style="margin:0;flex:1;min-width:180px"><label class="sr" for="cbDt">Pick a day and time</label><input id="cbDt" type="datetime-local"></div><button class="btn sm p" type="button" data-cbwhen="custom" data-id="'+esc(l.id)+'">Save</button><button class="btn sm" type="button" data-cbcancel="1">Cancel</button></div></div>';
+  if(cb.id===l.id&&cb.mode==="email")h+='<form class="cbpick" data-cksend="'+esc(l.id)+'" data-kind="'+esc(cb.kind)+'"><b>'+(cb.kind==="interested"?"Send the check and the offer to":"Send the free check to")+'</b><div class="field" style="margin:0"><label class="sr" for="ckEmail">Email</label><input id="ckEmail" type="email" inputmode="email" autocomplete="off" placeholder="their email" value="'+esc(email)+'" required></div><div class="inline"><button class="btn sm p" type="submit">'+(cb.kind==="interested"?"Send check + offer":"Send the check")+'</button><button class="btn sm" type="button" data-cbcancel="1">Cancel</button></div><small class="dim">'+esc((O[cb.kind]||{}).then||"")+'</small></form>';
+  h+='<ul class="then">'+["no_answer","not_interested","call_back","send_check","interested"].map(k=>'<li><b>'+esc((O[k]||{}).label||k)+':</b> '+esc((O[k]||{}).then||"")+'</li>').join("")+'</ul></div>';
+  if(Array.isArray(l.calls)&&l.calls.length)h+='<div class="sec"><h4>Earlier calls</h4><div class="list">'+l.calls.slice(-6).reverse().map(c=>'<div class="row"><span class="pill">'+esc(c.outcome)+'</span><div class="t"><small>'+esc(fmtT(c.t))+(c.note?' · '+esc(c.note):'')+(c.nextAt?' · next '+esc(fmtT(c.nextAt)):'')+'</small></div></div>').join("")+'</div></div>';
+  h+='<p class="dim small"><button class="btn sm" type="button" data-lead="'+esc(l.id)+'">Full lead card</button></p>';
+  return h;
+}
+async function callOutcome(id,k,extra){
+  const l=S.leads.find(x=>x.id===id);if(!l)return;extra=extra||{};const O=(CALL_KIT.outcomes||{})[k]||{};const t=nowIso();const label=O.label||k;
+  const calls=(l.calls||[]).concat([{t,who:"grayson",outcome:label,note:extra.note||(extra.email?"email "+extra.email:""),nextAt:extra.nextAt||null}]);
+  const patch={calls};let msg="Logged: "+label;
+  if(k==="no_answer"){const tries=calls.filter(c=>/no answer|voicemail/i.test(c.outcome||"")).length;const max=O.max_tries||3;if(tries>=max){patch.callDone=true;patch.nextCallAt=null;msg="No answer "+tries+" times. Off the call list; email keeps going."}else{patch.nextCallAt=ctIso(O.after_days||1,7,30);msg="No answer ("+tries+" of "+max+"). Back on the list tomorrow."}}
+  else if(k==="not_interested"){patch.status="Not a fit";patch.nextCallAt=null;patch.followUp={kind:"close_lead",status:"done",requestedAt:t,doneAt:t,by:"calls screen"};msg="Not a fit. No more calls or emails."}
+  else if(k==="call_back"){if(!extra.nextAt)return;patch.nextCallAt=extra.nextAt;msg="Call back "+fmtT(extra.nextAt)}
+  else if(k==="send_check"||k==="interested"){const em=String(extra.email||"").trim().toLowerCase();if(!em)return;patch.followUp={kind:O.next||(k==="interested"?"email_ai_check_plus_offer":"email_ai_check"),status:"pending",requestedAt:t,email:em,withOffer:k==="interested",by:"calls screen"};patch.freeCheck=Object.assign({},l.freeCheck||{},{requestedAt:t,requestedBy:"call",toEmail:em,withOffer:k==="interested",status:"requested"});if(!l.contactEmail){patch.contactEmail=em;patch.emailSource="given on the phone "+dayKey()}patch.status="Replied";patch.nextCallAt=null;msg=k==="interested"?"Interested. The desk sends the check and the offer within 2 hours.":"The desk sends the free check within 2 hours."}
+  else if(k==="do_not_call"){patch.status="Suppressed";patch.nextCallAt=null;patch.callDone=true;await setDoc("suppression/"+slug(l.contactEmail||l.businessName),{email:l.contactEmail||"",businessName:l.businessName,reason:"asked on call",by:"grayson",at:t});msg="Suppressed. Never contacted again."}
+  if(await updDoc("leads/"+id,patch)){toast(msg);event("Grayson","Call "+label+": "+l.businessName+(extra.email?" ("+extra.email+")":"")+(extra.nextAt?" at "+fmtT(extra.nextAt):""));S.cb={};closeDrawer()}
+}
+
 /* ---------- Leads ---------- */
 function scoreBand(s){s=Number(s)||0;return s>=settings().scoreGate?"hi":s>=40?"mid":"lo"}
 function rLeads(){
   const c=counts();const q=S.leadQuery.trim().toLowerCase();
-  let h=pageHead("leads","Every business the crew found, with the proof. Tap a lead for the facts, the AI check and the call script.",'<div class="inline"><button class="btn sm" type="button" data-act="addLead">+ Add lead</button><button class="btn sm '+(S.leadView==="calls"?"p":"")+'" type="button" data-act="view-calls"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call list</button><button class="btn sm '+(S.leadView==="list"?"p":"")+'" type="button" data-act="view-list">All leads</button></div>');
+  let h=pageHead("leads","Every business the crew found, with the proof. Tap a lead for the facts, the AI check and the call script.",'<div class="inline"><button class="btn sm" type="button" data-act="addLead">+ Add lead</button><button class="btn sm" type="button" data-go="calls"><svg aria-hidden="true"><use href="#i-phone"/></svg>Calls</button><button class="btn sm '+(S.leadView==="list"?"p":"")+'" type="button" data-act="view-list">All leads</button></div>');
   h+=dbBanner();
   if(S.leadView==="calls"){
     const list=c.callList;
@@ -684,6 +784,7 @@ function closeDrawer(){S.drawer=null;$("#drawer").classList.remove("on");$("#dra
 function renderDrawer(){
   const d=S.drawer;if(!d)return;const body=$("#dBody");const title=$("#dTitle");
   if(d.kind==="lead"){const l=S.leads.find(x=>x.id===d.id);if(!l){title.textContent="Lead";body.innerHTML='<div class="empty"><b>Lead not found</b></div>';return}title.textContent=l.businessName||"Lead";body.innerHTML=leadDrawer(l)}
+  else if(d.kind==="call"){const l=S.leads.find(x=>x.id===d.id);title.textContent=l?(l.businessName||"Call"):"Call";body.innerHTML=l?callDrawer(l):'<div class="empty"><b>Lead not found</b></div>'}
   else if(d.kind==="agent"){const a=AGENTS.find(x=>x.id===d.id);title.textContent=a?a.name+" · "+a.role:"Agent";body.innerHTML=agentDrawer(a)}
   else if(d.kind==="task"){const t=S.tasks.find(x=>x.id===d.id);title.textContent=t?t.title:"Task";body.innerHTML=t?taskDrawer(t):""}
   else if(d.kind==="run"){const r=S.runs.find(x=>x.id===d.id);title.textContent=r?"Run "+(r.day||""):"Run";body.innerHTML=r?runDrawer(r):""}
@@ -746,6 +847,11 @@ document.addEventListener("click",async e=>{
   if(b.dataset.go){if(b.dataset.go==="more"){$("#sheetNav").classList.add("on")}else go(b.dataset.go);return}
   if(b.id==="sheetPause"||b.id==="pauseBtn"){const st=settings();if(st.paused){await saveSettings({paused:false});event("Grayson","Resumed the office")}else{if(!S.confirm.pause){S.confirm.pause=true;toast("Tap Pause again to confirm");b.textContent="Tap again to confirm";setTimeout(()=>{S.confirm.pause=false;renderChrome()},3000);return}S.confirm.pause=false;await saveSettings({paused:true});event("Grayson","Paused the office")}return}
   if(b.dataset.ny!=null){if(b.dataset.view)S.leadView=b.dataset.view;go(b.dataset.ny);if(b.dataset.lead)openDrawer("lead",b.dataset.lead);if(b.dataset.clientid)openDrawer("client",b.dataset.clientid);return}
+  if(b.dataset.tel){return}
+  if(b.dataset.callid){S.cb={};openDrawer("call",b.dataset.callid);return}
+  if(b.dataset.outcome){const k=b.dataset.outcome,id=b.dataset.id;if(k==="call_back"){S.cb={id,mode:"when"};renderDrawer();return}if(k==="send_check"||k==="interested"){S.cb={id,mode:"email",kind:k};renderDrawer();const i=$("#ckEmail");if(i)i.focus();return}await callOutcome(id,k,{});return}
+  if(b.dataset.cbwhen){const id=b.dataset.id;const w=b.dataset.cbwhen;let iso;if(w==="custom"){const inp=$("#cbDt");if(!inp||!inp.value){toast("Pick a day and time");return}const d=new Date(inp.value);if(isNaN(d.getTime())){toast("Pick a day and time");return}iso=d.toISOString()}else{const [dd,hh,mm]=w.split(",").map(Number);iso=ctIso(dd,hh,mm)}await callOutcome(id,"call_back",{nextAt:iso});return}
+  if(b.dataset.cbcancel){S.cb={};renderDrawer();return}
   if(b.dataset.lead&&!b.dataset.act){openDrawer("lead",b.dataset.lead);return}
   if(b.dataset.agent){openDrawer("agent",b.dataset.agent);return}
   if(b.dataset.task){openDrawer("task",b.dataset.task);return}
@@ -797,6 +903,7 @@ document.addEventListener("change",async e=>{
 document.addEventListener("submit",async e=>{
   const f=e.target;e.preventDefault();
   if(f.id==="taskForm"||f.id==="drawerTaskForm"){const agent=f.id==="taskForm"?$("#tAgent").value:f.dataset.agent;const title=(f.id==="taskForm"?$("#tTitle"):$("#dtTitle")).value.trim();const details=(f.id==="taskForm"?$("#tDetails"):$("#dtDetails")).value.trim();if(!title)return;const id="t-"+uid();if(await setDoc("tasks/"+id,{agent,title,details,status:"queued",attempts:0,maxAttempts:2,by:"grayson",createdAt:nowIso(),updatedAt:nowIso()})){toast("Queued for "+agent);f.reset();event("Grayson","Queued task for "+agent+": "+title);if(S.drawer)closeDrawer()}return}
+  if(f.dataset.cksend){const em=String(($("#ckEmail")||{}).value||"").trim();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){toast("Type a real email");return}await callOutcome(f.dataset.cksend,f.dataset.kind,{email:em});return}
   if(f.id==="lessonForm"){const id="l-"+uid();if(await setDoc("lessons/"+id,{title:$("#lTitle").value.trim(),observation:$("#lObs").value.trim(),evidence:$("#lEv").value.trim(),confidence:Number($("#lConf").value)||0,agent:"grayson",status:"active",source:"page",createdAt:nowIso()})){toast("Lesson saved");f.reset()}return}
   if(f.id==="supForm"){const v=$("#supEmail").value.trim();if(!v)return;const isEmail=v.includes("@");if(await setDoc("suppression/"+slug(v),{email:isEmail?v.toLowerCase():"",businessName:isEmail?"":v,reason:$("#supWhy").value.trim()||"asked to stop",by:"grayson",at:nowIso()})){toast("Added");f.reset()}return}
   if(f.id==="capsForm"){const p={};["dailyEmailCap","followUpDays","maxTouches","scoreGate","foundingSpots"].forEach(k=>{const el=f.querySelector('[name="'+k+'"]');if(el){let v=Number(el.value);if(k==="dailyEmailCap")v=Math.min(20,Math.max(1,v));p[k]=v}});await saveSettings(p);return}
@@ -817,7 +924,7 @@ async function runNow(btn){
     toast("Day Shift started");if(note)note.textContent="Started "+fmtT(nowIso())+". Give it about 20 minutes; results show on Today.";event("Grayson","Started a Day Shift from the page");
   }catch(err){console.error(err);toast("Could not start the run: "+(err&&err.code?err.code:"try again"));btn.disabled=false}
 }
-const SCRIPT="Hey, is this the owner? This is Grayson with Ridgeline Local. Real quick: I asked ChatGPT who the best roofer in [TOWN] is and it named [COMPETITOR 1] and [COMPETITOR 2]. You didn't come up. I can email you the screenshot and the three things I'd fix. Free, no catch. What's the best email for that?\n\nIf they hesitate: It takes me two minutes and it's yours to keep either way. Where should I send it?\n\nIf they ask the price: The check is free. If you want me to actually fix it, it's $147 a month for the first three months, then $197, month to month, cancel by email. If you don't gain 15 real reviews in 60 days, the third month is free. But first let me send you the check so you can see it for yourself.\n\nVoicemail: Hi, this is Grayson with Ridgeline Local. I checked what ChatGPT says when someone asks for a roofer in [TOWN] and you're not on it. I'll email the screenshot to the address on your website. If you'd rather I didn't, no problem. Thanks.";
+const SCRIPT=[CALL_KIT.script.opener,CALL_KIT.script.value,CALL_KIT.script.close].join("\n\n")+"\n\nIf they say:\n"+Object.keys(CALL_KIT.objections).map(k=>k+": "+CALL_KIT.objections[k]).join("\n");const SCRIPT_OLD="Hey, is this the owner? This is Grayson with Ridgeline Local. Real quick: I asked ChatGPT who the best roofer in [TOWN] is and it named [COMPETITOR 1] and [COMPETITOR 2]. You didn't come up. I can email you the screenshot and the three things I'd fix. Free, no catch. What's the best email for that?\n\nIf they hesitate: It takes me two minutes and it's yours to keep either way. Where should I send it?\n\nIf they ask the price: The check is free. If you want me to actually fix it, it's $147 a month for the first three months, then $197, month to month, cancel by email. If you don't gain 15 real reviews in 60 days, the third month is free. But first let me send you the check so you can see it for yourself.\n\nVoicemail: Hi, this is Grayson with Ridgeline Local. I checked what ChatGPT says when someone asks for a roofer in [TOWN] and you're not on it. I'll email the screenshot to the address on your website. If you'd rather I didn't, no problem. Thanks.";
 
 /* ============================ start ============================ */
 (function start(){
@@ -830,3 +937,5 @@ const SCRIPT="Hey, is this the owner? This is Grayson with Ridgeline Local. Real
 })();
 })();
 </script>
+
+</body></html>
