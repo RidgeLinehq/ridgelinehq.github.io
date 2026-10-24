@@ -1,0 +1,50 @@
+{
+  "version": "8.0",
+  "biz": "ridgeline",
+  "business": "Ridgeline Local: AI-search visibility for local businesses",
+  "tz": "America/Chicago",
+  "repo": "RidgeLinehq/ridgelinehq.github.io",
+  "branch": "main",
+  "runlog": "office/runlog.jsonl",
+  "crew_owner": "reply desk",
+  "notify_only_if_unfixable": true,
+  "max_dispatches_per_pass": 4,
+  "ticket_grace_hours": 5,
+  "human_after_hours": 2,
+  "under_goal_human_hours": 3,
+  "sources": { "gateway": { "jobs": "office/gw/jobs", "out": "office/gw/out" } },
+  "lanes": {
+    "rl_outreach":  { "label": "Leads & outreach", "biz": "ridgeline", "signal": "runlog_count", "task": "day-shift",
+                      "count_regex": "(\\d+) sent", "unit": "emails sent", "daily_min": 10, "goal_hour": 18,
+                      "window": { "days": "weekdays" }, "platform_label": "Day Shift", "playbook": ["fire_task", "next_slot"] },
+    "rl_replies":   { "label": "Messages (reply desk)", "biz": "ridgeline", "signal": "runlog_heartbeat", "task": "reply-desk",
+                      "heartbeat_minutes": 120, "window": { "start": "07:30", "end": "23:59", "days": "all" },
+                      "platform_label": "Reply desk", "playbook": ["fire_task"] },
+    "rl_ai_checks": { "label": "AI checks (ChatGPT + Gemini)", "biz": "ridgeline", "signal": "gw_jobs", "style": "aicheck",
+                      "jobs": "office/gw/jobs", "out": "office/gw/out", "stale_minutes": 25, "workflow": "aicheck.yml",
+                      "job_input": false, "verify_seconds": 300, "platform_label": "AI check", "playbook": ["retry", "fallback_model"] },
+    "rl_website":   { "label": "Website", "biz": "ridgeline", "signal": "http", "url": "https://ridgelinehq.github.io/",
+                      "expect_text": "Ridgeline", "platform_label": "GitHub Pages", "playbook": ["redeploy"] },
+    "rl_calls":     { "label": "Calls", "biz": "ridgeline", "signal": "manual",
+                      "note": "Grayson calls from the Calls screen; the reply desk sends each follow-up within 2 hours (Lane G)" },
+    "rl_social":    { "label": "Social", "biz": "ridgeline", "signal": "manual",
+                      "note": "Nova writes the briefs; Grayson films and posts" },
+    "actions":      { "label": "GitHub Actions", "biz": "ridgeline", "signal": "actions_runs", "hours": 24,
+                      "workflows": ["aicheck.yml", "cards.yml", "studio-fetch.yml", "studio-tts.yml"], "playbook": ["rerun_failed"] }
+  },
+  "crews": {
+    "day-shift":  { "label": "Day Shift (Mara + crew)", "every_hours": 24, "grace_hours": 3,
+                    "window": { "start": "07:00", "end": "23:59", "days": "weekdays" }, "trigger": "Ridgeline Office · Day Shift" },
+    "reply-desk": { "label": "Reply desk", "every_hours": 2, "grace_hours": 1,
+                    "window": { "start": "07:30", "end": "23:59", "days": "all" }, "trigger": "Ridgeline · reply desk" }
+  },
+  "needs_human": {
+    "auth_expired":   "The {platform} key was refused. Open the repo's Settings > Secrets and paste a new key.",
+    "platform_block": "{platform} refused the request ({detail}). Open the app and clear the notice.",
+    "billing":        "The AI check's OpenAI credit ran out ({detail}). Add $5 at platform.openai.com > Billing (the approved spend); the next check runs itself.",
+    "missing":        "{lane} stopped checking in ({detail}). Open the scheduled tasks list and tap Run.",
+    "crew_missing":   "{lane} did not run ({detail}). Open the scheduled tasks list and tap Run.",
+    "down":           "The website is down ({detail}). Open the repo's Settings > Pages and check the build.",
+    "under_goal":     "{lane} is under its daily goal ({detail}). The next Day Shift should catch up; if not, open the office."
+  }
+}

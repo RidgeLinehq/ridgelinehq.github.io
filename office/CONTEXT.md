@@ -10,6 +10,7 @@ until that folder's CONTEXT.md tells you to.
 | The week's standing order (Oct 23-30, 2026) | `specs/push-week-2026-10-23.md` | Mission numbers, daily targets per agent, the scoreboard, Grayson's taps; Mara loads it at stages 00 and 08 |
 | A task assigned from the office page (tasks collection, status queued) | `stages/day-shift/CONTEXT.md` section "Assigned tasks" | Grayson queued a one-off job for a named agent |
 | A tap on the Calls screen (lead.followUp pending) | `stages/reply-desk/CONTEXT.md` Lane G | Grayson called a business; the desk sends the free check (and the offer) within 2 hours. The call words live in `office/call_kit/` |
+| A Medic ticket (`office/medic/queue/*.json`, status open) or a red lane on the Medic board | `stages/reply-desk/CONTEXT.md` Lane H | The Medic (`office/medic/`, plain Python on a GitHub Action every 30 min) could not fix it alone: fire the Day Shift once, or tell Grayson the one tap |
 
 ## The crew (8 agents, one skill file each in `skills/`)
 

@@ -16,6 +16,7 @@ first emails and client work; this desk sends and answers, any day.
 | shared/gateway.md | Protocol |
 | shared/rules.md | Honesty, Who we are in writing |
 | database: settings/main; leads (query by contactEmail as needed; Lane G: list all with out_dir); clients where status == active; drafts where status == ready and clientId set; suppression (all) | |
+| `office/medic/public/medic_report.json`, `office/medic/queue/*.json` (Lane H) | small |
 | office/call_kit/kit.json | outcomes (what each Calls-screen tap promises Grayson) |
 | Gmail tools: `ToolSearch "select:mcp__Gmail__search_threads,mcp__Gmail__get_thread,mcp__Gmail__reply,mcp__Gmail__send_message,mcp__Gmail__list_labels,mcp__Gmail__create_label,mcp__Gmail__label_thread,SendUserMessage,ArtifactData"` | |
 
@@ -170,6 +171,27 @@ reply_desk:
     - reply within 2 hours during 7am-8pm local time of the lead (the schedule already covers it)
     - one reply per message; the suppression list wins over every lane
 ```
+
+## Lane H: the Medic's tickets and board (V8, Oct 24, 2026; every run, after Lane G, before Lane F)
+The Medic (`office/medic/`, plain Python on a GitHub Action every 30 minutes) restarts a stuck AI
+check, asks GitHub Pages to rebuild the site and re-runs a failed Action once, all by itself. What
+it cannot do becomes a ticket in `office/medic/queue/*.json` (status `open`); what nobody can do
+is a `needs_you` line in `office/medic/public/medic_report.json`. You are the crew half.
+1. Read `office/medic/public/medic_report.json` (board, needs_you, fixed_today). A red lane there is
+   red in your end heartbeat note too, unless you verified otherwise this run.
+2. For every ticket with status `open`:
+   | ticket | what you do |
+   |---|---|
+   | error `crew_missing` for `day-shift`, weekday, before 6 PM CT | ToolSearch `mcp__claude-code-remote__fire_trigger`; fire "Ridgeline Office · Day Shift" ONCE per day (health/desk.medicFired[<day key>] = trigger id; never twice). Status `done`, note "Day Shift fired HH:MM". |
+   | error `crew_missing` for `reply-desk` | That is you, running now. Status `done`, note "desk is running". |
+   | step `fire_task` for lane `rl_outreach` (under its daily goal) | If no Day Shift run-log line exists today and it is a weekday before 6 PM CT: fire it once as above. Otherwise status `cannot`, note "Day Shift ran; the goal is its job". |
+   | step `next_slot`, `fallback_model` | Status `cannot` with the reason (no second model or slot is set up). A `billing` or `auth_expired` error is already a `needs_you` line: see 3. |
+   Write the ticket back with `status`, `note` (one line), `by: "reply desk"`, `at` (UTC ISO); keep every
+   other field. Never create a ticket, never edit `medic.py`, `lanes.json`, `db/` or `public/`.
+3. Each `needs_you` line in the report that health/desk.medicNotified does not list for today becomes
+   one Lane F line (max 2 per run, the Medic's own words: they carry the exact tap); then add it to
+   health/desk.medicNotified[<day key>].
+4. Commit `office/medic/queue` with the run-log commit. Record "medic: N tickets done/cannot, N told" in the heartbeat note.
 
 ## Lane F: tell Grayson (SendUserMessage, only when there is something new)
 - NEW CLIENT (always its own message): "🚨💰 NEW CLIENT: <business> just paid $147/mo!
