@@ -7,7 +7,7 @@ secrets (OPENAI_API_KEY, GEMINI_API_KEY); nobody sees or prints them.
 ## Protocol
 1. Write `office/gw/jobs/aicheck-<day>-<town>-<4 hex>.json` =
    {"id": "<same as file name without .json>", "queries": [{"key": "<town>-<st>-<trade>",
-   "question": "Who are the best <roofers|tree services> in <Town>, <ST>?", "city": "<Town>",
+   "question": "Who are the best <trade phrase> in <Town>, <ST>?", "city": "<Town>",
    "region": "<State name>"}]}. One query per town+trade (never a named lead: the repo is
    public). At most 6 queries per job.
 2. Commit, `git pull --rebase`, `git push origin HEAD:main`. The Action "Ridgeline AI check"
@@ -24,7 +24,7 @@ secrets (OPENAI_API_KEY, GEMINI_API_KEY); nobody sees or prints them.
   aiCheck.answers = {chatgpt: first 600 chars, gemini: first 600 chars, models, sources (max 3
   each), at, jobId}. aiCheck.by = "gateway".
 - A "not named" result is the strongest loss line there is: Parker uses it first, Echo quotes
-  it exactly ("When I asked ChatGPT 'Who are the best roofers in Cabot, AR?' it named X, Y and
+  it exactly ("When I asked ChatGPT 'Who are the best barbers in Cabot, AR?' it named X, Y and
   Z."). Never paraphrase it into something it did not say.
 - Cache: one job per town+trade per 7 days. Re-use the newest out file inside that window.
 

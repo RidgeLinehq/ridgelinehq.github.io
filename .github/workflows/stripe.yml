@@ -1,0 +1,49 @@
+name: Ridgeline Stripe
+
+# Creates the plan checkout links (data/stripe-links.json) once STRIPE_SECRET_KEY is set, and
+# applies Second Month Free Guarantee credits from office/stripe/jobs/<id>.json
+# (results in office/stripe/out/<id>.json). Runs hourly so nothing waits on a tap.
+on:
+  push:
+    paths:
+      - "office/stripe/jobs/*.json"
+      - "office/stripe/stripe_ops.py"
+      - ".github/workflows/stripe.yml"
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stripe
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Stripe setup + jobs
+        id: ops
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+        run: |
+          set +e
+          python office/stripe/stripe_ops.py
+          echo "exit=$?" >> "$GITHUB_OUTPUT"
+      - name: Push links and results
+        run: |
+          git config user.name "ridgeline-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/stripe-links.json office/stripe/out
+          git diff --cached --quiet && exit 0
+          git commit -m "stripe: links and job results [skip ci]"
+          for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && break; sleep 5; done
+      - name: Fail if anything failed (triggers the alert)
+        run: test "${{ steps.ops.outputs.exit }}" = "0"

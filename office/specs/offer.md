@@ -1,59 +1,66 @@
 # The offer (facts the crew may use, nothing else)
 
-Grayson's standing orders. The website (index.html) and this file must agree; if they differ,
-tell Grayson (NEEDS YOU) and use the website's wording until he decides.
+Grayson's standing orders (v3, Oct 24, 2026). The website (index.html, guarantee.html) and this
+file must agree; if they differ, tell Grayson (NEEDS YOU) and use the website's wording until he
+decides.
 
-## What Ridgeline Local does
-Gets local businesses of every kind (Oct 22, 2026: "anybody can get it") recommended when people
-ask ChatGPT, Gemini and Google who to call, by fixing the signals those tools rely on: the Google Business Profile,
-review flow, matching name/address/phone across listings, Yelp, weekly Google posts. Proof every
-month: what ChatGPT and Gemini answer (exact words, dated), review count, completed work.
+## What Ridgeline Local does (the promise, word for word)
+"We get your business found on Google AND recommended by AI like ChatGPT and Gemini, and we send
+you leads." For ANY local business, anywhere: restaurants, salons, barbers, gyms, dentists,
+contractors, cleaners, auto shops, and more. Never describe it as a roofing or tree-service
+product.
 
-## The free AI check (the only thing the first email offers)
-What ChatGPT and Gemini actually answer when asked for their trade in their town (their exact
-words, from the AI check gateway, shared/gateway.md), plus the three fixes we would make first.
-Free, no call, no commitment, theirs to keep. Fully automatic since Oct 22, 2026: the reply
-desk runs and sends it inside the same run, any day (specs/free-check.md). Never send an answer the gateway did not
-return, and never label a Claude answer as ChatGPT or Gemini.
+## The plans (index.html "Pricing")
+| Plan | Price | What's in it |
+|---|---|---|
+| Free AI Check | $0, always, no card | What ChatGPT and Gemini answer for their kind of business in their town (exact words, from the gateway), them vs the competitors named, the 3 fixes we'd make first. The main call to action everywhere. |
+| Starter | $75/month | Google Business Profile cleanup + optimization (we audit and write every fix ready to paste, then check it went live); monthly AI visibility report (weekly re-checks behind it); review request system (we email the client's real customers a review request; ready text + QR card for the owner to send). |
+| Growth (MOST POPULAR) | $125/month | Everything in Starter + AI Lead Finder (leads sent to them, specs/lead-tracking.md) + lead tracking (every lead logged; monthly "did it turn into a job?") + the Second Month Free Guarantee. |
+| Pro | $199/month | Everything in Growth + priority lead alerts (lead page form leads go to the owner instantly; Lead Finder leads emailed the same run they are found) + a simple lead-capture page (p/<slug>/) with a tracking link + a short promo video every month + competitor tracking (the businesses ChatGPT and Gemini name instead of them, week by week). |
 
-## Founding client pricing (the website's pricing card, Oct 22, 2026)
-- Setup normally $297, waived for founding clients.
-- $147 a month for the first 3 months, then $197 a month. Month to month. Cancel by replying to
-  any email.
-- Review-growth guarantee: if they don't gain at least 15 genuine Google reviews in the first
-  60 days (counted from their review total on the day we start), month three is free.
-  Written terms (Oct 22, 2026): https://ridgelinehq.github.io/guarantee.html — day 1 = first
-  payment; Google reviews only; month 3 payment refunded in full within 7 days if under 15;
-  client uses the review kit; Sage emails the day-1 and day-60 counts. Link it, never reword it.
-- Founding spots: settings.foundingSpots is the real number left (Grayson sets it). The crew may
-  say "N founding spots left" only with that live number, and never invents a deadline.
-- Payment link (recurring $147): https://buy.stripe.com/dRm00jgNddCI53cbOlaEE00
-- Website: https://ridgelinehq.github.io
-- After paying: they add ridgelinemarketinghq@gmail.com as a Manager on their Google Business
-  Profile (Google Maps app or google.com/business → profile → Business profile settings →
-  Managers → Add). Never a password.
+Deals:
+- Founding Client Deal: the first 20 clients lock their price for life (as long as they stay
+  subscribed). The live count is `data/founding.json` spotsLeft (Grayson can edit it; the reply
+  desk lowers it by 1 per new paying client). Say "N founding spots left" only with that number.
+  Never invent a deadline.
+- Pay yearly, get 2 months free: Starter $750/yr, Growth $1,250/yr, Pro $1,990/yr.
+- The Free AI Check is always free with no card required.
+- Month to month. Cancel anytime by replying "cancel" to any email.
 
-## Included (the six items on the site)
-Google Business Profile build-out · Review request kit (text + QR card) · Listing consistency
-across Google, Yelp, Facebook · Yelp claim and cleanup · Weekly Google posts and review replies
-· Monthly proof report (ChatGPT and Gemini answers, review count, work done).
+## Links (send these, nothing else)
+- Pricing and checkout: https://ridgelinehq.github.io/#pricing (each plan button goes to
+  start.html, which opens the right Stripe checkout from data/stripe-links.json).
+- Direct checkout link for one plan: read `data/stripe-links.json` → links.<plan>.<monthly|yearly>.
+  If it is empty, checkout is not live yet: send https://ridgelinehq.github.io/start.html?plan=<plan>
+  and say we'll email the secure link as soon as it's ready (and alert Grayson, shared/alerts.md).
+- Guarantee terms: https://ridgelinehq.github.io/guarantee.html
+- Onboarding form (sent in the welcome): https://ridgelinehq.github.io/welcome.html?plan=<plan>
+- RETIRED, never send again: the $147 link https://buy.stripe.com/dRm00jgNddCI53cbOlaEE00 and the
+  "$147 then $197", "setup fee waived" and "15 reviews in 60 days" wording. (Anyone who already
+  paid $147 keeps what they bought: the old review-growth guarantee, noted at the foot of
+  guarantee.html.)
 
-## Promises the crew may repeat
-Only the guarantee above, word for word. Never rankings, never "#1", never a number of leads
-or jobs, never "guaranteed results".
+## The guarantee (Growth and Pro; the only promise the crew may repeat, word for word)
+"If your first month brings you zero tracked leads AND no improvement in your AI visibility, your
+second month is free. No arguing." How it is measured and paid: specs/guarantee.md. Always link
+the terms, never reword them.
 
-## Targets (settings.targets is the live list; this is the Oct 22, 2026 default)
-| Town | State | Trades | Why |
-|---|---|---|---|
-| Owasso | OK | roofing, tree service | mid-size suburb, storm market, far from home |
-| Cabot | AR | roofing, tree service | small city, few agencies pitching |
-| Foley | AL | roofing, tree service | Gulf coast, storm roofing, growing |
-Rotate one town per run. Add a town only when Grayson adds it on the page. The cold-email crew
-stays on roofers and tree services in these towns (the biggest measured gap); anyone else who
-asks (website form, Facebook or Instagram message passed on by Grayson, email) gets the same
-check and the same offer. The crew never names Grayson's town in outreach.
+## Promises the crew may NOT make
+Never rankings, never "#1", never a number of leads, jobs or reviews, never "guaranteed results",
+never "we post for you on Google" (we write it, the owner pastes it), never "we text your
+customers" (we email them; the owner can text the ready message). If the work can't deliver a
+line on the website, NEEDS YOU: "Website promises <x>, we can't deliver it yet" so Grayson can
+change the wording; the crew does not quietly under-deliver.
 
-## What a client gets each month (Sage tracks it in clients/<id>)
-Week 1: profile build-out done, review kit sent, listing fixes started. Weekly: 1 Google post
-draft + review reply drafts, emailed to the client by the reply desk the same day (the client
-pastes them in, or we do as Manager). Day 30: first report (AI answers, review count vs start, work done).
+## After paying (specs/client-delivery.md is the whole flow)
+Stripe checkout → welcome.html onboarding form (business name, Google profile link, phone,
+services, city, email) → the reply desk's welcome email + baseline AI check → work begins. Adding
+ridgelinemarketinghq@gmail.com as a Manager on their Google Business Profile is optional and
+helps (we receive Google's message/call notices = tracked leads). Never a password.
+
+## Targets for cold outreach (settings.targets is the live list)
+Any local business type. The Day Shift rotates one town per run and the trades listed for it in
+settings.targets (Oct 24, 2026 default: Owasso OK: barber, dentist, auto repair, house cleaning;
+Cabot AR: salon, gym, restaurant, plumber; Foley AL: med spa, pet grooming, HVAC, landscaping).
+Anyone who asks (website form, email, Grayson's own leads) gets the same check and offer. The crew
+never names Grayson's town in outreach.

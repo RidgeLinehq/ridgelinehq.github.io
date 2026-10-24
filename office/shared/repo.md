@@ -12,7 +12,8 @@ prospects, no backups.
 - Only if missing, the LIGHT clone (about 1 second and 500 KB; the full tree carries the
   studio's videos and photos, which no crew needs):
   `git clone --depth 1 --filter=blob:none --sparse https://github.com/RidgeLinehq/ridgelinehq.github.io /home/claude/ridgeline`
-  then `git -C /home/claude/ridgeline sparse-checkout set office/shared office/specs office/stages office/skills office/gw office/cards office/health office/playbooks office/tools`
+  then `git -C /home/claude/ridgeline sparse-checkout set office/shared office/specs office/stages office/skills office/gw office/cards office/health office/playbooks office/tools office/stripe office/leadfinder office/landing office/alerts data p`
+  An existing clone made before Oct 24, 2026: run `git sparse-checkout add office/stripe office/leadfinder office/landing office/alerts data p` once.
   (root files such as index.html and office/CLAUDE.md, CONTEXT.md, LESSONS.md, runlog.jsonl come
   along automatically). Commits and pushes work normally from this clone. Do not use add_repo;
   it is not available in scheduled runs. Never `git add` anything under office/studio/.
@@ -43,9 +44,12 @@ prospects, no backups.
 | Day Shift (all workers) | office/skills/<own agent>/SKILL.md ("What I've learned" lines, or a proven rewrite of "Exact steps" after Sage's go), office/LESSONS.md, office/playbooks/, office/stages/day-shift/output/, office/runlog.jsonl |
 | Sage | the above plus office/skills/*/SKILL.md "Exact steps" (only when a workflow/<version> doc says adopted) |
 | Patch | the above plus index.html (a broken element only, after a 3-line plan and a before/after check; never copy, prices or the offer), office/health/ (site check outputs) |
-| Reply desk | nothing in the repo |
+| Reply desk | office/runlog.jsonl, office/gw/jobs/, office/cards/jobs/, office/stripe/jobs/ (guarantee, cancel, lookup), office/alerts/ (emailed flags), data/founding.json (spotsLeft only), office/landing/ + p/<slug>/ (Pro lead pages) |
+| Day Shift 09 (Clients) | the Day Shift paths plus office/gw/jobs/, office/leadfinder/jobs/, office/landing/ + p/<slug>/, office/studio/out/clients/ |
 | Server work (only when Grayson asks for it in chat) | office/server/ |
 
+Never write a client's or a lead's email, name or customer list into any job file: jobs carry
+town + trade, an opaque Stripe session id, or a salted hash (office/stripe/stripe_ops.py --hash).
 Never touch: `.github/`, `office/page/` (backups), `office/shared/` and `office/specs/` (Grayson's
 standing orders; propose changes as a NEEDS YOU line), CNAME, any secret, any file that belongs
 to another crew. Never force-push, never reset, never delete a folder.

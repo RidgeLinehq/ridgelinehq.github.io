@@ -61,10 +61,12 @@ Three fixes I'd make first:
 2. <fix>
 3. <fix>
 
-If you'd rather have it done for you: founding rate $147 a month for the first 3 months, then
-$197, month to month, cancel anytime, setup fee waived. If you don't gain 15 real Google
-reviews in 60 days, month three is free (terms: https://ridgelinehq.github.io/guarantee.html).
-Start here: <settings.stripeUrl>
+If you'd rather have it done for you: plans start at $75 a month, month to month. Most
+businesses pick Growth ($125): we fix all of the above and send you leads, and if your first
+month brings zero tracked leads and no improvement in your AI visibility, your second month is
+free (terms: https://ridgelinehq.github.io/guarantee.html). [Only if data/founding.json
+spotsLeft > 0: "<N> founding spots left: the first 20 clients keep their price for life."]
+See the plans: https://ridgelinehq.github.io/#pricing
 
 Or just reply with any question.
 
@@ -84,8 +86,9 @@ Ran your check. I asked ChatGPT and Gemini "Who are the best <trade phrase> in <
 ChatGPT named <1>, <2>, <3>. Gemini named <1>, <2>, <3>. <Business> was <named by
 both|named by ChatGPT only|named by Gemini only|not named by either>.
 Three things I'd fix first: <fix 1 short>; <fix 2 short>; <fix 3 short>.
-I can do all of it for $147/mo (first 3 months, then $197), month to month, and if you don't
-get 15 real Google reviews in 60 days, month 3 is free. Want me to start?
+I can fix all of it from $75/mo, month to month. Growth ($125/mo) also sends you leads, and if
+the first month brings zero tracked leads and no AI improvement, month 2 is free. Plans:
+ridgelinehq.github.io/#pricing. Want me to start?
 ```
 
 ## Record (the page reads these)

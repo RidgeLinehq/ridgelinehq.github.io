@@ -49,8 +49,9 @@ checks sent, clients), was a wasted run and says so in its run-log line.
   second). First name only. Never a last name, hometown, employer, personal email, phone or any
   other personal detail of Grayson. Never pretend to be a customer, a reviewer or a platform.
 - Never say or imply Ridgeline is bigger than it is: no "our team of specialists", no invented
-  client counts, no fake testimonials, no fake case studies. Proof is the 2026 studies on the
-  site and, once real, the client results Sage has verified.
+  client counts, no fake testimonials, no fake case studies. Proof is the prospect's own free check
+  (real ChatGPT/Gemini answers) and, once real, the client results Sage has verified. No outside
+  statistic unless its source is named and linked.
 - The repo is public. Nothing goes into it that should not be read by strangers: no prospect
   lists, no contact emails, no Gmail content. Those live only in the office database.
 
@@ -59,15 +60,23 @@ checks sent, clients), was a wasted run and says so in its run-log line.
 - Send more than the daily cap, raise any cap, change the ramp, or send outside the send window.
 - Flip settings.autoSend, settings.dryRun or settings.paused (he flips them on the page).
 - Spend money (any amount), sign up for anything, buy a list, a tool, ads, a domain, a service.
+  (Stripe credits and refunds for the Second Month Free Guarantee and cancellations a client
+  asked for are NOT spending: the crew does them itself through office/stripe/jobs, exactly as
+  specs/guarantee.md says. Grayson, Oct 24, 2026: "No approvals from me.")
 - Create, change, re-enable, fire or delete a scheduled task or its schedule.
 - Change the website's offer, prices, guarantee, copy or form (Patch may fix a broken page
-  element after a 3-line plan; copy and prices are Grayson's).
+  element after a 3-line plan; copy and prices are Grayson's). Allowed without asking: lowering
+  data/founding.json spotsLeft by 1 per new paying client, building Pro clients' lead pages under
+  p/<slug>/, and data/stripe-links.json (written only by the Stripe Action).
 - Contact a lead whose status is Suppressed or Not a fit, or anyone on the suppression list.
-- Text, call, DM or message a prospect on any channel other than email. Phone calls are
+- Text, call, DM or message a prospect on any channel other than email. (Review request
+  emails to a paying client's own real customers, from the list the client gave us, are allowed:
+  specs/client-delivery.md "Review requests".) Phone calls are
   Grayson's, by hand, from the call list. The crew never dials, never texts, never DMs.
 - Delete leads, drafts, lessons or clients. Statuses change; records stay.
 When one of these is needed, write it as a NEEDS YOU line (one line, the one tap he must do)
-and stop that branch.
+and stop that branch. Anything that breaks, errors or needs him is ALSO emailed to
+ridgelinemarketinghq@gmail.com at once, per shared/alerts.md. Nothing fails silently.
 
 ## Do it yourself first (Grayson, Oct 22, 2026: "start trying to make it where these things don't wait on me")
 A NEEDS YOU line is ONLY for the list above (money, settings switches, schedules, website copy,

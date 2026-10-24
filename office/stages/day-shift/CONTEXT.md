@@ -76,7 +76,7 @@ only, no prose padding.
 | 06 | `specs/email-rules.md` ("Reply handling"), `skills/sage/SKILL.md`, `LESSONS.md`, `references/database-fields.md` (lessons, workflow, clients) |
 | 07 | `skills/patch/SKILL.md`, `shared/repo.md` ("Write paths"), `references/database-fields.md` (health) |
 | 08 | `skills/mara/SKILL.md`, `shared/logging.md`, `shared/repo.md` ("Committing"), `specs/push-week-2026-10-23.md` ("Scoreboard": the money line and the day's targets vs actual) |
-| 09 | `specs/client-delivery.md`, `specs/offer.md` (Included), `skills/echo/SKILL.md`, `skills/parker/SKILL.md` |
+| 09 | `specs/client-delivery.md`, `specs/lead-tracking.md`, `specs/offer.md` (The plans, Promises), `shared/gateway.md`, `shared/alerts.md`, `skills/echo/SKILL.md`, `skills/parker/SKILL.md` |
 
 Do NOT load: every skill, every spec, `office/server/`, `office/page/`, `index.html` (Patch
 fetches the live site instead). If a stage file cannot be read, stop that stage, write the run

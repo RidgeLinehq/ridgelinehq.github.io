@@ -11,8 +11,10 @@
 ## Process
 1. Crew doc working: "Checking the office".
 2. Site: WebFetch https://ridgelinehq.github.io (prompt: list the page title, whether the
-   pricing card shows $147, whether the Stripe link and the email ridgelinemarketinghq@gmail.com
-   appear, and any visible error). Also `curl -sI` the raw file for a 200 and the time taken.
+   pricing shows Starter $75, Growth $125 and Pro $199, whether the "Get my free AI check" button
+   and the email ridgelinemarketinghq@gmail.com appear, and any visible error). Also read
+   https://ridgelinehq.github.io/data/stripe-links.json: empty links = yellow "checkout not live
+   yet" until the STRIPE_SECRET_KEY secret exists, then red if still empty after 2 hours (alert). Also `curl -sI` the raw file for a 200 and the time taken.
    Missing price, link or email = red; slow or odd = yellow; fine = green. Record health.site.
    A broken element (not copy) that Patch can fix with a surgical edit: 3-line plan in the run
    doc, edit index.html, verify the raw file after push shows the fix; otherwise NEEDS YOU.

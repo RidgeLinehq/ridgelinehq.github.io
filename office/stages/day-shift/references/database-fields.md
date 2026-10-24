@@ -53,12 +53,29 @@
 {email, domain, businessName, reason, by, at}
 
 ## clients/<id>
-{leadId, businessName, town, state, contactEmail, plan:"founding"|"standard", monthly:147|197, startedAt,
- stripe:{customerEmail, lastPaymentAt, messageId}, reviewsAtStart, reviewsNow, managerAccess:bool,
- reviewLink, yelpClaimed:bool, work:[{item, status:"todo"|"drafted"|"done", t, draftId}], guarantee:{checkedAt, gained, met},
- reportDue, status:"active"|"paused"|"cancelled", notes, createdAt, updatedAt}
- Standard work items (the page shows them as ticks): welcome-sent, manager-access, review-link,
- profile-audit, buildout-plan, buildout-applied, review-kit, listing-fixes, yelp-claim, week-post, report-30
+{leadId, businessName, town, state, contactEmail, phone, services, googleProfile, slug,
+ plan:"starter"|"growth"|"pro", billing:"monthly"|"yearly", price, foundingLocked:bool, startedAt,
+ stripe:{customerEmail, lastPaymentAt, messageId, amount}, stripeSession:"cs_..."|"none",
+ aiQuestions:[{key, question}], baseline:{score, points, answers, jobId, at, detail},
+ aiTrend:[{at, score, jobId, named}], competitorsNow:[...],
+ guarantee:{checkedAt, leads, baselineScore, dayScore, owed, jobId, stripeJob, applied, appliedAt, what},
+ audit:{at, ...}, profileLog:[{at, field, before, after, source}], reviewsAtStart, reviewsNow:{count, at, source},
+ customers:[{email, firstName, addedAt, askedAt}] (never in the repo), fixesTried:[{at, fix, result}], flatAt,
+ managerAccess:bool, reviewLink, reviewCard, landing:{slug, url},
+ work:[{item, status:"todo"|"drafted"|"done", t, draftId}], reportDue,
+ status:"awaiting-onboarding"|"awaiting-payment"|"active"|"paused"|"cancelled", notes, createdAt, updatedAt}
+ Standard work items: welcome-sent, onboarding, baseline, manager-access, review-link,
+ profile-audit, buildout-plan, buildout-applied, review-kit, review-requests, lead-page (Pro),
+ week-post, report-<yyyy-mm>, jobcheck-<yyyy-mm>, video-<yyyy-mm> (Pro), guarantee (Growth/Pro)
+ (Clients from before Oct 24, 2026 on the $147 founding plan keep plan "founding" and the old
+ review-growth guarantee: 15 genuine Google reviews in 60 days or month 3 free.)
+
+## leadlog/<clientId>-<yyyymmdd>-<4 hex>
+specs/lead-tracking.md "The lead log" (source, sourceUrl, contact, summary, status, counted,
+sentToClientAt, sentGmailId, jobAnswer, notes). Never in the repo.
+
+## alerts/<key>
+{key, what, firstAt, lastAt, count, emailedAt, resolvedAt} (shared/alerts.md)
 
 ## lessons/<id>
 {title, observation, evidence, confidence:0-100, agent, predicted, observed, workflowVersion,

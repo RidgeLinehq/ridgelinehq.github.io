@@ -25,6 +25,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Answer every job without an output yet
+        id: ask
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -32,11 +33,13 @@ jobs:
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
         run: |
           python office/gw/aicheck.py --selftest
+          bad=0
           for f in office/gw/jobs/*.json; do
             [ -e "$f" ] || continue
             [ -e "office/gw/out/$(basename "$f")" ] && continue
-            python office/gw/aicheck.py "$f" office/gw/out
+            python office/gw/aicheck.py "$f" office/gw/out || bad=1
           done
+          echo "bad=$bad" >> "$GITHUB_OUTPUT"
       - name: Push the answers
         run: |
           git config user.name "ridgeline-actions"
@@ -44,3 +47,5 @@ jobs:
           git add office/gw/out
           git commit -m "AI check answers [skip ci]" || exit 0
           for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done
+      - name: Fail if ChatGPT and Gemini both failed (triggers the alert)
+        run: test "${{ steps.ask.outputs.bad }}" = "0"

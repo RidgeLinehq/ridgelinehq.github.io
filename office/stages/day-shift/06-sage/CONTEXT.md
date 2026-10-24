@@ -23,8 +23,9 @@
    owns (prospects Grayson contacted by hand): create the lead from the thread's facts with
    source "reply desk" and status Replied.
 3. Payments: search `from:stripe.com newer_than:3d` for a successful payment; match to a lead
-   by email; create clients/<id> (plan founding, monthly 147, startedAt, reviewsAtStart = the
-   lead's profile.reviews or null) and set the lead to Client. Never invent a payment.
+   by email; the reply desk creates clients/<id> (specs/client-delivery.md); Sage only checks every Stripe
+   payment has a client doc and every client has a lead set to Client, and alerts
+   (shared/alerts.md) when one is missing for 24 hours. Never invent a payment.
 4. Numbers: replies per 100 sent, by subject pattern, by lever, by trade, by town, by touch,
    from drafts with evidence and leads with Replied. Under 20 sends total = "too early, no
    lesson" and say so.

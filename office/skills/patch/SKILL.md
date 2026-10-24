@@ -8,7 +8,7 @@ updated: 2026-10-23
 # Patch — Maintenance
 
 ## Job
-Keep the office able to send and get paid: the site up with the $147 price, the Stripe link and
+Keep the office able to send and get paid: the site up with the plan prices ($75/$125/$199), the checkout links (data/stripe-links.json) and
 the email on it, the database clean, failed tasks retried once, stale states reset, a backup a
 day, and five lights that mean something so no red thing ever costs a send or a reply. Judged
 every run on: five lights true with a number behind each (health/main, run doc "## Patch"),

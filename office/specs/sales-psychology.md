@@ -7,16 +7,16 @@ real, the facts are real, and nothing is faked, because fake pressure is what ge
 blacklisted, gets refunds, and kills a small brand. Hard-hitting and honest beats hype.
 
 ## The owner we are selling to
-A roofer or tree-service owner in a town of 10,000 to 40,000. Reads email in the truck between
-jobs, on a phone, with a thumb. Gets 5 to 10 pitches a week from "marketing guys", most of them
+The owner of a local business (barber, salon, restaurant, gym, dentist, contractor, cleaner,
+auto shop...) in a town of 10,000 to 100,000. Reads email between customers, on a phone, with a thumb. Gets 5 to 10 pitches a week from "marketing guys", most of them
 garbage. Trusts his own eyes, his crew and other owners. Hates wasting money, hates being
 talked down to, respects straight talk and specifics. Has heard of ChatGPT; has probably never
 checked what it says about him. That gap is the whole sale.
 
 ## The ten levers (use several in every message; name them in the run doc)
 1. Their loss, first line. People move to stop losing more than to gain. Open with the
-   specific thing they are losing right now: "When someone in Cabot asks ChatGPT for a roofer,
-   it names Summit Peak, Oak & Stone and Northline. Not you." Name the real competitors Scout
+   specific thing they are losing right now: "When someone in Cabot asks ChatGPT for a barber,
+   it names <A>, <B> and <C>. Not you." (only names a real check returned) Name the real competitors Scout
    found. Never a generic "you might be missing out".
 2. Specificity is credibility. Their business name, their town, their review count, the exact
    thing missing from their profile ("your Google profile has 4 photos and no services listed").
@@ -27,22 +27,22 @@ checked what it says about him. That gap is the whole sale.
 4. Tiny ask. The first email asks for ONE thing: "Want me to send it?" or "What's the best
    email for the results?" Never ask for a call, a meeting or a sale in email one. Small yes
    now, bigger yes later.
-5. Proof over promises. Numbers from the 2026 studies on the site (45% of consumers used AI to
-   find a local business; AI-named businesses average 133 reviews vs 11; 1.2% of locations get
-   named by ChatGPT). Later, real client results Sage has verified. Never invented testimonials.
+5. Proof over promises. The proof is their own free check (what ChatGPT and Gemini actually
+   said, dated) and, later, real client results Sage has verified. No outside statistics unless
+   the source is named and linked. Never invented testimonials.
 6. Real scarcity, said plainly. Founding pricing is real and limited (settings.foundingSpots).
-   "I'm taking 10 founding clients at $147 instead of $197 and I'm at 3." When the number is
+   "The first 20 clients keep their price for life, and <N> spots are left" (N = data/founding.json spotsLeft). When the number is
    real, say it hard. When there is no real limit, say nothing about limits.
 7. Authority through evidence, not titles. We never claim to be an agency with a team. We show
    what ChatGPT actually said, the number, the fix. "Here's what AI says. Here's why. Here's the fix." The
    person who shows you the problem is the person you hire to fix it.
-8. Remove risk. The guarantee (15 genuine reviews in 60 days or month 3 free), month to month,
+8. Remove risk. The guarantee (Growth/Pro: zero tracked leads and no AI improvement in month 1 = month 2 free), month to month,
    cancel by replying to an email, no contract, no password. Say it once, late, when they are
    deciding, not in the opener.
 9. Momentum. Every message ends with the next step being one tap: reply "yes", open the link,
    add the manager. Never "let me know if you have any questions" (that is an end, not a step).
-10. Confident close. When they ask the price, give it and ask for the sale: "It's $147 a month
-    for the first three months. Want me to start Monday?" No apologizing for the price, no
+10. Confident close. When they ask the price, give it and ask for the sale: "Growth is $125 a
+    month, month to month. Want me to start today?" No apologizing for the price, no
     discount unless he offers one, no begging. If they say no, thank them and leave the door
     open in one line.
 
@@ -72,9 +72,9 @@ checked what it says about him. That gap is the whole sale.
 - No reply after 3 = Not a fit. Never a fourth email. Never a guilt trip.
 
 ## Subject lines (short, specific, honest; test two patterns per week, Sage scores them)
-- "what ChatGPT says about roofers in Cabot"
+- "what ChatGPT says about <trade plural> in <town>"
 - "<Business name> + ChatGPT"
-- "3 roofers ChatGPT recommends in Owasso (not you yet)"
+- "3 <trade plural> ChatGPT recommends in <town> (not you yet)"
 - "quick one about your Google profile"
 Lowercase and plain is fine; it reads like a person. Never ALL CAPS, never "RE:", never
 "URGENT", never a question that feels like a trick.

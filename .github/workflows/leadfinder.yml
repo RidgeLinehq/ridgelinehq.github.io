@@ -1,0 +1,47 @@
+name: Ridgeline lead finder
+
+# The office pushes office/leadfinder/jobs/<id>.json (town + kind of business, never a client name);
+# this searches public Reddit posts asking for a recommendation through the official Reddit API
+# and pushes office/leadfinder/out/<id>.json. Secrets: REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET.
+on:
+  push:
+    paths:
+      - "office/leadfinder/jobs/*.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: leadfinder
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Search
+        id: find
+        env:
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          REDDIT_USER_AGENT: ${{ vars.REDDIT_USER_AGENT }}
+        run: |
+          set +e
+          python office/leadfinder/finder.py
+          echo "exit=$?" >> "$GITHUB_OUTPUT"
+      - name: Push results
+        run: |
+          git config user.name "ridgeline-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add office/leadfinder/out
+          git diff --cached --quiet && exit 0
+          git commit -m "lead finder results [skip ci]"
+          for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && break; sleep 5; done
+      - name: Fail if the search failed (triggers the alert)
+        run: test "${{ steps.find.outputs.exit }}" = "0"

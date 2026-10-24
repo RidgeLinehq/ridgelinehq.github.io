@@ -93,10 +93,14 @@ def main(job_path, out_dir):
     json.dump(out, open(path, "w"), indent=1)
     oks = sum(r["chatgpt"]["ok"] for r in out["results"]), sum(r["gemini"]["ok"] for r in out["results"])
     print(f"{path}: {len(out['results'])} queries, chatgpt ok {oks[0]}, gemini ok {oks[1]}")
+    if out["results"] and oks[0] == 0 and oks[1] == 0:
+        print("BOTH TOOLS FAILED on every query:", out["results"][0]["chatgpt"].get("error"), "|", out["results"][0]["gemini"].get("error"))
+        return 2
+    return 0
 
 
 if __name__ == "__main__":
     if len(sys.argv) == 2 and sys.argv[1] == "--selftest":
         print("keys present:", {"openai": bool(OPENAI_KEY), "gemini": bool(GEMINI_KEY)})
         sys.exit(0)
-    main(sys.argv[1], sys.argv[2])
+    sys.exit(main(sys.argv[1], sys.argv[2]))
