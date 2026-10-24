@@ -141,3 +141,17 @@ phone calls) or a login only he can renew. Everything else the crew finishes its
   if the number did not move, tomorrow's change is bigger, not smaller.
 - Standing order for the week: `specs/push-week-2026-10-23.md` (Mara reads it at stage 00 and
   08; every worker's brief carries its one line for that worker).
+
+## Weekly grading (V8, Grayson, Oct 24, 2026)
+- Every agent's file starts with "My job is to make Grayson money. I'm judged on real results."
+  and ends with its dated "What I've learned" lines: a number, the one change for tomorrow, one
+  prediction with a number for the next run (graded first thing next run: hit or miss, and why).
+- Every Sunday, Mara (the Ridgeline commander) grades every agent on evidence in the Day Shift's
+  report: sent, replies, checks delivered, calls made, clients kept, with the numbers from the
+  database and the run log. Proven lessons move into the owning skill's checklist with the
+  evidence; a lesson a later number disproved is deleted; an agent whose predictions missed 3 runs
+  running gets its "Exact steps" rewritten from what actually worked (surgical edit, the stage
+  CONTEXT still wins). The grade is never a feeling; a line with no number is not a grade.
+- Notes on everything: every email, call, check, draft and post gets a line with its real result
+  where the stage's Outputs say (database.md "Shared log documents", the run log). The apps are
+  for work, not chat; Grayson chats in Claude.
