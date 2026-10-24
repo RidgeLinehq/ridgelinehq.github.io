@@ -30,6 +30,32 @@ coupon, and puts the links on the site by itself. It only needs your Stripe key,
 The key is stored encrypted in GitHub; the crew never sees or prints it. Until this is done,
 the plan buttons show "Email me my checkout link" and the crew replies to those emails.
 
+## 2b. INSTANT SERVER: free, answers forms in 1 to 3 minutes (about 10 minutes, once)
+Without this, free checks and new-client welcomes go out within the hour (the crew runs hourly).
+With it, they go out in 1 to 3 minutes, free, from your Ridgeline Gmail, 24/7. Do it on the phone
+in **desktop mode** (Safari: **aA → Request Desktop Website**), logged into the **Ridgeline Gmail**.
+
+You need two keys (they're new copies; the old ones stay where they are):
+- OpenAI: **platform.openai.com/api-keys** → **Create new secret key** → name `ridgeline-instant` → copy.
+- Gemini: **aistudio.google.com/apikey** → **Create API key** → copy.
+
+1. Open **script.google.com** → **New project**. Tap the title "Untitled project" and name it `Ridgeline Instant`.
+2. Open **https://raw.githubusercontent.com/RidgeLinehq/ridgelinehq.github.io/main/office/instant/Code.gs**,
+   long-press the text → **Select All** → **Copy**.
+3. Back in the script editor: tap into the code box, select all the sample code, and **Paste** over it. Tap the **save** icon (💾).
+4. Tap the **gear** icon (Project Settings) on the left → scroll to **Script properties** → **Add script property**:
+   - `OPENAI_API_KEY` = your OpenAI key
+   - `GEMINI_API_KEY` = your Gemini key
+   Tap **Save script properties**.
+5. Tap the **< >** icon (Editor). In the function menu at the top pick **setup**, tap **Run**.
+6. Google asks for permission: **Review permissions** → pick the Ridgeline Gmail → **Advanced** →
+   **Go to Ridgeline Instant (unsafe)** → **Allow**. ("Unsafe" just means you wrote it yourself and
+   Google hasn't reviewed it.)
+7. Done when you get an email **"✅ Ridgeline Instant is ON"**. From then on it checks every minute.
+
+If anything goes wrong it emails you "🚨 Ridgeline: instant server problem", and the hourly crew
+still handles everything, so nothing is lost.
+
 ## 3. Retire the old $147 link (1 minute, after step 2)
 1. Stripe → **Payment Links**. Tap the old **$147** link → **⋯ → Deactivate**.
    (The site and the crew no longer use it. Deactivating stops old emails from selling the old plan.)

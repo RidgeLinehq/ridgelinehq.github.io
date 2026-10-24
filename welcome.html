@@ -87,6 +87,8 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
       <div class="f"><label for="b">Business name</label><input id="b" required maxlength="120" autocomplete="organization"><div class="msg">Please add your business name.</div></div>
       <div class="f"><label for="gp">Google Business Profile link <span>(optional, but it helps)</span></label><input id="gp" type="url" inputmode="url" maxlength="300" placeholder="Paste the link from Google Maps → Share"><div class="msg">That doesn't look like a link.</div></div>
       <div class="f"><label for="ph">Business phone</label><input id="ph" type="tel" inputmode="tel" required maxlength="40" autocomplete="tel"><div class="msg">Please add a phone number.</div></div>
+      <div class="f"><label for="ty">What kind of business?</label><input id="ty" required maxlength="80" list="kinds" placeholder="e.g. barber, dentist, gym, plumber"><div class="msg">Please tell us what kind of business you are.</div>
+        <datalist id="kinds"><option value="Barber"><option value="Salon"><option value="Restaurant"><option value="Gym"><option value="Dentist"><option value="Contractor"><option value="Cleaning service"><option value="Auto shop"><option value="Plumber"><option value="HVAC"><option value="Med spa"><option value="Landscaping"><option value="Pet grooming"></datalist></div>
       <div class="f"><label for="sv">What do you do? <span>(your main services)</span></label><textarea id="sv" required maxlength="500" placeholder="e.g. haircuts, beard trims, kids cuts"></textarea><div class="msg">Please list your main services.</div></div>
       <div class="f"><label for="ct">City and state</label><input id="ct" required maxlength="100" placeholder="e.g. Tulsa, OK" autocomplete="address-level2"><div class="msg">Please add your city and state.</div></div>
       <div class="f"><label for="em">Email for reports and leads</label><input id="em" type="email" required maxlength="160" autocomplete="email" inputmode="email"><div class="msg">Please add an email we can reach you at.</div></div>
@@ -139,7 +141,7 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
   var plan=(q.get("plan")||"").toLowerCase(),billing=(q.get("billing")||"monthly").toLowerCase(),session=q.get("session_id")||"";
   if(plans[plan]){document.getElementById("planLine").textContent="Your plan: "+plans[plan].replace("/month",billing==="yearly"?"/month, billed yearly":"/month")+". Month to month. Cancel anytime by replying to any email."}
   var $=function(id){return document.getElementById(id)};
-  var req=["b","ph","sv","ct","em"];
+  var req=["b","ty","ph","sv","ct","em"];
   function val(){
     var good=true;
     req.concat(["gp"]).forEach(function(id){
@@ -151,7 +153,7 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
   }
   $("ob").addEventListener("submit",function(e){
     e.preventDefault();if(!val())return;
-    var d={business:$("b").value,google_profile:$("gp").value||"Not given",phone:$("ph").value,services:$("sv").value,city:$("ct").value,email:$("em").value,plan:plan||"unknown",billing:billing,stripe_session:session||"none"};
+    var d={business:$("b").value,type_of_business:$("ty").value,google_profile:$("gp").value||"Not given",phone:$("ph").value,services:$("sv").value,city:$("ct").value,email:$("em").value,plan:plan||"unknown",billing:billing,stripe_session:session||"none"};
     var subject="Onboarding — "+d.business;
     var text=Object.keys(d).map(function(k){return k+": "+d[k]}).join("\n");
     $("go").disabled=true;$("go").textContent="Sending…";

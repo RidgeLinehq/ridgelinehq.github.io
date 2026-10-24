@@ -31,6 +31,23 @@ before updating it and pass if_version). Day key = TZ=America/Chicago date +%F.
    set emailed true, commit, push. A Stripe out file (office/stripe/out/*) with ok false that has
    no alerts doc yet → alert now. If the repo can't be pulled, that is itself an alert email.
 1. settings.paused true → do nothing else this run, say so in the run-log line.
+1b. RIDGELINE INSTANT (the free Apps Script server in this Gmail, office/instant/Code.gs) answers
+   free-check and onboarding forms within minutes and labels the form thread RL-Instant-Sent (or
+   RL-Instant-Failed). It emails this inbox an "RL-INSTANT-LOG <kind> — <business>" copy with JSON.
+   - Search `subject:"RL-INSTANT-LOG" newer_than:3d -label:Ridgeline-Handled` FIRST. For each:
+     freecheck → record the lead, freeCheck {status "sent", by "ridgeline-instant"}, aiCheck from
+     the JSON, status Meeting, drafts kind freecheck sent (evidence: the sent email in Sent mail to
+     that address); onboarding → create/update the client from the JSON (facts, plan, billing,
+     stripeSession, aiQuestions = questions, baseline = baseline, aiTrend [baseline]); work items
+     welcome-sent + onboarding + baseline done; then do everything else in Lane C step 3 that the
+     JSON doesn't cover (founding counter, first delivery: profile fixes + review kit, Pro page).
+     Label the log thread Ridgeline-Handled. NEVER re-send a check or welcome that Instant sent.
+   - Form threads labeled RL-Instant-Sent: already answered; only record (above) and label handled.
+   - Form threads labeled RL-Instant-Failed: handle normally (Lane A/B/C) through the gateway.
+   - A free-check or onboarding form thread older than 10 minutes with NEITHER label: Instant is
+     down. Handle it normally AND alert (key instant-down-<day>): "Instant server isn't answering
+     forms: open script.google.com → Ridgeline Instant → Executions, or tell Claude: fix the
+     instant server." If onboarding JSON baseline is null, run the baseline through the gateway.
 2. Make sure the Gmail label "Ridgeline-Handled" exists (create it once).
 3. Suppression list in memory: never email an address, domain or business on it (except a
    client's own service emails).
@@ -109,7 +126,7 @@ Search `(from:stripe.com OR subject:"Onboarding —") newer_than:7d -label:Ridge
    month to month, "Fill in this 2-minute form so we can start: https://ridgelinehq.github.io/welcome.html?plan=<plan>&billing=<billing>",
    that their starting AI visibility score comes right after, and (Growth/Pro) one line on the
    guarantee with its link. Label the Stripe thread.
-2. "Onboarding — <business>" email (FormSubmit; fields business, google_profile, phone,
+2. "Onboarding — <business>" email (FormSubmit; fields business, type_of_business, google_profile, phone,
    services, city, email, plan, billing, stripe_session): match to the client by email (or
    create the client if the payment email hasn't arrived yet: status "awaiting-payment"; it
    becomes active when the payment arrives; never start paid work before a payment is seen).
