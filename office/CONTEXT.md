@@ -9,6 +9,7 @@ until that folder's CONTEXT.md tells you to.
 | Ridgeline · reply desk | `stages/reply-desk/` | Every 2 hours, every day: answers prospect replies, runs and sends the free AI check in the same run, welcomes paying clients, emails the crew's client work (`stages/reply-desk/CONTEXT.md`) |
 | The week's standing order (Oct 23-30, 2026) | `specs/push-week-2026-10-23.md` | Mission numbers, daily targets per agent, the scoreboard, Grayson's taps; Mara loads it at stages 00 and 08 |
 | A task assigned from the office page (tasks collection, status queued) | `stages/day-shift/CONTEXT.md` section "Assigned tasks" | Grayson queued a one-off job for a named agent |
+| A tap on the Calls screen (lead.followUp pending) | `stages/reply-desk/CONTEXT.md` Lane G | Grayson called a business; the desk sends the free check (and the offer) within 2 hours. The call words live in `office/call_kit/` |
 
 ## The crew (8 agents, one skill file each in `skills/`)
 

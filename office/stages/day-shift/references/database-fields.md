@@ -28,7 +28,13 @@
  angle:{lever, hook, detail, by:"parker", at},
  status:"New"|"Researching"|"Qualified"|"Contacted"|"Replied"|"Meeting"|"Client"|"Not a fit"|"Suppressed",
  touches:[{n, t, channel:"email"|"call"|"voicemail", draftId, gmailMessageId, threadId, note}],
- nextTouchAt, gmailThreadId, replyGist, calls:[{t, outcome, note, nextAt}],
+ nextTouchAt, gmailThreadId, replyGist, calls:[{t, who, outcome, note, nextAt}],
+ callRank, callWindow, aiResultLine (Quinn via office/call_kit/call_kit.py --rank),
+ nextCallAt (ISO; a call-back the page or the desk scheduled), callDone (true after 3 no-answers),
+ followUp:{kind:"email_ai_check"|"email_ai_check_plus_offer"|"retry_call"|"schedule_call"|"close_lead",
+   status:"pending"|"done"|"blocked", requestedAt, doneAt, email, withOffer, note, by:"calls screen"},
+ freeCheck:{requestedAt, requestedBy:"call"|"reply"|"form"|"grayson", toEmail, withOffer, sentAt, gmailMessageId, threadId, jobId, status, fixes, by},
+ offerSentAt,
  notes, source:"scout <day>", runId, createdAt, updatedAt}
 
 ## drafts/<id>
