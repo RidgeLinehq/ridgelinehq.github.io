@@ -28,8 +28,9 @@ found, new, with email, readable); 15 new and 5 with an email are the push-week 
       in a result snippet counts; record that result's URL as emailSource).
    b. Chamber of commerce member directory: search `<town> chamber of commerce <trade>` and
       `<town> chamber members <business name>` (Owasso Chamber, Cabot Chamber, South Baldwin
-      Chamber for Foley). Member pages often print email + website; fetch the member page only
-      when a result shows its URL.
+      Chamber for Foley). Fetch a member page only when a result shows its URL. Tested 2026-10-25:
+      South Baldwin Chamber pages show phones but hide emails behind a "Send an Email" form
+      (never use the form); use them for phone + website name, then search that site name.
    c. Public profiles that load: `"<business name>" <town> facebook` (use the About text in the
       result snippet only; never log in, never open a login wall), Yellow Pages listing,
       Manta, chamberofcommerce.com, HomeGuide, The Builder Market.
