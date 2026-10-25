@@ -35,7 +35,7 @@ LINKS = os.path.join(ROOT, "data", "stripe-links.json")
 JOBS = os.path.join(ROOT, "office", "stripe", "jobs")
 OUT = os.path.join(ROOT, "office", "stripe", "out")
 COUPON = "rl-second-month-free"
-TERMS_TEXT = "By subscribing you agree to the Ridgeline Local Terms (ridgelinehq.github.io/terms.html). All payments are final and non-refundable; cancel anytime by replying \"cancel\" to any email to stop future charges."
+TERMS_TEXT = "By subscribing you agree to the Ridgeline Local Terms (ridgelinehq.github.io/terms.html). Payments are non-refundable except mistaken charges and the Second Month Free Guarantee on Growth and Pro. Cancel anytime by replying \"cancel\" to any email."
 
 PLANS = {
     "starter": {"name": "Ridgeline Local Starter", "monthly": 7500, "yearly": 75000,
