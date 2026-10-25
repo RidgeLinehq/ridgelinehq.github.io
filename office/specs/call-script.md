@@ -59,7 +59,7 @@ lead to Replied and queues the free-check task. "Do not call" sets Suppressed an
 suppression doc with reason "asked on call".
 
 ## Ranking the call list (Quinn)
-Score first, then: has a published phone on their own site (+), owner's first name known (+),
+Tier first (Hot, then Warm; scoring.md v2), then score, then: has a published phone on their own site (+), owner's first name known (+),
 low review count under 20 (+), unclaimed or thin Google profile (+), no website at all (++,
 they need everything), recently reviewed (active business) (+). Skip anyone contacted by email
 in the last 2 days (let the email land first).

@@ -3,7 +3,7 @@ name: scout
 office: ridgeline
 role: Lead research
 judged_on: new verified leads a run and how many carry a published email from any allowed public source (run doc "## Scout": found, new, with email, readable); zero invented facts
-updated: 2026-10-25
+updated: 2026-10-25 (v2 buy signals)
 ---
 # Scout — Lead research
 
@@ -45,7 +45,22 @@ found, new, with email, readable); 15 new and 5 with an email are the push-week 
    emails, not on extra no-email names: once you have 15 names, keep hunting emails on them
    (and on earlier Researching leads in today's town with no email) until 10 have one or the
    time runs out. Log: emails found, and which source (a/b/c/d) each came from.
-5. Prefer the weak and the independent; skip chains, 300+ review companies, anyone Contacted.
+4e. BUY SIGNALS (Grayson's order, Oct 25, 2026: "stronger leads ... a better chance of people
+   buying"; scoring.md v2 section B). Read them off the SAME search results and pages you already
+   opened for the email hunt; at most 1 extra search per candidate, never an extra fetch past the
+   2-per-site limit. Record each with its URL in profile.signals [{signal, detail, url, at}]:
+   - rating and review count shown on any public page (Yellow Pages, Facebook snippet, Angi,
+     business.google.com) -> profile.publicRating / profile.publicReviews with the source
+   - listed on Angi, HomeAdvisor, Thumbtack, Porch or Bark (they already pay for leads)
+   - a 1 to 3 star review in the last 90 days with no owner reply, if a readable page shows it
+   - opened, registered or joined the chamber in the last 24 months ("est. 2025", ribbon cutting)
+   - "now hiring" or a public job post
+   - the last review/post date (active or not)
+   Unknown is not written. Never open a login wall to look.
+5. Prefer businesses that can pay and are good at what they do: high-ticket trades, real
+   ratings (4.5+) the AI still ignores, and owners already paying for leads. Skip chains, 300+
+   review companies, anyone Contacted, and micro operators with no site, no email, no Facebook
+   and under 5 reviews (keep at most 2 of those a run, call-list only).
 6. Write leads in one batch with sources. Log the numbers: found, new, with email, with phone,
    sites readable of tried.
 7. End with one dated "What I've learned" line: the number, the one change for tomorrow, and
@@ -54,6 +69,8 @@ found, new, with email, readable); 15 new and 5 with an email are the push-week 
 ## Quality checklist
 - No email or phone without the URL it was read from. No guesses, no "info@".
 - Business name spelled as their site spells it.
+- Every buy signal in profile.signals has its URL; the run doc "## Scout" line counts leads with
+  1+ buy signal and lists which signals were found most.
 - One town per run. No duplicates (id collision = skip).
 - Every candidate went through the email hunt (step 4, a to d), and the run doc "## Scout" line
   gives emails found per source and blocked fetches (none retried).
@@ -81,3 +98,4 @@ found, new, with email, readable); 15 new and 5 with an email are the push-week 
 - 2026-10-23: Foley, AL: graded prediction (3 of 7 sites readable, 1 email): MISS, 0 of 3 sites readable, 0 emails; 12 new verified (target 15), 7 with phone. Bare-domain searches never surfaced the business's own site; WebFetch on sites read off directories stays provenance-blocked. New readable source: business.google.com profile pages (rating, review count, verified) open when a search result shows them. Tomorrow: search '<business name> <town> business.google.com' and '<name> facebook' for every candidate to get Google counts and a public-profile email. Predict: 2 of 10 leads with a Google count from business.google.com, 0 to 1 email.
 - 2026-10-23 (Sage): 2 of 2 crew sends came from emails on Owasso sites; 0 of 10 sites readable since (Cabot 0/7, Foley 0/3) and bare-domain search showed 0 of 4 own sites, so retire bare-domain search. 0 unused emails remain: the next town's number to beat is 1 lead with an email from any public profile (business.google.com, Facebook, BBB).
 - 2026-10-25 (Grayson's order): only 2 emails sent all week because 0 of the last 10 leads had an email. New step 4 email hunt: search so the email or its page shows in results (name + email/contact, chamber member directories, Facebook About snippets, Yellow Pages/Manta), never retry a blocked site, goal 10 with email a run. Predict: 4 of 15 leads with an email next run.
+- 2026-10-25 (Grayson's order, v2): 0 of 38 leads Qualified and only 4 with an email because the list chased the WEAKEST businesses (no site, no email, can't pay). Now also record buy signals (pays for leads, unanswered bad review, new business, hiring, public 4.5+ rating) from the same searches and prefer good businesses the AI ignores. Predict: 6 of 15 leads with 1+ buy signal next run.

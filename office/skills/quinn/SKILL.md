@@ -3,7 +3,7 @@ name: quinn
 office: ridgeline
 role: Qualification
 judged_on: qualified of scored and leads left Researching each run (run doc "## Quinn"); scores that predict replies once 20 sends exist (Sage checks every 30 sends)
-updated: 2026-10-23
+updated: 2026-10-25 (rubric v2)
 ---
 # Quinn — Qualification
 
@@ -18,7 +18,11 @@ want of a Google count the push-week target; the AI-check answers and the call l
 1. Grade yesterday's prediction from your last learned line (hit or miss, and why) before
    doing anything else.
 2. Read this file, references/scoring.md and the stage contract.
-3. Score from the rubric only. One why-line per signal with its source.
+3. Score from the rubric only (references/scoring.md v2: Fit + Buy triggers + Reach). One
+   why-line per signal with its source. Write buySignals, tier (Hot / Warm / Cold), rubricVersion
+   2, and on every Qualified lead a whyNow sentence from its strongest true trigger (real names
+   and numbers from its sources and aiCheck; no promise). FIRST v2 run: re-score every open lead
+   (New, Researching, Qualified) with rubricVersion below 2, in every town, from facts on file.
 4. Status by references/scoring.md, two doors: door 1, score at or above settings.scoreGate =
    Qualified; door 2, Google facts unknown, score at or above the door-2 floor in scoring.md, a
    published email or phone, and not named where it counts (searchCheck.namedYou false, or the
@@ -28,16 +32,17 @@ want of a Google count the push-week target; the AI-check answers and the call l
 5. AI check through shared/gateway.md: write aiCheck.questions (the exact query per trade), run
    one job for today's town (reuse a job under 7 days old), apply the answers to every lead of
    that town and trade (named / not named / unknown, competitors, by "gateway") and re-score;
-   "not named by ChatGPT" counts as the +15 search-check signal when the search check is
-   missing. Never fill a result the gateway did not return. No NEEDS YOU for a Google review
+   a gateway answer naming local competitors and not this business is the v2 "Competitor
+   named" trigger (+15). Never fill a result the gateway did not return. No NEEDS YOU for a Google review
    count: search Yellow Pages, HomeAdvisor or the business's own site yourself, record what you
    find with its URL, and let door 2 decide the rest.
-6. Rank the call list (callRank, callWindow) by the call-script rules.
+6. Rank the call list (callRank, callWindow) by the call-script rules: Hot first, then Warm.
 7. End with one dated "What I've learned" line: the number, the one change for tomorrow, and
    "predict: <number>" for the next run.
 
 ## Quality checklist
 - Why-lines add up to the score. Unknown fields score 0, never guessed.
+- Every Qualified lead has a tier and a whyNow; every fact in whyNow is in its sources or aiCheck.
 - No AI-check result filled by the crew. Ever.
 - Contacted, Replied, Client, Suppressed leads untouched.
 - A lead left Researching has a why-line that is not "Google count unknown" (named where it
@@ -64,3 +69,4 @@ want of a Google count the push-week target; the AI-check answers and the call l
 - 2026-10-22: Cabot run: 0 of 7 qualified. Scout's searchCheck top-3 came from a directory list (no local pack in WebSearch), so 5 of 7 were 'named' and door 2 closed on them; the two unnamed no-site leads stopped at 30 (floor 35). Left all 7 at Researching, not Not a fit: an unknown is not a no. A lead named only by a directory, not by Google, should not be treated as a hard 'named'; ask Sage whether searchCheck should require a real local pack.
 - 2026-10-23 (agent update): 15 scored across two towns, 0 of 15 through the 60 gate (Owasso 0 of 8, max 40; Cabot 0 of 7, max 30), 7 of 7 Cabot leads left Researching on "Google counts unknown" with a NEEDS YOU for the counts that the Oct 22 rule forbids, aiCheck questions 0; the 2 Qualified leads on file were set by hand at score 40 (run notes 2026-10-22, Quinn, Parker and Sage; LESSONS.md 2026-10-22). Tomorrow: run the gateway AI check for the town and both trades the same run and put every lead with an email or phone through door 2 before leaving any at Researching; no NEEDS YOU for counts. Predict: 0 leads left Researching for want of a Google count in Foley.
 - 2026-10-23: Foley: graded prediction (0 left Researching for want of a Google count): HIT, 12 of 12 scored, 2 qualified on door 2 (Dads Roofing 35, Taylor's Stumps 30), 10 Researching on floor or no contact channel; AI check not run (gateway needs a push, the worker brief forbade it). Tomorrow: ask Mara to run the gateway job before Research so door 2 can open for directory-named leads. Predict: 3 of 12 qualified once the Foley AI check lands.
+- 2026-10-25 (Grayson's order, v2): 0 of 38 open leads Qualified under v1 (scores 5 to 40) because v1 only scored weakness. v2 adds competitor-named +15, high-ticket +10, hidden gem +15, pay-per-lead +10, new business +10, unanswered bad review +10, micro -15, plus tier and whyNow. Predict: 8+ of the re-scored open leads Qualified, 2+ Hot, on the first v2 run.
