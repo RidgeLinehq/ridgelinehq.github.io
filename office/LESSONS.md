@@ -16,3 +16,8 @@ skills/<agent>/SKILL.md first. Nothing here without evidence.
   Foley 0/3), 0 emails in 19 new leads, and bare-domain search showed 0 of 4 own sites. Ready
   emails left after today: 0, so the next send day starts at 0 of 10. Replies: 0 of 10 sends
   (2 crew, 8 hand), under 20, no reply lesson.
+- 2026-10-26 (Sage): The new email hunt (Oct 25 step 4) found 0 of 15 emails on its first
+  run (Foley); since Owasso (3 of 8) the email towns gave 0 emails in 34 new leads and own
+  sites were readable 1 of 17. Next send day can start 0 of 10 first touches. Enrichment pass
+  0b has not run yet: it is the one source left untried. Replies: 0 of 10 sends (2 crew, 8
+  hand), under 20, no reply lesson. Calls: 8 logged, 0 interested, under 20, no call lesson.
