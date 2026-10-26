@@ -1,0 +1,46 @@
+{
+ "id": "aicheck-2026-10-26-elizabethtown-8038",
+ "at": "2026-10-26T19:52:12Z",
+ "results": [
+  {
+   "key": "elizabethtown-ky-auto-repair-shops",
+   "question": "Who are the best auto repair shops in Elizabethtown, KY?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were a local homeowner trying to pick a \u201ccar guy,\u201d I\u2019d start with these:\n\n- **All Around Auto Care** \u2014 my first call for general repair/maintenance. It shows very strong local ratings: 5.0/203 on one directory and 4.9/73 verified CARFAX reviews. ([autorepairdirectories.com](https://www.autorepairdirectories.com/kentucky/elizabethtown?utm_source=openai))  \n- **Charlie\u2019s Service Center** \u2014 good pick for routine maintenance or bigger repairs; their own site says they handle \u201cregular maintenance\u201d and \u201cmajor services,\u201d and review directories show high ratings. ([charliesservicectr.net](https://charliesservicectr.net/services?utm_source=openai))  \n- **A&M Automotive Solutions** \u2014 another solid independent shop, listed around 4.8 stars with 100+ reviews in local auto-repair directories. ([reviews.birdeye.com](https://reviews.birdeye.com/d/auto-repair/elizabethtown-ky/?utm_source=openai))  \n- **John Ray & Sons Automotive** \u2014 worth calling if the others are booked; directories list it as a recommended 4.8-star shop with 100+ reviews. ([autorepairdirectories.com](https://www.autorepairdirectories.com/kentucky/elizabethtown?utm_source=openai))  \n- **Carl\u2019s Auto Care & Towing** \u2014 best fit if the vehicle may need a tow plus repair; their site says they\u2019ve served Elizabethtown since 1978 and offer full-service repair/towing. ([carlsautocareelizabethtown.com](https://www.carlsautocareelizabethtown.com/?utm_source=openai))  \n\nI\u2019d call two, describe the symptoms, and compare diagnostic fees and warranty.",
+    "sources": [
+     {
+      "url": "https://www.autorepairdirectories.com/kentucky/elizabethtown?utm_source=openai",
+      "title": "Auto Repair Shops in Elizabethtown, Kentucky | Auto Repair Directories | AutoRepairDirectories.com"
+     },
+     {
+      "url": "https://charliesservicectr.net/services?utm_source=openai",
+      "title": "Charlie's Service Center - Auto Repair, Mechanic Shop, Car Repair"
+     },
+     {
+      "url": "https://reviews.birdeye.com/d/auto-repair/elizabethtown-ky/?utm_source=openai",
+      "title": "Top Auto Repair Companies in Elizabethtown, KY | Birdeye"
+     },
+     {
+      "url": "https://www.autorepairdirectories.com/kentucky/elizabethtown?utm_source=openai",
+      "title": "Auto Repair Shops in Elizabethtown, Kentucky | Auto Repair Directories | AutoRepairDirectories.com"
+     },
+     {
+      "url": "https://www.carlsautocareelizabethtown.com/?utm_source=openai",
+      "title": "Auto Repair & Towing Service | Elizabethtown, KY | Carl's"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me where to take their car in E-town, these are the three local, independent shops I\u2019d recommend:\n\n**1. Ponder Auto Repair**  \nPonder is locally legendary for honesty and thoroughness. They do digital inspections, send you photos of what actually needs fixing, and never push unnecessary upsells. They're ideal for tricky diagnostic issues or major repairs.\n\n**2. Glines Auto Repair**  \nA longtime staple in town, Glines is the place you go for straightforward, fair pricing and fast service. The mechanics are straight shooters, making them my top pick for routine maintenance, brakes, and general repairs.\n\n**3. S&S Transmission & Auto Repair**  \nDon't let the name fool you\u2014they handle full bumper-to-bumper service. They have a reputation for standing behind their work, giving accurate quotes, and fixing complex engine or drivetrain issues right the first time. \n\n**Neighborly Advice:** Because these shops have built such strong community trust, they stay busy. Call a few days in advance to book an appointment rather than dropping off unannounced!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
