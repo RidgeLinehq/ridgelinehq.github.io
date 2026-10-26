@@ -1,0 +1,46 @@
+{
+ "id": "aicheck-2026-10-26-poplar-bluff-dabd",
+ "at": "2026-10-26T20:08:37Z",
+ "results": [
+  {
+   "key": "poplar-bluff-mo-auto-repair",
+   "question": "Who are the best auto repair shops in Poplar Bluff, MO?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If it were my family car in Poplar Bluff, I\u2019d start with these:\n\n1. **Plaza Tire Service \u2013 1036 W Pine St.** Best all-around pick for tires, brakes, alignment, oil changes, and quick turnaround; it shows strong review volume/rating locally. ([loc8nearme.com](https://www.loc8nearme.com/missouri/poplar-bluff/auto-repair/?utm_source=openai))\n\n2. **Christian Automotive & Tire \u2013 2235 S Westwood Blvd.** Good \u201cone shop\u201d option for bumper-to-bumper work; they advertise ASE-certified mechanics and handle tires, wheels, and auto repair. ([christianautotire.com](https://www.christianautotire.com/?utm_source=openai))\n\n3. **Barker\u2019s Towing & Auto Repair.** I\u2019d use them if the car may need a tow plus repair\u2014review sites consistently list them highly for both. ([reviews.birdeye.com](https://reviews.birdeye.com/barkers-towing-auto-repair-156045601623868?utm_source=openai))\n\n4. **Richard\u2019s Roadware \u2013 515 Washington St.** Worth calling for general repair and tire-related help; local review summaries highlight long-time customer satisfaction. ([loc8nearme.com](https://www.loc8nearme.com/missouri/poplar-bluff/richards-roadware-llc/4311270/?utm_source=openai))\n\n5. **Matt\u2019s Auto \u2013 1637 State Hwy AA.** Smaller independent shop with solid ratings; good candidate for a second estimate on repairs. ([reviews.birdeye.com](https://reviews.birdeye.com/d/auto-repair/poplar-bluff-mo/?utm_source=openai))\n\nFor bigger jobs, get a written estimate and ask what parts/labor warranty they offer.",
+    "sources": [
+     {
+      "url": "https://www.loc8nearme.com/missouri/poplar-bluff/auto-repair/?utm_source=openai",
+      "title": "Auto Repair in Poplar Bluff, MO with Ratings, Reviews, Hours and Locations - Loc8NearMe"
+     },
+     {
+      "url": "https://www.christianautotire.com/?utm_source=openai",
+      "title": "Christian Automotive & Tire :: Poplar Bluff MO Tires & Auto Repair Shop"
+     },
+     {
+      "url": "https://reviews.birdeye.com/barkers-towing-auto-repair-156045601623868?utm_source=openai",
+      "title": "Barker's Towing & Auto Repair - 174 Reviews - Automotive in Poplar Bluff, MO - Birdeye"
+     },
+     {
+      "url": "https://www.loc8nearme.com/missouri/poplar-bluff/richards-roadware-llc/4311270/?utm_source=openai",
+      "title": "RICHARD'S ROADWARE LLC - Poplar Bluff MO - Hours, Directions, Reviews - Loc8NearMe"
+     },
+     {
+      "url": "https://reviews.birdeye.com/d/auto-repair/poplar-bluff-mo/?utm_source=openai",
+      "title": "Top Auto Repair Companies in Poplar Bluff, MO | Birdeye"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me where to take their car in Poplar Bluff, these are the top three local shops I\u2019d recommend:\n\n1. **Stancil\u2019s Auto Repair**: Known around town for honest, straightforward service. They excel at engine diagnostics and general repairs. They won't upsell you on unnecessary parts, and their prices are very fair. \n\n2. **M & M Automotive**: Excellent for comprehensive, bumper-to-bumper repairs. The mechanics here are experienced and take the time to explain what\u2019s wrong in plain English. They're reliable, thorough, and stand firmly behind their work.\n\n3. **Bargain Barn Tire & Auto**: My top pick for tires, brakes, suspension work, and routine maintenance (like oil changes). They are fast, reasonably priced, and run by friendly folks who treat you like family. It\u2019s the perfect spot for everyday car care.\n\n**Tip:** Try to call ahead for an appointment at any of these spots\u2014they stay busy because the locals trust them!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
