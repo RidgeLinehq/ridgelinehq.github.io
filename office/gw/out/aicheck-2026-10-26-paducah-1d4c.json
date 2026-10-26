@@ -1,0 +1,46 @@
+{
+ "id": "aicheck-2026-10-26-paducah-1d4c",
+ "at": "2026-10-26T20:20:46Z",
+ "results": [
+  {
+   "key": "paducah-ky-auto-repair",
+   "question": "Who are the best auto repair shops in Paducah, KY?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were a Paducah homeowner picking a shop, I\u2019d shortlist these:\n\n- **Coram\u2019s Automotive** \u2014 best all-around bet for routine service and diagnostics; strong volume of verified reviews: **4.9/5 from 216 reviews**, with mentions of timeliness, pricing, and trustworthiness. ([carfax.com](https://www.carfax.com/Reviews-Corams-Automotive-Paducah-KY_XRY9UFQ001?utm_source=openai))  \n- **Farmers Auto Repair** \u2014 good choice if you want a smaller, straightforward shop; **4.9/5 from 33 verified reviews**, with customers noting honest estimates and communication. ([carfax.com](https://www.carfax.com/Reviews-Farmers-Auto-Repair-LLC-Paducah-KY_DPFPA8MRGB?utm_source=openai))  \n- **Prestige Diagnostics & Maintenance** \u2014 my pick for check-engine lights, brakes, and \u201cfigure out what\u2019s wrong\u201d jobs; CARFAX lists **4.9/5 from 25 reviews**. ([carfax.com](https://www.carfax.com/Auto-Repair-Paducah-KY_c16782?utm_source=openai))  \n- **Affordable Diesel & Auto Repair** \u2014 call them first for trucks/diesel work; **4.9/5**, with reviews praising real mechanic work rather than parts-swapping. ([carfax.com](https://www.carfax.com/Reviews-Affordable-Diesel-and-Auto-Repair-LLC-Paducah-KY_9O3RCQD001?utm_source=openai))  \n- **Plaza Tire Service \u2014 Lone Oak Rd.** \u2014 solid for tires, rotations, alignments, and basic maintenance; **4.8/5 from 161 verified reviews**. ([carfax.com](https://www.carfax.com/Auto-Repair-Paducah-KY_c16782?utm_source=openai))  \n\nFor a big repair, I\u2019d get quotes from **Coram\u2019s** and **Farmers** first.",
+    "sources": [
+     {
+      "url": "https://www.carfax.com/Reviews-Corams-Automotive-Paducah-KY_XRY9UFQ001?utm_source=openai",
+      "title": "Coram's Automotive in Paducah, KY | CARFAX"
+     },
+     {
+      "url": "https://www.carfax.com/Reviews-Farmers-Auto-Repair-LLC-Paducah-KY_DPFPA8MRGB?utm_source=openai",
+      "title": "Farmers Auto Repair, LLC in Paducah, KY | CARFAX"
+     },
+     {
+      "url": "https://www.carfax.com/Auto-Repair-Paducah-KY_c16782?utm_source=openai",
+      "title": "Top Rated Auto Repair near Paducah, KY | CARFAX"
+     },
+     {
+      "url": "https://www.carfax.com/Reviews-Affordable-Diesel-and-Auto-Repair-LLC-Paducah-KY_9O3RCQD001?utm_source=openai",
+      "title": "Affordable Diesel & Auto Repair LLC in Paducah, KY | CARFAX"
+     },
+     {
+      "url": "https://www.carfax.com/Auto-Repair-Paducah-KY_c16782?utm_source=openai",
+      "title": "Top Rated Auto Repair near Paducah, KY | CARFAX"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you're looking for a reliable mechanic around Paducah, a few local shops stand out for honest work and fair pricing:\n\n*   **H&R Tire & Auto Care:** My top pick for routine maintenance, tires, and brakes. They're fast, straightforward, and won't try to upsell you on repairs you don't actually need. \n*   **Guiffre\u2019s Auto Repair:** A trusted neighborhood classic, especially for tricky electrical or mechanical diagnostics. They have a reputation for pinpointing the exact issue so you aren't paying for trial-and-error fixes.\n*   **Harper\u2019s Countryside Auto Repair:** Excellent choice if you value great customer service. They take the time to explain what\u2019s going on under the hood in plain English and stand firmly behind their work.\n*   **Whitis Auto Repair:** A reliable, family-owned spot known for solid craftsmanship and labor rates that are much friendlier than the dealerships.\n\n**My recommendation:** Call **H&R** for quick maintenance or tire work, and head to **Guiffre\u2019s** if you have an engine light issue you can't figure out. Both will treat you fairly.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
