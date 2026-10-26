@@ -52,6 +52,31 @@ someone asks for a <trade> in <town>. I'll email it to the address on your websi
 rather I didn't, no problem. Thanks."
 (Then the office drafts the email to the published address as touch 1, marked "after voicemail".)
 
+## Cold call sessions (Grayson, Oct 26, 2026; the page's Calls tab)
+- "Start cold call session" picks the Niche of the Day (rotation over the kit's `niches`, ordered by
+  callstats/main.nicheOrder once Sage has numbers; until Scout has stocked every niche, the niche
+  with the most call-ready leads) and the city with the most call-ready leads in it. Grayson can
+  pick another niche or city. One niche + one city per session, so the pitch stays the same.
+- Callbacks due today come first, whatever their niche. Then that niche + city, best first
+  (Ranking below). A lead is call-ready with a published business phone; office/tools/call_desk.py
+  uses the same rules for Scout's stock (25+ per niche).
+- At the top: "Who's On Top" (markets/<niche>-<town>-<st> from Quinn: who ChatGPT, Gemini and Google
+  name), merged into one numbered "Top 5 in <town>" that Grayson can read out; the pitch card has
+  it as a ready sentence, and the "Top 5 in town" opener uses it. Say "<business> doesn't come up"
+  only when the lead's own AI check says not named. A one-tap pitch card: the opener (one of the kit's `pitch_lines`; the session mostly uses
+  the best line by Interested/Sold rate and keeps testing the others), the lead's weakSpots, the
+  value line, and quick answers to the kit's `quick_objections` (price, "I get enough work", "is
+  this a scam", "send me info").
+- One lead at a time: tap to call, then one outcome tap logs it and moves on: No answer, Voicemail,
+  Callback (time picker), Interested (their email → the reply desk sends the free check within the
+  hour, Lane I), Sold (plan + email → check + that plan's checkout link), Not interested. Do not
+  contact sits apart (two taps). Voicemail with a published email → Echo's short follow-up with the
+  AI check the next weekday morning, inside the email gates.
+- End → summary: calls made, outcomes, callbacks scheduled, follow-up emails queued. Every call
+  carries niche, town, pitchLine and sessionId so Sage can learn (06 step 5b).
+- callStatus (New, Called, Voicemail, Callback, Interested, Sold, Not interested, Do not contact)
+  is Grayson's word and lives beside the pipeline status; the page keeps both in step.
+
 ## Call log fields (the page's Log call buttons)
 answered · voicemail · no answer · interested (email given) · not interested · do not call ·
 wrong number. Each log line: {t, who:"Grayson", outcome, note, nextAt}. "Interested" sets the

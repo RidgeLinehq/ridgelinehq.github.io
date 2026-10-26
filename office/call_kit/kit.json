@@ -1,5 +1,5 @@
 {
- "version": "9.0",
+ "version": "10.1",
  "script": {
   "opener": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. I'll be quick. I ran a free check on how {business} shows up when people ask ChatGPT and Google's AI for a {trade} in {town}. Got 30 seconds?",
   "value": "Right now when someone asks for a {trade} in {town}, the AI recommends {competitor_or_others} and {business} {ai_result}. We fix that: we clean up your Google profile and help your real customers leave reviews, so the AI starts recommending you.",
@@ -16,7 +16,8 @@
   "How do you get reviews?": "Only from your real customers. You can send us their emails and we send a short, friendly request from your business, or you use the ready-made text and QR card we give you. We never write or buy reviews.",
   "Are these fake reviews?": "No, never. Fake reviews can get your Google profile suspended. We only ask your real customers.",
   "Do I have to do the work?": "Barely. We write every Google profile fix ready to paste, about 10 minutes for you, and we check it went live. We handle the review requests and the monthly AI report.",
-  "What's the guarantee?": "On Growth and Pro: if your first month brings zero tracked leads and no improvement in your AI visibility, your second month is free. The full terms are on our website."
+  "What's the guarantee?": "On Growth and Pro: if your first month brings zero tracked leads and no improvement in your AI visibility, your second month is free. The full terms are on our website.",
+  "Just send me info": "Happy to. What's the best email? I'll send your free AI check: what ChatGPT and Gemini say about {business} versus who they recommend, and the three things I'd fix. It takes a minute to read."
  },
  "outcomes": {
   "no_answer": {
@@ -56,6 +57,19 @@
    "label": "Do not call",
    "next": "suppress",
    "then": "Suppressed the same minute. Never contacted again."
+  },
+  "voicemail": {
+   "label": "Voicemail",
+   "next": "voicemail_email",
+   "after_days": 2,
+   "then": "Counts as a try. If they have a published email, Echo sends a short follow-up with their free AI check the next weekday morning (inside the email gates). Back on the list in 2 days."
+  },
+  "sold": {
+   "label": "Sold",
+   "next": "email_ai_check_plus_offer",
+   "template": "after_call_offer",
+   "ask": "email_plan",
+   "then": "The reply desk emails their free check plus the checkout link for the plan they picked within about an hour, and tells you when it went out."
   }
  },
  "rules": {
@@ -79,7 +93,226 @@
    "8 AM to 8 PM their time.",
    "Honor 'don't call again' at once (suppression).",
    "Never a recorded voicemail, never a text."
-  ]
+  ],
+  "session_min_leads": 25,
+  "rotation_epoch": "2026-01-01"
  },
- "updated": "2026-10-25: prices match the website ($75 Starter / $125 Growth / $199 Pro)."
+ "updated": "2026-10-26: Top 5 in town (Who's On Top + pitch line), niches, pitch lines, voicemail + sold outcomes, cold call sessions.",
+ "niches": [
+  {
+   "id": "restaurants",
+   "label": "Restaurants",
+   "word": "restaurant",
+   "plural": "restaurants",
+   "match": [
+    "restaurant",
+    "cafe",
+    "diner",
+    "grill",
+    "pizza",
+    "bbq",
+    "bar and grill",
+    "eatery"
+   ],
+   "window": "2:30-4:30 PM"
+  },
+  {
+   "id": "roofing",
+   "label": "Roofing",
+   "word": "roofer",
+   "plural": "roofers",
+   "match": [
+    "roofing",
+    "roofer",
+    "roof"
+   ],
+   "window": "7:30-8:30 AM or 4:30-6 PM"
+  },
+  {
+   "id": "pressure-washing",
+   "label": "Pressure washing",
+   "word": "pressure washing company",
+   "plural": "pressure washing companies",
+   "match": [
+    "pressure washing",
+    "power washing",
+    "soft wash",
+    "exterior cleaning"
+   ],
+   "window": "7:30-8:30 AM or 4:30-6 PM"
+  },
+  {
+   "id": "tree-service",
+   "label": "Tree service",
+   "word": "tree service",
+   "plural": "tree services",
+   "match": [
+    "tree service",
+    "tree services",
+    "tree removal",
+    "stump",
+    "arborist",
+    "tree care",
+    "forestry"
+   ],
+   "window": "7:30-8:30 AM or 4:30-6 PM"
+  },
+  {
+   "id": "detailing",
+   "label": "Detailing",
+   "word": "auto detailer",
+   "plural": "auto detailers",
+   "match": [
+    "detailing",
+    "detailer",
+    "auto spa",
+    "ceramic",
+    "car wash",
+    "mobile detail"
+   ],
+   "window": "9:30-11 AM or 2-4 PM"
+  },
+  {
+   "id": "plumbing",
+   "label": "Plumbing",
+   "word": "plumber",
+   "plural": "plumbers",
+   "match": [
+    "plumbing",
+    "plumber",
+    "drain",
+    "sewer"
+   ],
+   "window": "7:30-8:30 AM or 4:30-6 PM"
+  },
+  {
+   "id": "hvac",
+   "label": "HVAC",
+   "word": "HVAC company",
+   "plural": "HVAC companies",
+   "match": [
+    "hvac",
+    "heating",
+    "air conditioning",
+    "a/c",
+    "furnace",
+    "cooling"
+   ],
+   "window": "7:30-8:30 AM or 4:30-6 PM"
+  },
+  {
+   "id": "landscaping",
+   "label": "Landscaping",
+   "word": "landscaper",
+   "plural": "landscapers",
+   "match": [
+    "landscaping",
+    "landscaper",
+    "lawn",
+    "yard care",
+    "mowing",
+    "landscape"
+   ],
+   "window": "7:30-8:30 AM or 4:30-6 PM"
+  },
+  {
+   "id": "barbershops",
+   "label": "Barbershops",
+   "word": "barbershop",
+   "plural": "barbershops",
+   "match": [
+    "barber",
+    "barbershop",
+    "barber shop"
+   ],
+   "window": "9:30-11 AM or 2-4 PM"
+  },
+  {
+   "id": "salons",
+   "label": "Hair salons",
+   "word": "hair salon",
+   "plural": "hair salons",
+   "match": [
+    "salon",
+    "hair studio",
+    "stylist",
+    "beauty"
+   ],
+   "window": "9:30-11 AM or 2-4 PM"
+  },
+  {
+   "id": "auto-repair",
+   "label": "Auto repair",
+   "word": "auto repair shop",
+   "plural": "auto repair shops",
+   "match": [
+    "auto repair",
+    "mechanic",
+    "automotive",
+    "transmission",
+    "tire",
+    "brake"
+   ],
+   "window": "9:30-11 AM or 2-4 PM"
+  },
+  {
+   "id": "cleaning",
+   "label": "House cleaning",
+   "word": "cleaning company",
+   "plural": "cleaning companies",
+   "match": [
+    "cleaning",
+    "maid",
+    "janitorial",
+    "housekeeping"
+   ],
+   "window": "9:30-11 AM or 2-4 PM"
+  }
+ ],
+ "pitch_lines": [
+  {
+   "id": "ai-check",
+   "label": "Free AI check",
+   "text": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. I'll be quick. I ran a free check on how {business} shows up when people ask ChatGPT and Google's AI for a {trade} in {town}. Got 30 seconds?"
+  },
+  {
+   "id": "who-shows-up",
+   "label": "Who's showing up",
+   "text": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. Quick one: when people ask ChatGPT for a {trade} in {town}, it sends them to {competitor_or_others}. I checked {business} and wanted to show you what it says. Got 30 seconds?"
+  },
+  {
+   "id": "reviews",
+   "label": "Reviews + AI",
+   "text": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. I help {trade_plural} in {town} get more Google reviews from their real customers and show up when people ask AI who to call. I ran a free check on {business}. Can I tell you what I found? 30 seconds."
+  },
+  {
+   "id": "top-5",
+   "label": "Top 5 in town",
+   "text": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. Quick one: when people in {town} ask ChatGPT or Google for a {trade}, the top 5 that come up are {top5}. I wanted to show you where {business} lands. Got 30 seconds?"
+  }
+ ],
+ "quick_objections": [
+  "How much is it?",
+  "We get enough work",
+  "Is this a scam?",
+  "Just send me info"
+ ],
+ "call_statuses": [
+  "New",
+  "Called",
+  "Voicemail",
+  "Callback",
+  "Interested",
+  "Sold",
+  "Not interested",
+  "Do not contact"
+ ],
+ "session_outcomes": [
+  "no_answer",
+  "voicemail",
+  "call_back",
+  "interested",
+  "sold",
+  "not_interested"
+ ]
 }

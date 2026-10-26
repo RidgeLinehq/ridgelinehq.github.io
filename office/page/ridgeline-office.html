@@ -105,7 +105,7 @@ a{color:inherit}
 @media(max-width:860px){
   .body{grid-template-columns:1fr}
   .rail{display:none}
-  .tabs{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+  .tabs{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
   .tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;padding:8px 2px;font-size:12px;font-weight:600;color:var(--mist);border-radius:10px;position:relative}
   .tabs button[aria-current="page"]{font-weight:800}
   .tabs button svg{width:22px;height:22px}
@@ -247,6 +247,52 @@ a.tel-big svg{width:18px;height:18px}
 .then{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:3px;font-size:12px;color:var(--dim)}
 .then li b{color:var(--mist);font-weight:700}
 
+/* ---------- cold call sessions + full lead cards (Oct 26, 2026): phone first, big taps ---------- */
+.startbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:64px;border:0;border-radius:18px;background:var(--good-dot);color:#06140b;font-family:var(--display);font-weight:900;font-size:20px;letter-spacing:-.01em;box-shadow:0 10px 26px rgba(59,170,74,.28);margin:4px 0 14px}
+.startbtn svg{width:24px;height:24px;flex:none}
+.startbtn:disabled{opacity:.45}
+.bigchips{display:flex;gap:8px;flex-wrap:wrap}
+.bigchips .chip{min-height:48px;padding:10px 15px;font-size:16px;display:inline-flex;align-items:center;gap:6px}
+.bigchips .chip .n{font-size:13px}
+.sess-top{position:sticky;top:calc(60px + env(safe-area-inset-top,0px));z-index:5;background:var(--bg);padding:8px 0 10px;display:flex;align-items:center;gap:10px}
+.sess-top .t{flex:1;min-width:0}.sess-top .t b{display:block;font-family:var(--display);font-weight:900;font-size:19px;line-height:1.2}.sess-top .t small{display:block;color:var(--mist);font-size:14px}
+.sess-top .btn{min-height:48px;font-size:16px}
+.prog{height:6px;border-radius:3px;background:var(--sunk);overflow:hidden;margin-top:6px}.prog i{display:block;height:100%;background:var(--ember)}
+.lc{background:var(--surface);border-radius:var(--r2);box-shadow:var(--shadow);padding:18px;display:grid;gap:12px;margin-top:12px}
+.lc h2{font-size:27px;line-height:1.15}
+.lc .meta{font-size:16px;color:var(--mist);line-height:1.4}
+.lc .meta b{color:var(--text)}
+.callbig{display:flex;align-items:center;justify-content:center;gap:10px;min-height:70px;border-radius:18px;font-family:var(--display);font-size:23px;font-weight:900;text-decoration:none;background:linear-gradient(135deg,#3fc47f,var(--good));color:#06140b;box-shadow:0 8px 22px rgba(79,209,139,.25)}
+.callbig svg{width:24px;height:24px}
+.ob{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ob .btn{min-height:64px;font-size:17px;border-radius:14px;white-space:normal;line-height:1.2}
+.ob .btn.wide{grid-column:1/-1}
+.minor{display:flex;gap:8px;flex-wrap:wrap}.minor .btn{min-height:46px;font-size:15px;flex:1}
+.facts{display:grid}
+.fact{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px;align-items:flex-start;line-height:1.4}
+.fact:last-child{border-bottom:0}
+.fact dt{flex:0 0 92px;color:var(--dim);font-weight:700;font-size:13px;padding-top:3px}
+.fact dd{margin:0;flex:1;min-width:0;overflow-wrap:anywhere}
+.fact dd a{font-weight:700;color:var(--signal)}
+.nf{color:var(--warn);font-weight:800}
+.weak{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.weak li{display:flex;gap:10px;align-items:flex-start;font-size:16px;line-height:1.35;padding:10px 12px;border-radius:12px;background:var(--bad-soft)}
+.weak li::before{content:"!";flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--bad-dot);color:#fff;font-weight:900;font-size:13px;margin-top:1px}
+.wot{display:grid;gap:8px}
+.wot .src{padding:10px 12px;border-radius:12px;background:var(--raised);border:1px solid var(--line)}
+.wot .src b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-bottom:2px}
+.wot .src span{font-size:16px;font-weight:700;line-height:1.35}
+.qa{padding:10px 12px;border-radius:12px;background:var(--raised);border:1px solid var(--line)}
+.qa b{display:block;font-size:15px;margin-bottom:3px}.qa p{font-size:15.5px;line-height:1.45;color:var(--text)}
+.lrow{display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);min-width:0;cursor:pointer}
+.lrow:last-child{border-bottom:0}
+.lrow .t{flex:1;min-width:0}.lrow .t b{display:block;font-size:17px;font-weight:800;line-height:1.25}.lrow .t small{display:block;color:var(--mist);font-size:14px;line-height:1.35;margin-top:2px}
+.lrow .pill{font-size:12.5px;padding:4px 10px}
+.cbig textarea{min-height:64px;font-size:16px}
+.cbig select,.cbig input{min-height:50px;font-size:17px}
+.sumgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sumgrid .tile b{font-size:34px}
+
 /* ---------- office floor ---------- */
 .floor{position:relative;border:1px solid var(--line2);border-radius:var(--r2);padding:18px 14px 14px;overflow:hidden;
   background:
@@ -382,7 +428,7 @@ a.tel-big svg{width:18px;height:18px}
 /* ============================ state ============================ */
 const AGENTS=[
   {id:"mara",name:"Mara",role:"Commander",desc:"Runs the day, prioritizes, reports to you."},
-  {id:"scout",name:"Scout",role:"Lead research",desc:"Finds roofers and tree services with weak online signals."},
+  {id:"scout",name:"Scout",role:"Lead research",desc:"Finds local businesses most likely to buy: good businesses the AI ignores, owners paying for leads, new shops."},
   {id:"quinn",name:"Quinn",role:"Qualification",desc:"Scores every lead 0 to 100 and says why."},
   {id:"parker",name:"Parker",role:"Offer strategist",desc:"Picks the angle and the hook for each lead."},
   {id:"echo",name:"Echo",role:"Outreach writer",desc:"Writes the emails, runs the QA gate, sends only through the gates."},
@@ -416,9 +462,11 @@ const PAGES=[
   {id:"analytics",label:"Analytics",icon:"i-chart",title:"Analytics"},
   {id:"settings",label:"Settings",icon:"i-gear",title:"Settings & Safety"}
 ];
+const TAB_IDS=["today","calls","work","floor"];
 const DEFAULT_SETTINGS={businessName:"Ridgeline Local",paused:false,dryRun:true,autoSend:false,dailyEmailCap:10,followUpDays:4,maxTouches:3,scoreGate:60,foundingSpots:10,signature:"Grayson\nRidgeline Local",optOutLine:"If you'd rather not hear from me, reply 'no thanks' and I'll stop.",mailingAddress:"",gmail:"ridgelinemarketinghq@gmail.com",siteUrl:"https://ridgelinehq.github.io",stripeUrl:"https://buy.stripe.com/dRm00jgNddCI53cbOlaEE00",targets:[{town:"Owasso",state:"OK",trades:["roofing","tree service"]},{town:"Cabot",state:"AR",trades:["roofing","tree service"]},{town:"Foley",state:"AL",trades:["roofing","tree service"]}],nextTarget:0,dayShiftTriggerId:"",officeVersion:"v8.3"};
 const S={settings:null,settingsExists:false,crew:{},leads:[],drafts:[],tasks:[],approvals:[],lessons:[],workflow:[],runs:[],events:[],stats:[],health:null,suppression:[],clients:[],
-  db:null,dbState:"loading",user:null,canWrite:null,readOnly:false,assets:null,page:"today",leadFilter:"all",leadQuery:"",leadView:"list",outreachTab:"ready",drawer:null,confirm:{},edits:{},cb:{},medic:null,desk:null};
+  db:null,dbState:"loading",user:null,canWrite:null,readOnly:false,assets:null,page:"today",leadFilter:"all",leadQuery:"",leadView:"list",outreachTab:"ready",drawer:null,confirm:{},edits:{},cb:{},medic:null,desk:null,
+  sessions:[],markets:[],callstats:null,sess:null,sessSummary:null,setup:null,sessUI:{},leadNiche:"all"};
 const $=(s,c)=>(c||document).querySelector(s);
 const esc=v=>String(v==null?"":v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const nowIso=()=>new Date().toISOString();
@@ -452,7 +500,7 @@ async function boot(){
   try{S.assets=await window.claude.use("assets")}catch(e){}
   subs.push(db.doc("settings/main").onSnapshot(s=>{S.settingsExists=s.exists;S.settings=s.exists?s.data():null;queue()},onErr));
   subs.push(db.collection("crew").onSnapshot(s=>{S.crew={};docList(s).forEach(d=>S.crew[d.id]=d);queue()},onErr));
-  subs.push(db.collection("leads").orderBy("updatedAt","desc").limit(400).onSnapshot(s=>{S.leads=docList(s);queue()},onErr));
+  subs.push(db.collection("leads").orderBy("updatedAt","desc").limit(1000).onSnapshot(s=>{S.leads=docList(s);queue()},onErr));
   subs.push(db.collection("drafts").orderBy("createdAt","desc").limit(250).onSnapshot(s=>{S.drafts=docList(s);queue()},onErr));
   subs.push(db.collection("tasks").orderBy("createdAt","desc").limit(120).onSnapshot(s=>{S.tasks=docList(s);queue()},onErr));
   subs.push(db.collection("approvals").orderBy("createdAt","desc").limit(60).onSnapshot(s=>{S.approvals=docList(s);queue()},onErr));
@@ -465,6 +513,9 @@ async function boot(){
   subs.push(db.doc("health/desk").onSnapshot(s=>{S.desk=s.exists?s.data():null;queue()},onErr));
   subs.push(db.collection("suppression").limit(400).onSnapshot(s=>{S.suppression=docList(s);queue()},onErr));
   subs.push(db.collection("clients").limit(100).onSnapshot(s=>{S.clients=docList(s);queue()},onErr));
+  subs.push(db.collection("sessions").orderBy("startedAt","desc").limit(30).onSnapshot(s=>{S.sessions=docList(s);resumeSession();queue()},onErr));
+  subs.push(db.collection("markets").limit(300).onSnapshot(s=>{S.markets=docList(s);queue()},onErr));
+  subs.push(db.doc("callstats/main").onSnapshot(s=>{S.callstats=s.exists?s.data():null;queue()},onErr));
 }
 async function write(path,data,mode){
   if(!S.db){toast("Database not available in this view");return false}
@@ -501,9 +552,18 @@ function needsYou(){
   if(c.ready.length&&!st.autoSend)out.push({t:c.ready.length+" email"+(c.ready.length>1?"s":"")+" waiting because autosend is off",s:"Turn autosend on in Settings and they go out by themselves.",go:"settings"});
   c.pendingApprovals.forEach(a=>out.push({t:a.summary,s:a.detail||"",go:"settings"}));
   if(S.health&&S.health.lights&&Object.values(S.health.lights).includes("red"))(S.health.needsYou||[]).forEach(x=>out.push({t:x,s:"Patch could not fix this by itself.",go:"settings"}));
+  followUpProblems().forEach(x=>out.push(x));
   if(S.medic&&Array.isArray(S.medic.needs_you))S.medic.needs_you.forEach(n=>out.push({t:n.msg||String(n),s:"The Medic tried what it can for free and could not fix this.",go:"floor"}));
   return out;
 }
+function followUpProblems(){
+  /* A call follow-up the crew should have sent. Pending call emails go out within the hour (reply desk);
+     voicemail emails go out the next weekday morning (Echo). The crew also emails an alert; this is the page's copy. */
+  const out=[];const now=Date.now();
+  S.leads.forEach(l=>{const f=l.followUp;if(!f||l.test===true)return;const age=now-Date.parse(f.requestedAt||"");
+    if(f.status==="failed")out.push({t:"Follow-up email to "+l.businessName+" failed",s:(f.error?f.error+". ":"")+"Tap to open the lead. The crew retries on its next run.",go:"leads",lead:l.id});
+    else if(f.status==="pending"&&!isNaN(age)&&age>(f.kind==="voicemail_email"?80:3)*36e5)out.push({t:"Follow-up to "+l.businessName+" hasn't gone out",s:"Asked "+ago(f.requestedAt)+". Open this chat and tell Claude: fix the call follow-ups.",go:"leads",lead:l.id})});
+  return out}
 function optionalForYou(){
   const c=counts();const out=[];
   if(c.ready.length&&settings().autoSend)out.push({t:c.ready.length+" email"+(c.ready.length>1?"s":"")+" queued",s:"They go out by themselves at 7:00 AM on the next weekday. Nothing to do.",go:"outreach"});
@@ -526,9 +586,9 @@ function renderChrome(){
   const pb=$("#pauseBtn");pb.innerHTML=st.paused?'<svg aria-hidden="true"><use href="#i-play"/></svg>Resume':'<svg aria-hidden="true"><use href="#i-pause"/></svg>Pause all';pb.className="btn pause sm "+(st.paused?"good":"bad");
   const badges={outreach:c.ready.length,today:needsYou().length};
   $("#rail").innerHTML=PAGES.map(p=>'<a href="#'+p.id+'" '+(S.page===p.id?'aria-current="page"':'')+'><svg aria-hidden="true"><use href="#'+p.icon+'"/></svg>'+esc(p.title)+(badges[p.id]?'<span class="cnt">'+badges[p.id]+'</span>':'')+'</a>').join("");
-  const tabs=PAGES.slice(0,3);
-  $("#tabs").innerHTML=tabs.map(p=>'<button type="button" data-go="'+p.id+'" '+(S.page===p.id?'aria-current="page"':'')+'><svg aria-hidden="true"><use href="#'+p.icon+'"/></svg>'+esc(p.label)+(badges[p.id]?'<span class="cnt">'+badges[p.id]+'</span>':'')+'</button>').join("")+'<button type="button" data-go="more" '+(!["today","work","floor"].includes(S.page)?'aria-current="page"':'')+'><svg aria-hidden="true"><use href="#i-more"/></svg>More</button>';
-  $("#sheetNavIn").innerHTML='<div class="lights">'+lights().map(x=>'<span class="light" data-l="'+x.v+'"><i></i>'+esc(x.k)+'</span>').join("")+'</div>'+PAGES.slice(3).map(p=>'<a href="#'+p.id+'"><svg aria-hidden="true"><use href="#'+p.icon+'"/></svg>'+esc(p.title)+'</a>').join("")+'<div class="inline" style="margin-top:12px"><button class="btn block '+(st.paused?"good":"bad")+'" type="button" id="sheetPause">'+(st.paused?"Resume the office":"Pause all")+'</button></div>';
+  const tabs=TAB_IDS.map(id=>PAGES.find(p=>p.id===id));
+  $("#tabs").innerHTML=tabs.map(p=>'<button type="button" data-go="'+p.id+'" '+(S.page===p.id?'aria-current="page"':'')+'><svg aria-hidden="true"><use href="#'+p.icon+'"/></svg>'+esc(p.label)+(badges[p.id]?'<span class="cnt">'+badges[p.id]+'</span>':'')+'</button>').join("")+'<button type="button" data-go="more" '+(!TAB_IDS.includes(S.page)?'aria-current="page"':'')+'><svg aria-hidden="true"><use href="#i-more"/></svg>More</button>';
+  $("#sheetNavIn").innerHTML='<div class="lights">'+lights().map(x=>'<span class="light" data-l="'+x.v+'"><i></i>'+esc(x.k)+'</span>').join("")+'</div>'+PAGES.filter(p=>!TAB_IDS.includes(p.id)).map(p=>'<a href="#'+p.id+'"><svg aria-hidden="true"><use href="#'+p.icon+'"/></svg>'+esc(p.title)+'</a>').join("")+'<div class="inline" style="margin-top:12px"><button class="btn block '+(st.paused?"good":"bad")+'" type="button" id="sheetPause">'+(st.paused?"Resume the office":"Pause all")+'</button></div>';
   $("#brandSub").textContent=(S.readOnly?"view only · ":"")+"8 agents · "+(S.dbState==="ok"?(st.paused?"paused":"on duty"):"offline");
 }
 function renderPage(){
@@ -571,6 +631,7 @@ function rToday(){
     h+='<div class="next fade-in"><div class="eyebrow">Crew is on it</div><h2>'+esc(title)+'</h2><p>'+esc(sub)+'</p><button class="btn cta" type="button" data-go="work"><span>See the work</span><span aria-hidden="true">→</span></button></div>';
   }
   S.clients.filter(k=>k.status==="active"&&(k.work||[]).filter(w=>w.status==="done").length<3).forEach(k=>{h+='<button type="button" class="wrow fade-in" data-client="'+esc(k.id)+'" style="outline:2px solid var(--good-dot)"><span class="ic" style="background:var(--good-soft);color:var(--good)"><svg aria-hidden="true"><use href="#i-users"/></svg></span><span class="t"><b>New client: '+esc(k.businessName)+'</b><small>$'+esc(k.monthly)+'/mo · tap for the welcome checklist</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>'});
+  h+=startBtn();
   h+='<div class="section">Your work</div>'+workRows(c,st,true);
   h+='<button type="button" class="agentsbar fade-in" data-go="floor"><span>Agents</span><span><span class="dot '+(st.paused?"bad":working.length?"":"off")+'"></span>'+(st.paused?"paused":working.length?working.length+" working · "+idle+" idle":"all idle · on schedule")+'</span></button>';
   if(ny.length>1)h+='<div class="section" style="font-size:18px">Also needs you</div><div class="card"><div class="list">'+ny.slice(1).map(n=>'<div class="row click" data-ny="'+esc(n.go)+'" data-lead="'+esc(n.lead||"")+'" data-view="'+esc(n.view||"")+'" data-clientid="'+esc(n.client||"")+'"><div class="t"><b>'+esc(n.t)+'</b><small>'+esc(n.s)+'</small></div><span class="pill bad">open</span></div>').join("")+'</div></div>';
@@ -628,12 +689,14 @@ function eventsHtml(){const today=dayKey();const ev=S.events.find(e=>e.id===toda
 /* ---------- Calls (V8 "The Turning Point", Oct 24 2026) ---------- */
 /* The words and the rules have one home: office/call_kit/call_kit.py -> kit.json. This copy is the fallback. */
 const CALL_KIT_URL="https://raw.githubusercontent.com/RidgeLinehq/ridgelinehq.github.io/main/office/call_kit/kit.json";
-let CALL_KIT={"version": "9.0", "script": {"opener": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. I'll be quick. I ran a free check on how {business} shows up when people ask ChatGPT and Google's AI for a {trade} in {town}. Got 30 seconds?", "value": "Right now when someone asks for a {trade} in {town}, the AI recommends {competitor_or_others} and {business} {ai_result}. We fix that: we clean up your Google profile and help your real customers leave reviews, so the AI starts recommending you.", "close": "Can I email you the free one-page report so you can see it yourself? No cost, no pressure."}, "objections": {"Not interested": "Totally fair. Can I still send the free report? If it's not useful, just delete it.", "We get enough work": "That's great to hear. This just makes sure the AI keeps sending people your way as more folks search that way.", "How much is it?": "The check is free. Plans start at $75 a month, month to month, cancel anytime by email. $125 adds leads we find and send you, plus our guarantee. The first 20 clients lock their price for life. Let me send the free check first so you can see if you even need it.", "Is this a scam?": "Fair question. I'll email the report from ridgelinemarketinghq@gmail.com and you can check it against ChatGPT yourself.", "How did you find me?": "Your website or your Google listing. I only work with a few local businesses at a time, and {town} is one of the towns I'm calling.", "Call me later": "No problem. What's a better day and time? I'll put it down.", "Don't call again": "Understood, I won't. Have a good one.", "How do you get reviews?": "Only from your real customers. You can send us their emails and we send a short, friendly request from your business, or you use the ready-made text and QR card we give you. We never write or buy reviews.", "Are these fake reviews?": "No, never. Fake reviews can get your Google profile suspended. We only ask your real customers.", "Do I have to do the work?": "Barely. We write every Google profile fix ready to paste, about 10 minutes for you, and we check it went live. We handle the review requests and the monthly AI report.", "What's the guarantee?": "On Growth and Pro: if your first month brings zero tracked leads and no improvement in your AI visibility, your second month is free. The full terms are on our website."}, "outcomes": {"no_answer": {"label": "No answer", "next": "retry_call", "after_days": 1, "max_tries": 3, "then": "A second and third try on the next two call days; after 3 misses the lead stays on email only."}, "not_interested": {"label": "Not interested", "next": "close_lead", "then": "Status Not a fit. No more calls or emails."}, "call_back": {"label": "Call back", "next": "schedule_call", "ask": "when", "then": "Back on the list at the time you pick."}, "send_check": {"label": "Send the free check", "next": "email_ai_check", "template": "after_call_report", "ask": "email", "then": "The reply desk runs the real ChatGPT + Gemini check and emails the one-page report within 2 hours."}, "interested": {"label": "Interested", "next": "email_ai_check_plus_offer", "template": "after_call_offer", "ask": "email", "alert_grayson": true, "then": "The desk sends the report plus the plans ($75 / $125 / $199) and checkout links, and tells you when it went out."}, "do_not_call": {"label": "Do not call", "next": "suppress", "then": "Suppressed the same minute. Never contacted again."}}, "rules": {"list_size": 15, "skip_if_emailed_within_days": 2, "eligible_statuses": ["New", "Researching", "Qualified", "Contacted"], "never_statuses": ["Suppressed", "Not a fit", "Client", "Meeting", "Replied"], "legal": ["Dial by hand to the business's published number only.", "8 AM to 8 PM their time.", "Honor 'don't call again' at once (suppression).", "Never a recorded voicemail, never a text."]}, "updated": "2026-10-25: prices match the website ($75 Starter / $125 Growth / $199 Pro)."};
-(async()=>{try{const r=await fetch(CALL_KIT_URL,{cache:"no-store"});if(r.ok){const k=await r.json();if(k&&k.script&&k.outcomes&&k.rules){CALL_KIT=k;queue()}}}catch(e){}})();
+let CALL_KIT={"version": "10.1", "script": {"opener": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. I'll be quick. I ran a free check on how {business} shows up when people ask ChatGPT and Google's AI for a {trade} in {town}. Got 30 seconds?", "value": "Right now when someone asks for a {trade} in {town}, the AI recommends {competitor_or_others} and {business} {ai_result}. We fix that: we clean up your Google profile and help your real customers leave reviews, so the AI starts recommending you.", "close": "Can I email you the free one-page report so you can see it yourself? No cost, no pressure."}, "objections": {"Not interested": "Totally fair. Can I still send the free report? If it's not useful, just delete it.", "We get enough work": "That's great to hear. This just makes sure the AI keeps sending people your way as more folks search that way.", "How much is it?": "The check is free. Plans start at $75 a month, month to month, cancel anytime by email. $125 adds leads we find and send you, plus our guarantee. The first 20 clients lock their price for life. Let me send the free check first so you can see if you even need it.", "Is this a scam?": "Fair question. I'll email the report from ridgelinemarketinghq@gmail.com and you can check it against ChatGPT yourself.", "How did you find me?": "Your website or your Google listing. I only work with a few local businesses at a time, and {town} is one of the towns I'm calling.", "Call me later": "No problem. What's a better day and time? I'll put it down.", "Don't call again": "Understood, I won't. Have a good one.", "How do you get reviews?": "Only from your real customers. You can send us their emails and we send a short, friendly request from your business, or you use the ready-made text and QR card we give you. We never write or buy reviews.", "Are these fake reviews?": "No, never. Fake reviews can get your Google profile suspended. We only ask your real customers.", "Do I have to do the work?": "Barely. We write every Google profile fix ready to paste, about 10 minutes for you, and we check it went live. We handle the review requests and the monthly AI report.", "What's the guarantee?": "On Growth and Pro: if your first month brings zero tracked leads and no improvement in your AI visibility, your second month is free. The full terms are on our website.", "Just send me info": "Happy to. What's the best email? I'll send your free AI check: what ChatGPT and Gemini say about {business} versus who they recommend, and the three things I'd fix. It takes a minute to read."}, "outcomes": {"no_answer": {"label": "No answer", "next": "retry_call", "after_days": 1, "max_tries": 3, "then": "A second and third try on the next two call days; after 3 misses the lead stays on email only."}, "not_interested": {"label": "Not interested", "next": "close_lead", "then": "Status Not a fit. No more calls or emails."}, "call_back": {"label": "Call back", "next": "schedule_call", "ask": "when", "then": "Back on the list at the time you pick."}, "send_check": {"label": "Send the free check", "next": "email_ai_check", "template": "after_call_report", "ask": "email", "then": "The reply desk runs the real ChatGPT + Gemini check and emails the one-page report within 2 hours."}, "interested": {"label": "Interested", "next": "email_ai_check_plus_offer", "template": "after_call_offer", "ask": "email", "alert_grayson": true, "then": "The desk sends the report plus the plans ($75 / $125 / $199) and checkout links, and tells you when it went out."}, "do_not_call": {"label": "Do not call", "next": "suppress", "then": "Suppressed the same minute. Never contacted again."}, "voicemail": {"label": "Voicemail", "next": "voicemail_email", "after_days": 2, "then": "Counts as a try. If they have a published email, Echo sends a short follow-up with their free AI check the next weekday morning (inside the email gates). Back on the list in 2 days."}, "sold": {"label": "Sold", "next": "email_ai_check_plus_offer", "template": "after_call_offer", "ask": "email_plan", "then": "The reply desk emails their free check plus the checkout link for the plan they picked within about an hour, and tells you when it went out."}}, "rules": {"list_size": 15, "skip_if_emailed_within_days": 2, "eligible_statuses": ["New", "Researching", "Qualified", "Contacted"], "never_statuses": ["Suppressed", "Not a fit", "Client", "Meeting", "Replied"], "legal": ["Dial by hand to the business's published number only.", "8 AM to 8 PM their time.", "Honor 'don't call again' at once (suppression).", "Never a recorded voicemail, never a text."], "session_min_leads": 25, "rotation_epoch": "2026-01-01"}, "updated": "2026-10-26: Top 5 in town (Who's On Top + pitch line), niches, pitch lines, voicemail + sold outcomes, cold call sessions.", "niches": [{"id": "restaurants", "label": "Restaurants", "word": "restaurant", "plural": "restaurants", "match": ["restaurant", "cafe", "diner", "grill", "pizza", "bbq", "bar and grill", "eatery"], "window": "2:30-4:30 PM"}, {"id": "roofing", "label": "Roofing", "word": "roofer", "plural": "roofers", "match": ["roofing", "roofer", "roof"], "window": "7:30-8:30 AM or 4:30-6 PM"}, {"id": "pressure-washing", "label": "Pressure washing", "word": "pressure washing company", "plural": "pressure washing companies", "match": ["pressure washing", "power washing", "soft wash", "exterior cleaning"], "window": "7:30-8:30 AM or 4:30-6 PM"}, {"id": "tree-service", "label": "Tree service", "word": "tree service", "plural": "tree services", "match": ["tree service", "tree services", "tree removal", "stump", "arborist", "tree care", "forestry"], "window": "7:30-8:30 AM or 4:30-6 PM"}, {"id": "detailing", "label": "Detailing", "word": "auto detailer", "plural": "auto detailers", "match": ["detailing", "detailer", "auto spa", "ceramic", "car wash", "mobile detail"], "window": "9:30-11 AM or 2-4 PM"}, {"id": "plumbing", "label": "Plumbing", "word": "plumber", "plural": "plumbers", "match": ["plumbing", "plumber", "drain", "sewer"], "window": "7:30-8:30 AM or 4:30-6 PM"}, {"id": "hvac", "label": "HVAC", "word": "HVAC company", "plural": "HVAC companies", "match": ["hvac", "heating", "air conditioning", "a/c", "furnace", "cooling"], "window": "7:30-8:30 AM or 4:30-6 PM"}, {"id": "landscaping", "label": "Landscaping", "word": "landscaper", "plural": "landscapers", "match": ["landscaping", "landscaper", "lawn", "yard care", "mowing", "landscape"], "window": "7:30-8:30 AM or 4:30-6 PM"}, {"id": "barbershops", "label": "Barbershops", "word": "barbershop", "plural": "barbershops", "match": ["barber", "barbershop", "barber shop"], "window": "9:30-11 AM or 2-4 PM"}, {"id": "salons", "label": "Hair salons", "word": "hair salon", "plural": "hair salons", "match": ["salon", "hair studio", "stylist", "beauty"], "window": "9:30-11 AM or 2-4 PM"}, {"id": "auto-repair", "label": "Auto repair", "word": "auto repair shop", "plural": "auto repair shops", "match": ["auto repair", "mechanic", "automotive", "transmission", "tire", "brake"], "window": "9:30-11 AM or 2-4 PM"}, {"id": "cleaning", "label": "House cleaning", "word": "cleaning company", "plural": "cleaning companies", "match": ["cleaning", "maid", "janitorial", "housekeeping"], "window": "9:30-11 AM or 2-4 PM"}], "pitch_lines": [{"id": "ai-check", "label": "Free AI check", "text": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. I'll be quick. I ran a free check on how {business} shows up when people ask ChatGPT and Google's AI for a {trade} in {town}. Got 30 seconds?"}, {"id": "who-shows-up", "label": "Who's showing up", "text": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. Quick one: when people ask ChatGPT for a {trade} in {town}, it sends them to {competitor_or_others}. I checked {business} and wanted to show you what it says. Got 30 seconds?"}, {"id": "reviews", "label": "Reviews + AI", "text": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. I help {trade_plural} in {town} get more Google reviews from their real customers and show up when people ask AI who to call. I ran a free check on {business}. Can I tell you what I found? 30 seconds."}, {"id": "top-5", "label": "Top 5 in town", "text": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. Quick one: when people in {town} ask ChatGPT or Google for a {trade}, the top 5 that come up are {top5}. I wanted to show you where {business} lands. Got 30 seconds?"}], "quick_objections": ["How much is it?", "We get enough work", "Is this a scam?", "Just send me info"], "call_statuses": ["New", "Called", "Voicemail", "Callback", "Interested", "Sold", "Not interested", "Do not contact"], "session_outcomes": ["no_answer", "voicemail", "call_back", "interested", "sold", "not_interested"]};
+
+
+(async()=>{try{const r=await fetch(CALL_KIT_URL,{cache:"no-store"});if(r.ok){const k=await r.json();if(k&&k.script&&k.outcomes&&k.rules){CALL_KIT=Object.assign({},CALL_KIT,k,{outcomes:Object.assign({},CALL_KIT.outcomes,k.outcomes),objections:Object.assign({},CALL_KIT.objections,k.objections)});queue()}}}catch(e){}})();
 const JOB_SITE=new Set(["roofer","roofing","tree service","tree services","landscaper","landscaping","contractor","stump grinding","tree removal","construction","fencing","concrete","painter","painting"]);
 const fmtTpl=(t,ctx)=>String(t||"").replace(/\{(\w+)\}/g,(m,k)=>ctx[k]!=null?ctx[k]:m);
 function bestCallTime(trade){return JOB_SITE.has(String(trade||"").trim().toLowerCase())?"7:30-8:30 AM or 4:30-6 PM":"10-11:30 AM or 2-4 PM"}
-function tradeWord(t){t=String(t||"").trim().toLowerCase();const m={roofing:"roofer","tree service":"tree service",other:"business","":"business"};return m[t]!=null?m[t]:t}
+function tradeWord(t){t=String(t||"").trim().toLowerCase();const m={roofing:"roofer","tree service":"tree service",other:"business","":"business"};if(m[t]!=null)return m[t];const n=nicheById(nicheOfText(t));return n?n.word:t}
 function telLink(p){let d=String(p||"").replace(/\D/g,"");if(d.length===10)d="1"+d;return d?"tel:+"+d:""}
 function aiResult(l){const ai=l.aiCheck||{};const g=ai.chatgpt,m=ai.gemini;
   if(g==="not named"&&m==="not named")return "isn't mentioned by ChatGPT or Gemini";
@@ -652,73 +715,314 @@ function callEligible(l,now){now=now||Date.now();const R=CALL_KIT.rules||{};
   if(st==="Contacted"){const ts=(l.touches||[]).map(t=>Date.parse(t&&t.t||"")).filter(x=>!isNaN(x));if(ts.length&&now-Math.max(...ts)<(R.skip_if_emailed_within_days||2)*86400000)return false}
   const nx=Date.parse(l.nextCallAt||"");if(!isNaN(nx)&&nx>now+12*3600000)return false;
   return true}
-function callKey(l){const p=l.profile||{};const nx=Date.parse(l.nextCallAt||"");return [isNaN(nx)?1:0,aiRankKey(l),Number.isInteger(l.callRank)?l.callRank:999,-(Number(l.score)||0),typeof p.reviews==="number"?p.reviews:1e6]}
+function tierRank(l){return ({Hot:0,Warm:1,Cold:3})[l.tier]??2}
+function tierPill(l){return l.tier?'<span class="pill '+(l.tier==="Hot"?"bad":l.tier==="Warm"?"warn":"")+'">'+(l.tier==="Hot"?"🔥 ":"")+esc(l.tier)+'</span>':''}
+function callKey(l){const p=l.profile||{};const nx=Date.parse(l.nextCallAt||"");return [isNaN(nx)?1:0,tierRank(l),aiRankKey(l),Number.isInteger(l.callRank)?l.callRank:999,-(Number(l.score)||0),typeof p.reviews==="number"?p.reviews:1e6]}
 function callCmp(a,b){const x=callKey(a),y=callKey(b);for(let i=0;i<x.length;i++){if(x[i]!==y[i])return x[i]-y[i]}return String(a.businessName||"").localeCompare(String(b.businessName||""))}
 function callQueue(){const now=Date.now();return S.leads.filter(l=>callEligible(l,now)).sort(callCmp)}
 function competitorPhrase(l){const ai=l.aiCheck||{};let c=ai.competitors;if(c&&!Array.isArray(c)&&typeof c==="object")c=(c.chatgpt&&c.chatgpt.length?c.chatgpt:c.gemini)||[];if(Array.isArray(c)&&c.length){const n=c.filter(Boolean).slice(0,2).map(x=>String(x).split(" / ")[0].split(" (")[0].trim());if(n.length)return n.join(" and ")}const top=(l.searchCheck||{}).namedTop3||[];if(top.length)return top.slice(0,2).map(x=>String(x).split(" (")[0]).join(" and ");return "other companies"}
-function fillScript(l){const s=CALL_KIT.script||{};const biz=l.businessName||"";const ctx={owner_or_business:l.contactName||biz,business:biz,trade:tradeWord(l.trade),town:l.town||"",competitor_or_others:competitorPhrase(l),ai_result:aiResult(l)};return {opener:fmtTpl(s.opener,ctx),value:fmtTpl(s.value,ctx),close:fmtTpl(s.close,ctx)}}
+function scriptCtx(l){const biz=l.businessName||"";const n=nicheById(nicheOf(l));return {owner_or_business:l.contactName||biz,business:biz,trade:n?n.word:tradeWord(l.trade),trade_plural:n?n.plural:tradeWord(l.trade)+"s",top5:top5Words(nicheOf(l),townKey(l))||"a handful of other companies",town:l.town||"",competitor_or_others:competitorPhrase(l),ai_result:aiResult(l)}}
+function fillScript(l,lineId){const s=CALL_KIT.script||{};const ctx=scriptCtx(l);const line=(CALL_KIT.pitch_lines||[]).find(x=>x.id===lineId);return {opener:fmtTpl(line?line.text:s.opener,ctx),value:fmtTpl(s.value,ctx),close:fmtTpl(s.close,ctx)}}
 function ctOffsetMin(d){const p=new Intl.DateTimeFormat("en-US",{timeZone:"America/Chicago",hour12:false,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit"}).formatToParts(d);const g=k=>Number((p.find(x=>x.type===k)||{}).value);const asUtc=Date.UTC(g("year"),g("month")-1,g("day"),g("hour")%24,g("minute"),g("second"));return Math.round((asUtc-d.getTime())/60000)}
 function ctIso(dayOffset,hh,mm){const key=dayKey(new Date(Date.now()+dayOffset*86400000));const naive=Date.parse(key+"T"+String(hh).padStart(2,"0")+":"+String(mm).padStart(2,"0")+":00Z");const off=ctOffsetMin(new Date(naive));return new Date(naive-off*60000).toISOString()}
 function callRow(l,i){const ai=aiResult(l);const rk=aiRankKey(l);const nx=Date.parse(l.nextCallAt||"");
-  return '<div class="row click crow" data-callid="'+esc(l.id)+'"><span class="crank">'+(i+1)+'</span><div class="t"><b>'+esc(l.businessName)+'</b><small>'+esc(tradeWord(l.trade))+' · '+esc(l.town||"")+(l.state?', '+esc(l.state):'')+' · '+esc(l.callWindow||bestCallTime(l.trade))+(isNaN(nx)?'':' · call back '+esc(fmtT(l.nextCallAt)))+'</small><small class="'+(rk<=1?"ai-bad":rk===2?"ai-unk":"")+'">'+esc(l.businessName)+' '+esc(ai)+'</small></div><a class="tel" href="'+esc(telLink(l.phone))+'" data-tel="'+esc(l.id)+'" aria-label="Call '+esc(l.businessName)+'"><svg aria-hidden="true"><use href="#i-phone"/></svg></a></div>'}
+  return '<div class="row click crow" data-callid="'+esc(l.id)+'"><span class="crank">'+(i+1)+'</span><div class="t"><b>'+esc(l.businessName)+'</b>'+(l.tier?'<span style="display:block;margin:2px 0">'+tierPill(l)+'</span>':'')+'<small>'+esc(tradeWord(l.trade))+' · '+esc(l.town||"")+(l.state?', '+esc(l.state):'')+' · '+esc(l.callWindow||bestCallTime(l.trade))+(isNaN(nx)?'':' · call back '+esc(fmtT(l.nextCallAt)))+'</small><small class="'+(rk<=1?"ai-bad":rk===2?"ai-unk":"")+'">'+esc(l.businessName)+' '+esc(ai)+'</small>'+(l.whyNow?'<small><b>Why now:</b> '+esc(l.whyNow)+'</small>':'')+'</div><a class="tel" href="'+esc(telLink(l.phone))+'" data-tel="'+esc(l.id)+'" aria-label="Call '+esc(l.businessName)+'"><svg aria-hidden="true"><use href="#i-phone"/></svg></a></div>'}
+/* ---------- Cold call sessions (Oct 26, 2026) ----------
+   One niche + one city per session so the pitch stays the same. Callbacks due today come first.
+   Niches, pitch lines and objections come from the call kit (office/call_kit/kit.json); the crew's
+   office/tools/call_desk.py uses the same niche and eligibility rules for Scout's stock and Sage's stats. */
+const CALL_STATUSES=["New","Called","Voicemail","Callback","Interested","Sold","Not interested","Do not contact"];
+const CS_TONE={New:"",Called:"",Voicemail:"warn",Callback:"signal",Interested:"good",Sold:"good","Not interested":"","Do not contact":"bad"};
+const PLANS=[["starter","Starter $75/mo"],["growth","Growth $125/mo"],["pro","Pro $199/mo"]];
+function NICHES(){return Array.isArray(CALL_KIT.niches)&&CALL_KIT.niches.length?CALL_KIT.niches:[]}
+function nicheById(id){return NICHES().find(n=>n.id===id)||null}
+function nicheOfText(t){t=String(t||"").toLowerCase();if(!t)return null;for(const n of NICHES()){if((n.match||[]).some(w=>new RegExp("\\b"+w.replace(/[.*+?^${}()|[\]\\\/]/g,"\\$&")).test(t)))return n.id}return null}
+function nicheOf(l){if(l.niche&&nicheById(l.niche))return l.niche;return nicheOfText(l.trade)||nicheOfText(l.businessName)}
+function nicheLabel(id){const n=nicheById(id);return n?n.label:"Other"}
+function townKey(l){return (l.town||"?")+", "+(l.state||"?")}
+function canonOutcome(o){const m={"no answer":"No answer","voicemail":"Voicemail","call back":"Callback","callback":"Callback","interested":"Interested","sold":"Sold","not interested":"Not interested","do not call":"Do not contact","do not contact":"Do not contact","answered":"Called","send the free check":"Interested"};const s=String(o||"").trim();return s?(m[s.toLowerCase()]||s):""}
+function callStatusOf(l){
+  if(l.callStatus&&CALL_STATUSES.includes(l.callStatus))return l.callStatus;
+  if(l.status==="Suppressed")return "Do not contact";if(l.status==="Client")return "Sold";
+  const calls=l.calls||[];const last=calls.length?canonOutcome(calls[calls.length-1].outcome):"";
+  if(last==="Not interested"||(l.followUp||{}).kind==="close_lead")return "Not interested";
+  if(["Interested","Sold","Callback","Voicemail","Do not contact"].includes(last))return last;
+  return calls.length?"Called":"New"}
+function csPill(l){const c=callStatusOf(l);return '<span class="pill '+(CS_TONE[c]||"")+'">'+esc(c)+'</span>'}
+const OUT_LABEL={no_answer:"No answer",voicemail:"Voicemail",call_back:"Callback",interested:"Interested",sold:"Sold",not_interested:"Not interested",send_check:"Send the free check",do_not_call:"Do not contact"};
+function outLabel(k){return OUT_LABEL[k]||((CALL_KIT.outcomes||{})[k]||{}).label||k}
+function safeUrl(u){u=String(u||"").trim();return /^https?:\/\//i.test(u)?u:""}
+function windowStart(l){const n=nicheById(nicheOf(l));const w=(n&&n.window)||l.callWindow||bestCallTime(l.trade);const m=/(\d{1,2})(?::(\d\d))?\s*-\s*(\d{1,2})(?::\d\d)?\s*(AM|PM)/i.exec(w||"");if(!m)return [9,0];let h=Number(m[1]);if(/pm/i.test(m[4])&&h<12&&h<=Number(m[3]))h+=12;return [h,Number(m[2]||0)]}
+function sessionEligible(l){
+  if(l.test===true||!l.phone)return false;const st=l.status||"New";
+  if(["Suppressed","Not a fit","Client"].includes(st))return false;
+  const cs=callStatusOf(l);if(["Sold","Not interested","Do not contact"].includes(cs))return false;
+  if(cs==="Interested"&&!l.nextCallAt)return false;
+  if(l.callDone===true||(l.followUp||{}).kind==="close_lead")return false;
+  if(l.nextCallAt&&dayKey(l.nextCallAt)>dayKey())return false;
+  if(st==="Contacted"){const ts=(l.touches||[]).map(t=>Date.parse(t&&t.t||"")).filter(x=>!isNaN(x));if(ts.length&&Date.now()-Math.max(...ts)<((CALL_KIT.rules||{}).skip_if_emailed_within_days||2)*86400000)return false}
+  return true}
+function isCallbackDue(l){return callStatusOf(l)==="Callback"&&!!l.nextCallAt&&dayKey(l.nextCallAt)<=dayKey()&&sessionEligible(l)}
+function callbacksDue(){return S.leads.filter(isCallbackDue).sort((a,b)=>Date.parse(a.nextCallAt)-Date.parse(b.nextCallAt))}
+function stockNow(){const per={};NICHES().forEach(n=>per[n.id]={total:0,towns:{}});
+  S.leads.forEach(l=>{if(!sessionEligible(l))return;const n=nicheOf(l);if(!n||!per[n])return;const t=townKey(l);per[n].total++;per[n].towns[t]=(per[n].towns[t]||0)+1});
+  return per}
+function townsFor(per,id){const t=(per[id]||{}).towns||{};return Object.keys(t).map(k=>({town:k,n:t[k]})).sort((a,b)=>b.n-a.n||(((liveStats().byTown[b.town]||{}).score||0)-((liveStats().byTown[a.town]||{}).score||0))||a.town.localeCompare(b.town))}
+/* Live numbers from every logged call (Sage writes the same numbers to callstats/main and the lessons files). */
+let LS_CACHE=null,LS_KEY="";
+function liveStats(){const key=S.leads.length+":"+S.leads.reduce((a,l)=>a+(l.calls||[]).length,0);if(LS_CACHE&&LS_KEY===key)return LS_CACHE;
+  const by={byNiche:{},byTown:{},byLine:{}};let total=0;
+  const bump=(b,k,o)=>{const r=b[k||"unknown"]=b[k||"unknown"]||{calls:0,talked:0,interested:0,sold:0};r.calls++;if(o!=="No answer"&&o!=="Voicemail")r.talked++;if(o==="Interested")r.interested++;if(o==="Sold")r.sold++};
+  S.leads.forEach(l=>{if(l.test===true)return;const n=nicheOf(l);(l.calls||[]).forEach(c=>{const o=canonOutcome(c.outcome);if(!o)return;total++;bump(by.byNiche,c.niche||n,o);bump(by.byTown,c.town||townKey(l),o);bump(by.byLine,c.pitchLine,o)})});
+  Object.values(by).forEach(b=>Object.values(b).forEach(r=>{const w=r.interested+r.sold;r.winRate=r.calls?Math.round(1000*w/r.calls)/10:0;r.score=(w+1)/(r.calls+10)}));
+  LS_CACHE=Object.assign({calls:total},by);LS_KEY=key;return LS_CACHE}
+function nicheOfDay(per){
+  const ids=NICHES().map(n=>n.id);const learned=(S.callstats&&Array.isArray(S.callstats.nicheOrder))?S.callstats.nicheOrder.filter(x=>ids.includes(x)):[];
+  const order=learned.concat(ids.filter(x=>!learned.includes(x)));
+  const epoch=(CALL_KIT.rules||{}).rotation_epoch||"2026-01-01";const dayN=Math.max(0,Math.round((Date.parse(dayKey()+"T00:00:00Z")-Date.parse(epoch+"T00:00:00Z"))/864e5));
+  const best=id=>{const t=townsFor(per,id);return t.length?t[0].n:0};
+  const ready=order.filter(id=>best(id)>=10),some=order.filter(id=>best(id)>0);
+  /* Rotate through niches with a full session ready; until Scout has stocked them, use the best-stocked one. */
+  const id=ready.length?ready[dayN%ready.length]:some.length?some.slice().sort((a,b)=>best(b)-best(a))[0]:order[dayN%order.length];
+  const st=liveStats().byNiche[id];
+  const why=(ready.length?"Today's pick in the rotation · "+best(id)+" leads ready":some.length?"Most leads loaded today ("+best(id)+" in one city)":"Rotation pick (no leads loaded yet)")+(learned.length?" · ordered by what's selling":"")+(st&&st.calls>=5?" · "+(st.interested+st.sold)+" of "+st.calls+" calls interested or sold so far":"");
+  return {id,why}}
+function startBtn(){const n=callbacksDue().length;return '<button type="button" class="startbtn" data-sess-setup="1"'+(S.readOnly?" disabled":"")+'><svg aria-hidden="true"><use href="#i-phone"/></svg>'+(S.sess?"Back to my call session":"Start cold call session")+'</button>'+(n&&!S.sess?'<p class="small" style="margin:-6px 0 12px;color:var(--signal);font-weight:700">'+n+' callback'+(n>1?"s":"")+' due today: they come first.</p>':'')}
+function resumeSession(){if(S.sess)return;const id=ls.get("ro.sess");if(!id)return;const d=S.sessions.find(x=>x.id===id);if(d&&d.status==="open"&&Date.now()-Date.parse(d.startedAt||"")<16*36e5){S.sess=Object.assign({done:[],skipped:[],log:[],callbacks:[],followUps:[],counts:{}},d)}else if(d)ls.set("ro.sess","")}
+function sessNote(){const t=$("#sessNote");return t?t.value.trim():""}
+
 function rCalls(){
-  const q=callQueue();const R=CALL_KIT.rules||{};const lim=R.list_size||15;const today=q.slice(0,lim);
-  let h=pageHead("calls",today.length?today.length+" to call today. Tap a business for the words and the one-tap follow-ups; tap the green phone to dial.":"No one to call yet. Businesses with a published phone land here as Scout finds them.");
+  if(S.sess)return sessionView();
+  if(S.sessSummary)return summaryView(S.sessSummary);
+  if(S.setup)return setupView();
+  const q=callQueue();const R=CALL_KIT.rules||{};const lim=R.list_size||15;const today=q.slice(0,lim);const cbs=callbacksDue();
+  let h=pageHead("calls","One niche, one city, one pitch. Tap start, call, tap what happened. The crew does the follow-up emails.");
   h+=dbBanner();
-  h+=today.length?'<div class="card"><div class="list">'+today.map(callRow).join("")+'</div></div>':'<div class="empty"><b>No one to call yet</b>Add a business by hand on the Lead Desk, or wait for the next Day Shift.</div>';
+  h+=startBtn();
+  if(cbs.length)h+='<div class="card" style="margin-bottom:12px"><h3>Callbacks due today <span class="sp">'+cbs.length+'</span></h3><div class="list">'+cbs.map(callRow).join("")+'</div></div>';
+  h+=workingCard();
+  const past=S.sessions.filter(x=>x.status==="done").slice(0,5);
+  if(past.length)h+='<div class="card" style="margin-top:12px"><h3>Last sessions</h3><div class="list">'+past.map(x=>{const c=x.counts||{};return '<div class="lrow" data-sesssum="'+esc(x.id)+'"><div class="t"><b>'+esc(nicheLabel(x.niche))+' · '+esc(x.town||"")+'</b><small>'+esc(fmtT(x.startedAt))+' · '+((x.log||[]).length)+' calls · '+((c.Interested||0)+(c.Sold||0))+' interested or sold · '+((x.callbacks||[]).length)+' callbacks</small></div><svg class="chev" style="width:18px;height:18px;color:var(--dim)" aria-hidden="true"><use href="#i-chev"/></svg></div>'}).join("")+'</div></div>';
+  h+='<div class="section" style="font-size:18px">Everyone call-ready</div>';
+  h+=today.length?'<div class="card"><div class="list">'+today.map(callRow).join("")+'</div></div>':'<div class="empty"><b>No one to call yet</b>Scout loads call-ready businesses every Day Shift.</div>';
   if(q.length>lim)h+='<p class="dim small" style="margin-top:8px">'+(q.length-lim)+' more wait for another day (the list holds '+lim+').</p>';
   h+='<p class="dim small" style="margin-top:10px">'+esc((R.legal||[]).join(" "))+'</p>';
   return h;
 }
+function workingCard(){const st=liveStats();
+  if(!st.calls)return '<div class="card"><h3>What\'s working</h3><p class="muted small">Fills in from your first calls: which niches, cities and pitch lines get the most Interested and Sold.</p></div>';
+  const rows=(b,label)=>{const ks=Object.keys(b).filter(k=>k!=="unknown"&&b[k].calls>0).sort((x,y)=>b[y].score-b[x].score).slice(0,4);return ks.length?'<div class="sec"><h4>'+label+'</h4><div class="list">'+ks.map(k=>{const r=b[k];const name=label==="Pitch lines"?(((CALL_KIT.pitch_lines||[]).find(p=>p.id===k)||{}).label||k):label==="Niches"?nicheLabel(k):k;return '<div class="row"><div class="t"><b>'+esc(name)+'</b><small>'+r.calls+' calls · '+r.talked+' talked · '+r.interested+' interested · '+r.sold+' sold</small></div><span class="pill '+(r.interested+r.sold?"good":"")+' mono">'+r.winRate+'%</span></div>'}).join("")+'</div></div>':''};
+  return '<div class="card"><h3>What\'s working <span class="sp">'+st.calls+' calls</span></h3>'+(st.calls<20?'<p class="dim small" style="margin-bottom:6px">Early numbers: Sage writes a lesson after 20 calls.</p>':'')+rows(st.byNiche,"Niches")+rows(st.byTown,"Cities")+rows(st.byLine,"Pitch lines")+'</div>'}
+function setupView(){
+  const per=stockNow();const nod=nicheOfDay(per);const sel=S.setup.niche||nod.id;const towns=townsFor(per,sel);const town=(S.setup.town&&towns.some(t=>t.town===S.setup.town))?S.setup.town:(towns[0]||{}).town||"";
+  const n=(towns.find(t=>t.town===town)||{}).n||0;const cbs=callbacksDue().length;const min=(CALL_KIT.rules||{}).session_min_leads||25;
+  let h='<div class="head"><div><h2>New call session</h2><p>Same niche and city all session, so the pitch stays the same.</p></div></div>';
+  h+='<div class="next" style="margin-top:0"><div class="eyebrow">Niche of the Day</div><h2 style="font-size:28px">'+esc(nicheLabel(nod.id))+'</h2><p>'+esc(nod.why)+'</p>'+(sel!==nod.id?'<p class="small" style="margin:0">You picked <b>'+esc(nicheLabel(sel))+'</b> instead.</p>':'')+'</div>';
+  h+='<div class="sec"><h4>Niche</h4><div class="bigchips">'+NICHES().map(x=>'<button type="button" class="chip" aria-pressed="'+(x.id===sel)+'" data-setup-niche="'+esc(x.id)+'">'+esc(x.label)+'<span class="n">'+(per[x.id]||{total:0}).total+'</span></button>').join("")+'</div></div>';
+  h+='<div class="sec" style="margin-top:14px"><h4>City</h4>'+(towns.length?'<div class="bigchips">'+towns.map(t=>'<button type="button" class="chip" aria-pressed="'+(t.town===town)+'" data-setup-town="'+esc(t.town)+'">'+esc(t.town)+'<span class="n">'+t.n+'</span></button>').join("")+'</div>':'<div class="note warn">No call-ready '+esc(nicheLabel(sel).toLowerCase())+' leads yet. Scout loads them on the next Day Shift. Pick another niche for now.</div>')+'</div>';
+  if(n&&n<min)h+='<div class="note warn" style="margin-top:12px">Only '+n+' loaded for '+esc(nicheLabel(sel))+' in '+esc(town)+'. Scout tops every niche up to '+min+' on the next Day Shift.</div>';
+  if(cbs)h+='<div class="note" style="margin-top:12px"><b>'+cbs+' callback'+(cbs>1?"s":"")+' due today</b> go first, then '+esc(nicheLabel(sel).toLowerCase())+' in '+esc(town||"the city")+'.</div>';
+  h+='<button type="button" class="startbtn" style="margin-top:16px" data-sess-go="1" data-niche="'+esc(sel)+'" data-town="'+esc(town)+'"'+(n+cbs?"":" disabled")+'><svg aria-hidden="true"><use href="#i-phone"/></svg>Start calling · '+(n+cbs)+' lead'+(n+cbs===1?"":"s")+'</button>';
+  h+='<button type="button" class="btn block" style="min-height:52px;font-size:16px" data-sess-cancel="1">Not now</button>';
+  return h}
+function sessQueue(){const s=S.sess;if(!s)return [];const skip=new Set((s.done||[]).concat(s.skipped||[]));
+  const cbs=callbacksDue().filter(l=>!skip.has(l.id));const cb=new Set(cbs.map(l=>l.id));
+  const rest=S.leads.filter(l=>!skip.has(l.id)&&!cb.has(l.id)&&nicheOf(l)===s.niche&&townKey(l)===s.town&&sessionEligible(l)).sort(callCmp);
+  return cbs.concat(rest)}
+function whoOnTop(niche,town){
+  const m=S.markets.find(x=>x.niche===niche&&(x.town+", "+x.state)===town);
+  const clean=x=>String(x||"").split(" / ")[0].split(" (")[0].trim();
+  const tally=()=>({}),add=(t,x)=>{x=clean(x);if(x)t[x]=(t[x]||0)+1},top=t=>Object.keys(t).sort((a,b)=>t[b]-t[a]).slice(0,5);
+  const g=tally(),gm=tally(),go=tally();let at="";
+  if(m){(m.chatgpt||[]).forEach(x=>add(g,x));(m.gemini||[]).forEach(x=>add(gm,x));(m.google||[]).forEach(x=>add(go,x));at=m.at||""}
+  else S.leads.forEach(l=>{if(nicheOf(l)!==niche||townKey(l)!==town)return;const ai=l.aiCheck||{};let c=ai.competitors;
+    if(Array.isArray(c))c.forEach(x=>add(g,x));else if(c&&typeof c==="object"){(c.chatgpt||[]).forEach(x=>add(g,x));(c.gemini||[]).forEach(x=>add(gm,x))}
+    ((l.searchCheck||{}).namedTop3||[]).forEach(x=>add(go,x));if(ai.at&&ai.at>at)at=ai.at});
+  return {chatgpt:top(g),gemini:top(gm),google:top(go),at,from:m?(m.googleFrom||""):""}}
+/* Top 5 in the area: one list from all three sources. A name each source ranks high, or that
+   several sources name, ranks first. Names exactly as ChatGPT, Gemini or the search showed them. */
+function top5(niche,town){const w=whoOnTop(niche,town);const norm=x=>x.toLowerCase().replace(/&/g," and ").replace(/\b(llc|inc|co|company|the)\b/g,"").replace(/[^a-z0-9]+/g," ").trim();const pts={};
+  [["ChatGPT",w.chatgpt],["Gemini",w.gemini],["Google",w.google]].forEach(([src,arr])=>arr.forEach((name,i)=>{const k=norm(name);if(!k)return;const r=pts[k]=pts[k]||{name,score:0,src:[]};r.score+=6-i;if(!r.src.includes(src)){r.src.push(src);r.score+=3}}));
+  return Object.values(pts).sort((a,b)=>b.score-a.score||a.name.localeCompare(b.name)).slice(0,5)}
+function top5Words(niche,town){const t=top5(niche,town).map(x=>x.name);return t.length>1?t.slice(0,-1).join(", ")+" and "+t[t.length-1]:t[0]||""}
+function top5List(niche,town,big){const t=top5(niche,town);return t.length?'<ol style="margin:0;padding-left:24px;display:grid;gap:4px;font-size:'+(big?16:15)+'px;font-weight:700;line-height:1.3">'+t.map(x=>'<li>'+esc(x.name)+' <small class="dim" style="font-weight:600">'+esc(x.src.join(" + "))+'</small></li>').join("")+'</ol>':'<p class="dim small">Not checked yet for this niche and city: Quinn runs it on the next Day Shift.</p>'}
+function wotCard(niche,town){const w=whoOnTop(niche,town);const line=(label,arr)=>'<div class="src"><b>'+label+'</b><span>'+(arr.length?esc(arr.join(" · ")):'<span class="dim">not checked yet</span>')+'</span></div>';
+  const first=top5(niche,town).map((x,i)=>(i+1)+". "+x.name).join("  ");
+  return '<details class="card wotc"'+(S.sessUI.wot?" open":"")+' style="margin-top:4px;padding:14px 16px"><summary data-wot="1" style="cursor:pointer;list-style:none;min-height:44px"><span style="display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--display);font-weight:900;font-size:17px">Who\'s On Top<span class="pill signal" style="font-size:12px">'+(S.sessUI.wot?"hide":"show all")+'</span></span><span style="display:block;font-size:15px;font-weight:700;color:var(--mist);margin-top:2px">'+esc(first||"Not checked yet for "+nicheLabel(niche)+" in "+town)+'</span></summary><p class="dim small" style="margin-top:6px">Top 5 '+esc(nicheLabel(niche).toLowerCase())+' in '+esc(town)+(w.at?' · checked '+esc(fmtT(w.at).split(",")[0]):'')+'</p><div style="margin:8px 0 10px">'+top5List(niche,town,true)+'</div><div class="wot" style="margin-top:8px">'+line("ChatGPT recommends",w.chatgpt)+line("Gemini recommends",w.gemini)+line("Google shows"+(w.from&&!/pack/i.test(w.from)?" (directory)":""),w.google)+'</div>'+(!w.chatgpt.length&&!w.gemini.length?'<p class="dim small" style="margin-top:6px">Quinn runs the ChatGPT + Gemini check for this niche and city on the next Day Shift.</p>':'')+'</details>'}
+function weakSpots(l){
+  if(Array.isArray(l.weakSpots)&&l.weakSpots.length)return l.weakSpots.map(String);
+  const p=l.profile||{},ai=l.aiCheck||{},sc=l.searchCheck||{},out=[];
+  if(ai.chatgpt==="not named"&&ai.gemini==="not named")out.push("ChatGPT and Gemini don't recommend them");
+  else{if(ai.chatgpt==="not named")out.push("ChatGPT doesn't recommend them");if(ai.gemini==="not named")out.push("Gemini doesn't recommend them")}
+  if(sc.namedYou===false&&sc.query)out.push("Not in the top 3 for \u201c"+sc.query+"\u201d");
+  if(p.website===false||(!l.website&&(((l.enrich||{}).website||{}).status==="not found")))out.push("No website");
+  const rv=p.reviews!=null?p.reviews:p.publicReviews,rt=p.rating!=null?p.rating:p.publicRating;
+  if(rv!=null&&rv<20)out.push("Only "+rv+" reviews");
+  if(rt!=null&&rt<4.3)out.push("Rating "+rt+"\u2605");
+  if(p.claimed===false)out.push("Google profile unclaimed");
+  if(p.photos!=null&&p.photos<10)out.push("Only "+p.photos+" photos on Google");
+  if(p.hoursListed===false)out.push("No hours on Google");
+  if(p.yelpClaimed===false)out.push("Yelp page unclaimed");
+  (p.signals||[]).forEach(x=>{if(x&&x.signal==="bad-review-unanswered")out.push("Unanswered bad review"+(x.detail?": "+x.detail:""))});
+  return out}
+function pitchLines(){return Array.isArray(CALL_KIT.pitch_lines)&&CALL_KIT.pitch_lines.length?CALL_KIT.pitch_lines:[{id:"ai-check",label:"Free AI check",text:(CALL_KIT.script||{}).opener||""}]}
+function pickLine(prev){const lines=pitchLines();const st=liveStats().byLine;const tested=lines.filter(x=>(st[x.id]||{}).calls>=10);
+  const best=(S.callstats&&S.callstats.bestLine&&lines.some(x=>x.id===S.callstats.bestLine))?S.callstats.bestLine:(tested.length?tested.sort((a,b)=>st[b.id].score-st[a.id].score)[0].id:null);
+  if(best&&Math.random()<.7)return best; /* mostly the winner, sometimes a test of the others */
+  const i=lines.findIndex(x=>x.id===prev);return lines[(i+1)%lines.length].id}
+function pitchCard(l){const s=S.sess;const sc=fillScript(l,s.line);const K=CALL_KIT;const st=liveStats().byLine;const ws=weakSpots(l);const quick=K.quick_objections||Object.keys(K.objections||{}).slice(0,4);const ctx=scriptCtx(l);
+  let h='<div class="card" style="margin-top:12px;display:grid;gap:12px"><div class="sec"><h4>Opener</h4><div class="bigchips">'+pitchLines().map(x=>{const r=st[x.id];return '<button type="button" class="chip" aria-pressed="'+(x.id===s.line)+'" data-line="'+esc(x.id)+'">'+esc(x.label)+(r&&r.calls?'<span class="n">'+r.winRate+'%</span>':'')+'</button>'}).join("")+'</div><div class="say"><p>'+esc(sc.opener)+'</p></div></div>';
+  const t5=top5Words(s.niche,s.town);const ai=l.aiCheck||{};const missed=ai.chatgpt==="not named"||ai.gemini==="not named";
+  h+='<div class="sec"><h4>Top 5 in '+esc(s.town)+'</h4>'+top5List(s.niche,s.town,true)+(t5?'<div class="say" style="margin-top:8px"><p>'+esc("Right now when people in "+(l.town||"town")+" ask ChatGPT or Google for a "+ctx.trade+", the top names are "+t5+"."+(missed?" "+(l.businessName||"You")+" doesn't come up.":""))+'</p></div>':'')+'</div>';
+  h+='<div class="sec"><h4>Their weak spots</h4>'+(ws.length?'<ul class="weak">'+ws.slice(0,5).map(w=>'<li>'+esc(w)+'</li>').join("")+'</ul>':'<p class="dim small">None on file yet: use the AI check.</p>')+'</div>';
+  h+='<div class="sec"><h4>Then</h4><div class="say"><p>'+esc(sc.value)+'</p><p>'+esc(sc.close)+'</p></div></div>';
+  h+='<div class="sec"><h4>If they say</h4><div style="display:grid;gap:8px">'+quick.filter(k=>(K.objections||{})[k]).map(k=>'<div class="qa"><b>\u201c'+esc(k)+'\u201d</b><p>'+esc(fmtTpl(K.objections[k],ctx))+'</p></div>').join("")+'</div>'+Object.keys(K.objections||{}).filter(k=>!quick.includes(k)).map(k=>'<details class="obj"><summary>'+esc(k)+'</summary><p>'+esc(fmtTpl(K.objections[k],ctx))+'</p></details>').join("")+'</div>';
+  return h+'<button type="button" class="btn block" style="min-height:52px;font-size:16px" data-pitch="1">Hide pitch card</button></div>'}
+function cbForms(l){const cb=S.cb||{};if(cb.id!==l.id)return "";const O=CALL_KIT.outcomes||{};
+  if(cb.mode==="when")return '<div class="cbpick cbig"><b style="font-size:17px">Call back when?</b><div class="bigchips"><button class="chip" type="button" data-cbwhen="h1" data-id="'+esc(l.id)+'">In 1 hour</button><button class="chip" type="button" data-cbwhen="0,16,30" data-id="'+esc(l.id)+'">Today 4:30 PM</button><button class="chip" type="button" data-cbwhen="1,9,0" data-id="'+esc(l.id)+'">Tomorrow 9 AM</button><button class="chip" type="button" data-cbwhen="1,16,30" data-id="'+esc(l.id)+'">Tomorrow 4:30 PM</button><button class="chip" type="button" data-cbwhen="3,9,0" data-id="'+esc(l.id)+'">In 3 days</button></div><div class="field" style="margin:0"><label for="cbDt">Or pick a day and time</label><input id="cbDt" type="datetime-local"></div><div class="minor"><button class="btn p" type="button" data-cbwhen="custom" data-id="'+esc(l.id)+'">Save</button><button class="btn" type="button" data-cbcancel="1">Cancel</button></div></div>';
+  if(cb.mode==="email"){const sold=cb.kind==="sold";return '<form class="cbpick cbig" data-cksend="'+esc(l.id)+'" data-kind="'+esc(cb.kind)+'"><b style="font-size:17px">'+(sold?"Sold! Send the check + checkout link to":cb.kind==="interested"?"Send their free AI check to":"Send the free check to")+'</b>'+(sold?'<div class="field" style="margin:0"><label for="ckPlan">Plan they picked</label><select id="ckPlan">'+PLANS.map(p=>'<option value="'+p[0]+'"'+(p[0]==="growth"?" selected":"")+'>'+p[1]+'</option>').join("")+'</select></div>':'')+'<div class="field" style="margin:0"><label for="ckEmail">Their email</label><input id="ckEmail" type="email" inputmode="email" autocomplete="off" placeholder="name@business.com" value="'+esc(l.contactEmail||"")+'" required></div><div class="minor"><button class="btn p" type="submit">'+(sold?"Log sale + send":"Log + send the check")+'</button><button class="btn" type="button" data-cknoemail="'+esc(l.id)+'" data-kind="'+esc(cb.kind)+'">No email, just log it</button></div><button class="btn" type="button" data-cbcancel="1" style="min-height:44px">Cancel</button><small class="dim">'+esc((O[cb.kind]||{}).then||"")+'</small></form>'}
+  return ""}
+function sessionView(){
+  const s=S.sess;const q=sessQueue();const l=q[0];const n=nicheById(s.niche);const done=(s.log||[]).length;const total=done+q.length;
+  let h='<div class="sess-top"><div class="t"><b>'+esc(n?n.label:"Calls")+' · '+esc(s.town)+'</b><small>'+done+' called · '+q.length+' left'+(n&&n.window?' · best '+esc(n.window):'')+'</small><div class="prog"><i style="width:'+(total?Math.round(done/total*100):0)+'%"></i></div></div><button type="button" class="btn bad" data-sess-end="1">End</button></div>';
+  h+=wotCard(s.niche,s.town);
+  if(!l){h+='<div class="empty" style="margin-top:12px;padding:28px 14px"><b>That\'s everyone in '+esc(s.town)+'</b>End the session for your summary, or start another niche.</div><button type="button" class="startbtn" style="margin-top:12px" data-sess-end="1">End session + see summary</button>';return h}
+  h+='<button type="button" class="btn block" style="min-height:54px;font-size:17px;margin-top:12px" data-pitch="1">'+(S.sessUI.pitch?"Hide pitch card":"Pitch card: opener, weak spots, objections")+'</button>';
+  if(S.sessUI.pitch)h+=pitchCard(l);
+  const p=l.profile||{};const rv=p.reviews!=null?p.reviews:p.publicReviews,rt=p.rating!=null?p.rating:p.publicRating;const ws=weakSpots(l);const cbk=isCallbackDue(l);
+  h+='<div class="lc">'+(cbk?'<span class="pill signal" style="justify-self:start;font-size:13px">Callback · '+esc(fmtT(l.nextCallAt))+(nicheOf(l)!==s.niche?' · '+esc(nicheLabel(nicheOf(l))):'')+'</span>':'')+'<h2>'+esc(l.businessName)+'</h2>';
+  h+='<div class="meta">'+(l.contactName?'Ask for <b>'+esc(l.contactName)+'</b> · ':'')+esc(l.town||"")+(l.state?', '+esc(l.state):'')+(rt!=null||rv!=null?' · '+(rt!=null?esc(rt)+'\u2605 ':'')+(rv!=null?esc(rv)+' reviews':''):'')+'</div>';
+  h+='<div class="meta">'+esc(l.businessName)+' <b>'+esc(aiResult(l))+'</b></div>';
+  if(ws.length)h+='<div class="chips">'+ws.slice(0,3).map(w=>'<span class="pill bad" style="font-size:13px;padding:5px 10px;white-space:normal">'+esc(w)+'</span>').join("")+'</div>';
+  if(Array.isArray(l.calls)&&l.calls.length){const c=l.calls[l.calls.length-1];h+='<div class="note small">Last call '+esc(fmtT(c.t))+': <b>'+esc(canonOutcome(c.outcome))+'</b>'+(c.note?' · '+esc(c.note):'')+'</div>'}
+  h+='<a class="callbig" href="'+esc(telLink(l.phone))+'" data-tel="'+esc(l.id)+'"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call '+esc(l.phone)+'</a>';
+  h+='<div class="field cbig" style="margin:0"><label class="sr" for="sessNote">Call note</label><textarea id="sessNote" data-id="'+esc(l.id)+'" placeholder="Quick note (optional): who you talked to, what they said">'+esc(S.sessUI.note&&S.sessUI.note.id===l.id?S.sessUI.note.v:"")+'</textarea></div>';
+  h+='<div class="ob">'+(CALL_KIT.session_outcomes||["no_answer","voicemail","call_back","interested","sold","not_interested"]).map(k=>'<button type="button" class="btn '+(k==="interested"||k==="sold"?"good":k==="not_interested"?"bad":"")+'" data-outcome="'+esc(k)+'" data-id="'+esc(l.id)+'"'+(S.readOnly?" disabled":"")+'>'+esc(outLabel(k))+'</button>').join("")+'</div>';
+  h+=cbForms(l);
+  h+='<div class="minor"><button type="button" class="btn" data-sess-skip="'+esc(l.id)+'">Skip</button><button type="button" class="btn" data-lead="'+esc(l.id)+'">Full card</button><button type="button" class="btn bad" data-outcome="do_not_call" data-id="'+esc(l.id)+'">Do not contact</button></div>';
+  h+='</div>';
+  if(q.length>1)h+='<p class="dim small" style="margin-top:10px">Next: '+esc(q.slice(1,4).map(x=>x.businessName).join(" · "))+(q.length>4?' …':'')+'</p>';
+  return h}
+function summaryView(x){const c=x.counts||{};const calls=(x.log||[]).length;const mins=x.endedAt&&x.startedAt?Math.max(1,Math.round((Date.parse(x.endedAt)-Date.parse(x.startedAt))/60000)):null;
+  let h='<div class="head"><div><h2>Session summary</h2><p>'+esc(nicheLabel(x.niche))+' · '+esc(x.town||"")+' · '+esc(fmtT(x.startedAt))+(mins?' · '+mins+' min':'')+'</p></div></div>';
+  h+='<div class="sumgrid">'+tile(calls,"Calls made")+tile((c.Interested||0)+(c.Sold||0),"Interested or sold","",(c.Interested||0)+(c.Sold||0)?"hot":"")+tile((x.callbacks||[]).length,"Callbacks scheduled")+tile((x.followUps||[]).length,"Follow-up emails queued")+'</div>';
+  h+='<div class="card" style="margin-top:12px"><h3>Outcomes</h3><div class="list">'+["No answer","Voicemail","Callback","Interested","Sold","Not interested","Do not contact"].filter(k=>c[k]).map(k=>'<div class="row"><div class="t"><b>'+esc(k)+'</b></div><b class="mono" style="font-size:18px">'+c[k]+'</b></div>').join("")+(calls?'':'<p class="dim small">No calls logged.</p>')+'</div></div>';
+  if((x.callbacks||[]).length)h+='<div class="card" style="margin-top:12px"><h3>Callbacks</h3><div class="list">'+x.callbacks.map(b=>'<div class="lrow" data-lead="'+esc(b.leadId)+'"><div class="t"><b>'+esc(b.name)+'</b><small>'+esc(fmtT(b.at))+'</small></div></div>').join("")+'</div><p class="dim small" style="margin-top:6px">They show up first in your next session.</p></div>';
+  if((x.followUps||[]).length)h+='<div class="card" style="margin-top:12px"><h3>Follow-up emails</h3><div class="list">'+x.followUps.map(b=>'<div class="lrow" data-lead="'+esc(b.leadId)+'"><div class="t"><b>'+esc(b.name)+'</b><small>'+esc(b.kind==="voicemail_email"?"voicemail email: next weekday morning":"free AI check"+(b.plan?" + "+b.plan+" checkout link":"")+": within about an hour")+'</small></div></div>').join("")+'</div></div>';
+  h+='<button type="button" class="startbtn" style="margin-top:14px" data-sess-close="1">Done</button>';
+  return h}
+async function sessionClick(b){
+  const d=b.dataset;
+  if(d.sessSetup){if(S.sess){go("calls");return true}S.setup={};S.sessSummary=null;go("calls");return true}
+  if(d.setupNiche){S.setup={niche:d.setupNiche};renderPage();return true}
+  if(d.setupTown){S.setup=Object.assign({},S.setup,{town:d.setupTown});renderPage();return true}
+  if(d.sessCancel){S.setup=null;renderPage();return true}
+  if(d.sessGo){const id="s-"+dayKey().replace(/-/g,"")+"-"+uid();const t=nowIso();
+    const sess={id,niche:d.niche,town:d.town,startedAt:t,status:"open",line:pickLine(null),lineFixed:false,done:[],skipped:[],log:[],counts:{},callbacks:[],followUps:[],by:"grayson",createdAt:t,updatedAt:t};
+    if(!await setDoc("sessions/"+id,sess))return true;S.sess=sess;S.setup=null;S.sessUI={};ls.set("ro.sess",id);event("Grayson","Started a call session: "+nicheLabel(d.niche)+" in "+d.town);renderPage();window.scrollTo({top:0});return true}
+  if(d.pitch){S.sessUI.pitch=!S.sessUI.pitch;renderPage();return true}
+  if(d.wot){S.sessUI.wot=!S.sessUI.wot;renderPage();return true}
+  if(d.line&&S.sess){S.sess.line=d.line;S.sess.lineFixed=true;updDoc("sessions/"+S.sess.id,{line:d.line,lineFixed:true});renderPage();return true}
+  if(d.sessSkip&&S.sess){S.sess.skipped=(S.sess.skipped||[]).concat([d.sessSkip]);S.cb={};updDoc("sessions/"+S.sess.id,{skipped:S.sess.skipped});renderPage();return true}
+  if(d.sessEnd&&S.sess){const x=Object.assign({},S.sess,{status:"done",endedAt:nowIso()});await updDoc("sessions/"+x.id,{status:"done",endedAt:x.endedAt});const c=x.counts||{};event("Grayson","Call session done: "+(x.log||[]).length+" calls, "+((c.Interested||0)+(c.Sold||0))+" interested or sold, "+(x.callbacks||[]).length+" callbacks");S.sess=null;S.sessSummary=x;S.cb={};ls.set("ro.sess","");renderPage();window.scrollTo({top:0});return true}
+  if(d.sessClose){S.sessSummary=null;renderPage();return true}
+  if(d.nichef){S.leadNiche=d.nichef;renderPage();return true}
+  if(d.nfclear){const l=S.leads.find(x=>x.id===d.nfclear);if(l&&await updDoc("leads/"+l.id,Object.assign({nextCallAt:null},callStatusOf(l)==="Callback"?{callStatus:"Called"}:{})))toast("Follow-up cleared");return true}
+  if(d.cs){const id=d.id,v=d.cs;const l=S.leads.find(x=>x.id===id);if(!l)return true;
+    if(v==="Interested"||v==="Sold"){S.cb={id,mode:"email",kind:v==="Sold"?"sold":"interested"};renderPage();return true}
+    if(v==="Callback"){S.cb={id,mode:"when"};renderPage();return true}
+    if(v==="Voicemail"){await callOutcome(id,"voicemail",{});return true}
+    if(v==="Not interested"){await callOutcome(id,"not_interested",{});return true}
+    if(v==="Do not contact"){if(S.confirm.dnc!==id){S.confirm.dnc=id;toast("Tap Do not contact again to confirm");setTimeout(()=>{S.confirm.dnc=null},4000);return true}S.confirm.dnc=null;await callOutcome(id,"do_not_call",{});return true}
+    if(await updDoc("leads/"+id,{callStatus:v})){toast("Status: "+v);event("Grayson",l.businessName+" → "+v)}return true}
+  if(d.sesssum){const x=S.sessions.find(y=>y.id===d.sesssum);if(x){S.sessSummary=x;renderPage();window.scrollTo({top:0})}return true}
+  return false}
+/* After any outcome logged while a session is open: the session doc keeps the tally for the summary and for Sage. */
+async function sessRecord(l,label,k,patch,t){const s=S.sess;if(!s||s.status!=="open")return;
+  const o=canonOutcome(label);if(!(s.done||[]).includes(l.id))s.done=(s.done||[]).concat([l.id]);
+  s.counts=Object.assign({},s.counts||{});s.counts[o]=(s.counts[o]||0)+1;
+  s.log=(s.log||[]).concat([{leadId:l.id,name:l.businessName,outcome:o,t,line:s.line,niche:nicheOf(l),town:townKey(l)}]);
+  if(k==="call_back"&&patch.nextCallAt)s.callbacks=(s.callbacks||[]).concat([{leadId:l.id,name:l.businessName,at:patch.nextCallAt}]);
+  if(patch.followUp&&patch.followUp.status==="pending")s.followUps=(s.followUps||[]).concat([{leadId:l.id,name:l.businessName,kind:patch.followUp.kind,plan:patch.followUp.plan||null}]);
+  if(!s.lineFixed)s.line=pickLine(s.line);
+  S.sessUI.note=null;
+  await updDoc("sessions/"+s.id,{done:s.done,counts:s.counts,log:s.log,callbacks:s.callbacks||[],followUps:s.followUps||[],line:s.line,lastAt:t})}
 function callDrawer(l){
-  const K=CALL_KIT;const O=K.outcomes||{};const sc=fillScript(l);const cb=S.cb||{};const email=l.contactEmail||"";const tries=(l.calls||[]).filter(c=>/no answer|voicemail/i.test(c.outcome||"")).length;
-  let h='<div class="inline"><span class="pill">'+esc(tradeWord(l.trade))+'</span><span class="pill">'+esc(l.town||"")+(l.state?', '+esc(l.state):'')+'</span>'+statusPill(l.status)+'<span class="pill signal">'+esc(l.callWindow||bestCallTime(l.trade))+'</span></div>';
+  const K=CALL_KIT;const O=K.outcomes||{};const sc=fillScript(l,S.sess?S.sess.line:null);const cb=S.cb||{};const email=l.contactEmail||"";const tries=(l.calls||[]).filter(c=>/no answer|voicemail/i.test(c.outcome||"")).length;
+  let h='<div class="inline"><span class="pill">'+esc(tradeWord(l.trade))+'</span><span class="pill">'+esc(l.town||"")+(l.state?', '+esc(l.state):'')+'</span>'+statusPill(l.status)+tierPill(l)+'<span class="pill signal">'+esc(l.callWindow||bestCallTime(l.trade))+'</span></div>';
+  if(l.whyNow)h+='<div class="note good" style="margin-top:8px"><b>Why they should care now:</b> '+esc(l.whyNow)+'</div>';
+  if(Array.isArray(l.buySignals)&&l.buySignals.length)h+='<div class="chips" style="margin-top:6px">'+l.buySignals.map(b=>'<span class="pill ember">'+esc(b)+'</span>').join("")+'</div>';
   h+=l.phone?'<a class="btn block tel-big" href="'+esc(telLink(l.phone))+'" data-tel="'+esc(l.id)+'"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call '+esc(l.phone)+'</a>':'<div class="note warn">No phone on file.</div>';
   h+='<div class="kv"><dt>AI check</dt><dd>'+esc(l.businessName)+' '+esc(aiResult(l))+'</dd><dt>Owner</dt><dd>'+esc(l.contactName||"unknown")+'</dd><dt>Email</dt><dd>'+(email?esc(email):'<span class="dim">none on file: ask for it</span>')+'</dd>'+(l.website?'<dt>Site</dt><dd>'+esc(String(l.website).replace(/^https?:\/\//,""))+'</dd>':'')+(tries?'<dt>Tries</dt><dd>'+tries+' no answer</dd>':'')+'</div>';
   h+='<div class="sec"><h4>Say this</h4><div class="say"><p>'+esc(sc.opener)+'</p><p>'+esc(sc.value)+'</p><p>'+esc(sc.close)+'</p></div></div>';
   h+='<div class="sec"><h4>If they say</h4>'+Object.keys(K.objections||{}).map(k=>'<details class="obj"><summary>'+esc(k)+'</summary><p>'+esc(fmtTpl(K.objections[k],{town:l.town||""}))+'</p></details>').join("")+'</div>';
-  h+='<div class="sec"><h4>Outcome (tap one)</h4><div class="outc">'+["no_answer","not_interested","call_back","send_check","interested","do_not_call"].map(k=>'<button type="button" class="btn '+(k==="interested"?"good":k==="do_not_call"?"bad":k==="send_check"?"p":"")+'" data-outcome="'+k+'" data-id="'+esc(l.id)+'"'+(S.readOnly?" disabled":"")+'>'+esc((O[k]||{}).label||k)+'</button>').join("")+'</div>';
-  if(cb.id===l.id&&cb.mode==="when")h+='<div class="cbpick"><b>Call back when?</b><div class="chips"><button class="chip" type="button" data-cbwhen="0,16,30" data-id="'+esc(l.id)+'">Today 4:30 PM</button><button class="chip" type="button" data-cbwhen="1,7,30" data-id="'+esc(l.id)+'">Tomorrow 7:30 AM</button><button class="chip" type="button" data-cbwhen="1,16,30" data-id="'+esc(l.id)+'">Tomorrow 4:30 PM</button><button class="chip" type="button" data-cbwhen="3,7,30" data-id="'+esc(l.id)+'">In 3 days, 7:30 AM</button></div><div class="inline"><div class="field" style="margin:0;flex:1;min-width:180px"><label class="sr" for="cbDt">Pick a day and time</label><input id="cbDt" type="datetime-local"></div><button class="btn sm p" type="button" data-cbwhen="custom" data-id="'+esc(l.id)+'">Save</button><button class="btn sm" type="button" data-cbcancel="1">Cancel</button></div></div>';
-  if(cb.id===l.id&&cb.mode==="email")h+='<form class="cbpick" data-cksend="'+esc(l.id)+'" data-kind="'+esc(cb.kind)+'"><b>'+(cb.kind==="interested"?"Send the check and the offer to":"Send the free check to")+'</b><div class="field" style="margin:0"><label class="sr" for="ckEmail">Email</label><input id="ckEmail" type="email" inputmode="email" autocomplete="off" placeholder="their email" value="'+esc(email)+'" required></div><div class="inline"><button class="btn sm p" type="submit">'+(cb.kind==="interested"?"Send check + offer":"Send the check")+'</button><button class="btn sm" type="button" data-cbcancel="1">Cancel</button></div><small class="dim">'+esc((O[cb.kind]||{}).then||"")+'</small></form>';
-  h+='<ul class="then">'+["no_answer","not_interested","call_back","send_check","interested"].map(k=>'<li><b>'+esc((O[k]||{}).label||k)+':</b> '+esc((O[k]||{}).then||"")+'</li>').join("")+'</ul></div>';
+  h+='<div class="sec"><h4>Outcome (tap one)</h4><div class="outc">'+["no_answer","voicemail","call_back","interested","sold","not_interested","send_check","do_not_call"].map(k=>'<button type="button" class="btn '+(k==="interested"||k==="sold"?"good":k==="do_not_call"?"bad":k==="send_check"?"p":"")+'" data-outcome="'+k+'" data-id="'+esc(l.id)+'"'+(S.readOnly?" disabled":"")+'>'+esc(outLabel(k))+'</button>').join("")+'</div>';
+  h+=cbForms(l);
+  h+='<ul class="then">'+["no_answer","voicemail","call_back","interested","sold","not_interested"].map(k=>'<li><b>'+esc((O[k]||{}).label||k)+':</b> '+esc((O[k]||{}).then||"")+'</li>').join("")+'</ul></div>';
   if(Array.isArray(l.calls)&&l.calls.length)h+='<div class="sec"><h4>Earlier calls</h4><div class="list">'+l.calls.slice(-6).reverse().map(c=>'<div class="row"><span class="pill">'+esc(c.outcome)+'</span><div class="t"><small>'+esc(fmtT(c.t))+(c.note?' · '+esc(c.note):'')+(c.nextAt?' · next '+esc(fmtT(c.nextAt)):'')+'</small></div></div>').join("")+'</div></div>';
   h+='<p class="dim small"><button class="btn sm" type="button" data-lead="'+esc(l.id)+'">Full lead card</button></p>';
   return h;
 }
 async function callOutcome(id,k,extra){
-  const l=S.leads.find(x=>x.id===id);if(!l)return;extra=extra||{};const O=(CALL_KIT.outcomes||{})[k]||{};const t=nowIso();const label=O.label||k;
-  const calls=(l.calls||[]).concat([{t,who:"grayson",outcome:label,note:extra.note||(extra.email?"email "+extra.email:""),nextAt:extra.nextAt||null}]);
+  /* One place that logs a call, from the session, the call drawer or the lead card.
+     callStatus is Grayson's call word; status stays the crew's pipeline word (Echo, Quinn and the watch read it). */
+  const l=S.leads.find(x=>x.id===id);if(!l)return false;extra=extra||{};const O=(CALL_KIT.outcomes||{})[k]||{};const t=nowIso();const label=outLabel(k);
+  const ctx=S.sess&&S.sess.status==="open"?{niche:nicheOf(l),town:townKey(l),pitchLine:S.sess.line,sessionId:S.sess.id}:{niche:nicheOf(l),town:townKey(l)};
+  const calls=(l.calls||[]).concat([Object.assign({t,who:"grayson",outcome:label,note:extra.note||(extra.email?"email "+extra.email:""),nextAt:extra.nextAt||null},ctx)]);
   const patch={calls};let msg="Logged: "+label;
-  if(k==="no_answer"){const tries=calls.filter(c=>/no answer|voicemail/i.test(c.outcome||"")).length;const max=O.max_tries||3;if(tries>=max){patch.callDone=true;patch.nextCallAt=null;msg="No answer "+tries+" times. Off the call list; email keeps going."}else{patch.nextCallAt=ctIso(O.after_days||1,7,30);msg="No answer ("+tries+" of "+max+"). Back on the list tomorrow."}}
-  else if(k==="not_interested"){patch.status="Not a fit";patch.nextCallAt=null;patch.followUp={kind:"close_lead",status:"done",requestedAt:t,doneAt:t,by:"calls screen"};msg="Not a fit. No more calls or emails."}
-  else if(k==="call_back"){if(!extra.nextAt)return;patch.nextCallAt=extra.nextAt;msg="Call back "+fmtT(extra.nextAt)}
-  else if(k==="send_check"||k==="interested"){const em=String(extra.email||"").trim().toLowerCase();if(!em)return;patch.followUp={kind:O.next||(k==="interested"?"email_ai_check_plus_offer":"email_ai_check"),status:"pending",requestedAt:t,email:em,withOffer:k==="interested",by:"calls screen"};patch.freeCheck=Object.assign({},l.freeCheck||{},{requestedAt:t,requestedBy:"call",toEmail:em,withOffer:k==="interested",status:"requested"});if(!l.contactEmail){patch.contactEmail=em;patch.emailSource="given on the phone "+dayKey()}patch.status="Replied";patch.nextCallAt=null;msg=k==="interested"?"Interested. The desk sends the check and the offer within 2 hours.":"The desk sends the free check within 2 hours."}
-  else if(k==="do_not_call"){patch.status="Suppressed";patch.nextCallAt=null;patch.callDone=true;await setDoc("suppression/"+slug(l.contactEmail||l.businessName),{email:l.contactEmail||"",businessName:l.businessName,reason:"asked on call",by:"grayson",at:t});msg="Suppressed. Never contacted again."}
-  if(await updDoc("leads/"+id,patch)){toast(msg);event("Grayson","Call "+label+": "+l.businessName+(extra.email?" ("+extra.email+")":"")+(extra.nextAt?" at "+fmtT(extra.nextAt):""));S.cb={};closeDrawer()}
+  const tries=calls.filter(c=>/no answer|voicemail/i.test(c.outcome||"")).length;const max=((CALL_KIT.outcomes||{}).no_answer||{}).max_tries||3;
+  const [wh,wm]=windowStart(l);
+  if(k==="no_answer"){patch.callStatus="Called";if(tries>=max){patch.callDone=true;patch.nextCallAt=null;msg="No answer "+tries+" times. Off the call list; email keeps going."}else{patch.nextCallAt=ctIso(O.after_days||1,wh,wm);msg="No answer ("+tries+" of "+max+"). Back on the list tomorrow."}}
+  else if(k==="voicemail"){patch.callStatus="Voicemail";if(tries>=max){patch.callDone=true;patch.nextCallAt=null}else patch.nextCallAt=ctIso(O.after_days||2,wh,wm);
+    const f=l.followUp||{};const already=f.kind==="voicemail_email"&&["pending","sent","waiting-email"].includes(f.status);
+    if(!already&&f.status!=="pending"){patch.followUp={kind:"voicemail_email",status:l.contactEmail?"pending":"waiting-email",email:l.contactEmail||"",requestedAt:t,by:"calls screen"}}
+    msg=l.contactEmail?"Voicemail. Echo emails their free AI check next weekday morning.":"Voicemail. No email on file yet: Scout keeps hunting, Echo sends when found."}
+  else if(k==="not_interested"){patch.callStatus="Not interested";patch.status="Not a fit";patch.nextCallAt=null;patch.followUp={kind:"close_lead",status:"done",requestedAt:t,doneAt:t,by:"calls screen"};msg="Not interested. No more calls or emails."}
+  else if(k==="call_back"){if(!extra.nextAt)return false;patch.callStatus="Callback";patch.nextCallAt=extra.nextAt;msg="Callback "+fmtT(extra.nextAt)+". It shows up first in that day's session."}
+  else if(k==="send_check"||k==="interested"||k==="sold"){const em=String(extra.email||"").trim().toLowerCase();if(!em&&!extra.noEmail)return false;
+    patch.callStatus=k==="sold"?"Sold":"Interested";if(!["Meeting","Client"].includes(l.status))patch.status="Replied";patch.nextCallAt=null;
+    if(em){patch.followUp={kind:k==="send_check"?"email_ai_check":"email_ai_check_plus_offer",status:"pending",requestedAt:t,email:em,withOffer:k!=="send_check",plan:k==="sold"?(extra.plan||"growth"):null,by:"calls screen"};
+      patch.freeCheck=Object.assign({},l.freeCheck||{},{requestedAt:t,requestedBy:"call",toEmail:em,withOffer:k!=="send_check",status:"requested"});
+      if(!l.contactEmail){patch.contactEmail=em;patch.emailSource="given on the phone "+dayKey()}
+      msg=k==="sold"?"Sold! The desk emails the check + the "+(extra.plan||"growth")+" checkout link within about an hour.":"Interested. The desk emails their free AI check within about an hour."}
+    else msg=(k==="sold"?"Sold":"Interested")+" logged. No email given, so nothing is sent: add it on the card when you have it."}
+  else if(k==="do_not_call"){patch.callStatus="Do not contact";patch.status="Suppressed";patch.nextCallAt=null;patch.callDone=true;await setDoc("suppression/"+slug(l.contactEmail||l.businessName),{email:l.contactEmail||"",businessName:l.businessName,reason:"asked on call",by:"grayson",at:t});msg="Do not contact. Never contacted again."}
+  if(await updDoc("leads/"+id,patch)){
+    toast(msg);event("Grayson","Call "+label+": "+l.businessName+(extra.email?" ("+extra.email+")":"")+(extra.nextAt?" at "+fmtT(extra.nextAt):""));
+    await sessRecord(l,label,k,patch,t);
+    S.cb={};if(S.drawer&&(S.drawer.kind==="call"||(S.sess&&S.page==="calls")))closeDrawer();renderPage();return true}
+  return false
 }
 
 /* ---------- Leads ---------- */
 function scoreBand(s){s=Number(s)||0;return s>=settings().scoreGate?"hi":s>=40?"mid":"lo"}
 function rLeads(){
   const c=counts();const q=S.leadQuery.trim().toLowerCase();
-  let h=pageHead("leads","Every business the crew found, with the proof. Tap a lead for the facts, the AI check and the call script.",'<div class="inline"><button class="btn sm" type="button" data-act="addLead">+ Add lead</button><button class="btn sm" type="button" data-go="calls"><svg aria-hidden="true"><use href="#i-phone"/></svg>Calls</button><button class="btn sm '+(S.leadView==="list"?"p":"")+'" type="button" data-act="view-list">All leads</button></div>');
+  let h=pageHead("leads","Every business the crew found, one full card each. Tap a business for everything in one place.",'<div class="inline"><button class="btn" type="button" data-act="addLead">+ Add lead</button></div>');
   h+=dbBanner();
+  h+=startBtn();
   if(S.leadView==="calls"){
     const list=c.callList;
-    h+='<div class="note" style="margin-bottom:12px"><b>Call list.</b> Only the goal: their email and a yes to the free check. Best windows 7:00–8:15 AM and 4:00–6:00 PM their time, Tue–Thu. Dial by hand. <button class="copy" type="button" data-copy="script">'+'<svg aria-hidden="true"><use href="#i-copy"/></svg>Copy the script</button></div>';
-    h+=list.length?'<div class="card"><div class="list">'+list.map(l=>'<div class="row click" data-lead="'+esc(l.id)+'"><span class="score" data-s="'+scoreBand(l.score)+'">'+esc(l.score==null?"–":l.score)+'</span><div class="t"><b>'+esc(l.businessName)+'</b><small>'+esc(l.trade||"")+' · '+esc(l.town||"")+', '+esc(l.state||"")+' · '+esc(l.callWindow||"")+'</small></div><span class="pill signal mono">'+esc(l.phone)+'</span></div>').join("")+'</div></div>':'<div class="empty"><b>No one to call yet</b>Qualified leads with a published phone number land here, ranked by Quinn.</div>';
+    h+='<div class="note" style="margin-bottom:12px"><b>Call list.</b> Only the goal: their email and a yes to the free check. Dial by hand. <button class="copy" type="button" data-copy="script">'+'<svg aria-hidden="true"><use href="#i-copy"/></svg>Copy the script</button> <button class="copy" type="button" data-act="view-list">All leads</button></div>';
+    h+=list.length?'<div class="card"><div class="list">'+list.map(callRow).join("")+'</div></div>':'<div class="empty"><b>No one to call yet</b>Leads with a published phone number land here.</div>';
     return h;
   }
-  const filters=[["all","All",S.leads.length]].concat(LEAD_STATUS.map(s=>[s,s,c.by[s]||0]));
-  h+='<div class="chips" style="margin:4px 0 12px">'+filters.map(f=>'<button class="chip" type="button" aria-pressed="'+(S.leadFilter===f[0])+'" data-filter="'+esc(f[0])+'">'+esc(f[1])+'<span class="n">'+f[2]+'</span></button>').join("")+'</div>';
-  h+='<div class="field" style="margin:0 0 12px"><label class="sr" for="leadQ">Search leads</label><input id="leadQ" type="search" placeholder="Search business, town, trade" value="'+esc(S.leadQuery)+'"></div>';
-  let list=S.leads.filter(l=>S.leadFilter==="all"||l.status===S.leadFilter);
-  if(q)list=list.filter(l=>[l.businessName,l.town,l.trade,l.state,l.contactEmail].join(" ").toLowerCase().includes(q));
-  list=list.slice().sort((a,b)=>(b.score||0)-(a.score||0));
-  h+=list.length?'<div class="card"><div class="list">'+list.map(l=>'<div class="row click" data-lead="'+esc(l.id)+'"><span class="score" data-s="'+scoreBand(l.score)+'">'+esc(l.score==null?"–":l.score)+'</span><div class="t"><b>'+esc(l.businessName)+'</b><small>'+esc(l.trade||"")+' · '+esc(l.town||"")+', '+esc(l.state||"")+(l.contactEmail?" · email":"")+(l.phone?" · phone":"")+(l.searchCheck&&l.searchCheck.namedYou===false?" · not named":"")+'</small></div>'+statusPill(l.status)+'</div>').join("")+'</div></div>'
-    :'<div class="empty"><b>'+(S.leads.length?"No leads match":"No leads yet")+'</b>'+(S.leads.length?"Try another filter.":"Scout adds businesses from "+esc((settings().targets||[]).map(t=>t.town).join(", "))+" on the first Day Shift. You can also add one by hand.")+'</div>';
+  const by={};CALL_STATUSES.forEach(s=>by[s]=0);const byN={};S.leads.forEach(l=>{by[callStatusOf(l)]++;const n=nicheOf(l)||"other";byN[n]=(byN[n]||0)+1});
+  if(S.leadFilter!=="all"&&!CALL_STATUSES.includes(S.leadFilter))S.leadFilter="all";
+  const nf=[["all","All niches",S.leads.length]].concat(NICHES().filter(n=>byN[n.id]).map(n=>[n.id,n.label,byN[n.id]])).concat(byN.other?[["other","Other",byN.other]]:[]);
+  h+='<div class="sec"><h4>Niche</h4><div class="bigchips">'+nf.map(f=>'<button class="chip" type="button" aria-pressed="'+(S.leadNiche===f[0])+'" data-nichef="'+esc(f[0])+'">'+esc(f[1])+'<span class="n">'+f[2]+'</span></button>').join("")+'</div></div>';
+  h+='<div class="sec" style="margin-top:12px"><h4>Status</h4><div class="bigchips">'+[["all","All",S.leads.length]].concat(CALL_STATUSES.filter(s=>by[s]).map(s=>[s,s,by[s]])).map(f=>'<button class="chip" type="button" aria-pressed="'+(S.leadFilter===f[0])+'" data-filter="'+esc(f[0])+'">'+esc(f[1])+'<span class="n">'+f[2]+'</span></button>').join("")+'</div></div>';
+  h+='<div class="field cbig" style="margin:12px 0"><label class="sr" for="leadQ">Search leads</label><input id="leadQ" type="search" placeholder="Search business, city, owner" value="'+esc(S.leadQuery)+'"></div>';
+  let list=S.leads.filter(l=>(S.leadFilter==="all"||callStatusOf(l)===S.leadFilter)&&(S.leadNiche==="all"||(nicheOf(l)||"other")===S.leadNiche));
+  if(q)list=list.filter(l=>[l.businessName,l.town,l.trade,l.state,l.contactEmail,l.contactName].join(" ").toLowerCase().includes(q));
+  const rank={Callback:0,Interested:1,New:2,Voicemail:3,Called:4,Sold:5,"Not interested":6,"Do not contact":7};
+  list=list.slice().sort((a,b)=>(rank[callStatusOf(a)]-rank[callStatusOf(b)])||tierRank(a)-tierRank(b)||(b.score||0)-(a.score||0));
+  h+=list.length?'<div class="card"><div class="list">'+list.map(leadRow).join("")+'</div></div>'
+    :'<div class="empty"><b>'+(S.leads.length?"No leads match":"No leads yet")+'</b>'+(S.leads.length?"Try another filter.":"Scout adds businesses every Day Shift. You can also add one by hand.")+'</div>';
   return h;
 }
+function leadRow(l){const p=l.profile||{};const rv=p.reviews!=null?p.reviews:p.publicReviews,rt=p.rating!=null?p.rating:p.publicRating;const nx=l.nextCallAt&&callStatusOf(l)==="Callback"?' · call back '+fmtT(l.nextCallAt):'';
+  return '<div class="lrow" data-lead="'+esc(l.id)+'"><div class="t"><b>'+esc(l.businessName)+'</b><small>'+esc(nicheLabel(nicheOf(l)))+' · '+esc(l.town||"")+(l.state?', '+esc(l.state):'')+(rt!=null?' · '+esc(rt)+'★':'')+(rv!=null?' ('+esc(rv)+')':'')+esc(nx)+'</small><span style="display:flex;gap:6px;margin-top:5px;flex-wrap:wrap">'+csPill(l)+tierPill(l)+(l.phone?'':'<span class="pill">no phone</span>')+'</span></div>'+(l.phone?'<a class="tel" href="'+esc(telLink(l.phone))+'" data-tel="'+esc(l.id)+'" aria-label="Call '+esc(l.businessName)+'"><svg aria-hidden="true"><use href="#i-phone"/></svg></a>':'')+'</div>'}
 function statusPill(s){const m={Qualified:"signal",Contacted:"warn",Replied:"ember",Meeting:"ember",Client:"good","Not a fit":"",Suppressed:"bad",New:"",Researching:""};return '<span class="pill '+(m[s]||"")+'">'+esc(s||"New")+'</span>'}
 
 /* ---------- Floor ---------- */
@@ -893,28 +1197,64 @@ function renderDrawer(){
   else if(d.kind==="clients"){title.textContent="Clients";body.innerHTML=S.clients.length?'<div class="list">'+S.clients.map(k=>'<div class="row click" data-client="'+esc(k.id)+'"><div class="t"><b>'+esc(k.businessName)+'</b><small>$'+esc(k.monthly||0)+'/mo · '+esc(k.status||"")+' · '+((k.work||[]).filter(w=>w.status==="done").length)+' of '+CLIENT_WORK.length+' work items done</small></div><span class="pill '+(k.status==="active"?"good":"")+'">'+esc(k.status||"")+'</span></div>').join("")+'</div>':'<div class="empty"><b>No clients yet</b>When a business pays through Stripe, the reply desk creates the client here and starts the work.</div>'}
   else if(d.kind==="client"){const k=S.clients.find(x=>x.id===d.id);title.textContent=k?k.businessName:"Client";body.innerHTML=k?clientDrawer(k):'<div class="empty"><b>Client not found</b></div>';if(k&&k.reviewLink){const q=$("#qrBox");if(q){q.innerHTML="";if(window.QRCode){try{new QRCode(q,{text:k.reviewLink,width:200,height:200,correctLevel:QRCode.CorrectLevel.M})}catch(e){q.textContent="QR could not render; copy the link instead"}}else{q.style.color="#15212c";q.textContent="QR maker did not load (no internet?). Reload, or copy the link instead."}}}}
 }
+function notFound(l,key){const e=(l.enrich||{})[key];return '<span class="nf">Not found</span>'+(e&&e.tries?'<small class="dim"> · tried '+esc(e.tries)+'×'+(e.lastTriedAt?', last '+esc(fmtT(e.lastTriedAt).split(",")[0]):'')+' · Scout keeps looking</small>':'<small class="dim"> · Scout keeps looking</small>')}
+function factRow(label,html,l,key){return '<div class="fact"><dt>'+esc(label)+'</dt><dd>'+(html||notFound(l,key))+'</dd></div>'}
+function linkOut(u,text){u=safeUrl(u);return u?'<a href="'+esc(u)+'" target="_blank" rel="noopener">'+esc(text||u.replace(/^https?:\/\/(www\.)?/,"").slice(0,44))+'</a>':''}
+function gbpLink(l){if(safeUrl(l.gbpUrl))return l.gbpUrl;const s=((l.profile||{}).sources||[]).find(x=>/business\.google\.com|google\.com\/maps|g\.page|maps\.app\.goo\.gl/i.test(x.url||""));return s?s.url:""}
 function leadDrawer(l){
-  const st=settings();const p=l.profile||{};const ai=l.aiCheck||{};const sc=l.searchCheck||{};const drafts=S.drafts.filter(d=>d.leadId===l.id);
-  let h='<div class="inline"><span class="score" data-s="'+scoreBand(l.score)+'">'+esc(l.score==null?"–":l.score)+'</span>'+statusPill(l.status)+'<span class="pill">'+esc(l.trade||"")+'</span><span class="pill">'+esc(l.town||"")+', '+esc(l.state||"")+'</span></div>';
-  h+='<div class="sec"><h4>Status</h4><div class="field" style="margin:0"><label class="sr" for="lStatus">Status</label><select id="lStatus" data-leadstatus="'+esc(l.id)+'">'+LEAD_STATUS.map(s=>'<option '+(l.status===s?"selected":"")+'>'+esc(s)+'</option>').join("")+'</select></div></div>';
-  h+='<div class="sec"><h4>Contact</h4><div class="kv">'
-    +'<dt>Email</dt><dd>'+(l.contactEmail?esc(l.contactEmail)+' <button class="copy" type="button" data-copytext="'+esc(l.contactEmail)+'"><svg aria-hidden="true"><use href="#i-copy"/></svg>Copy</button>'+(l.emailSource?'<br><small class="dim">from <a href="'+esc(l.emailSource)+'" target="_blank" rel="noopener">'+esc(l.emailSource.replace(/^https?:\/\//,"").slice(0,48))+'</a></small>':''):'<span class="dim">none published</span>')+'</dd>'
-    +'<dt>Phone</dt><dd>'+(l.phone?'<span class="mono">'+esc(l.phone)+'</span> <button class="copy" type="button" data-copytext="'+esc(l.phone)+'"><svg aria-hidden="true"><use href="#i-copy"/></svg>Copy</button>'+(l.callWindow?' <span class="pill signal">'+esc(l.callWindow)+'</span>':''):'<span class="dim">none published</span>')+'</dd>'
-    +'<dt>Owner</dt><dd>'+esc(l.contactName||"unknown")+'</dd>'
-    +'<dt>Website</dt><dd>'+(l.website?'<a href="'+esc(l.website)+'" target="_blank" rel="noopener">'+esc(l.website.replace(/^https?:\/\//,""))+'</a>':'<span class="dim">none</span>')+'</dd></div></div>';
-  h+='<div class="sec"><h4>Why this score</h4>'+(Array.isArray(l.scoreWhy)&&l.scoreWhy.length?'<ul class="why">'+l.scoreWhy.map(w=>'<li class="'+(/^-|−|minus/i.test(String(w))?"neg":"")+'">'+esc(w)+'</li>').join("")+'</ul>':'<p class="dim small">Not scored yet.</p>')+'</div>';
-  h+='<div class="sec"><h4>Profile facts</h4><div class="kv"><dt>Google</dt><dd>'+(p.gbpFound===false?"no listing found":(p.rating!=null?esc(p.rating)+"★ · ":"")+(p.reviews!=null?esc(p.reviews)+" reviews":"reviews unknown")+(p.claimed===false?" · unclaimed":"")+(p.photos!=null?" · "+esc(p.photos)+" photos":""))+'</dd><dt>Yelp</dt><dd>'+(p.yelpClaimed==null?"unknown":p.yelpClaimed?"claimed":"unclaimed")+'</dd><dt>Search check</dt><dd>'+(sc.query?'“'+esc(sc.query)+'” names '+esc((sc.namedTop3||[]).join(", ")||"nobody")+' · '+(sc.namedYou?'<span class="pill good">named</span>':'<span class="pill warn">not named</span>'):'<span class="dim">not run</span>')+'</dd></div>'+(Array.isArray(p.sources)&&p.sources.length?'<details><summary class="small muted" style="cursor:pointer">Sources ('+p.sources.length+')</summary><ul class="small" style="margin:6px 0 0 18px">'+p.sources.map(s=>'<li><a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.what||s.url)+'</a></li>').join("")+'</ul></details>':'')+'</div>';
-  h+='<div class="sec"><h4>Google facts</h4><p class="small muted">The crew can\'t read Google Maps. Open the listing on your phone and type what you see; Quinn re-scores it on the next run.</p><form class="inline" data-gfacts="'+esc(l.id)+'"><div class="field" style="margin:0;width:92px"><label for="gf-r-'+esc(l.id)+'" class="small">Reviews</label><input id="gf-r-'+esc(l.id)+'" name="reviews" type="number" inputmode="numeric" min="0" value="'+esc(p.reviews==null?"":p.reviews)+'"></div><div class="field" style="margin:0;width:84px"><label for="gf-s-'+esc(l.id)+'" class="small">Rating</label><input id="gf-s-'+esc(l.id)+'" name="rating" type="number" inputmode="decimal" step="0.1" min="0" max="5" value="'+esc(p.rating==null?"":p.rating)+'"></div><div class="field" style="margin:0;width:84px"><label for="gf-p-'+esc(l.id)+'" class="small">Photos</label><input id="gf-p-'+esc(l.id)+'" name="photos" type="number" inputmode="numeric" min="0" value="'+esc(p.photos==null?"":p.photos)+'"></div><div class="field" style="margin:0;width:110px"><label for="gf-c-'+esc(l.id)+'" class="small">Claimed</label><select id="gf-c-'+esc(l.id)+'" name="claimed"><option value="">unknown</option><option value="yes" '+(p.claimed===true?"selected":"")+'>yes</option><option value="no" '+(p.claimed===false?"selected":"")+'>no (Own this business?)</option></select></div><button class="btn sm p" type="submit">Save</button></form></div>';
-  h+='<div class="sec"><h4>AI check</h4><p class="small muted">Automatic: the crew asks ChatGPT and Gemini for this town and records whether this business was named. You can also check by hand and tap below.</p>'+(ai.answers?'<div class="note" style="margin-bottom:8px"><b>ChatGPT'+(ai.answers.models&&ai.answers.models.chatgpt?' ('+esc(ai.answers.models.chatgpt)+')':'')+':</b> '+esc(String(ai.answers.chatgpt||'no answer').slice(0,600))+'</div><div class="note"><b>Gemini'+(ai.answers.models&&ai.answers.models.gemini?' ('+esc(ai.answers.models.gemini)+')':'')+':</b> '+esc(String(ai.answers.gemini||'no answer').slice(0,600))+'</div>':'')+(Array.isArray(ai.questions)&&ai.questions.length?ai.questions.map((q,i)=>'<div class="row"><div class="t"><small style="white-space:normal;color:var(--text)">'+esc(q)+'</small></div><button class="copy" type="button" data-copytext="'+esc(q)+'"><svg aria-hidden="true"><use href="#i-copy"/></svg>Copy</button></div>').join(""):'<p class="dim small">Quinn writes the two questions when the lead is qualified.</p>');
-  h+='<div class="grid g2" style="margin-top:8px"><div><small class="dim">ChatGPT</small><div class="inline" style="margin-top:4px"><button class="btn sm '+(ai.chatgpt==="named"?"good":"")+'" type="button" data-ai="chatgpt" data-v="named" data-id="'+esc(l.id)+'">Named</button><button class="btn sm '+(ai.chatgpt==="not named"?"bad":"")+'" type="button" data-ai="chatgpt" data-v="not named" data-id="'+esc(l.id)+'">Not named</button></div></div><div><small class="dim">Gemini</small><div class="inline" style="margin-top:4px"><button class="btn sm '+(ai.gemini==="named"?"good":"")+'" type="button" data-ai="gemini" data-v="named" data-id="'+esc(l.id)+'">Named</button><button class="btn sm '+(ai.gemini==="not named"?"bad":"")+'" type="button" data-ai="gemini" data-v="not named" data-id="'+esc(l.id)+'">Not named</button></div></div></div>';
+  const p=l.profile||{};const ai=l.aiCheck||{};const sc=l.searchCheck||{};const drafts=S.drafts.filter(d=>d.leadId===l.id);const cs=callStatusOf(l);
+  const rv=p.reviews!=null?p.reviews:p.publicReviews,rt=p.rating!=null?p.rating:p.publicRating;const ratingFromGoogle=p.reviews!=null||p.rating!=null;
+  let h='<div class="inline">'+csPill(l)+'<span class="pill">'+esc(nicheLabel(nicheOf(l)))+'</span><span class="pill">'+esc(l.town||"")+(l.state?', '+esc(l.state):'')+'</span>'+tierPill(l)+'</div>';
+  if(l.whyNow)h+='<div class="note good"><b>Why they should care now:</b> '+esc(l.whyNow)+'</div>';
+  h+=cs==="Do not contact"?'<div class="note bad"><b>Do not contact.</b> They asked us to stop. No calls, no emails.</div>':l.phone?'<a class="callbig" href="'+esc(telLink(l.phone))+'" data-tel="'+esc(l.id)+'"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call '+esc(l.phone)+'</a>':'<div class="note warn">No phone found yet. Scout keeps looking.</div>';
+  /* 1. everything about the business, missing facts marked */
+  const social=l.social&&typeof l.social==="object"?Object.keys(l.social).map(k=>linkOut(l.social[k],k.charAt(0).toUpperCase()+k.slice(1))).filter(Boolean).join(" · "):"";
+  h+='<div class="sec"><h4>Business</h4><div class="facts">'
+    +factRow("Niche",esc(nicheLabel(nicheOf(l)))+(l.trade&&nicheOf(l)?'':' <small class="dim">('+esc(l.trade||"")+')</small>'),l,"niche")
+    +factRow("City",esc(l.town||"")+(l.state?', '+esc(l.state):''),l,"town")
+    +factRow("Address",l.address?esc(l.address):"",l,"address")
+    +factRow("Owner",l.contactName?esc(l.contactName)+(l.contactRole?' <small class="dim">('+esc(l.contactRole)+')</small>':''):"",l,"owner")
+    +factRow("Email",l.contactEmail?esc(l.contactEmail)+' <button class="copy" type="button" data-copytext="'+esc(l.contactEmail)+'"><svg aria-hidden="true"><use href="#i-copy"/></svg>Copy</button>':"",l,"email")
+    +factRow("Phone",l.phone?'<a href="'+esc(telLink(l.phone))+'" data-tel="'+esc(l.id)+'">'+esc(l.phone)+'</a>':"",l,"phone")
+    +factRow("Website",linkOut(l.website)||(p.website===false?'<span class="nf">No website</span> <small class="dim">(a weak spot we fix)</small>':""),l,"website")
+    +factRow("Google",linkOut(gbpLink(l),"Google Business Profile"),l,"gbp")
+    +factRow("Rating",rt!=null||rv!=null?'<b>'+(rt!=null?esc(rt)+'★':'')+'</b>'+(rv!=null?' · '+esc(rv)+' reviews':'')+' <small class="dim">'+(ratingFromGoogle?"Google":"public listing")+'</small>':"",l,"rating")
+    +factRow("Social",social,l,"social")
+    +'</div></div>';
+  /* 2. AI visibility */
+  const comp=(()=>{let c=ai.competitors;if(Array.isArray(c))return {chatgpt:c,gemini:[]};return c&&typeof c==="object"?{chatgpt:c.chatgpt||[],gemini:c.gemini||[]}:{chatgpt:[],gemini:[]}})();
+  const aiWord=v=>v==="named"?'<span class="pill good">shows up</span>':v==="not named"?'<span class="pill bad">doesn\'t show up</span>':'<span class="pill">not checked</span>';
+  h+='<div class="sec"><h4>AI visibility</h4><div class="facts">'
+    +'<div class="fact"><dt>ChatGPT</dt><dd>'+aiWord(ai.chatgpt)+(comp.chatgpt.length?'<br><small class="dim">Recommends instead:</small> '+esc(comp.chatgpt.slice(0,4).join(" · ")):'')+'</dd></div>'
+    +'<div class="fact"><dt>Gemini</dt><dd>'+aiWord(ai.gemini)+(comp.gemini.length?'<br><small class="dim">Recommends instead:</small> '+esc(comp.gemini.slice(0,4).join(" · ")):'')+'</dd></div>'
+    +'<div class="fact"><dt>Google</dt><dd>'+(sc.query?(sc.namedYou?'<span class="pill good">in the top 3</span>':'<span class="pill warn">not in the top 3</span>')+'<br><small class="dim">“'+esc(sc.query)+'” shows:</small> '+esc((sc.namedTop3||[]).join(" · ")||"nobody"):'<span class="pill">not checked</span>')+'</dd></div>'
+    +'<div class="fact"><dt>Top 5 here</dt><dd>'+top5List(nicheOf(l),townKey(l),false)+'</dd></div>'
+    +'</div>'+(ai.at?'<p class="dim small">Checked '+esc(fmtT(ai.at))+(ai.questions&&ai.questions[0]?' · asked “'+esc(ai.questions[0])+'”':'')+'</p>':'<p class="dim small">Quinn runs the ChatGPT + Gemini check on the next Day Shift.</p>')+'</div>';
+  /* 3. weak spots */
+  const ws=weakSpots(l);
+  h+='<div class="sec"><h4>Weak spots we can fix</h4>'+(ws.length?'<ul class="weak">'+ws.map(w=>'<li>'+esc(w)+'</li>').join("")+'</ul>':'<p class="dim small">None found yet. They fill in as Scout and the AI check learn more.</p>')+'</div>';
+  /* 4. status + follow-up */
+  h+='<div class="sec"><h4>Status</h4><div class="bigchips">'+CALL_STATUSES.map(s=>'<button class="chip" type="button" aria-pressed="'+(s===cs)+'" data-cs="'+esc(s)+'" data-id="'+esc(l.id)+'"'+(S.readOnly?" disabled":"")+'>'+esc(s)+'</button>').join("")+'</div>'+cbForms(l)+'</div>';
+  h+='<div class="sec"><h4>Next follow-up</h4><form class="cbig" data-nextfu="'+esc(l.id)+'" style="display:grid;gap:8px"><p style="font-size:16px;margin:0">'+(l.nextCallAt?'<b>'+esc(fmtT(l.nextCallAt))+'</b>'+(cs==="Callback"?' · callback':''):'<span class="dim">None set</span>')+(l.followUp&&l.followUp.kind&&l.followUp.kind!=="close_lead"?'<br><small class="dim">Email follow-up: '+esc(l.followUp.status||"")+(l.followUp.sentAt?' · sent '+esc(fmtT(l.followUp.sentAt)):'')+'</small>':'')+'</p><div class="field" style="margin:0"><label class="sr" for="nfu-'+esc(l.id)+'">Next follow-up</label><input id="nfu-'+esc(l.id)+'" type="datetime-local"></div><div class="minor"><button class="btn p" type="submit">Save date</button>'+(l.nextCallAt?'<button class="btn" type="button" data-nfclear="'+esc(l.id)+'">Clear</button>':'')+'</div></form></div>';
+  /* 5. call history + notes */
+  const calls=Array.isArray(l.calls)?l.calls.slice().reverse():[];
+  h+='<div class="sec"><h4>Call history</h4>'+(calls.length?'<div class="list">'+calls.map(c=>'<div class="row"><span class="pill">'+esc(canonOutcome(c.outcome))+'</span><div class="t"><small style="color:var(--text);font-size:14px">'+esc(fmtT(c.t))+(c.nextAt?' · next '+esc(fmtT(c.nextAt)):'')+'</small>'+(c.note?'<small style="font-size:14px">'+esc(c.note)+'</small>':'')+'</div></div>').join("")+'</div>':'<p class="dim small">No calls yet.</p>')+'</div>';
+  h+='<div class="sec"><h4>Call notes</h4><div class="field cbig" style="margin:0"><label class="sr" for="lNotes">Notes</label><textarea id="lNotes" placeholder="Anything you learned">'+esc(l.notes||"")+'</textarea></div><div class="minor" style="margin-top:8px"><button class="btn p" type="button" data-savenotes="'+esc(l.id)+'">Save notes</button>'+(l.status!=="Suppressed"?'<button class="btn bad" type="button" data-suppress="'+esc(l.id)+'">Never contact</button>':'')+'</div></div>';
+  /* 6. the crew's working details, out of the way */
+  h+='<details class="card" style="padding:14px"><summary style="cursor:pointer;font-weight:800;min-height:36px">More: score, AI answers, Google facts, emails</summary><div style="display:grid;gap:14px;margin-top:10px">';
+  h+='<div class="sec"><h4>Office stage</h4><div class="field" style="margin:0"><label class="sr" for="lStatus">Office stage</label><select id="lStatus" data-leadstatus="'+esc(l.id)+'">'+LEAD_STATUS.map(s=>'<option '+(l.status===s?"selected":"")+'>'+esc(s)+'</option>').join("")+'</select></div><p class="dim small">The crew\'s pipeline word (who gets emailed). Your call status above is separate.</p></div>';
+  h+='<div class="sec"><h4>Score '+esc(l.score==null?"–":l.score)+'</h4>'+(Array.isArray(l.scoreWhy)&&l.scoreWhy.length?'<ul class="why">'+l.scoreWhy.map(w=>'<li class="'+(/^-|−|minus/i.test(String(w))?"neg":"")+'">'+esc(w)+'</li>').join("")+'</ul>':'<p class="dim small">Not scored yet.</p>')+(Array.isArray(l.buySignals)&&l.buySignals.length?'<div class="chips">'+l.buySignals.map(b=>'<span class="pill ember">'+esc(b)+'</span>').join("")+'</div>':'')+'</div>';
+  if(ai.answers)h+='<div class="sec"><h4>What the AI said</h4><div class="note"><b>ChatGPT'+(ai.answers.models&&ai.answers.models.chatgpt?' ('+esc(ai.answers.models.chatgpt)+')':'')+':</b> '+esc(String(ai.answers.chatgpt||'no answer').slice(0,600))+'</div><div class="note"><b>Gemini'+(ai.answers.models&&ai.answers.models.gemini?' ('+esc(ai.answers.models.gemini)+')':'')+':</b> '+esc(String(ai.answers.gemini||'no answer').slice(0,600))+'</div></div>';
+  h+='<div class="sec"><h4>Check the AI by hand</h4><div class="grid g2"><div><small class="dim">ChatGPT</small><div class="inline" style="margin-top:4px"><button class="btn sm '+(ai.chatgpt==="named"?"good":"")+'" type="button" data-ai="chatgpt" data-v="named" data-id="'+esc(l.id)+'">Named</button><button class="btn sm '+(ai.chatgpt==="not named"?"bad":"")+'" type="button" data-ai="chatgpt" data-v="not named" data-id="'+esc(l.id)+'">Not named</button></div></div><div><small class="dim">Gemini</small><div class="inline" style="margin-top:4px"><button class="btn sm '+(ai.gemini==="named"?"good":"")+'" type="button" data-ai="gemini" data-v="named" data-id="'+esc(l.id)+'">Named</button><button class="btn sm '+(ai.gemini==="not named"?"bad":"")+'" type="button" data-ai="gemini" data-v="not named" data-id="'+esc(l.id)+'">Not named</button></div></div></div>';
   h+='<div class="inline" style="margin-top:8px"><label class="btn sm" for="shot-'+esc(l.id)+'">Add screenshot</label><input id="shot-'+esc(l.id)+'" type="file" accept="image/*" multiple class="sr" data-shot="'+esc(l.id)+'">'+(S.assets?'':'<small class="dim">(uploads need editor access)</small>')+'</div>';
   if(Array.isArray(ai.screenshotAssetIds)&&ai.screenshotAssetIds.length)h+='<div class="inline" style="margin-top:8px">'+ai.screenshotAssetIds.map(id=>'<a href="/_blob/'+esc(id)+'" target="_blank" rel="noopener"><img src="/_blob/'+esc(id)+'" alt="AI check screenshot" style="width:72px;height:72px;object-fit:cover;border-radius:8px;border:1px solid var(--line2)"></a>').join("")+'</div>';
   h+='</div>';
+  h+='<div class="sec"><h4>Google facts</h4><p class="small muted">Open their Google listing on your phone and type what you see; Quinn re-scores it on the next run.</p><form class="inline" data-gfacts="'+esc(l.id)+'"><div class="field" style="margin:0;width:92px"><label for="gf-r-'+esc(l.id)+'" class="small">Reviews</label><input id="gf-r-'+esc(l.id)+'" name="reviews" type="number" inputmode="numeric" min="0" value="'+esc(p.reviews==null?"":p.reviews)+'"></div><div class="field" style="margin:0;width:84px"><label for="gf-s-'+esc(l.id)+'" class="small">Rating</label><input id="gf-s-'+esc(l.id)+'" name="rating" type="number" inputmode="decimal" step="0.1" min="0" max="5" value="'+esc(p.rating==null?"":p.rating)+'"></div><div class="field" style="margin:0;width:84px"><label for="gf-p-'+esc(l.id)+'" class="small">Photos</label><input id="gf-p-'+esc(l.id)+'" name="photos" type="number" inputmode="numeric" min="0" value="'+esc(p.photos==null?"":p.photos)+'"></div><div class="field" style="margin:0;width:110px"><label for="gf-c-'+esc(l.id)+'" class="small">Claimed</label><select id="gf-c-'+esc(l.id)+'" name="claimed"><option value="">unknown</option><option value="yes" '+(p.claimed===true?"selected":"")+'>yes</option><option value="no" '+(p.claimed===false?"selected":"")+'>no (Own this business?)</option></select></div><button class="btn sm p" type="submit">Save</button></form></div>';
   if(l.angle&&l.angle.hook)h+='<div class="sec"><h4>Angle (Parker)</h4><p class="small"><span class="pill signal">'+esc(l.angle.lever||"")+'</span> '+esc(l.angle.hook)+'</p></div>';
   h+='<div class="sec"><h4>Emails</h4>'+(drafts.length?'<div class="list">'+drafts.map(d=>'<div class="row"><div class="t"><b>'+esc(d.subject||d.title||"")+'</b><small>'+esc(d.kind||"")+(d.touch?" · touch "+d.touch:"")+' · '+esc(d.status)+(d.evidence&&d.evidence.sentAt?' · '+esc(fmtT(d.evidence.sentAt)):'')+'</small></div><button class="copy" type="button" data-copydraft="'+esc(d.id)+'"><svg aria-hidden="true"><use href="#i-copy"/></svg>Copy</button></div>').join("")+'</div>':'<p class="dim small">No emails written for this lead yet.</p>')+(l.gmailThreadId?'<p class="small dim">Gmail thread '+esc(l.gmailThreadId)+(l.replyGist?' · “'+esc(l.replyGist)+'”':'')+'</p>':'')+'</div>';
-  h+='<div class="sec"><h4>Calls</h4><div class="inline">'+["answered","voicemail","no answer","interested","not interested","do not call"].map(o=>'<button class="btn sm '+(o==="interested"?"good":o==="do not call"?"bad":"")+'" type="button" data-call="'+esc(o)+'" data-id="'+esc(l.id)+'">'+esc(o)+'</button>').join("")+'</div>'+(Array.isArray(l.calls)&&l.calls.length?'<div class="list" style="margin-top:6px">'+l.calls.slice(-5).reverse().map(c=>'<div class="row"><span class="pill">'+esc(c.outcome)+'</span><div class="t"><small>'+esc(fmtT(c.t))+(c.note?' · '+esc(c.note):'')+'</small></div></div>').join("")+'</div>':'')+'</div>';
-  h+='<div class="sec"><h4>Notes</h4><div class="field" style="margin:0"><label class="sr" for="lNotes">Notes</label><textarea id="lNotes" style="min-height:70px" placeholder="Anything you learned">'+esc(l.notes||"")+'</textarea></div><div class="inline" style="margin-top:8px"><button class="btn sm p" type="button" data-savenotes="'+esc(l.id)+'">Save notes</button>'+(l.status!=="Suppressed"?'<button class="btn sm bad" type="button" data-suppress="'+esc(l.id)+'">Never contact</button>':'')+'</div></div>';
+  if(Array.isArray(p.sources)&&p.sources.length)h+='<div class="sec"><h4>Sources ('+p.sources.length+')</h4><ul class="small" style="margin:0 0 0 18px">'+p.sources.map(s=>'<li>'+(safeUrl(s.url)?'<a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.what||s.url)+'</a>':esc(s.what||""))+'</li>').join("")+'</ul></div>';
   h+='<p class="dim small">Found by '+esc(l.source||"")+' · updated '+esc(ago(l.updatedAt))+'</p>';
+  h+='</div></details>';
   return h;
 }
 function agentDrawer(a){
@@ -938,24 +1278,26 @@ function clientDrawer(k){
   h+='<div class="sec"><h4>Status</h4><div class="inline">'+["active","paused","cancelled"].map(s2=>'<button class="btn sm '+(k.status===s2?"p":"")+'" type="button" data-clientstatus="'+s2+'" data-client="'+esc(k.id)+'">'+s2+'</button>').join("")+'</div><p class="small dim" style="margin-top:6px">Cancelling here does not touch Stripe. Cancel the subscription in Stripe → Customers.</p></div>';
   return h;
 }
-function addLeadForm(){const st=settings();return '<form id="addLeadForm"><div class="field" style="margin:0"><label for="alName">Business name</label><input id="alName" required maxlength="120"></div><div class="grid g2"><div class="field"><label for="alTrade">Trade</label><select id="alTrade"><option>roofing</option><option>tree service</option><option>other</option></select></div><div class="field"><label for="alTown">Town, ST</label><input id="alTown" required placeholder="Cabot, AR" value="'+esc((st.targets||[])[0]?st.targets[0].town+", "+st.targets[0].state:"")+'"></div></div><div class="field"><label for="alWeb">Website</label><input id="alWeb" type="url" inputmode="url" placeholder="https://"></div><div class="grid g2"><div class="field"><label for="alEmail">Email (only if published)</label><input id="alEmail" type="email"></div><div class="field"><label for="alPhone">Phone</label><input id="alPhone" inputmode="tel"></div></div><div class="field"><label for="alSrc">Where you found it (URL)</label><input id="alSrc" type="url" inputmode="url" placeholder="https://"></div><div class="field"><label for="alNotes">Notes</label><textarea id="alNotes" style="min-height:60px"></textarea></div><button class="btn p block" type="submit" style="margin-top:12px">Save lead</button><p class="dim small" style="margin-top:8px">Quinn scores it on the next run.</p></form>'}
+function addLeadForm(){const st=settings();return '<form id="addLeadForm"><div class="field" style="margin:0"><label for="alName">Business name</label><input id="alName" required maxlength="120"></div><div class="grid g2"><div class="field"><label for="alTrade">Trade</label><select id="alTrade">'+NICHES().map(n=>'<option value="'+esc(n.id)+'">'+esc(n.label)+'</option>').join("")+'<option value="other">Other</option></select></div><div class="field"><label for="alTown">Town, ST</label><input id="alTown" required placeholder="Cabot, AR" value="'+esc((st.targets||[])[0]?st.targets[0].town+", "+st.targets[0].state:"")+'"></div></div><div class="field"><label for="alWeb">Website</label><input id="alWeb" type="url" inputmode="url" placeholder="https://"></div><div class="grid g2"><div class="field"><label for="alEmail">Email (only if published)</label><input id="alEmail" type="email"></div><div class="field"><label for="alPhone">Phone</label><input id="alPhone" inputmode="tel"></div></div><div class="field"><label for="alSrc">Where you found it (URL)</label><input id="alSrc" type="url" inputmode="url" placeholder="https://"></div><div class="field"><label for="alNotes">Notes</label><textarea id="alNotes" style="min-height:60px"></textarea></div><button class="btn p block" type="submit" style="margin-top:12px">Save lead</button><p class="dim small" style="margin-top:8px">Quinn scores it on the next run.</p></form>'}
 
 /* ============================ actions ============================ */
 function go(id){if(!PAGES.some(p=>p.id===id))id="today";S.page=id;ls.set("ro.page",id);$("#sheetNav").classList.remove("on");renderAll();window.scrollTo({top:0})}
 window.addEventListener("hashchange",()=>{const t=location.hash.replace("#","");if(PAGES.some(p=>p.id===t))go(t)});
 document.addEventListener("click",async e=>{
-  const b=e.target.closest("button,a,.row.click,.desk");if(!b)return;
+  const b=e.target.closest("button,a,.row.click,.desk,.lrow,summary[data-wot]");if(!b)return;
   if(b.matches(".rail a, .sheet-nav a, .brand")){e.preventDefault();go(b.getAttribute("href").replace("#",""));return}
   if(b.dataset.go){if(b.dataset.go==="more"){$("#sheetNav").classList.add("on")}else go(b.dataset.go);return}
   if(b.id==="sheetPause"||b.id==="pauseBtn"){const st=settings();if(st.paused){await saveSettings({paused:false});event("Grayson","Resumed the office")}else{if(!S.confirm.pause){S.confirm.pause=true;toast("Tap Pause again to confirm");b.textContent="Tap again to confirm";setTimeout(()=>{S.confirm.pause=false;renderChrome()},3000);return}S.confirm.pause=false;await saveSettings({paused:true});event("Grayson","Paused the office")}return}
   if(b.dataset.ny!=null){if(b.dataset.view)S.leadView=b.dataset.view;go(b.dataset.ny);if(b.dataset.lead)openDrawer("lead",b.dataset.lead);if(b.dataset.clientid)openDrawer("client",b.dataset.clientid);return}
   if(b.dataset.tel){return}
+  if(await sessionClick(b))return;
   if(b.dataset.act==="clients"){openDrawer("clients","all");return}
   if(b.dataset.run&&!b.dataset.act){openDrawer("run",b.dataset.run);return}
   if(b.dataset.callid){S.cb={};openDrawer("call",b.dataset.callid);return}
-  if(b.dataset.outcome){const k=b.dataset.outcome,id=b.dataset.id;if(k==="call_back"){S.cb={id,mode:"when"};renderDrawer();return}if(k==="send_check"||k==="interested"){S.cb={id,mode:"email",kind:k};renderDrawer();const i=$("#ckEmail");if(i)i.focus();return}await callOutcome(id,k,{});return}
-  if(b.dataset.cbwhen){const id=b.dataset.id;const w=b.dataset.cbwhen;let iso;if(w==="custom"){const inp=$("#cbDt");if(!inp||!inp.value){toast("Pick a day and time");return}const d=new Date(inp.value);if(isNaN(d.getTime())){toast("Pick a day and time");return}iso=d.toISOString()}else{const [dd,hh,mm]=w.split(",").map(Number);iso=ctIso(dd,hh,mm)}await callOutcome(id,"call_back",{nextAt:iso});return}
-  if(b.dataset.cbcancel){S.cb={};renderDrawer();return}
+  if(b.dataset.outcome){const k=b.dataset.outcome,id=b.dataset.id;if(k==="call_back"){S.cb={id,mode:"when"};renderPage();return}if(k==="send_check"||k==="interested"||k==="sold"){S.cb={id,mode:"email",kind:k};renderPage();const i=$("#ckEmail");if(i&&!i.value)i.focus();return}if(k==="do_not_call"&&S.confirm.dnc!==id){S.confirm.dnc=id;toast("Tap Do not contact again to confirm");setTimeout(()=>{S.confirm.dnc=null},4000);return}S.confirm.dnc=null;await callOutcome(id,k,{note:sessNote()});return}
+  if(b.dataset.cbwhen){const id=b.dataset.id;const w=b.dataset.cbwhen;let iso;if(w==="h1"){iso=new Date(Date.now()+3600000).toISOString()}else if(w==="custom"){const inp=$("#cbDt");if(!inp||!inp.value){toast("Pick a day and time");return}const d=new Date(inp.value);if(isNaN(d.getTime())){toast("Pick a day and time");return}iso=d.toISOString()}else{const [dd,hh,mm]=w.split(",").map(Number);iso=ctIso(dd,hh,mm)}await callOutcome(id,"call_back",{nextAt:iso,note:sessNote()});return}
+  if(b.dataset.cbcancel){S.cb={};renderPage();return}
+  if(b.dataset.cknoemail){await callOutcome(b.dataset.cknoemail,b.dataset.kind,{noEmail:true,plan:(($("#ckPlan")||{}).value)||null,note:sessNote()});return}
   if(b.dataset.lead&&!b.dataset.act){openDrawer("lead",b.dataset.lead);return}
   if(b.dataset.agent){openDrawer("agent",b.dataset.agent);return}
   if(b.dataset.task){openDrawer("task",b.dataset.task);return}
@@ -996,9 +1338,10 @@ document.addEventListener("click",async e=>{
   if(b.id==="dClose"){closeDrawer();return}
 });
 $("#drawerBg").addEventListener("click",closeDrawer);
+document.addEventListener("click",e=>{if(e.target.closest("summary[data-wot]"))e.preventDefault()},true);
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeDrawer();$("#sheetNav").classList.remove("on")}});
 $("#sheetNav").addEventListener("click",e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove("on")});
-document.addEventListener("input",e=>{if(e.target.id==="leadQ"){S.leadQuery=e.target.value;clearTimeout(window.__lq);window.__lq=setTimeout(()=>{renderPage();const i=$("#leadQ");if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},180)}});
+document.addEventListener("input",e=>{if(e.target.id==="sessNote"){S.sessUI.note={id:e.target.dataset.id,v:e.target.value};return}if(e.target.id==="leadQ"){S.leadQuery=e.target.value;clearTimeout(window.__lq);window.__lq=setTimeout(()=>{renderPage();const i=$("#leadQ");if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},180)}});
 document.addEventListener("change",async e=>{
   const t=e.target;
   if(t.dataset.leadstatus){const l=S.leads.find(x=>x.id===t.dataset.leadstatus);if(l&&await updDoc("leads/"+l.id,{status:t.value})){toast("Status: "+t.value);event("Grayson",l.businessName+" → "+t.value)}}
@@ -1007,13 +1350,14 @@ document.addEventListener("change",async e=>{
 document.addEventListener("submit",async e=>{
   const f=e.target;e.preventDefault();
   if(f.id==="taskForm"||f.id==="drawerTaskForm"){const agent=f.id==="taskForm"?$("#tAgent").value:f.dataset.agent;const title=(f.id==="taskForm"?$("#tTitle"):$("#dtTitle")).value.trim();const details=(f.id==="taskForm"?$("#tDetails"):$("#dtDetails")).value.trim();if(!title)return;const id="t-"+uid();if(await setDoc("tasks/"+id,{agent,title,details,status:"queued",attempts:0,maxAttempts:2,by:"grayson",createdAt:nowIso(),updatedAt:nowIso()})){toast("Queued for "+agent);f.reset();event("Grayson","Queued task for "+agent+": "+title);if(S.drawer)closeDrawer()}return}
-  if(f.dataset.cksend){const em=String(($("#ckEmail")||{}).value||"").trim();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){toast("Type a real email");return}await callOutcome(f.dataset.cksend,f.dataset.kind,{email:em});return}
+  if(f.dataset.cksend){const em=String(($("#ckEmail")||{}).value||"").trim();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){toast("Type a real email");return}await callOutcome(f.dataset.cksend,f.dataset.kind,{email:em,plan:(($("#ckPlan")||{}).value)||null,note:sessNote()});return}
+  if(f.dataset.nextfu){const v=(f.querySelector("input")||{}).value;const l=S.leads.find(x=>x.id===f.dataset.nextfu);if(!l)return;let iso=null;if(v){const d=new Date(v);if(isNaN(d.getTime())){toast("Pick a day and time");return}iso=d.toISOString()}const patch={nextCallAt:iso};if(iso&&["New","Called","Voicemail"].includes(callStatusOf(l)))patch.callStatus="Callback";if(await updDoc("leads/"+l.id,patch)){toast(iso?"Next follow-up "+fmtT(iso):"Follow-up cleared");event("Grayson","Next follow-up for "+l.businessName+": "+(iso?fmtT(iso):"none"))}return}
   if(f.id==="lessonForm"){const id="l-"+uid();if(await setDoc("lessons/"+id,{title:$("#lTitle").value.trim(),observation:$("#lObs").value.trim(),evidence:$("#lEv").value.trim(),confidence:Number($("#lConf").value)||0,agent:"grayson",status:"active",source:"page",createdAt:nowIso()})){toast("Lesson saved");f.reset()}return}
   if(f.id==="supForm"){const v=$("#supEmail").value.trim();if(!v)return;const isEmail=v.includes("@");if(await setDoc("suppression/"+slug(v),{email:isEmail?v.toLowerCase():"",businessName:isEmail?"":v,reason:$("#supWhy").value.trim()||"asked to stop",by:"grayson",at:nowIso()})){toast("Added");f.reset()}return}
   if(f.id==="capsForm"){const p={};["dailyEmailCap","followUpDays","maxTouches","scoreGate","foundingSpots"].forEach(k=>{const el=f.querySelector('[name="'+k+'"]');if(el){let v=Number(el.value);if(k==="dailyEmailCap")v=Math.min(20,Math.max(1,v));p[k]=v}});await saveSettings(p);return}
   if(f.id==="voiceForm"){await saveSettings({signature:$("#sSig").value,optOutLine:$("#sOpt").value.trim(),mailingAddress:$("#sAddr").value.trim()});return}
   if(f.id==="targetForm"){const st=settings();const t=(st.targets||[]).slice();t.push({town:$("#tTown").value.trim(),state:$("#tState").value.trim().toUpperCase(),trades:$("#tTrades").value.split(",").map(x=>x.trim()).filter(Boolean)});await saveSettings({targets:t});return}
-  if(f.id==="addLeadForm"){const name=$("#alName").value.trim();const tt=$("#alTown").value.split(",");const town=(tt[0]||"").trim(),state=(tt[1]||"").trim().toUpperCase();if(!name||!town)return;const id=slug(town+"-"+state+"-"+name);const email=$("#alEmail").value.trim().toLowerCase();const src=$("#alSrc").value.trim();const data={businessName:name,trade:$("#alTrade").value,town,state,website:$("#alWeb").value.trim(),contactEmail:email,emailSource:email?src:"",phone:$("#alPhone").value.trim(),phoneSource:$("#alPhone").value.trim()?src:"",profile:{sources:src?[{url:src,what:"added by Grayson",at:nowIso()}]:[]},notes:$("#alNotes").value.trim(),status:"New",source:"grayson "+dayKey()};if(S.leads.some(l=>l.id===id)){toast("That business is already here");openDrawer("lead",id);return}if(await setDoc("leads/"+id,Object.assign(data,{createdAt:nowIso(),updatedAt:nowIso()}))){toast("Lead saved");event("Grayson","Added lead "+name);openDrawer("lead",id)}return}
+  if(f.id==="addLeadForm"){const name=$("#alName").value.trim();const tt=$("#alTown").value.split(",");const town=(tt[0]||"").trim(),state=(tt[1]||"").trim().toUpperCase();if(!name||!town)return;const id=slug(town+"-"+state+"-"+name);const email=$("#alEmail").value.trim().toLowerCase();const src=$("#alSrc").value.trim();const nid=$("#alTrade").value;const nn=nicheById(nid);const data={businessName:name,trade:nn?nn.label.toLowerCase():"other",niche:nn?nn.id:null,callStatus:"New",town,state,website:$("#alWeb").value.trim(),contactEmail:email,emailSource:email?src:"",phone:$("#alPhone").value.trim(),phoneSource:$("#alPhone").value.trim()?src:"",profile:{sources:src?[{url:src,what:"added by Grayson",at:nowIso()}]:[]},notes:$("#alNotes").value.trim(),status:"New",source:"grayson "+dayKey()};if(S.leads.some(l=>l.id===id)){toast("That business is already here");openDrawer("lead",id);return}if(await setDoc("leads/"+id,Object.assign(data,{createdAt:nowIso(),updatedAt:nowIso()}))){toast("Lead saved");event("Grayson","Added lead "+name);openDrawer("lead",id)}return}
   if(f.dataset.clientnums){const d=Object.fromEntries(new FormData(f).entries());const num=v=>v===""?null:Number(v);if(await updDoc("clients/"+f.dataset.clientnums,{reviewsAtStart:num(d.reviewsAtStart),reviewsNow:num(d.reviewsNow)}))toast("Saved");return}
   if(f.dataset.clientlink){const d=Object.fromEntries(new FormData(f).entries());const k=S.clients.find(x=>x.id===f.dataset.clientlink);const work=((k&&k.work)||[]).filter(w=>w.item!=="review-link");if(d.reviewLink)work.push({item:"review-link",status:"done",t:nowIso()});if(await updDoc("clients/"+f.dataset.clientlink,{reviewLink:d.reviewLink.trim(),work}))toast("Link saved");return}
   if(f.id==="addClientForm"){const name=$("#acName").value.trim();if(!name)return;const tt=$("#acTown").value.split(",");const id="c-"+slug(name);if(await setDoc("clients/"+id,{businessName:name,contactEmail:$("#acEmail").value.trim().toLowerCase(),town:(tt[0]||"").trim(),state:(tt[1]||"").trim().toUpperCase(),plan:({75:"starter",125:"growth",199:"pro"})[Number($("#acMonthly").value)]||"custom",monthly:Number($("#acMonthly").value)||75,startedAt:nowIso(),reviewsAtStart:null,reviewsNow:null,managerAccess:false,reviewLink:"",work:[],status:"active",notes:"",createdAt:nowIso(),updatedAt:nowIso()})){toast("Client saved");event("Grayson","Added client "+name);openDrawer("client",id)}return}
@@ -1034,7 +1378,7 @@ const SCRIPT=[CALL_KIT.script.opener,CALL_KIT.script.value,CALL_KIT.script.close
 (function start(){
   const h=location.hash.replace("#","");const saved=ls.get("ro.page");
   S.page=PAGES.some(p=>p.id===h)?h:(PAGES.some(p=>p.id===saved)?saved:"today");
-  if(window.claude&&window.claude.hot&&window.claude.hot.snapshot){try{window.claude.hot.snapshot(()=>({page:S.page,drawer:S.drawer}))}catch(e){}}
+  if(window.claude&&window.claude.hot&&window.claude.hot.snapshot){try{window.claude.hot.snapshot(()=>({page:S.page,drawer:S.drawer,setup:S.setup}))}catch(e){}}
   const data=(window.claude&&window.claude.hot&&window.claude.hot.data)||{};if(data.page&&PAGES.some(p=>p.id===data.page))S.page=data.page;
   boot();
   if(data.drawer&&data.drawer.kind&&data.drawer.id)setTimeout(()=>openDrawer(data.drawer.kind,data.drawer.id),600);

@@ -32,6 +32,20 @@
 5. Lessons: one lesson per real finding with a number (lessons/<id> + a line in LESSONS.md +
    a "What I've learned" line in the agent's skill file the finding belongs to). No number, no
    lesson.
+5b. CALLS (Grayson, Oct 26, 2026: "track which niches, cities and pitch lines get the most
+   Interested/Sold, save lessons ... so the pitch card and niche picks improve daily"). List ALL
+   leads (limit 1000, out_dir) and run `python3 office/tools/call_desk.py stats <out_dir> --json`.
+   Write callstats/main from it (set; read first, if_version) with at = now: the page orders the
+   Niche of the Day by nicheOrder and leads with bestLine (needs 10+ calls on a line). Then:
+   - 20+ calls total: one lesson per real finding with the numbers (lessons/<id>, a dated line in
+     LESSONS.md, and a "What I've learned" line in skills/scout/SKILL.md for niche/town findings or
+     skills/parker/SKILL.md for pitch-line findings): e.g. "2026-11-03: HVAC 4 of 22 calls
+     interested or sold vs roofing 1 of 30; Scout stocks HVAC first." Under 20 calls: "too early,
+     no lesson" in the run doc.
+   - A pitch line with 20+ calls and 0 Interested/Sold while another line has 2+: propose
+     retiring it (approvals/<id>, type "other"); never edit call_kit/kit.json yourself.
+   - Callbacks: any lead with callStatus Callback and nextCallAt more than 2 days in the past with
+     no newer call = one NEEDS YOU line ("<n> callbacks went past due") so nothing is forgotten.
 6. Workflow (Sunday only, or when a workflow doc is "testing" and its eval sends are done):
    a change to a stage's steps is proposed as workflow/<version> with a prediction and an eval
    plan (the next 30 sends, alternating). When the sends are done, compare reply rate to the
@@ -60,6 +74,7 @@ No workflow adopted under 30 sends. Suppression written before anything else for
 |---|---|
 | leads/<id>, clients/<id>, suppression/<id>, tasks/<id>, drafts/<id> | as above |
 | lessons/<id>, workflow/<version> | as above |
+| callstats/main | call numbers by niche, town, pitch line and hour; nicheOrder; bestLine (step 5b) |
 | office/LESSONS.md, office/skills/<agent>/SKILL.md | one line each per lesson (repo write) |
 | events/<day> | "Sage: <r> replies, <m> meetings, <c> clients, <l> lessons" |
 | output/<day>-run.md | `## Sage`: replies found (business + gist), statuses changed, rates, lessons, workflow verdicts |

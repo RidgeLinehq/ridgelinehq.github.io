@@ -11,6 +11,7 @@ Claude app.
 | A GitHub Action (AI check, Stripe, lead finder, review cards) | the "Ridgeline alerts" Action opens a GitHub issue (GitHub emails the account owner) and writes office/alerts/<run id>.json | at once |
 | office/alerts/*.json with emailed:false | the reply desk (every run, first thing after the gates) emails it, then sets emailed:true and commits | within 2 hours |
 | Anything inside a crew run (gateway failed 3 times, a Stripe job ok:false, Gmail error, a send failed, a client with no onboarding after 72 h, checkout links empty while someone wants to pay, a website promise we can't deliver) | the crew member who hit it, in the same run | at once |
+| Leads area (Oct 26, 2026): lead finding came back empty or errored, the enrichment pass broke, a niche ran out of call-ready leads, a call follow-up email failed or sat pending past its window | Scout (Day Shift 01), Echo (04 C2), the reply desk (Lane I, every hour, including the stuck guard), and the page shows failed/stuck follow-ups in red on Today | at once (follow-ups within the hour) |
 | A scheduled task that failed, stopped, or never ran; the reply desk silent 3+ hours | the Emergency Watch (every 4 hours) | within 4 hours |
 
 ## The email (Gmail send_message, to ridgelinemarketinghq@gmail.com)

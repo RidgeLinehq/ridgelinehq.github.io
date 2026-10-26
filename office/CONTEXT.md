@@ -30,6 +30,8 @@ time too (Oklahoma, Arkansas, Alabama).
 
 ## Status words (the only ones the page understands)
 Lead: New, Researching, Qualified, Contacted, Replied, Meeting, Client, Not a fit, Suppressed.
+Lead callStatus (Grayson's call word, a separate field; Oct 26, 2026): New, Called, Voicemail,
+Callback, Interested, Sold, Not interested, Do not contact. Never overwrite one with the other.
 Draft: draft, ready (awaiting Grayson), approved (send on next run), sent, rejected, published.
 Task: queued, running, done, failed, blocked.
 Crew: idle, working, paused, error.

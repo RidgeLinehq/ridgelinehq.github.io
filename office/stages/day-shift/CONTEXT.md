@@ -37,7 +37,7 @@ gates in specs/email-rules.md. It never texts, calls, DMs or posts.
 
 | Worker | Stages | Runs | Skip when |
 |--------|--------|------|-----------|
-| Research | 01-scout, 02-quinn | once | paused; or today's town has 25+ Qualified leads not yet Contacted (then only 02 re-scores stale leads) |
+| Research | 01-scout, 02-quinn | once | paused. (Today's town with 25+ Qualified leads not yet Contacted skips only Scout's email-town steps 1-7; the call stock fill 0, the enrichment pass 0b and Quinn's Who's On Top 3b always run while any niche is under 25.) |
 | Outreach | 03-parker, 04-echo | once | paused; or no Qualified lead with an email and no follow-up due |
 | Studio | 05-nova | Monday and Thursday only | a brief already exists for this week's slot |
 | Review | 06-sage, 07-patch | once | never (sub-steps have their own skips) |
@@ -68,12 +68,12 @@ only, no prose padding.
 | Stage | Loads |
 |-------|-------|
 | 00 | `shared/repo.md` ("Getting it"), `specs/push-week-2026-10-23.md` (the week's standing order: Mara puts each worker's one line into its brief) |
-| 01 | `specs/offer.md` (Targets), `shared/outreach-law.md` ("Where leads come from"), `skills/scout/SKILL.md`, `LESSONS.md`, `references/database-fields.md` (leads) |
+| 01 | `call_kit/kit.json` (niches), `office/tools/call_desk.py stock` output, `specs/offer.md` (Targets), `shared/outreach-law.md` ("Where leads come from"), `skills/scout/SKILL.md`, `LESSONS.md`, `references/database-fields.md` (leads) |
 | 02 | `references/scoring.md`, `skills/quinn/SKILL.md`, `specs/call-script.md` ("Ranking the call list"), `shared/gateway.md` |
 | 03 | `specs/sales-psychology.md`, `specs/offer.md`, `skills/parker/SKILL.md` |
 | 04 | `specs/email-rules.md`, `specs/sales-psychology.md` ("Follow-up cadence", "Subject lines", "Voice"), `shared/outreach-law.md`, `skills/echo/SKILL.md`, `LESSONS.md`, `references/database-fields.md` (drafts, suppression, stats) |
 | 05 | `specs/video-briefs.md`, `specs/sales-psychology.md` ("For Nova"), `skills/nova/SKILL.md` |
-| 06 | `specs/email-rules.md` ("Reply handling"), `skills/sage/SKILL.md`, `LESSONS.md`, `references/database-fields.md` (lessons, workflow, clients) |
+| 06 | `office/tools/call_desk.py stats` output, `specs/email-rules.md` ("Reply handling"), `skills/sage/SKILL.md`, `LESSONS.md`, `references/database-fields.md` (lessons, workflow, clients) |
 | 07 | `skills/patch/SKILL.md`, `shared/repo.md` ("Write paths"), `references/database-fields.md` (health) |
 | 08 | `skills/mara/SKILL.md`, `shared/logging.md`, `shared/repo.md` ("Committing"), `specs/push-week-2026-10-23.md` ("Scoreboard": the money line and the day's targets vs actual) |
 | 09 | `specs/client-delivery.md`, `specs/quality.md`, `specs/lead-tracking.md`, `specs/offer.md` (The plans, Promises), `shared/gateway.md`, `shared/alerts.md`, `skills/echo/SKILL.md`, `skills/parker/SKILL.md` |
@@ -92,6 +92,7 @@ doc failed with the reason, and tell Grayson in one line.
   the law checks (footer, address) on it.
 
 ## Time budget and conflicts
-About 25 minutes of work. Over budget: skip 05, then cut Scout to 8 leads, then skip Sage's
+About 25 minutes of work, plus up to 15 more for the call stock fill and enrichment pass (Oct 26,
+2026) while any niche is under 25. Over budget: skip 05, then cut the stock fill to 15 leads, then cut Scout to 8 leads, then skip Sage's
 workflow review (replies are never skipped). Any single wait: 5 minutes max.
 `shared/rules.md` wins over anything softer. The task prompt wins over all.
