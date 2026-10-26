@@ -32,7 +32,22 @@
  status:"New"|"Researching"|"Qualified"|"Contacted"|"Replied"|"Meeting"|"Client"|"Not a fit"|"Suppressed",
  touches:[{n, t, channel:"email"|"call"|"voicemail", draftId, gmailMessageId, threadId, note}],
  nextTouchAt, gmailThreadId, replyGist, calls:[{t, outcome, note, nextAt}],
- notes, source:"scout <day>", runId, createdAt, updatedAt}
+ notes, source:"scout <day>", runId, createdAt, updatedAt,
+ FULL LEAD CARD (Grayson, Oct 26, 2026; the page's Lead Desk and call sessions read these):
+ niche:"<id from office/call_kit/kit.json niches>" (Scout sets it on every lead), address (published
+ business address, with addressSource), contactRole ("owner"|"manager"), gbpUrl (the public Google
+ Business Profile URL a search result showed), social:{facebook, instagram, ...} (public page URLs),
+ weakSpots:[short plain strings, each true from the facts above, e.g. "Only 7 Google reviews"],
+ enrich:{<field>:{status:"found"|"not found", tries:n, lastTriedAt, sources:[urls tried]}} for
+   fields email, phone, owner, address, website, gbp, rating, social. "Not found" is written, never
+   guessed; Scout retries it on later runs (01-scout "Enrichment pass"),
+ callStatus:"New"|"Called"|"Voicemail"|"Callback"|"Interested"|"Sold"|"Not interested"|"Do not contact"
+   (Grayson's call word, set by the page; separate from status, which stays the pipeline word),
+ nextCallAt (next follow-up / callback time, ISO), callDone (3 tries with no answer),
+ calls:[{t, who, outcome, note, nextAt, niche, town, pitchLine, sessionId}],
+ followUp:{kind:"email_ai_check"|"email_ai_check_plus_offer"|"voicemail_email"|"close_lead",
+   status:"pending"|"waiting-email"|"sent"|"failed"|"done", email, plan ("starter"|"growth"|"pro"
+   on a Sold call), withOffer, requestedAt, sentAt, gmailMessageId, error, tries, by}
 
 ## drafts/<id>
 {kind:"outreach"|"followup"|"breakup"|"freecheck"|"reply"|"script"|"caption"|"calendar"|"post"|"kit"|"plan"|"report", clientId (client work only),
@@ -92,6 +107,21 @@ sentToClientAt, sentGmailId, jobAnswer, notes). Never in the repo.
 {task:"day-shift", day, startedAt, finishedAt, status:"running"|"done"|"failed"|"paused",
  stages:[{id, status, minutes, note}], counts:{found, new, qualified, drafts, ready, sent,
  replies, lessons}, summary, needsYou:[strings], town, model}
+
+## sessions/<id>   id = s-<yyyymmdd>-<random>   (written by the page during a cold call session)
+{niche, town:"<Town>, <ST>", startedAt, endedAt, status:"open"|"done", line (current pitch line id),
+ done:[leadIds], skipped:[leadIds], counts:{<outcome>:n}, log:[{leadId, name, outcome, t, line, niche, town}],
+ callbacks:[{leadId, name, at}], followUps:[{leadId, name, kind, plan}], by:"grayson"}
+
+## markets/<niche>-<town>-<st>   e.g. roofing-cabot-ar   (Quinn; the page's "Who's On Top" panel)
+{niche, town, state, question, chatgpt:[names], gemini:[names], google:[names],
+ googleFrom:"local pack"|"directory <name>", jobId, sources:[urls], at}
+Names exactly as the gateway text / the search result shows them. Refreshed every 14 days.
+
+## callstats/main   (Sage, from office/tools/call_desk.py stats)
+{at, calls, byNiche:{<id>:{calls, talked, interested, sold, winRate, score}}, byTown:{...},
+ byLine:{<pitch line id>:{...}}, byHour:{...}, nicheOrder:[niche ids, best first], bestLine, tooEarly}
+The page orders the Niche of the Day rotation by nicheOrder and leads with bestLine.
 
 ## events/<day>
 {day, items:[{t, agent, text}]}  (read first, append, keep newest 200)

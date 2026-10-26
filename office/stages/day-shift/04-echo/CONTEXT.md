@@ -9,7 +9,7 @@
 | skills/echo/SKILL.md | all |
 | LESSONS.md | all |
 | references/database-fields.md | drafts, suppression, stats |
-| database: leads with an angle set this run (Parker's list); suppression (all, out_dir); drafts where status in (approved, ready); stats/<day>; settings/main | |
+| database: leads with an angle set this run (Parker's list); leads with followUp.kind "voicemail_email" (list all leads with out_dir, filter locally: nested where-filters are refused); suppression (all, out_dir); drafts where status in (approved, ready); stats/<day>; settings/main | |
 | Gmail tools (ToolSearch `select:mcp__Gmail__create_draft,mcp__Gmail__send_message,mcp__Gmail__search_threads,mcp__Gmail__delete_draft`) | only in this stage |
 
 ## Process
@@ -34,6 +34,22 @@ C. New drafts. A lead that already has a draft with status "draft" from a dry ru
      drafts/<id> status "ready" with gmailDraftId and gmailDraftUrl. If the Gmail draft call
      fails, status ready without the ids (the page shows Copy).
    dryRun true: write drafts with status "draft" and qa only; create no Gmail draft, send nothing.
+C2. VOICEMAIL FOLLOW-UPS (Grayson, Oct 26, 2026: "after Voicemail, the crew drafts and sends a short
+   follow-up email with their free AI check"). Before new drafts: every lead with followUp.kind
+   "voicemail_email" and status "pending" (an email is on file; "waiting-email" leads wait for
+   Scout's enrichment pass and become pending when it finds one). Write ONE short email (under 90
+   words before the footer): subject "Sorry I missed you, <first name or business>"; line 1 "I
+   just left you a voicemail about <business>."; line 2 the AI check line from lead.aiCheck
+   exactly as gateway.md allows ("When I asked ChatGPT 'Who are the best <plural> in <Town>, <ST>?'
+   it named X and Y, not <business>."; aiCheck unknown = say you ran a free check and offer to send
+   it, never invent a result); one ask ("Want the full one-page check? Just reply yes."). It is a
+   cold touch: QA gate, every sending gate (window, cap, suppression, footer, autoSend or
+   approval, dryRun) applies exactly as in A to C. Sent = followUp {status "sent", sentAt,
+   gmailMessageId}, lead.touches + {channel:"email", note:"after voicemail"}, status Contacted if it
+   was New/Researching/Qualified. Not sendable today (cap, window, weekend) = leave pending. A
+   Gmail error or a refusal = followUp {status "failed", error, tries+1} and an ALERT at once
+   (shared/alerts.md, key `vm-email-<lead id>-<day>`); tries 3 = stop and say so in the alert.
+   These go before new first emails inside the cap: the person already heard Grayson's voice.
 D. Suppression: any lead whose replyGist or notes say no/stop/unsubscribe, or whose address
    bounced (search `from:mailer-daemon newer_than:7d`), gets status Suppressed and a
    suppression doc, before anything else is written.
@@ -49,7 +65,8 @@ E. Crew doc idle: "<r> ready, <s> sent, <d> drafts".
 ## Outputs
 | Where | What |
 |---|---|
-| drafts/<id> | created/updated with status, qa, evidence |
+| drafts/<id> | created/updated with status, qa, evidence (voicemail follow-ups: kind "followup", note "after voicemail") |
+| leads/<id> followUp | voicemail follow-ups: sent with gmailMessageId, or failed with error (+ alert) |
 | leads/<id> | touches, status, nextTouchAt, gmailThreadId |
 | suppression/<id> | new entries |
 | stats/<day> | sent, ready, drafts counts |

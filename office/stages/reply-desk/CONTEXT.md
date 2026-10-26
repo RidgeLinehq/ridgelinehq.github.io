@@ -56,7 +56,7 @@ before updating it and pass if_version). Day key = TZ=America/Chicago date +%F.
 ## knows the desk is alive)
 At the START write health/desk (set; read first, pass if_version) = {at: now ISO, state:
 "running", startedAt: now}. At the END overwrite it with {at: now, state:"idle", startedAt,
-finishedAt, minutes, lanes:{replies, checks, clients, deliveries, grayson}, inboxSeen: <threads
+finishedAt, minutes, lanes:{replies, checks, clients, deliveries, grayson, callFollowUps}, inboxSeen: <threads
 the search returned>, note: "<one line: what happened, or 'nothing new'>", needsYou:[...]}.
 The run-log line in the repo is in addition to this, never instead of it.
 
@@ -238,6 +238,41 @@ Parse `check: <Business>, <Town ST>, <trade>[, <email>]`. Run Lane B for it; rep
 email with the paste-ready version from free-check.md (and "Sent the full check to <email>"
 when an email was given). Create the lead with source "grayson dm". Label the thread.
 
+## Lane I: call follow-ups from the office page (Grayson, Oct 26, 2026)
+When Grayson taps Interested or Sold on a call (cold call session, call drawer or lead card), the
+page writes lead.followUp {kind "email_ai_check_plus_offer" (or "email_ai_check"), status
+"pending", email (the address the person gave him on the phone), plan (Sold only), requestedAt}
+and lead.freeCheck {status "requested"}. That is Grayson's own request, on the same footing as
+Lane E: the person asked him for it on the phone. Every run:
+1. List all leads (limit 1000, out_dir; nested where-filters are refused) and filter locally:
+   followUp.status "pending" and kind starts with "email_ai_check"; skip test leads.
+2. Suppressed address, domain or business → followUp {status "done", note "suppressed"}, send
+   nothing. A check already sent to this business in the last 30 days → send that one again
+   (free-check.md) instead of a new gateway job.
+3. Otherwise Lane B for it, in this same run: business, town, state from the lead, trade phrase =
+   the kit niche's `plural` (office/call_kit/kit.json; lead.niche), reusing markets/<niche>-<town>-<st>
+   or an office/gw/out file under 7 days old. Send it as a NEW message to followUp.email, the
+   free-check.md shape, first line "Thanks for taking my call today." With withOffer true, add the
+   three plans in three short lines (Lane A case b) and ONE checkout link: the plan in
+   followUp.plan for a Sold call ("Here's the secure link for <Plan> like we talked about:"),
+   Growth otherwise (data/stripe-links.json; empty = start.html?plan=<plan> and the
+   checkout-not-live alert). QA it like any check.
+4. Sent → lead.followUp {status "sent", sentAt, gmailMessageId, threadId}, freeCheck {status
+   "sent", sentAt, gmailMessageId, jobId}, aiCheck, status Meeting, gmailThreadId,
+   drafts/<id> kind freecheck status sent with evidence, events line, Lane F line
+   "📞 Sent <business> their AI check after your call" (group up to 3; Sold: "💰 <business>: check +
+   <Plan> link sent").
+5. Failures are never silent: gateway failed → followUp.tries + 1, error, stays pending (retried
+   next run); a second failed run, a Gmail error or a bounce → followUp {status "failed", error}
+   and an ALERT at once (shared/alerts.md, key `callfu-<lead id>-<day>`, "Follow-up email to
+   <business> didn't go out: <reason>"). The page shows failed ones in red on Today.
+6. Stuck guard (first thing in this lane): any followUp "pending" (email_ai_check*) older than
+   3 hours, or "voicemail_email" pending older than 80 hours (Echo sends those on weekday mornings),
+   means a run missed it: alert (key `callfu-stuck-<day>`) AND add the line to health/desk.needsYou
+   so the Emergency Watch sees it too; then handle it now if it is yours.
+Voicemail follow-ups (kind "voicemail_email") are Echo's (Day Shift 04 step C2): cold touches that
+pass every email gate. This desk never sends them.
+
 ## Lane F: tell Grayson (SendUserMessage, only when there is something new)
 - NEW CLIENT (always its own message): "🚨💰 NEW CLIENT: <business> just paid <plan> $<price>!
   Welcome + onboarding sent. Baseline AI score: <score or 'running'>. <N> founding spots left."
@@ -261,7 +296,7 @@ Nothing new → send nothing. At most 4 short lines per message.
 ## Outputs
 | Where | What |
 |---|---|
-| leads/<id> | status, replyGist, freeCheck, aiCheck, gmailThreadId |
+| leads/<id> | status, replyGist, freeCheck, aiCheck, gmailThreadId, followUp (Lane I) |
 | drafts/<id> | freecheck sent; client drafts sent with evidence |
 | clients/<id> | new clients, onboarding facts, baseline, guarantee, reviewLink, reviewCard, customers, managerAccess, work[] |
 | leadlog/<id> | every lead (Lane G), jobAnswer, sentToClientAt |

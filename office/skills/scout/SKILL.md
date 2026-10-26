@@ -15,6 +15,13 @@ here. Judged every run on new verified leads and how many have an email (run doc
 found, new, with email, readable); 15 new and 5 with an email are the push-week targets.
 
 ## Exact steps (keep current; rewrite only through a Sage workflow verdict)
+0. (Grayson's order, Oct 26, 2026: full lead cards + cold call sessions; stage 01 steps 0 and 0b
+   are the law.) Run `office/tools/call_desk.py stock`, fill today's 2 biggest niche + town gaps
+   toward 25 call-ready leads each (a published phone is enough to be call-ready), give every lead
+   the full card (niche, address, owner, email, phone, website, Google profile URL, rating +
+   count, social, weakSpots), write "not found" into enrich for what isn't published, and spend
+   about 5 minutes re-trying the "not found" fields of 15 open leads (callbacks and interested
+   first) with sources not tried before.
 1. Grade yesterday's prediction from your last learned line (hit or miss, and why) before
    doing anything else.
 2. Read this file, LESSONS.md and the stage contract. Note the de-dup table.
@@ -67,6 +74,8 @@ found, new, with email, readable); 15 new and 5 with an email are the push-week 
    "predict: <number>" for the next run.
 
 ## Quality checklist
+- Every lead has `niche` (a kit.json id) and either a value or an enrich "not found" for each card
+  field. Lead finding or enrichment that broke or found nothing = an alert in the same run.
 - No email or phone without the URL it was read from. No guesses, no "info@".
 - Business name spelled as their site spells it.
 - Every buy signal in profile.signals has its URL; the run doc "## Scout" line counts leads with
