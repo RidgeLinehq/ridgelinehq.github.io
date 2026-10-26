@@ -61,7 +61,9 @@ rather I didn't, no problem. Thanks."
   (Ranking below). A lead is call-ready with a published business phone; office/tools/call_desk.py
   uses the same rules for Scout's stock (25+ per niche).
 - At the top: "Who's On Top" (markets/<niche>-<town>-<st> from Quinn: who ChatGPT, Gemini and Google
-  name). A one-tap pitch card: the opener (one of the kit's `pitch_lines`; the session mostly uses
+  name), merged into one numbered "Top 5 in <town>" that Grayson can read out; the pitch card has
+  it as a ready sentence, and the "Top 5 in town" opener uses it. Say "<business> doesn't come up"
+  only when the lead's own AI check says not named. A one-tap pitch card: the opener (one of the kit's `pitch_lines`; the session mostly uses
   the best line by Interested/Sold rate and keeps testing the others), the lead's weakSpots, the
   value line, and quick answers to the kit's `quick_objections` (price, "I get enough work", "is
   this a scam", "send me info").

@@ -1,5 +1,5 @@
 {
- "version": "10.0",
+ "version": "10.1",
  "script": {
   "opener": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. I'll be quick. I ran a free check on how {business} shows up when people ask ChatGPT and Google's AI for a {trade} in {town}. Got 30 seconds?",
   "value": "Right now when someone asks for a {trade} in {town}, the AI recommends {competitor_or_others} and {business} {ai_result}. We fix that: we clean up your Google profile and help your real customers leave reviews, so the AI starts recommending you.",
@@ -97,7 +97,7 @@
   "session_min_leads": 25,
   "rotation_epoch": "2026-01-01"
  },
- "updated": "2026-10-26: niches, pitch lines, 'Just send me info', voicemail + sold outcomes, cold call sessions.",
+ "updated": "2026-10-26: Top 5 in town (Who's On Top + pitch line), niches, pitch lines, voicemail + sold outcomes, cold call sessions.",
  "niches": [
   {
    "id": "restaurants",
@@ -284,6 +284,11 @@
    "id": "reviews",
    "label": "Reviews + AI",
    "text": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. I help {trade_plural} in {town} get more Google reviews from their real customers and show up when people ask AI who to call. I ran a free check on {business}. Can I tell you what I found? 30 seconds."
+  },
+  {
+   "id": "top-5",
+   "label": "Top 5 in town",
+   "text": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. Quick one: when people in {town} ask ChatGPT or Google for a {trade}, the top 5 that come up are {top5}. I wanted to show you where {business} lands. Got 30 seconds?"
   }
  ],
  "quick_objections": [

@@ -116,7 +116,8 @@ sentToClientAt, sentGmailId, jobAnswer, notes). Never in the repo.
 ## markets/<niche>-<town>-<st>   e.g. roofing-cabot-ar   (Quinn; the page's "Who's On Top" panel)
 {niche, town, state, question, chatgpt:[names], gemini:[names], google:[names],
  googleFrom:"local pack"|"directory <name>", jobId, sources:[urls], at}
-Names exactly as the gateway text / the search result shows them. Refreshed every 14 days.
+Names exactly as the gateway text / the search result shows them, in their order, up to 5 each.
+Refreshed every 14 days. The page merges them into one "Top 5 in <town>" list for the pitch.
 
 ## callstats/main   (Sage, from office/tools/call_desk.py stats)
 {at, calls, byNiche:{<id>:{calls, talked, interested, sold, winRate, score}}, byTown:{...},
