@@ -1,0 +1,6 @@
+{
+ "id": "aicheck-2026-10-26-cabot-e674",
+ "queries": [
+  {"key": "cabot-ar-auto-repair", "question": "Who are the best auto repair shops in Cabot, AR?", "city": "Cabot", "region": "Arkansas"}
+ ]
+}
