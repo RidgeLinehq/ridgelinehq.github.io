@@ -1,0 +1,46 @@
+{
+ "id": "aicheck-2026-10-26-cabot-e674",
+ "at": "2026-10-26T14:39:50Z",
+ "results": [
+  {
+   "key": "cabot-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Cabot, AR?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a Cabot homeowner, I\u2019d shortlist these first:\n\n- **Eads Automotive & Tire** \u2014 best all-around pick. Longstanding local shop, established in 1993, with strong review volume and a full-service repair/tire setup. Good first call for diagnostics, brakes, A/C, maintenance, and tires. ([eadsauto.com](https://www.eadsauto.com/?utm_source=openai))  \n- **A & B Foreign Car Repair** \u2014 my pick if you drive an import/foreign make. It\u2019s consistently listed near the top locally, with about a 4.9 rating and 70+ reviews. ([autorepairdirectories.com](https://www.autorepairdirectories.com/arkansas/cabot?utm_source=openai))  \n- **Big O Tires \u2013 Cabot** \u2014 best for tires, alignments, batteries, and routine service where you want lots of review history; listings show very high volume and strong ratings. ([reviews.birdeye.com](https://reviews.birdeye.com/d/automotive/cabot-ar/?utm_source=openai))  \n- **Danny\u2019s Diesel Repair** \u2014 call them if you have a diesel truck; they\u2019re highly rated locally and clearly diesel-focused. ([autorepairdirectories.com](https://www.autorepairdirectories.com/arkansas/cabot?utm_source=openai))  \n- **Bob\u2019s Garage Inc. or Waller\u2019s Auto Repair** \u2014 smaller local-shop options with solid ratings if you want an independent mechanic feel. ([autorepairdirectories.com](https://www.autorepairdirectories.com/arkansas/cabot?utm_source=openai))  \n\nI\u2019d get written estimates from two shops for anything over $500.",
+    "sources": [
+     {
+      "url": "https://www.eadsauto.com/?utm_source=openai",
+      "title": "Cabot Auto Repair - Eads Automotive & Tire"
+     },
+     {
+      "url": "https://www.autorepairdirectories.com/arkansas/cabot?utm_source=openai",
+      "title": "Auto Repair Shops in Cabot, Arkansas | Auto Repair Directories | AutoRepairDirectories.com"
+     },
+     {
+      "url": "https://reviews.birdeye.com/d/automotive/cabot-ar/?utm_source=openai",
+      "title": "Top Automotive Companies in Cabot, AR | Birdeye"
+     },
+     {
+      "url": "https://www.autorepairdirectories.com/arkansas/cabot?utm_source=openai",
+      "title": "Auto Repair Shops in Cabot, Arkansas | Auto Repair Directories | AutoRepairDirectories.com"
+     },
+     {
+      "url": "https://www.autorepairdirectories.com/arkansas/cabot?utm_source=openai",
+      "title": "Auto Repair Shops in Cabot, Arkansas | Auto Repair Directories | AutoRepairDirectories.com"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "Hey neighbor! If you\u2019re looking for trustworthy mechanics around town, here are the top local shops I always recommend:\n\n1. **G & T Auto Repair:** They\u2019re the gold standard in Cabot for honesty and fair pricing. Whether it\u2019s a tricky diagnostic issue or routine service, they\u2019re known for fixing what\u2019s actually broken without trying to upsell you on unnecessary repairs. \n\n2. **Cabot Tire & Service Center:** This is my go-to spot for tires, brakes, and quick maintenance. The staff is exceptionally friendly, the turnaround time is fast, and they treat you like family from the moment you walk in the door.\n\n3. **Direct Auto Care:** Excellent choice if you need major mechanical work or complex electrical troubleshooting. They are super thorough, explain everything clearly before doing the work, and stand behind their repairs with solid warranties.\n\nYou really can't go wrong with any of these three\u2014they\u2019ve all built great reputations in our community by treating locals right!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
