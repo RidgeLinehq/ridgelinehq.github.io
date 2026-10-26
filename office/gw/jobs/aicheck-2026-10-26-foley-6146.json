@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-10-26-foley-6146",
+ "queries": [
+  {
+   "key": "foley-al-med-spa",
+   "question": "Who are the best med spas in Foley, AL?",
+   "city": "Foley",
+   "region": "Alabama"
+  },
+  {
+   "key": "foley-al-pet-grooming",
+   "question": "Who are the best pet groomers in Foley, AL?",
+   "city": "Foley",
+   "region": "Alabama"
+  },
+  {
+   "key": "foley-al-hvac",
+   "question": "Who are the best HVAC companies in Foley, AL?",
+   "city": "Foley",
+   "region": "Alabama"
+  },
+  {
+   "key": "foley-al-landscaping",
+   "question": "Who are the best landscapers in Foley, AL?",
+   "city": "Foley",
+   "region": "Alabama"
+  },
+  {
+   "key": "foley-al-tree-service",
+   "question": "Who are the best tree services in Foley, AL?",
+   "city": "Foley",
+   "region": "Alabama"
+  },
+  {
+   "key": "foley-al-roofing",
+   "question": "Who are the best roofers in Foley, AL?",
+   "city": "Foley",
+   "region": "Alabama"
+  }
+ ]
+}
