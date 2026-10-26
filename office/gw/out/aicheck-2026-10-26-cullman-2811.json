@@ -1,0 +1,42 @@
+{
+ "id": "aicheck-2026-10-26-cullman-2811",
+ "at": "2026-10-26T20:35:33Z",
+ "results": [
+  {
+   "key": "cullman-al-auto-repair",
+   "question": "Who are the best auto repair shops in Cullman, AL?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I lived in Cullman and needed a dependable shop, I\u2019d start with these:\n\n1. **Guthrie\u2019s Auto Service** \u2014 Best all-around pick. Strong local reputation, 4.8 rating with hundreds of reviews, and it handles general repair/maintenance at 144 Co Rd 1435. Good choice for family vehicles you need fixed right. ([autorepairdirectories.com](https://www.autorepairdirectories.com/alabama/cullman?utm_source=openai))\n\n2. **Community Auto Repair** \u2014 My \u201chonest neighborhood mechanic\u201d pick. Reviews repeatedly mention communication, fair pricing, diagnostics, and thorough work; it\u2019s also centrally located at 302 5th Ave SW. ([bestprosintown.com](https://www.bestprosintown.com/al/cullman/community-auto-repair-/?utm_source=openai))\n\n3. **Graves Auto Service** \u2014 Worth calling for diagnostics and routine repairs; Loc8NearMe lists it among the top Cullman auto repair options with a 4.8 rating and 200+ reviews. ([loc8nearme.com](https://www.loc8nearme.com/alabama/cullman/auto-repair/?utm_source=openai))\n\n4. **Branham Tire & Auto** \u2014 Best if your issue involves tires, brakes, alignment, or suspension. It has a 4.8 rating with 300+ reviews. ([autorepairdirectories.com](https://www.autorepairdirectories.com/alabama/cullman?utm_source=openai))\n\nFor mufflers/exhaust specifically, I\u2019d call **Cullman Discount Muffler** first.",
+    "sources": [
+     {
+      "url": "https://www.autorepairdirectories.com/alabama/cullman?utm_source=openai",
+      "title": "Auto Repair Shops in Cullman, Alabama | Auto Repair Directories | AutoRepairDirectories.com"
+     },
+     {
+      "url": "https://www.bestprosintown.com/al/cullman/community-auto-repair-/?utm_source=openai",
+      "title": "Community Auto Repair, Cullman, AL - Reviews (111), Photos (14) - BestProsInTown"
+     },
+     {
+      "url": "https://www.loc8nearme.com/alabama/cullman/auto-repair/?utm_source=openai",
+      "title": "Auto Repair in Cullman, AL with Ratings, Reviews, Hours and Locations - Loc8NearMe"
+     },
+     {
+      "url": "https://www.autorepairdirectories.com/alabama/cullman?utm_source=openai",
+      "title": "Auto Repair Shops in Cullman, Alabama | Auto Repair Directories | AutoRepairDirectories.com"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable local mechanics in Cullman, here are the spots I\u2019d recommend to any neighbor wanting fair prices and honest work:\n\n1. **McSwain Tire & Auto**: A long-standing local favorite. They\u2019re famous for honest diagnoses and won\u2019t try to upsell you on unnecessary repairs. Great for everything from routine maintenance to major engine work.\n2. **B&M Auto Repair**: Known for clear communication and integrity. The mechanics here explain the issue in plain English, provide accurate quotes upfront, and get the job done right the first time.\n3. **Cullman Tire & Automotive**: My go-to for brakes, alignments, and tires. They offer fast turnarounds, fair pricing, and great customer service, making them super convenient for busy schedules.\n4. **Grissom Tire & Auto**: Fantastic for suspension, brakes, and general maintenance. They treat customer vehicles like their own and have built a reputation for being reliable and transparent. \n\nStick with these independent shops\u2014you'll get solid, dependable service without paying high dealership markups.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
