@@ -1,0 +1,42 @@
+{
+ "id": "aicheck-2026-10-26-tupelo-740f",
+ "at": "2026-10-26T19:34:22Z",
+ "results": [
+  {
+   "key": "tupelo-ms-auto-repair",
+   "question": "Who are the best auto repair shops in Tupelo, MS?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "Here\u2019s who I\u2019d call first in **Tupelo**:\n\n- **Tom\u2019s Automotive Service \u2014 317 Magazine St.** Best all-around pick. They\u2019re **AAA Approved**, do full-service mechanical/body work, and list **ASE Master Certified** technicians\u2014good signs if you want one dependable shop. ([aaa.com](https://www.aaa.com/autorepair/locations/tupelo-ms?utm_source=openai))\n\n- **Johnson Service Center \u2014 508 Daybrite Dr.** My \u201clocal-trust\u201d pick. CARFAX shows **5.0 stars from verified customers**, and local Reddit recommendations specifically mention them for serious engine/mechanical work. ([carfax.com](https://www.carfax.com/Reviews-Johnson-Service-Center-Tupelo-MS_FKNOEEKQAI?utm_source=openai))\n\n- **Auto Medic Imports \u2014 3552 Jeff Homan Blvd.** Best if you drive an import or European car. CARFAX shows **4.8 stars**, and locals point people there for European vehicles. ([carfax.com](https://www.carfax.com/Reviews-Auto-Medic-Imports-Tupelo-MS_NLQ3ZVJ001?utm_source=openai))\n\n- **Express Oil Change & Tire Engineers \u2014 W Main or N Gloster.** Good for oil changes, tires, brakes, and quicker routine maintenance; both Tupelo locations show strong customer-review volume. ([loc8nearme.com](https://www.loc8nearme.com/mississippi/tupelo/auto-repair/?utm_source=openai))\n\nI\u2019d get a written estimate, ask about parts/labor warranty, and avoid authorizing \u201cwhile we\u2019re in there\u201d work without a second call.",
+    "sources": [
+     {
+      "url": "https://www.aaa.com/autorepair/locations/tupelo-ms?utm_source=openai",
+      "title": "Auto Repair Shops - Tupelo MS | AAA Approved Auto Repair Facilities"
+     },
+     {
+      "url": "https://www.carfax.com/Reviews-Johnson-Service-Center-Tupelo-MS_FKNOEEKQAI?utm_source=openai",
+      "title": "Johnson Service Center in Tupelo, MS | CARFAX"
+     },
+     {
+      "url": "https://www.carfax.com/Reviews-Auto-Medic-Imports-Tupelo-MS_NLQ3ZVJ001?utm_source=openai",
+      "title": "Auto Medic Imports in Tupelo, MS | CARFAX"
+     },
+     {
+      "url": "https://www.loc8nearme.com/mississippi/tupelo/auto-repair/?utm_source=openai",
+      "title": "Auto Repair in Tupelo, MS with Ratings, Reviews, Hours and Locations - Loc8NearMe"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in Tupelo, you know how important it is to have a reliable mechanic you can trust with the family cars. Based on local reputation, consistent quality work, and fair dealing, here are the shops I\u2019d recommend:\n\n*   **Tupelo Automobile Repair:** If you want honest diagnostics and old-school customer service, this is a go-to spot. Locals rave about their integrity\u2014they won\u2019t upsell you on repairs you don\u2019t need, and their turnaround times are very dependable.\n*   **Gateway Tire & Service Center:** For routine maintenance, tires, brakes, and suspension work, Gateway is hard to beat. As homeowners, we appreciate convenience, and they are quick, efficient, and stand behind their warranties without giving you the runaround.\n*   **Express Oil Change & Tire Engineers:** For quick oil changes, state inspections, and minor services where you don't want to leave your car all day, these guys are top-notch. You can stay in your car, and their staff is consistently polite and professional.\n\nStick with one of these three depending on the job, and you\u2019ll be in good hands.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
