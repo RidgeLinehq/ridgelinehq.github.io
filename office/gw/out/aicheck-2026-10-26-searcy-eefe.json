@@ -1,0 +1,46 @@
+{
+ "id": "aicheck-2026-10-26-searcy-eefe",
+ "at": "2026-10-26T21:27:08Z",
+ "results": [
+  {
+   "key": "searcy-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Searcy, AR?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a Searcy homeowner who wants **dependable, no-drama car repair**, I\u2019d start with:\n\n1. **Lynn\u2019s Automotive** \u2014 My first call for general maintenance/diagnostics. CARFAX shows a **5.0 rating with 40+ verified reviews**, and comments emphasize trustworthy service. ([carfax.com](https://www.carfax.com/Reviews-Lynns-Automotive-Searcy-AR_9RAA2EH5U8?utm_source=openai))\n\n2. **East Park Service Center** \u2014 Best \u201csafe bet\u201d if you want an established full-service shop. It has about **4.9 stars with 100+ verified CARFAX reviews** and handles oil changes, tires, rotations, and general repair. ([carfax.com](https://www.carfax.com/Reviews-East-Park-Service-Center-Searcy-AR_0RDW3OQYTR?utm_source=openai))\n\n3. **Moudy Auto Repair** \u2014 Good independent-shop option; Birdeye lists it at **4.7 stars with 52 reviews**, with customers praising the people and work. ([reviews.birdeye.com](https://reviews.birdeye.com/moudy-auto-repair-156046094919014?utm_source=openai))\n\n4. **Rainwater\u2019s Garage** \u2014 Worth calling for smaller-shop service; Birdeye lists **4.9 stars with 42 reviews**. ([reviews.birdeye.com](https://reviews.birdeye.com/d/auto-repair/searcy-ar/?utm_source=openai))\n\n5. **Paul\u2019s Garage** \u2014 Another solid local pick, especially if you prefer a smaller garage; Birdeye shows **4.9 stars with 28 reviews**. ([reviews.birdeye.com](https://reviews.birdeye.com/d/auto-repair/searcy-ar/?utm_source=openai))\n\nI\u2019d get quotes from **Lynn\u2019s and East Park first**, then use Moudy/Rainwater\u2019s/Paul\u2019s if scheduling or price is better.",
+    "sources": [
+     {
+      "url": "https://www.carfax.com/Reviews-Lynns-Automotive-Searcy-AR_9RAA2EH5U8?utm_source=openai",
+      "title": "Lynn's Automotive - 2100 Highway 16 - Searcy, AR | CARFAX"
+     },
+     {
+      "url": "https://www.carfax.com/Reviews-East-Park-Service-Center-Searcy-AR_0RDW3OQYTR?utm_source=openai",
+      "title": "East Park Service Center in Searcy, AR | CARFAX"
+     },
+     {
+      "url": "https://reviews.birdeye.com/moudy-auto-repair-156046094919014?utm_source=openai",
+      "title": "Moudy Auto Repair - 52 Reviews - Auto Repair in Searcy, AR - Birdeye"
+     },
+     {
+      "url": "https://reviews.birdeye.com/d/auto-repair/searcy-ar/?utm_source=openai",
+      "title": "Top Auto Repair Companies in Searcy, AR | Birdeye"
+     },
+     {
+      "url": "https://reviews.birdeye.com/d/auto-repair/searcy-ar/?utm_source=openai",
+      "title": "Top Auto Repair Companies in Searcy, AR | Birdeye"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "Here are the local auto shops in Searcy I\u2019d recommend to any neighbor looking for honest, reliable work:\n\n*   **Autoworks of Searcy:** Hands down one of the most trusted spots in town. They\u2019re known for transparent pricing, skilled mechanics, and never pushing unnecessary repairs. If they say you need a fix, you actually need it.\n*   **Siler Auto Service:** A long-standing, family-owned local staple. You get old-fashioned, friendly customer service and dependable mechanics who take real pride in keeping White County vehicles running safely.\n*   **Christian Brothers Automotive:** Excellent for a modern, hassle-free experience. They send digital inspection reports with photos so you can see the exact issue yourself, and they offer a complimentary shuttle ride home while your car is worked on.\n*   **White County Tire & Auto:** My go-to recommendation for tires, brakes, alignments, and routine maintenance. They\u2019re fast, reasonably priced, and always stand behind their labor.\n\nYou really can\u2019t go wrong with any of these four\u2014just call ahead for an appointment, as their good reputations keep them busy!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
