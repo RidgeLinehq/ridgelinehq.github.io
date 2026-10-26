@@ -1,0 +1,46 @@
+{
+ "id": "aicheck-2026-10-26-elizabethtown-5adc",
+ "at": "2026-10-26T19:46:13Z",
+ "results": [
+  {
+   "key": "elizabethtown-ky-landscapers",
+   "question": "Who are the best landscapers in Elizabethtown, KY?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a homeowner in Elizabethtown, I\u2019d start with these:\n\n- **Duvall\u2019s Landscaping** \u2014 best for curb-appeal projects: bed renovation, planting, mulch/edging, and softscape design. They\u2019re Hardin County\u2013based and emphasize residential/commercial landscaping with free estimates. ([duvallslandscaping.com](https://www.duvallslandscaping.com/?utm_source=openai))  \n- **Fentress Landscape & Lawn Care** \u2014 strong pick for a local lawn-and-landscape combo; listed as locally owned, licensed and insured, with very strong review listings. ([fentresslandscaping.com](https://fentresslandscaping.com/?utm_source=openai))  \n- **Dixie Yard Works** \u2014 good if you want a one-stop shop for design/build, plants, stone, hardscapes, mulch, and materials; they\u2019re on N. Dixie Hwy in Elizabethtown. ([dixieyardworks.com](https://dixieyardworks.com/?utm_source=openai))  \n- **Evergreen Landscaping & Garden Center** \u2014 worth calling for landscape installation plus plant/nursery help; Birdeye shows a 4.8 rating with 35 reviews. ([reviews.birdeye.com](https://reviews.birdeye.com/evergreen-landscaping-garden-center-156202692004225?utm_source=openai))  \n- **Bluegrass Garden Center and Landscaping** \u2014 good for low-maintenance landscape design/install; Kentucky Proud lists them at 626 Westport Road. ([kyagr.com](https://www.kyagr.com/AgBusiness/10291?utm_source=openai))  \n\nI\u2019d get 2\u20133 quotes and ask for proof of insurance, recent local photos, and a plant warranty.",
+    "sources": [
+     {
+      "url": "https://www.duvallslandscaping.com/?utm_source=openai",
+      "title": "Duvall's Landscaping"
+     },
+     {
+      "url": "https://fentresslandscaping.com/?utm_source=openai",
+      "title": "Fentress Landscaping"
+     },
+     {
+      "url": "https://dixieyardworks.com/?utm_source=openai",
+      "title": "Home - Dixie Yard Works"
+     },
+     {
+      "url": "https://reviews.birdeye.com/evergreen-landscaping-garden-center-156202692004225?utm_source=openai",
+      "title": "Evergreen Landscaping & Garden Center - 35 Reviews - Landscape Architects in Elizabethtown, KY - Birdeye"
+     },
+     {
+      "url": "https://www.kyagr.com/AgBusiness/10291?utm_source=openai",
+      "title": "Bluegrass Garden Center and Landscaping"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re looking to upgrade your yard in E-town, a few local companies consistently come recommended by homeowners:\n\n*   **Greenwell\u2019s Landscaping:** A local favorite, especially for custom design and hardscaping like patios and retaining walls. They are known for meticulous attention to detail and reliable communication.\n*   **The Grounds Guys of Elizabethtown:** Great if you want a polished, professional crew that handles everything from routine lawn maintenance to seasonal cleanups and irrigation. They\u2019re super dependable and easy to work with.\n*   **Bluegrass Lawn & Landscaping:** Excellent for larger residential projects, grading, and sod installation. Neighbors frequently praise their efficiency and fair pricing.\n\n**My advice?** Call Greenwell\u2019s if you\u2019re doing a major custom outdoor living project. Reach out to The Grounds Guys if you need reliable ongoing maintenance and general upkeep. Always get at least two quotes to compare timelines and vibes before signing!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
