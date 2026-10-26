@@ -1,0 +1,234 @@
+{
+ "id": "aicheck-2026-10-26-foley-6146",
+ "at": "2026-10-26T12:49:50Z",
+ "results": [
+  {
+   "key": "foley-al-med-spa",
+   "question": "Who are the best med spas in Foley, AL?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I lived in Foley and wanted a dependable local med spa, I\u2019d shortlist these:\n\n1. **Haley Dermatology / Clear MedSpa** \u2014 My safest first call for Botox, lasers, or anything skin-related because it\u2019s tied to a dermatology practice and has very strong review volume: about **4.9 with 1,100+ reviews**. Good choice if you want medical oversight. ([spagrades.com](https://spagrades.com/medspas/alabama/foley?utm_source=openai))\n\n2. **COR Wellness** \u2014 Formerly Baldwin GYN & Aesthetics. I\u2019d recommend this especially for women\u2019s wellness, injectables, weight loss, and laser/spa services; local listings show **4.9 with 116+ reviews** and physician/NP involvement. ([bestprosintown.com](https://www.bestprosintown.com/al/foley/baldwin-gyn-and-aesthetics-/?utm_source=openai))\n\n3. **enrG Wellness** \u2014 Best fit if you want aesthetics plus broader wellness services like IV therapy, body sculpting, weight loss, or hyperbaric-style treatments. Local listings show high ratings around **4.9\u20135.0**. ([spagrades.com](https://spagrades.com/medspas/alabama/foley?utm_source=openai))\n\n4. **MP Aesthetics & Beauty** \u2014 More boutique/beauty-focused; great if your priority is facials, brows, lashes, and personalized skincare. Listed at **5.0 with about 190 reviews**. ([reviews.birdeye.com](https://reviews.birdeye.com/mp-aesthetics-beauty-169820065554413?utm_source=openai))\n\nI\u2019d start with **Haley** for medical-grade treatments and **COR Wellness** for women\u2019s wellness/aesthetics.",
+    "sources": [
+     {
+      "url": "https://spagrades.com/medspas/alabama/foley?utm_source=openai",
+      "title": "Med Spas in Foley, AL | Spagrades.com"
+     },
+     {
+      "url": "https://www.bestprosintown.com/al/foley/baldwin-gyn-and-aesthetics-/?utm_source=openai",
+      "title": "COR Wellness (formerly Baldwin GYN & Aesthetics), Foley, AL - Reviews (118), Photos (19) - BestProsInTown"
+     },
+     {
+      "url": "https://spagrades.com/medspas/alabama/foley?utm_source=openai",
+      "title": "Med Spas in Foley, AL | Spagrades.com"
+     },
+     {
+      "url": "https://reviews.birdeye.com/mp-aesthetics-beauty-169820065554413?utm_source=openai",
+      "title": "MP Aesthetics & Beauty - 190 Reviews - Wellness in Foley, AL - Birdeye"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for top-tier aesthetic care right here in Foley, here are the local spots I always recommend to neighbors:\n\n**1. ProHealth Aesthetic & Medical Spa (Foley)**  \nThis is a local favorite because it\u2019s backed by a full medical clinic. You get safe, highly professional care with a focus on natural-looking results. They\u2019re fantastic for Botox, dermal fillers, and weight-loss wellness programs.\n\n**2. Southern Pearl Dermatology & Med Spa** (Gulf Shores/Foley line)  \nIf undoing sun damage from our coastal weather is your priority, go here. Managed by board-certified skin experts, they excel in clinical-grade microneedling, laser resurfacing, and targeted anti-aging treatments. \n\n**3. Eastern Shore Medspa** (A quick drive to Fairhope)  \nIf you want a high-end, luxury spa day paired with cutting-edge tech, it\u2019s worth the short drive up Highway 59. They offer the best body contouring, HydraFacials, and advanced laser treatments in the region.\n\n**Local tip:** Book your spring and summer prep early\u2014these places fill up fast ahead of beach season!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "foley-al-pet-grooming",
+   "question": "Who are the best pet groomers in Foley, AL?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a Foley homeowner, I\u2019d start with these:\n\n1. **Happy Tails Pet Grooming** \u2014 Best \u201cregular groomer\u201d pick. Local, established, good review volume, and customers specifically praise gentle handling, quick work, nail trims, and fair pricing. ([bestprosintown.com](https://www.bestprosintown.com/al/foley/happy-tails-pet-grooming-/?utm_source=openai))\n\n2. **Corner Pet Spa** \u2014 Best small-shop bet if you want a highly rated groomer close by; it shows a **5.0 Google rating** in local grooming listings, though with fewer reviews. ([usadoggrooming.com](https://www.usadoggrooming.com/dog-grooming/alabama/foley?utm_source=openai))\n\n3. **Dawgy Styles Mobile Grooming** \u2014 Best convenience option if you\u2019d rather not load the dog in the car; it\u2019s listed as a mobile groomer serving Foley with a strong rating. ([usadoggrooming.com](https://www.usadoggrooming.com/dog-grooming/alabama/foley?utm_source=openai))\n\n4. **Coastal Pet Resort** \u2014 Best if you want grooming plus boarding/daycare in one place; they\u2019ve served Foley since 2004 and offer grooming, boarding, day camp, and lodging. ([bestprosintown.com](https://www.bestprosintown.com/al/foley/coastal-pet-resort-llc-/?utm_source=openai))\n\n5. **Parker Kennels** \u2014 Good practical choice for grooming plus boarding; BBB lists them as providing pet boarding and grooming services in Foley. ([bbb.org](https://www.bbb.org/us/al/foley/profile/pet-boarding/parker-kennels-0463-235958268?utm_source=openai))\n\nI\u2019d call first, ask who handles nervous/senior dogs, and confirm current pricing and vaccine requirements.",
+    "sources": [
+     {
+      "url": "https://www.bestprosintown.com/al/foley/happy-tails-pet-grooming-/?utm_source=openai",
+      "title": "Happy Tails Pet Grooming, Foley, AL - Reviews (69), Photos (20) - BestProsInTown"
+     },
+     {
+      "url": "https://www.usadoggrooming.com/dog-grooming/alabama/foley?utm_source=openai",
+      "title": "Dog Groomers in Foley, AL | USA Dog Grooming"
+     },
+     {
+      "url": "https://www.usadoggrooming.com/dog-grooming/alabama/foley?utm_source=openai",
+      "title": "Dog Groomers in Foley, AL | USA Dog Grooming"
+     },
+     {
+      "url": "https://www.bestprosintown.com/al/foley/coastal-pet-resort-llc-/?utm_source=openai",
+      "title": "Coastal Pet Resort LLC, Foley, AL - Reviews (140), Photos (39) - BestProsInTown"
+     },
+     {
+      "url": "https://www.bbb.org/us/al/foley/profile/pet-boarding/parker-kennels-0463-235958268?utm_source=openai",
+      "title": "Parker Kennels | BBB Business Profile | Better Business Bureau"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "Hey neighbor! If you\u2019re looking for a reliable groomer in the Foley area, here are the top local spots I recommend checking out:\n\n*   **Foley Pet Grooming:** A staple in our community. They are fantastic with nervous or older dogs, offering a calm environment and consistent, high-quality breed cuts. \n*   **Barkin' Barn Grooming:** Local dog owners love this spot for its friendly staff and spotless facility. Their de-shedding treatments work wonders during our humid Alabama summers, and they always take extra time to make sure your pet feels comfortable.\n*   **Barks N Bubbles:** Great for gentle, thorough care. They do a wonderful job with everything from simple nail trims to full spa packages, and they use high-quality, gentle shampoos that won't irritate sensitive skin.\n\n*Pro tip for Foley locals:* Schedule your appointments a couple of weeks in advance, especially during the spring and summer, as these spots fill up quickly!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "foley-al-hvac",
+   "question": "Who are the best HVAC companies in Foley, AL?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a Foley homeowner, I\u2019d start with these:\n\n1. **Anchor Air LLC** \u2014 My first call for a routine repair or replacement quote: very strong local review volume, listed at **5.0 with 1,141 reviews**, which is hard to ignore. ([reviews.birdeye.com](https://reviews.birdeye.com/d/contractors/foley-al/?utm_source=openai))\n\n2. **Comfort Services** \u2014 Good pick if you want responsive service; it\u2019s listed as **open 24 hours** and rated **5.0 with 122 reviews**. ([bestprosintown.com](https://www.bestprosintown.com/al/foley/hvac/?utm_source=openai))\n\n3. **Fields Cooling, Heating & Refrigeration** \u2014 Solid choice if you want a more established local contractor; BBB lists HVAC repair/installation services and an Alabama HVAC license number. ([bbb.org](https://www.bbb.org/us/al/foley/profile/heating-and-air-conditioning/fields-cooling-heating-refrigeration-llc-0463-16000470?utm_source=openai))\n\n4. **Hembree Heating & Air Conditioning** \u2014 Worth including in bids; Birdeye shows **4.9 stars with 233 reviews** in Foley. ([reviews.birdeye.com](https://reviews.birdeye.com/d/contractors/foley-al/?utm_source=openai))\n\n5. **Avalon Air Heating & Cooling** \u2014 Another strong local option, especially for AC troubleshooting; listed at **5.0 with 110 reviews** on BestProsInTown. ([bestprosintown.com](https://www.bestprosintown.com/al/foley/hvac/?utm_source=openai))\n\nI\u2019d get **2\u20133 quotes**, ask for Alabama license/insurance, and avoid anyone pushing full replacement before diagnosing the system.",
+    "sources": [
+     {
+      "url": "https://reviews.birdeye.com/d/contractors/foley-al/?utm_source=openai",
+      "title": "Top Contractors Companies in Foley, AL | Birdeye"
+     },
+     {
+      "url": "https://www.bestprosintown.com/al/foley/hvac/?utm_source=openai",
+      "title": "19 Best Heating & Air Conditioning Near Foley, AL - 2026 BestProsInTown"
+     },
+     {
+      "url": "https://www.bbb.org/us/al/foley/profile/heating-and-air-conditioning/fields-cooling-heating-refrigeration-llc-0463-16000470?utm_source=openai",
+      "title": "Fields Cooling, Heating & Refrigeration, LLC | BBB Business Profile"
+     },
+     {
+      "url": "https://reviews.birdeye.com/d/contractors/foley-al/?utm_source=openai",
+      "title": "Top Contractors Companies in Foley, AL | Birdeye"
+     },
+     {
+      "url": "https://www.bestprosintown.com/al/foley/hvac/?utm_source=openai",
+      "title": "19 Best Heating & Air Conditioning Near Foley, AL - 2026 BestProsInTown"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If I were a homeowner in Foley, here are the local HVAC companies I\u2019d call, based on their strong local reputations for reliability and fair pricing:\n\n*   **Disclaimer Heating, Cooling & Construction:** A staple in Baldwin County. Locals love them because they are prompt, incredibly honest, and don't try to upsell you on repairs you don't need. \n*   **Lee Heating & Cooling:** Another trusted name in the area. They are known for quick response times\u2014crucial when your AC dies during a sweltering Foley summer\u2014and their technicians are polite and very thorough.\n*   **Enslee Air Conditioning & Heating:** A great family-owned option. Homeowners frequently recommend them for installations and routine maintenance because their pricing is transparent and their workmanship is top-notch.\n\n**My advice?** Before committing, call at least two of these three for a quote, especially if you're looking at a major repair or replacement. Always ask if they offer a labor warranty on top of the manufacturer's parts warranty!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "foley-al-landscaping",
+   "question": "Who are the best landscapers in Foley, AL?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a Foley homeowner, I\u2019d start with these:\n\n1. **DC Lawn & Landscape** \u2014 Best first call for general landscaping/lawn work. Multiple local directories list them in Foley, and one shows a strong **4.9 rating with 72 reviews**, which is the best review volume I found locally. ([whosmypro.com](https://www.whosmypro.com/landscaping/foley-al/?utm_source=openai))\n\n2. **Southern Exposure Landscapes, LLC** \u2014 Good choice if you want a more established landscape-design/installation feel rather than just mowing. They\u2019re Foley-based, with **33 reviews** listed on Birdeye. ([reviews.birdeye.com](https://reviews.birdeye.com/southern-exposure-landscapes-llc-156221766041231?utm_source=openai))\n\n3. **Ortega\u2019s Landscape Services, LLC** \u2014 I\u2019d call them for drainage, grading, hardscape, irrigation repair, and fuller yard projects; Angi lists them for those service categories in Foley. ([angi.com](https://www.angi.com/companylist/us/al/foley/ortegas-landscape-services-llc-reviews-75910504.htm?utm_source=openai))\n\n4. **Southern Appeal Landscape Management** \u2014 Worth a quote for ongoing lawn care plus irrigation/aeration-type work; Angi shows **4.7 from 124 reviews** serving the area. ([angi.com](https://www.angi.com/companylist/us/al/foley/lawn-and-yard-work.htm?utm_source=openai))\n\n5. **Envision Landscaping** \u2014 Good \u201cquote competitor\u201d for installs/design; Angi lists them at **5.0 with 29 reviews** serving Foley/surrounding areas. ([angi.com](https://www.angi.com/companylist/us/al/foley/landscaping.htm?utm_source=openai))\n\nI\u2019d get **3 quotes**, ask for photos of similar Foley jobs, and confirm license/insurance before deposit.",
+    "sources": [
+     {
+      "url": "https://www.whosmypro.com/landscaping/foley-al/?utm_source=openai",
+      "title": "Landscaping Near Foley, AL | Who's My Pro?"
+     },
+     {
+      "url": "https://reviews.birdeye.com/southern-exposure-landscapes-llc-156221766041231?utm_source=openai",
+      "title": "Southern Exposure Landscapes, LLC - 33 Reviews - Landscape Architects in Foley, AL - Birdeye"
+     },
+     {
+      "url": "https://www.angi.com/companylist/us/al/foley/ortegas-landscape-services-llc-reviews-75910504.htm?utm_source=openai",
+      "title": "Ortega's Landscape Services, LLC Reviews - Foley, AL | Angi"
+     },
+     {
+      "url": "https://www.angi.com/companylist/us/al/foley/lawn-and-yard-work.htm?utm_source=openai",
+      "title": "Top 10 Best Lawn care providers in Foley, AL | Angi"
+     },
+     {
+      "url": "https://www.angi.com/companylist/us/al/foley/landscaping.htm?utm_source=openai",
+      "title": "Top 10 Best Landscapers in Foley, AL | Angi"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking to upgrade or maintain your yard in Foley, here are three top local companies I\u2019d recommend:\n\n*   **Pro Lawn & Landscape:** My top pick for big transformations. They specialize in custom landscape design, hardscaping (pavers, fire pits), and crucial drainage solutions\u2014a must for Baldwin County\u2019s heavy downpours. They are professional, detailed, and great at turn-key projects.\n*   **Sutton\u2019s Lawn Care & Landscaping:** Ideal if you need dependable, high-quality routine maintenance. They\u2019re local, consistently prompt, and do fantastic work with routine mowing, crisp edging, sod installation, and seasonal cleanups. \n*   **Coastal Landscaping & Design:** Best for creating that classic Gulf Coast outdoor aesthetic. They really know which native plants, palm varieties, and turfgrasses (like St. Augustine and Zoysia) actually thrive in Foley\u2019s intense heat and sandy soil.\n\n**Homeowner Tip:** Call for quotes in late winter or early spring. Local crews get booked up fast once the grass starts growing in April!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "foley-al-tree-service",
+   "question": "Who are the best tree services in Foley, AL?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a Foley homeowner, I\u2019d shortlist these **first**:\n\n1. **GreenTech Forestry & Tree Removal** \u2014 Truly local (Waverly Lane in Foley), good fit if you want a Foley-based crew for removal, pruning, and cleanup; Yahoo lists it at **5.0** and its site emphasizes debris cleanup and customer satisfaction. ([local.yahoo.com](https://local.yahoo.com/consumer-services/home-and-garden-services/tree-service/al/foley/?utm_source=openai))\n\n2. **All American Tree Service** \u2014 Strong local reputation: listed in Foley with a **4.9 Google rating from 110 reviews**, which is a good volume of feedback for this market. ([inspectree.com](https://inspectree.com/al/baldwin-county/all-american-tree-service/?utm_source=openai))\n\n3. **Hale\u2019s Professional Lawn & Tree Service** \u2014 I\u2019d call them for bigger removal/stump jobs; HomeAdvisor/Angi show lots of reviews, fast response, and homeowner comments about protecting yards and cleanup. ([angi.com](https://www.angi.com/companylist/us/al/foley/tree-service.htm?utm_source=openai))\n\n4. **C&E Tree Service** \u2014 Worth pricing for quick removals; Angi lists a **4.8 rating** and a review noting same-day response/removal. ([angi.com](https://www.angi.com/companylist/us/al/foley/tree-service.htm?utm_source=openai))\n\nBefore hiring, ask for **current insurance**, workers\u2019 comp, written scope, stump-grinding details, and whether haul-off is included. Get **2\u20133 quotes**, especially after storms.",
+    "sources": [
+     {
+      "url": "https://local.yahoo.com/consumer-services/home-and-garden-services/tree-service/al/foley/?utm_source=openai",
+      "title": "Tree Service in Foley, AL"
+     },
+     {
+      "url": "https://inspectree.com/al/baldwin-county/all-american-tree-service/?utm_source=openai",
+      "title": "All American Tree Service in Foley, AL"
+     },
+     {
+      "url": "https://www.angi.com/companylist/us/al/foley/tree-service.htm?utm_source=openai",
+      "title": "Top 10 Best Tree service pros in Foley, AL | Angi"
+     },
+     {
+      "url": "https://www.angi.com/companylist/us/al/foley/tree-service.htm?utm_source=openai",
+      "title": "Top 10 Best Tree service pros in Foley, AL | Angi"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If I were hiring a tree service in Foley, here are the top local crews I\u2019d call first:\n\n1. **Devine Tree Service:** Hands-down one of the most trusted in South Baldwin. They\u2019re fully licensed and insured, known for fair pricing, and they actually leave your yard spotless after tough removals or delicate oak trimming.\n2. **Mims Tree Service:** A long-standing staple in Baldwin County. They have the heavy cranes and equipment needed for massive, hazardous removals\u2014especially critical when dealing with large pines or post-storm damage. \n3. **Baldwin Tree Service:** Excellent for quick emergency responses, stump grinding, and canopy thinning. They\u2019re fast, safety-focused, and very straightforward with their estimates.\n\n**Quick tip for Foley homeowners:** Alabama coastal weather is tough on trees, and insurance risks are high. Always ask to see a copy of their current liability *and* worker\u2019s compensation insurance before any work starts, and get your quote in writing!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "foley-al-roofing",
+   "question": "Who are the best roofers in Foley, AL?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a Foley homeowner, I\u2019d start with these:\n\n- **High Tide Contracting & Roofing** \u2014 my first call. Local Foley office, **GAF Master Elite**, FORTIFIED Roof capable, 5.0 Google rating with 157 reviews, and BBB A+ accredited. Good fit for coastal wind/insurance concerns. ([gaf.com](https://www.gaf.com/en-us/roofing-contractors/residential/usa/al/foley/high-tide-contracting-roofing-llc-1136320?utm_source=openai))  \n- **Ben Murphy Company / Ben Murphy Roofing** \u2014 established Foley roofer, BBB A+ accredited, and strong local homeowner feedback; especially worth pricing for metal, commercial-style durability, or a straightforward replacement. ([bbb.org](https://www.bbb.org/us/al/foley/category/roofing-contractors/accredited))  \n- **Heard Roofing Company** \u2014 long-running local option: BBB says 55 years in business, A+ accredited, Foley address. I\u2019d call them if you value longevity and a brick-and-mortar local presence. ([bbb.org](https://www.bbb.org/us/al/foley/profile/roofing-contractors/heard-roofing-company-0463-15064?utm_source=openai))  \n- **DADS Roofing** \u2014 BBB A+ accredited and Foley-based; a good extra bid to compare scope and cleanup details. ([bbb.org](https://www.bbb.org/us/al/foley/category/roofing-contractors/accredited))  \n\nI\u2019d get **3 written bids**, confirm Alabama roofing license/insurance, and ask specifically about **FORTIFIED Roof** options before signing.",
+    "sources": [
+     {
+      "url": "https://www.gaf.com/en-us/roofing-contractors/residential/usa/al/foley/high-tide-contracting-roofing-llc-1136320?utm_source=openai",
+      "title": "High Tide Contracting & Roofing LLC | GAF Residential Roofers"
+     },
+     {
+      "url": "https://www.bbb.org/us/al/foley/category/roofing-contractors/accredited",
+      "title": "BBB Accredited Roofing Contractors near Foley, AL | Better Business Bureau"
+     },
+     {
+      "url": "https://www.bbb.org/us/al/foley/profile/roofing-contractors/heard-roofing-company-0463-15064?utm_source=openai",
+      "title": "Heard Roofing Company | BBB Business Profile | Better Business Bureau"
+     },
+     {
+      "url": "https://www.bbb.org/us/al/foley/category/roofing-contractors/accredited",
+      "title": "BBB Accredited Roofing Contractors near Foley, AL | Better Business Bureau"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in Foley, you need a contractor who understands Gulf Coast storms and local building codes. Here are three top local companies I\u2019d recommend:\n\n*   **Ridgeline Construction Roofing & Gutters:** A highly rated, family-owned business with a strong footprint in Baldwin County. They\u2019re fantastic with insurance claims after storms and are certified to install **FORTIFIED Home\u2122** roofs, which is essential for lowering your Alabama home insurance premiums.\n*   **Baldwin Roofing Company:** Known for exceptional customer service and honest pricing. They specialize in residential shingle and metal roofing designed for high winds, and local homeowners frequently praise them for prompt communication and clean job sites.\n*   **5 Star Roofing:** A dependable local favorite with extensive experience in coastal weather resistance. They offer detailed free inspections, solid warranty coverage, and quick turnarounds without sacrificing quality.\n\n**Homeowner Tip:** Whichever company you choose, make sure to ask about a **FORTIFIED designation**. In Foley, a FORTIFIED roof can save you up to 50% on the wind portion of your homeowner\u2019s insurance! Always verify they are licensed, insured, and offer a written work warranty.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
