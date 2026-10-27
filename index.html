@@ -19,6 +19,9 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","name":"Ridgeline Local","url":"https://ridgelinehq.github.io/","email":"ridgelinemarketinghq@gmail.com","description":"Helps local businesses get recommended by ChatGPT and Google AI, and makes it easy for happy customers to leave reviews.","areaServed":"United States","priceRange":"$39.99 - $125 per month"}
 </script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is this legit?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. No contract, and you can cancel anytime by replying to any email. Growth and Pro come with a second month free guarantee. You see the real ChatGPT and Gemini answers before and after, and every lead we send. If it’s not for you, you stop. No fee, no hassle."}}, {"@type": "Question", "name": "What’s in the free AI check?", "acceptedAnswer": {"@type": "Answer", "text": "We ask ChatGPT and Gemini who they recommend for your kind of business in your town, then email you their exact answers, whether you were named, and the three fixes we’d make first. Free. No card, no call."}}, {"@type": "Question", "name": "How much of my time does it take?", "acceptedAnswer": {"@type": "Answer", "text": "About two minutes for the signup form, and about ten minutes to paste in your Google profile fixes. We write them for you. The rest happens by email."}}, {"@type": "Question", "name": "Do you need my passwords?", "acceptedAnswer": {"@type": "Answer", "text": "No. Never. If you like, you can add us as a manager on your Google profile. Your login stays yours."}}, {"@type": "Question", "name": "Where do the leads come from?", "acceptedAnswer": {"@type": "Answer", "text": "On Pro, we look for people asking for your kind of business nearby: public posts asking for recommendations, messages on your own Google profile, and your own lead form. Every lead is logged. We never buy lists or message strangers in your name."}}, {"@type": "Question", "name": "How do I cancel?", "acceptedAnswer": {"@type": "Answer", "text": "Reply “cancel” to any email from us. That’s it. No contract, no fee, and you keep the service through the month you paid for."}}]}
+</script>
 <style>
 /* =====================================================================
    RIDGELINE LOCAL — warm ivory, forest green, brass. Motion with purpose.
@@ -268,26 +271,33 @@ h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-
 .card h3{margin-bottom:10px}
 .card p{color:var(--muted);font-size:.98rem;flex:1}
 .tag{display:inline-flex;align-self:flex-start;margin-top:18px;padding:6px 10px;background:var(--ivory-2);color:var(--brass-text);font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-radius:6px}
-.viz{height:92px;margin-bottom:22px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:var(--mint);position:relative;overflow:hidden}
-/* viz 1: map pin drop + ring */
-.pin{width:40px;height:40px;color:var(--forest);animation:drop 3.2s var(--ease) infinite}
-.ring{position:absolute;width:26px;height:10px;border-radius:50%;border:2px solid var(--brass);bottom:22px;opacity:0;animation:ripple 3.2s ease-out infinite}
-@keyframes drop{0%{transform:translateY(-60px);opacity:0}18%{transform:translateY(0);opacity:1}24%{transform:translateY(-8px)}30%{transform:translateY(0)}78%{transform:translateY(0);opacity:1}100%{transform:translateY(-60px);opacity:0}}
-@keyframes ripple{0%,17%{opacity:0;transform:scale(.3)}22%{opacity:.9;transform:scale(.6)}60%{opacity:0;transform:scale(2.6)}100%{opacity:0}}
-/* viz 2: stars fill, then "Posted" */
-.stars{display:flex;gap:6px}
-.stars svg{width:24px;height:24px;color:#cbbf9f;animation:star 6s ease-in-out infinite}
-.stars svg:nth-child(1){animation-delay:0s}.stars svg:nth-child(2){animation-delay:.25s}.stars svg:nth-child(3){animation-delay:.5s}.stars svg:nth-child(4){animation-delay:.75s}.stars svg:nth-child(5){animation-delay:1s}
-@keyframes star{0%,8%{color:#cbbf9f;transform:scale(1)}14%{color:var(--brass-num);transform:scale(1.35)}20%,80%{color:var(--brass-num);transform:scale(1)}90%,100%{color:#cbbf9f}}
-.posted{position:absolute;bottom:8px;display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:700;color:#fff;background:var(--good);padding:4px 10px;border-radius:20px;opacity:0;animation:posted 6s ease-in-out infinite}
-.posted svg{width:12px;height:12px}
-@keyframes posted{0%,30%{opacity:0;transform:translateY(8px)}36%,75%{opacity:1;transform:none}82%,100%{opacity:0;transform:translateY(8px)}}
-/* viz 3: phone with lead chip */
-.phone{width:34px;height:34px;color:var(--forest);animation:wiggle 4s ease-in-out infinite}
-@keyframes wiggle{0%,60%,100%{transform:rotate(0)}64%,72%{transform:rotate(-12deg)}68%,76%{transform:rotate(12deg)}}
-.lead{position:absolute;right:14px;top:50%;display:inline-flex;align-items:center;gap:7px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:7px 10px;font-size:.78rem;font-weight:600;box-shadow:var(--shadow-sm);opacity:0;animation:lead 4s var(--ease) infinite}
-.lead i{width:8px;height:8px;border-radius:50%;background:var(--good)}
-@keyframes lead{0%,10%{opacity:0;transform:translate(16px,-50%)}18%,55%{opacity:1;transform:translate(0,-50%)}63%,100%{opacity:0;transform:translate(16px,-50%)}}
+
+/* ---------- photo cards ---------- */
+.shot{position:relative;margin:-30px -28px 24px;aspect-ratio:4/3;overflow:hidden;background:var(--ivory-2)}
+.shot img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+@media(hover:hover){.card:hover .shot img{transform:scale(1.05)}}
+.shot::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,36,29,0) 55%,rgba(15,36,29,.45))}
+.shot-chip{position:absolute;z-index:1;left:14px;bottom:14px;display:inline-flex;align-items:center;gap:8px;background:rgba(255,253,249,.95);color:var(--ink);border-radius:12px;padding:8px 12px;font-size:.8rem;font-weight:600;box-shadow:var(--shadow-sm)}
+.shot-chip i{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 0 0 rgba(47,125,90,.5);animation:blip 2.4s ease-out infinite}
+.shot-chip svg{width:14px;height:14px;color:var(--brass-num)}
+.shot-chip .st{display:flex;gap:2px}
+@keyframes blip{0%{box-shadow:0 0 0 0 rgba(47,125,90,.55)}70%,100%{box-shadow:0 0 0 9px rgba(47,125,90,0)}}
+
+/* ---------- proof: a real AI answer ---------- */
+.proof{overflow:hidden}
+.proof-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(36px,6vw,88px);align-items:center}
+.phone-frame{position:relative;max-width:360px;margin-inline:auto;padding:12px;background:#0b0b0b;border-radius:44px;box-shadow:0 0 0 1px #2a2a2a,0 40px 80px rgba(10,30,22,.28);transform:rotate(-2.5deg);transition:transform .6s var(--ease)}
+@media(hover:hover){.phone-frame:hover{transform:rotate(0)}}
+.phone-frame img{border-radius:32px;width:100%;height:auto}
+.proof-tag{position:absolute;z-index:2;top:-14px;right:28px;display:inline-flex;align-items:center;gap:6px;background:var(--brass);color:var(--forest);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:7px 12px;border-radius:999px;box-shadow:var(--shadow-sm);transform:rotate(2.5deg)}
+.proof-tag svg{width:13px;height:13px}
+.proof h2{margin:18px 0 18px}
+.proof-list{list-style:none;padding:0;margin:26px 0 30px;display:grid;gap:16px}
+.proof-list li{display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:start;color:var(--muted)}
+.proof-list b{display:block;color:var(--ink);font-weight:600;margin-bottom:2px}
+.proof-list .ic{width:34px;height:34px;border-radius:10px;background:var(--mint);display:grid;place-items:center;color:var(--forest)}
+.proof-list .ic svg{width:16px;height:16px}
+.proof-note{margin-top:16px;font-size:.84rem;color:var(--muted)}
 
 /* ---------- how it works (dark, drawn line) ---------- */
 .how{position:relative;overflow:hidden}
@@ -348,10 +358,13 @@ h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-
 .q-inner p{padding:0 2px 22px;color:var(--muted);max-width:68ch;font-size:1rem}
 
 /* ---------- closing band ---------- */
-.close{position:relative;overflow:hidden;color:#fff;background:linear-gradient(118deg,#0f241d 0%,var(--forest) 35%,#245545 65%,var(--forest) 100%);background-size:220% 220%;animation:shift 16s ease-in-out infinite alternate}
-@keyframes shift{from{background-position:0% 50%}to{background-position:100% 50%}}
+.close{position:relative;overflow:hidden;color:#fff;background:#0f241d}
+.close-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 50%;transform:scale(1.06);animation:pan 24s ease-in-out infinite alternate}
+@keyframes pan{from{transform:scale(1.06) translateX(0)}to{transform:scale(1.06) translateX(-2.5%)}}
+.close::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(15,36,29,.96) 0%,rgba(20,47,39,.86) 42%,rgba(20,47,39,.25) 100%)}
+.close .contours{z-index:1}
 .close .contours{right:-220px;top:-60px;color:var(--brass);opacity:.16}
-.close-in{position:relative;z-index:1;padding:clamp(72px,9vw,120px) 0;max-width:680px;text-align:left}
+.close-in{position:relative;z-index:2;padding:clamp(72px,9vw,120px) 0;max-width:680px;text-align:left}
 .close h2{font-size:clamp(2.3rem,4.6vw,3.8rem);margin-bottom:16px}
 .close p{color:var(--muted-dark);max-width:48ch;margin-bottom:30px;font-size:1.1rem}
 
@@ -389,8 +402,8 @@ footer .mail{font-size:1.02rem;font-weight:600}
   .steps::before{transform:none}.step .n{transform:none;opacity:1}
   .track{animation:none;flex-wrap:wrap;width:auto;justify-content:center}
   .marquee{-webkit-mask-image:none;mask-image:none}
-  .stars svg{color:var(--brass-num)}.posted{opacity:1}.lead{opacity:1;transform:translate(0,-50%)}.pin{animation:none}.ring{display:none}
   .q-panel{transition:none}
+  .close-bg{animation:none}.shot-chip i{animation:none}
 }
 
 /* ---------- responsive ---------- */
@@ -398,6 +411,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
   .hero-grid{grid-template-columns:minmax(0,1fr) minmax(300px,420px);gap:32px}
   .grid-3{gap:16px}
   .card{padding:26px 22px}
+  .shot{margin:-26px -22px 22px}
   .plans{gap:14px}
   .plan{padding:26px 20px 22px}
   .steps{gap:22px}
@@ -410,6 +424,9 @@ footer .mail{font-size:1.02rem;font-weight:600}
   .demo{transform:none}
   .check-grid{grid-template-columns:minmax(0,1fr);gap:30px}
   .grid-3{grid-template-columns:minmax(0,1fr)}
+  .proof-grid{grid-template-columns:minmax(0,1fr);gap:44px}
+  .proof-copy{order:-1}
+  .close::before{background:linear-gradient(180deg,rgba(15,36,29,.9) 0%,rgba(20,47,39,.82) 60%,rgba(20,47,39,.6) 100%)}
   .steps{grid-template-columns:minmax(0,1fr);gap:0}
   .steps::before{display:none}
   .step:not(:last-child)::before{content:"";position:absolute;left:27px;top:56px;bottom:0;width:2px;background:linear-gradient(180deg,var(--brass),rgba(210,179,117,.3));transform:scaleY(0);transform-origin:top;transition:transform .9s var(--ease)}
@@ -449,6 +466,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
   .plan .amt{font-size:2.7rem}
   .brand small{display:none}
   .demo-badge{left:0}
+  .phone-frame{max-width:300px}
 }
 @media(max-width:360px){
   .nav-in{gap:8px}
@@ -562,6 +580,30 @@ footer .mail{font-size:1.02rem;font-weight:600}
 </div>
 <p class="sr">Built for roofers, dentists, barbers, plumbers, restaurants, salons, HVAC, gyms, landscapers, auto shops, cleaners, med spas, electricians, pet groomers, contractors, tree services and more.</p>
 
+<!-- ===================== PROOF: A REAL AI ANSWER ===================== -->
+<section class="section proof" id="proof" aria-labelledby="proof-title" data-anim>
+  <div class="wrap proof-grid">
+    <div data-reveal>
+      <div class="phone-frame">
+        <span class="proof-tag"><svg aria-hidden="true"><use href="#i-check"/></svg>Real answer</span>
+        <img src="assets/proof-chatgpt-foley.jpg" width="720" height="994" loading="lazy" decoding="async" alt="A real ChatGPT answer to 'I need a tree service in Foley, AL, who should I call?' It recommends two local businesses by name with their phone numbers. Business names are blurred.">
+      </div>
+    </div>
+    <div class="proof-copy" data-reveal>
+      <span class="kicker">Not a mockup</span>
+      <h2 id="proof-title">AI doesn’t give ten blue links. It gives two names.</h2>
+      <p class="lede">We asked ChatGPT for a tree service in Foley, Alabama. It named two businesses, gave their phone numbers, and told the customer to call. Every other tree service in town never came up.</p>
+      <ul class="proof-list">
+        <li><span class="ic" aria-hidden="true"><svg><use href="#i-phone"/></svg></span><div><b>The short list gets the call</b>There’s no page two. If you’re not in the answer, the customer never hears your name.</div></li>
+        <li><span class="ic" aria-hidden="true"><svg><use href="#i-pin"/></svg></span><div><b>It reads what’s already out there</b>Your Google profile, your reviews and your website are what AI uses to decide who to name.</div></li>
+        <li><span class="ic" aria-hidden="true"><svg><use href="#i-star"/></svg></span><div><b>That’s fixable</b>Clear details and steady reviews are exactly what we work on, every month.</div></li>
+      </ul>
+      <a class="btn btn-forest btn-lg" href="#free-check">See what AI says about you <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <p class="proof-note">Real ChatGPT answer, October 2026. Business names and numbers blurred.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== FREE CHECK (form) ===================== -->
 <section class="section on-dark check" id="free-check" aria-labelledby="check-title" data-anim>
   <svg class="contours drift" aria-hidden="true"><use href="#i-contours"/></svg>
@@ -621,21 +663,21 @@ footer .mail{font-size:1.02rem;font-weight:600}
     </div>
     <div class="grid-3" data-reveal data-stagger>
       <article class="card" style="--d:0">
-        <div class="viz" aria-hidden="true"><svg class="pin"><use href="#i-pin"/></svg><span class="ring"></span></div>
+        <figure class="shot"><img src="assets/photo-main-street-card.jpg" width="960" height="720" loading="lazy" decoding="async" alt="Main street storefronts at sunset: a cafe, a barbershop and a flower shop with customers walking in"><figcaption class="shot-chip"><i aria-hidden="true"></i>Found when locals ask AI</figcaption></figure>
         <span class="num">01</span>
         <h3>Google &amp; AI visibility</h3>
         <p>Clear, consistent information about your business where Google, ChatGPT and Gemini look for it.</p>
         <span class="tag">All plans</span>
       </article>
       <article class="card" style="--d:1">
-        <div class="viz" aria-hidden="true"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><span class="posted"><svg><use href="#i-check"/></svg>Review posted</span></div>
+        <figure class="shot"><img src="assets/photo-review-counter.jpg" width="960" height="720" loading="lazy" decoding="async" alt="A customer at a coffee shop counter opens a five-star review screen on her phone"><figcaption class="shot-chip"><span class="st" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>Review in 10 seconds</figcaption></figure>
         <span class="num">02</span>
         <h3>10-second reviews</h3>
         <p>A review link and a QR card for the counter, so happy customers can leave a Google review in about ten seconds.</p>
         <span class="tag">All plans</span>
       </article>
       <article class="card" style="--d:2">
-        <div class="viz" aria-hidden="true"><svg class="phone"><use href="#i-phone"/></svg><span class="lead"><i></i>New lead: needs a quote</span></div>
+        <figure class="shot"><img src="assets/photo-owner-call.jpg" width="960" height="720" loading="lazy" decoding="async" alt="A business owner at his shop desk takes a call and writes down a job, work van parked outside"><figcaption class="shot-chip"><i aria-hidden="true"></i>New lead: needs a quote</figcaption></figure>
         <span class="num">03</span>
         <h3>Local leads</h3>
         <p>People nearby asking for what you do, found by AI and sent straight to your inbox.</p>
@@ -805,6 +847,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
 
 <!-- ===================== CLOSING BAND ===================== -->
 <section class="close" aria-labelledby="close-title" data-anim>
+  <img class="close-bg" src="assets/photo-main-street-wide.jpg" width="1440" height="810" decoding="async" alt="">
   <svg class="contours drift" aria-hidden="true"><use href="#i-contours"/></svg>
   <div class="wrap"><div class="close-in" data-reveal>
     <h2 id="close-title">Let’s put your business on the map.</h2>
