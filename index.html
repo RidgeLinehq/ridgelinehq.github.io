@@ -368,6 +368,13 @@ footer .mail{font-size:1.02rem;font-weight:600}
 .sticky-cta[hidden]{display:block!important;transform:translateY(110%);pointer-events:none;visibility:hidden;transition:transform .35s var(--ease),visibility 0s .35s}
 .sticky-cta .btn{width:100%;min-height:50px}
 
+/* ---------- about ---------- */
+.about{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,48px);align-items:start;max-width:860px}
+.about-pic{width:clamp(92px,16vw,150px);aspect-ratio:1;border-radius:50%;background:var(--forest);color:var(--brass);display:grid;place-items:center;font-family:var(--display,inherit);font-weight:800;font-size:clamp(2.2rem,5vw,3.4rem);overflow:hidden;box-shadow:0 0 0 6px var(--ivory),0 0 0 7px var(--brass)}
+.about-pic img{width:100%;height:100%;object-fit:cover}
+.about p{color:var(--muted);font-size:1.06rem;max-width:60ch;margin:0 0 14px}
+.about .sig{color:var(--ink);font-weight:600;margin-top:14px}
+@media (max-width:560px){.about{grid-template-columns:1fr}}
 /* ---------- scroll reveal + motion safety ---------- */
 .reveal-wait{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .reveal-wait.in{opacity:1;transform:none}
@@ -485,6 +492,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
       <a href="#what">What we do</a>
       <a href="#how">How it works</a>
       <a href="#pricing">Pricing</a>
+      <a href="#about">About</a>
       <a href="#faq">FAQ</a>
       <a href="#contact">Contact</a>
       <a class="btn btn-forest" href="#free-check">Free AI check</a>
@@ -497,6 +505,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
   <a href="#what">What we do <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#how">How it works <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#pricing">Pricing <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  <a href="#about">About <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#faq">FAQ <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#contact">Contact <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a class="btn btn-brass" href="#free-check">Get my free AI check</a>
@@ -674,7 +683,6 @@ footer .mail{font-size:1.02rem;font-weight:600}
         </ul>
         <a class="btn btn-light plan-go" data-plan="starter" data-href="https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07" href="https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07">Try Starter <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <p class="nocontract">No contract. Cancel anytime.</p>
-        <p class="nudge">Most businesses move to Growth after month one.</p>
       </article>
 
       <article class="plan hot" style="--d:0">
@@ -758,6 +766,25 @@ footer .mail{font-size:1.02rem;font-weight:600}
   </div>
 </section>
 
+<!-- ===================== ABOUT ===================== -->
+<section class="section on-ivory" id="about" aria-labelledby="about-title">
+  <div class="wrap">
+    <div class="head" data-reveal>
+      <span class="kicker">Who you’re working with</span>
+      <h2 id="about-title">A real person, not a call center.</h2>
+    </div>
+    <div class="about" data-reveal>
+      <!-- To add a photo: upload assets/grayson.jpg and replace the G below with <img src="assets/grayson.jpg" alt="Grayson, founder of Ridgeline Local"> -->
+      <div class="about-pic" aria-hidden="true">G</div>
+      <div>
+        <p>I’m Grayson, founder of Ridgeline Local. I’ve spent years in local sales, and I kept seeing the same thing: good businesses losing calls to competitors who simply showed up first online.</p>
+        <p>Now more customers ask ChatGPT and Google AI who to call, and most owners have no idea what those answers say. I keep it simple: show you the real answers, fix what’s holding you back, and track whether it’s working. If it isn’t helping your business, you shouldn’t be paying for it.</p>
+        <p class="sig">Grayson, Ridgeline Local</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== FAQ ===================== -->
 <section class="section" id="faq" aria-labelledby="faq-title">
   <div class="wrap">
@@ -791,7 +818,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
 <footer>
   <div class="wrap">
     <div><b><svg aria-hidden="true"><use href="#i-logo"/></svg>Ridgeline Local</b>Local businesses. Clear next steps.</div>
-    <div><b>Contact</b><a class="mail" href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a><br>A real person answers, every day.</div>
+    <div><b>Contact</b><a class="mail" href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a><br>A real person reads every email.</div>
     <div><b>More</b><a href="guarantee.html">Guarantee terms</a> · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a><br>© <span id="year">2026</span> Ridgeline Local</div>
   </div>
 </footer>
