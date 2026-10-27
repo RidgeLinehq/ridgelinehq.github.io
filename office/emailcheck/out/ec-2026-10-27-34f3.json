@@ -1,0 +1,26 @@
+{
+ "id": "ec-2026-10-27-34f3",
+ "at": "2026-10-27T13:32:46.705649Z",
+ "domains": {
+  "apexcompleteauto.com": {
+   "mx": true,
+   "why": "MX smtp.google.com"
+  },
+  "atnt.net": {
+   "mx": true,
+   "why": "no MX but has A record (mail may still work)"
+  },
+  "chrisb.com": {
+   "mx": true,
+   "why": "MX alt2.aspmx.l.google.com"
+  },
+  "eadsauto.com": {
+   "mx": true,
+   "why": "MX mx1.emailsrvr.com"
+  },
+  "gmail.com": {
+   "mx": true,
+   "why": "MX alt4.gmail-smtp-in.l.google.com"
+  }
+ }
+}
