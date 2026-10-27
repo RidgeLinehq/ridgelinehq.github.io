@@ -297,6 +297,7 @@ h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-
 .proof-list b{display:block;color:var(--ink);font-weight:600;margin-bottom:2px}
 .proof-list .ic{width:34px;height:34px;border-radius:10px;background:var(--mint);display:grid;place-items:center;color:var(--forest)}
 .proof-list .ic svg{width:16px;height:16px}
+.proof-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px}
 .proof-note{margin-top:16px;font-size:.84rem;color:var(--muted)}
 
 /* ---------- how it works (dark, drawn line) ---------- */
@@ -598,7 +599,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
         <li><span class="ic" aria-hidden="true"><svg><use href="#i-pin"/></svg></span><div><b>It reads what’s already out there</b>Your Google profile, your reviews and your website are what AI uses to decide who to name.</div></li>
         <li><span class="ic" aria-hidden="true"><svg><use href="#i-star"/></svg></span><div><b>That’s fixable</b>Clear details and steady reviews are exactly what we work on, every month.</div></li>
       </ul>
-      <a class="btn btn-forest btn-lg" href="#free-check">See what AI says about you <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <div class="proof-cta"><a class="btn btn-forest btn-lg" href="#free-check">See what AI says about you <svg aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="link" href="#pricing">Ready now? See plans</a></div>
       <p class="proof-note">Real ChatGPT answer, October 2026. Business names and numbers blurred.</p>
     </div>
   </div>
@@ -728,7 +729,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
       </article>
 
       <article class="plan hot" style="--d:0">
-        <span class="badge">Most popular</span>
+        <span class="badge">Recommended</span>
         <h3>Growth</h3>
         <p class="for">Everything in Starter, plus ongoing work every month.</p>
         <p class="amt">$75<small>/ month</small></p>
@@ -1058,7 +1059,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
     var body=["Name: "+g("c-name"),"Business: "+(g("c-business")||"Not given"),"Phone: "+g("c-phone"),"Best time to call: "+g("c-time"),"Email: "+(g("c-email")||"Not given"),"Question: "+(g("c-msg")||"Not given"),"Source: website contact form"].join("\n");
     cBtn.disabled=true;cBtn.textContent="Sending…";
     var payload={_subject:subject,_template:"box",_captcha:"false",name:g("c-name"),business:g("c-business")||"Not given",phone:g("c-phone"),best_time:g("c-time"),email:g("c-email")||"Not given",question:g("c-msg")||"Not given",source:"website contact form"};
-    if(g("c-email"))payload._autoresponse="Thanks, "+g("c-name")+"! We got your message. Grayson will call you at "+g("c-phone")+" ("+g("c-time").toLowerCase()+"), usually the same day.\n\nThe plans, in short: Starter $39.99/mo, Growth $75/mo (most popular), Pro $125/mo. No contract, cancel anytime. Details: https://ridgelinehq.github.io/#pricing\n\nReply to this email with any question. A real person answers.\n\nGrayson\nRidgeline Local";
+    if(g("c-email"))payload._autoresponse="Thanks, "+g("c-name")+"! We got your message. Grayson will call you at "+g("c-phone")+" ("+g("c-time").toLowerCase()+"), usually the same day.\n\nThe plans, in short: Starter $39.99/mo, Growth $75/mo (the one we recommend), Pro $125/mo. No contract, cancel anytime. Details: https://ridgelinehq.github.io/#pricing\n\nReply to this email with any question. A real person answers.\n\nGrayson\nRidgeline Local";
     fetch(FORM_URL,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(payload)})
       .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j}})})
       .then(function(res){if(!res.ok||String(res.j.success)==="false")throw new Error("not sent")})
