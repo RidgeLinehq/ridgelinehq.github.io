@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"ProfessionalService","name":"Ridgeline Local","url":"https://ridgelinehq.github.io/","email":"ridgelinemarketinghq@gmail.com","description":"Helps local businesses get recommended by ChatGPT and Google AI, and makes it easy for happy customers to leave reviews.","areaServed":"United States","priceRange":"$39.99 - $125 per month"}
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"Ridgeline Local","url":"https://ridgelinehq.github.io/","email":"ridgelinemarketinghq@gmail.com","telephone":"+1-615-318-0687","description":"Helps local businesses get recommended by ChatGPT and Google AI, and makes it easy for happy customers to leave reviews.","areaServed":"United States","priceRange":"$39.99 - $125 per month"}
 </script>
 <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is this legit?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. No contract, and you can cancel anytime by replying to any email. Growth and Pro come with a second month free guarantee. You see the real ChatGPT and Gemini answers before and after, and every lead we send. If it’s not for you, you stop. No fee, no hassle."}}, {"@type": "Question", "name": "What’s in the free AI check?", "acceptedAnswer": {"@type": "Answer", "text": "We ask ChatGPT and Gemini who they recommend for your kind of business in your town, then email you their exact answers, whether you were named, and the three fixes we’d make first. Free. No card, no call."}}, {"@type": "Question", "name": "How much of my time does it take?", "acceptedAnswer": {"@type": "Answer", "text": "About two minutes for the signup form, and about ten minutes to paste in your Google profile fixes. We write them for you. The rest happens by email."}}, {"@type": "Question", "name": "Do you need my passwords?", "acceptedAnswer": {"@type": "Answer", "text": "No. Never. If you like, you can add us as a manager on your Google profile. Your login stays yours."}}, {"@type": "Question", "name": "Where do the leads come from?", "acceptedAnswer": {"@type": "Answer", "text": "On Pro, we look for people asking for your kind of business nearby: public posts asking for recommendations, messages on your own Google profile, and your own lead form. Every lead is logged. We never buy lists or message strangers in your name."}}, {"@type": "Question", "name": "How do I cancel?", "acceptedAnswer": {"@type": "Answer", "text": "Reply “cancel” to any email from us. That’s it. No contract, no fee, and you keep the service through the month you paid for."}}]}
@@ -380,7 +380,21 @@ footer .mail{font-size:1.02rem;font-weight:600}
 /* ---------- sticky mobile CTA ---------- */
 .sticky-cta{position:fixed;bottom:0;inset-inline:0;z-index:40;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(20,47,39,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line-dark);box-shadow:0 -10px 30px rgba(0,0,0,.18);transform:translateY(0);transition:transform .35s var(--ease),visibility 0s}
 .sticky-cta[hidden]{display:block!important;transform:translateY(110%);pointer-events:none;visibility:hidden;transition:transform .35s var(--ease),visibility 0s .35s}
-.sticky-cta .btn{width:100%;min-height:50px}
+.sticky-cta:not([hidden]),.sticky-cta[hidden]{display:flex!important;gap:10px}
+.sticky-cta .btn{min-height:50px}
+.sticky-cta .btn-brass{flex:1}
+.btn-call{flex:none;background:transparent;color:#fff;border-color:rgba(255,255,255,.4);padding-inline:18px}
+.btn-call svg{width:18px;height:18px}
+.nav-tel{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:.94rem;color:var(--forest);text-decoration:none;white-space:nowrap}
+.nav-tel svg{width:17px;height:17px;color:var(--brass-text)}
+@media(max-width:1180px){.nav-links .nav-tel{display:none}}
+.hero-tel{margin-top:16px;color:var(--muted);font-size:.95rem}
+.hero-tel a{color:var(--forest);font-weight:600;text-decoration:underline;text-decoration-color:var(--brass);text-underline-offset:4px;white-space:nowrap}
+.tel-btn{margin-top:22px}
+.tel-btn svg,.sheet .btn svg{width:18px;height:18px}
+.close-ctas{display:flex;flex-wrap:wrap;align-items:center;gap:16px 26px}
+.close-tel{display:inline-flex;align-items:center;gap:8px;color:#fff;font-weight:600;text-decoration:underline;text-decoration-color:var(--brass);text-underline-offset:5px}
+.close-tel svg{width:18px;height:18px;color:var(--brass)}
 
 /* ---------- about ---------- */
 .about{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,48px);align-items:start;max-width:860px}
@@ -514,6 +528,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
       <a href="#about">About</a>
       <a href="#faq">FAQ</a>
       <a href="#contact">Contact</a>
+      <a class="nav-tel" href="tel:+16153180687"><svg aria-hidden="true"><use href="#i-phone"/></svg>(615) 318-0687</a>
       <a class="btn btn-forest" href="#free-check">Free AI check</a>
       <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sheet" aria-label="Open menu"><svg aria-hidden="true"><use href="#i-menu"/></svg></button>
     </nav>
@@ -528,6 +543,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
   <a href="#faq">FAQ <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#contact">Contact <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a class="btn btn-brass" href="#free-check">Get my free AI check</a>
+  <a class="btn btn-light" href="tel:+16153180687"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call (615) 318-0687</a>
 </div>
 
 <main id="top">
@@ -549,6 +565,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
         <li><svg aria-hidden="true"><use href="#i-check"/></svg>Takes a minute</li>
         <li><svg aria-hidden="true"><use href="#i-check"/></svg>No contract, ever</li>
       </ul>
+      <p class="hero-tel fade-in d4">Rather talk? Call Grayson: <a href="tel:+16153180687">(615) 318-0687</a></p>
     </div>
 
     <div class="demo-wrap">
@@ -769,8 +786,9 @@ footer .mail{font-size:1.02rem;font-weight:600}
     <div class="contact-grid" id="contact">
       <div data-reveal>
         <span class="kicker">Talk to a person</span>
-        <h2>Questions about pricing? Leave your number.</h2>
-        <p class="lede">Not sure which plan fits, or want to talk it through first? Send your number and Grayson will call you back, usually the same day.</p>
+        <h2>Questions? Call, or leave your number.</h2>
+        <p class="lede">Not sure which plan fits, or want to talk it through first? Call Grayson directly, or send your number and he’ll call you back, usually the same day.</p>
+        <a class="btn btn-forest btn-lg tel-btn" href="tel:+16153180687"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call (615) 318-0687</a>
         <ul class="check-list" style="margin-top:18px">
           <li style="color:var(--muted)"><svg aria-hidden="true"><use href="#i-phone"/></svg>A real call from a real person. No robocalls, no texts.</li>
           <li style="color:var(--muted)"><svg aria-hidden="true"><use href="#i-shield"/></svg>We never sell or share your number.</li>
@@ -853,7 +871,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
   <div class="wrap"><div class="close-in" data-reveal>
     <h2 id="close-title">Let’s put your business on the map.</h2>
     <p>Start with your free AI visibility check.</p>
-    <a class="btn btn-brass btn-lg" href="#free-check">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    <div class="close-ctas"><a class="btn btn-brass btn-lg" href="#free-check">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="close-tel" href="tel:+16153180687"><svg aria-hidden="true"><use href="#i-phone"/></svg>or call (615) 318-0687</a></div>
   </div></div>
 </section>
 
@@ -862,12 +880,13 @@ footer .mail{font-size:1.02rem;font-weight:600}
 <footer>
   <div class="wrap">
     <div><b><svg aria-hidden="true"><use href="#i-logo"/></svg>Ridgeline Local</b>Local businesses. Clear next steps.</div>
-    <div><b>Contact</b><a class="mail" href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a><br>A real person reads every email.</div>
+    <div><b>Contact</b><a class="mail" href="tel:+16153180687">(615) 318-0687</a><br><a class="mail" href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a><br>A real person reads every email.</div>
     <div><b>More</b><a href="guarantee.html">Guarantee terms</a> · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a><br>© <span id="year">2026</span> Ridgeline Local</div>
   </div>
 </footer>
 
-<aside class="sticky-cta" id="stickyCta" aria-label="Get your free AI check" hidden>
+<aside class="sticky-cta" id="stickyCta" aria-label="Get your free AI check or call" hidden>
+  <a class="btn btn-call" href="tel:+16153180687" aria-label="Call (615) 318-0687"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call</a>
   <a class="btn btn-brass" href="#free-check">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
 </aside>
 
