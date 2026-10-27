@@ -49,6 +49,13 @@ Score the draft 0 to 100 on specificity, clarity and pull; record it in drafts.q
 5. The draft's status is "approved" (Grayson tapped Approve on the page) OR settings.autoSend is
    true and the draft passed the QA gate at 80 or more.
 6. The draft has a subject, a body, a lead id, and the lead has a contactEmail with a source.
+7. EMAIL CHECK (Oct 27, 2026: 4+ sends bounced in two days, and bounces hurt the Gmail's
+   reputation): `python3 office/tools/email_check.py check <contactEmail>` returns ok true. Once per
+   run, before the first send, write one job with every address you plan to email
+   (`email_check.py job ...`; it stores DOMAINS only), commit, push, and wait up to 2 minutes for
+   office/emailcheck/out/<id>.json; if it has not landed, send on the local check alone. ok false =
+   do not send; set lead.emailStatus "bad" with the reason and fix, keep the lead's status, and add
+   it to the run's needsYou as one line ("<business>: <fix>") so Grayson gets it on his next call.
 Then: send with the Gmail tool (send_message, plain text, to the lead's contactEmail, from the
 connected Ridgeline account), record {gmailMessageId, threadId, sentAt} on the draft and on
 the lead's touches, set the lead's status to Contacted (first email) and nextTouchAt =

@@ -244,7 +244,12 @@ Lane E: the person asked him for it on the phone. Every run:
 1. List all leads (limit 1000, out_dir; nested where-filters are refused) and filter locally:
    followUp.status "pending" and kind starts with "email_ai_check"; skip test leads.
 2. Suppressed address, domain or business → followUp {status "done", note "suppressed"}, send
-   nothing. A check already sent to this business in the last 30 days → send that one again
+   nothing.
+2b. EMAIL CHECK (Oct 27, 2026): `python3 office/tools/email_check.py check <followUp.email>`. ok false
+   (typo domain, fake or no-mail domain) → send nothing; followUp {status "needs-email", note
+   <reason + fix>} and one needsYou line "<business>: <fix>" so Grayson gets the right address on a
+   callback. A typo with an obvious fix (atnt.net → att.net) is still NOT sent to the guess: he
+   confirms it first. A check already sent to this business in the last 30 days → send that one again
    (free-check.md) instead of a new gateway job.
 3. Otherwise Lane B for it, in this same run: business, town, state from the lead, trade phrase =
    the kit niche's `plural` (office/call_kit/kit.json; lead.niche), reusing markets/<niche>-<town>-<st>

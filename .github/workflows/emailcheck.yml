@@ -1,0 +1,40 @@
+name: Ridgeline email check
+
+# The office pushes office/emailcheck/jobs/<id>.json (email DOMAINS only, never addresses or names);
+# this looks up each domain's mail server (MX) and pushes office/emailcheck/out/<id>.json.
+# No secrets needed. Added Oct 27, 2026 to stop sending to addresses that bounce.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "office/emailcheck/jobs/*.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: emailcheck
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Look up mail servers
+        run: |
+          pip install --quiet dnspython
+          python office/emailcheck/mx.py
+      - name: Push results
+        run: |
+          git config user.name "ridgeline-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add office/emailcheck/out
+          git diff --cached --quiet && exit 0
+          git commit -m "email check results [skip ci]"
+          for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && break; sleep 5; done
