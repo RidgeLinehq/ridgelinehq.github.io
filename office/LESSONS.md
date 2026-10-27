@@ -21,3 +21,7 @@ skills/<agent>/SKILL.md first. Nothing here without evidence.
   sites were readable 1 of 17. Next send day can start 0 of 10 first touches. Enrichment pass
   0b has not run yet: it is the one source left untried. Replies: 0 of 10 sends (2 crew, 8
   hand), under 20, no reply lesson. Calls: 8 logged, 0 interested, under 20, no call lesson.
+- 2026-10-27 (Sage): Calls, 106 logged: auto repair 14 of 62 Interested (22.6%) vs roofing 0 of 13
+  and barbershops 0 of 7; the ai-check line 14 of 70 (20%) vs who-shows-up 0 of 8; 0 sold.
+  Emails taken on the phone: 4 of 16 failed (2 x 550, 1 no-MX domain, 1 invalid '&'), 12 free
+  checks delivered, 0 replies at day 1. Cold email: 0 of 10 sends replied, under 20, no reply lesson.
