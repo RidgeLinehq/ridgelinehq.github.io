@@ -72,7 +72,7 @@
 
 ## inbox/in-<gmail thread id>   (reply desk Lane J; the page's Inbox tab, Oct 27, 2026)
 {name, businessName, phone, email, town, message, bestTime, kind: pricing|freecheck|onboarding|reply|other,
-source: "website form"|"email", subject, receivedAt, gmailThreadId, leadId, clientId, handled (what the
+source: "website form"|"email", subject, receivedAt, gmailThreadId, gmailUrl, leadId, clientId, handled (what the
 crew already did), status: New|Called|Left voicemail|Emailed|Done (Grayson's), statusAt, notes (Grayson's),
 test, createdAt, updatedAt}. The crew never changes status or notes after creating the doc.
 

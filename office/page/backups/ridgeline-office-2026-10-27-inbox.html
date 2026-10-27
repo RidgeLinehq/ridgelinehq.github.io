@@ -699,7 +699,7 @@ const INBOX_STATUS=["New","Called","Left voicemail","Emailed","Done"];
 const INBOX_TONE={New:"good",Called:"signal","Left voicemail":"warn",Emailed:"signal",Done:""};
 const INBOX_KIND={pricing:"Wants pricing",freecheck:"Free AI check",onboarding:"New client signup",reply:"Emailed you",other:"Reached out"};
 function inboxNew(){return S.inbox.filter(x=>(x.status||"New")==="New"&&x.test!==true)}
-function gmailLink(x){if(!x.gmailThreadId)return "";return "https://mail.google.com/mail/?authuser="+encodeURIComponent(settings().gmail)+"#all/"+encodeURIComponent(x.gmailThreadId)}
+function gmailLink(x){if(safeUrl(x.gmailUrl)&&/^https:\/\/mail\.google\.com\//.test(x.gmailUrl))return x.gmailUrl;if(!x.gmailThreadId)return "";return "https://mail.google.com/mail/?authuser="+encodeURIComponent(settings().gmail)+"#all/"+encodeURIComponent(x.gmailThreadId)}
 function mailtoLink(x){const st=settings();const first=String(x.name||"").split(" ")[0];
   const body=(first?"Hi "+first+",\n\n":"Hi,\n\n")+"Thanks for reaching out to Ridgeline Local. \n\n"+String(st.signature||"Grayson\nRidgeline Local");
   return "mailto:"+encodeURIComponent(x.email)+"?subject="+encodeURIComponent(x.kind==="pricing"?"Your pricing question":"Ridgeline Local")+"&body="+encodeURIComponent(body)}
@@ -714,7 +714,7 @@ function inboxCard(x){const stt=x.status||"New";const who=x.name||x.businessName
   h+=x.phone?'<a class="callbig" href="'+esc(telLink(x.phone))+'" data-intel="'+esc(x.id)+'"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call '+esc(x.phone)+'</a>':'<div class="note">No phone number given. Email them instead.</div>';
   const links=[];
   if(x.email)links.push('<a class="btn" href="'+esc(mailtoLink(x))+'" data-inmail="'+esc(x.id)+'"><svg aria-hidden="true"><use href="#i-mail"/></svg>Email '+esc(x.email)+'</a>');
-  if(x.gmailThreadId)links.push('<a class="btn" href="'+esc(gmailLink(x))+'" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-ext"/></svg>See it in Gmail</a>');
+  if(x.gmailThreadId||x.gmailUrl)links.push('<a class="btn" href="'+esc(gmailLink(x))+'" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-ext"/></svg>See it in Gmail</a>');
   if(x.leadId&&S.leads.some(l=>l.id===x.leadId))links.push('<button class="btn" type="button" data-lead="'+esc(x.leadId)+'">Lead card</button>');
   if(links.length)h+='<div class="minor">'+links.join("")+'</div>';
   h+='<div class="sec"><h4>What did you do?</h4><div class="bigchips">'+INBOX_STATUS.map(v=>'<button class="chip" type="button" aria-pressed="'+(v===stt)+'" data-inst="'+esc(v)+'" data-id="'+esc(x.id)+'"'+(S.readOnly?" disabled":"")+'>'+esc(v)+'</button>').join("")+'</div></div>';

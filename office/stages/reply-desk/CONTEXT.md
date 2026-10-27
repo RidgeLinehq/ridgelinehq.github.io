@@ -112,7 +112,7 @@ question field or the email body without quoted history or signatures), bestTime
 best_time or ""), kind: "pricing" (Pricing question form, or an email asking the price), "freecheck"
 (Free AI check form), "onboarding" (Onboarding form / new client), "reply" (any other email from a
 person), source "website form"|"email", subject, receivedAt (the first message's date, ISO UTC),
-gmailThreadId, leadId (or clientId) when one exists, handled (one line of what the crew already did,
+gmailThreadId, gmailUrl (the thread's viewUrl from get_thread), leadId (or clientId) when one exists, handled (one line of what the crew already did,
 e.g. "Free AI check emailed 2:14 PM" or "Plans + Growth checkout link emailed"; "" when nothing),
 status "New", notes "", createdAt, updatedAt}.
 - Only create, with `set` and no if_version. If the doc already exists (a get finds it), never
