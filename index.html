@@ -242,6 +242,16 @@ h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-
 .form[data-state="ready"] .fields{display:none}.form[data-state="ready"] .done{display:block}
 .edit-btn{margin-top:16px;background:none;border:0;padding:8px;font-weight:600;color:var(--forest);text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--brass);text-decoration-thickness:2px}
 
+/* ---------- contact: questions about pricing, leave your number ---------- */
+.contact-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(30px,5vw,72px);align-items:center;margin-top:clamp(48px,7vw,80px)}
+.contact-grid h2{margin:18px 0 14px}
+.contact-grid .lede{color:var(--muted)}
+.field select,.field textarea{width:100%;min-height:50px;padding:12px 14px;border-radius:12px;border:1px solid #b9b3a1;background:#fffefb;color:var(--ink);font-size:1rem;font-family:inherit;transition:border-color .2s,box-shadow .2s}
+.field textarea{min-height:96px;resize:vertical;line-height:1.45}
+.field select:focus,.field textarea:focus{outline:none;border:2px solid var(--brass-text);padding:11px 13px;box-shadow:0 0 0 3px rgba(127,98,51,.28)}
+.field.err select,.field.err textarea{border-color:var(--bad)}
+@media(max-width:860px){.contact-grid{grid-template-columns:1fr}}
+
 /* ---------- marquee ---------- */
 .marquee{overflow:hidden;border-block:1px solid var(--line);background:var(--white);padding:18px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
 .track{display:flex;gap:14px;width:max-content;animation:scrollX 48s linear infinite}
@@ -476,6 +486,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
       <a href="#how">How it works</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
       <a class="btn btn-forest" href="#free-check">Free AI check</a>
       <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sheet" aria-label="Open menu"><svg aria-hidden="true"><use href="#i-menu"/></svg></button>
     </nav>
@@ -487,6 +498,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
   <a href="#how">How it works <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#pricing">Pricing <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#faq">FAQ <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  <a href="#contact">Contact <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a class="btn btn-brass" href="#free-check">Get my free AI check</a>
 </div>
 
@@ -702,6 +714,47 @@ footer .mail{font-size:1.02rem;font-weight:600}
       </div>
     </div>
     <div class="secure"><svg aria-hidden="true"><use href="#i-lock"/></svg><span>Secure checkout through Stripe. By starting a plan you agree to our <a class="link" href="terms.html">Terms</a>.</span></div>
+
+    <div class="contact-grid" id="contact">
+      <div data-reveal>
+        <span class="kicker">Talk to a person</span>
+        <h2>Questions about pricing? Leave your number.</h2>
+        <p class="lede">Not sure which plan fits, or want to talk it through first? Send your number and Grayson will call you back, usually the same day.</p>
+        <ul class="check-list" style="margin-top:18px">
+          <li style="color:var(--muted)"><svg aria-hidden="true"><use href="#i-phone"/></svg>A real call from a real person. No robocalls, no texts.</li>
+          <li style="color:var(--muted)"><svg aria-hidden="true"><use href="#i-shield"/></svg>We never sell or share your number.</li>
+        </ul>
+      </div>
+      <form class="form" id="contactForm" data-state="idle" action="https://formsubmit.co/ridgelinemarketinghq@gmail.com" method="POST" novalidate data-reveal>
+        <div class="fields">
+          <h3>Call me about pricing</h3>
+          <p class="hint">Takes 20 seconds.</p>
+          <div class="fields-2">
+            <div class="field"><label for="c-name">Your name</label><input id="c-name" name="name" required autocomplete="name" maxlength="80" placeholder="e.g. Sam" aria-describedby="c-name-msg"><div class="msg" id="c-name-msg">Add your name so we know who to ask for.</div></div>
+            <div class="field"><label for="c-business">Business <span>(optional)</span></label><input id="c-business" name="business" autocomplete="organization" maxlength="120" placeholder="e.g. Main St. Barbershop"></div>
+          </div>
+          <div class="fields-2">
+            <div class="field"><label for="c-phone">Phone number</label><input id="c-phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" maxlength="40" placeholder="(555) 555-5555" aria-describedby="c-phone-msg"><div class="msg" id="c-phone-msg">Add a phone number we can call.</div></div>
+            <div class="field"><label for="c-time">Best time to call</label><select id="c-time" name="best_time"><option>Anytime</option><option>Morning</option><option>Afternoon</option><option>Evening</option></select></div>
+          </div>
+          <div class="field"><label for="c-email">Email <span>(optional)</span></label><input id="c-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="160" placeholder="you@yourbusiness.com" aria-describedby="c-email-msg"><div class="msg" id="c-email-msg">That email doesn’t look right.</div></div>
+          <div class="field"><label for="c-msg">What do you want to know? <span>(optional)</span></label><textarea id="c-msg" name="message" maxlength="1500" placeholder="e.g. Which plan is right for a small roofing company?"></textarea></div>
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="btn btn-forest btn-block btn-lg" type="submit" id="contactBtn">Call me back <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          <p class="tiny">By sending this you ask Ridgeline Local to call or email you about our service. That’s all we use it for. <a class="link" href="privacy.html">Privacy</a></p>
+        </div>
+        <div class="done" aria-live="polite">
+          <div class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></div>
+          <h3 id="cDoneTitle" tabindex="-1">Got it. Grayson will call you.</h3>
+          <p id="cDoneText">Usually the same day. If you left an email, the plans and prices are on their way there too.</p>
+          <div class="fallback" id="cFallback" hidden>
+            <label>Our form didn’t go through. Call or email instead:</label>
+            <a class="btn btn-forest btn-block" id="cMailto" href="mailto:ridgelinemarketinghq@gmail.com">Send by email</a>
+          </div>
+          <button class="edit-btn" type="button" id="cEdit">Edit my details</button>
+        </div>
+      </form>
+    </div>
   </div>
 </section>
 
@@ -835,7 +888,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
 
   /* ---- sticky mobile CTA (hidden while the form is on screen) ---- */
   var sticky=$("#stickyCta"),formWrap=$("#free-check"),scheduled=false;
-  function updateSticky(){var r=formWrap.getBoundingClientRect();var passed=r.bottom<0;sticky.hidden=!(window.innerWidth<=760&&passed&&!menuOpen);scheduled=false}
+  function updateSticky(){var r=formWrap.getBoundingClientRect();var passed=r.bottom<0;var c=$("#contactForm").getBoundingClientRect();var onContact=c.top<window.innerHeight&&c.bottom>0;sticky.hidden=!(window.innerWidth<=760&&passed&&!onContact&&!menuOpen);scheduled=false}
   function scheduleSticky(){if(!scheduled){scheduled=true;requestAnimationFrame(updateSticky)}}
   window.addEventListener("scroll",scheduleSticky,{passive:true});
   window.addEventListener("resize",scheduleSticky);
@@ -912,6 +965,37 @@ footer .mail{font-size:1.02rem;font-weight:600}
       .then(function(){form.setAttribute("data-state","ready");submitBtn.disabled=false;submitBtn.innerHTML=submitLabel;form.scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"});$("#doneTitle").focus({preventScroll:true})});
   });
   $("#copyRequest").addEventListener("click",function(){copyText($("#requestCopy").value,this)});
+
+  /* ---- contact form: "call me about pricing" (lands in the Ridgeline inbox; the office page lists it under Inbox) ---- */
+  var cForm=$("#contactForm"),cBtn=$("#contactBtn"),cLabel=cBtn.innerHTML;
+  function cCheck(){
+    var good=true,c=function(id){return $("#"+id)};
+    [["c-name",function(v){return !!v}],["c-phone",function(v){return v.replace(/\D/g,"").length>=7}],["c-email",function(v){return !v||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)}]].forEach(function(r){
+      var el=c(r[0]),f=fieldOf(el);el.value=el.value.trim();var bad=!r[1](el.value);
+      f.classList.remove("err");if(bad){void f.offsetWidth;f.classList.add("err")}
+      el.setAttribute("aria-invalid",bad?"true":"false");if(bad&&good){el.focus();good=false}
+    });
+    return good;
+  }
+  ["c-name","c-phone","c-email"].forEach(function(id){$("#"+id).addEventListener("input",function(){fieldOf(this).classList.remove("err");this.removeAttribute("aria-invalid")})});
+  cForm.addEventListener("submit",function(e){
+    e.preventDefault();
+    if(!cCheck())return;
+    if(cForm.querySelector("[name=_honey]").value)return;
+    var g=function(id){return $("#"+id).value.trim()};
+    var who=g("c-business")||g("c-name");
+    var subject="Pricing question — "+who;
+    var body=["Name: "+g("c-name"),"Business: "+(g("c-business")||"Not given"),"Phone: "+g("c-phone"),"Best time to call: "+g("c-time"),"Email: "+(g("c-email")||"Not given"),"Question: "+(g("c-msg")||"Not given"),"Source: website contact form"].join("\n");
+    cBtn.disabled=true;cBtn.textContent="Sending…";
+    var payload={_subject:subject,_template:"box",_captcha:"false",name:g("c-name"),business:g("c-business")||"Not given",phone:g("c-phone"),best_time:g("c-time"),email:g("c-email")||"Not given",question:g("c-msg")||"Not given",source:"website contact form"};
+    if(g("c-email"))payload._autoresponse="Thanks, "+g("c-name")+"! We got your message. Grayson will call you at "+g("c-phone")+" ("+g("c-time").toLowerCase()+"), usually the same day.\n\nThe plans, in short: Starter $39.99/mo, Growth $75/mo (most popular), Pro $125/mo. No contract, cancel anytime. Details: https://ridgelinehq.github.io/#pricing\n\nReply to this email with any question. A real person answers.\n\nGrayson\nRidgeline Local";
+    fetch(FORM_URL,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(payload)})
+      .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j}})})
+      .then(function(res){if(!res.ok||String(res.j.success)==="false")throw new Error("not sent")})
+      .catch(function(){$("#cDoneTitle").textContent="One more tap";$("#cDoneText").textContent="";$("#cMailto").href="mailto:"+EMAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);$("#cFallback").hidden=false})
+      .then(function(){cForm.setAttribute("data-state","ready");cBtn.disabled=false;cBtn.innerHTML=cLabel;cForm.scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"});$("#cDoneTitle").focus({preventScroll:true})});
+  });
+  $("#cEdit").addEventListener("click",function(){cForm.setAttribute("data-state","idle");$("#cFallback").hidden=true;$("#cDoneTitle").textContent="Got it. Grayson will call you.";$("#cDoneText").textContent="Usually the same day. If you left an email, the plans and prices are on their way there too.";$("#c-name").focus()});
   $("#editRequest").addEventListener("click",function(){form.setAttribute("data-state","idle");status.textContent="";$("#emailFallback").hidden=true;$("#doneTitle").textContent="Got it. Your check is on the way.";$("#doneText").textContent="We’ll email you what ChatGPT and Gemini say about your business, usually within the hour.";$("#business").focus()});
 })();
 </script>
