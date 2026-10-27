@@ -29,7 +29,7 @@ Judged every run on leads with an angle against Qualified-with-email leads and p
 
 ## Quality checklist
 - Every hook cites a fact in the lead doc. No invented competitor, no invented number.
-- No promise beyond offer.md. Scarcity only with the live foundingSpots number.
+- No promise beyond offer.md. No scarcity lines: there is no founding deal or spot count.
 - Two subject patterns per week, alternated, tagged.
 - Leads with angle equals Qualified leads with an email and no touches (up to today's cap x 2)
   plus follow-ups due, before Echo starts; a Qualified lead with an email and no angle is

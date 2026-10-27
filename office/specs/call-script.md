@@ -31,11 +31,11 @@ trade in office/gw/out says so.)
 If they hesitate: "It takes me two minutes and it's yours to keep either way. Where should I
 send it?"
 
-If they ask what it costs: "The check is free. If you want help after, plans start at $75 a
-month, month to month. Most people pick Growth at $125: we fix your Google profile, get you
-reviews from your real customers, and send you leads. And if your first month brings zero leads
-and no improvement, your second month is free. But first let me send you the check so you can
-see it for yourself."
+If they ask what it costs: "The check is free. If you want help after, plans start at $39.99 a
+month, no contract. Most people pick Growth at $75: we fix your Google profile, get you
+reviews from your real customers, and keep it moving every month. Pro at $125 adds leads we find
+and send you. And on Growth and Pro, if your first month brings zero leads and no improvement,
+your second month is free. But first let me send you the check so you can see it for yourself."
 
 If they ask what we do in one line: "We get your business found on Google and recommended by AI
 like ChatGPT and Gemini, and we send you leads."

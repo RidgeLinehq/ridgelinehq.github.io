@@ -65,9 +65,8 @@ checks sent, clients), was a wasted run and says so in its run-log line.
   specs/guarantee.md says. Grayson, Oct 24, 2026: "No approvals from me.")
 - Create, change, re-enable, fire or delete a scheduled task or its schedule.
 - Change the website's offer, prices, guarantee, copy or form (Patch may fix a broken page
-  element after a 3-line plan; copy and prices are Grayson's). Allowed without asking: lowering
-  data/founding.json spotsLeft by 1 per new paying client, building Pro clients' lead pages under
-  p/<slug>/, and data/stripe-links.json (written only by the Stripe Action).
+  element after a 3-line plan; copy and prices are Grayson's). Allowed without asking: building
+  Pro clients' lead pages under p/<slug>/, and data/stripe-links.json (written only by the Stripe Action).
 - Contact a lead whose status is Suppressed or Not a fit, or anyone on the suppression list.
 - Text, call, DM or message a prospect on any channel other than email. (Review request
   emails to a paying client's own real customers, from the list the client gave us, are allowed:

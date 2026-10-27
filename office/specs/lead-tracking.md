@@ -22,7 +22,7 @@ createdBy, notes}
 ## Allowed sources (only these; Grayson Oct 24, 2026: "must be legit")
 | Source | How | Needs |
 |---|---|---|
-| Reddit (public posts asking for a recommendation) | Day Shift 09: one lead-finder job per run with a search per Growth/Pro client (town + kind of business, never the client's name), through the official Reddit Data API ("Ridgeline lead finder" Action, office/leadfinder/finder.py). | REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET secrets (SETUP_NEEDED.md). Until set, the out file says "not set up" and the source is skipped (noted in the report). |
+| Reddit (public posts asking for a recommendation) | Day Shift 09: one lead-finder job per run with a search per Pro client (town + kind of business, never the client's name), through the official Reddit Data API ("Ridgeline lead finder" Action, office/leadfinder/finder.py). | REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET secrets (SETUP_NEEDED.md). Until set, the out file says "not set up" and the source is skipped (noted in the report). |
 | Public web posts found by search | Day Shift 09: WebSearch (the search engine's results only) for recent public posts asking for that kind of business in that town, e.g. "<town> recommend a good <trade>". Use the result's URL, title and snippet only. | nothing |
 | The client's Google Business Profile | Once ridgelinemarketinghq@gmail.com is a Manager, Google emails new-message, new-call and lead notices to the Ridgeline Gmail; the reply desk (Lane G) logs each as a lead. Clients can also forward these emails. | client adds us as Manager (optional) |
 | The Pro lead page | p/<slug>/ form → email "Lead for <slug> — <business>" to the Ridgeline Gmail (copy to the owner at once); the reply desk logs it. `source` field = the tracking link's ?src= value. | FormSubmit activated once (SETUP_NEEDED.md) |
@@ -34,12 +34,13 @@ we find; contacting a lead on the client's behalf. We send the lead to the clien
 decides whether and how to answer.
 
 ## Sending leads to the client
-- Growth: one email per run with all new counted leads (max 10), plain text: for each, the
+- Pro only (Grayson, Oct 27, 2026: leads are sold on Pro, not Growth). Each lead the moment it
+  is found in that run (one email per lead, subject "New lead: <one line>"), plain text: the
   source, the date, what they asked (their words, one line), the link or contact info, and one
   suggested next step for the owner ("Reply on the post with your shop name and booking link").
-- Pro (priority): the same, but each lead the moment it is found in that run (one email per
-  lead, subject "New lead: <one line>"); lead-page leads already reach the owner instantly by
-  the form's copy, and the desk logs them.
+  Lead-page leads already reach the owner instantly by the form's copy, and the desk logs them.
+- Growth clients get no Lead Finder emails. A Google-profile message or call notice for any
+  client is still logged (it counts for the guarantee) and forwarded to the owner.
 - Every send records sentToClientAt and sentGmailId on the row. No id, no "sent".
 
 ## "Did this lead turn into a job?" (monthly, Lane D of the reply desk)

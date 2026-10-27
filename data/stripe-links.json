@@ -1,18 +1,15 @@
 {
   "note": "Written by the 'Ridgeline Stripe' Action. Do not edit by hand; the next run rewrites it.",
-  "updatedAt": "2026-10-24T17:43:50Z",
+  "updatedAt": "2026-10-27T03:10:00Z",
   "links": {
     "starter": {
-      "monthly": "https://buy.stripe.com/7sYaEXfJ9eGM0MW5pXaEE01",
-      "yearly": "https://buy.stripe.com/eVqcN50Of7ek2V419HaEE02"
+      "monthly": "https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07"
     },
     "growth": {
-      "monthly": "https://buy.stripe.com/5kQ7sL7cD2Y4eDM5pXaEE03",
-      "yearly": "https://buy.stripe.com/8x24gzeF5fKQeDMcSpaEE04"
+      "monthly": "https://buy.stripe.com/14AbJ168z9msbrAdWtaEE08"
     },
     "pro": {
-      "monthly": "https://buy.stripe.com/7sYbJ1fJ9buA9js7y5aEE05",
-      "yearly": "https://buy.stripe.com/4gM7sLgNd4288fog4BaEE06"
+      "monthly": "https://buy.stripe.com/8x200jgNd6ag3Z8aKhaEE09"
     }
   }
 }

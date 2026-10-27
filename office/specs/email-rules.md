@@ -72,7 +72,7 @@ what it cannot answer from the offer. Sage reads those
 threads each run: reply → lead status Replied (with the thread id and one-line gist); "yes" or
 "send it" → status Meeting and a "freecheck" draft for Echo: the exact ChatGPT and Gemini
 answers for their town (gateway, under 7 days old; run a new job if older), whether they were
-named, the 3 fixes from their profile facts, then the founding offer in 2 lines and one ask. A
+named, the 3 fixes from their profile facts, then the offer in 2 lines (plans from $39.99, Growth $75 most popular, the guarantee link) and one ask. A
 free check is a reply to someone who asked for it: with autoSend on it goes out on the next run
 after the QA gate (no send window or cap applies to replies, the suppression list always does),
 otherwise it waits as "ready"; payment → Client; no/stop →

@@ -40,7 +40,7 @@ before updating it and pass if_version). Day key = TZ=America/Chicago date +%F.
      that address); onboarding → create/update the client from the JSON (facts, plan, billing,
      stripeSession, aiQuestions = questions, baseline = baseline, aiTrend [baseline]); work items
      welcome-sent + onboarding + baseline done; then do everything else in Lane C step 3 that the
-     JSON doesn't cover (founding counter, first delivery: profile fixes + review kit, Pro page).
+     JSON doesn't cover (first delivery: profile fixes + review kit, Pro page).
      Label the log thread Ridgeline-Handled. NEVER re-send a check or welcome that Instant sent.
    - Form threads labeled RL-Instant-Sent: already answered; only record (above) and label handled.
    - Form threads labeled RL-Instant-Failed: handle normally (Lane A/B/C) through the gateway.
@@ -77,9 +77,9 @@ A FormSubmit "Activate your form" / confirmation email: alert Grayson once (shar
 "FormSubmit not activated"); website forms fall back to email until he taps it.
 - a. yes / send it / sure / "do it", or a website form request ("Free AI check request —"):
   → Lane B now (the check goes out in this run, as the reply).
-- b. price / how it works / "let's do it": the three plans in three short lines (Starter $75,
-  Growth $125 most popular, Pro $199; specs/offer.md), the guarantee in one line with its link,
-  founding spots left (data/founding.json, only if > 0), the checkout link for the plan they
+- b. price / how it works / "let's do it": the three plans in three short lines (Starter $39.99,
+  Growth $75 most popular, Pro $125; specs/offer.md), the guarantee in one line with its link,
+  the checkout link for the plan they
   named (data/stripe-links.json; Growth if they named none; if empty, start.html?plan=<plan> and
   an alert "checkout links not live"), "Want me to start today?". After paying they fill the
   short form; that's the whole onboarding. Lead status Meeting.
@@ -119,8 +119,7 @@ town, state if known, trade, status, source "reply desk").
 ## Lane C: payments, onboarding, new clients (specs/client-delivery.md "The flow")
 Search `(from:stripe.com OR subject:"Onboarding —") newer_than:7d -label:Ridgeline-Handled`.
 1. Stripe payment / new subscription email for a real customer (never an account notice): note
-   the customer email, amount and plan (from the amount: 75/125/199 monthly, 750/1250/1990
-   yearly). If no client doc exists for that email: create clients/c-<slug of email local part>
+   the customer email, amount and plan (from the amount: 39.99 Starter, 75 Growth, 125 Pro, monthly). If no client doc exists for that email: create clients/c-<slug of email local part>
    with status "awaiting-onboarding", stripe {customerEmail, lastPaymentAt, messageId, amount},
    plan, billing, startedAt (payment time). Send the welcome now: thank them, plan + price,
    month to month, "Fill in this 2-minute form so we can start: https://ridgelinehq.github.io/welcome.html?plan=<plan>&billing=<billing>",
@@ -135,8 +134,7 @@ Search `(from:stripe.com OR subject:"Onboarding —") newer_than:7d -label:Ridge
    Client (create the lead if none, source "stripe").
 3. For every client just made active: (a) baseline AI check now (specs/guarantee.md §1; one
    gateway job can hold the 3 questions of 2 clients); (b) the baseline email in their thread;
-   (c) data/founding.json spotsLeft - 1 (never below 0; commit "reply-desk: founding spots N";
-   when it hits 0, tell Grayson); (d) Pro: write office/landing/<slug>.json from the form's
+   (c) Pro: write office/landing/<slug>.json from the form's
    facts and run office/tools/make_landing.py, commit p/<slug>/, include the link in the
    baseline email; (e) FIRST DELIVERY in this same run (specs/quality.md "Speed" and "Format"):
    build the profile fixes (from the onboarding facts + a WebSearch of their public Google
@@ -275,7 +273,7 @@ pass every email gate. This desk never sends them.
 
 ## Lane F: tell Grayson (SendUserMessage, only when there is something new)
 - NEW CLIENT (always its own message): "🚨💰 NEW CLIENT: <business> just paid <plan> $<price>!
-  Welcome + onboarding sent. Baseline AI score: <score or 'running'>. <N> founding spots left."
+  Welcome + onboarding sent. Baseline AI score: <score or 'running'>."
 - "🛡️ Guarantee applied for <business>: month 2 free (0 leads, score <x> → <y>)."
 - Every alert from shared/alerts.md goes to the Ridgeline Gmail by email AND as one line here.
 - "🔥 Ridgeline: <business> said YES. Free check sent: <named|not named> by ChatGPT." (one line each; group up to 3)
@@ -301,7 +299,7 @@ Nothing new → send nothing. At most 4 short lines per message.
 | clients/<id> | new clients, onboarding facts, baseline, guarantee, reviewLink, reviewCard, customers, managerAccess, work[] |
 | leadlog/<id> | every lead (Lane G), jobAnswer, sentToClientAt |
 | alerts/<key> | every alert sent (dedupe) |
-| repo | office/alerts/*.json emailed flags, data/founding.json, office/stripe/jobs/*, office/gw/jobs/*, office/landing/*.json + p/<slug>/, office/cards/jobs/* |
+| repo | office/alerts/*.json emailed flags, office/stripe/jobs/*, office/gw/jobs/*, office/landing/*.json + p/<slug>/, office/cards/jobs/* |
 | suppression/<id> | replied no |
 | events/<day>, stats/<day> | one line per action; freeChecks, replies, clients |
 | office/runlog.jsonl | `python3 office/shared/runlog.py add --task reply-desk --started <UTC ISO> --finished <UTC ISO> --stages <lanes you did> --skipped <lanes with nothing> --loaded specs/offer.md,specs/free-check.md --gateway-jobs <N> --db-writes <N> --outcome done|failed|skipped --note "<replies, checks, clients, deliveries>" --needs-you "<one line or empty>"`, then commit office/runlog.jsonl, pull --rebase, push (never retried; never fails the run) |

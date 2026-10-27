@@ -2,7 +2,7 @@
 
 rubricVersion: 2 (Grayson's order, Oct 25, 2026: "make my leads stronger ... a better chance of
 people buying", like a real lead finder). v1 only measured how WEAK a business looks online, so
-the list filled with tiny no-site operators who can't pay $75+ (38 leads on Oct 25: 4 with an
+the list filled with tiny no-site operators who can't pay $39.99+ (38 leads on Oct 25: 4 with an
 email, 0 Qualified, scores 5 to 40, 0 replies of 10 sends). v2 scores three things: can they pay
 and can we help (Fit), why would they buy NOW (Buy triggers), and can we reach them (Reach).
 
@@ -17,7 +17,7 @@ point names its source URL. Unknown fields score 0, never a guess.
 | Google profile found, under 30 reviews | +10 | gap is real and fixable |
 | 30 to 80 reviews | +5 | still beatable |
 | Profile under 10 photos, or no services, or no hours | +5 | concrete fixes to name |
-| Too small to pay: no website AND no email AND under 5 public reviews AND no Facebook page | -15, note "micro" | a $75/mo service is a stretch for them |
+| Too small to pay: no website AND no email AND under 5 public reviews AND no Facebook page | -15, note "micro" | a $39.99/mo service is a stretch for them |
 | Over 150 reviews, 4.7+ | 0, note "already strong" | less to fix |
 | Chain, franchise, or agency visible (pro site, 500+ reviews, ads managed by an agency) | -30 | not our buyer |
 | Agency badge or "website by <marketing agency>" footer | -20 | they have help |

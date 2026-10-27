@@ -3,8 +3,8 @@
 
 Two jobs, both idempotent:
 
-1. setup (every run): make sure the products, prices (monthly + yearly), the guarantee coupon
-   and one payment link per plan+billing exist, then write their public URLs to
+1. setup (every run): make sure the products, prices (monthly), the guarantee coupon
+   and one payment link per plan exist, then write their public URLs to
    data/stripe-links.json (the website's checkout buttons read that file). Objects are found
    again by metadata / lookup_key, so re-running never makes duplicates.
 
@@ -35,16 +35,24 @@ LINKS = os.path.join(ROOT, "data", "stripe-links.json")
 JOBS = os.path.join(ROOT, "office", "stripe", "jobs")
 OUT = os.path.join(ROOT, "office", "stripe", "out")
 COUPON = "rl-second-month-free"
-TERMS_TEXT = "By subscribing you agree to the Ridgeline Local Terms (ridgelinehq.github.io/terms.html). Payments are non-refundable except mistaken charges and the Second Month Free Guarantee on Growth and Pro. Cancel anytime by replying \"cancel\" to any email."
+TERMS_BASE = "By subscribing you agree to the Ridgeline Local Terms (ridgelinehq.github.io/terms.html). No contract. Cancel anytime by replying \"cancel\" to any email."
+GUARANTEE_LINE = " Second Month Free Guarantee: ridgelinehq.github.io/guarantee.html"
 
+
+def terms_text(plan):
+    """The line under the Pay button in checkout. The guarantee is Growth and Pro only."""
+    return TERMS_BASE + (GUARANTEE_LINE if plan in ("growth", "pro") else "")
+
+# Prices in cents. Monthly only (yearly billing was retired Oct 27, 2026).
 PLANS = {
-    "starter": {"name": "Ridgeline Local Starter", "monthly": 7500, "yearly": 75000,
-                "desc": "Google Business Profile cleanup + optimization, monthly AI visibility report, review request system."},
-    "growth": {"name": "Ridgeline Local Growth", "monthly": 12500, "yearly": 125000,
-               "desc": "Everything in Starter + AI Lead Finder, lead tracking, Second Month Free Guarantee."},
-    "pro": {"name": "Ridgeline Local Pro", "monthly": 19900, "yearly": 199000,
-            "desc": "Everything in Growth + priority lead alerts, lead-capture page, monthly promo video, competitor tracking."},
+    "starter": {"name": "Ridgeline Local Starter", "monthly": 3999,
+                "desc": "AI visibility check, Google Business Profile cleanup, 10-second review system."},
+    "growth": {"name": "Ridgeline Local Growth", "monthly": 7500,
+               "desc": "Everything in Starter + monthly updates, review growth, AI visibility tracking, Second Month Free Guarantee."},
+    "pro": {"name": "Ridgeline Local Pro", "monthly": 12500,
+            "desc": "Everything in Growth + AI-found leads sent to you."},
 }
+BILLINGS = ("monthly",)
 
 
 class StripeError(Exception):
@@ -142,8 +150,8 @@ def ensure_link(plan, billing, price):
     for link in all_pages("payment_links", {"active": "true"}):
         md = link.get("metadata") or {}
         if md.get("rl_plan") == plan and md.get("rl_billing") == billing and md.get("rl_price") == price:
-            if (((link.get("custom_text") or {}).get("submit") or {}).get("message") or "") != TERMS_TEXT:
-                call("POST", f"payment_links/{link['id']}", {"custom_text": {"submit": {"message": TERMS_TEXT}}})
+            if (((link.get("custom_text") or {}).get("submit") or {}).get("message") or "") != terms_text(plan):
+                call("POST", f"payment_links/{link['id']}", {"custom_text": {"submit": {"message": terms_text(plan)}}})
                 print(f"terms line added to {plan} {billing} checkout")
             return link["url"]
     redirect = f"{SITE}/welcome.html?plan={plan}&billing={billing}&session_id={{CHECKOUT_SESSION_ID}}"
@@ -151,7 +159,7 @@ def ensure_link(plan, billing, price):
         "line_items": [{"price": price, "quantity": 1}],
         "after_completion": {"type": "redirect", "redirect": {"url": redirect}},
         "allow_promotion_codes": True,
-        "custom_text": {"submit": {"message": TERMS_TEXT}},
+        "custom_text": {"submit": {"message": terms_text(plan)}},
         "billing_address_collection": "auto",
         "phone_number_collection": {"enabled": True},
         "metadata": {"rl_plan": plan, "rl_billing": billing, "rl_price": price},
@@ -165,7 +173,7 @@ def setup():
     for plan, p in PLANS.items():
         product = ensure_product(plan, p)
         links[plan] = {}
-        for billing in ("monthly", "yearly"):
+        for billing in BILLINGS:
             price = ensure_price(plan, billing, product, p[billing])
             links[plan][billing] = ensure_link(plan, billing, price)
     ensure_coupon()

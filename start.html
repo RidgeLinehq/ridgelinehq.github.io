@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#fffdf8">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23142f27'/%3E%3Cpath d='M4 25 L12 11.5 L16.5 18 L20.5 12.5 L28 25 Z' fill='%23d2b375'/%3E%3C/svg%3E">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,700&display=swap" rel="stylesheet">
 <style>
 :root{--forest:#142f27;--ink:#15271f;--ivory:#f5f1e6;--white:#fffdf8;--brass:#d2b375;--brass-text:#7f6233;--muted:#5a6a60;--line:#e3ded0;--sage:#e9eee3}
 *{box-sizing:border-box}
@@ -17,33 +17,24 @@ a:focus-visible{outline:3px solid #b98f4a;outline-offset:3px;border-radius:4px}
 .wrap{width:min(760px,calc(100% - 36px));margin-inline:auto}
 .nav{border-bottom:1px solid var(--line)}
 .nav .wrap{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.brand{display:flex;align-items:center;gap:10px;font:800 .85rem/1 "Inter Tight",system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--forest)}
+.brand{display:flex;align-items:center;gap:10px;font:700 .85rem/1 "Inter",system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--forest)}
 .brand svg{width:30px;height:30px}
 .back{font-size:.9rem;font-weight:600;padding:10px 0}
 header.top{background:var(--ivory);border-bottom:1px solid var(--line);padding:48px 0 40px}
 .kicker{display:block;font-size:.74rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--brass-text)}
 .kicker::after{content:"";display:block;width:44px;height:2px;background:var(--brass);margin-top:12px}
-h1{font:800 clamp(2rem,6vw,3rem)/1.05 "Inter Tight",system-ui,sans-serif;letter-spacing:-.035em;margin:20px 0 14px}
-h1 em{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;color:var(--brass-text)}
+h1{font:700 clamp(2rem,6vw,3rem)/1.05 "Fraunces",Georgia,serif;letter-spacing:-.02em;margin:20px 0 14px}
+h1 em{font-style:italic;font-weight:700;color:var(--brass-text)}
 .promise{margin:22px 0 0;padding:18px 20px;background:var(--forest);color:#fff;border-radius:14px;font-size:1.05rem}
-.promise strong{color:var(--brass)}
 .meta{margin-top:14px;font-size:.85rem;color:var(--muted)}
 main{padding:40px 0 64px}
-ol.terms{list-style:none;padding:0;margin:0;counter-reset:t}
-ol.terms>li{counter-increment:t;display:grid;grid-template-columns:42px 1fr;gap:4px 10px;padding:22px 0;border-top:1px solid var(--line)}
-ol.terms>li::before{content:counter(t,decimal-leading-zero);font:400 1.4rem/1.2 "Instrument Serif",Georgia,serif;color:#9a7a45}
-h2{font:700 1.1rem/1.3 "Inter",system-ui,sans-serif;margin:0 0 6px;letter-spacing:-.01em}
-li p,li ul{margin:0;color:var(--muted)}
-li ul{padding-left:18px;margin-top:6px}
-li ul li{margin:4px 0}
-.box{margin-top:30px;padding:20px;background:var(--sage);border-radius:14px}
-.box h2{margin-bottom:8px}
-.box p{margin:0 0 10px;color:var(--ink)}
-.small{font-size:.84rem;color:var(--muted);margin-top:28px}
 footer{background:#0f241d;color:#cfd9cf;padding:28px 0 calc(28px + env(safe-area-inset-bottom));font-size:.88rem}
 footer a{color:#fff}
-@media(max-width:420px){ol.terms>li{grid-template-columns:34px 1fr}.brand span{font-size:.78rem}}
-.tap{display:flex;justify-content:center;align-items:center;min-height:54px;margin-top:16px;border-radius:10px;background:var(--forest);color:#fff;font-weight:600;text-decoration:none}.tap.alt{background:var(--white);color:var(--forest);border:1px solid var(--line)}#wait{display:none}</style>
+.tap{display:flex;justify-content:center;align-items:center;min-height:54px;margin-top:16px;border-radius:10px;background:var(--forest);color:#fff;font-weight:600;text-decoration:none}
+.tap.alt{background:var(--white);color:var(--forest);border:1px solid var(--line)}
+#wait{display:none}
+@media(max-width:420px){.brand span{font-size:.78rem}}
+</style>
 </head>
 <body>
 <nav class="nav" aria-label="Site"><div class="wrap">
@@ -58,7 +49,7 @@ footer a{color:#fff}
 <main><div class="wrap">
   <div id="wait">
     <div class="promise" id="planBox"></div>
-    <p style="margin-top:18px">Online checkout for this plan isn’t switched on yet. Tap below and we’ll email you your secure Stripe link, usually within a few hours. Your founding spot is held from the moment you send it.</p>
+    <p style="margin-top:18px">Checkout for this plan isn’t open right now. Tap below and we’ll email you a secure Stripe link.</p>
     <a class="tap" id="mail" href="mailto:ridgelinemarketinghq@gmail.com">Email me my checkout link</a>
     <a class="tap alt" href="./#free-check">Get the free AI check first</a>
   </div>
@@ -68,25 +59,35 @@ footer a{color:#fff}
 <script>
 (function(){
   "use strict";
+  /* ?plan=starter|growth|pro  ?client_reference_id=NAME (or ?ref=NAME)  ?email=you@x.com */
   var q=new URLSearchParams(location.search);
-  var names={starter:"Starter · $75/month",growth:"Growth · $125/month",pro:"Pro · $199/month"};
-  var yearly={starter:"Starter · $750/year",growth:"Growth · $1,250/year",pro:"Pro · $1,990/year"};
+  var names={starter:"Starter · $39.99/month",growth:"Growth · $75/month",pro:"Pro · $125/month"};
+  var LINKS={starter:"https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07",growth:"https://buy.stripe.com/14AbJ168z9msbrAdWtaEE08",pro:"https://buy.stripe.com/8x200jgNd6ag3Z8aKhaEE09"};
   var plan=(q.get("plan")||"growth").toLowerCase();if(!names[plan])plan="growth";
-  var billing=(q.get("billing")||"monthly").toLowerCase()==="yearly"?"yearly":"monthly";
-  var label=billing==="yearly"?yearly[plan]:names[plan];
+  var label=names[plan];
+  var ref=(q.get("client_reference_id")||q.get("ref")||"").replace(/[^A-Za-z0-9_-]/g,"").slice(0,200);
+  var email=(q.get("prefilled_email")||q.get("email")||"").trim();
+  function go(url){
+    var extra=[];
+    if(ref)extra.push("client_reference_id="+encodeURIComponent(ref));
+    if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))extra.push("prefilled_email="+encodeURIComponent(email));
+    if(extra.length)url+=(url.indexOf("?")>-1?"&":"?")+extra.join("&");
+    location.replace(url);
+  }
   function wait(){
     document.getElementById("title").innerHTML="You picked <em>"+label.split(" · ")[0]+".</em>";
-    document.getElementById("sub").textContent=label+(billing==="yearly"?". Billed once a year, 2 months free.":". Month to month. Cancel anytime.");
+    document.getElementById("sub").textContent=label+". No contract. Cancel anytime.";
     document.getElementById("planBox").textContent=label;
     var subject="Start "+label;
     var body="Hi Ridgeline,\n\nI want to start "+label+".\n\nBusiness name:\nCity and state:\nPhone:\n\nPlease send my checkout link.";
     document.getElementById("mail").href="mailto:ridgelinemarketinghq@gmail.com?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
     document.getElementById("wait").style.display="block";
   }
+  var ok=function(u){return /^https:\/\/(buy|checkout)\.stripe\.com\//.test(u||"")};
   fetch("data/stripe-links.json",{cache:"no-store"}).then(function(r){return r.json()}).then(function(d){
-    var url=((d.links||{})[plan]||{})[billing]||"";
-    if(/^https:\/\/(buy|checkout)\.stripe\.com\//.test(url)){location.replace(url)}else{wait()}
-  }).catch(wait);
+    var url=((d.links||{})[plan]||{}).monthly||"";
+    if(ok(url))go(url);else if(ok(LINKS[plan]))go(LINKS[plan]);else wait();
+  }).catch(function(){if(ok(LINKS[plan]))go(LINKS[plan]);else wait()});
 })();
 </script>
 </body>

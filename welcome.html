@@ -75,8 +75,8 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
   <div class="wrap">
     <span class="kicker">You're in</span>
     <h1>Welcome to <em>Ridgeline Local.</em></h1>
-    <div class="promise">One short form (about 2 minutes) and we start. We run your <strong>starting AI visibility check</strong> right away and email you the result.</div>
-    <p class="meta planline" id="planLine">Month to month. Cancel anytime by replying to any email.</p>
+    <div class="promise">One short form (about 2 minutes) and we get going. We run your <strong>starting AI visibility check</strong> right away and email you the result.</div>
+    <p class="meta planline" id="planLine">No contract. Cancel anytime by replying to any email.</p>
   </div>
 </header>
 
@@ -118,8 +118,9 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
         <ul>
           <li><strong>Today:</strong> your starting AI visibility check (what ChatGPT and Gemini say, and your score).</li>
           <li><strong>Within 2 business days:</strong> your Google profile fixes, written out and ready to paste, and your review request kit.</li>
-          <li><strong>Every week:</strong> we re-check ChatGPT and Gemini. Growth and Pro: leads go to your email as we find them.</li>
-          <li><strong>Every month:</strong> your report: leads sent, leads that became jobs, AI score then vs now, reviews gained.</li>
+          <li><strong>Growth and Pro, every week:</strong> we re-check ChatGPT and Gemini and keep your profile moving.</li>
+          <li><strong>Pro:</strong> leads go to your email as we find them.</li>
+          <li><strong>Growth and Pro, every month:</strong> a short report: AI score then vs now, reviews gained, and on Pro, the leads we sent.</li>
         </ul></div></li>
     </ol>
 
@@ -137,9 +138,9 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
   "use strict";
   var EMAIL="ridgelinemarketinghq@gmail.com";
   var q=new URLSearchParams(location.search);
-  var plans={starter:"Starter ($75/month)",growth:"Growth ($125/month)",pro:"Pro ($199/month)"};
+  var plans={starter:"Starter ($39.99/month)",growth:"Growth ($75/month)",pro:"Pro ($125/month)"};
   var plan=(q.get("plan")||"").toLowerCase(),billing=(q.get("billing")||"monthly").toLowerCase(),session=q.get("session_id")||"";
-  if(plans[plan]){document.getElementById("planLine").textContent="Your plan: "+plans[plan].replace("/month",billing==="yearly"?"/month, billed yearly":"/month")+". Month to month. Cancel anytime by replying to any email."}
+  if(plans[plan]){document.getElementById("planLine").textContent="Your plan: "+plans[plan]+". No contract. Cancel anytime by replying to any email."}
   var $=function(id){return document.getElementById(id)};
   var req=["b","ty","ph","sv","ct","em"];
   function val(){

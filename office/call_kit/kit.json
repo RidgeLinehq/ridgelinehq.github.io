@@ -8,7 +8,7 @@
  "objections": {
   "Not interested": "Totally fair. Can I still send the free report? If it's not useful, just delete it.",
   "We get enough work": "That's great to hear. This just makes sure the AI keeps sending people your way as more folks search that way.",
-  "How much is it?": "The check is free. Plans start at $75 a month, month to month, cancel anytime by email. $125 adds leads we find and send you, plus our guarantee. The first 20 clients lock their price for life. Let me send the free check first so you can see if you even need it.",
+  "How much is it?": "The check is free. Plans start at $39.99 a month, no contract, cancel anytime by email. Most people pick Growth at $75: we keep your Google profile and reviews moving every month, with a second-month-free guarantee. Pro at $125 adds leads we find and send you. Let me send the free check first so you can see if you even need it.",
   "Is this a scam?": "Fair question. I'll email the report from ridgelinemarketinghq@gmail.com and you can check it against ChatGPT yourself.",
   "How did you find me?": "Your website or your Google listing. I only work with a few local businesses at a time, and {town} is one of the towns I'm calling.",
   "Call me later": "No problem. What's a better day and time? I'll put it down.",
@@ -51,7 +51,7 @@
    "template": "after_call_offer",
    "ask": "email",
    "alert_grayson": true,
-   "then": "The desk sends the report plus the plans ($75 / $125 / $199) and checkout links, and tells you when it went out."
+   "then": "The desk sends the report plus the plans ($39.99 / $75 / $125) and checkout links, and tells you when it went out."
   },
   "do_not_call": {
    "label": "Do not call",

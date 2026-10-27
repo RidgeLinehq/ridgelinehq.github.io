@@ -12,7 +12,7 @@ asked, except for the alerts in shared/alerts.md.
 3. **Onboarding form** (welcome.html): business name, Google profile link, phone, services, city,
    email. It arrives in the Ridgeline Gmail as "Onboarding — <business>" (FormSubmit).
 4. **Reply desk, Lane C** (within 2 hours, any day): creates clients/<id>, sends the welcome,
-   runs the baseline AI check (specs/guarantee.md §1), lowers data/founding.json by 1, tells
+   runs the baseline AI check (specs/guarantee.md §1), tells
    Grayson "NEW CLIENT". If the Stripe email came but no onboarding form within 24 hours: one
    friendly reminder with the form link; again at 72 hours; then alert Grayson.
 5. **Work begins** (Day Shift 09, next weekday morning, and every weekday after).
@@ -33,12 +33,12 @@ asked, except for the alerts in shared/alerts.md.
 - **Profile check:** WebSearch the client's public Google listing; compare with the fixes we sent;
   log each change seen in client.profileLog [{at, field, before, after, source}]. A fix not live
   after 7 days → one nudge to the owner with just that fix.
-- **Lead Finder** (Growth, Pro): specs/lead-tracking.md.
+- **Lead Finder** (Pro only): specs/lead-tracking.md.
 - **Google post draft** (one per week, kind "post") for the owner to paste.
 
 ## Flat after 2 weeks: fix it ourselves (Day Shift 09)
 At day 14+ (and every 14 days after), a client is FLAT when aiTrend has no point above baseline
-AND (Growth/Pro) counted leads == 0 AND reviews gained is 0 or unknown. For a flat client, in the
+AND (Pro) counted leads == 0 AND reviews gained is 0 or unknown. For a flat client, in the
 same run, without asking anyone, pick the next 2 untried fixes from this ladder and do them
 (record each in client.fixesTried [{at, fix, result}]):
 1. Re-send the one profile fix that is still not live, shortened to a single step.
@@ -52,7 +52,7 @@ same run, without asking anyone, pick the next 2 untried fixes from this ladder 
 Tell Grayson in the morning report only: "<business> flat at day N; tried: <fix>, <fix>".
 
 ## Monthly (startedAt day-of-month)
-- "Did this lead turn into a job?" email (Growth, Pro) and the results report (all plans):
+- "Did this lead turn into a job?" email (Pro) and the results report (Growth and Pro):
   specs/lead-tracking.md.
 - Pro: a short promo video (Nova, office/studio/CONTEXT.md, the client's own photos and facts;
   their real reviews quoted only with the reviewer's first name and the exact words), rendered,

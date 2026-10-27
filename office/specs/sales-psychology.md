@@ -30,9 +30,9 @@ checked what it says about him. That gap is the whole sale.
 5. Proof over promises. The proof is their own free check (what ChatGPT and Gemini actually
    said, dated) and, later, real client results Sage has verified. No outside statistics unless
    the source is named and linked. Never invented testimonials.
-6. Real scarcity, said plainly. Founding pricing is real and limited (settings.foundingSpots).
-   "The first 20 clients keep their price for life, and <N> spots are left" (N = data/founding.json spotsLeft). When the number is
-   real, say it hard. When there is no real limit, say nothing about limits.
+6. No scarcity. There is no founding deal, spot count or deadline (Grayson, Oct 27, 2026), so
+   say nothing about limits. The easy next step is the pitch: no contract, cancel anytime,
+   Growth and Pro carry the Second Month Free Guarantee.
 7. Authority through evidence, not titles. We never claim to be an agency with a team. We show
    what ChatGPT actually said, the number, the fix. "Here's what AI says. Here's why. Here's the fix." The
    person who shows you the problem is the person you hire to fix it.
@@ -41,7 +41,7 @@ checked what it says about him. That gap is the whole sale.
    deciding, not in the opener.
 9. Momentum. Every message ends with the next step being one tap: reply "yes", open the link,
    add the manager. Never "let me know if you have any questions" (that is an end, not a step).
-10. Confident close. When they ask the price, give it and ask for the sale: "Growth is $125 a
+10. Confident close. When they ask the price, give it and ask for the sale: "Growth is $75 a
     month, month to month. Want me to start today?" No apologizing for the price, no
     discount unless he offers one, no begging. If they say no, thank them and leave the door
     open in one line.
