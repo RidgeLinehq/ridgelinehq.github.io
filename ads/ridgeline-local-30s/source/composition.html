@@ -1,0 +1,334 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Ridgeline Local 30s</title>
+<style>
+:root{--navy:#0B1220;--navy2:#121D38;--gold:#FFC43D;--gold2:#FFD873;--white:#F8FAFF;--muted:rgba(248,250,255,.72);--red:#FF7A7A;--green:#7EE2A8;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--navy)}
+body{font-family:"Inter","Inter Display",system-ui,sans-serif;color:var(--white);-webkit-font-smoothing:antialiased}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:radial-gradient(120% 80% at 50% 30%,#152445 0%,#0B1220 70%)}
+.scene{position:absolute;inset:0;display:none;transform-origin:50% 50%}
+.photo{position:absolute;inset:0;overflow:hidden}
+.photo .kb{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:50% 50%}
+.photo img{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;display:block}
+.photo .tint{position:absolute;inset:0}
+.aurora{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:.22}
+.aurora .blob{position:absolute;width:900px;height:900px;border-radius:50%;filter:blur(90px)}
+.aurora .b1{background:radial-gradient(circle,#3B5BDB 0%,rgba(59,91,219,0) 65%)}
+.aurora .b2{background:radial-gradient(circle,#FFC43D 0%,rgba(255,196,61,0) 62%)}
+#vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 70% at 50% 50%,rgba(0,0,0,0) 45%,rgba(0,0,0,.55) 100%)}
+#flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.hd{font-family:"Inter Display","Inter",sans-serif;font-weight:800;letter-spacing:-.02em}
+.gold{color:var(--gold)}
+/* captions */
+#capbg{position:absolute;left:0;width:1080px;height:460px;top:1110px;background:radial-gradient(ellipse 60% 55% at 50% 50%,rgba(8,13,28,.82),rgba(8,13,28,0) 100%);opacity:0}
+#cap{position:absolute;left:0;width:1080px;top:1180px;height:320px;display:flex;align-items:center;justify-content:center;padding:0 100px;text-align:center}
+#cap.center{top:640px;height:640px;padding:0 90px}
+.cap-line{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;column-gap:.24em;row-gap:.06em;font-family:"Inter Display","Inter",sans-serif;font-weight:800;font-size:76px;line-height:1.12;letter-spacing:-.02em;color:var(--white);text-shadow:0 4px 26px rgba(0,0,0,.6),0 1px 2px rgba(0,0,0,.6)}
+.cap-line.normal{font-size:60px;line-height:1.14}
+.cap-line.center{font-size:86px}
+.tok{display:inline-block;opacity:.3;transform:translateY(0) scale(1);transform-origin:50% 80%}
+.tok.faint{opacity:.3}
+.br{flex-basis:100%;height:0}
+#cap.low{top:1262px;height:230px}
+.tok.gold{color:var(--gold)}
+/* phone mockup */
+.phone{position:absolute;width:760px;height:1560px;border-radius:100px;background:#0a0a0e;box-shadow:0 70px 140px rgba(0,0,0,.65),0 0 0 3px #3a3a42,inset 0 0 0 4px #1a1a20;transform-origin:50% 40%}
+.phone .screen{position:absolute;left:20px;top:20px;right:20px;bottom:20px;border-radius:84px;background:#212121;overflow:hidden}
+.phone .island{position:absolute;top:30px;left:50%;transform:translateX(-50%);width:210px;height:58px;border-radius:32px;background:#000;z-index:5}
+.chat{position:absolute;inset:0;font-size:38px;color:#ECECEC}
+.chat .topbar{position:absolute;top:110px;left:0;right:0;height:80px;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:40px;color:#fff;letter-spacing:-.01em}
+.chat .topbar .menu{position:absolute;left:44px;top:14px;width:44px;height:44px}
+.chat .topbar .menu i{display:block;height:5px;border-radius:3px;background:#cfcfcf;margin:8px 0}
+.chat .topbar .pen{position:absolute;right:44px;top:10px;width:48px;height:48px;border:4px solid #cfcfcf;border-radius:14px}
+.newchat{position:absolute;inset:0}
+.newchat .hello{position:absolute;top:560px;left:0;right:0;text-align:center;font-weight:600;font-size:50px;color:#fff;letter-spacing:-.02em}
+.inputpill{position:absolute;left:44px;right:44px;height:150px;border-radius:50px;background:#303030;border:2px solid #3f3f3f;padding:0 44px;display:flex;align-items:center;font-size:40px;color:#fff}
+.inputpill .ph{color:#9a9a9a}
+.inputpill .cursor{display:inline-block;width:4px;height:48px;background:#fff;margin-left:6px;vertical-align:middle}
+.inputpill .send{position:absolute;right:26px;top:50%;transform:translateY(-50%);width:84px;height:84px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
+.inputpill .send::after{content:"";width:22px;height:22px;border-left:7px solid #000;border-top:7px solid #000;transform:translateY(6px) rotate(45deg)}
+.inputpill .plus{width:56px;height:56px;border-radius:50%;border:3px solid #6a6a6a;margin-right:26px;flex:none;position:relative}
+.inputpill .plus::before,.inputpill .plus::after{content:"";position:absolute;background:#bbb;left:50%;top:50%;transform:translate(-50%,-50%)}
+.inputpill .plus::before{width:26px;height:4px}.inputpill .plus::after{width:4px;height:26px}
+.convo{position:absolute;inset:0;display:none}
+.bubble{position:absolute;right:44px;top:230px;max-width:560px;background:#303030;color:#fff;border-radius:44px;padding:26px 40px;font-size:40px;line-height:1.25}
+.answer{position:absolute;left:44px;right:44px;top:390px;font-size:38px;line-height:1.45;color:#ECECEC}
+.answer .ln{white-space:nowrap;overflow:hidden;min-height:1.45em}
+.answer .ln.sp{height:.6em;min-height:0}
+.answer .ln b{font-weight:700;color:#fff}
+.answer .ln .star{color:#FFC43D}
+.rowhi{position:absolute;left:28px;right:28px;height:82px;border-radius:22px;background:rgba(255,255,255,.1);opacity:0}
+.tapring{position:absolute;width:140px;height:140px;border-radius:50%;border:6px solid rgba(255,255,255,.9);transform:translate(-50%,-50%) scale(.3);opacity:0}
+.callchip{position:absolute;left:44px;right:44px;top:870px;height:118px;border-radius:30px;background:#2f6b47;display:flex;align-items:center;gap:22px;padding:0 36px;font-size:34px;color:#fff;font-weight:600;opacity:0;white-space:nowrap}
+.callchip .ic{width:58px;height:58px;border-radius:50%;background:#52c47f;flex:none;position:relative}
+.callchip .ic::after{content:"";position:absolute;left:16px;top:14px;width:26px;height:30px;border:6px solid #0b2e1b;border-radius:10px;border-right-color:transparent;transform:rotate(-30deg)}
+/* lock screen overlay (homography) */
+.lock{position:absolute;left:0;top:0;width:440px;height:1000px;transform-origin:0 0;background:linear-gradient(180deg,#0e1a33 0%,#0a1226 60%,#080e1e 100%);color:#fff;overflow:hidden}
+.lock .time{position:absolute;top:150px;left:0;right:0;text-align:center;font-family:"Inter Display";font-weight:600;font-size:108px;letter-spacing:-.03em}
+.lock .date{position:absolute;top:110px;left:0;right:0;text-align:center;font-size:28px;font-weight:500;color:rgba(255,255,255,.85)}
+.lock .nonote{position:absolute;top:540px;left:26px;right:26px;height:150px;border-radius:26px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:10px;padding:0 28px;font-size:31px;line-height:1.2;color:rgba(255,255,255,.82);white-space:nowrap}
+.lock .nonote .dot{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.14);flex:none}
+.lock .sheen{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 45%)}
+.lock .dim{position:absolute;inset:0;background:#000;opacity:0}
+/* scene 3 */
+.kicker{font-size:30px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);text-align:center}
+.querypill{position:absolute;left:120px;right:120px;top:1290px;height:130px;border-radius:65px;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.18);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:0 44px;font-size:48px;color:var(--white);font-weight:500}
+.querypill .q{margin:0 18px;white-space:nowrap}
+.querypill .cur{display:inline-block;width:4px;height:52px;background:#fff;margin-left:8px;vertical-align:middle}
+.querypill .ask{color:rgba(248,250,255,.6)}
+/* scene 4 */
+.steps{position:absolute;top:338px;left:0;right:0;display:flex;justify-content:center;gap:16px}
+.steps i{display:block;width:150px;height:8px;border-radius:4px;background:rgba(255,255,255,.22)}
+.steps i.on{background:var(--gold)}
+.stepnum{position:absolute;left:0;right:0;top:360px;text-align:center;font-family:"Inter Display";font-weight:900;font-size:420px;line-height:1;color:rgba(255,255,255,.05);letter-spacing:-.05em}
+.stitle{position:absolute;left:60px;right:60px;top:420px;text-align:center;font-family:"Inter Display";font-weight:800;font-size:96px;line-height:1.05;letter-spacing:-.03em;color:var(--gold);text-shadow:0 6px 30px rgba(0,0,0,.5)}
+.ssub{position:absolute;left:80px;right:80px;top:545px;text-align:center;font-size:46px;font-weight:600;color:var(--white);text-shadow:0 3px 16px rgba(0,0,0,.5)}
+.panel{position:absolute;left:110px;right:110px;top:660px;border-radius:40px;background:rgba(11,18,32,.78);border:2px solid rgba(255,255,255,.14);box-shadow:0 40px 90px rgba(0,0,0,.5);backdrop-filter:blur(10px);padding:40px 44px}
+.panel .ph{font-size:38px;font-weight:600;letter-spacing:.01em;color:rgba(248,250,255,.88);margin-bottom:22px}
+.prow{display:flex;align-items:center;gap:26px;height:112px;border-top:1px solid rgba(255,255,255,.1);font-size:42px;font-weight:600;opacity:0;transform:translateX(40px)}
+.prow .nm{flex:1}
+.prow .st{display:flex;align-items:center;gap:16px;font-size:36px;color:var(--red);font-weight:600}
+.prow .st::before{content:"";width:18px;height:18px;border-radius:50%;background:var(--red);box-shadow:0 0 14px rgba(255,122,122,.7)}
+.crow{display:flex;align-items:center;gap:26px;height:124px;border-top:1px solid rgba(255,255,255,.1);font-size:44px;font-weight:600;opacity:0;transform:translateX(40px)}
+.crow .box{width:66px;height:66px;border-radius:18px;border:4px solid rgba(255,255,255,.35);position:relative;flex:none;transition:none}
+.crow .box.ok{border-color:var(--gold);background:var(--gold)}
+.crow .box.ok::after{content:"";position:absolute;left:20px;top:8px;width:16px;height:32px;border-right:7px solid #0B1220;border-bottom:7px solid #0B1220;transform:rotate(45deg)}
+.crow .nm{flex:1}
+.crow .tag{font-size:30px;font-weight:700;color:var(--gold);letter-spacing:.02em;opacity:0}
+.crow .stars{display:flex;gap:6px}
+.crow .stars i{width:40px;height:40px;background:rgba(255,255,255,.2);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.crow .stars i.on{background:var(--gold)}
+.notif{position:absolute;left:34px;right:34px;height:150px;border-radius:34px;background:rgba(255,255,255,.95);color:#111;display:flex;align-items:center;gap:22px;padding:0 30px;opacity:0;transform:translateY(-30px) scale(.96)}
+.notif .ic{width:80px;height:80px;border-radius:22px;background:#34C759;flex:none;position:relative}
+.notif .ic::after{content:"";position:absolute;left:22px;top:18px;width:30px;height:38px;border:7px solid #fff;border-radius:12px;border-right-color:transparent;transform:rotate(-30deg)}
+.notif .ic.msg{background:#0A84FF}.notif .ic.msg::after{border:none;width:40px;height:30px;left:20px;top:25px;border-radius:12px;background:#fff;transform:none}
+.notif .tx{flex:1;line-height:1.2}
+.notif .tx b{display:block;font-size:34px;font-weight:700}
+.notif .tx span{font-size:30px;color:#333;white-space:nowrap}
+.notif .ago{font-size:26px;color:#666;align-self:flex-start;margin-top:24px}
+.flip{position:absolute;left:110px;right:110px;top:690px;height:170px;perspective:1400px;opacity:0}
+.flip .face{position:absolute;inset:0;border-radius:36px;display:flex;align-items:center;justify-content:center;gap:24px;font-family:"Inter Display";font-weight:800;font-size:64px;letter-spacing:-.02em;backface-visibility:hidden;box-shadow:0 30px 70px rgba(0,0,0,.5)}
+.flip .before{background:#161d30;color:rgba(248,250,255,.65);border:2px solid rgba(255,255,255,.16)}
+.flip .after{background:var(--gold);color:#0B1220}
+/* scene 5 */
+.price{position:absolute;left:0;right:0;top:556px;text-align:center}
+.price .lead{font-size:46px;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.price .amt{font-family:"Inter Display";font-weight:900;font-size:250px;line-height:1;letter-spacing:-.05em;color:var(--gold);text-shadow:0 10px 60px rgba(255,196,61,.35);margin-top:14px;transform-origin:50% 60%}
+.price .per{font-size:54px;font-weight:700;color:var(--white);margin-top:4px}
+.glow{position:absolute;left:50%;top:50%;width:900px;height:900px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,196,61,.55) 0%,rgba(255,196,61,0) 60%);opacity:0;pointer-events:none}
+.badge{position:absolute;left:80px;right:80px;top:985px;height:140px;border-radius:70px;border:4px solid var(--gold);background:rgba(11,18,32,.82);display:flex;align-items:center;justify-content:center;column-gap:.24em;font-family:"Inter Display";font-weight:800;font-size:52px;white-space:nowrap;letter-spacing:-.02em;color:var(--white);box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 60px rgba(255,196,61,.25)}
+.badge .tok{transform-origin:50% 80%}
+.qual{position:absolute;left:50px;right:50px;top:1146px;text-align:center;font-size:34px;white-space:nowrap;font-weight:600;line-height:1.3;color:rgba(248,250,255,.92);text-shadow:0 2px 12px rgba(0,0,0,.7);opacity:0}
+.qual b{color:var(--gold);font-weight:700}
+/* scene 6 */
+.logo{position:absolute;left:50%;top:470px;width:200px;height:200px;transform:translateX(-50%)}
+.wordmark{position:absolute;left:0;right:0;top:690px;text-align:center;font-family:"Inter Display";font-weight:800;font-size:92px;letter-spacing:-.03em}
+.wordmark small{font-weight:600;color:var(--gold);font-size:92px;margin-left:.22em}
+.url{position:absolute;left:0;right:0;top:812px;text-align:center;font-size:50px;font-weight:700;letter-spacing:.04em;color:var(--white)}
+.cta{position:absolute;left:110px;right:110px;top:935px;height:150px;border-radius:75px;background:var(--gold);color:#0B1220;display:flex;align-items:center;justify-content:center;gap:22px;font-family:"Inter Display";font-weight:800;font-size:58px;letter-spacing:-.02em;box-shadow:0 30px 70px rgba(0,0,0,.5),0 0 0 0 rgba(255,196,61,.0);transform-origin:50% 50%}
+.cta .arrow{font-weight:900}
+.sub2{position:absolute;left:0;right:0;top:1120px;text-align:center;font-size:36px;font-weight:600;color:var(--white)}
+</style></head>
+<body><div id="stage">
+<div id="scenes"></div>
+<div class="aurora"><div class="blob b1"></div><div class="blob b2"></div></div>
+<div id="capbg"></div>
+<div id="cap"></div>
+<div id="vignette"></div>
+<div id="flash"></div>
+</div>
+<script src="timing.js"></script>
+<script>
+const $ = (sel,root=document)=>root.querySelector(sel);
+const el = (cls, html='', tag='div')=>{const d=document.createElement(tag); if(cls) d.className=cls; d.innerHTML=html; return d;};
+const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const seg=(t,a,b)=>clamp((t-a)/(b-a));
+const eoc=p=>1-Math.pow(1-p,3);
+const eic=p=>p*p*p;
+const eio=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+const eob=(p,s=1.7)=>{const c3=s+1;return 1+c3*Math.pow(p-1,3)+s*Math.pow(p-1,2);};
+const eoe=p=>p>=1?1:1-Math.pow(2,-10*p);
+const stage=$('#stage'), scenesRoot=$('#scenes');
+const LOGO='<svg viewBox="0 0 40 40" width="100%" height="100%"><path d="M2 31 13.5 11l6 9.5 5-7.5L38 31Z" fill="#F8FAFF"/><path d="M13.5 11 19.5 20.5 16.4 24.9 9.6 17.7Z" fill="#FFC43D"/></svg>';
+const IMG={street:'../assets/01-main-street.jpg',bakery:'../assets/02-bakery.jpg',reviews:'../assets/03-reviews.jpg',shop:'../assets/04-phone-shop.jpg',salon:'../assets/05-salon.jpg',ridge:'../assets/06-ridge.jpg'};
+const SX=1080/941, SY=1920/1672;
+function photo(src,{tint='rgba(10,16,32,.55)',tint2=null,blur=0,bright=1}={}){
+  const root=el('photo'); const kb=el('kb'); const img=document.createElement('img'); img.src=src; img.decoding='sync';
+  if(blur||bright!==1) img.style.filter=`${blur?`blur(${blur}px) `:''}brightness(${bright})`;
+  const tintEl=el('tint'); tintEl.style.background=tint2?`linear-gradient(180deg,${tint} 0%,${tint2} 100%)`:tint;
+  kb.appendChild(img); root.appendChild(kb); root.appendChild(tintEl);
+  return {root,kb,img,set(s,ox,oy){kb.style.transformOrigin=`${ox}px ${oy}px`;kb.style.transform=`scale(${s})`;}};
+}
+function homography(src,dst){const A=[],b=[];for(let i=0;i<4;i++){const [x,y]=src[i],[u,v]=dst[i];A.push([x,y,1,0,0,0,-u*x,-u*y]);b.push(u);A.push([0,0,0,x,y,1,-v*x,-v*y]);b.push(v);}
+  const n=8,M=A.map((r,i)=>[...r,b[i]]);for(let c=0;c<n;c++){let p=c;for(let r=c+1;r<n;r++)if(Math.abs(M[r][c])>Math.abs(M[p][c]))p=r;[M[c],M[p]]=[M[p],M[c]];for(let r=0;r<n;r++){if(r===c)continue;const f=M[r][c]/M[c][c];for(let k=c;k<=n;k++)M[r][k]-=f*M[c][k];}}
+  const h=M.map((r,i)=>r[n]/r[i]);return [...h,1];}
+const m3d=h=>`matrix3d(${h[0]},${h[3]},0,${h[6]},${h[1]},${h[4]},0,${h[7]},0,0,1,0,${h[2]},${h[5]},0,${h[8]})`;
+function showTok(tok,t,s,dur=.16,slam=false){const p=seg(t,s,s+dur);if(p<=0){tok.style.opacity=0;tok.style.transform='translateY(16px) scale(.92)';return false;}
+  const e=slam?eob(p,2.2):eoc(p); tok.style.opacity=Math.min(1,p*2); tok.style.transform=slam?`translateY(0) scale(${lerp(1.35,1,e)})`:`translateY(${lerp(16,0,e)}px) scale(${lerp(.92,1,e)})`; return true;}
+/* ---------- CAPTIONS ---------- */
+const capEl=$('#cap'), capBg=$('#capbg');
+const CAP_CFG={L1:{mode:'band',hero:true,gold:['competitor.'],br:[2]},L2:{mode:'band',br:[5]},L3:{mode:'center',hero:true,rename:{'your':'YOUR'},gold:['YOUR'],br:[2,5]},L4a:{mode:'band',br:[2]},L4b:{mode:'band',br:[4]},L4c:{mode:'band',br:[3]},L5a:{mode:'band',hero:true,gold:['One','new','customer'],br:[2]},L5b:{mode:'none'},L5c:{mode:'none'},L6:{mode:'band',br:[4]}};
+const HOLD={L1:2.98,L2:5.9,L3:10.98,L4a:13.98,L4b:16.98,L4c:19.98,L5a:22.55,L6:30.5};
+const STATIC=[{s:5.93,e:6.98,text:'You never even knew.',mode:'band',hero:true},{s:25.4,e:26.48,text:'You literally can’t lose.',mode:'band',hero:true,gold:['can’t','lose.'],low:true}];
+const capLines={};
+function buildCap(id,tokens,cfg){const line=el('cap-line '+(cfg.hero?(cfg.mode==='center'?'center':''):'normal'));
+  tokens.forEach((tk,i)=>{let w=tk.w; if(cfg.rename&&cfg.rename[w.replace(/[^a-z]/gi,'').toLowerCase()]) w=cfg.rename[w.replace(/[^a-z]/gi,'').toLowerCase()]+w.replace(/^[a-z]+/i,'');
+    const sp=el('tok'+((cfg.gold||[]).includes(w)?' gold':''),w,'span'); sp.dataset.s=tk.s; sp.dataset.e=tk.e; line.appendChild(sp); if((cfg.br||[]).includes(i)) line.appendChild(el('br'));});
+  return line;}
+VO.lines.forEach(L=>{const cfg=CAP_CFG[L.id]; if(cfg.mode==='none')return; capLines[L.id]={line:buildCap(L.id,L.tokens,cfg),cfg,L};});
+STATIC.forEach((st,i)=>{const toks=st.text.split(' ').map((w,j)=>({w,s:st.s+j*.03,e:st.s+j*.03+.3})); st.id='S'+i; capLines[st.id]={line:buildCap(st.id,toks,{hero:st.hero,mode:st.mode,gold:st.gold}),cfg:{mode:st.mode,hero:st.hero,slam:true,low:st.low},L:{start:st.s,end:st.e,tokens:toks},hold:st.e};});
+let capCur=null;
+function updateCaptions(t){
+  let active=null;
+  for(const id in capLines){const c=capLines[id]; const s=c.L.start-.02, e=(c.hold||HOLD[id]||c.L.end); if(t>=s&&t<e){active=c;break;}}
+  if(active!==capCur){capEl.innerHTML=''; if(active){capEl.appendChild(active.line); capEl.className=(active.cfg.mode==='center'?'center':'')+((active.cfg.low||(t>=20&&t<26.5))?' low':'');} capCur=active;}
+  if(active) capEl.className=(active.cfg.mode==='center'?'center':'')+((active.cfg.low||(t>=20&&t<26.5))?' low':'');
+  if(!active){capBg.style.opacity=0;return;}
+  const toks=active.line.querySelectorAll('.tok'); let cur=-1;
+  for(let i=0;i<toks.length;i++){const tk=toks[i]; const s=+tk.dataset.s,e=+tk.dataset.e;
+    if(active.cfg.slam){const p=seg(t,s-.02,s+.2); const ee=eob(p,1.5); tk.style.opacity=p<=0?0:Math.min(1,p*3); tk.style.transform=`translateY(${lerp(14,0,ee)}px) scale(${lerp(1.1,1,ee)})`; if(p>0)cur=i; continue;}
+    const p=seg(t,s-.02,s+.14); const ee=eoc(p);
+    if(p<=0){tk.style.opacity=.3; tk.style.transform='translateY(0) scale(1)';}
+    else{tk.style.opacity=lerp(.3,1,Math.min(1,p*2)); tk.style.transform=`translateY(${lerp(6,0,ee)}px) scale(${lerp(1.0,1.06,Math.sin(p*Math.PI))})`; if(t<e+.06)cur=i;}
+  }
+  if(!active.cfg.hero){for(let i=0;i<toks.length;i++){const tk=toks[i]; if(tk.classList.contains('gold'))continue; tk.style.color=(i===cur)?'var(--gold)':'';}}
+  capBg.style.opacity=active.cfg.mode==='center'?0:1;
+}
+/* ---------- SCENES ---------- */
+const scenes=[];
+function scene(t0,t1,build){const root=el('scene'); scenesRoot.appendChild(root); const s={t0,t1,root,...build(root)}; scenes.push(s); return s;}
+function cutPunch(root,lt,amt=.04,dur=.35){const p=seg(lt,0,dur); root.style.transform=`scale(${1+amt*(1-eoc(p))})`;}
+/* Scene 1: pattern interrupt 0-3 */
+scene(0,3,root=>{
+  const ph=photo(IMG.street,{tint:'rgba(10,16,32,.6)',blur:10,bright:.9}); root.appendChild(ph.root);
+  const phone=el('phone'); phone.style.left='160px'; phone.style.top='120px'; phone.innerHTML='<div class="island"></div><div class="screen"><div class="chat"><div class="topbar"><div class="menu"><i></i><i></i><i></i></div>ChatGPT ▾<div class="pen"></div></div><div class="newchat"><div class="hello">What can I help with?</div><div class="inputpill" style="top:700px"><div class="plus"></div><span class="typed"></span><span class="ph">Ask anything</span><span class="cursor"></span><div class="send"></div></div></div><div class="convo"><div class="bubble">best roofer near me</div><div class="rowhi"></div><div class="answer"></div><div class="simlabel" style="position:absolute;left:44px;top:760px;font-size:26px;color:rgba(255,255,255,.5);opacity:0">Simulated example</div><div class="callchip"><div class="ic"></div><span>Calling Northside Roofing…</span></div><div class="tapring"></div></div></div></div>';
+  root.appendChild(phone);
+  const typed=$('.typed',phone), ph2=$('.ph',phone), cursor=$('.cursor',phone), send=$('.send',phone), newchat=$('.newchat',phone), convo=$('.convo',phone), answer=$('.answer',phone), rowhi=$('.rowhi',phone), tapring=$('.tapring',phone), callchip=$('.callchip',phone), bubble=$('.bubble',phone);
+  const QUERY='best roofer near me';
+  const LINES=[{t:'Top-rated roofers near you:'},{sp:true},{t:'1. <b>Northside Roofing Co.</b> <span class="star">★</span> 4.9',n:'1. Northside Roofing Co. ★ 4.9'},{t:'2. <b>Blue Valley Roofers</b> <span class="star">★</span> 4.8',n:'2. Blue Valley Roofers ★ 4.8'},{t:'3. <b>Hartley &amp; Sons Roofing</b> <span class="star">★</span> 4.7',n:'3. Hartley & Sons Roofing ★ 4.7'},{sp:true},{t:'Want their phone numbers?'}];
+  LINES.forEach(l=>{const d=el('ln'+(l.sp?' sp':''),l.sp?'':l.t); answer.appendChild(d);});
+  const lnEls=[...answer.children];
+  return {update(lt,t){
+    cutPunch(root,lt,0);
+    ph.set(lerp(1.10,1.16,lt/3),540,780);
+    // phone entry
+    const pe=eoc(seg(lt,0,.5)); const sc=lerp(1.07,1,pe)*lerp(1,1.03,lt/3); const ry=lerp(-9,0,pe);
+    phone.style.transform=`perspective(2400px) translateY(${lerp(40,0,pe)}px) rotateY(${ry}deg) scale(${sc})`;
+    // typing 0.12-1.15
+    const nch=Math.floor(seg(lt,.1,.78)*QUERY.length); typed.textContent=QUERY.slice(0,nch); ph2.style.display=nch>0?'none':'inline';
+    cursor.style.opacity=(Math.floor(lt*6)%2===0||lt<.9)?1:0;
+    const sendp=seg(lt,.82,.94); send.style.transform=`translateY(-50%) scale(${1-.18*Math.sin(sendp*Math.PI)})`; send.style.background=sendp>0&&sendp<1?'#FFC43D':'#fff';
+    const conv=lt>=.97; newchat.style.display=conv?'none':'block'; convo.style.display=conv?'block':'none';
+    if(conv){const bp=eoc(seg(lt,.97,1.15)); bubble.style.opacity=bp; bubble.style.transform=`translateY(${lerp(20,0,bp)}px)`;
+      let chars=Math.floor(seg(lt,1.12,1.95)*150); $('.simlabel',phone).style.opacity=seg(lt,1.6,1.8); lnEls.forEach((d,i)=>{const L=LINES[i]; if(L.sp){d.style.opacity=chars>0?1:0;return;} const n=(L.n||L.t).length; const show=clamp(chars,0,n); d.style.width=show>=n?'100%':(show/n*100)+'%'; d.style.opacity=show>0?1:0; chars-=n;});
+      // tap on row 1 at 2.5
+      const tp=seg(lt,2.15,2.45); tapring.style.left='300px'; tapring.style.top='497px'; tapring.style.opacity=tp>0&&tp<1?1-tp:0; tapring.style.transform=`translate(-50%,-50%) scale(${lerp(.3,1.4,eoc(tp))})`;
+      rowhi.style.top='462px'; rowhi.style.height='70px'; rowhi.style.opacity=lt>2.17?1:0;
+      const cp=eob(seg(lt,2.3,2.58),1.4); callchip.style.opacity=lt>2.3?1:0; callchip.style.transform=`translateY(${lerp(30,0,cp)}px) scale(${lerp(.9,1,cp)})`;}
+  }};
+});
+/* Scene 2: the sting 3-7 */
+scene(3,7,root=>{
+  const ph=photo(IMG.shop,{tint:'rgba(10,16,32,.42)',tint2:'rgba(10,16,32,.7)'}); root.appendChild(ph.root);
+  const lock=el('lock','<div class="date">Tuesday, October 27</div><div class="time">4:47</div><div class="nonote"><span>No missed calls</span><span>No new messages</span></div><div class="sheen"></div><div class="dim"></div>');
+  const raw=[[361,643],[606,635],[677,1197],[413,1214]]; const cx=raw.reduce((a,p)=>a+p[0],0)/4, cy=raw.reduce((a,p)=>a+p[1],0)/4; const corners=raw.map(([x,y])=>{const dx=x-cx,dy=y-cy,d=Math.hypot(dx,dy); return [(x+dx/d*26)*SX,(y+dy/d*26)*SY];});
+  lock.style.transform=m3d(homography([[0,0],[440,0],[440,1000],[0,1000]],corners)); ph.kb.appendChild(lock);
+  const dim=$('.dim',lock);
+  return {update(lt,t){cutPunch(root,lt,.05,.4); ph.set(lerp(1.0,1.15,eio(lt/4)),597,1062); dim.style.opacity=lerp(0,.55,seg(lt,2.2,3.4));}};
+});
+/* Scene 3: curiosity 7-11 */
+scene(7,11,root=>{
+  const ph=photo(IMG.ridge,{tint:'rgba(10,16,32,.72)',tint2:'rgba(10,16,32,.86)'}); root.appendChild(ph.root);
+  const kick=el('kicker','Customers now ask<br>ChatGPT · Gemini · Google AI'); kick.style.cssText='position:absolute;left:0;right:0;top:390px;opacity:0;font-size:36px;line-height:1.35;letter-spacing:.1em'; root.appendChild(kick);
+  const pill=el('querypill','<span class="ask">best</span><span class="q gold">roofer</span><span class="ask">near me</span><span class="cur"></span>'); root.appendChild(pill);
+  const q=$('.q',pill), cur=$('.cur',pill); const TYPES=['roofer','plumber','dentist','salon','bakery'];
+  return {update(lt,t){cutPunch(root,lt,.03,.4); ph.set(lerp(1.06,1.14,lt/4),540,1150);
+    kick.style.opacity=seg(lt,.3,.7); const pp=eoc(seg(lt,.5,.9)); pill.style.opacity=pp; pill.style.transform=`translateY(${lerp(30,0,pp)}px)`;
+    const i=Math.min(TYPES.length-1,Math.floor(Math.max(0,lt-.9)/.72)); q.textContent=TYPES[i]; cur.style.opacity=Math.floor(lt*5)%2===0?1:0;
+    const grow=lerp(1,1.03,seg(lt,3.3,4)); capEl.style.transform=`scale(${grow})`;}};
+});
+/* Scene 4: the fix 11-20 */
+function stepHeader(root,idx){const k=el('kicker','The fix'); k.style.cssText='position:absolute;left:0;right:0;top:280px'; root.appendChild(k); const st=el('steps','<i></i><i></i><i></i>'); [...st.children].forEach((i,j)=>{if(j<=idx)i.classList.add('on');}); root.appendChild(st);}
+scene(11,14,root=>{
+  const ph=photo(IMG.bakery,{tint:'rgba(10,16,32,.4)',tint2:'rgba(10,16,32,.74)'}); root.appendChild(ph.root); stepHeader(root,0);
+  const title=el('stitle','Free AI Check'), sub=el('ssub','We show you exactly what AI says'); root.append(title,sub);
+  const panel=el('panel','<div class="ph">We asked AI: “best bakery near me”</div>'); const rows=[['ChatGPT','Not mentioned'],['Gemini','Not mentioned'],['Google AI','Not mentioned']].map(([n,s])=>{const r=el('prow',`<span class="nm">${n}</span><span class="st">${s}</span>`); panel.appendChild(r); return r;}); root.appendChild(panel);
+  return {update(lt,t){cutPunch(root,lt,.05,.4); ph.set(lerp(1.04,1.12,lt/3),540,900);
+    const tp=eob(seg(lt,.05,.45),1.3); title.style.opacity=seg(lt,.05,.2); title.style.transform=`translateY(${lerp(30,0,tp)}px) scale(${lerp(.9,1,tp)})`;
+    const sp=eoc(seg(lt,.25,.6)); sub.style.opacity=sp; sub.style.transform=`translateY(${lerp(20,0,sp)}px)`;
+    const pp=eoc(seg(lt,.45,.85)); panel.style.opacity=pp; panel.style.transform=`translateY(${lerp(40,0,pp)}px)`;
+    rows.forEach((r,i)=>{const p=eoc(seg(lt,.9+i*.4,1.2+i*.4)); r.style.opacity=p; r.style.transform=`translateX(${lerp(40,0,p)}px)`;});}};
+});
+scene(14,17,root=>{
+  const ph=photo(IMG.reviews,{tint:'rgba(10,16,32,.42)',tint2:'rgba(10,16,32,.8)'}); root.appendChild(ph.root); stepHeader(root,1);
+  const title=el('stitle','We fix it'), sub=el('ssub','Profile · Reviews · Listings'); root.append(title,sub);
+  const panel=el('panel','<div class="ph">What we fix</div>'); const defs=[['Google Business Profile',null],['Reviews','tag'],['Listings',null]];
+  const rows=defs.map(([n,x])=>{const r=el('crow',`<div class="box"></div><span class="nm">${n}</span>${x?'<span class="tag">new reviews ↑</span>':''}`); panel.appendChild(r); return r;}); root.appendChild(panel);
+  const T=[.72,1.52,2.12];
+  return {update(lt,t){cutPunch(root,lt,.05,.4); ph.set(lerp(1.0,1.09,lt/3),540,1000);
+    const tp=eob(seg(lt,.05,.45),1.3); title.style.opacity=seg(lt,.05,.2); title.style.transform=`translateY(${lerp(30,0,tp)}px) scale(${lerp(.9,1,tp)})`;
+    const sp=eoc(seg(lt,.25,.6)); sub.style.opacity=sp; sub.style.transform=`translateY(${lerp(20,0,sp)}px)`;
+    const pp=eoc(seg(lt,.1,.35)); panel.style.opacity=pp; panel.style.transform=`translateY(${lerp(40,0,pp)}px)`;
+    rows.forEach((r,i)=>{const p=eoc(seg(lt,.15+i*.08,.4+i*.08)); r.style.opacity=p; r.style.transform=`translateX(${lerp(40,0,p)}px)`;
+      const box=$('.box',r); const cp=seg(lt,T[i],T[i]+.25); box.classList.toggle('ok',cp>0); box.style.transform=`scale(${1+.25*Math.sin(cp*Math.PI)})`;
+      const tag=$('.tag',r); if(tag){tag.style.opacity=seg(lt,T[i]+.1,T[i]+.35);}});}};
+});
+scene(17,20,root=>{
+  const ph=photo(IMG.salon,{tint:'rgba(10,16,32,.45)',tint2:'rgba(10,16,32,.8)'}); root.appendChild(ph.root); stepHeader(root,2);
+  const title=el('stitle','AI recommends <span style="color:#fff">YOU</span>'), sub=el('ssub','Your phone lights up'); root.append(title,sub);
+  const phone=el('phone'); phone.style.cssText='left:160px;top:640px;transform-origin:50% 0;'; phone.innerHTML='<div class="island"></div><div class="screen" style="background:linear-gradient(180deg,#0e1a33,#080e1e)"><div class="notif n1" style="top:400px"><div class="ic"></div><div class="tx"><b>Incoming call</b><span>New customer · (555) 014-2290</span></div><div class="ago">now</div></div><div class="notif n2" style="top:555px"><div class="ic msg"></div><div class="tx"><b>New message</b><span>“Can you come out Tuesday?”</span></div><div class="ago">now</div></div><div class="notif n3" style="top:710px"><div class="ic"></div><div class="tx"><b>Incoming call</b><span>New customer · (555) 020-7718</span></div><div class="ago">now</div></div></div>'; root.appendChild(phone);
+  const glow=el('glow'); glow.style.cssText='left:540px;top:1060px;width:1200px;height:1200px'; root.appendChild(glow);
+  const ns=[$('.n1',phone),$('.n2',phone),$('.n3',phone)]; const NT=[1.35,1.75,2.15];
+  const flip=el('flip','<div class="face before">Not mentioned</div><div class="face after">Recommended ✓</div>'); root.appendChild(flip); const before=$('.before',flip), after=$('.after',flip);
+  return {update(lt,t){cutPunch(root,lt,.05,.4); ph.set(lerp(1.06,1.14,lt/3),650,860);
+    const tp=eob(seg(lt,.05,.45),1.3); title.style.opacity=seg(lt,.05,.2); title.style.transform=`translateY(${lerp(30,0,tp)}px) scale(${lerp(.9,1,tp)})`;
+    const sp=eoc(seg(lt,.25,.6)); sub.style.opacity=sp; sub.style.transform=`translateY(${lerp(20,0,sp)}px)`;
+    const pe=eoc(seg(lt,.12,.5)); phone.style.transform=`translateY(${lerp(60,0,pe)}px) scale(${lerp(.62,.66,pe)})`; phone.style.opacity=seg(lt,.12,.3);
+    // before/after card first: in at 17.35, flip 17.8-18.2
+    const fin=eoc(seg(lt,.35,.6)); flip.style.opacity=seg(lt,.35,.42); flip.style.transform=`translateY(${lerp(50,0,fin)}px)`;
+    const fp=eio(seg(lt,.8,1.2)); const ang=fp*180; before.style.transform=`rotateX(${ang}deg)`;
+    after.style.transform=`rotateX(${ang-180}deg) scale(${lerp(1,1.05,Math.sin(seg(lt,1.15,1.55)*Math.PI))})`;
+    // then the phone lights up
+    let g=0; ns.forEach((n,i)=>{const p=eob(seg(lt,NT[i],NT[i]+.35),1.5); n.style.opacity=seg(lt,NT[i],NT[i]+.12); n.style.transform=`translateY(${lerp(-30,0,p)}px) scale(${lerp(.96,1,p)})`; g=Math.max(g,Math.sin(seg(lt,NT[i],NT[i]+.7)*Math.PI));}); glow.style.opacity=g*.9;}};
+});
+/* Scene 5: the no-brainer 20-26.45 */
+scene(20,26.5,root=>{
+  const ph=photo(IMG.street,{tint:'rgba(10,16,32,.55)',tint2:'rgba(10,16,32,.8)'}); root.appendChild(ph.root);
+  const glow=el('glow'); glow.style.cssText='left:540px;top:790px'; root.appendChild(glow);
+  const price=el('price','<div class="lead">Plans start at just</div><div class="amt">$39.99</div><div class="per">a month</div>'); root.appendChild(price);
+  const lead=$('.lead',price), amt=$('.amt',price), per=$('.per',price);
+  const badge=el('badge'); const L5c=VO.lines.find(l=>l.id==='L5c'); L5c.tokens.forEach(tk=>{const s=el('tok'+(['free.'].includes(tk.w)?' gold':''),tk.w,'span'); s.dataset.s=tk.s; s.dataset.e=tk.e; badge.appendChild(s);}); root.appendChild(badge);
+  const qual=el('qual','Second month free: <b>Growth ($75) &amp; Pro ($125)</b> plans only.<br>No contract. Cancel anytime.'); root.appendChild(qual);
+  const L5b=VO.lines.find(l=>l.id==='L5b'); const tPrice=L5b.tokens.find(t=>t.w==='$39.99').s, tLead=L5b.tokens[0].s, tPer=L5b.tokens.find(t=>t.w==='a').s;
+  return {update(lt,t){cutPunch(root,lt,.05,.4); ph.set(lerp(1.0,1.08,lt/6.5),540,1000);
+    const show=t>=21.83; price.style.display=show?'block':'none';
+    if(show){const lp=eoc(seg(t,tLead,tLead+.3)); lead.style.opacity=lp; lead.style.transform=`translateY(${lerp(20,0,lp)}px)`;
+      const pp=seg(t,tPrice,tPrice+.5); const e=eob(pp,2.0); amt.style.opacity=pp>0?1:0; amt.style.transform=`scale(${lerp(.35,1,e)})`; glow.style.opacity=pp>0?Math.sin(seg(t,tPrice,tPrice+.9)*Math.PI)*.9+.25:0;
+      const rp=eoc(seg(t,tPer,tPer+.3)); per.style.opacity=rp; per.style.transform=`translateY(${lerp(16,0,rp)}px)`;}
+    const bp=eob(seg(t,24.45,24.8),1.6); badge.style.display=t>=24.45?'flex':'none'; badge.style.opacity=seg(t,24.45,24.6); badge.style.transform=`translateY(${lerp(40,0,bp)}px) scale(${lerp(.9,1,bp)})`;
+    [...badge.children].forEach(tk=>{tk.style.opacity=1; tk.style.transform='none';});
+    qual.style.opacity=seg(t,24.75,25.05);
+    capEl.style.transform='';}};
+});
+/* Scene 6: one step 26.45-30 */
+scene(26.5,30.001,root=>{
+  const ph=photo(IMG.ridge,{tint:'rgba(10,16,32,.45)',tint2:'rgba(10,16,32,.82)'}); root.appendChild(ph.root);
+  const warm=el(''); warm.style.cssText='position:absolute;inset:0;background:radial-gradient(60% 40% at 50% 46%,rgba(255,196,61,.28),rgba(255,196,61,0) 100%)'; root.appendChild(warm);
+  const logo=el('logo',LOGO), wm=el('wordmark','Ridgeline<small>Local</small>'), url=el('url','ridgelinehq.github.io'), cta=el('cta','<span>Get your FREE AI check</span><span class="arrow">→</span>'), sub2=el('sub2','No card. No call. Free.'); root.append(logo,wm,url,cta,sub2);
+  return {update(lt,t){cutPunch(root,lt,.04,.4); ph.set(lerp(1.14,1.06,eio(lt/3.5)),540,1100);
+    const lp=eob(seg(lt,.05,.55),1.4); logo.style.opacity=seg(lt,.05,.25); logo.style.transform=`translateX(-50%) scale(${lerp(.6,1,lp)}) rotate(${lerp(-8,0,lp)}deg)`;
+    const wp=eoc(seg(lt,.3,.7)); wm.style.opacity=wp; wm.style.transform=`translateY(${lerp(24,0,wp)}px)`;
+    const up=eoc(seg(lt,.55,.9)); url.style.opacity=up; url.style.transform=`translateY(${lerp(16,0,up)}px)`;
+    const cp=eob(seg(lt,.8,1.25),1.7); cta.style.opacity=seg(lt,.8,.95); const pulse=lt>1.3?1+.025*Math.sin((lt-1.3)*2*Math.PI/1.2):1; cta.style.transform=`scale(${lerp(.7,1,cp)*pulse})`;
+    const gl=lt>1.3?.5+.5*Math.sin((lt-1.3)*2*Math.PI/1.2):0; cta.style.boxShadow=`0 30px 70px rgba(0,0,0,.5),0 0 ${lerp(20,70,gl)}px rgba(255,196,61,${lerp(.25,.6,gl)})`;
+    sub2.style.opacity=seg(lt,1.3,1.6);}};
+});
+/* ---------- AURORA / FLASH ---------- */
+const b1=$('.aurora .b1'), b2=$('.aurora .b2'), flash=$('#flash');
+const CUTS=[3,7,11,14,17,20,26.5];
+function updateFx(t){b1.style.transform=`translate(${-300+220*Math.sin(t*.37)}px,${200+180*Math.cos(t*.29)}px)`; b2.style.transform=`translate(${500+200*Math.cos(t*.23+1)}px,${900+260*Math.sin(t*.31+2)}px)`;
+  let f=0; for(const c of CUTS){const p=seg(t,c,c+.14); if(p>0&&p<1) f=Math.max(f,.14*(1-p));} flash.style.opacity=f;}
+window.seek=function(t){window.__t=t; for(const s of scenes){const on=t>=s.t0&&t<s.t1; s.root.style.display=on?'block':'none'; if(on) s.update(t-s.t0,t);} if(t<7||t>=11) capEl.style.transform=''; updateCaptions(t); updateFx(t);};
+Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>{ if(document.fonts) return document.fonts.load('800 76px "Inter Display"').then(()=>document.fonts.load('600 40px "Inter"')); }).then(()=>{window.seek(0); window.__ready=true;});
+</script></body></html>

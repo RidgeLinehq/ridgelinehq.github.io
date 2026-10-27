@@ -1,0 +1,109 @@
+{
+ "voice_note": "Confident, calm, natural male. Serious 0-10s, warm/upbeat after the fix.",
+ "lines": [
+  {
+   "id": "L1",
+   "scene": "0-3 pattern interrupt",
+   "start": 0.55,
+   "end_by": 2.95,
+   "tts": "Your customer just picked your competitor.",
+   "caption": "Your customer just picked your competitor."
+  },
+  {
+   "id": "L2",
+   "scene": "3-7 the sting",
+   "start": 3.25,
+   "end_by": 6.8,
+   "tts": "They asked A.I. who to call... and it didn't say you.",
+   "caption": "They asked AI who to call... and it didn't say you."
+  },
+  {
+   "id": "L3",
+   "scene": "7-11 curiosity",
+   "start": 7.45,
+   "end_by": 10.3,
+   "tts": "So... what does ChatGPT say about your business?",
+   "caption": "So... what does ChatGPT say about your business?"
+  },
+  {
+   "id": "L4a",
+   "scene": "11-14 step 1",
+   "start": 11.2,
+   "end_by": 13.9,
+   "tts": "Here's the fix. First, a free A.I. check.",
+   "caption": "Here's the fix. First, a free AI check."
+  },
+  {
+   "id": "L4b",
+   "scene": "14-17 step 2",
+   "start": 14.2,
+   "end_by": 16.9,
+   "tts": "Then we fix your profile, your reviews, your listings.",
+   "caption": "Then we fix your profile, your reviews, your listings."
+  },
+  {
+   "id": "L4c",
+   "scene": "17-20 step 3",
+   "start": 17.2,
+   "end_by": 19.6,
+   "tts": "So A.I. can start recommending you.",
+   "caption": "So AI can start recommending you."
+  },
+  {
+   "id": "L5a",
+   "scene": "20-22 anchor",
+   "start": 20.15,
+   "end_by": 22.0,
+   "tts": "One new customer pays for it.",
+   "caption": "One new customer pays for it."
+  },
+  {
+   "id": "L5b",
+   "scene": "22-24.5 price",
+   "start": 21.85,
+   "end_by": 24.45,
+   "tts": "Plans start at just thirty-nine ninety-nine a month.",
+   "caption": "Plans start at just $39.99 a month.",
+   "map": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     6
+    ],
+    [
+     7
+    ]
+   ]
+  },
+  {
+   "id": "L5c",
+   "scene": "24.5-26 guarantee",
+   "start": 24.5,
+   "end_by": 26.2,
+   "tts": "No boost? Second month's free.",
+   "caption": "No boost? Second month's free."
+  },
+  {
+   "id": "L6",
+   "scene": "26-30 one step",
+   "start": 26.6,
+   "end_by": 29.5,
+   "tts": "Find out what A.I. says about you. It's free.",
+   "caption": "Find out what AI says about you. It's free."
+  }
+ ]
+}

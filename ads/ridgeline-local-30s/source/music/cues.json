@@ -1,0 +1,166 @@
+{
+  "bpm": 120.0,
+  "key": "D minor intro -> F major (relative major) drop; F / Bb / C / Dm | F / Bb / C -> F",
+  "sections": [
+    {
+      "name": "pattern_interrupt",
+      "start": 0.0,
+      "end": 3.0
+    },
+    {
+      "name": "sting_tension",
+      "start": 3.0,
+      "end": 7.0
+    },
+    {
+      "name": "pause",
+      "start": 7.0,
+      "end": 9.6
+    },
+    {
+      "name": "riser",
+      "start": 9.6,
+      "end": 11.0
+    },
+    {
+      "name": "drop_fix_steps",
+      "start": 11.0,
+      "end": 20.0
+    },
+    {
+      "name": "price_reveal",
+      "start": 20.0,
+      "end": 26.0
+    },
+    {
+      "name": "end_card",
+      "start": 26.0,
+      "end": 30.0
+    }
+  ],
+  "hits": [
+    {
+      "t": 0.0,
+      "what": "sub_boom"
+    },
+    {
+      "t": 3.0,
+      "what": "sting"
+    },
+    {
+      "t": 11.0,
+      "what": "drop_hit"
+    },
+    {
+      "t": 11.0,
+      "what": "step_bell_C5"
+    },
+    {
+      "t": 14.0,
+      "what": "step_bell_F5"
+    },
+    {
+      "t": 17.0,
+      "what": "step_bell_G5"
+    },
+    {
+      "t": 20.0,
+      "what": "price_pop"
+    },
+    {
+      "t": 26.0,
+      "what": "resolve_F_major"
+    },
+    {
+      "t": 28.0,
+      "what": "drums_out"
+    }
+  ],
+  "kicks": [
+    12.0,
+    12.5,
+    13.0,
+    13.5,
+    14.0,
+    14.5,
+    15.0,
+    15.5,
+    16.0,
+    16.5,
+    17.0,
+    17.5,
+    18.0,
+    18.5,
+    19.0,
+    19.5,
+    20.0,
+    20.5,
+    21.0,
+    21.5,
+    22.0,
+    22.5,
+    23.0,
+    23.5,
+    24.0,
+    24.5,
+    25.0,
+    25.5,
+    26.0,
+    26.5,
+    27.0,
+    27.5
+  ],
+  "steps": [
+    11.0,
+    14.0,
+    17.0
+  ],
+  "chords": [
+    {
+      "t": 11.0,
+      "chord": "C"
+    },
+    {
+      "t": 12.0,
+      "chord": "F"
+    },
+    {
+      "t": 14.0,
+      "chord": "Bb"
+    },
+    {
+      "t": 16.0,
+      "chord": "C"
+    },
+    {
+      "t": 18.0,
+      "chord": "Dm"
+    },
+    {
+      "t": 20.0,
+      "chord": "F"
+    },
+    {
+      "t": 22.0,
+      "chord": "Bb"
+    },
+    {
+      "t": 24.0,
+      "chord": "C"
+    },
+    {
+      "t": 26.0,
+      "chord": "F (end card, add9)"
+    }
+  ],
+  "accent_times": [
+    0.0,
+    3.0,
+    11.0,
+    14.0,
+    17.0,
+    20.0,
+    26.0,
+    28.0
+  ]
+}
