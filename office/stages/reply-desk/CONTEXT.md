@@ -72,6 +72,12 @@ Website forms arrive from FormSubmit (submissions@formsubmit.co or similar) as a
 "Free AI check request — <business>" is Lane A case a: the person's address is the form's
 `email` field; send the check as a NEW message to that address (never reply to FormSubmit).
 "Onboarding — ..." belongs to Lane C and "Lead for ..." to Lane G: skip them here.
+"Pricing question — <name or business>" (the website's "Call me about pricing" form, Oct 27,
+2026): the person wants Grayson to CALL them. Send NO email (FormSubmit already auto-replied with
+the plans when they gave an email). Create or update the lead (contactName = `name`, businessName
+if given, phone, contactEmail if given, emailSource "website contact form", status Replied, replyGist
+= their question or "wants pricing", source "website contact form"), write the inbox doc (Lane J,
+kind "pricing"), a Lane F line, and label the thread handled.
 A form whose business is "TEST ignore" is Grayson testing: label it handled, send nothing.
 A FormSubmit "Activate your form" / confirmation email: alert Grayson once (shared/alerts.md
 "FormSubmit not activated"); website forms fall back to email until he taps it.
@@ -95,6 +101,26 @@ A FormSubmit "Activate your form" / confirmation email: alert Grayson once (shar
 Then label the thread Ridgeline-Handled. If no lead matches the sender, create
 leads/<town>-<st>-<slug> from the thread (businessName, contactEmail, emailSource "reply",
 town, state if known, trade, status, source "reply desk").
+
+## Lane J: the Inbox on the office page (every run; Grayson, Oct 27, 2026: "show me the people
+## contacting me, so I can call them about pricing")
+Every thread a real person started that this run handled in Lane A, B, C, C2 or I (website forms
+and real emails; never Stripe, GitHub, Google, FormSubmit system mail, newsletters or auto-replies)
+gets ONE doc `inbox/in-<gmail thread id>` so Grayson sees it under Inbox with a Call button:
+{name, businessName, phone, email, town, message (their words, under 600 chars, from the form's
+question field or the email body without quoted history or signatures), bestTime (form's
+best_time or ""), kind: "pricing" (Pricing question form, or an email asking the price), "freecheck"
+(Free AI check form), "onboarding" (Onboarding form / new client), "reply" (any other email from a
+person), source "website form"|"email", subject, receivedAt (the first message's date, ISO UTC),
+gmailThreadId, gmailUrl (the thread's viewUrl from get_thread), leadId (or clientId) when one exists, handled (one line of what the crew already did,
+e.g. "Free AI check emailed 2:14 PM" or "Plans + Growth checkout link emailed"; "" when nothing),
+status "New", notes "", createdAt, updatedAt}.
+- Only create, with `set` and no if_version. If the doc already exists (a get finds it), never
+  touch status or notes (those are Grayson's): only update `handled` (pass if_version) when this
+  run did something new, and set status back to "New" only if the person wrote again after
+  Grayson marked it Done.
+- A suppressed sender, a "TEST ignore" form and Grayson's own emails get no inbox doc.
+- Grayson's test submissions with business or name "TEST ignore" get `test: true` if written at all.
 
 ## Lane B: the free AI check (specs/free-check.md is the law; do it inside this run)
 1. Collect this run's requests: Lane A case a; plus Lane E requests from Grayson.
@@ -282,6 +308,7 @@ pass every email gate. This desk never sends them.
 - Every alert from shared/alerts.md goes to the Ridgeline Gmail by email AND as one line here.
 - "🔥 Ridgeline: <business> said YES. Free check sent: <named|not named> by ChatGPT." (one line each; group up to 3)
 - "💬 Ridgeline: <business> asked the price. Offer + payment link sent."
+- "📞 Ridgeline: <name> (<business>) wants a call about pricing: <phone>, best <time>. It's in your Inbox."
 - "📬 Ridgeline: delivered <kit|plan|post|report> to <business>."
 - "⚠️ Ridgeline: <business> wrote something I didn't answer: <gist in 10 words>. Gmail has the thread."
 - "⚠️ Ridgeline: AI check gateway failed for <business>; retrying next run." (once per business)
@@ -299,6 +326,7 @@ Nothing new → send nothing. At most 4 short lines per message.
 | Where | What |
 |---|---|
 | leads/<id> | status, replyGist, freeCheck, aiCheck, gmailThreadId, followUp (Lane I) |
+| inbox/in-<threadId> | one per person who reached out (Lane J); the office page's Inbox |
 | drafts/<id> | freecheck sent; client drafts sent with evidence |
 | clients/<id> | new clients, onboarding facts, baseline, guarantee, reviewLink, reviewCard, customers, managerAccess, work[] |
 | leadlog/<id> | every lead (Lane G), jobAnswer, sentToClientAt |

@@ -41,6 +41,7 @@ files; the database holds the business.
 | tasks/<id> | a queued job (from the page or from Mara) | Mara claims and finishes; Patch retries once |
 | approvals/<id> | something waiting for Grayson that is not a draft (a cap raise, a setting, a spend) | the crew creates; Grayson decides on the page |
 | suppression/<id> | an address or business never to contact again | Echo, Sage, Grayson |
+| inbox/in-<threadId> | a person who reached out (website form or email), shown on the page's Inbox with a Call button | reply desk creates (Lane J); Grayson sets status (New, Called, Left voicemail, Emailed, Done) and notes |
 | clients/<id> | a paying client and its monthly work | Sage creates from a payment; Grayson edits |
 | lessons/<id> | one lesson with evidence and confidence | Sage; Grayson on the page |
 | workflow/<version> | a proposed change to how a stage works, its prediction, its result | Sage |
