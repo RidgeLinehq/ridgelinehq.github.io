@@ -84,8 +84,7 @@ A FormSubmit "Activate your form" / confirmation email: alert Grayson once (shar
   an alert "checkout links not live"), "Want me to start today?". After paying they fill the
   short form; that's the whole onboarding. Lead status Meeting.
 - b2. "Start <plan>" emails from start.html (checkout wasn't live yet): reply with the plan's
-  checkout link once data/stripe-links.json has it; if still empty, reply "Your spot is held,
-  I'll send the secure link within the day" and alert Grayson (key checkout-not-live-<day>).
+  checkout link once data/stripe-links.json has it; if still empty, reply "I'll send the secure link within the day" and alert Grayson (key checkout-not-live-<day>).
 - c. a question or doubt (scam? guarantee? how long?): answer honestly from the offer, one easy
   next step. Lead status Replied.
 - d. not interested / stop / unsubscribe / remove: one polite line ("Understood, I won't reach

@@ -7,7 +7,7 @@ until that folder's CONTEXT.md tells you to.
 |---|---|---|
 | Ridgeline Office · Day Shift | `stages/day-shift/` | The daily run: Scout finds businesses, Quinn scores, Parker picks the angle, Echo writes and (when allowed) sends, Nova writes video briefs, Sage learns from replies, Patch checks health, Mara reports |
 | Ridgeline · reply desk | `stages/reply-desk/` | Every 2 hours, every day: emails alerts, answers prospect replies, runs and sends the free AI check, signs up paying clients (onboarding form, baseline AI check), runs the day-28 guarantee check and Stripe credit, logs leads, emails the crew's client work (`stages/reply-desk/CONTEXT.md`) |
-| Ridgeline · Lead Finder | `stages/lead-finder/` | 8:23 AM and 4:23 PM Central, every day: finds, logs and sends leads for every Growth and Pro client (`stages/lead-finder/CONTEXT.md`) |
+| Ridgeline · Lead Finder | `stages/lead-finder/` | 8:23 AM and 4:23 PM Central, every day: finds, logs and sends leads for every Pro client (`stages/lead-finder/CONTEXT.md`) |
 | The week's standing order (Oct 23-30, 2026) | `specs/push-week-2026-10-23.md` | Mission numbers, daily targets per agent, the scoreboard, Grayson's taps; Mara loads it at stages 00 and 08 |
 | A task assigned from the office page (tasks collection, status queued) | `stages/day-shift/CONTEXT.md` section "Assigned tasks" | Grayson queued a one-off job for a named agent |
 

@@ -1,4 +1,4 @@
-# Lead Finder: leads for every Growth and Pro client, twice a day, every day
+# Lead Finder: leads for every Pro client, twice a day, every day
 
 Grayson's standing order (Oct 24, 2026): "make sure we are sending agents to get them more leads
 if they buy for that package." This task runs at 8:23 AM and 4:23 PM Central, every day
@@ -11,10 +11,10 @@ the reply desk answers emails and the Day Shift does the rest of the client work
 | specs/lead-tracking.md | all (the ONLY allowed sources and the NEVER list) |
 | specs/quality.md | Leads, Format |
 | shared/alerts.md | all |
-| database: clients where status == active and plan in (growth, pro) (out_dir); leadlog for them, last 45 days (out_dir); suppression | |
+| database: clients where status == active and plan == pro (out_dir); leadlog for them, last 45 days (out_dir); suppression | |
 
 ## Process
-0. No active Growth/Pro client → write the run-log line ("no lead clients") and stop. Cheap.
+0. No active Pro client → write the run-log line ("no lead clients") and stop. Cheap.
 1. Per client: the search plan, kept on the client as `leadSearch` (build it the first time,
    improve it every run): their kind of business + 3 to 5 words customers use for it (services,
    synonyms, problems: "haircut", "fade", "beard trim"), their town + every town within about 20
@@ -33,7 +33,7 @@ the reply desk answers emails and the Day Shift does the rest of the client work
    and the near-misses with counted false + why.
 5. Send (specs/lead-tracking.md "Sending leads to the client", specs/quality.md "Leads"):
    Pro = each new lead at once, one email each, subject "New lead: <their ask in 6 words>";
-   Growth = one email with all of this run's new leads.
+   Growth clients get no lead emails (leads are sold on Pro only, Grayson Oct 27, 2026).
    NO GMAIL TOOL in this session (the scheduled task may run without the Gmail connector): write
    each email as a drafts doc kind "leads", status "ready", clientId, priority true for Pro, with
    the finished subject + body + leadlog ids; the reply desk (hourly, Lane D) sends it and records

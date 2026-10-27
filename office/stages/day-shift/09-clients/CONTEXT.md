@@ -2,7 +2,7 @@
 
 Grayson's standing order (Oct 24, 2026): for every paying client the crew automatically
 optimizes their Google profile and tracks changes, runs review requests to their REAL customers,
-re-checks AI visibility weekly and logs the trend, finds and sends leads (Growth/Pro), and flags
+re-checks AI visibility weekly and logs the trend, finds and sends leads (Pro), and flags
 any client whose numbers are flat after 2 weeks and tries new fixes on its own. No approvals.
 The reply desk owns signup, baseline, the day-28 guarantee check and lead intake; this stage
 owns the work.
@@ -39,7 +39,7 @@ owns the work.
    Compare with client.audit and the fixes sent; append changes to client.profileLog
    [{at, field, before, after, source}]; reviewsNow = the public count with its date. A fix
    not live after 7 days → one nudge draft (kind "fix") with just that step.
-5. **Lead Finder** (Growth, Pro): the dedicated Lead Finder task (stages/lead-finder/, twice a day, every day) owns this. Here, only check its last run line in office/runlog.jsonl is under 14 hours old (else alert) and fold its stats into the report. The steps below are its fallback if it hasn't run today:
+5. **Lead Finder** (Pro only): the dedicated Lead Finder task (stages/lead-finder/, twice a day, every day) owns this. Here, only check its last run line in office/runlog.jsonl is under 14 hours old (else alert) and fold its stats into the report. The steps below are its fallback if it hasn't run today:
    a. Reddit: one lead-finder job for all due clients: `office/leadfinder/jobs/lf-<day>-<4 hex>.json`
       = {"id", "searches":[{"key":"<town>-<st>-<trade slug>", "town", "state", "terms":[3 to 5
       words people use for their service], "subreddits":[the town's and the nearest city's
@@ -50,11 +50,11 @@ owns the work.
       Nextdoor or anything behind a login). Use only the result's URL, title and snippet.
    c. Every real ask → leadlog row (specs/lead-tracking.md), dedupe by URL. counted true only
       when it is a person asking for what the client sells in/near their town.
-   d. New counted leads → drafts kind "leads" (Growth: one email per run; Pro: one per lead,
+   d. New counted leads (Pro only) → drafts kind "leads" (one per lead,
       priority). The desk sends them within 2 hours; Pro leads found in this run also go out in
       this run if the Gmail send tool is available here (record the id), else the desk's next run.
 6. **Flat check** (client day 14+, every 14 days): FLAT = no aiTrend point above baseline AND
-   (Growth/Pro) 0 counted leads AND reviews gained 0 or unknown. Flat → pick the next 2 untried
+   (Pro) 0 counted leads AND reviews gained 0 or unknown. Flat → pick the next 2 untried
    fixes from the ladder in client-delivery.md, do them in this run (draft what goes to the
    owner as kind "fix", add searches, etc.), record client.fixesTried. Also add the line
    "<business> flat at day N; tried: <fix>, <fix>" to the run notes for the morning report.

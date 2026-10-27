@@ -68,7 +68,7 @@ Clients get designed deliverables, not walls of instructions:
 - Instantly: the form sends the buyer a confirmation email (FormSubmit autoresponse). Within the hour of the onboarding form: the baseline score email AND the profile fixes AND the
   review kit (the reply desk builds and sends these in the same run; Day Shift 09 refines later).
 - Pro lead page live within 24 hours of onboarding.
-- New leads: Growth same day, Pro the run they are found.
+- New leads (Pro only): the run they are found.
 - Nothing ready sits undelivered more than 2 hours (the reply desk sends every ready item each run; a send that fails is an alert).
 
 ## Learn from every client

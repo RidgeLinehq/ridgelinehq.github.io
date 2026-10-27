@@ -44,7 +44,7 @@ prospects, no backups.
 | Day Shift (all workers) | office/skills/<own agent>/SKILL.md ("What I've learned" lines, or a proven rewrite of "Exact steps" after Sage's go), office/LESSONS.md, office/playbooks/, office/stages/day-shift/output/, office/runlog.jsonl |
 | Sage | the above plus office/skills/*/SKILL.md "Exact steps" (only when a workflow/<version> doc says adopted) |
 | Patch | the above plus index.html (a broken element only, after a 3-line plan and a before/after check; never copy, prices or the offer), office/health/ (site check outputs) |
-| Reply desk | office/runlog.jsonl, office/gw/jobs/, office/cards/jobs/, office/stripe/jobs/ (guarantee, cancel, lookup), office/alerts/ (emailed flags), data/founding.json (spotsLeft only), office/landing/ + p/<slug>/ (Pro lead pages) |
+| Reply desk | office/runlog.jsonl, office/gw/jobs/, office/cards/jobs/, office/stripe/jobs/ (guarantee, cancel, lookup), office/alerts/ (emailed flags), office/landing/ + p/<slug>/ (Pro lead pages) |
 | Day Shift 09 (Clients) | the Day Shift paths plus office/gw/jobs/, office/leadfinder/jobs/, office/landing/ + p/<slug>/, office/studio/out/clients/ |
 | Server work (only when Grayson asks for it in chat) | office/server/ |
 

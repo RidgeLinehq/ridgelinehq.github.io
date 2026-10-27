@@ -85,7 +85,7 @@ Ran your check. I asked ChatGPT and Gemini "Who are the best <trade phrase> in <
 ChatGPT named <1>, <2>, <3>. Gemini named <1>, <2>, <3>. <Business> was <named by
 both|named by ChatGPT only|named by Gemini only|not named by either>.
 Three things I'd fix first: <fix 1 short>; <fix 2 short>; <fix 3 short>.
-I can fix all of it from $39.99/mo, month to month. Growth ($75/mo) also sends you leads, and if
+I can fix all of it from $39.99/mo, month to month. Pro ($125/mo) also sends you leads, and on Growth and Pro, if
 the first month brings zero tracked leads and no AI improvement, month 2 is free. Plans:
 ridgelinehq.github.io/#pricing. Want me to start?
 ```

@@ -67,7 +67,9 @@ h1,h2,h3,h4,p,ul,ol,figure{margin:0}
 h1,h2{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:1.02;text-wrap:balance;font-variation-settings:"opsz" 96}
 h2{font-size:clamp(2.1rem,4.4vw,3.4rem)}
 h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-.02em;line-height:1.2}
-:where(a,button,summary,input,select,textarea):focus-visible{outline:3px solid #b98f4a;outline-offset:3px;border-radius:6px}
+:where(a,button,summary,input,select,textarea):focus-visible{outline:3px solid var(--brass-text);outline-offset:3px;border-radius:6px}
+.on-dark :where(a,button):focus-visible,.close :where(a,button):focus-visible,.sticky-cta a:focus-visible{outline-color:var(--brass)}
+.form :where(a,button,input):focus-visible{outline-color:var(--brass-text)}
 [hidden]{display:none!important}
 .wrap{width:min(var(--max),calc(100% - 48px));margin-inline:auto}
 .section{padding-block:clamp(64px,8vw,112px);position:relative}
@@ -109,9 +111,10 @@ h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-
 /* ---------- nav ---------- */
 .nav{position:sticky;top:0;z-index:50;background:rgba(246,242,232,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s,background .3s}
 .nav.scrolled{background:rgba(255,253,249,.92);border-bottom-color:var(--line);box-shadow:0 6px 24px rgba(20,47,39,.06)}
-.progress{position:absolute;left:0;bottom:-1px;height:3px;width:0;background:linear-gradient(90deg,var(--brass),var(--brass-num));transition:width .1s linear}
+.progress{position:absolute;left:0;bottom:-1px;height:3px;width:100%;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,var(--brass),var(--brass-num));transition:transform .1s linear}
+.anim-off,.anim-off *,.anim-off *::before,.anim-off *::after{animation-play-state:paused!important}
 .nav-in{height:70px;display:flex;align-items:center;justify-content:space-between;gap:18px}
-.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:1.1rem;letter-spacing:-.02em;white-space:nowrap;text-decoration:none;color:var(--forest)}
+.brand{display:flex;align-items:center;min-height:44px;gap:10px;font-family:var(--display);font-weight:800;font-size:1.1rem;letter-spacing:-.02em;white-space:nowrap;text-decoration:none;color:var(--forest)}
 .brand svg{width:36px;height:36px;color:var(--forest)}
 .brand small{font-family:var(--body);font-weight:600;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--brass-text);margin-left:2px}
 .nav-links{display:flex;align-items:center;gap:28px}
@@ -123,6 +126,7 @@ h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-
 .menu-btn svg{width:20px;height:20px}
 .sheet{display:none}
 @media(max-width:860px){
+  .nav-links{gap:12px}
   .nav-links a:not(.btn){display:none}
   .menu-btn{display:grid}
   .sheet{display:block;position:fixed;inset:var(--navh,70px) 0 0;z-index:49;background:var(--ivory);padding:20px 24px calc(24px + env(safe-area-inset-bottom));transform:translateY(-8px);opacity:0;visibility:hidden;transition:opacity .25s,transform .3s var(--ease),visibility .25s;overflow:auto}
@@ -141,13 +145,18 @@ h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-
 .hero .contours{left:-140px;bottom:-120px}
 .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,470px);gap:clamp(32px,5vw,72px);align-items:center;padding:clamp(64px,8vw,112px) 0 clamp(56px,7vw,96px)}
 .hero h1{font-size:clamp(2.6rem,5.6vw,4.7rem);margin:22px 0 22px;color:var(--forest)}
-.hero h1 .w{display:inline-block;opacity:0;transform:translateY(.55em) rotate(2deg);animation:wordUp .8s var(--ease) forwards;animation-delay:calc(.15s + var(--i)*.055s)}
+.hero h1 .w{display:inline-block}
+.js-anim .hero h1 .w{opacity:0;transform:translateY(.55em) rotate(2deg)}
+.js-anim.fonts-in .hero h1 .w{animation:wordUp .8s var(--ease) forwards;animation-delay:calc(.15s + var(--i)*.055s)}
 .hero h1 .hi{color:var(--brass-num);position:relative}
-.hero h1 .hi::after{content:"";position:absolute;left:0;right:0;bottom:.04em;height:.14em;background:var(--brass);opacity:.55;border-radius:3px;transform:scaleX(0);transform-origin:left;animation:underline .7s var(--ease) 1s forwards}
+.hero h1 .hi::after{content:"";position:absolute;left:0;right:0;bottom:.04em;height:.14em;background:var(--brass);opacity:.55;border-radius:3px;transform-origin:left}
+.js-anim .hero h1 .hi::after{transform:scaleX(0)}
+.js-anim.fonts-in .hero h1 .hi::after{animation:underline .7s var(--ease) 1s forwards}
 @keyframes wordUp{to{opacity:1;transform:none}}
 @keyframes underline{to{transform:scaleX(1)}}
 .hero .lede{max-width:36em;font-size:clamp(1.1rem,1.7vw,1.25rem)}
-.fade-in{opacity:0;animation:fadeUp .9s var(--ease) forwards}
+.js-anim .fade-in{opacity:0}
+.js-anim.fonts-in .fade-in{animation:fadeUp .9s var(--ease) forwards}
 .fade-in.d1{animation-delay:.1s}.fade-in.d2{animation-delay:.6s}.fade-in.d3{animation-delay:.8s}.fade-in.d4{animation-delay:1s}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .cta-row{display:flex;gap:14px 24px;flex-wrap:wrap;align-items:center;margin:32px 0 18px}
@@ -157,7 +166,9 @@ h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-
 .assure svg{width:15px;height:15px;color:var(--good)}
 
 /* ---------- animated AI demo card ---------- */
-.demo-wrap{position:relative;opacity:0;animation:fadeUp 1s var(--ease) .5s forwards}
+.demo-wrap{position:relative}
+.js-anim .demo-wrap{opacity:0}
+.js-anim.fonts-in .demo-wrap{animation:fadeUp 1s var(--ease) .5s forwards}
 .demo{position:relative;background:var(--white);border:1px solid rgba(20,47,39,.08);border-radius:var(--r);padding:18px 18px 20px;box-shadow:var(--shadow);transform:rotate(-1.2deg);transition:transform .5s var(--ease)}
 .demo-wrap:hover .demo{transform:rotate(0deg)}
 .demo-top{display:flex;align-items:center;gap:6px;padding:0 2px 14px;border-bottom:1px solid var(--line);margin-bottom:16px}
@@ -169,22 +180,25 @@ h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-
 .bubble.user .caret{display:inline-block;width:2px;height:1em;background:var(--brass);vertical-align:-.15em;margin-left:2px;animation:blink .9s steps(1) infinite}
 .demo.answered .bubble.user .caret,.demo.thinking .bubble.user .caret{display:none}
 @keyframes blink{50%{opacity:0}}
-.bubble.ai{margin-top:12px;background:var(--ivory);border-bottom-left-radius:5px;opacity:0;transform:translateY(8px);transition:opacity .4s var(--ease),transform .5s var(--ease)}
+.bubble.ai{position:relative;margin-top:12px;background:var(--ivory);border-bottom-left-radius:5px;opacity:0;transform:translateY(8px);transition:opacity .4s var(--ease),transform .5s var(--ease)}
 .demo.thinking .bubble.ai,.demo.answered .bubble.ai{opacity:1;transform:none}
-.dots{display:none;gap:5px;padding:4px 0}
+.dots{position:absolute;left:15px;top:16px;display:flex;gap:5px;opacity:0;transition:opacity .2s}
 .dots i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:bounce 1s ease-in-out infinite}
 .dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
 @keyframes bounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-5px);opacity:1}}
-.demo.thinking .dots{display:flex}
-.demo .answer{display:none}
-.demo.answered .answer{display:block}
+.demo.thinking .dots{opacity:1}
+.demo .answer{visibility:hidden}
+.demo.answered .answer{visibility:visible}
 .answer p{font-size:.92rem;color:var(--muted);margin-bottom:8px}
 .answer ol{list-style:none;padding:0;margin:0;display:grid;gap:7px;counter-reset:d}
-.answer li{counter-increment:d;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:var(--white);border:1px solid var(--line);font-weight:500;font-size:.95rem;opacity:0;transform:translateX(-8px);animation:slideIn .5s var(--ease) forwards;animation-delay:calc(.1s + var(--i)*.22s)}
+.answer li{counter-increment:d;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:var(--white);border:1px solid var(--line);font-weight:500;font-size:.95rem;opacity:0;transform:translateX(-8px)}
+.demo.answered .answer li{animation:slideIn .5s var(--ease) forwards;animation-delay:calc(.1s + var(--i)*.22s)}
 .answer li::before{content:counter(d);width:22px;height:22px;border-radius:50%;background:var(--sage);color:var(--forest);font-size:.75rem;font-weight:700;display:grid;place-items:center;flex:none}
 .answer li.you{border-color:var(--brass);background:linear-gradient(90deg,rgba(210,179,117,.18),rgba(210,179,117,.02));font-weight:600}
 .answer li.you::before{background:var(--brass);color:var(--forest)}
-.answer .chip{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--forest);background:var(--brass);padding:4px 9px;border-radius:20px;transform:scale(.6);opacity:0;animation:pop .45s var(--ease) forwards;animation-delay:.75s}
+.answer .chip{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--forest);background:var(--brass);padding:4px 9px;border-radius:20px;transform:scale(.6);opacity:0}
+.demo.answered .answer .chip{animation:pop .45s var(--ease) forwards;animation-delay:.75s}
+@media(max-width:480px){.bubble.user{min-height:calc(2.9em + 24px)}}
 .answer .chip svg{width:11px;height:11px}
 @keyframes slideIn{to{opacity:1;transform:none}}
 @keyframes pop{to{opacity:1;transform:none}}
@@ -206,7 +220,7 @@ h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-
 .field label{display:block;font-weight:600;font-size:.86rem;margin-bottom:6px}
 .field label span{color:var(--muted);font-weight:500}
 .field input,.fallback textarea{width:100%;min-height:50px;padding:12px 14px;border-radius:12px;border:1px solid #b9b3a1;background:#fffefb;color:var(--ink);font-size:1rem;transition:border-color .2s,box-shadow .2s}
-.field input:focus{outline:none;border-color:var(--brass-text);box-shadow:0 0 0 4px rgba(210,179,117,.3)}
+.field input:focus{outline:none;border:2px solid var(--brass-text);padding:11px 13px;box-shadow:0 0 0 3px rgba(127,98,51,.28)}
 .field.err input{border-color:var(--bad);box-shadow:0 0 0 4px rgba(178,58,45,.12);animation:shake .4s var(--ease)}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .field .msg{display:none;color:var(--bad);font-size:.84rem;margin-top:6px;font-weight:500}
@@ -240,7 +254,7 @@ h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-
 .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
 .card{position:relative;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:30px 28px 28px;display:flex;flex-direction:column;transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .3s;overflow:hidden}
 @media(hover:hover){.card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:#d9d2bf}}
-.card .num{font-family:var(--display);font-size:.95rem;font-weight:700;color:var(--brass-num);margin-bottom:6px;letter-spacing:.04em}
+.card .num{font-family:var(--display);font-size:.95rem;font-weight:700;color:var(--brass-text);margin-bottom:6px;letter-spacing:.04em}
 .card h3{margin-bottom:10px}
 .card p{color:var(--muted);font-size:.98rem;flex:1}
 .tag{display:inline-flex;align-self:flex-start;margin-top:18px;padding:6px 10px;background:var(--ivory-2);color:var(--brass-text);font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-radius:6px}
@@ -269,7 +283,7 @@ h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-
 .how{position:relative;overflow:hidden}
 .how .contours{left:-160px;bottom:-140px}
 .steps{position:relative;list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;counter-reset:s}
-.steps::before{content:"";position:absolute;left:28px;right:28px;top:28px;height:2px;background:linear-gradient(90deg,var(--brass),rgba(210,179,117,.35));transform:scaleX(0);transform-origin:left;transition:transform 1.4s var(--ease) .2s}
+.steps::before{content:"";position:absolute;left:28px;right:calc((100% - 56px)/3 - 28px);top:28px;height:2px;background:linear-gradient(90deg,var(--brass),rgba(210,179,117,.35));transform:scaleX(0);transform-origin:left;transition:transform 1.4s var(--ease) .2s}
 .steps.in::before{transform:scaleX(1)}
 .step{counter-increment:s;position:relative;padding-top:0}
 .step .n{position:relative;width:56px;height:56px;border-radius:50%;background:var(--forest);border:2px solid var(--brass);color:var(--brass);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:1.25rem;margin-bottom:22px;transform:scale(.4);opacity:0;transition:transform .6s var(--ease),opacity .4s}
@@ -313,6 +327,7 @@ h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-
 /* ---------- faq (animated accordion) ---------- */
 .faq{max-width:820px;display:grid;gap:2px}
 .q{border-bottom:1px solid var(--line)}
+.q-h{margin:0;font:inherit}
 .q-btn{width:100%;background:none;border:0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:68px;padding:18px 2px;font-family:var(--display);font-weight:700;font-size:1.2rem;letter-spacing:-.02em;color:var(--ink)}
 .q-btn .plus{flex:none;width:32px;height:32px;border-radius:50%;border:1px solid #c9c3b2;display:grid;place-items:center;color:var(--brass-text);transition:transform .4s var(--ease),background .25s,border-color .25s,color .25s}
 .q-btn .plus svg{width:14px;height:14px}
@@ -335,12 +350,12 @@ footer{background:#0f241d;padding:40px 0 calc(32px + env(safe-area-inset-bottom)
 footer .wrap{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:28px}
 footer b{display:flex;align-items:center;gap:9px;color:#fff;font-family:var(--display);font-weight:800;font-size:1rem;margin-bottom:8px}
 footer b svg{width:26px;height:26px}
-footer a{color:#fff;text-decoration:underline;text-decoration-color:var(--brass);text-underline-offset:4px;overflow-wrap:anywhere}
+footer a{display:inline-block;padding:4px 0;color:#fff;text-decoration:underline;text-decoration-color:var(--brass);text-underline-offset:4px;overflow-wrap:anywhere}
 footer .mail{font-size:1.02rem;font-weight:600}
 
 /* ---------- sticky mobile CTA ---------- */
-.sticky-cta{position:fixed;bottom:0;inset-inline:0;z-index:40;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(20,47,39,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line-dark);box-shadow:0 -10px 30px rgba(0,0,0,.18);transform:translateY(0);transition:transform .35s var(--ease)}
-.sticky-cta[hidden]{display:block!important;transform:translateY(110%);pointer-events:none}
+.sticky-cta{position:fixed;bottom:0;inset-inline:0;z-index:40;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(20,47,39,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line-dark);box-shadow:0 -10px 30px rgba(0,0,0,.18);transform:translateY(0);transition:transform .35s var(--ease),visibility 0s}
+.sticky-cta[hidden]{display:block!important;transform:translateY(110%);pointer-events:none;visibility:hidden;transition:transform .35s var(--ease),visibility 0s .35s}
 .sticky-cta .btn{width:100%;min-height:50px}
 
 /* ---------- scroll reveal + motion safety ---------- */
@@ -349,7 +364,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
 [data-stagger]>*{transition-delay:calc(var(--d,0)*90ms)}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0s!important}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0s!important}
   .reveal-wait{opacity:1;transform:none}
   .hero h1 .w{opacity:1;transform:none}
   .fade-in,.demo-wrap{opacity:1}
@@ -369,6 +384,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
   .plans{gap:14px}
   .plan{padding:26px 20px 22px}
   .steps{gap:22px}
+  .steps::before{right:calc((100% - 44px)/3 - 28px)}
 }
 @media(max-width:860px){
   .hero-grid{grid-template-columns:minmax(0,1fr);align-items:start;padding-top:clamp(40px,7vw,64px);gap:40px}
@@ -378,8 +394,10 @@ footer .mail{font-size:1.02rem;font-weight:600}
   .check-grid{grid-template-columns:minmax(0,1fr);gap:30px}
   .grid-3{grid-template-columns:minmax(0,1fr)}
   .steps{grid-template-columns:minmax(0,1fr);gap:0}
-  .steps::before{left:27px;right:auto;top:0;bottom:0;width:2px;height:auto;background:linear-gradient(180deg,var(--brass),rgba(210,179,117,.3));transform:scaleY(0);transform-origin:top}
-  .steps.in::before{transform:scaleY(1)}
+  .steps::before{display:none}
+  .step:not(:last-child)::before{content:"";position:absolute;left:27px;top:56px;bottom:0;width:2px;background:linear-gradient(180deg,var(--brass),rgba(210,179,117,.3));transform:scaleY(0);transform-origin:top;transition:transform .9s var(--ease)}
+  .steps.in .step:not(:last-child)::before{transform:scaleY(1)}
+  .steps.in .step:nth-child(2)::before{transition-delay:.45s}
   .step{display:grid;grid-template-columns:56px 1fr;gap:0 18px;padding-bottom:30px}
   .step:last-child{padding-bottom:0}
   .step .n{margin-bottom:0;grid-row:span 2}
@@ -415,11 +433,19 @@ footer .mail{font-size:1.02rem;font-weight:600}
   .brand small{display:none}
   .demo-badge{left:0}
 }
+@media(max-width:360px){
+  .nav-in{gap:8px}
+  .nav-links{gap:8px}
+  .nav .btn{padding:8px 10px;font-size:.78rem}
+  .menu-btn{flex:none}
+  .brand{font-size:.95rem;gap:7px}
+}
 @media(max-width:340px){
   .wrap{width:calc(100% - 28px)}
   .hero h1{font-size:2.1rem}
 }
 </style>
+<script>(function(){var h=document.documentElement;if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;h.className+=" js-anim";var done=false,go=function(){if(!done){done=true;h.className+=" fonts-in"}};if(document.fonts&&document.fonts.ready){document.fonts.ready.then(go)}setTimeout(go,600)})();</script>
 </head>
 <body>
 <a class="skip" href="#top">Skip to content</a>
@@ -467,7 +493,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
 <main id="top">
 
 <!-- ===================== HERO ===================== -->
-<section class="hero" aria-labelledby="hero-title">
+<section class="hero" aria-labelledby="hero-title" data-anim>
   <svg class="contours drift" id="heroContours" aria-hidden="true"><use href="#i-contours"/></svg>
   <div class="wrap hero-grid">
     <div class="hero-copy">
@@ -479,7 +505,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
         <a class="link" href="#pricing">See pricing</a>
       </div>
       <ul class="assure fade-in d4" aria-label="The basics">
-        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Free. No card.</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Free, no card</li>
         <li><svg aria-hidden="true"><use href="#i-check"/></svg>Takes a minute</li>
         <li><svg aria-hidden="true"><use href="#i-check"/></svg>No contract, ever</li>
       </ul>
@@ -487,7 +513,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
 
     <div class="demo-wrap">
       <span class="demo-badge">Example</span>
-      <div class="demo" id="demo" aria-label="Example of a customer asking an AI assistant who to call">
+      <div class="demo" id="demo" role="group" aria-label="Example of a customer asking an AI assistant who to call">
         <div class="demo-top"><i></i><i></i><i></i><span>AI assistant</span></div>
         <div class="bubble user"><span id="demoQ">Who’s the best roofer in Tulsa?</span><span class="caret" aria-hidden="true"></span></div>
         <div class="bubble ai" aria-live="off">
@@ -508,7 +534,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
 </section>
 
 <!-- ===================== BUSINESS TYPES MARQUEE ===================== -->
-<div class="marquee" aria-hidden="true">
+<div class="marquee" aria-hidden="true" data-anim>
   <div class="track" id="track">
     <span>Roofers</span><span>Dentists</span><span>Barbers</span><span>Plumbers</span><span>Restaurants</span><span>Salons</span><span>HVAC</span><span>Gyms</span><span>Landscapers</span><span>Auto shops</span><span>Cleaners</span><span>Med spas</span><span>Electricians</span><span>Pet groomers</span><span>Contractors</span><span>Tree services</span>
   </div>
@@ -516,7 +542,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
 <p class="sr">Built for roofers, dentists, barbers, plumbers, restaurants, salons, HVAC, gyms, landscapers, auto shops, cleaners, med spas, electricians, pet groomers, contractors, tree services and more.</p>
 
 <!-- ===================== FREE CHECK (form) ===================== -->
-<section class="section on-dark check" id="free-check" aria-labelledby="check-title">
+<section class="section on-dark check" id="free-check" aria-labelledby="check-title" data-anim>
   <svg class="contours drift" aria-hidden="true"><use href="#i-contours"/></svg>
   <div class="wrap check-grid">
     <div data-reveal>
@@ -524,7 +550,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
       <h2 id="check-title">See what AI says about you.</h2>
       <p class="lede">We ask ChatGPT and Gemini who they recommend for your kind of business in your town, and email you the exact answers.</p>
       <ul class="check-list" data-stagger>
-        <li style="--d:1"><svg aria-hidden="true"><use href="#i-check"/></svg>Their exact words, word for word</li>
+        <li style="--d:1"><svg aria-hidden="true"><use href="#i-check"/></svg>What ChatGPT and Gemini actually say</li>
         <li style="--d:2"><svg aria-hidden="true"><use href="#i-check"/></svg>Whether you were named</li>
         <li style="--d:3"><svg aria-hidden="true"><use href="#i-check"/></svg>The three fixes we’d make first</li>
       </ul>
@@ -534,13 +560,13 @@ footer .mail{font-size:1.02rem;font-weight:600}
       <div class="fields">
         <h3>Your free AI check.</h3>
         <p class="hint" id="form-note">Takes about a minute. Usually in your inbox within the hour.</p>
-        <div class="field"><label for="business">Business name</label><input id="business" name="business" required autocomplete="organization" maxlength="120" placeholder="e.g. Main St. Barbershop"><div class="msg">Add your business name so we know who to check.</div></div>
+        <div class="field"><label for="business">Business name</label><input id="business" name="business" required autocomplete="organization" maxlength="120" placeholder="e.g. Main St. Barbershop" aria-describedby="business-msg"><div class="msg" id="business-msg">Add your business name so we know who to check.</div></div>
         <div class="fields-2">
-          <div class="field"><label for="town">Town and state</label><input id="town" name="town" required autocomplete="address-level2" maxlength="100" placeholder="e.g. Tulsa, OK"><div class="msg">Add your town. AI answers are local.</div></div>
-          <div class="field"><label for="service">What you do</label><input id="service" name="service" required list="kinds" maxlength="80" placeholder="e.g. barber, dentist, roofer"><div class="msg">Tell us what you do.</div>
+          <div class="field"><label for="town">Town and state</label><input id="town" name="town" required autocomplete="address-level2" maxlength="100" placeholder="e.g. Tulsa, OK" aria-describedby="town-msg"><div class="msg" id="town-msg">Add your town. AI answers are local.</div></div>
+          <div class="field"><label for="service">What you do</label><input id="service" name="service" required list="kinds" maxlength="80" placeholder="e.g. barber, dentist, roofer" aria-describedby="service-msg"><div class="msg" id="service-msg">Tell us what you do.</div>
             <datalist id="kinds"><option value="Restaurant"><option value="Salon"><option value="Barber"><option value="Gym"><option value="Dentist"><option value="Roofer"><option value="Contractor"><option value="Cleaning service"><option value="Auto shop"><option value="Plumber"><option value="HVAC"><option value="Med spa"><option value="Landscaping"><option value="Pet grooming"></datalist></div>
         </div>
-        <div class="field"><label for="email">Your email <span>(we send the check here)</span></label><input id="email" name="email" type="email" required autocomplete="email" inputmode="email" maxlength="160" placeholder="you@yourbusiness.com"><div class="msg">Add an email so we can send your check.</div></div>
+        <div class="field"><label for="email">Your email <span>(we send the check here)</span></label><input id="email" name="email" type="email" required autocomplete="email" inputmode="email" maxlength="160" placeholder="you@yourbusiness.com" aria-describedby="email-msg"><div class="msg" id="email-msg">Add an email so we can send your check.</div></div>
         <div class="field"><label for="phone">Phone <span>(optional)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="40" placeholder="(555) 555-5555"></div>
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button class="btn btn-brass btn-block btn-lg" type="submit" id="submitBtn">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
@@ -548,7 +574,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
       </div>
       <div class="done">
         <div class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></div>
-        <h3 id="doneTitle">Got it. Your check is on the way.</h3>
+        <h3 id="doneTitle" tabindex="-1">Got it. Your check is on the way.</h3>
         <p id="doneText">We’ll email you what ChatGPT and Gemini say about your business, usually within the hour.</p>
         <div class="fallback" id="emailFallback" hidden>
           <label for="requestCopy">Our form didn’t go through. Tap below to send it by email instead, or copy it to <a class="link" href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a>.</label>
@@ -565,7 +591,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
 </section>
 
 <!-- ===================== WHAT WE DO ===================== -->
-<section class="section" id="what" aria-labelledby="what-title">
+<section class="section" id="what" aria-labelledby="what-title" data-anim>
   <div class="wrap">
     <div class="head" data-reveal>
       <span class="kicker">What we help with</span>
@@ -599,7 +625,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
 </section>
 
 <!-- ===================== HOW IT WORKS ===================== -->
-<section class="section on-dark how" id="how" aria-labelledby="how-title">
+<section class="section on-dark how" id="how" aria-labelledby="how-title" data-anim>
   <svg class="contours drift" aria-hidden="true"><use href="#i-contours"/></svg>
   <div class="wrap">
     <div class="head" data-reveal>
@@ -616,7 +642,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
 </section>
 
 <!-- ===================== PRICING ===================== -->
-<section class="section on-ivory" id="pricing" aria-labelledby="pricing-title">
+<section class="section on-ivory" id="pricing" aria-labelledby="pricing-title" data-anim>
   <div class="wrap">
     <div class="head" data-reveal>
       <span class="kicker">Pricing</span>
@@ -634,7 +660,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
           <li><svg aria-hidden="true"><use href="#i-check"/></svg>Google Business Profile cleanup, written out and ready to paste</li>
           <li><svg aria-hidden="true"><use href="#i-check"/></svg>10-second review system: your review link and a QR card</li>
         </ul>
-        <a class="btn btn-light plan-go" data-plan="starter" data-href="https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07" href="https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07">Start Starter <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-light plan-go" data-plan="starter" data-href="https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07" href="https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07">Try Starter <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <p class="nocontract">No contract. Cancel anytime.</p>
         <p class="nudge">Most businesses move to Growth after month one.</p>
       </article>
@@ -687,18 +713,18 @@ footer .mail{font-size:1.02rem;font-weight:600}
       <h2 id="faq-title">Quick answers.</h2>
     </div>
     <div class="faq" data-reveal>
-      <div class="q"><h3 class="sr">Is this legit?</h3><button class="q-btn" type="button" aria-expanded="false" aria-controls="a1" id="q1">Is this legit?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button><div class="q-panel" id="a1" role="region" aria-labelledby="q1"><div class="q-inner"><p>Yes. No contract, and you can cancel anytime by replying to any email. Growth and Pro come with a second month free guarantee. You see the real ChatGPT and Gemini answers before and after, and every lead we send. If it’s not for you, you stop. No fee, no hassle.</p></div></div></div>
-      <div class="q"><h3 class="sr">What’s in the free AI check?</h3><button class="q-btn" type="button" aria-expanded="false" aria-controls="a2" id="q2">What’s in the free AI check?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button><div class="q-panel" id="a2" role="region" aria-labelledby="q2"><div class="q-inner"><p>We ask ChatGPT and Gemini who they recommend for your kind of business in your town, then email you their exact answers, whether you were named, and the three fixes we’d make first. Free. No card, no call.</p></div></div></div>
-      <div class="q"><h3 class="sr">How much of my time does it take?</h3><button class="q-btn" type="button" aria-expanded="false" aria-controls="a3" id="q3">How much of my time does it take?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button><div class="q-panel" id="a3" role="region" aria-labelledby="q3"><div class="q-inner"><p>About five minutes for the signup form, and about ten minutes to paste in your Google profile fixes. We write them for you. The rest happens by email.</p></div></div></div>
-      <div class="q"><h3 class="sr">Do you need my passwords?</h3><button class="q-btn" type="button" aria-expanded="false" aria-controls="a4" id="q4">Do you need my passwords?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button><div class="q-panel" id="a4" role="region" aria-labelledby="q4"><div class="q-inner"><p>No. Never. If you like, you can add us as a manager on your Google profile. Your login stays yours.</p></div></div></div>
-      <div class="q"><h3 class="sr">Where do the leads come from?</h3><button class="q-btn" type="button" aria-expanded="false" aria-controls="a5" id="q5">Where do the leads come from?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button><div class="q-panel" id="a5" role="region" aria-labelledby="q5"><div class="q-inner"><p>On Pro, we look for people asking for your kind of business nearby: public posts asking for recommendations, messages on your own Google profile, and your own lead form. Every lead is logged. We never buy lists or message strangers in your name.</p></div></div></div>
-      <div class="q"><h3 class="sr">How do I cancel?</h3><button class="q-btn" type="button" aria-expanded="false" aria-controls="a6" id="q6">How do I cancel?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button><div class="q-panel" id="a6" role="region" aria-labelledby="q6"><div class="q-inner"><p>Reply “cancel” to any email from us. That’s it. No contract, no fee, and you keep the service through the month you paid for.</p></div></div></div>
+      <div class="q"><h3 class="q-h"><button class="q-btn" type="button" aria-expanded="false" aria-controls="a1" id="q1">Is this legit?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button></h3><div class="q-panel" id="a1" role="region" aria-labelledby="q1"><div class="q-inner"><p>Yes. No contract, and you can cancel anytime by replying to any email. Growth and Pro come with a second month free guarantee. You see the real ChatGPT and Gemini answers before and after, and every lead we send. If it’s not for you, you stop. No fee, no hassle.</p></div></div></div>
+      <div class="q"><h3 class="q-h"><button class="q-btn" type="button" aria-expanded="false" aria-controls="a2" id="q2">What’s in the free AI check?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button></h3><div class="q-panel" id="a2" role="region" aria-labelledby="q2"><div class="q-inner"><p>We ask ChatGPT and Gemini who they recommend for your kind of business in your town, then email you their exact answers, whether you were named, and the three fixes we’d make first. Free. No card, no call.</p></div></div></div>
+      <div class="q"><h3 class="q-h"><button class="q-btn" type="button" aria-expanded="false" aria-controls="a3" id="q3">How much of my time does it take?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button></h3><div class="q-panel" id="a3" role="region" aria-labelledby="q3"><div class="q-inner"><p>About two minutes for the signup form, and about ten minutes to paste in your Google profile fixes. We write them for you. The rest happens by email.</p></div></div></div>
+      <div class="q"><h3 class="q-h"><button class="q-btn" type="button" aria-expanded="false" aria-controls="a4" id="q4">Do you need my passwords?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button></h3><div class="q-panel" id="a4" role="region" aria-labelledby="q4"><div class="q-inner"><p>No. Never. If you like, you can add us as a manager on your Google profile. Your login stays yours.</p></div></div></div>
+      <div class="q"><h3 class="q-h"><button class="q-btn" type="button" aria-expanded="false" aria-controls="a5" id="q5">Where do the leads come from?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button></h3><div class="q-panel" id="a5" role="region" aria-labelledby="q5"><div class="q-inner"><p>On Pro, we look for people asking for your kind of business nearby: public posts asking for recommendations, messages on your own Google profile, and your own lead form. Every lead is logged. We never buy lists or message strangers in your name.</p></div></div></div>
+      <div class="q"><h3 class="q-h"><button class="q-btn" type="button" aria-expanded="false" aria-controls="a6" id="q6">How do I cancel?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button></h3><div class="q-panel" id="a6" role="region" aria-labelledby="q6"><div class="q-inner"><p>Reply “cancel” to any email from us. That’s it. No contract, no fee, and you keep the service through the month you paid for.</p></div></div></div>
     </div>
   </div>
 </section>
 
 <!-- ===================== CLOSING BAND ===================== -->
-<section class="close" aria-labelledby="close-title">
+<section class="close" aria-labelledby="close-title" data-anim>
   <svg class="contours drift" aria-hidden="true"><use href="#i-contours"/></svg>
   <div class="wrap"><div class="close-in" data-reveal>
     <h2 id="close-title">Let’s put your business on the map.</h2>
@@ -737,7 +763,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
   function updateNav(){
     var y=window.scrollY,h=document.documentElement.scrollHeight-window.innerHeight;
     nav.classList.toggle("scrolled",y>8);
-    progress.style.width=(h>0?Math.min(100,y/h*100):0)+"%";
+    progress.style.transform="scaleX("+(h>0?Math.min(1,y/h):0)+")";
     navTick=false;
   }
   window.addEventListener("scroll",function(){if(!navTick){navTick=true;requestAnimationFrame(updateNav)}},{passive:true});
@@ -757,7 +783,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
   menuBtn.addEventListener("click",function(){setMenu(sheet.getAttribute("data-open")!=="true")});
   $$("a",sheet).forEach(function(a){a.addEventListener("click",function(){setMenu(false)})});
   window.addEventListener("resize",function(){if(window.innerWidth>860&&menuOpen)setMenu(false)});
-  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&menuOpen)setMenu(false)});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&menuOpen){setMenu(false);menuBtn.focus()}});
 
   /* ---- hero demo: a customer asks, the AI answers, your name is in the list ---- */
   var demo=$("#demo"),dq=$("#demoQ");
@@ -800,11 +826,16 @@ footer .mail{font-size:1.02rem;font-weight:600}
 
   /* ---- hero contours: gentle parallax ---- */
   var hc=$("#heroContours"),pTick=false;
-  if(hc&&!reduce){window.addEventListener("scroll",function(){if(!pTick){pTick=true;requestAnimationFrame(function(){var y=window.scrollY;if(y<900)hc.style.setProperty("margin-top",(y*.12)+"px");pTick=false})}},{passive:true})}
+  if(hc&&!reduce){window.addEventListener("scroll",function(){if(!pTick){pTick=true;requestAnimationFrame(function(){var y=window.scrollY;if(y<900)hc.style.translate="0 "+(y*.12)+"px";pTick=false})}},{passive:true})}
+
+  /* ---- pause looping animations while their section is off screen ---- */
+  if("IntersectionObserver" in window){
+    try{var ao=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle("anim-off",!e.isIntersecting)})},{rootMargin:"120px 0px"});$$("[data-anim]").forEach(function(el){ao.observe(el)})}catch(_){}
+  }
 
   /* ---- sticky mobile CTA (hidden while the form is on screen) ---- */
   var sticky=$("#stickyCta"),formWrap=$("#free-check"),scheduled=false;
-  function updateSticky(){var r=formWrap.getBoundingClientRect();var v=r.top<window.innerHeight&&r.bottom>0;sticky.hidden=!(window.innerWidth<=760&&window.scrollY>360&&!v&&!menuOpen);scheduled=false}
+  function updateSticky(){var r=formWrap.getBoundingClientRect();var passed=r.bottom<0;sticky.hidden=!(window.innerWidth<=760&&passed&&!menuOpen);scheduled=false}
   function scheduleSticky(){if(!scheduled){scheduled=true;requestAnimationFrame(updateSticky)}}
   window.addEventListener("scroll",scheduleSticky,{passive:true});
   window.addEventListener("resize",scheduleSticky);
@@ -851,11 +882,12 @@ footer .mail{font-size:1.02rem;font-weight:600}
       var el=$("#"+id),f=fieldOf(el);el.value=el.value.trim();
       var bad=!el.value||(id==="email"&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value));
       f.classList.remove("err");if(bad){void f.offsetWidth;f.classList.add("err")}
+      el.setAttribute("aria-invalid",bad?"true":"false");
       if(bad&&good){el.focus();good=false}
     });
     return good;
   }
-  ["business","town","service","email"].forEach(function(id){$("#"+id).addEventListener("input",function(){fieldOf(this).classList.remove("err")})});
+  ["business","town","service","email"].forEach(function(id){$("#"+id).addEventListener("input",function(){fieldOf(this).classList.remove("err");this.removeAttribute("aria-invalid")})});
   function showFallback(subject,body){
     $("#doneTitle").textContent="One more tap";
     $("#doneText").textContent="";
@@ -871,13 +903,13 @@ footer .mail{font-size:1.02rem;font-weight:600}
     var subject="Free AI check request — "+g("business");
     var body=["Business: "+g("business"),"Town/state: "+g("town"),"Type of business: "+g("service"),"Email: "+g("email"),"Phone: "+(g("phone")||"Not given"),"Source: website form"].join("\n");
     submitBtn.disabled=true;submitBtn.textContent="Sending…";
-    var auto="Thanks! We got your free AI check request for "+g("business")+".\n\nWe’re asking ChatGPT and Gemini who they recommend for "+g("service")+" in "+g("town")+" right now. You’ll get their exact answers, whether they name you, and the three fixes we’d make first, usually within the hour.\n\nReply to this email with any question. A real person answers.\n\nGrayson\nRidgeline Local";
+    var auto="Thanks! We got your free AI check request for "+g("business")+".\n\nWe’re asking ChatGPT and Gemini who they recommend for a business like yours in "+g("town")+". You’ll get their exact answers, whether they name you, and the three fixes we’d make first, usually within the hour.\n\nReply to this email with any question. A real person answers.\n\nGrayson\nRidgeline Local";
     var payload={_subject:subject,_template:"box",_captcha:"false",_autoresponse:auto,business:g("business"),town:g("town"),type_of_business:g("service"),email:g("email"),phone:g("phone")||"Not given",source:"website free check form"};
     fetch(FORM_URL,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(payload)})
       .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j}})})
       .then(function(res){if(!res.ok||String(res.j.success)==="false")throw new Error("not sent");status.textContent="Request sent."})
       .catch(function(){showFallback(subject,body)})
-      .then(function(){form.setAttribute("data-state","ready");submitBtn.disabled=false;submitBtn.innerHTML=submitLabel;form.scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"})});
+      .then(function(){form.setAttribute("data-state","ready");submitBtn.disabled=false;submitBtn.innerHTML=submitLabel;form.scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"});$("#doneTitle").focus({preventScroll:true})});
   });
   $("#copyRequest").addEventListener("click",function(){copyText($("#requestCopy").value,this)});
   $("#editRequest").addEventListener("click",function(){form.setAttribute("data-state","idle");status.textContent="";$("#emailFallback").hidden=true;$("#doneTitle").textContent="Got it. Your check is on the way.";$("#doneText").textContent="We’ll email you what ChatGPT and Gemini say about your business, usually within the hour.";$("#business").focus()});

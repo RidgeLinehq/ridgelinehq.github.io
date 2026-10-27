@@ -3,9 +3,9 @@
 ## settings/main
 {businessName:"Ridgeline Local", paused:false, dryRun:true, autoSend:false, dailyEmailCap:10,
  ramp:{sendingSince:"" (first send day), step:1}, followUpDays:4, maxTouches:3, scoreGate:60,
- foundingSpots:10, signature:"Grayson\nRidgeline Local", optOutLine:"If you'd rather not hear
+ foundingSpots:0 (retired, ignore), signature:"Grayson\nRidgeline Local", optOutLine:"If you'd rather not hear
  from me, reply 'no thanks' and I'll stop.", mailingAddress:"", gmail:"ridgelinemarketinghq@gmail.com",
- siteUrl:"https://ridgelinehq.github.io", stripeUrl:"https://buy.stripe.com/dRm00jgNddCI53cbOlaEE00",
+ siteUrl:"https://ridgelinehq.github.io", stripeUrl:"" (retired; checkout links live in data/stripe-links.json),
  targets:[{town:"Owasso", state:"OK", trades:["roofing","tree service"]}, ...],
  nextTarget:0 (index into targets; 00-start uses it, 08-report advances it),
  dayShiftTriggerId:"" (filled when the scheduled task exists), officeVersion:"v1",
@@ -85,8 +85,7 @@
  Standard work items: welcome-sent, onboarding, baseline, manager-access, review-link,
  profile-audit, buildout-plan, buildout-applied, review-kit, review-requests, lead-page (Pro),
  week-post, report-<yyyy-mm>, jobcheck-<yyyy-mm>, video-<yyyy-mm> (Pro), guarantee (Growth/Pro)
- (Clients from before Oct 24, 2026 on the $147 founding plan keep plan "founding" and the old
- review-growth guarantee: 15 genuine Google reviews in 60 days or month 3 free.)
+ (No client is on the retired $147 founding plan; plan "founding" is legacy and unused.)
 
 ## leadlog/<clientId>-<yyyymmdd>-<4 hex>
 specs/lead-tracking.md "The lead log" (source, sourceUrl, contact, summary, status, counted,

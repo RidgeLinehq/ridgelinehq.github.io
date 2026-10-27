@@ -13,7 +13,7 @@ to be renamed, a Ridgeline Facebook Page) carry the same videos.
 | 0-2 | The loss, as a hook. "Your competitor just got recommended by ChatGPT." | none (face, eye contact) |
 | 2-8 | The demo. "Watch. 'Best barber in Cabot, Arkansas.'" (any local trade) | mock AI answer card: 3 competitor names, "Your business: not mentioned" (names from a real check Scout ran; marked Example on screen) |
 | 8-16 | Why. "AI tools lean on your Google profile and your reviews. Thin profile, few reviews: they name someone else." | "Google profile + reviews" big |
-| 16-26 | What I do. "We get you found on Google and recommended by AI, and we send you leads." | checklist: Google profile · real reviews · leads sent to you · monthly report |
+| 16-26 | What I do. "We get you found on Google and recommended by AI, and make it easy for happy customers to leave reviews." | checklist: Google profile · real reviews · leads sent to you · monthly report |
 | 26-34 | Risk gone + CTA. "No contract, no password. Free AI check first. Link in bio." | arrow to "Free AI check → ridgelinehq.github.io" |
 
 ## Brief fields (drafts/<id>, kind "script")

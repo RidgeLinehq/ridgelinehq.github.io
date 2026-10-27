@@ -187,7 +187,7 @@ function onboarding_(th, f) {
   L.push('1. Within the hour: your full Welcome Pack (a PDF): this score in detail, your Google profile fixes written out and ready to paste (about 10 minutes for you), and your review kit.');
   L.push('2. Then your QR review card for the counter, as soon as you reply with your Google review link.');
   if (plan === 'pro') L.push('3. Within 24 hours: your own lead page with tracking links. Leads from it reach you the moment they come in.');
-  if (plan === 'growth' || plan === 'pro') L.push((plan === 'pro' ? '4' : '3') + '. Leads we find go straight to this email, and every one is logged.');
+  if (plan === 'pro') L.push('4. Leads we find go straight to this email, and every one is logged.');
   if (plan === 'growth' || plan === 'pro') L.push('', 'Your Second Month Free Guarantee is on: if your first month brings zero tracked leads and no improvement in your AI visibility, your second month is free. Terms: ' + CFG.SITE + '/guarantee.html');
   L.push('', 'Optional, 3 minutes: add ' + CFG.ME + ' as a Manager on your Google Business Profile (Google Maps app > your profile > ⋯ > Business Profile settings > People and access > Add > Manager). It lets us log the messages and calls your profile gets. Never a password.');
   L.push('', 'Questions? Just reply to this email.', '', CFG.SIGNATURE);

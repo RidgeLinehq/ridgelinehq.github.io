@@ -56,7 +56,8 @@ checked what it says about him. That gap is the whole sale.
 - "Is this a scam?" → "Fair question. It's one person, no contract, no password, cancel by
   email, and the first thing you get is free. Here's the website: ridgelinehq.github.io."
 - "Can you guarantee I'll be #1?" → "No, and anyone who says they can is lying to you. What I
-  guarantee is the review growth, and I show you what the AI tools say every month."
+  do guarantee, on Growth and Pro: if your first month brings zero tracked leads and no improvement
+  in your AI visibility, your second month is free. And I show you what the AI tools say every month."
 - "Not now." → "No problem. I'll send the free check anyway so you have it. Mind if I check
   back in a month?"
 - "Too expensive." → "It's less than one small repair job a month. One extra job a month pays

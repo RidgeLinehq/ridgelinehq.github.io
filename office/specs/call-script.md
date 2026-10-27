@@ -38,7 +38,7 @@ and send you. And on Growth and Pro, if your first month brings zero leads and n
 your second month is free. But first let me send you the check so you can see it for yourself."
 
 If they ask what we do in one line: "We get your business found on Google and recommended by AI
-like ChatGPT and Gemini, and we send you leads."
+like ChatGPT and Gemini, and we make it easy for your happy customers to leave reviews."
 
 If they ask how you found them: "Your Google listing. I work with local businesses, and I check
 how AI answers for each kind of business in a town."
