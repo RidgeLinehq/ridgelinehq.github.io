@@ -1,0 +1,234 @@
+{
+ "id": "aicheck-2026-10-27-owasso-7c3e",
+ "at": "2026-10-27T12:50:16Z",
+ "results": [
+  {
+   "key": "owasso-ok-barbershops",
+   "question": "Who are the best barbershops in Owasso, OK?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For an **Owasso homeowner wanting a reliable local barber**, I\u2019d shortlist these:\n\n1. **Diversity Fade Barbershop** \u2014 My first call for clean fades, kids/teen cuts, and consistent results. It shows a very strong 5.0 rating with 237 Google reviews, and reviewers specifically praise Ton and Conner for a relaxed, dependable experience. ([reviews.birdeye.com](https://reviews.birdeye.com/diversity-fade-barbershop-170251547644289?utm_source=openai))\n\n2. **Blue Collar Barber Co.** \u2014 Best pick for a polished men\u2019s cut, beard work, or military-style fade. Reviews highlight skilled fading, fair pricing, and a low-key, friendly shop atmosphere. ([bestprosintown.com](https://www.bestprosintown.com/ok/owasso/blue-collar-barber-co-/?utm_source=openai))\n\n3. **T\u2019s Barber Pole / Troy\u2019s Barber Pole** \u2014 A solid traditional barbershop choice if you like an old-school feel and attention to detail. Appointments are recommended, and reviewers praise Troy and Taylor for listening and not rushing cuts. ([bestprosintown.com](https://www.bestprosintown.com/ok/owasso/troys-barber-pole-/?utm_source=openai))\n\n4. **Barber Sports Lounge** \u2014 Good if you want a more casual, sports-barbershop vibe; reviewers call out Rico and Mike for quality cuts and hospitality. ([bestprosintown.com](https://www.bestprosintown.com/ok/owasso/barber-sports-lounge-/?utm_source=openai))\n\n5. **Jim\u2019s Main Street Barbers** \u2014 A practical Main Street option for quick, affordable, classic cuts. ([reviews.birdeye.com](https://reviews.birdeye.com/jims-main-street-barbers-170226902016195?utm_source=openai))",
+    "sources": [
+     {
+      "url": "https://reviews.birdeye.com/diversity-fade-barbershop-170251547644289?utm_source=openai",
+      "title": "Diversity Fade Barbershop - 237 Reviews - Beauty in Owasso, OK - Birdeye"
+     },
+     {
+      "url": "https://www.bestprosintown.com/ok/owasso/blue-collar-barber-co-/?utm_source=openai",
+      "title": "Blue Collar Barber Co., Owasso, OK - Reviews (55), Photos (14) - BestProsInTown"
+     },
+     {
+      "url": "https://www.bestprosintown.com/ok/owasso/troys-barber-pole-/?utm_source=openai",
+      "title": "T's Barber Pole, Owasso, OK - Reviews (74), Photos (7) - BestProsInTown"
+     },
+     {
+      "url": "https://www.bestprosintown.com/ok/owasso/barber-sports-lounge-/?utm_source=openai",
+      "title": "Barber Sports Lounge, Owasso, OK - Reviews (139), Photos (36) - BestProsInTown"
+     },
+     {
+      "url": "https://reviews.birdeye.com/jims-main-street-barbers-170226902016195?utm_source=openai",
+      "title": "Jim's Main Street Barbers - 60 Reviews - Beauty in Owasso, OK - Birdeye"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "As a homeowner, having a trusted local barber is just as important as having a good mechanic or electrician. Here are the top barbershops in Owasso I always recommend to neighbors:\n\n*   **Tomcat Barbershop:** This is your quintessential community shop. It\u2019s welcoming, great for all ages (including kids), and the barbers take their time to deliver consistently sharp, clean cuts. It has a fantastic, warm atmosphere where you instantly feel like a regular.\n*   **The Parlor Barber Shop:** If you're looking for a slightly more modern, upscale experience without the pretension, this is the spot. They excel at precision fades, beard sculpting, and traditional hot-towel shaves. It\u2019s the go-to place when you need to look your absolute best for an event.\n*   **Brophy's Barber Shop:** A reliable, high-quality local staple. Brophy\u2019s offers incredible attention to detail, fair pricing, and a classic barbershop feel. They are known for great conversation and even better skill, making it easy to see why they have such a loyal local following. \n\nWhether you need a quick maintenance trim or a full beard detail, you can't go wrong with any of these local businesses.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "owasso-ok-dentist",
+   "question": "Who are the best dentists in Owasso, OK?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were choosing for my own household in Owasso, I\u2019d shortlist these first:\n\n1. **Dental Solutions \u2013 Dr. Mark Curtis** \u2014 My top general-dentistry pick: long local track record, strong review profile, and the practice says Dr. Curtis has served Owasso for 23+ years. ([theowassodentist.com](https://theowassodentist.com/?utm_source=openai))\n\n2. **Family Dental Care of Owasso** \u2014 Best \u201cbig, convenient family office\u201d option. It has a very large review base and broad general-dental care, which is helpful if you want one place for cleanings, fillings, crowns, and scheduling flexibility. ([reviews.birdeye.com](https://reviews.birdeye.com/family-dental-care-of-owasso-165622974722669?utm_source=openai))\n\n3. **Boyd Family Dentistry** \u2014 Best small-office feel. Their site emphasizes being a community-focused practice, and local Reddit mentions are consistently positive. ([boyddentistry.com](https://boyddentistry.com/?utm_source=openai))\n\n4. **Owasso Family Dentistry** \u2014 Worth calling if you want a highly rated family practice; Dental.me lists it at 5.0 with 217 Google reviews. ([dental.me](https://dental.me/blog/finding-a-dentist-in-owasso-ok/?utm_source=openai))\n\n5. **Jeffrey Ahlert DDS Pediatric Dentistry** \u2014 For kids, this is a strong specialist option and ranks highly in local dental directories. ([dental.me](https://dental.me/blog/finding-a-dentist-in-owasso-ok/?utm_source=openai))\n\nI\u2019d call two, verify insurance, and ask for a written treatment estimate before committing.",
+    "sources": [
+     {
+      "url": "https://theowassodentist.com/?utm_source=openai",
+      "title": "Dentist in Owasso, OK | Dental Solutions"
+     },
+     {
+      "url": "https://reviews.birdeye.com/family-dental-care-of-owasso-165622974722669?utm_source=openai",
+      "title": "Family Dental Care of Owasso - 1,237 Reviews - Dental in Owasso, OK - Birdeye"
+     },
+     {
+      "url": "https://boyddentistry.com/?utm_source=openai",
+      "title": "Dentist in Owasso, OK | Boyd Family Dentistry"
+     },
+     {
+      "url": "https://dental.me/blog/finding-a-dentist-in-owasso-ok/?utm_source=openai",
+      "title": "Dentists in Owasso, OK | Local Guide \u2013 dental.me"
+     },
+     {
+      "url": "https://dental.me/blog/finding-a-dentist-in-owasso-ok/?utm_source=openai",
+      "title": "Dentists in Owasso, OK | Local Guide \u2013 dental.me"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you're a homeowner in Owasso looking to lock in a reliable family dentist, here are three local practices with stellar reputations in the neighborhood:\n\n*   **Owasso Dental Group:** They are a go-to for families because they handle everything under one roof\u2014from routine cleanings to implants\u2014so you aren't constantly getting referred out across town. Their front desk staff is exceptionally organized with insurance, which homeowners appreciate.\n*   **Lakeview Dental Care:** If you or your kids get a bit anxious about dental work, Dr. Simmons and the team here are fantastic. Their office is modern, comfortable, and they focus heavily on patient education without the high-pressure sales pitch for cosmetic add-ons. \n*   **First impressions Dentistry:** Known for being remarkably punctual (a huge plus when you\u2019re juggling contractor visits and work calls), they are great with emergencies. If a kid cracks a tooth on the weekend, they are known for picking up the phone and squeezing you in. \n\nAny of these three will treat your household right and keep your smiles in shape without the hassle.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "owasso-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Owasso, OK?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "I\u2019d call these **Owasso shops first**, depending on the job:\n\n1. **Hometown Auto Repair** \u2014 my top pick for general repairs/diagnostics. Strong CARFAX rating, lots of local use, and they state their staff is **ASE-certified**. Good \u201ckeep the family car going\u201d shop. ([carfax.com](https://www.carfax.com/Reviews-Hometown-Auto-Repair-Owasso-OK_OXLOTDQWRJ))\n\n2. **Sinclair Auto Center** \u2014 a solid everyday-maintenance choice: oil changes, rotations, general service. It has one of the larger verified-review counts locally and a 4.8 CARFAX rating. ([carfax.com](https://www.carfax.com/Reviews-Sinclair-Auto-Center-Owasso-OK_ELKBXQE001))\n\n3. **Same Day Auto Repair Owasso** \u2014 I\u2019d use them when convenience matters; they\u2019re listed by **AAA Approved Auto Repair** in Owasso, which is a useful trust screen. ([aaa.com](https://www.aaa.com/autorepair/locations/owasso-ok))\n\n4. **Christian Brothers Automotive Owasso** \u2014 good option if you want a more polished, appointment-driven experience; CARFAX lists engine service/repair, maintenance, and tire rotation. ([carfax.com](https://www.carfax.com/Auto-Repair-Owasso-OK_c8251))\n\n5. **Robertson Tire** or **Tate Boys** \u2014 best bets for tires, alignments, rotations, and suspension-related basics; both show strong CARFAX ratings and high review counts. ([carfax.com](https://www.carfax.com/Auto-Repair-Owasso-OK_c8251))\n\nFor a homeowner: get a written estimate, ask what\u2019s urgent vs. optional, and avoid approving add-ons by phone without explanation.",
+    "sources": [
+     {
+      "url": "https://www.carfax.com/Reviews-Hometown-Auto-Repair-Owasso-OK_OXLOTDQWRJ",
+      "title": "Hometown Auto Repair - 10600 East 86th St North - Owasso, OK | CARFAX"
+     },
+     {
+      "url": "https://www.carfax.com/Reviews-Sinclair-Auto-Center-Owasso-OK_ELKBXQE001",
+      "title": "Sinclair Auto Center - 9700 N 119th East Ave - Owasso, OK | CARFAX"
+     },
+     {
+      "url": "https://www.aaa.com/autorepair/locations/owasso-ok",
+      "title": "Auto Repair Shops - Owasso OK | AAA Approved Auto Repair Facilities"
+     },
+     {
+      "url": "https://www.carfax.com/Auto-Repair-Owasso-OK_c8251",
+      "title": "Top Rated Auto Repair near Owasso, OK | CARFAX"
+     },
+     {
+      "url": "https://www.carfax.com/Auto-Repair-Owasso-OK_c8251",
+      "title": "Top Rated Auto Repair near Owasso, OK | CARFAX"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "Hey neighbor! If you\u2019re looking for trustworthy mechanics in Owasso, here are the top local shops I always recommend:\n\n*   **Christian Brothers Automotive:** My top pick for major repairs or tricky diagnostics. They are famously honest, send clear digital inspection reports with photos before touching anything, and even offer a free courtesy shuttle so you don't get stranded.\n*   **Tate Boys Automotive:** Excellent for routine maintenance, brakes, oil changes, and tires. They\u2019re an Oklahoma staple, the turnaround time is quick, and their staff is super upfront about pricing. \n*   **Owasso Auto Care:** A great local, independent option if you prefer a family-owned vibe. They offer fair labor rates, don't try to push unnecessary upsells, and treat you like a real person, not just a repair ticket.\n\n**Pro tip:** Call ahead to schedule an appointment, especially at Christian Brothers\u2014they tend to book up fast because of their reputation!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "owasso-ok-house-cleaning",
+   "question": "Who are the best cleaning companies in Owasso, OK?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were hiring for my own home in Owasso, I\u2019d start with:\n\n1. **Maid In Owasso, Inc.** \u2014 Best \u201clocal-local\u201d pick. They\u2019ve served Owasso since 1999, are fully bonded/insured, and offer weekly, biweekly, monthly, one-time, move-in/move-out, and rental cleans. Good choice if you want an established Owasso company, not a marketplace app. ([maidinowasso.com](https://www.maidinowasso.com/))\n\n2. **MaidPro Owasso** \u2014 Best for a polished, systemized clean. They advertise a customizable **49-point checklist**, serve the Owasso area, and show **4.8 stars from 204 reviews**. I\u2019d use them for recurring maintenance or when consistency matters. ([maidpro.com](https://maidpro.com/owasso))\n\n3. **Bliss Maid Services** \u2014 Best Tulsa-metro option if you want vetted staff and flexible services. They offer recurring, one-time, deep, event, and move-related cleaning; their cleaners are listed as background-checked, insured, bonded, trained, and certified. ([blissmaidservices.com](https://www.blissmaidservices.com/))\n\nI\u2019d **skip Custom Maid** now: their site says they closed August 29, 2026. ([custommaidok.com](https://www.custommaidok.com/))",
+    "sources": [
+     {
+      "url": "https://www.maidinowasso.com/",
+      "title": "Maid In Owasso, Inc."
+     },
+     {
+      "url": "https://maidpro.com/owasso",
+      "title": "MaidPro Owasso,OK | Best House Cleaning Services"
+     },
+     {
+      "url": "https://www.blissmaidservices.com/",
+      "title": "Bliss Maid Services \u2013 The Tulsa Area Cleaners That Care"
+     },
+     {
+      "url": "https://www.custommaidok.com/",
+      "title": "Home - Custom Maid"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable house cleaners here in Owasso, these are the top three local options I\u2019d recommend:\n\n1. **MaidPro Owasso:** They are a go-to for routine maintenance. Their 49-point checklist ensures consistency, and they\u2019re great about customizing your clean\u2014meaning you can ask them to skip unused rooms to save on your budget.\n\n2. **Two Maids (Tulsa/Owasso):** Outstanding for deep cleans or move-in/out jobs. They use a unique \"Pay for Performance\" model where the cleaners' feedback score directly impacts their pay, which keeps quality and attention to detail extremely high.\n\n3. **The Cleaning Authority (Tulsa Metro/Owasso):** The best pick if you want eco-friendly cleaning. They use non-toxic, Green Seal-certified products and run a \"detail-clean rotation system\" so your home gets a systematic deep-clean over time rather than just a quick surface wipe down.\n\n**My advice:** All three are fully bonded, insured, and offer fast online estimates. Call two for a quick quote to compare pricing for your specific square footage!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "cabot-ar-detailing",
+   "question": "Who are the best auto detailers in Cabot, AR?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a Cabot homeowner, I\u2019d call these first:\n\n1. **Champion Auto Detailing** \u2014 My top pick for a true detail. It\u2019s Cabot-based, has a strong 4.5-star profile, and recent reviews praise punctuality, pet-hair removal, and cars looking \u201cbrand new.\u201d Good choice for family SUVs, kid messes, and dog hair. ([bestprosintown.com](https://www.bestprosintown.com/ar/cabot/champion-auto-detailing-/))\n\n2. **Reed\u2019s Auto Detailing** \u2014 A solid local shop option with an established Cabot address on Nalley Rd and 8 years in business. I\u2019d price them for a full interior/exterior detail or routine upkeep. ([yellowpages.com](https://www.yellowpages.com/cabot-ar/automobile-detailing))\n\n3. **Arkansas Pro Kleen Auto Detail** \u2014 Another dedicated Cabot detailer, located on S. 1st St. Worth calling if you want a nearby drop-off option and to compare packages/pricing. ([arkansasprokleenautodetail.localsearch.com](https://arkansasprokleenautodetail.localsearch.com/))\n\n4. **Fine Line Mobile Detailing** \u2014 Best if you want them to come to your house. They serve Cabot and offer mobile detailing, paint correction, ceramic coating, and tinting. ([finelinemobile.com](https://www.finelinemobile.com/))\n\nI\u2019d ask each for recent photos, package details, and whether shampoo/extraction and pet hair are included.",
+    "sources": [
+     {
+      "url": "https://www.bestprosintown.com/ar/cabot/champion-auto-detailing-/",
+      "title": "Champion Auto Detailing, Cabot, AR - Reviews (24), Photos (22) - BestProsInTown"
+     },
+     {
+      "url": "https://www.yellowpages.com/cabot-ar/automobile-detailing",
+      "title": "Best 28 Automobile Detailing in Cabot, AR with Reviews | The Real Yellow Pages\u00ae"
+     },
+     {
+      "url": "https://arkansasprokleenautodetail.localsearch.com/",
+      "title": "Arkansas Pro Kleen Auto Detail - Automobile Detailing - Cabot, AR"
+     },
+     {
+      "url": "https://www.finelinemobile.com/",
+      "title": "Mobile Detailing | Alexander, AR | Fine Line Mobile"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re looking to get your car detailed in Cabot, here are the local spots I\u2019d recommend trusting with your vehicle:\n\n1. **Cabot Auto Detailing:** They are a local favorite for a reason. They do incredible work on both interior deep cleans and exterior paint correction. If you have kids or pets and your seats are wrecked, these are the folks to call to make it look brand new.\n2. **Dynamic Mobile Detailing:** If you\u2019re a busy homeowner who doesn't have time to drop off a car and wait around, Dynamic is fantastic because they come right to your driveway. They are meticulous, professional, and very convenient. \n3. **Advanced Tint & Detailing:** While many know them for window tinting, their detailing services are top-tier. They really understand paint protection, so if you're looking for ceramic coatings alongside a thorough wash and polish, they\u2019re worth every penny.\n\nAny of these three will treat your vehicles right without the corporate runaround!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "foley-al-house-cleaning",
+   "question": "Who are the best cleaning companies in Foley, AL?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were hiring for a **Foley home**, I\u2019d start with these:\n\n1. **Whole Lotta Kleaning and More** \u2014 Best first call for recurring house cleaning. Angi lists them at **5.0 with 8 reviews**, in business since 2021, and reviewers mention thorough work and moving to a recurring schedule. ([angi.com](https://www.angi.com/companylist/us/al/foley/house-cleaning.htm))\n\n2. **The Cleaning Authority of Baldwin County** \u2014 Best for a more structured, professional setup. They\u2019re listed at **5.0 with 5 reviews**, offer recurring, deep, move-in/move-out cleaning, and note background-checked/drug-screened cleaners. ([angi.com](https://www.angi.com/companylist/us/al/foley/house-cleaning.htm))\n\n3. **Zoiris Cleaning Services** \u2014 Best if you want a no-contract company with strong stated protections: licensed, bonded, insured, background-checked cleaners, and a satisfaction guarantee. They advertise **4.9 stars with 240+ reviews**. ([zoiriscleaningservices.com](https://www.zoiriscleaningservices.com/foley-al/))\n\n4. **Leidy Cleaning Services** \u2014 Good local Foley option for detailed deep cleans; BestProsInTown shows **4.6 from 11 reviews**, with customers praising top-to-bottom cleaning. ([bestprosintown.com](https://www.bestprosintown.com/al/foley/leidy-cleaning-services-/?utm_source=openai))\n\nI\u2019d get quotes from the first three and ask who supplies products, whether they\u2019re insured, and if the same cleaner/team returns each visit.",
+    "sources": [
+     {
+      "url": "https://www.angi.com/companylist/us/al/foley/house-cleaning.htm",
+      "title": "Top 10 Best House cleaners in Foley, AL | Angi"
+     },
+     {
+      "url": "https://www.angi.com/companylist/us/al/foley/house-cleaning.htm",
+      "title": "Top 10 Best House cleaners in Foley, AL | Angi"
+     },
+     {
+      "url": "https://www.zoiriscleaningservices.com/foley-al/",
+      "title": "House Cleaning & Maid Services in Foley, AL | Zoiris Cleaning"
+     },
+     {
+      "url": "https://www.bestprosintown.com/al/foley/leidy-cleaning-services-/?utm_source=openai",
+      "title": "LEIDY CLEANING SERVICES, Foley, AL - Reviews (11), Photos (13) - BestProsInTown"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you're looking for reliable cleaners in Foley, here are the local companies I\u2019d put at the top of my list:\n\n1. **The Maids of South Alabama**: Perfect if you need a thorough deep clean. They send a 3-to-4-person team using a detailed 22-step cleaning system and HEPA filtration vacuums, which is fantastic if anyone in your home suffers from allergies or tracking in coastal dust.\n\n2. **Southern Breeze Cleaning**: A highly-rated local favorite. Homeowners love them because they are reliable, detail-oriented, and treat your house with real care. They\u2019re great for setting up regular bi-weekly or monthly maintenance cleans.\n\n3. **Molly Maid of Baldwin County**: If you want the peace of mind that comes with a well-established, fully insured company, they're a great option. They offer flexible, no-contract custom cleaning plans tailored to your specific budget and home size.\n\n4. **Gulf Coast Clean Team**: Excellent if you want a locally owned crew that knows how to handle coastal homes\u2014from sandy floors to humidity-related dust.\n\n**Pro tip:** Most of these offer free over-the-phone estimates. Call two or three to compare rates and see who fits your schedule best!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
