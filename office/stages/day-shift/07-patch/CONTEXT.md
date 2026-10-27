@@ -15,6 +15,10 @@
    and the email ridgelinemarketinghq@gmail.com appear, and any visible error). Also read
    https://ridgelinehq.github.io/data/stripe-links.json: empty links = yellow "checkout not live
    yet" until the STRIPE_SECRET_KEY secret exists, then red if still empty after 2 hours (alert). Also `curl -sI` the raw file for a 200 and the time taken.
+   WebFetch refused or blocked by this session's network (not an HTTP error from the site) is NOT
+   "site down": fall back to `git show origin/main:index.html` for the price/button/email checks and
+   mark health.site "green (checked from repo; live fetch blocked here)". Only a real HTTP error or
+   wrong content is red (Oct 27, 2026: "site unreachable" fired 3 of 4 days while the site was up).
    Missing price, link or email = red; slow or odd = yellow; fine = green. Record health.site.
    A broken element (not copy) that Patch can fix with a surgical edit: 3-line plan in the run
    doc, edit index.html, verify the raw file after push shows the fix; otherwise NEEDS YOU.
