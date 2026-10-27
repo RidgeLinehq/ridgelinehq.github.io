@@ -1,0 +1,8 @@
+{"id": "aicheck-2026-10-27-owasso-7c3e", "queries": [
+  {"key": "owasso-ok-barbershops", "question": "Who are the best barbershops in Owasso, OK?", "city": "Owasso", "region": "Oklahoma"},
+  {"key": "owasso-ok-dentist", "question": "Who are the best dentists in Owasso, OK?", "city": "Owasso", "region": "Oklahoma"},
+  {"key": "owasso-ok-auto-repair", "question": "Who are the best auto repair shops in Owasso, OK?", "city": "Owasso", "region": "Oklahoma"},
+  {"key": "owasso-ok-house-cleaning", "question": "Who are the best cleaning companies in Owasso, OK?", "city": "Owasso", "region": "Oklahoma"},
+  {"key": "cabot-ar-detailing", "question": "Who are the best auto detailers in Cabot, AR?", "city": "Cabot", "region": "Arkansas"},
+  {"key": "foley-al-house-cleaning", "question": "Who are the best cleaning companies in Foley, AL?", "city": "Foley", "region": "Alabama"}
+]}
