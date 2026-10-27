@@ -99,7 +99,6 @@ function freeCheck_(th, f) {
                      : { ok: false, error: a.error };
   });
   var fixes = pickFixes_(res);
-  var spots = foundingSpots_();
   var biz = f.business;
   var lines = [];
   lines.push('Hi there,', '');
@@ -115,8 +114,7 @@ function freeCheck_(th, f) {
   lines.push('The 3 fixes I\'d make first:');
   fixes.forEach(function (fx, i) { lines.push((i + 1) + '. ' + fx); });
   lines.push('');
-  lines.push('Want us to do it for you? Plans start at $75 a month, month to month. Most businesses pick Growth ($125): we fix all of the above and send you leads, and if your first month brings zero tracked leads and no improvement in your AI visibility, your second month is free (terms: ' + CFG.SITE + '/guarantee.html).');
-  if (spots > 0) lines.push(spots + ' founding spots left: the first 20 clients keep their price for life.');
+  lines.push('Want us to do it for you? Plans start at $39.99 a month, no contract. Most businesses pick Growth ($75): we fix all of the above and keep it moving every month, and if your first month brings zero tracked leads and no improvement in your AI visibility, your second month is free (terms: ' + CFG.SITE + '/guarantee.html).');
   lines.push('See the plans: ' + CFG.SITE + '/#pricing', '');
   lines.push('Or just reply with any question.', '', CFG.SIGNATURE, '', CFG.OPT_OUT, CFG.ADDRESS);
   GmailApp.sendEmail(f.email, 'Your free AI check: ' + biz + ' in ' + place.town, lines.join('\n'), { name: 'Grayson at Ridgeline Local', replyTo: CFG.ME });
@@ -385,11 +383,6 @@ function tradePhrase_(t) {
 function slugify_(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 30) || 'x'; }
 function excerpt_(t, n) { var s = String(t).replace(/\*\*/g, '').replace(/\s+/g, ' ').trim(); return s.length > n ? s.slice(0, n).replace(/\s\S*$/, '') + '…' : s; }
 function strip_(x) { return x.ok ? { ok: true, model: x.model, live: x.live, rank: x.rank, names: x.names, text: excerpt_(x.text, 600) } : x; }
-
-function foundingSpots_() {
-  try { var d = JSON.parse(UrlFetchApp.fetch(CFG.SITE + '/data/founding.json', { muteHttpExceptions: true }).getContentText()); return Math.max(0, +d.spotsLeft || 0); }
-  catch (e) { return 0; }
-}
 
 function label_(name) { return GmailApp.getUserLabelByName(name) || GmailApp.createLabel(name); }
 
