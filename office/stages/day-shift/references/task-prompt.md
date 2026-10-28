@@ -1,4 +1,4 @@
-# Scheduled task prompts: proposed edits (Oct 28, 2026; NOT applied until Grayson says go)
+# Scheduled task prompts: edits APPLIED Oct 28, 2026 at Grayson's go (both tasks updated with update_trigger)
 
 The two live tasks are "Ridgeline Office · Day Shift" (weekdays 7:07 AM Central,
 trig_012SJWcH3bKBRLuSS2meJQgc) and "Ridgeline · reply desk" (hourly 6:37 AM to 11:37 PM Central,
