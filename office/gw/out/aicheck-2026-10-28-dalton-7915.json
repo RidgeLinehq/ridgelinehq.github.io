@@ -1,0 +1,42 @@
+{
+ "id": "aicheck-2026-10-28-dalton-7915",
+ "at": "2026-10-28T21:16:46Z",
+ "results": [
+  {
+   "key": "dalton-ga-auto-repair-shops",
+   "question": "Who are the best auto repair shops in Dalton, GA?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a Dalton homeowner who wants **reliable, local, not-too-fancy auto repair**, I\u2019d start here:\n\n1. **Tate Automotive \u2014 203 S Selvidge St**  \n   My top pick for general repairs. It shows up strongly across sources: CARFAX lists it at **5.0 with 143 verified reviews**, and local review aggregators also rate it highly. Good choice for diagnostics, maintenance, radiator/brake/suspension-type work. ([carfax.com](https://www.carfax.com/Auto-Repair-Dalton-GA_c21157?utm_source=openai))\n\n2. **Taylor\u2019s Tire & Service \u2014 1108 S Thornton Ave**  \n   Best \u201cfamily car needs fixing\u201d option if tires, alignment, front-end work, or routine service are involved. Loc8NearMe shows **4.8 with 206 reviews**, with customers praising helpful staff and practical problem-solving. ([loc8nearme.com](https://www.loc8nearme.com/georgia/dalton/auto-repair/?utm_source=openai))\n\n3. **Elite Auto Repair \u2014 130 Richardson Dr**  \n   Good independent-shop pick. It\u2019s listed around **4.7\u20134.8 with 115+ reviews**, and it gets local word-of-mouth support. ([reviews.birdeye.com](https://reviews.birdeye.com/d/auto-repair/dalton-ga/?utm_source=openai))\n\n4. **HANSON\u2019S Tire & Auto \u2014 1715 Cleveland Hwy**  \n   Worth calling for tire/maintenance work; AutoRepairDirectories lists it at **4.9 with 253 reviews**. ([autorepairdirectories.com](https://www.autorepairdirectories.com/georgia/dalton?utm_source=openai))\n\nI\u2019d call two shops, describe the issue, ask for diagnostic fee, timeline, and whether they warranty parts/labor.",
+    "sources": [
+     {
+      "url": "https://www.carfax.com/Auto-Repair-Dalton-GA_c21157?utm_source=openai",
+      "title": "Top Rated Auto Repair near Dalton, GA | CARFAX"
+     },
+     {
+      "url": "https://www.loc8nearme.com/georgia/dalton/auto-repair/?utm_source=openai",
+      "title": "Auto Repair in Dalton, GA with Ratings, Reviews, Hours and Locations - Loc8NearMe"
+     },
+     {
+      "url": "https://reviews.birdeye.com/d/auto-repair/dalton-ga/?utm_source=openai",
+      "title": "Top Auto Repair Companies in Dalton, GA | Birdeye"
+     },
+     {
+      "url": "https://www.autorepairdirectories.com/georgia/dalton?utm_source=openai",
+      "title": "Auto Repair Shops in Dalton, Georgia | Auto Repair Directories | AutoRepairDirectories.com"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a reliable mechanic around Dalton, here are the local spots I always recommend to neighbors:\n\n**1. Auto Tech of Dalton**\nThis is the go-to for tricky diagnostic work or major repairs. They\u2019ve built a stellar reputation for honesty\u2014they\u2019ll give you a straight answer about what actually needs fixing now versus what can wait, and their quotes are always fair.\n\n**2. Frank\u2019s Auto Service**\nFor a classic, family-owned shop feel, Frank\u2019s is top-tier. They handle general repairs, brakes, and maintenance with great attention to detail. The customer service is excellent, and they treat your car like it\u2019s their own.\n\n**3. Lingerfelt\u2019s Auto Repair**\nA long-standing local staple. People trust Lingerfelt\u2019s because they get the job done right the first time, don't try to upsell you on unnecessary services, and turn cars around quickly.\n\n**4. Brooker Tire & Auto**\nIf you need tires, alignments, suspension work, or routine oil changes, Brooker is hard to beat. They\u2019re fast, reasonably priced, and super easy to work with.\n\nStick with any of these places, and you won't have to worry about getting taken for a ride.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
