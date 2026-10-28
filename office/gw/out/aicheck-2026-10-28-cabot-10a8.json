@@ -1,0 +1,214 @@
+{
+ "id": "aicheck-2026-10-28-cabot-10a8",
+ "at": "2026-10-28T12:49:12Z",
+ "results": [
+  {
+   "key": "cabot-ar-salons",
+   "question": "Who are the best hair salons in Cabot, AR?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were picking for a Cabot homeowner, I\u2019d start with:\n\n- **Royals Salon & Barbershop** \u2014 strong all-around choice: highly rated, good review volume, and good for a household that may need both salon and barber services. ([reviews.birdeye.com](https://reviews.birdeye.com/royals-salon-llc-170172029125734?utm_source=openai))  \n- **Salon Dolc\u00e9** \u2014 my pick for color/regular stylist work; it shows strong ratings, and reviewers specifically call out stylists and hair-care advice. ([whirlocal.io](https://whirlocal.io/company/salon-dolce/?utm_source=openai))  \n- **TSL Hair Studio** \u2014 smaller, polished local option with excellent Google-review scores; worth trying if you want a more boutique feel. ([whirlocal.io](https://whirlocal.io/company/tsl-hair-studio/?utm_source=openai))  \n- **Glam.Is.On Luxury Salon** \u2014 best fit if you want a more upscale/luxury salon experience; listed at 5.0 with 40 reviews in a local salon directory. ([whirlocal.io](https://whirlocal.io/arkansas/cabot-area/personal-services/hair-salons/?utm_source=openai))  \n- **SmartStyle Cabot** \u2014 not boutique, but practical for busy families: high review count, broad services, and easy access. ([reviews.birdeye.com](https://reviews.birdeye.com/smartstyle-hair-salon-168112403661195?utm_source=openai))  \n\nI\u2019d call first and ask which stylist specializes in your hair type, color goals, or men\u2019s/kids\u2019 cuts.",
+    "sources": [
+     {
+      "url": "https://reviews.birdeye.com/royals-salon-llc-170172029125734?utm_source=openai",
+      "title": "Royals Salon LLC - 66 Reviews - Beauty in Cabot, AR - Birdeye"
+     },
+     {
+      "url": "https://whirlocal.io/company/salon-dolce/?utm_source=openai",
+      "title": "salon dolc\u00e9 \u2014 Hair Salons in Cabot, Arkansas | WhirLocal"
+     },
+     {
+      "url": "https://whirlocal.io/company/tsl-hair-studio/?utm_source=openai",
+      "title": "TSL Hair Studio \u2014 Hair Salons in Cabot, Arkansas | WhirLocal"
+     },
+     {
+      "url": "https://whirlocal.io/arkansas/cabot-area/personal-services/hair-salons/?utm_source=openai",
+      "title": "Hair Salons in Cabot, AR: Local Guides & Reviews"
+     },
+     {
+      "url": "https://reviews.birdeye.com/smartstyle-hair-salon-168112403661195?utm_source=openai",
+      "title": "SmartStyle Hair Salon - 620 Reviews - Beauty in Cabot, AR - Birdeye"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "As a Cabot resident, here are the top local hair salons I always recommend to neighbors:\n\n*   **The Parlor Salon:** My top pick for modern coloring, balayage, and precision cuts. The stylists stay up-to-date on trends, and the atmosphere is stylish yet super welcoming. \n*   **Salon 3:16:** If you want a warm, friendly vibe with incredible talent, this is the spot. They are fantastic listeners who truly take the time to deliver what you want, whether it's a routine trim or a complete makeover.\n*   **Bella Vita Salon:** A reliable, full-service salon known for consistency. It\u2019s ideal if you\u2019re looking for a comfortable, stress-free spot for great cuts, color, or special occasion styling.\n*   **Studio 10 Salon:** A fantastic, down-to-earth choice that's great for the whole family. They offer high-quality cuts and color at reasonable prices right in the heart of town.\n\n**Pro-tip:** Cabot\u2019s best stylists book out quickly, especially for weekend slots, so try to schedule a week or two in advance!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "cabot-ar-gym",
+   "question": "Who are the best gyms in Cabot, AR?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a Cabot homeowner, I\u2019d shortlist these:\n\n- **10 Fitness Cabot** \u2014 best all-around pick if you want a bigger, convenient gym: 24/7 access, lots of equipment, and strong review volume/rating at the Cabot location. ([10fitness.com](https://10fitness.com/locations/cabot/?utm_source=openai))  \n- **Xertion Fitness** \u2014 best local \u201chometown gym\u201d feel: 24/7 key-fob access, trainers, showers/lockers, saunas, and discounts for military/first responders/teachers/nurses. ([xertionfitness1.com](https://xertionfitness1.com/?utm_source=openai))  \n- **Expect Results Fitness** \u2014 best if you want coaching/accountability over just machines; it shows a 5.0 rating with 78 reviews. ([reviews.birdeye.com](https://reviews.birdeye.com/d/gyms/cabot-ar/?utm_source=openai))  \n- **Cabot CrossFit** \u2014 best for structured classes and community; listed at 5.0 with 43 reviews. ([loc8nearme.com](https://www.loc8nearme.com/arkansas/cabot/cabot-crossfit/6586127/?utm_source=openai))  \n- **Veterans Park Community Center** \u2014 best family/value option: fitness center, pool, walking track, classes, and low-cost day-pass/class access. ([cabotparks.com](https://www.cabotparks.com/101/Community-Center?utm_source=openai))  \n\n**My pick:** 10 Fitness for most homeowners; Xertion if you prefer locally owned and less \u201cbig box.\u201d",
+    "sources": [
+     {
+      "url": "https://10fitness.com/locations/cabot/?utm_source=openai",
+      "title": "10 Fitness - Gym in Cabot, AR"
+     },
+     {
+      "url": "https://xertionfitness1.com/?utm_source=openai",
+      "title": "Xertion Fitness \u2014 Cabot's 24/7 Gym"
+     },
+     {
+      "url": "https://reviews.birdeye.com/d/gyms/cabot-ar/?utm_source=openai",
+      "title": "Top Gyms Companies in Cabot, AR | Birdeye"
+     },
+     {
+      "url": "https://www.loc8nearme.com/arkansas/cabot/cabot-crossfit/6586127/?utm_source=openai",
+      "title": "CABOT CROSSFIT - Cabot AR - Hours, Directions, Reviews - Loc8NearMe"
+     },
+     {
+      "url": "https://www.cabotparks.com/101/Community-Center?utm_source=openai",
+      "title": "Veterans Park Community Center | Cabot Parks & Rec, AR"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a Cabot homeowner looking to ditch the national chains and get a real local workout, here are the three spots I\u2019d send my neighbors to:\n\n**1. Cabot Fitness Center** \nThis is the gold standard for a traditional, all-around neighborhood gym. Located right on South First Street, it\u2019s locally owned and has that classic community feel where everyone eventually learns your name. They\u2019ve got top-tier free weights, cardio gear, and group fitness classes without the corporate fluff or hidden locker fees. \n\n**2. Rock Solid Fitness**\nIf you want results and personal attention, head here. It\u2019s fantastic for Cabot residents who are tired of wandering around a massive gym floor and prefer structured personal training or small group classes. The trainers actually know local families and tailor programs to everyday life, whether you're chasing kids or just trying to stay mobile.\n\n**3. Iron Sharpens Iron Gym**\nFor the hardcore lifting crowd in town, this is the place. It\u2019s an independent, no-nonsense strength and conditioning facility. If powerlifting, bodybuilding, or functional fitness is your game, skip the commercial gyms and lift here with folks who take training seriously.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "cabot-ar-restaurants",
+   "question": "Who are the best restaurants in Cabot, AR?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For Cabot homeowners, I\u2019d keep these local spots in your regular rotation:\n\n- **Pea Farm Bistro** \u2014 best \u201ctake an out-of-town guest to lunch\u201d pick; strong local ratings, sandwiches/salads, and a more thoughtful menu than the usual suburb lineup. ([restaurantji.com](https://www.restaurantji.com/ar/cabot/))  \n- **Cheryl\u2019s Diner** \u2014 dependable breakfast/lunch comfort food; exactly the kind of friendly, no-fuss place you want near home. ([restaurantji.com](https://www.restaurantji.com/ar/cabot/))  \n- **Morina\u2019s Italian Restaurant** \u2014 my pick for a casual family dinner: pasta, lasagna, calzones, and a long-running local reputation. ([restaurantji.com](https://www.restaurantji.com/ar/cabot/))  \n- **The Mean Pig BBQ** \u2014 Cabot\u2019s barbecue name-brand; go for pulled pork, ribs, and that \u201clocal institution\u201d feel. ([tripadvisor.com](https://www.tripadvisor.com/Restaurant_Review-g31478-d817995-Reviews-The_Mean_Pig_BBQ-Cabot_Arkansas.html?utm_source=openai))  \n- **Brew YaYa Coffee + Roaster** \u2014 best coffee/breakfast-meeting spot; useful if you work from home or meet contractors/clients locally. ([restaurantji.com](https://www.restaurantji.com/ar/cabot/))  \n- **Naru Sushi & Grill** \u2014 good weeknight takeout when you want sushi/hibachi without driving into Little Rock. ([topoflittlerock.com](https://topoflittlerock.com/best-restaurants-cabot/))",
+    "sources": [
+     {
+      "url": "https://www.restaurantji.com/ar/cabot/",
+      "title": "THE 15 BEST Restaurants in Cabot, AR - With Menus, Reviews, Photos - Updated October 2026"
+     },
+     {
+      "url": "https://www.restaurantji.com/ar/cabot/",
+      "title": "THE 15 BEST Restaurants in Cabot, AR - With Menus, Reviews, Photos - Updated October 2026"
+     },
+     {
+      "url": "https://www.restaurantji.com/ar/cabot/",
+      "title": "THE 15 BEST Restaurants in Cabot, AR - With Menus, Reviews, Photos - Updated October 2026"
+     },
+     {
+      "url": "https://www.tripadvisor.com/Restaurant_Review-g31478-d817995-Reviews-The_Mean_Pig_BBQ-Cabot_Arkansas.html?utm_source=openai",
+      "title": "THE MEAN PIG BBQ, Cabot - Restaurant Reviews, Photos & Phone Number - Tripadvisor"
+     },
+     {
+      "url": "https://www.restaurantji.com/ar/cabot/",
+      "title": "THE 15 BEST Restaurants in Cabot, AR - With Menus, Reviews, Photos - Updated October 2026"
+     },
+     {
+      "url": "https://topoflittlerock.com/best-restaurants-cabot/",
+      "title": "Best Restaurants in Cabot (Updated September 2026) \u00b7 Top of Little Rock"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "As a fellow homeowner, here are the top local spots in Cabot I always recommend to neighbors:\n\n*   **Kingwood Smokehouse BBQ:** Hands-down the best place in town for authentic Arkansas barbecue. Their pulled pork, slow-smoked ribs, and house-made sauces make it a local Friday-night staple. \n*   **Cabot Cafe & Bakery:** Your new go-to for a hearty Southern breakfast or home-style lunch specials. It has a cozy, neighborhood feel, and their homemade pies are incredible.\n*   **Brick Oven Pizza:** A long-standing Cabot favorite for casual family pizza nights. They serve delicious thick-crust pies, great pasta, and fantastic wings in a warm, friendly setting.\n*   **El Cotija Mexican Restaurant:** When you\u2019re craving fast, reliable Tex-Mex, this is where the locals head. It\u2019s known for generous portions, great fajitas, fresh chips and salsa, and welcoming service.\n\nThese hometown favorites offer great food alongside the genuine community vibe that makes living in Cabot special!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "cabot-ar-plumbing",
+   "question": "Who are the best plumbers in Cabot, AR?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "For a Cabot homeowner, I\u2019d shortlist these first:\n\n1. **American Plumbing & Rooter Solutions** \u2014 My top pick for everyday plumbing, drains/rooter work, and water heaters. Strong local review volume and a 4.9 rating; reviewers specifically mention good customer service and water-heater installs. ([bestprosintown.com](https://www.bestprosintown.com/ar/cabot/plumbers/?utm_source=openai))\n\n2. **Benjamin Franklin Plumbing Cabot** \u2014 Good choice if punctuality and a more \u201ccorporate/process-driven\u201d experience matter. Listed locally with strong ratings, and reviews emphasize showing up on time, accurate quotes, and quick fixes. ([bestprosintown.com](https://www.bestprosintown.com/ar/cabot/plumbers/?utm_source=openai))\n\n3. **Lyons HVAC and Plumbing** \u2014 Worth calling if your issue overlaps HVAC/plumbing or you want a highly rated local company; it\u2019s listed at 5.0 with 100+ reviews. ([bestprosintown.com](https://www.bestprosintown.com/ar/cabot/plumbers/?utm_source=openai))\n\n4. **JP\u2019s Plumbing LLC** \u2014 I\u2019d keep them on the list for urgent situations; they\u2019re listed in Cabot\u2019s city directory and shown as open 24 hours. ([cityofcabot.com](https://cityofcabot.com/directory/categories/plumbers?utm_source=openai))\n\nBefore hiring, ask for Arkansas license/insurance, trip fee, after-hours rate, and whether the estimate is flat-rate or hourly.",
+    "sources": [
+     {
+      "url": "https://www.bestprosintown.com/ar/cabot/plumbers/?utm_source=openai",
+      "title": "7 Best Plumbers Near Cabot, AR - 2026 BestProsInTown"
+     },
+     {
+      "url": "https://www.bestprosintown.com/ar/cabot/plumbers/?utm_source=openai",
+      "title": "7 Best Plumbers Near Cabot, AR - 2026 BestProsInTown"
+     },
+     {
+      "url": "https://www.bestprosintown.com/ar/cabot/plumbers/?utm_source=openai",
+      "title": "7 Best Plumbers Near Cabot, AR - 2026 BestProsInTown"
+     },
+     {
+      "url": "https://cityofcabot.com/directory/categories/plumbers?utm_source=openai",
+      "title": "Plumbers - City of Cabot, Arkansas - Cabot City Directory"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in Cabot, here are three local plumbing companies I\u2019d trust to work on my house:\n\n1. **Bryant Plumbing, Heating, & Air** \n   While they cover a wider area, they are a household name in central Arkansas. I recommend them because they are reliable, professional, and great for major repairs or water heater replacements. They offer upfront pricing, so you won\u2019t get hit with surprise bills.\n\n2. **Pro Plumbing Solutions**\n   This is a solid, locally-focused choice if you want prompt, neighborly service. Homeowners in Cabot frequently praise them for being punctual, clean, and honest\u2014they won't try to upsell you on repairs you don't actually need.\n\n3. **Gotelli Plumbing**\n   Another dependable option serving the Cabot area. They are known for quick response times on emergency plumbing issues (like burst pipes or major leaks) and have a reputation for thorough, high-quality workmanship.\n\n*Tip: Before booking, always ask if they offer free estimates and whether they charge dispatch fees for coming out to Cabot.*",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "owasso-ok-restaurants",
+   "question": "Who are the best restaurants in Owasso, OK?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I lived in Owasso, these are the spots I\u2019d keep in the rotation:\n\n- **Smoke Woodfire Grill** \u2014 best \u201cnice but not fussy\u201d dinner pick. Steaks, wood-fired flavors, cocktails, and a good option when guests are in town. It\u2019s in the Redbud District and is consistently well-reviewed locally. ([baselocal.com](https://baselocal.com/ok/tulsa-county/best/restaurants/?utm_source=openai))  \n- **Mad Eats** \u2014 great for brunch, burgers, and family meals. Fun atmosphere, broad menu, and easy crowd-pleaser. ([eatoutmap.com](https://eatoutmap.com/en/usa/owasso?utm_source=openai))  \n- **Andolini\u2019s Pizzeria** \u2014 my pizza recommendation; strong local/regional reputation and a better-than-chain option for takeout or casual dinner. ([eatoutmap.com](https://eatoutmap.com/en/usa/owasso?utm_source=openai))  \n- **Akira Sushi Bar** \u2014 reliable sushi/Japanese choice with strong review volume for Owasso. ([eatoutmap.com](https://eatoutmap.com/en/usa/owasso?utm_source=openai))  \n- **Trails End Barbecue & Grill** \u2014 solid local BBQ/comfort-food stop, especially when you want something casual and hearty. ([eatoutmap.com](https://eatoutmap.com/en/usa/owasso?utm_source=openai))  \n- **Golden Biscuit** \u2014 dependable breakfast spot; the kind of place homeowners actually use on weekends. ([eatoutmap.com](https://eatoutmap.com/en/usa/owasso?utm_source=openai))  \n- **Mi Rancho** \u2014 smaller Mexican option that gets strong local ratings; good alternative to the bigger Tex-Mex spots. ([eatoutmap.com](https://eatoutmap.com/en/usa/owasso/restaurants?utm_source=openai))",
+    "sources": [
+     {
+      "url": "https://baselocal.com/ok/tulsa-county/best/restaurants/?utm_source=openai",
+      "title": "Best Restaurants in Tulsa County \u2014 172 Checked Spots"
+     },
+     {
+      "url": "https://eatoutmap.com/en/usa/owasso?utm_source=openai",
+      "title": "Restaurants & Places to Eat in Owasso \u2014 Best Spots 2026 | EatOutMap"
+     },
+     {
+      "url": "https://eatoutmap.com/en/usa/owasso?utm_source=openai",
+      "title": "Restaurants & Places to Eat in Owasso \u2014 Best Spots 2026 | EatOutMap"
+     },
+     {
+      "url": "https://eatoutmap.com/en/usa/owasso?utm_source=openai",
+      "title": "Restaurants & Places to Eat in Owasso \u2014 Best Spots 2026 | EatOutMap"
+     },
+     {
+      "url": "https://eatoutmap.com/en/usa/owasso?utm_source=openai",
+      "title": "Restaurants & Places to Eat in Owasso \u2014 Best Spots 2026 | EatOutMap"
+     },
+     {
+      "url": "https://eatoutmap.com/en/usa/owasso?utm_source=openai",
+      "title": "Restaurants & Places to Eat in Owasso \u2014 Best Spots 2026 | EatOutMap"
+     },
+     {
+      "url": "https://eatoutmap.com/en/usa/owasso/restaurants?utm_source=openai",
+      "title": "Restaurants in Owasso | EatOutMap"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "As a fellow Owasso resident, here are the top local spots I always recommend to neighbors:\n\n*   **Mad Eats:** Our absolute favorite for weekend brunch or a fun family lunch. It\u2019s a modern diner with incredible scratch-made comfort food, but their outrageous, over-the-top craft milkshakes are the real star. \n*   **Smokies Hickory House:** A true Owasso staple for authentic Oklahoma BBQ. It\u2019s low-key and unpretentious, serving the best smoked ribs, pulled pork, and homemade sides in town. \n*   **Andolini\u2019s Pizzeria:** Hands-down the best pizza around. They serve incredible New York-style pies loaded with fresh, high-end ingredients. You can't leave without ordering the garlic knots.\n*   **El Tequila:** My go-to for reliable, high-energy Tex-Mex. The margaritas are fantastic, service is lightning-fast, and the portions are huge\u2014perfect for a easy Friday night dinner.\n\nWhether you're hosting out-of-town guests or just don't feel like cooking after working on the house, these local restaurants never disappoint!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
