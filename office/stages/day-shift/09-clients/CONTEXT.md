@@ -1,4 +1,4 @@
-# 09 Clients: make the product work for every paying client (runs when any client is active)
+# 09 Clients: make the product work for every paying client (runs when any client is active, and Mondays for the test buy)
 
 Grayson's standing order (Oct 24, 2026): for every paying client the crew automatically
 optimizes their Google profile and tracks changes, runs review requests to their REAL customers,
@@ -11,6 +11,7 @@ owns the work.
 | File | Section |
 |---|---|
 | specs/client-delivery.md | all |
+| specs/client-happiness.md | all (touchpoints, win emails, real-not-noise, cancel = learn) |
 | specs/quality.md | all (every drafted item passes it before status ready; reports and packs are branded PDFs via office/tools/make_pack.js) |
 | specs/lead-tracking.md | all |
 | specs/offer.md | The plans, Promises the crew may NOT make |
@@ -19,6 +20,24 @@ owns the work.
 | skills/echo/SKILL.md, skills/parker/SKILL.md | all |
 | database: clients where status == active (out_dir); leadlog for those clients, last 45 days (out_dir); drafts where clientId set, newest 10 per client | |
 | Tools: WebSearch (profile checks, web-search leads, review counts), Gmail read-only for the client's thread | |
+
+## Step 0: the weekly test buy (Mondays, always, even with zero clients)
+Grayson (Oct 28, 2026): "make sure when people buy they're actually getting a good product."
+We test the product the way a buyer meets it, every week, so it gets better before and between
+real clients.
+1. Pick one REAL public local business (rotate kind of business and town each week; one a
+   gateway out file from the last 7 days already covers, so no new spend; never a lead we are
+   emailing, never Tennessee).
+2. Build its full Welcome Pack exactly as Lane C would (specs/quality.md: plan + kit + score,
+   branded PDF via make_pack.js), spec and PDF in the session scratchpad only.
+3. Grade it with a fresh grader (specs/quality.md "Who grades") as a skeptical owner. Fix the 3
+   weakest lines, grade again.
+4. Log: runlog note `testbuy {kind, town, score1, score2, weakest}` (no business name in the
+   repo), and one line in skills/echo/SKILL.md "What I've learned" with the weakest part and the
+   fix. The same weakness 2 weeks running → Sage makes it a rule in specs/quality.md.
+5. Score 90+ and better than office/examples/welcome-pack.json → write a fictionalized copy
+   there (new name, town, numbers). Under 80 → alert Grayson: "Test buy scored <n>: <weakest>".
+6. Email Grayson the PDF in the Monday morning report email ("This week's test buy: <score>").
 
 ## Process (per active client, oldest first; write the crew doc "working: Clients: <business>")
 1. **Week 1 items** not yet done (client.work): profile audit, profile fixes ("buildout-plan",
@@ -62,6 +81,11 @@ owns the work.
    "report" (all plans) per specs/lead-tracking.md; Pro: the promo video (Nova, studio), linked
    in the report. Real numbers only; unknown = "unknown".
 8. Weekly Google post draft (kind "post"), Mondays.
+8b. **Happiness** (specs/client-happiness.md): day-3 check-in (kind "checkin"), day-21 "what we
+   did so far" (kind "update"), a win email (kind "win") the run a proven win shows up (a score
+   gain counts only once it holds 2 checks in a row), the simpler-version redo for any client
+   who asked "how" or hasn't acted in 7 days, and renewal-in-3-days with zero wins → strongest
+   honest update + flat ladder today. Log each response in skills/echo "What I've learned".
 9. Anything that failed for a client (gateway 3x, lead finder error, a WebSearch dead end that
    blocks a promised item) → alert (shared/alerts.md) and a line in the run notes. If a promise
    on the website can't be delivered, NEEDS YOU "Website promises <x>, we can't deliver it yet:
@@ -77,8 +101,8 @@ or client.customers in the repo. Lead finder and gateway jobs carry town + trade
 ## Outputs
 | Where | What |
 |---|---|
-| drafts/<id> (kinds plan, kit, reviewreq, fix, leads, jobcheck, report, post) | status ready, clientId set |
-| clients/<id> | work[], aiTrend, competitorsNow, profileLog, reviewsNow, fixesTried, flatAt, reportDue, updatedAt |
+| drafts/<id> (kinds plan, kit, reviewreq, fix, leads, jobcheck, report, post, checkin, update, win) | status ready, clientId set |
+| clients/<id> | work[], checkins[], wins[], lastUpdateAt, aiTrend, competitorsNow, profileLog, reviewsNow, fixesTried, flatAt, reportDue, updatedAt |
 | leadlog/<id> | new leads |
 | repo | office/gw/jobs/*, office/leadfinder/jobs/*, office/landing/*.json + p/<slug>/ (Pro) |
 | events/<day> | "Clients: <n> active, <m> items drafted, <l> leads, <f> flat" |

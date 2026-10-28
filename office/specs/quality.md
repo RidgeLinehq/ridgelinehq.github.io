@@ -20,6 +20,23 @@ again (up to 2 rewrites). Still under 85 after 2 rewrites: ship the best version
 | Looks good on a phone (15) | Short paragraphs, numbered steps, no walls of text, no jargon, under the length limit for the kind. |
 | True (10) | Every fact traceable to the client, the lead log, the gateway text or a source URL. One invented fact = score 0. |
 
+## Who grades (Oct 28, 2026: the writer never grades its own work)
+A worker that wrote a deliverable always thinks it's good. So the qa score comes from a FRESH
+grader: launch a separate worker (Agent tool) that gets only (a) the finished deliverable (the
+PDF rendered to page images, or the email text), (b) this file, (c) the client's facts and the
+source URLs, and none of the drafting conversation. Its job: "You are the busy owner of
+<business>, reading this on your phone between jobs. Score it on the six checks. Find every
+fact you can't trace to a source. List the 3 weakest lines, worst first." The writer fixes those
+and the grader scores again (counts as a rewrite). Record qa.by = "grader". A draft scored only
+by its writer is not ready. If the Agent tool is missing in a run, score it yourself, record
+qa.by = "self" and the desk re-grades it before sending.
+
+## Learn from the best one (golden example)
+Before drafting a Welcome Pack or a monthly report, read office/examples/ (the best graded
+example of that kind, fictional business, 90+). Match or beat it; never copy its facts. When a
+real deliverable grades higher than the example, Sage replaces the example on Sunday with a
+fictionalized copy (new business name, town, numbers; same structure and quality).
+
 ## The standard for each kind
 - **Profile fixes ("plan")**: every field Google lets them fill, written for them: primary and
   secondary categories (Google's exact category names), 750-character description that names

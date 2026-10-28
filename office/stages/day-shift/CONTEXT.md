@@ -41,7 +41,7 @@ gates in specs/email-rules.md. It never texts, calls, DMs or posts.
 | Outreach | 03-parker, 04-echo | once | paused; or no Qualified lead with an email and no follow-up due |
 | Studio | 05-nova | Monday and Thursday only | a brief already exists for this week's slot |
 | Review | 06-sage, 07-patch | once | never (sub-steps have their own skips) |
-| Clients | 09-clients | once | no client with status active |
+| Clients | 09-clients | once | no client with status active, except Mondays (the weekly test buy runs then) |
 | Report | 08-report | once, last | never |
 
 ## Assigned tasks (tasks collection, status queued)
@@ -76,7 +76,7 @@ only, no prose padding.
 | 06 | `office/tools/call_desk.py stats` output, `specs/email-rules.md` ("Reply handling"), `skills/sage/SKILL.md`, `LESSONS.md`, `references/database-fields.md` (lessons, workflow, clients) |
 | 07 | `skills/patch/SKILL.md`, `shared/repo.md` ("Write paths"), `references/database-fields.md` (health) |
 | 08 | `skills/mara/SKILL.md`, `shared/logging.md`, `shared/repo.md` ("Committing"), `specs/push-week-2026-10-23.md` ("Scoreboard": the money line and the day's targets vs actual) |
-| 09 | `specs/client-delivery.md`, `specs/quality.md`, `specs/lead-tracking.md`, `specs/offer.md` (The plans, Promises), `shared/gateway.md`, `shared/alerts.md`, `skills/echo/SKILL.md`, `skills/parker/SKILL.md` |
+| 09 | `specs/client-delivery.md`, `specs/client-happiness.md`, `specs/quality.md`, `specs/lead-tracking.md`, `specs/offer.md` (The plans, Promises), `shared/gateway.md`, `shared/alerts.md`, `skills/echo/SKILL.md`, `skills/parker/SKILL.md` |
 
 Do NOT load: every skill, every spec, `office/server/`, `office/page/`, `index.html` (Patch
 fetches the live site instead). If a stage file cannot be read, stop that stage, write the run

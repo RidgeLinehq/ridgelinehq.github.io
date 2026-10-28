@@ -80,8 +80,9 @@ refunded automatically. Disputes: evidence PDF to Grayson the same run. Reply de
 (same rules as specs/guarantee.md §4: no email in the file), client.status cancelled once the out
 file says ok, and a short confirmation with the date the last paid period ends. ok false → alert. Their lead page stays up 30 days, then is removed.
 
-## Quality
-Every deliverable passes specs/quality.md (85+) before it is ready, and goes out automatically.
+## Quality and happiness
+Every deliverable passes specs/quality.md (85+, scored by a fresh grader) before it is ready, and goes out
+automatically. Check-ins, win emails, the day-21 update and cancel reasons: specs/client-happiness.md.
 
 ## Honesty
 No work is marked done unless a Gmail id, a commit or a database row proves it. Reports show the

@@ -59,6 +59,7 @@ office/
 | Email and call law, deliverability | `shared/outreach-law.md` |
 | Something broke or needs Grayson | `shared/alerts.md` (email him at once) |
 | Guarantee, leads, client work | `specs/guarantee.md`, `specs/lead-tracking.md`, `specs/client-delivery.md` |
+| Keeping clients happy, wins, check-ins, test buy | `specs/client-happiness.md`, `specs/quality.md` ("Who grades"), `examples/` |
 | Run log | `shared/logging.md` |
 
 ## Triggers

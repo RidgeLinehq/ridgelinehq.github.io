@@ -16,6 +16,7 @@ first emails and client work; this desk sends and answers, any day.
 | specs/lead-tracking.md | The lead log, Sending leads, "Did this lead turn into a job?" |
 | shared/alerts.md | all |
 | specs/quality.md | all (every client deliverable passes it; Speed) |
+| specs/client-happiness.md | 2 (win emails), 4 (catch confusion), 5 (cancel = learn) |
 | specs/email-rules.md | QA gate 5 to 7, "Reply handling" |
 | shared/gateway.md | Protocol |
 | shared/rules.md | Honesty, Who we are in writing |
@@ -163,7 +164,7 @@ Search `(from:stripe.com OR subject:"Onboarding —") newer_than:7d -label:Ridge
    facts and run office/tools/make_landing.py, commit p/<slug>/, include the link in the
    baseline email; (e) FIRST DELIVERY in this same run (specs/quality.md "Speed" and "Format"):
    build the profile fixes (from the onboarding facts + a WebSearch of their public Google
-   listing) and the review kit, QA them to 85+, and send them as ONE "Welcome Pack" email with
+   listing) and the review kit, QA them to 85+ with a fresh grader (specs/quality.md "Who grades"; read office/examples/welcome-pack.json first), and send them as ONE "Welcome Pack" email with
    ONE branded PDF (office/tools/make_pack.js: score, AI answers, competitors, profile fixes,
    review kit, next 30 days), in the client's thread; record drafts kinds "plan" and "kit" as
    sent with that one Gmail id; Day Shift 09 refines them later; (f) work items welcome-sent, onboarding, baseline,
@@ -181,6 +182,9 @@ Search `(from:stripe.com OR subject:"Onboarding —") newer_than:7d -label:Ridge
 6. Google's "manager invitation accepted" email → client.managerAccess true, work item done.
 7. "cancel" from a client → Stripe cancel job (specs/client-delivery.md "Cancel or pause"),
    confirm to the client once the out file says ok; alert if not ok.
+   In that confirmation, ask once: "If you have 5 seconds: what would have made it worth
+   keeping?" Their answer → client.cancelReason + a line in skills/echo "What I've learned"
+   (specs/client-happiness.md §5).
 
 ## Lane C2: client care (every email from a paying client gets a real answer within the hour)
 Clients are paying real money: treat every message like it matters. Read their whole thread and
@@ -193,6 +197,9 @@ their client doc first. Answer in their thread, warm, plain, specific to their b
   again tomorrow" and check on the next Day Shift.
 - A review link, customer emails, photos, new info → Lane C step 5 + confirm what happens next.
 - "Cancel" → Lane C step 7. Be kind, no guilt, confirm the date the service ends.
+- Confused ("I don't get it", "how do I…") → answer with the ONE step, numbered, "takes 2
+  minutes", and log the lesson. Upset, money, or "not working" → reply kindly now AND alert
+  Grayson the same run with the gist and your best fix (specs/client-happiness.md §4).
 - A refund request → terms.html: payments are final (no refunds). Reply kindly, never cold:
   acknowledge, restate the policy in one plain line, offer to cancel future charges, and offer one
   concrete way to make it right (a call from Grayson, an extra profile review, a fresh lead push).
