@@ -65,7 +65,23 @@ class AiScoreTest(unittest.TestCase):
     def test_two_questions_warn_three_do_not(self):
         self.assertIn("2 questions (4 answers)", ai_score.few_questions_warning(2))
         self.assertIsNone(ai_score.few_questions_warning(3))
-        self.assertIsNone(ai_score.few_questions_warning(4))
+        self.assertIn("exactly 3", ai_score.few_questions_warning(4))
+
+    def test_duplicate_keys_count_once(self):
+        r = ai_score.score("Riverbend Plumbing Co.", ["q1", "q1", "q1"], [self.three])
+        self.assertEqual(r["questions"], 1)
+        self.assertEqual(r["answers"], 2)
+        self.assertIn("warning", r)
+
+    def test_no_keys_is_an_error_exit_2(self):
+        with self.assertRaises(SystemExit) as cm:
+            ai_score.score("Riverbend Plumbing Co.", [""], [self.three])
+        self.assertIn("no keys", str(cm.exception.code))
+        p = subprocess.run([sys.executable, "-I", os.path.join(HERE, "ai_score.py"), "--name", "X", "--keys", "", self.three],
+                           capture_output=True, text=True)
+        self.assertEqual(p.returncode, 2)
+        self.assertNotIn("Traceback", p.stderr)
+        self.assertNotIn("WARNING", p.stderr)
 
     def test_missing_key_is_an_error(self):
         with self.assertRaises(SystemExit) as cm:

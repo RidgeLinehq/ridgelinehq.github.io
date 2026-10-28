@@ -53,6 +53,7 @@
 {kind:"outreach"|"followup"|"breakup"|"freecheck"|"reply"|"script"|"caption"|"calendar"|"post"|"kit"|"plan"|"report"
    |"leads"|"jobcheck"|"reviewreq"|"fix"|"checkin"|"update"|"win" (the last three: client care, specs/client-happiness.md), clientId (client work only),
  leadId, businessName, town, title, subject, body, touch:1|2|3,
+ care:{kind:"day-3"|"simpler"|"ask" (checkin) | "ai-named"|"reviews"|"fix-live"|"lead" (win), question, proof} (09 sets it; the desk copies it into client.checkins / client.wins on send),
  status:"draft"|"ready"|"approved"|"sent"|"rejected"|"failed"|"brief"|"filmed"|"posted",
  qa:{score, by:"grader"|"self"|"desk", weakest, rewrites, levers:[], flags:[], at}, gmailDraftId, gmailDraftUrl,
  evidence:{gmailMessageId, threadId, sentAt}, approvedAt, rejectedAt, editedAt, error,

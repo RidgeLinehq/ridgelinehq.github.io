@@ -15,6 +15,8 @@ Owner: the reply desk (it runs every 2 hours, every day, so day 28 is never miss
 2. One gateway job with those 3 queries (shared/gateway.md protocol). A fresh job, never a cached
    out file: the baseline must be dated on/after the signup day.
 3. Score: `python3 office/tools/ai_score.py --name "<business>" --keys <q1,q2,q3> office/gw/out/<file>.json`.
+   (Oct 28, 2026: ai_score.py prints a WARNING and adds "warning" to its JSON when the keys are not
+   exactly the client's 3 distinct questions; a warned score is a first check, never the baseline.)
    Save on the client: `baseline = {score, points, answers, jobId, at, detail}` and append the
    same to `aiTrend` (the weekly history).
 4. Email the client their starting score in the welcome thread: the score, who ChatGPT and

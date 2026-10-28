@@ -73,6 +73,9 @@ def competitors(text, variants):
 
 
 def score(name, keys, files):
+    keys = distinct_keys(keys)
+    if not keys:
+        raise SystemExit(json.dumps({"error": "no keys", "missing": []}))
     variants = name_variants(name)
     results = {}
     for f in files:
@@ -100,14 +103,23 @@ def score(name, keys, files):
 
 
 def few_questions_warning(n_questions):
-    """The text of the warning for a score built from fewer than BASELINE_QUESTIONS questions, else None."""
-    if n_questions >= BASELINE_QUESTIONS:
+    """The warning text for a score built from anything but exactly BASELINE_QUESTIONS distinct questions, else None."""
+    if n_questions == BASELINE_QUESTIONS:
         return None
-    return ("WARNING: scored %d question%s (%d answers); the baseline and the guarantee use %d questions "
-            "(%d answers). Call this a first check, not the baseline. Do not write it to client.baseline, "
-            "client.aiTrend or the guarantee check; re-run with all %d keys first."
-            % (n_questions, "" if n_questions == 1 else "s", n_questions * 2, BASELINE_QUESTIONS,
-               BASELINE_QUESTIONS * 2, BASELINE_QUESTIONS))
+    if n_questions < BASELINE_QUESTIONS:
+        return ("WARNING: scored %d question%s (%d answers); the baseline and the guarantee use %d questions "
+                "(%d answers). Call this a first check, not the baseline. Do not write it to client.baseline, "
+                "client.aiTrend or the guarantee check; re-run with all %d keys first."
+                % (n_questions, "" if n_questions == 1 else "s", n_questions * 2, BASELINE_QUESTIONS,
+                   BASELINE_QUESTIONS * 2, BASELINE_QUESTIONS))
+    return ("WARNING: scored %d questions (%d answers); the baseline and the guarantee use exactly %d. "
+            "A score over more questions is not this client's baseline: re-run with their %d keys only."
+            % (n_questions, n_questions * 2, BASELINE_QUESTIONS, BASELINE_QUESTIONS))
+
+
+def distinct_keys(keys):
+    """Keys in order, duplicates dropped (q1,q1,q1 is one question, not three)."""
+    return list(dict.fromkeys(k for k in keys if k))
 
 
 if __name__ == "__main__":
@@ -117,11 +129,10 @@ if __name__ == "__main__":
     ap.add_argument("files", nargs="+")
     a = ap.parse_args()
     try:
-        keys = [k for k in a.keys.split(",") if k]
-        w = few_questions_warning(len(keys))
-        if w:
-            print(w, file=sys.stderr)
-        print(json.dumps(score(a.name, keys, a.files), indent=1))
+        out = score(a.name, a.keys.split(","), a.files)
+        if out.get("warning"):
+            print(out["warning"], file=sys.stderr)
+        print(json.dumps(out, indent=1))
     except SystemExit as e:
         print(e.code if isinstance(e.code, str) else e, file=sys.stderr)
         sys.exit(2)

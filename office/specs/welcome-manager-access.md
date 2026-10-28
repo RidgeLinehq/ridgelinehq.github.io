@@ -47,7 +47,7 @@ ignores the new field.
   "invited" | "later" | "no-access" (true once Google's "manager invitation accepted" email
   arrives, step 6). invited: accept the invite the same run when the Gmail shows it; the Welcome
   Pack says "we're in your listing" and drops the review-link homework. later: the pack's DO FIRST
-  #1 is the Manager step and the day-3 check-in asks for it once, never twice. no-access: the pack
+  #1 is the Manager step and the first "fix" nudge repeats it once (never the day-3 check-in, which asks one question only). no-access: the pack
   includes "Claim your Google listing (free, 5 minutes)" as DO FIRST #1 and every profile fact
   is labeled with the copy site it came from.
 - stages/day-shift/references/database-fields.md: managerAccess: true|false|"invited"|"later"|"no-access".

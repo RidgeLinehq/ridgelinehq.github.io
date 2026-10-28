@@ -33,11 +33,13 @@ gates in specs/email-rules.md. It never texts, calls, DMs or posts.
    Welcome Pack, a monthly report, the Monday test-buy pack), you launch the grader yourself as
    its own fresh agent with the brief in 09-clients/CONTEXT.md "Grading hand-off", then a fresh
    Clients worker for the fix round (its brief carries the grader's JSON), then the grader once
-   more. Two rounds at most, about 8 minutes each. A pack graded only by its writer is qa.by
-   "self" and never status ready; the reply desk re-grades those before sending. On Mondays the
+   more. Two rounds at most, about 8 minutes each. After the last round you record the grade on
+   the draft yourself (09 "Grading hand-off" step 6). A pack no grader could run on goes "ready"
+   with qa.by "self" plus an alert, and the reply desk re-grades it before sending. On Mondays the
    Clients worker runs even with zero clients (the test buy), and its `TESTBUY:` line goes into
    the Report worker's brief.
-3. After each worker: read its report and the run notes file, update runs/<runId> and counts,
+3. After each worker: read its report and the run notes file, email every `ALERT:` line in it
+   yourself (shared/alerts.md, deduped; workers cannot send email), update runs/<runId> and counts,
    and decide the next worker. A failed worker is retried once with the failure in its brief; a
    second failure marks the run failed at that stage (later workers still run where they can:
    Review and Report always run).
@@ -108,4 +110,6 @@ doc failed with the reason, and tell Grayson in one line.
 About 25 minutes of work, plus up to 15 more for the call stock fill and enrichment pass (Oct 26,
 2026) while any niche is under 25. Over budget: skip 05, then cut the stock fill to 15 leads, then cut Scout to 8 leads, then skip Sage's
 workflow review (replies are never skipped). Any single wait: 5 minutes max.
+A grader round (2b) is the one wait allowed past 5 minutes (about 8). Mondays add 10 minutes for
+the test buy; the ladder never cuts the test buy or the first grader round.
 `shared/rules.md` wins over anything softer. The task prompt wins over all.

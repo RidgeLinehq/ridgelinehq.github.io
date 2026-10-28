@@ -94,7 +94,9 @@ real clients.
    in the report. Real numbers only; unknown = "unknown".
 8. Weekly Google post draft (kind "post"), Mondays.
 8b. **Happiness** (specs/client-happiness.md): day-3 check-in (kind "checkin"), day-21 "what we
-   did so far" (kind "update"), a win email (kind "win") the run a proven win shows up (a score
+   did so far" (kind "update"), a win email (kind "win"; every checkin draft carries care = {kind, question} and every win draft
+   care = {kind, proof}, which the desk copies into client.checkins / client.wins when it sends) the
+   run a proven win shows up (a score
    gain counts only once it holds 2 checks in a row), the simpler-version redo for any client
    who asked "how" or hasn't acted in 7 days, and renewal-in-3-days with zero wins → strongest
    honest update + flat ladder today. Log each response in skills/echo "What I've learned".
@@ -112,8 +114,10 @@ report; care notes under 60 words you grade yourself, qa.by "self", and the desk
    write a facts file next to it: the client's onboarding facts, every source URL you used, the
    gateway out file path. Nothing from these files goes in the repo.
 2. Set the draft's qa = {score: your own honest score, by: "self", weakest, rewrites: 0} and
-   status "draft" (never "ready" on a self grade).
-3. In your report to Mara, one line per deliverable: `GRADE: <pdf path> | <facts path> | <draft id>`.
+   status "draft" until Mara records the grader's result (step 6). Only care notes under 60 words
+   go "ready" on a self grade (the desk re-grades them before sending).
+3. In your report to Mara, one line per deliverable: `GRADE: <pdf path> | <facts path> | <draft id>`
+   (the Monday test buy has no draft and no client: write `testbuy` as the id).
 4. Mara launches the grader (general-purpose, foreground) with this brief, filled in: "You are the
    busy owner of <business>, reading this on your phone between jobs. Read office/specs/quality.md,
    then the PDF at <pdf> (every page, with the Read tool), then <facts>. Nothing else; you have no
@@ -126,6 +130,11 @@ report; care notes under 60 words you grade yourself, qa.by "self", and the desk
    a first grade of 85+): status "ready" at 85+ with qa.by "grader"; 75 to 84 ready plus an alert;
    under 75 not ready plus an alert (quality.md "The bar"). Record qa.score from the grader, never
    your own.
+6. Mara records the final grade herself (ArtifactData; read the draft first, pass if_version):
+   qa = {score, by:"grader", weakest, rewrites} and the status above, plus the alert when under
+   85. For the test buy she records nothing in the database: the score goes in the TESTBUY line
+   and the run notes. If no grader could run at all (Agent tool missing for Mara too), the draft
+   goes "ready" with qa.by "self" and an alert, and the desk re-grades it before sending.
 
 ## Audit
 Every drafted item has qa {score, by, weakest, rewrites} per specs/quality.md and 85+ (or 75+ with
@@ -137,7 +146,7 @@ or client.customers in the repo. Lead finder and gateway jobs carry town + trade
 | Where | What |
 |---|---|
 | drafts/<id> (kinds plan, kit, reviewreq, fix, leads, jobcheck, report, post, checkin, update, win) | status ready, clientId set |
-| clients/<id> | work[], checkins[], wins[], lastUpdateAt, aiTrend, competitorsNow, profileLog, reviewsNow, fixesTried, flatAt, reportDue, updatedAt |
+| clients/<id> | work[], aiTrend, competitorsNow, profileLog, reviewsNow, fixesTried, flatAt, reportDue, updatedAt (checkins[], wins[] and lastUpdateAt are written by the reply desk when it sends; 09 only reads them) |
 | leadlog/<id> | new leads |
 | repo | office/gw/jobs/*, office/leadfinder/jobs/*, office/landing/*.json + p/<slug>/ (Pro) |
 | events/<day> | "Clients: <n> active, <m> items drafted, <l> leads, <f> flat" |

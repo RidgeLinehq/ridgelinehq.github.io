@@ -16,7 +16,7 @@ first emails and client work; this desk sends and answers, any day.
 | specs/lead-tracking.md | The lead log, Sending leads, "Did this lead turn into a job?" |
 | shared/alerts.md | all |
 | specs/quality.md | all (every client deliverable passes it; Speed) |
-| specs/client-happiness.md | 2 (win emails), 4 (catch confusion), 5 (cancel = learn) |
+| specs/client-happiness.md | 1 (touchpoints: the 2-a-week rule, the formats), 2 (win emails), 4 (catch confusion), 5 (cancel = learn) |
 | specs/email-rules.md | QA gate 5 to 7, "Reply handling" |
 | shared/gateway.md | Protocol |
 | shared/rules.md | Honesty, Who we are in writing |
@@ -190,8 +190,9 @@ Search `(from:stripe.com OR subject:"Onboarding —") newer_than:7d -label:Ridge
    draft's fields in order (where → text, categories, hours, description, services, Q&A), status
    "queued", attempts 0, maxAttempts 2, by:"reply desk", createdAt}. The office page shows it on
    Today; when he marks it done the Day Shift (09 step 4) logs the changes and sends the client a
-   "fix-live" win. managerAccess "later": the pack's DO FIRST #1 is the Manager step and the day-3
-   check-in asks once more, never again. "no-access": DO FIRST #1 is "claim your Google listing
+   "fix-live" win. managerAccess "later": the pack's DO FIRST #1 is the Manager step and the first
+   "fix" nudge repeats it once (never the day-3 check-in, which asks one question only).
+   "no-access": DO FIRST #1 is "claim your Google listing
    (free, 5 minutes)" and every profile fact carries its copy-site source.
 7. "cancel" from a client → Stripe cancel job (specs/client-delivery.md "Cancel or pause"),
    confirm to the client once the out file says ok; alert if not ok.
@@ -201,7 +202,8 @@ Search `(from:stripe.com OR subject:"Onboarding —") newer_than:7d -label:Ridge
 
 ## Lane C2: client care (every email from a paying client gets a real answer within the hour)
 Clients are paying real money: treat every message like it matters. Read their whole thread and
-their client doc first. Answer in their thread, warm, plain, specific to their business, under
+their client doc first. Any reply from a client sets repliedAt and reply (their words, under 200
+characters) on the newest client.checkins entry that has no repliedAt. Answer in their thread, warm, plain, specific to their business, under
 150 words, with the one next step. Never make them repeat themselves.
 - A question → answer it from their data (score, leads, what we sent); attach the relevant PDF
   again if it helps. "How's it going?" → their real numbers this month.
@@ -281,11 +283,15 @@ Client-care kinds (Oct 28, 2026; specs/client-happiness.md): "checkin" (day 3, O
 (one proven win, 2 to 4 lines, the proof word for word, then "Next we're working on <x>") and
 "update" (day 21, "what we did so far", under 80 words, before the renewal charge) go out as a
 SHORT designed note (htmlBody + the same text in body) in the client's thread, with NO PDF and no
-"everything is in the attached PDF" line. They count toward the 2-emails-a-week limit outside
-replies and leads: skip a checkin when the client already replied since the pack, and never send
-two care emails to one client in one run. After each send: append {at, kind, question, draftId,
-gmailMessageId} to client.checkins (checkin) or {at, kind, proof, draftId, gmailMessageId} to
-client.wins (win; proof = the draft's proof line), set client.lastUpdateAt (update), events line.
+"everything is in the attached PDF" line. The 2-emails-a-week limit (client-happiness.md 1):
+count this client's drafts with status sent and evidence.sentAt in the last 7 days of kinds plan,
+kit, post, report, fix, jobcheck, checkin, update, win (never reply, leads or reviewreq). At 2 or
+more, leave the care draft ready for the first run under the limit, oldest first; never two care
+emails to one client in one run. A checkin for a client who already replied since the pack is not
+sent: status "rejected", error "skipped: client replied". After each send: append {at, kind:
+draft.care.kind, question: draft.care.question, draftId, gmailMessageId} to client.checkins
+(checkin) or {at, kind: draft.care.kind, proof: draft.care.proof, draftId, gmailMessageId} to
+client.wins (win), set client.lastUpdateAt (update), events line.
 Fresh grade before sending (quality.md "Who grades"): a draft whose qa.by is "self" or missing
 is graded here first by a separate worker (this desk has the Agent tool; the Day Shift's workers
 do not), fixed if under 85, and goes out with qa.by "grader". Care notes under 60 words may be

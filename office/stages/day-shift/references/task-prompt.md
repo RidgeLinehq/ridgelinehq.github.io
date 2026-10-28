@@ -56,7 +56,7 @@ Day Shift's packs stay graded by their writer (qa.by "self").
 
 ---
 
-# The Day Shift scheduled task (not created yet; needs Grayson's go)
+# HISTORICAL: the first Day Shift prompt draft (Oct 22, 2026). The task exists and its live prompt differs; the edits above quote the LIVE prompts.
 
 Proposed name: `Ridgeline Office · Day Shift`
 Proposed schedule: `CRON_TZ=America/Chicago 41 6 * * 1-5` (6:41 AM Central, weekdays)
