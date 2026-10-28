@@ -20,11 +20,11 @@ Inputs, 08's Monday line, repo.md's sparse list). The edits below are the only p
 task change. Each is old -> new, the shortest wording that works.
 
 ## Day Shift
-1. REQUIRED (the golden example is invisible without it). In the "Get it" line, both lists:
+1. REQUIRED (the golden example and the call kit are invisible without it; the Oct 28 run notes already say "kit.json is outside this sparse checkout"). In the "Get it" line, both lists:
    old: `git sparse-checkout add office/stripe office/leadfinder office/landing office/alerts office/emailcheck data p && git pull --rebase`
-   new: `git sparse-checkout add office/stripe office/leadfinder office/landing office/alerts office/emailcheck office/examples data p && git pull --rebase`
+   new: `git sparse-checkout add office/stripe office/leadfinder office/landing office/alerts office/emailcheck office/examples office/call_kit data p && git pull --rebase`
    old: `office/tools office/stripe office/leadfinder office/landing office/alerts office/emailcheck data p` (do not use add_repo;
-   new: `office/tools office/stripe office/leadfinder office/landing office/alerts office/emailcheck office/examples data p` (do not use add_repo;
+   new: `office/tools office/stripe office/leadfinder office/landing office/alerts office/emailcheck office/examples office/call_kit data p` (do not use add_repo;
 2. REQUIRED (otherwise every pack is graded by its writer). New step after 1b:
    1c. FRESH GRADER (Oct 28, 2026; office/specs/quality.md "Who grades"): a worker you launch has
    no Agent tool, so the Clients worker cannot grade its own Welcome Pack, report or Monday
@@ -41,7 +41,7 @@ task change. Each is old -> new, the shortest wording that works.
 ## Reply desk
 1. REQUIRED. Both sparse lists: add `office/examples` right before `data p`:
    old: `office/alerts office/instant office/emailcheck data p`  (appears twice)
-   new: `office/alerts office/instant office/emailcheck office/examples data p`
+   new: `office/alerts office/instant office/emailcheck office/examples office/call_kit data p`
 2. REQUIRED. Lane list:
    old: `Lane C (payments, onboarding, new clients, baseline, Welcome Pack)`
    new: `Lane C (payments, onboarding, new clients, baseline, Welcome Pack: read office/examples/welcome-pack.json first and grade the pack with a fresh grader per office/specs/quality.md "Who grades" before it goes out)`

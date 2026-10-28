@@ -50,13 +50,14 @@ sometimes name businesses that don't exist. ChatGPT (web search) is steadier.
 When a client says cancel: process it kindly (client-delivery.md "Cancel or pause"), and in the
 same confirmation ask ONE optional question: "If you have 5 seconds: what would have made it
 worth keeping?" Store client.cancelReason (their words, or "no answer"). Every cancel reason is
-a line in skills/echo/SKILL.md "What I've learned" and is read by Sage on Sunday.
+a line in skills/echo/SKILL.md "What I've learned" and is read by Sage on Monday (the week's
+first run; there is no Sunday run).
 
 ## 6. Learn from every client (feeds the crew's lessons)
 After each client touchpoint with a response (reply, fix pasted, review gained, nothing), one
 line in skills/echo/SKILL.md "What I've learned": what we sent → what they did → change for
-next time. Sage's Sunday review turns repeated lines into a rule in specs/quality.md or this
-file (with the date and the evidence count).
+next time. Sage's Monday review (the week's first run) turns repeated lines into a proposed rule
+for specs/quality.md or this file, as a NEEDS YOU line with the date and the evidence count.
 
 ## 7. Measure it (the numbers Grayson sees)
 Database clients/<id> gets: checkins[], wins[] {at, kind, proof}, lastUpdateAt, cancelReason.

@@ -20,7 +20,7 @@
 {"@context":"https://schema.org","@type":"ProfessionalService","name":"Ridgeline Local","url":"https://ridgelinehq.github.io/","email":"ridgelinemarketinghq@gmail.com","telephone":"+1-615-318-0687","description":"Helps local businesses get recommended by ChatGPT and Google AI, and makes it easy for happy customers to leave reviews.","areaServed":"United States","priceRange":"$39.99 - $125 per month"}
 </script>
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is this legit?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. No contract, and you can cancel anytime by replying to any email. Growth and Pro come with a second month free guarantee. You see the real ChatGPT and Gemini answers before and after, and every lead we send. If it’s not for you, you stop. No fee, no hassle."}}, {"@type": "Question", "name": "What’s in the free AI check?", "acceptedAnswer": {"@type": "Answer", "text": "We ask ChatGPT and Gemini who they recommend for your kind of business in your town, then email you their exact answers, whether you were named, and the three fixes we’d make first. Free. No card, no call."}}, {"@type": "Question", "name": "How much of my time does it take?", "acceptedAnswer": {"@type": "Answer", "text": "About two minutes for the signup form, and about ten minutes to paste in your Google profile fixes. We write them for you. The rest happens by email."}}, {"@type": "Question", "name": "Do you need my passwords?", "acceptedAnswer": {"@type": "Answer", "text": "No. Never. If you like, you can add us as a manager on your Google profile. Your login stays yours."}}, {"@type": "Question", "name": "Where do the leads come from?", "acceptedAnswer": {"@type": "Answer", "text": "On Pro, we look for people asking for your kind of business nearby: public posts asking for recommendations, messages on your own Google profile, and your own lead form. Every lead is logged. We never buy lists or message strangers in your name."}}, {"@type": "Question", "name": "How do I cancel?", "acceptedAnswer": {"@type": "Answer", "text": "Reply “cancel” to any email from us. That’s it. No contract, no fee, and you keep the service through the month you paid for."}}]}
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is this legit?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. No contract, and you can cancel anytime by replying to any email. Growth and Pro come with a second month free guarantee. You see the real ChatGPT and Gemini answers before and after, and every lead we send. If it’s not for you, you stop. No fee, no hassle."}}, {"@type": "Question", "name": "What’s in the free AI check?", "acceptedAnswer": {"@type": "Answer", "text": "We ask ChatGPT and Gemini who they recommend for your kind of business in your town, then email you their exact answers, whether you were named, and the three fixes we’d make first. Free. No card, no call."}}, {"@type": "Question", "name": "How much of my time does it take?", "acceptedAnswer": {"@type": "Answer", "text": "About two minutes for the signup form and three minutes to add us as a Manager on your Google listing. Then we make the profile changes for you. Rather keep the keys? We send every change written out, ready to paste (about ten minutes). The rest happens by email."}}, {"@type": "Question", "name": "Do you need my passwords?", "acceptedAnswer": {"@type": "Answer", "text": "No. Never. You add us as a Manager on your Google profile (3 minutes), which is how we do the work for you. Your login stays yours, and you can remove us any time."}}, {"@type": "Question", "name": "Where do the leads come from?", "acceptedAnswer": {"@type": "Answer", "text": "On Pro, we look for people asking for your kind of business nearby: public posts asking for recommendations, messages on your own Google profile, and your own lead form. Every lead is logged. We never buy lists or message strangers in your name."}}, {"@type": "Question", "name": "How do I cancel?", "acceptedAnswer": {"@type": "Answer", "text": "Reply “cancel” to any email from us. That’s it. No contract, no fee, and you keep the service through the month you paid for."}}]}
 </script>
 <style>
 /* =====================================================================
@@ -494,6 +494,23 @@ footer .mail{font-size:1.02rem;font-weight:600}
   .wrap{width:calc(100% - 28px)}
   .hero h1{font-size:2.1rem}
 }
+
+/* ---------- samples: the real Welcome Pack and the emails (Oct 28, 2026) ---------- */
+.samples .pages{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 16px;margin:0 -2px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.samples .pg{flex:0 0 min(72vw,300px);scroll-snap-align:start;text-decoration:none;color:inherit;display:grid;gap:8px;min-width:0}
+.samples .pg img{width:100%;height:auto;aspect-ratio:935/1210;border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow-sm);background:#fff;display:block;transition:transform .25s var(--ease)}
+@media(hover:hover){.samples .pg:hover img{transform:translateY(-4px)}}
+.samples .pg span{font-size:.82rem;font-weight:600;color:var(--muted)}
+.sample-ctas{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin:8px 0 34px}
+.sample-note{margin:0;color:var(--ink);font-size:1rem;max-width:52ch}
+.mail{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:26px 24px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.mail .num{font-family:var(--display);font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--brass-text)}
+.mail h3{margin:0}
+.mail .from{font-size:.86rem;color:var(--muted);margin:0}
+.mail p{margin:0;font-size:.98rem;color:var(--ink)}
+.mail .sig{color:var(--muted);font-size:.9rem;margin-top:4px}
+.sample-fine{margin-top:18px;font-size:.86rem;color:var(--muted);max-width:70ch}
+@media(max-width:860px){.grid-3.mails{grid-template-columns:1fr}}
 </style>
 <script>(function(){var h=document.documentElement;if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;h.className+=" js-anim";var done=false,go=function(){if(!done){done=true;h.className+=" fonts-in"}};if(document.fonts&&document.fonts.ready){document.fonts.ready.then(go)}setTimeout(go,600)})();</script>
 </head>
@@ -523,6 +540,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
     <a class="brand" href="#top" aria-label="Ridgeline Local home"><svg aria-hidden="true"><use href="#i-logo"/></svg>Ridgeline<small>Local</small></a>
     <nav class="nav-links" aria-label="Primary">
       <a href="#what">What we do</a>
+      <a href="#samples">Samples</a>
       <a href="#how">How it works</a>
       <a href="#pricing">Pricing</a>
       <a href="#about">About</a>
@@ -705,6 +723,36 @@ footer .mail{font-size:1.02rem;font-weight:600}
   </div>
 </section>
 
+<!-- ===================== SAMPLES (Oct 28, 2026) ===================== -->
+<section class="section on-ivory samples" id="samples" aria-labelledby="samples-title" data-anim>
+  <div class="wrap">
+    <div class="head" data-reveal>
+      <span class="kicker">What you get, exactly</span>
+      <h2 id="samples-title">Here’s a real Welcome Pack.</h2>
+      <p class="lede">Every client gets one like this within the hour of signing up: your starting AI score, who AI recommends instead of you, your Google profile fixes, a review kit and your first 30 days. This one was built for a made-up plumber, so nothing private is shown.</p>
+    </div>
+    <div class="pages" data-reveal aria-label="Sample Welcome Pack pages, swipe to see all seven">
+      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-1.jpg" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 1: starting AI visibility score 0 out of 100, and who ChatGPT and Gemini recommend instead"><span>1 · Your starting score</span></a>
+      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-2.jpg" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 2: review count and rating from public copies, and the gaps that cost calls, each with its source"><span>2 · What we found on your profile</span></a>
+      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-3.jpg" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 3: the hours fix and the category fix, marked do first"><span>3 · Fixes 1 and 2: hours, categories</span></a>
+      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-4.jpg" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 4: a ready description and a services list"><span>4 · Fixes 3 and 4: description, services</span></a>
+      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-5.jpg" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 5: five customer questions with answers and ten photo ideas"><span>5 · Q&A and photo ideas</span></a>
+      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-6.jpg" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 6: how we get the review link, the text to send after a job and the line for staff"><span>6 · Your review kit</span></a>
+      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-7.jpg" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 7: the 30-day plan, the guarantee and the sources"><span>7 · Your first 30 days</span></a>
+    </div>
+    <div class="sample-ctas" data-reveal>
+      <a class="btn btn-forest" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener">Open the full sample PDF <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <p class="sample-note">Add us as a Manager on your Google listing (3 minutes, no password) and we make these changes for you. Prefer to keep the keys? Everything comes written out, ready to paste.</p>
+    </div>
+    <div class="grid-3 mails" data-reveal data-stagger>
+      <article class="mail" style="--d:0"><span class="num">Day 3</span><h3>The check-in</h3><p class="from">Subject: Quick check</p><p>Quick check: did the profile changes make sense? Reply with anything confusing and I’ll make it simpler.</p><p class="sig">Grayson<br>Ridgeline Local</p></article>
+      <article class="mail" style="--d:1"><span class="num">The day it happens</span><h3>The win email</h3><p class="from">Subject: ChatGPT named you today</p><p>ChatGPT named Riverbend Plumbing Co. #3 today for “best plumber in Millbrook” (not named when we started). Word for word: “Riverbend Plumbing Co., praised for fast water-heater swaps and clear pricing.” Next we’re working on your November Google post.</p><p class="sig">Grayson<br>Ridgeline Local</p></article>
+      <article class="mail" style="--d:2"><span class="num">Day 21</span><h3>What we did so far</h3><p class="from">Subject: What we did so far (week 3)</p><p>Hours, categories and description set on your Google listing (Oct 3). Review kit and QR card sent (Oct 3). Reviews 38 → 44. AI re-checks Oct 10 and Oct 17: ChatGPT now names you for one of your three questions. Week 4: your Google post and the Yahoo category fix.</p><p class="sig">Grayson<br>Ridgeline Local</p></article>
+    </div>
+    <p class="sample-fine" data-reveal>Sample emails for the same made-up plumber, written the way we write them: one real number or one finished piece of work per email, never fluff. Never more than two emails a week outside replies and leads.</p>
+  </div>
+</section>
+
 <!-- ===================== HOW IT WORKS ===================== -->
 <section class="section on-dark how" id="how" aria-labelledby="how-title" data-anim>
   <svg class="contours drift" aria-hidden="true"><use href="#i-contours"/></svg>
@@ -715,7 +763,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
     </div>
     <ol class="steps" id="steps">
       <li class="step"><span class="n" aria-hidden="true"></span><div><h3>Free AI check</h3><p>We ask ChatGPT and Gemini who they recommend for your kind of business in your town. You see the exact answers.</p></div></li>
-      <li class="step"><span class="n" aria-hidden="true"></span><div><h3>We fix your profile and set up 10-second reviews</h3><p>We clean up your Google Business Profile and hand you a review link and QR card your customers can use on the spot.</p></div></li>
+      <li class="step"><span class="n" aria-hidden="true"></span><div><h3>We fix your profile for you and set up 10-second reviews</h3><p>Add us as a Manager on your Google listing (3 minutes, no password) and we make the changes ourselves. Then we hand you a review link and QR card your customers can use on the spot.</p></div></li>
       <li class="step"><span class="n" aria-hidden="true"></span><div><h3>You show up more and get more calls</h3><p>Clear info and fresh reviews are what Google and AI look for. We keep it moving month to month.</p></div></li>
     </ol>
     <div data-reveal><a class="btn btn-brass" href="#free-check">Start with the free check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
@@ -738,7 +786,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
         <p class="amt">$39.99<small>/ month</small></p>
         <ul>
           <li><svg aria-hidden="true"><use href="#i-check"/></svg>AI visibility check: what ChatGPT and Gemini say about you</li>
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Google Business Profile cleanup, written out and ready to paste</li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Google Business Profile cleanup: done for you as your Manager, or written out ready to paste</li>
           <li><svg aria-hidden="true"><use href="#i-check"/></svg>10-second review system: your review link and a QR card</li>
         </ul>
         <a class="btn btn-light plan-go" data-plan="starter" data-href="https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07" href="https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07">Try Starter <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
@@ -752,7 +800,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
         <p class="amt">$75<small>/ month</small></p>
         <ul>
           <li class="plus"><svg aria-hidden="true"><use href="#i-check"/></svg>Everything in Starter</li>
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Monthly profile updates</li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Monthly profile updates and Google posts, done for you</li>
           <li><svg aria-hidden="true"><use href="#i-check"/></svg>Review growth: we email review requests to your customers</li>
           <li><svg aria-hidden="true"><use href="#i-check"/></svg>AI visibility tracking: weekly checks, monthly report</li>
         </ul>
@@ -856,8 +904,8 @@ footer .mail{font-size:1.02rem;font-weight:600}
     <div class="faq" data-reveal>
       <div class="q"><h3 class="q-h"><button class="q-btn" type="button" aria-expanded="false" aria-controls="a1" id="q1">Is this legit?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button></h3><div class="q-panel" id="a1" role="region" aria-labelledby="q1"><div class="q-inner"><p>Yes. No contract, and you can cancel anytime by replying to any email. Growth and Pro come with a second month free guarantee. You see the real ChatGPT and Gemini answers before and after, and every lead we send. If it’s not for you, you stop. No fee, no hassle.</p></div></div></div>
       <div class="q"><h3 class="q-h"><button class="q-btn" type="button" aria-expanded="false" aria-controls="a2" id="q2">What’s in the free AI check?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button></h3><div class="q-panel" id="a2" role="region" aria-labelledby="q2"><div class="q-inner"><p>We ask ChatGPT and Gemini who they recommend for your kind of business in your town, then email you their exact answers, whether you were named, and the three fixes we’d make first. Free. No card, no call.</p></div></div></div>
-      <div class="q"><h3 class="q-h"><button class="q-btn" type="button" aria-expanded="false" aria-controls="a3" id="q3">How much of my time does it take?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button></h3><div class="q-panel" id="a3" role="region" aria-labelledby="q3"><div class="q-inner"><p>About two minutes for the signup form, and about ten minutes to paste in your Google profile fixes. We write them for you. The rest happens by email.</p></div></div></div>
-      <div class="q"><h3 class="q-h"><button class="q-btn" type="button" aria-expanded="false" aria-controls="a4" id="q4">Do you need my passwords?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button></h3><div class="q-panel" id="a4" role="region" aria-labelledby="q4"><div class="q-inner"><p>No. Never. If you like, you can add us as a manager on your Google profile. Your login stays yours.</p></div></div></div>
+      <div class="q"><h3 class="q-h"><button class="q-btn" type="button" aria-expanded="false" aria-controls="a3" id="q3">How much of my time does it take?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button></h3><div class="q-panel" id="a3" role="region" aria-labelledby="q3"><div class="q-inner"><p>About two minutes for the signup form and three minutes to add us as a Manager on your Google listing. Then we make the profile changes for you. Rather keep the keys? We send every change written out, ready to paste (about ten minutes). The rest happens by email.</p></div></div></div>
+      <div class="q"><h3 class="q-h"><button class="q-btn" type="button" aria-expanded="false" aria-controls="a4" id="q4">Do you need my passwords?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button></h3><div class="q-panel" id="a4" role="region" aria-labelledby="q4"><div class="q-inner"><p>No. Never. You add us as a Manager on your Google profile (3 minutes), which is how we do the work for you. Your login stays yours, and you can remove us any time.</p></div></div></div>
       <div class="q"><h3 class="q-h"><button class="q-btn" type="button" aria-expanded="false" aria-controls="a5" id="q5">Where do the leads come from?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button></h3><div class="q-panel" id="a5" role="region" aria-labelledby="q5"><div class="q-inner"><p>On Pro, we look for people asking for your kind of business nearby: public posts asking for recommendations, messages on your own Google profile, and your own lead form. Every lead is logged. We never buy lists or message strangers in your name.</p></div></div></div>
       <div class="q"><h3 class="q-h"><button class="q-btn" type="button" aria-expanded="false" aria-controls="a6" id="q6">How do I cancel?<span class="plus"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></button></h3><div class="q-panel" id="a6" role="region" aria-labelledby="q6"><div class="q-inner"><p>Reply “cancel” to any email from us. That’s it. No contract, no fee, and you keep the service through the month you paid for.</p></div></div></div>
     </div>

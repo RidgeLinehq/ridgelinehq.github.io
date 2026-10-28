@@ -23,8 +23,9 @@ gates in specs/email-rules.md. It never texts, calls, DMs or posts.
    Outputs table says; after each stage append one line to events/<day key> (shape in
    database.md) and append your section to office/stages/day-shift/output/<day key>-run.md
    under the heading the stage names. Set your crew doc working/idle as database.md says.
-   Report back in at most 12 plain lines: what you did, the numbers, what failed, and the list
-   of instruction files you loaded."
+   Report back in at most 12 plain lines: what you did, the numbers, what failed, every alert
+   as an `ALERT: <key>: <what> | <tap to fix>` line (you cannot send email; Mara sends them),
+   any `GRADE:` or `TESTBUY:` lines, and the list of instruction files you loaded."
 
 2b. Fresh grader (Oct 28, 2026): a worker launched with the Agent tool has NO Agent tool of its
    own (tested), so the Clients worker cannot launch the grader that specs/quality.md "Who
@@ -70,7 +71,9 @@ many found, how many new, how many with email, sources used), `## Quinn` (02: sc
 top 5 with why), `## Parker` (03: angle per lead, one line each), `## Echo` (04: drafts
 written, QA scores, ready/approved/sent counts, Gmail ids, blockers), `## Nova` (05), `## Sage`
 (06: replies found, statuses changed, lessons written, workflow verdicts), `## Patch` (07:
-lights, fixed, needs you, backup id), `## Money` (08), `## Next move` (08). Plain text, numbers
+lights, fixed, needs you, backup id), `## Clients` (09: per client one line; Mondays first
+line `testbuy {kind, town, score1, score2, weakest} pdf=<path>`), `## Money` (08), `## Next
+move` (08). Plain text, numbers
 only, no prose padding.
 
 ## Load map (what each stage's Inputs table points to; every worker also has CLAUDE.md, database.md, rules.md)

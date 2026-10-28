@@ -152,7 +152,9 @@ Search `(from:stripe.com OR subject:"Onboarding —") newer_than:7d -label:Ridge
    that their starting AI visibility score comes right after, and (Growth/Pro) one line on the
    guarantee with its link. Label the Stripe thread.
 2. "Onboarding — <business>" email (FormSubmit; fields business, type_of_business, google_profile, phone,
-   services, city, email, plan, billing, stripe_session): match to the client by email (or
+   services, city, email, manager_access, plan, billing, stripe_session; manager_access is
+   invited | later | no-access, missing = "later"; store it as client.managerAccess until Google's
+   acceptance email turns it true, step 6): match to the client by email (or
    create the client if the payment email hasn't arrived yet: status "awaiting-payment"; it
    becomes active when the payment arrives; never start paid work before a payment is seen).
    Fill businessName, googleProfile, phone, services, town, state, contactEmail, stripeSession
@@ -179,7 +181,18 @@ Search `(from:stripe.com OR subject:"Onboarding —") newer_than:7d -label:Ridge
    public URL https://ridgelinehq.github.io/cards/<slug>.png). Record client.reviewCard.
    A client reply with customer emails (a list or a CSV attachment) → client.customers
    [{email, firstName, addedAt, askedAt:null}] (database only, never the repo).
-6. Google's "manager invitation accepted" email → client.managerAccess true, work item done.
+6. Manager access = we do the Google work for them (Grayson, Oct 28, 2026). Google's invitation
+   email ("... invited you to manage ...") needs one tap only a person can do: alert Grayson once
+   (key mgr-accept-<clientId>): "Tap Accept in Google's invite email for <business> (Gmail: search
+   'invited you to manage')". Google's acceptance / "you can now manage" email → client.managerAccess
+   true, work item manager-access done, and queue the apply task: tasks/<id> = {agent:"grayson",
+   kind:"apply-google", clientId, title:"Apply on Google: <business> (10 min)", details: the plan
+   draft's fields in order (where → text, categories, hours, description, services, Q&A), status
+   "queued", attempts 0, maxAttempts 2, by:"reply desk", createdAt}. The office page shows it on
+   Today; when he marks it done the Day Shift (09 step 4) logs the changes and sends the client a
+   "fix-live" win. managerAccess "later": the pack's DO FIRST #1 is the Manager step and the day-3
+   check-in asks once more, never again. "no-access": DO FIRST #1 is "claim your Google listing
+   (free, 5 minutes)" and every profile fact carries its copy-site source.
 7. "cancel" from a client → Stripe cancel job (specs/client-delivery.md "Cancel or pause"),
    confirm to the client once the out file says ok; alert if not ok.
    In that confirmation, ask once: "If you have 5 seconds: what would have made it worth
@@ -262,6 +275,8 @@ Kind "jobcheck": the monthly "did it turn into a job?" email. Kind "reviewreq": 
 request per customer in draft.recipients (specs/client-delivery.md "Review requests"; max 25 per
 client per day, 7:00 AM to 7:00 PM Central, skip suppressed, set customers[].askedAt). These go
 to the client's real customers on the client's behalf; that is allowed (Grayson, Oct 24, 2026).
+For a client with managerAccess true, the plan email's intro says "we're making these changes in
+your listing this week; here's the record" (the apply task carries them), never "paste these".
 Client-care kinds (Oct 28, 2026; specs/client-happiness.md): "checkin" (day 3, ONE question), "win"
 (one proven win, 2 to 4 lines, the proof word for word, then "Next we're working on <x>") and
 "update" (day 21, "what we did so far", under 80 words, before the renewal charge) go out as a

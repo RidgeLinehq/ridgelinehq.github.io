@@ -51,11 +51,14 @@ qa.by = "self" and the desk re-grades it before sending.
 ## Learn from the best one (golden example)
 Before drafting a Welcome Pack or a monthly report, read office/examples/ (the best graded
 example of that kind, fictional business, 90+). Match or beat it; never copy its facts. When a
-real deliverable grades higher than the example, Sage replaces the example on Sunday with a
-fictionalized copy (new business name, town, numbers; same structure and quality).
+real deliverable grades higher than the example, Sage replaces the example on Monday (the
+week's first run; there is no Sunday run) with a fictionalized copy (new business name, town,
+numbers; same structure and quality).
 
 ## The standard for each kind
-- **Profile fixes ("plan")**: every field Google lets them fill, written for them: primary and
+- **Profile fixes ("plan")**: with Manager access we APPLY them (Grayson as Manager, the page's
+  "Apply on Google" task) and the pack says "we're making these changes for you; here's the
+  record"; without access the pack says paste. Either way, every field Google lets them fill, written for them: primary and
   secondary categories (Google's exact category names), 750-character description that names
   the town, nearby towns and top services in plain words, services list with one-line
   descriptions, hours check, 5 Q&A pairs customers really ask, 10 photo ideas specific to their

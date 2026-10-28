@@ -25,6 +25,7 @@ office/
   CONTEXT.md           (start here: which stage folder handles my task)
   shared/              (canonical rules, one home each: rules, database, repo, logging, outreach-law)
   specs/               (Grayson's standing orders: the offer, sales psychology, email rules, call script, video briefs)
+  examples/            (golden deliverables for a fictional business, 88+; read before any Welcome Pack or report)
   stages/<task>/       (one folder per scheduled task; numbered sub-stages where the task has steps)
     CONTEXT.md         (the stage contract: Inputs, Process, Audit, Outputs)
     references/        (rule text this stage needs; stable across runs)

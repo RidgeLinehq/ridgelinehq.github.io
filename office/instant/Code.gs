@@ -333,6 +333,7 @@ var KEYS_ = {
   email: ['email'],
   phone: ['phone'],
   google: ['google profile', 'google_profile'],
+  manager: ['manager access', 'manager_access'],
   plan: ['plan'],
   billing: ['billing'],
   session: ['stripe session', 'stripe_session']

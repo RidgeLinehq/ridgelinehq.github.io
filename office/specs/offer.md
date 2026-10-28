@@ -14,7 +14,7 @@ product.
 | Plan | Price | What's in it |
 |---|---|---|
 | Free AI Check | $0, always, no card | What ChatGPT and Gemini answer for their kind of business in their town (exact words, from the gateway), them vs the competitors named, the 3 fixes we'd make first. The main call to action everywhere. |
-| Starter | $39.99/month | AI visibility check (the baseline, specs/guarantee.md §1); Google Business Profile cleanup (we audit and write every fix ready to paste, then check it went live); the 10-second review system (their Google review link + the QR card for the counter + a ready text for the owner to send). |
+| Starter | $39.99/month | AI visibility check (the baseline, specs/guarantee.md §1); Google Business Profile cleanup (we audit and write every fix; with Manager access we apply it in their listing ourselves, Grayson as the Manager from the Google Maps app, usually within 2 business days, and confirm it is live; without access we send it ready to paste and check it went live); the 10-second review system (their Google review link + the QR card for the counter + a ready text for the owner to send). |
 | Growth (MOST POPULAR) | $75/month | Everything in Starter + monthly profile updates (weekly profile check, Google post drafts, fixes re-sent until live) + review growth (we email the client's real customers review requests) + AI visibility tracking (weekly ChatGPT and Gemini re-checks, monthly report) + the Second Month Free Guarantee. |
 | Pro | $125/month | Everything in Growth + the AI Lead Finder (leads emailed to them as they are found, specs/lead-tracking.md) + lead tracking (every lead logged; monthly "did it turn into a job?"). |
 
@@ -53,16 +53,20 @@ the terms, never reword them.
 (Never bring these up unprompted: lead with what we do and the guarantee. If a prospect asks
 "can you get me #1?", answer with what we do and the guarantee, positively.)
 Never rankings, never "#1", never a number of leads, jobs or reviews, never "guaranteed results",
-never "we post for you on Google" (we write it, the owner pastes it), never "we text your
+never "we post for you on Google" to a client WITHOUT Manager access (then we write it, the owner pastes it; with Manager access we do apply changes and posts ourselves, Oct 28, 2026), never "we text your
 customers" (we email them; the owner can text the ready message). If the work can't deliver a
 line on the website, NEEDS YOU: "Website promises <x>, we can't deliver it yet" so Grayson can
 change the wording; the crew does not quietly under-deliver.
 
 ## After paying (specs/client-delivery.md is the whole flow)
 Stripe checkout → welcome.html onboarding form (business name, Google profile link, phone,
-services, city, email) → the reply desk's welcome email + baseline AI check → work begins. Adding
-ridgelinemarketinghq@gmail.com as a Manager on their Google Business Profile is optional and
-helps (we receive Google's message/call notices = tracked leads). Never a password.
+services, city, email, manager_access) → the reply desk's welcome email + baseline AI check → work
+begins. The form asks them to add ridgelinemarketinghq@gmail.com as a Manager on their Google
+Business Profile (manager_access: invited | later | no-access; Oct 28, 2026, Grayson: "we do this
+for them"). With it we do the Google work for them: Grayson applies the crew's fields as Manager
+from the Google Maps app (the page's "Apply on Google" task), usually within 2 business days, and
+we receive Google's message/call notices (tracked leads). Without it, every change is written
+out ready to paste. Never a password.
 
 ## Targets for cold outreach (settings.targets is the live list)
 Any local business type. The Day Shift rotates one town per run and the trades listed for it in

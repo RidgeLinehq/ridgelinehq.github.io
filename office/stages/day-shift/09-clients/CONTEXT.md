@@ -35,9 +35,11 @@ real clients.
    below: you cannot launch agents yourself, Mara does. Fix the 3 weakest lines, grade again.
 4. Log: runlog note `testbuy {kind, town, score1, score2, weakest}` (no business name in the
    repo), and one line in skills/echo/SKILL.md "What I've learned" with the weakest part and the
-   fix. The same weakness 2 weeks running → Sage makes it a rule in specs/quality.md.
+   fix. The same weakness 2 weeks running → Sage proposes the rule for specs/quality.md as a NEEDS
+   YOU line (specs/ is Grayson's; the crew never edits it).
 5. Score 90+ and better than office/examples/welcome-pack.json → write a fictionalized copy
-   there (new name, town, numbers). Under 80 → alert Grayson: "Test buy scored <n>: <weakest>".
+   there (new name, town, numbers; office/examples/ is in the Day Shift 09 write paths). Under
+   80 → alert Grayson: "Test buy scored <n>: <weakest>".
 6. Put one line in your report to Mara: `TESTBUY: <pdf path> | <score1> -> <score2> | <kind>, <town> |
    <weakest, 8 words>`. Mara (08) puts "This week's test buy: <score1> -> <score2>" in the morning
    message and emails Grayson the PDF.
@@ -47,6 +49,10 @@ real clients.
    drafts kind "plan"), review kit (kind "kit": the text + card link + "send us your customers'
    emails"), Pro lead page if the desk hasn't built it. Status "ready", clientId set; the desk
    emails them. No reviewLink yet → kit uses the "Get more reviews" how-to and asks for it.
+   managerAccess true (we do it for them, Oct 28, 2026): make sure one open tasks doc
+   {agent:"grayson", kind:"apply-google", clientId} exists with the plan's fields (the desk
+   creates it on acceptance; create it here if missing) and the plan email says we're applying
+   them. managerAccess "later": the first nudge (kind fix) is the Manager step, once.
 2. **Review requests:** customers in client.customers with askedAt null → one drafts doc kind
    "reviewreq" with recipients (max 25) and the request text (rules in client-delivery.md).
    None given yet and the kit went out 7+ days ago → one short ask to the owner for 10 emails
@@ -60,7 +66,10 @@ real clients.
    review count + rating, categories, hours, description snippet, photos count where shown.
    Compare with client.audit and the fixes sent; append changes to client.profileLog
    [{at, field, before, after, source}]; reviewsNow = the public count with its date. A fix
-   not live after 7 days → one nudge draft (kind "fix") with just that step.
+   not live after 7 days → one nudge draft (kind "fix") with just that step. An apply-google task
+   marked done since the last run → profileLog rows {at, field, before, after, source:"applied by
+   Ridgeline as Manager"} and a win draft (kind "win", win kind "fix-live"): "Your hours,
+   categories and description are now live on Google" with the exact fields, 2 to 4 lines.
 5. **Lead Finder** (Pro only): the dedicated Lead Finder task (stages/lead-finder/, twice a day, every day) owns this. Here, only check its last run line in office/runlog.jsonl is under 14 hours old (else alert) and fold its stats into the report. The steps below are its fallback if it hasn't run today:
    a. Reddit: one lead-finder job for all due clients: `office/leadfinder/jobs/lf-<day>-<4 hex>.json`
       = {"id", "searches":[{"key":"<town>-<st>-<trade slug>", "town", "state", "terms":[3 to 5

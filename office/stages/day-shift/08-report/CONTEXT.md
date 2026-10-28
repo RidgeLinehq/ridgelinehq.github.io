@@ -32,6 +32,9 @@
    "Ridgeline test buy <day key>: <score2>", body = that line plus the weakest part and its fix,
    the PDF as the attachment (base64), never in the repo. Under 80: the alert from 09 Step 0.5.
    A paused run sends nothing. If nothing happened and nothing is needed, send 2 lines max.
+5b. Workers cannot send email (a worker's send was refused Oct 27): every `ALERT: <key>: <what>
+   | <tap to fix>` line in a worker's report is emailed by you now (shared/alerts.md, deduped),
+   and the Monday `TESTBUY:` line goes into the run-log --note.
 6. Set every crew doc idle with lastResult. Commit the repo writes (run notes, skills, lessons),
    `git pull --rebase`, push. Write the run-log line last (shared/logging.md), commit and push
    it too (never retried on failure).

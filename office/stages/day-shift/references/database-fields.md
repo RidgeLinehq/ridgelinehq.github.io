@@ -60,6 +60,7 @@
  video:{hook, lines:[{second, say, popup}], caption, hashtags:[], capcut:[], postPlan:{}, results:{}} (scripts only)}
 
 ## tasks/<id>
+(kind:"apply-google" + clientId when it is a Grayson task to apply the crew's Google profile fields as Manager; the page lists queued Grayson tasks on Today with Mark done)
 {agent, title, details, status:"queued"|"running"|"done"|"failed"|"blocked", result, error,
  attempts, maxAttempts:2, runId, by:"grayson"|"mara"|"sage"|"patch", startedAt, finishedAt,
  createdAt, updatedAt, leadId (optional)}
@@ -86,7 +87,7 @@ test, createdAt, updatedAt}. The crew never changes status or notes after creati
  guarantee:{checkedAt, leads, baselineScore, dayScore, owed, jobId, stripeJob, applied, appliedAt, what},
  audit:{at, ...}, profileLog:[{at, field, before, after, source}], reviewsAtStart, reviewsNow:{count, at, source},
  customers:[{email, firstName, addedAt, askedAt}] (never in the repo), fixesTried:[{at, fix, result}], flatAt,
- managerAccess:bool, reviewLink, reviewCard, landing:{slug, url},
+ managerAccess:true|false|"invited"|"later"|"no-access" (the onboarding form's manager_access; true once Google's acceptance email arrives), reviewLink, reviewCard, landing:{slug, url},
  checkins:[{at, kind:"day-3"|"simpler"|"ask", question, draftId, gmailMessageId, repliedAt, reply}] (client-happiness.md 1, 4),
  wins:[{at, kind:"ai-named"|"reviews"|"fix-live"|"lead", proof, draftId, gmailMessageId}] (client-happiness.md 2; proof is the exact line emailed),
  lastUpdateAt (ISO of the last day-21 "what we did" email), cancelReason (the client's words, "no answer", or typed by Grayson on the page),

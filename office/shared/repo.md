@@ -12,9 +12,9 @@ prospects, no backups.
 - Only if missing, the LIGHT clone (about 1 second and 500 KB; the full tree carries the
   studio's videos and photos, which no crew needs):
   `git clone --depth 1 --filter=blob:none --sparse https://github.com/RidgeLinehq/ridgelinehq.github.io /home/claude/ridgeline`
-  then `git -C /home/claude/ridgeline sparse-checkout set office/shared office/specs office/stages office/skills office/gw office/cards office/health office/playbooks office/tools office/stripe office/leadfinder office/landing office/alerts office/instant office/emailcheck office/examples data p`
+  then `git -C /home/claude/ridgeline sparse-checkout set office/shared office/specs office/stages office/skills office/gw office/cards office/health office/playbooks office/tools office/stripe office/leadfinder office/landing office/alerts office/instant office/emailcheck office/examples office/call_kit data p`
   An existing clone made before Oct 24, 2026: run `git sparse-checkout add office/stripe office/leadfinder office/landing office/alerts data p` once.
-  An existing clone made before Oct 28, 2026: run `git sparse-checkout add office/examples office/instant office/emailcheck` once
+  An existing clone made before Oct 28, 2026: run `git sparse-checkout add office/examples office/call_kit office/instant office/emailcheck` once
   (office/examples holds the golden Welcome Pack that quality.md and the test buy read; a clone
   without it makes the crew draft blind).
   (root files such as index.html and office/CLAUDE.md, CONTEXT.md, LESSONS.md, runlog.jsonl come
@@ -48,7 +48,7 @@ prospects, no backups.
 | Sage | the above plus office/skills/*/SKILL.md "Exact steps" (only when a workflow/<version> doc says adopted) |
 | Patch | the above plus index.html (a broken element only, after a 3-line plan and a before/after check; never copy, prices or the offer), office/health/ (site check outputs) |
 | Reply desk | office/runlog.jsonl, office/gw/jobs/, office/cards/jobs/, office/stripe/jobs/ (guarantee, cancel, lookup), office/alerts/ (emailed flags), office/landing/ + p/<slug>/ (Pro lead pages) |
-| Day Shift 09 (Clients) | the Day Shift paths plus office/gw/jobs/, office/leadfinder/jobs/, office/landing/ + p/<slug>/, office/studio/out/clients/ |
+| Day Shift 09 (Clients) | the Day Shift paths plus office/gw/jobs/, office/leadfinder/jobs/, office/landing/ + p/<slug>/, office/studio/out/clients/, office/examples/ (fictionalized golden copies only, never a real client's facts) |
 | Server work (only when Grayson asks for it in chat) | office/server/ |
 
 Never write a client's or a lead's email, name or customer list into any job file: jobs carry
