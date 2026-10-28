@@ -48,6 +48,17 @@ const tag = v => {
   return `<span class="tag ${cls}">${esc(t)}</span>`;
 };
 
+// A heading never sits alone at the bottom of a page: it is kept together with the block after it.
+function groupHeadings(secs) {
+  const out = [];
+  for (let i = 0; i < secs.length; i++) {
+    if (secs[i] && secs[i].type === 'heading' && i + 1 < secs.length) {
+      out.push(`<div class="keep${secs[i].newpage ? ' np' : ''}">${block(secs[i])}${block(secs[i + 1])}</div>`); i++;
+    } else out.push(block(secs[i]));
+  }
+  return out.join('\n');
+}
+
 function block(b) {
   switch (b.type) {
     case 'score': return `<section class="score card">
@@ -91,7 +102,7 @@ function html(spec) {
 main{padding:28px 48px 40px}
 .card{background:#fff;border:1px solid #e3ded0;border-radius:14px;padding:20px 22px;margin:0 0 16px;break-inside:avoid}
 h2{font:400 28px/1.15 Georgia,serif;margin:0}h3{margin:0 0 8px;font-size:17px}
-.h2.np{break-before:page}.h2{break-after:avoid;margin:0 0 14px;border-top:2px solid #d2b375;padding-top:14px}.h2 p{margin:4px 0 0;color:#5a6a60}
+.h2.np,.keep.np{break-before:page}.keep{break-inside:avoid}.h2{break-after:avoid;margin:0 0 14px;border-top:2px solid #d2b375;padding-top:14px}.h2 p{margin:4px 0 0;color:#5a6a60}
 .score{display:grid;grid-template-columns:200px 1fr;gap:22px;align-items:start}
 .gauge{width:200px}.gnum{font:700 44px Georgia,serif;fill:#142f27}.gsub{font-size:11px;fill:#5a6a60}
 .glabel{text-align:center;font-weight:700;font-size:13px;margin-top:2px}
@@ -111,6 +122,7 @@ ol,ul{margin:0;padding-left:20px}li{margin:4px 0}
 .step span{font-weight:700;color:#7f6233;font-size:13px}.step p{margin:0}
 .note{background:#e9eee3;border-radius:12px;padding:14px 16px;margin:0 0 16px;font-size:14px}.note p{margin:0 0 6px}.note p:last-child{margin:0}
 .pb{break-after:page}
+.audit{break-inside:auto}
 .arow{display:grid;grid-template-columns:1.1fr 1fr 1.6fr;gap:8px 12px;padding:10px 0;border-top:1px solid #e3ded0;break-inside:avoid;font-size:13px}.arow:first-of-type{border-top:0}
 .aitem{font-weight:700}.arow small{display:block;color:#5a6a60;font-size:10px;text-transform:uppercase;letter-spacing:.1em}.asrc{grid-column:1/-1;color:#5a6a60;font-size:11px}
 .img{text-align:center}.img figcaption{color:#5a6a60;font-size:12px;margin-top:6px}
@@ -123,7 +135,7 @@ footer{padding:16px 48px 28px;color:#5a6a60;font-size:11px;border-top:1px solid 
 <div class="cover"><div class="brand"><svg viewBox="0 0 40 40"><path d="M2 31 13.5 11l6 9.5 5-7.5L38 31Z" fill="#fff"/><path d="M13.5 11 19.5 20.5 16.4 24.9 9.6 17.7Z" fill="#d2b375"/></svg>Ridgeline Local</div>
 <h1>${esc(spec.title)}<br><em>${esc(spec.business)}</em></h1>
 <div class="meta">${esc(spec.date || '')}${spec.plan ? ' · ' + esc(spec.plan) + ' plan' : ''}${spec.subtitle ? ' · ' + esc(spec.subtitle) : ''}</div></div>
-<main>${(spec.sections || []).map(block).join('\n')}</main>
+<main>${groupHeadings(spec.sections || [])}</main>
 <footer>${spec.footer ? esc(spec.footer) : `Prepared for ${esc(spec.business)} by Ridgeline Local · ridgelinemarketinghq@gmail.com · Questions? Reply to the email this came with.`}<br>
 AI answers change over time; every answer in this report is shown as ChatGPT or Gemini gave it on the date above.</footer>
 </body></html>`;
