@@ -1,0 +1,7 @@
+{"id": "aicheck-2026-10-28-cabot-10a8", "queries": [
+ {"key": "cabot-ar-salons", "question": "Who are the best hair salons in Cabot, AR?", "city": "Cabot", "region": "Arkansas"},
+ {"key": "cabot-ar-gym", "question": "Who are the best gyms in Cabot, AR?", "city": "Cabot", "region": "Arkansas"},
+ {"key": "cabot-ar-restaurants", "question": "Who are the best restaurants in Cabot, AR?", "city": "Cabot", "region": "Arkansas"},
+ {"key": "cabot-ar-plumbing", "question": "Who are the best plumbers in Cabot, AR?", "city": "Cabot", "region": "Arkansas"},
+ {"key": "owasso-ok-restaurants", "question": "Who are the best restaurants in Owasso, OK?", "city": "Owasso", "region": "Oklahoma"}
+]}
