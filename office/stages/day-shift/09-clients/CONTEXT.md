@@ -13,6 +13,7 @@ owns the work.
 | specs/client-delivery.md | all |
 | specs/client-happiness.md | all (touchpoints, win emails, real-not-noise, cancel = learn) |
 | specs/quality.md | all (every drafted item passes it before status ready; reports and packs are branded PDFs via office/tools/make_pack.js) |
+| office/examples/welcome-pack.json | all: the golden Welcome Pack (fictional business, 88+). Read it before Step 0 and before any plan, kit or report; match or beat it, never copy its facts. Missing from disk = the clone's sparse list lacks office/examples: run `git sparse-checkout add office/examples` first |
 | specs/lead-tracking.md | all |
 | specs/offer.md | The plans, Promises the crew may NOT make |
 | shared/gateway.md | Protocol |
@@ -30,14 +31,16 @@ real clients.
    emailing, never Tennessee).
 2. Build its full Welcome Pack exactly as Lane C would (specs/quality.md: plan + kit + score,
    branded PDF via make_pack.js), spec and PDF in the session scratchpad only.
-3. Grade it with a fresh grader (specs/quality.md "Who grades") as a skeptical owner. Fix the 3
-   weakest lines, grade again.
+3. Grade it with a fresh grader (specs/quality.md "Who grades") through the "Grading hand-off"
+   below: you cannot launch agents yourself, Mara does. Fix the 3 weakest lines, grade again.
 4. Log: runlog note `testbuy {kind, town, score1, score2, weakest}` (no business name in the
    repo), and one line in skills/echo/SKILL.md "What I've learned" with the weakest part and the
    fix. The same weakness 2 weeks running → Sage makes it a rule in specs/quality.md.
 5. Score 90+ and better than office/examples/welcome-pack.json → write a fictionalized copy
    there (new name, town, numbers). Under 80 → alert Grayson: "Test buy scored <n>: <weakest>".
-6. Email Grayson the PDF in the Monday morning report email ("This week's test buy: <score>").
+6. Put one line in your report to Mara: `TESTBUY: <pdf path> | <score1> -> <score2> | <kind>, <town> |
+   <weakest, 8 words>`. Mara (08) puts "This week's test buy: <score1> -> <score2>" in the morning
+   message and emails Grayson the PDF.
 
 ## Process (per active client, oldest first; write the crew doc "working: Clients: <business>")
 1. **Week 1 items** not yet done (client.work): profile audit, profile fixes ("buildout-plan",
@@ -92,9 +95,32 @@ real clients.
    change the wording or tell me how" (the crew does not quietly skip it).
 10. Crew doc idle: "<n> clients: <items drafted>, <leads> leads, <flat> flat".
 
+## Grading hand-off (Oct 28, 2026: workers cannot launch agents)
+You are a worker Mara launched; you have no Agent tool, so you cannot launch the fresh grader
+yourself. For every deliverable that needs a grade (the test-buy pack, a Welcome Pack, a monthly
+report; care notes under 60 words you grade yourself, qa.by "self", and the desk re-grades them):
+1. Finish the deliverable (the PDF and the HTML make_pack.js wrote) in the session scratchpad and
+   write a facts file next to it: the client's onboarding facts, every source URL you used, the
+   gateway out file path. Nothing from these files goes in the repo.
+2. Set the draft's qa = {score: your own honest score, by: "self", weakest, rewrites: 0} and
+   status "draft" (never "ready" on a self grade).
+3. In your report to Mara, one line per deliverable: `GRADE: <pdf path> | <facts path> | <draft id>`.
+4. Mara launches the grader (general-purpose, foreground) with this brief, filled in: "You are the
+   busy owner of <business>, reading this on your phone between jobs. Read office/specs/quality.md,
+   then the PDF at <pdf> (every page, with the Read tool), then <facts>. Nothing else; you have no
+   drafting history. Score the six checks, find every fact you cannot trace to the facts file or a
+   source URL (one invented fact = True 0), list the 3 weakest lines worst first with a rewrite for
+   each. Return JSON only: {score, checks:{specific, ready, nextStep, proof, phone, true}, untraceable:[],
+   weakest:[{line, why, fix}], by:"grader"}."
+5. Mara relaunches a Clients worker with the grader's JSON in its brief; that worker applies the
+   fixes, rebuilds the PDF, bumps qa.rewrites and reports GRADE again. After the second grade (or
+   a first grade of 85+): status "ready" at 85+ with qa.by "grader"; 75 to 84 ready plus an alert;
+   under 75 not ready plus an alert (quality.md "The bar"). Record qa.score from the grader, never
+   your own.
+
 ## Audit
-Every drafted item has qa {score, weakest, rewrites} per specs/quality.md and 85+ (or 75+ with
-an alert). Every drafted item names the client and uses only facts from the client, the lead log, the
+Every drafted item has qa {score, by, weakest, rewrites} per specs/quality.md and 85+ (or 75+ with
+an alert); packs and reports carry qa.by "grader". Every drafted item names the client and uses only facts from the client, the lead log, the
 gateway text or a source URL. No invented review counts, leads or scores. Nothing from leadlog
 or client.customers in the repo. Lead finder and gateway jobs carry town + trade only.
 

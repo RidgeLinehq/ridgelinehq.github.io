@@ -10,10 +10,15 @@ The score is the one written on guarantee.html, so it must stay exactly this:
 
 Usage:
   python3 office/tools/ai_score.py --name "Main St. Barbershop" --keys k1,k2,k3 office/gw/out/<file>.json [more files]
-  -> prints JSON {score, points, answers, detail:[{key, tool, named, rank, competitors}]}
+  -> prints JSON {score, points, answers, questions, detail:[{key, tool, named, rank, competitors}], warning?}
 A key missing from every file is an error (exit 2): never score from partial data.
+Fewer than 3 questions (Oct 28, 2026, from the first test buy: a one-question "first check" was
+almost written up as the baseline): the JSON carries a "warning" field and the same line goes
+to stderr. Such a score is a first check, never the baseline or the guarantee number.
 """
 import argparse, json, re, sys
+
+BASELINE_QUESTIONS = 3  # the guarantee score (guarantee.html, specs/guarantee.md) is always 3 questions x 2 tools
 
 GENERIC = {"the", "a", "an", "and", "&", "of", "llc", "inc", "co", "company", "corp", "ltd", "services", "service",
            "group", "pllc", "pc", "dds", "md"}
@@ -86,7 +91,23 @@ def score(name, keys, files):
             detail.append({"key": k, "tool": tool, "ok": bool(a.get("ok")), "named": rank is not None, "rank": rank,
                            "points": p, "competitors": competitors(a.get("text", ""), variants) if a.get("ok") else []})
     answers = len(keys) * 2
-    return {"name": name, "score": round(points / answers * 100), "points": points, "answers": answers, "detail": detail}
+    out = {"name": name, "score": round(points / answers * 100), "points": points, "answers": answers,
+           "questions": len(keys), "detail": detail}
+    w = few_questions_warning(len(keys))
+    if w:
+        out["warning"] = w
+    return out
+
+
+def few_questions_warning(n_questions):
+    """The text of the warning for a score built from fewer than BASELINE_QUESTIONS questions, else None."""
+    if n_questions >= BASELINE_QUESTIONS:
+        return None
+    return ("WARNING: scored %d question%s (%d answers); the baseline and the guarantee use %d questions "
+            "(%d answers). Call this a first check, not the baseline. Do not write it to client.baseline, "
+            "client.aiTrend or the guarantee check; re-run with all %d keys first."
+            % (n_questions, "" if n_questions == 1 else "s", n_questions * 2, BASELINE_QUESTIONS,
+               BASELINE_QUESTIONS * 2, BASELINE_QUESTIONS))
 
 
 if __name__ == "__main__":
@@ -96,7 +117,11 @@ if __name__ == "__main__":
     ap.add_argument("files", nargs="+")
     a = ap.parse_args()
     try:
-        print(json.dumps(score(a.name, [k for k in a.keys.split(",") if k], a.files), indent=1))
+        keys = [k for k in a.keys.split(",") if k]
+        w = few_questions_warning(len(keys))
+        if w:
+            print(w, file=sys.stderr)
+        print(json.dumps(score(a.name, keys, a.files), indent=1))
     except SystemExit as e:
         print(e.code if isinstance(e.code, str) else e, file=sys.stderr)
         sys.exit(2)

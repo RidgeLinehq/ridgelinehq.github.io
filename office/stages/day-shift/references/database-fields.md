@@ -50,10 +50,11 @@
    on a Sold call), withOffer, requestedAt, sentAt, gmailMessageId, error, tries, by}
 
 ## drafts/<id>
-{kind:"outreach"|"followup"|"breakup"|"freecheck"|"reply"|"script"|"caption"|"calendar"|"post"|"kit"|"plan"|"report", clientId (client work only),
+{kind:"outreach"|"followup"|"breakup"|"freecheck"|"reply"|"script"|"caption"|"calendar"|"post"|"kit"|"plan"|"report"
+   |"leads"|"jobcheck"|"reviewreq"|"fix"|"checkin"|"update"|"win" (the last three: client care, specs/client-happiness.md), clientId (client work only),
  leadId, businessName, town, title, subject, body, touch:1|2|3,
  status:"draft"|"ready"|"approved"|"sent"|"rejected"|"failed"|"brief"|"filmed"|"posted",
- qa:{score, levers:[], flags:[], at}, gmailDraftId, gmailDraftUrl,
+ qa:{score, by:"grader"|"self"|"desk", weakest, rewrites, levers:[], flags:[], at}, gmailDraftId, gmailDraftUrl,
  evidence:{gmailMessageId, threadId, sentAt}, approvedAt, rejectedAt, editedAt, error,
  createdBy, runId, createdAt, updatedAt,
  video:{hook, lines:[{second, say, popup}], caption, hashtags:[], capcut:[], postPlan:{}, results:{}} (scripts only)}
@@ -86,6 +87,9 @@ test, createdAt, updatedAt}. The crew never changes status or notes after creati
  audit:{at, ...}, profileLog:[{at, field, before, after, source}], reviewsAtStart, reviewsNow:{count, at, source},
  customers:[{email, firstName, addedAt, askedAt}] (never in the repo), fixesTried:[{at, fix, result}], flatAt,
  managerAccess:bool, reviewLink, reviewCard, landing:{slug, url},
+ checkins:[{at, kind:"day-3"|"simpler"|"ask", question, draftId, gmailMessageId, repliedAt, reply}] (client-happiness.md 1, 4),
+ wins:[{at, kind:"ai-named"|"reviews"|"fix-live"|"lead", proof, draftId, gmailMessageId}] (client-happiness.md 2; proof is the exact line emailed),
+ lastUpdateAt (ISO of the last day-21 "what we did" email), cancelReason (the client's words, "no answer", or typed by Grayson on the page),
  work:[{item, status:"todo"|"drafted"|"done", t, draftId}], reportDue,
  status:"awaiting-onboarding"|"awaiting-payment"|"active"|"paused"|"cancelled", notes, createdAt, updatedAt}
  Standard work items: welcome-sent, onboarding, baseline, manager-access, review-link,

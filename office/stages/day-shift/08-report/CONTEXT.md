@@ -26,6 +26,11 @@
    line 3: the one thing to tap, if any ("Approve 6 drafts in the office" / "Add a mailing
    address in Settings" / "Take 2 screenshots for Pine Hill Roofing")
    line 4: only if something is red.
+   Mondays (Oct 28, 2026): the Clients worker's `TESTBUY:` line becomes "This week's test buy:
+   <score1> -> <score2> (<kind>, <town>)" in the message, and the PDF goes to
+   ridgelinemarketinghq@gmail.com with mcp__Gmail__send_message (ToolSearch it first): subject
+   "Ridgeline test buy <day key>: <score2>", body = that line plus the weakest part and its fix,
+   the PDF as the attachment (base64), never in the repo. Under 80: the alert from 09 Step 0.5.
    A paused run sends nothing. If nothing happened and nothing is needed, send 2 lines max.
 6. Set every crew doc idle with lastResult. Commit the repo writes (run notes, skills, lessons),
    `git pull --rebase`, push. Write the run-log line last (shared/logging.md), commit and push

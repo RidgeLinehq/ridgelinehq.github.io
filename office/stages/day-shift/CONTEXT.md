@@ -26,6 +26,16 @@ gates in specs/email-rules.md. It never texts, calls, DMs or posts.
    Report back in at most 12 plain lines: what you did, the numbers, what failed, and the list
    of instruction files you loaded."
 
+2b. Fresh grader (Oct 28, 2026): a worker launched with the Agent tool has NO Agent tool of its
+   own (tested), so the Clients worker cannot launch the grader that specs/quality.md "Who
+   grades" requires. When its report carries `GRADE: <pdf> | <facts> | <draft id>` lines (a
+   Welcome Pack, a monthly report, the Monday test-buy pack), you launch the grader yourself as
+   its own fresh agent with the brief in 09-clients/CONTEXT.md "Grading hand-off", then a fresh
+   Clients worker for the fix round (its brief carries the grader's JSON), then the grader once
+   more. Two rounds at most, about 8 minutes each. A pack graded only by its writer is qa.by
+   "self" and never status ready; the reply desk re-grades those before sending. On Mondays the
+   Clients worker runs even with zero clients (the test buy), and its `TESTBUY:` line goes into
+   the Report worker's brief.
 3. After each worker: read its report and the run notes file, update runs/<runId> and counts,
    and decide the next worker. A failed worker is retried once with the failure in its brief; a
    second failure marks the run failed at that stage (later workers still run where they can:
@@ -76,7 +86,7 @@ only, no prose padding.
 | 06 | `office/tools/call_desk.py stats` output, `specs/email-rules.md` ("Reply handling"), `skills/sage/SKILL.md`, `LESSONS.md`, `references/database-fields.md` (lessons, workflow, clients) |
 | 07 | `skills/patch/SKILL.md`, `shared/repo.md` ("Write paths"), `references/database-fields.md` (health) |
 | 08 | `skills/mara/SKILL.md`, `shared/logging.md`, `shared/repo.md` ("Committing"), `specs/push-week-2026-10-23.md` ("Scoreboard": the money line and the day's targets vs actual) |
-| 09 | `specs/client-delivery.md`, `specs/client-happiness.md`, `specs/quality.md`, `specs/lead-tracking.md`, `specs/offer.md` (The plans, Promises), `shared/gateway.md`, `shared/alerts.md`, `skills/echo/SKILL.md`, `skills/parker/SKILL.md` |
+| 09 | `specs/client-delivery.md`, `specs/client-happiness.md`, `specs/quality.md`, `specs/lead-tracking.md`, `specs/offer.md` (The plans, Promises), `shared/gateway.md`, `shared/alerts.md`, `skills/echo/SKILL.md`, `skills/parker/SKILL.md`, `office/examples/welcome-pack.json` (every Monday, and before any Welcome Pack or report) |
 
 Do NOT load: every skill, every spec, `office/server/`, `office/page/`, `index.html` (Patch
 fetches the live site instead). If a stage file cannot be read, stop that stage, write the run

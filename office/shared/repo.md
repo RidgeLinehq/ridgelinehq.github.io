@@ -12,8 +12,11 @@ prospects, no backups.
 - Only if missing, the LIGHT clone (about 1 second and 500 KB; the full tree carries the
   studio's videos and photos, which no crew needs):
   `git clone --depth 1 --filter=blob:none --sparse https://github.com/RidgeLinehq/ridgelinehq.github.io /home/claude/ridgeline`
-  then `git -C /home/claude/ridgeline sparse-checkout set office/shared office/specs office/stages office/skills office/gw office/cards office/health office/playbooks office/tools office/stripe office/leadfinder office/landing office/alerts data p`
+  then `git -C /home/claude/ridgeline sparse-checkout set office/shared office/specs office/stages office/skills office/gw office/cards office/health office/playbooks office/tools office/stripe office/leadfinder office/landing office/alerts office/instant office/emailcheck office/examples data p`
   An existing clone made before Oct 24, 2026: run `git sparse-checkout add office/stripe office/leadfinder office/landing office/alerts data p` once.
+  An existing clone made before Oct 28, 2026: run `git sparse-checkout add office/examples office/instant office/emailcheck` once
+  (office/examples holds the golden Welcome Pack that quality.md and the test buy read; a clone
+  without it makes the crew draft blind).
   (root files such as index.html and office/CLAUDE.md, CONTEXT.md, LESSONS.md, runlog.jsonl come
   along automatically). Commits and pushes work normally from this clone. Do not use add_repo;
   it is not available in scheduled runs. Never `git add` anything under office/studio/.

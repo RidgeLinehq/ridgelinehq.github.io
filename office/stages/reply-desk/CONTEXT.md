@@ -241,7 +241,8 @@ Label each thread handled.
 
 ## Lane D: deliver the crew's client work
 For every drafts doc with status "ready" and a clientId (kinds kit, plan, post, reply, report,
-leads, jobcheck, reviewreq, fix)
+leads, jobcheck, reviewreq, fix, and the client-care kinds checkin, update and win from
+specs/client-happiness.md; their format is at the end of this lane)
 whose client is active: send it to the client's contactEmail in their thread as plain text
 with a two-line intro in Grayson's voice and the exact next step for them (for a plan: "paste
 these into the Google Business app: Edit profile → the field named in each step; about 10
@@ -261,6 +262,19 @@ Kind "jobcheck": the monthly "did it turn into a job?" email. Kind "reviewreq": 
 request per customer in draft.recipients (specs/client-delivery.md "Review requests"; max 25 per
 client per day, 7:00 AM to 7:00 PM Central, skip suppressed, set customers[].askedAt). These go
 to the client's real customers on the client's behalf; that is allowed (Grayson, Oct 24, 2026).
+Client-care kinds (Oct 28, 2026; specs/client-happiness.md): "checkin" (day 3, ONE question), "win"
+(one proven win, 2 to 4 lines, the proof word for word, then "Next we're working on <x>") and
+"update" (day 21, "what we did so far", under 80 words, before the renewal charge) go out as a
+SHORT designed note (htmlBody + the same text in body) in the client's thread, with NO PDF and no
+"everything is in the attached PDF" line. They count toward the 2-emails-a-week limit outside
+replies and leads: skip a checkin when the client already replied since the pack, and never send
+two care emails to one client in one run. After each send: append {at, kind, question, draftId,
+gmailMessageId} to client.checkins (checkin) or {at, kind, proof, draftId, gmailMessageId} to
+client.wins (win; proof = the draft's proof line), set client.lastUpdateAt (update), events line.
+Fresh grade before sending (quality.md "Who grades"): a draft whose qa.by is "self" or missing
+is graded here first by a separate worker (this desk has the Agent tool; the Day Shift's workers
+do not), fixed if under 85, and goes out with qa.by "grader". Care notes under 60 words may be
+graded by you in this run (record qa.by "desk").
 
 ## Lane E: Grayson's own leads
 Search `from:graysonryan01@gmail.com subject:check newer_than:3d -label:Ridgeline-Handled`.
