@@ -1,0 +1,14 @@
+{
+ "id": "ec-2026-10-28-98ff",
+ "at": "2026-10-28T12:49:13.237056Z",
+ "domains": {
+  "ridgebackroofingok.com": {
+   "mx": true,
+   "why": "MX ridgebackroofingok-com.mail.protection.outlook.com"
+  },
+  "sandersplumbinghvac.com": {
+   "mx": true,
+   "why": "MX sandersplumbinghvac-com.mail.protection.outlook.com"
+  }
+ }
+}
