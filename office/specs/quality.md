@@ -31,6 +31,23 @@ and the grader scores again (counts as a rewrite). Record qa.by = "grader". A dr
 by its writer is not ready. If the Agent tool is missing in a run, score it yourself, record
 qa.by = "self" and the desk re-grades it before sending.
 
+## Rules from the first test buy (Oct 28, 2026: fresh grader scored 71, then 88 after fixes)
+- A review count is labeled with the site that shows it. A third-party site's own review count is
+  never called "Google reviews". When copies disagree, show the range and both sources.
+- Lead the proof with the client's strength when it's real ("your 4.9 matches ChatGPT's #1 pick:
+  you're losing on visibility, not quality"). It's truer and it's what makes them stay.
+- Never tell a trade to mark nights or weekends Closed without the emergency branch (a plumber,
+  HVAC, tow or locksmith can lose calls). Google "More hours" takes time slots only, not text.
+- No blanks to fill. Write the most likely answer with "[delete if not]" instead of
+  "[your answer]". The only allowed blank is the review link, with the Manager-access shortcut.
+- We usually can't open the Google listing itself (it blocks fetches). Say so in one line, use
+  the onboarding facts first, and label every fact from a copy site with its source. Ask for
+  Manager access in the Welcome Pack: it unlocks the real listing for every later check.
+- Never claim a Google category, setting or menu exists unless you saw it; hedge with "if it
+  shows up when you type it".
+- Facts from a search-result title only (not an opened page) are "may", never stated as found.
+- Every pack ends with a sources block (make_pack.js "sources").
+
 ## Learn from the best one (golden example)
 Before drafting a Welcome Pack or a monthly report, read office/examples/ (the best graded
 example of that kind, fictional business, 90+). Match or beat it; never copy its facts. When a

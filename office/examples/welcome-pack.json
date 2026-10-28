@@ -1,0 +1,254 @@
+{
+ "title": "Welcome Pack",
+ "business": "Riverbend Plumbing Co.",
+ "date": "EXAMPLE",
+ "plan": "Growth",
+ "subtitle": "Millbrook, AR",
+ "sections": [
+  {
+   "type": "note",
+   "text": "Start here: confirm your hours on Google (fix #1 below). 2 minutes. Then paste the rest when you have 10 minutes."
+  },
+  {
+   "type": "score",
+   "score": 0,
+   "label": "Your starting AI visibility score",
+   "note": "On Oct 28, 2026 we asked ChatGPT and Gemini one question a Millbrook customer would ask. Neither one named you.\n\nThis first check is 1 question (2 answers). Your full baseline uses 3 questions, and we re-check every week.",
+   "rows": [
+    {
+     "question": "Who are the best plumbers in Millbrook, AR?",
+     "chatgpt": "Not named",
+     "gemini": "Not named"
+    }
+   ]
+  },
+  {
+   "type": "compare",
+   "title": "Who AI recommends instead of you",
+   "you": "Riverbend Plumbing Co.",
+   "items": [
+    {
+     "name": "Summit Plumbing & Drain",
+     "by": "ChatGPT #1"
+    },
+    {
+     "name": "Clearwater Plumbing",
+     "by": "ChatGPT #2"
+    },
+    {
+     "name": "Hartley Heating & Plumbing",
+     "by": "ChatGPT #3"
+    },
+    {
+     "name": "Ace Pipe Co.",
+     "by": "ChatGPT #4"
+    },
+    {
+     "name": "Northside Plumbing",
+     "by": "Gemini"
+    },
+    {
+     "name": "Delta Plumbing",
+     "by": "Gemini"
+    },
+    {
+     "name": "Keystone Plumbing",
+     "by": "Gemini"
+    }
+   ]
+  },
+  {
+   "type": "note",
+   "text": "ChatGPT on its #1 pick, word for word: \"Strong local review volume and a 4.9 rating; reviewers specifically mention good customer service and water-heater installs.\""
+  },
+  {
+   "type": "heading",
+   "text": "What we found on your profile",
+   "sub": "From public pages on Oct 28, 2026. We could not open your Google listing directly, so we checked the sites that copy it."
+  },
+  {
+   "type": "stats",
+   "items": [
+    {
+     "value": "0",
+     "label": "Your AI score today (out of 100)"
+    },
+    {
+     "value": "38-43",
+     "label": "Your Google reviews (third-party copies, Oct 2026)"
+    },
+    {
+     "value": "4.9 ★",
+     "label": "Your Google rating (TrustAnalytica) — same as ChatGPT's #1 pick. You're not losing on quality, you're losing on visibility."
+    }
+   ]
+  },
+  {
+   "type": "audit",
+   "title": "Gaps that cost you calls",
+   "rows": [
+    {
+     "item": "Hours",
+     "found": "Don't match",
+     "fix": "Birdeye says open 24/7; MapQuest and TrustAnalytica say Mon–Fri 7–4. Pick the true one (fix #1).",
+     "source": "birdeye.com, mapquest.com, trustanalytica.org"
+    },
+    {
+     "item": "Business description",
+     "found": "Missing",
+     "fix": "None shows on Birdeye, TrustAnalytica or WhirLocal, so AI tools have little to say about you. Paste fix #3.",
+     "source": "birdeye.com, trustanalytica.org, whirlocal.io"
+    },
+    {
+     "item": "Yahoo category",
+     "found": "Tree Service",
+     "fix": "Yahoo lists you as a tree service. We send you the exact fix in week 3. (Yelp may show the same; we'll confirm.)",
+     "source": "local.yahoo.com"
+    },
+    {
+     "item": "Phone on Yahoo",
+     "found": "(555) 010-9911",
+     "fix": "TrustAnalytica and WhirLocal show (555) 010-2200. Mismatched phones make AI tools less sure you're one business.",
+     "source": "local.yahoo.com, trustanalytica.org, whirlocal.io"
+    },
+    {
+     "item": "Recent reviews",
+     "found": "About 40",
+     "fix": "More recent reviews that mention 'Millbrook' and the job ('water heater', 'main line') give AI tools words to quote. Use the review kit below.",
+     "source": "birdeye.com (38), trustanalytica.org (43)"
+    },
+    {
+     "item": "WhirLocal page",
+     "found": "Unclaimed",
+     "fix": "It asks the owner to claim it. Optional, 5 minutes.",
+     "source": "whirlocal.io"
+    }
+   ]
+  },
+  {
+   "type": "note",
+   "text": "Where those names came from: ChatGPT searched the web (two local directory sites). Gemini answered without searching, so we can't confirm the places it named are real Millbrook businesses."
+  },
+  {
+   "type": "heading",
+   "text": "Your Google profile fixes",
+   "sub": "About 10 minutes, all from your phone. Do the 3 marked DO FIRST today."
+  },
+  {
+   "type": "copy",
+   "label": "DO FIRST",
+   "title": "1. Hours",
+   "where": "Google Maps > your business > Edit profile > Hours",
+   "text": "Your listings disagree: Birdeye says 24/7, MapQuest says Mon–Fri 7–4. Pick the one that's true.\n\nIf you answer emergency calls: set Monday–Friday 7:00 AM – 4:00 PM. Then tap More hours > Add > pick \"Emergency\" if it's listed and set it to Open 24 hours. Not listed? Skip it — your description and Q&A will say it.\n\nIf you don't: Monday–Friday 7:00 AM – 4:00 PM, Saturday and Sunday Closed."
+  },
+  {
+   "type": "copy",
+   "label": "DO FIRST",
+   "title": "2. Categories",
+   "where": "Edit profile > Business information > Business category",
+   "text": "Primary category: Plumber\n\nAdd as additional (each one only if it shows up when you type it):\nDrainage service\nWater heater installation service\nGas installation service\nEmergency plumber (only if you take after-hours calls)"
+  },
+  {
+   "type": "copy",
+   "label": "DO FIRST",
+   "title": "3. Description (575 characters)",
+   "where": "Edit profile > Business information > Description",
+   "text": "Riverbend Plumbing Co. is a local plumber at 118 Main St in Millbrook, Arkansas, serving homes and businesses since 2021. We handle plumbing repairs, leak detection, drain and main sewer line clearing, hydro jetting, line locating, gas line installation and repair, fixture and faucet installs, remodel plumbing, and water heater repair and replacement. If your main line backs up, a pipe starts leaking or your water heater quits, call us and a local plumber will come take a look. We work on houses and commercial buildings in Millbrook, Oak Hill, Danville, Pine Ridge and Stanton.\n\nDon't serve one of these towns? Delete it before you paste."
+  },
+  {
+   "type": "copy",
+   "title": "4. Services",
+   "where": "Edit profile > Services (add each one with its line)",
+   "text": "Plumbing repair - Leaks, broken pipes and fixtures fixed.\nLeak detection - We find hidden leaks before they do damage.\nDrain and sewer cleaning - Clogged drains and main lines cleared.\nHydro jetting - High-pressure water to scour sewer lines clean.\nLine locating - We find buried water and sewer lines.\nWater heater repair and replacement - Water heaters fixed or swapped out.\nFixture installation - Faucets, toilets, sinks and more put in right.\nRemodel plumbing - Plumbing for kitchen and bath remodels and additions.\nGas line installation and repair - Gas lines run, tested and repaired.\nCommercial plumbing - Repairs and service for local businesses."
+  },
+  {
+   "type": "copy",
+   "title": "5. Questions customers ask (5 Q&A pairs)",
+   "where": "Your website FAQ, and Google Q&A if your profile still shows it",
+   "text": "Q: Do you handle emergency calls?\nA: Yes, call (555) 010-2200. [Delete this answer if you don't take after-hours calls.]\n\nQ: Can you clear a backed-up main sewer line?\nA: Yes. We clear drains and main lines, and we do hydro jetting for lines that keep clogging.\n\nQ: Do you replace water heaters?\nA: Yes. We repair and replace water heaters. Call (555) 010-2200 for a quote.\n\nQ: Do you work on businesses as well as homes?\nA: Yes. We do residential and commercial plumbing.\n\nQ: What are your hours?\nA: Office hours are Monday to Friday, 7 am to 4 pm. [Emergency line: call (555) 010-2200 anytime — delete if not.]"
+  },
+  {
+   "type": "list",
+   "title": "6. 10 photo ideas (add 2 a week)",
+   "numbered": true,
+   "items": [
+    "Your truck parked out front of 118 Main St with the shop sign showing.",
+    "You or your crew next to the truck, smiling, in work clothes.",
+    "A new water heater you just installed, before the closet door shuts.",
+    "Before and after of a cleaned-out drain or sewer cleanout.",
+    "The jetter hooked up and running at a job (no customer house numbers).",
+    "A camera or locator screen showing a line you found.",
+    "A finished faucet or toilet install, wiped clean, good light.",
+    "A remodel bathroom with the rough-in plumbing done.",
+    "Your tools laid out neat on a tailgate.",
+    "A commercial job in Millbrook (ask the owner first, no signs if they say no)."
+   ]
+  },
+  {
+   "type": "heading",
+   "text": "Your review kit",
+   "sub": "Real customers only. Everyone gets the same link. No gifts or discounts for reviews."
+  },
+  {
+   "type": "copy",
+   "title": "Find your review link (1 minute)",
+   "where": "Google Maps > your business > Ask for reviews (or Get more reviews) > Share",
+   "text": "Fastest: Google Maps > your business > Ask for reviews > Copy link, then paste it in a reply to our email.\n\nEven easier: add ridgelinemarketinghq@gmail.com as a Manager (Edit profile > ⋮ > Business profile settings > People and access). We grab the link and set everything up. No password needed.\n\nWe'll put your link in the text below, on a counter card (QR code) you can print, and in the review emails we send your customers."
+  },
+  {
+   "type": "copy",
+   "title": "Text to send after a job (202 characters)",
+   "text": "Hi, it's [your name] with Riverbend Plumbing Co. in Millbrook. Thanks for having us out! If you have a minute, would you leave us a quick Google review? It helps local folks find us: [your review link]"
+  },
+  {
+   "type": "copy",
+   "title": "One line for your techs",
+   "text": "If you're happy with the work today, would you leave us a quick Google review? I'll text you the link."
+  },
+  {
+   "type": "note",
+   "text": "Send us 10 customer emails and we'll ask for you. Reply with names and emails of real customers (a list or a spreadsheet). We email each one a short review request from Riverbend Plumbing Co., once, with your link."
+  },
+  {
+   "type": "steps",
+   "title": "Your next 30 days",
+   "items": [
+    {
+     "when": "Today",
+     "what": "Fix your hours and paste the categories and description (the 3 DO FIRST). Reply with your review link."
+    },
+    {
+     "when": "This week",
+     "what": "Add the services list. Text the review message to every customer you finish a job for."
+    },
+    {
+     "when": "Week 2",
+     "what": "Add 4 photos from the list. Send us 10 customer emails. We check your Google listing and tell you what's live."
+    },
+    {
+     "when": "Week 3",
+     "what": "Paste the Google post we write for you. We send you the fix for Yahoo (it lists you as a tree service, with a different phone)."
+    },
+    {
+     "when": "Day 28",
+     "what": "Your first monthly report: AI score then vs now, reviews then vs now."
+    }
+   ]
+  },
+  {
+   "type": "note",
+   "text": "Your guarantee: \"If your first month brings you zero tracked leads AND no improvement in your AI visibility, your second month is free. No arguing.\" Terms: ridgelinehq.github.io/guarantee.html"
+  },
+  {
+   "type": "sources",
+   "items": [
+    {
+     "label": "(real packs list every page a fact came from)",
+     "url": "https://example.com/source-page"
+    }
+   ]
+  }
+ ],
+ "footer": "Prepared for Riverbend Plumbing Co. by Ridgeline Local · Questions? Reply to the email this came with. A real person answers.",
+ "_note": "Golden example (fictional business, graded 88+ by a fresh grader on Oct 28, 2026 after 2 rounds). Match or beat it; never copy its facts. See specs/quality.md 'Learn from the best one'."
+}
