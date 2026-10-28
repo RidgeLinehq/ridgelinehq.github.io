@@ -18,6 +18,11 @@
  *  {"type":"steps", "title":"Your next 30 days", "items":[{"when":"This week","what":"..."}]}
  *  {"type":"note", "text":"..."}
  *  {"type":"pagebreak"}
+ *  {"type":"heading", ..., "newpage":true}   (headings no longer force a new page unless asked)
+ *  {"type":"audit", "title":"What we found", "rows":[{"item":"Yelp category","found":"Tree Services","fix":"Change to Plumbers","source":"yelp.com"}]}
+ *  {"type":"image", "src":"https://ridgelinehq.github.io/cards/<slug>.png", "caption":"Your review QR card", "width":220}  (https only)
+ *  {"type":"sources", "title":"Where these facts came from", "items":[{"label":"Birdeye","url":"https://..."}]}
+ * Spec "footer": optional text replacing the default footer's first line.
  * Never put anything in a spec that isn't true (specs/quality.md "True").
  */
 const fs = require('fs');
@@ -51,7 +56,7 @@ function block(b) {
         ${(b.rows || []).length ? `<table><thead><tr><th>What a customer asks</th><th>ChatGPT</th><th>Gemini</th></tr></thead><tbody>
         ${b.rows.map(r => `<tr><td>“${esc(r.question)}”</td><td>${tag(r.chatgpt)}</td><td>${tag(r.gemini)}</td></tr>`).join('')}</tbody></table>` : ''}
       </div></section>`;
-    case 'heading': return `<header class="h2"><h2>${esc(b.text)}</h2>${b.sub ? `<p>${esc(b.sub)}</p>` : ''}</header>`;
+    case 'heading': return `<header class="h2${b.newpage ? ' np' : ''}"><h2>${esc(b.text)}</h2>${b.sub ? `<p>${esc(b.sub)}</p>` : ''}</header>`;
     case 'copy': return `<section class="copy card">${b.label ? `<span class="lbl">${esc(b.label)}</span>` : ''}<h3>${esc(b.title)}</h3>
       ${b.where ? `<div class="where">Where: ${esc(b.where)}</div>` : ''}<div class="paste">${para(b.text)}</div></section>`;
     case 'list': return `<section class="list card"><h3>${esc(b.title)}</h3><${b.numbered ? 'ol' : 'ul'}>${(b.items || []).map(i => `<li>${esc(i)}</li>`).join('')}</${b.numbered ? 'ol' : 'ul'}></section>`;
@@ -62,6 +67,11 @@ function block(b) {
     case 'steps': return `<section class="steps card"><h3>${esc(b.title)}</h3>${(b.items || []).map(i => `<div class="step"><span>${esc(i.when)}</span><p>${esc(i.what)}</p></div>`).join('')}</section>`;
     case 'note': return `<aside class="note">${para(b.text)}</aside>`;
     case 'pagebreak': return '<div class="pb"></div>';
+    case 'audit': return `<section class="audit card"><h3>${esc(b.title || 'What we found')}</h3>${(b.rows || []).map(r => `<div class="arow">
+      <div class="aitem">${esc(r.item)}</div><div class="afound"><small>Found</small>${tag(r.found)}</div>
+      <div class="afix"><small>Fix</small>${esc(r.fix)}</div>${r.source ? `<div class="asrc">Source: ${esc(r.source)}</div>` : ''}</div>`).join('')}</section>`;
+    case 'image': return /^https:\/\//.test(String(b.src || '')) ? `<figure class="img card"><img src="${esc(b.src)}" alt="${esc(b.caption || '')}" style="width:${Math.min(600, +b.width || 260)}px;max-width:100%">${b.caption ? `<figcaption>${esc(b.caption)}</figcaption>` : ''}</figure>` : '';
+    case 'sources': return `<section class="srcs"><h3>${esc(b.title || 'Where these facts came from')}</h3><ol>${(b.items || []).filter(i => /^https?:\/\//.test(String(i.url || ''))).map(i => `<li>${esc(i.label || '')} <a href="${esc(i.url)}">${esc(i.url)}</a></li>`).join('')}</ol></section>`;
     default: return '';
   }
 }
@@ -81,7 +91,7 @@ function html(spec) {
 main{padding:28px 48px 40px}
 .card{background:#fff;border:1px solid #e3ded0;border-radius:14px;padding:20px 22px;margin:0 0 16px;break-inside:avoid}
 h2{font:400 28px/1.15 Georgia,serif;margin:0}h3{margin:0 0 8px;font-size:17px}
-.h2{break-before:page;margin:0 0 14px;border-top:2px solid #d2b375;padding-top:14px}.h2 p{margin:4px 0 0;color:#5a6a60}
+.h2.np{break-before:page}.h2{break-after:avoid;margin:0 0 14px;border-top:2px solid #d2b375;padding-top:14px}.h2 p{margin:4px 0 0;color:#5a6a60}
 .score{display:grid;grid-template-columns:200px 1fr;gap:22px;align-items:start}
 .gauge{width:200px}.gnum{font:700 44px Georgia,serif;fill:#142f27}.gsub{font-size:11px;fill:#5a6a60}
 .glabel{text-align:center;font-weight:700;font-size:13px;margin-top:2px}
@@ -101,6 +111,11 @@ ol,ul{margin:0;padding-left:20px}li{margin:4px 0}
 .step span{font-weight:700;color:#7f6233;font-size:13px}.step p{margin:0}
 .note{background:#e9eee3;border-radius:12px;padding:14px 16px;margin:0 0 16px;font-size:14px}.note p{margin:0 0 6px}.note p:last-child{margin:0}
 .pb{break-after:page}
+.arow{display:grid;grid-template-columns:1.1fr 1fr 1.6fr;gap:8px 12px;padding:10px 0;border-top:1px solid #e3ded0;break-inside:avoid;font-size:13px}.arow:first-of-type{border-top:0}
+.aitem{font-weight:700}.arow small{display:block;color:#5a6a60;font-size:10px;text-transform:uppercase;letter-spacing:.1em}.asrc{grid-column:1/-1;color:#5a6a60;font-size:11px}
+.img{text-align:center}.img figcaption{color:#5a6a60;font-size:12px;margin-top:6px}
+.srcs{font-size:11px;color:#5a6a60;margin:8px 0 16px;break-inside:avoid}.srcs h3{font-size:13px}.srcs a{color:#142f27;word-break:break-all}
+@media (max-width:640px){.arow{grid-template-columns:1fr}}
 @media print{body{background:#fff}}
 footer{padding:16px 48px 28px;color:#5a6a60;font-size:11px;border-top:1px solid #e3ded0}
 @media (max-width:640px){.cover,main,footer{padding-left:18px;padding-right:18px}.score{grid-template-columns:1fr}.gauge{margin:0 auto;display:block}.step{grid-template-columns:1fr}}
@@ -109,7 +124,7 @@ footer{padding:16px 48px 28px;color:#5a6a60;font-size:11px;border-top:1px solid 
 <h1>${esc(spec.title)}<br><em>${esc(spec.business)}</em></h1>
 <div class="meta">${esc(spec.date || '')}${spec.plan ? ' · ' + esc(spec.plan) + ' plan' : ''}${spec.subtitle ? ' · ' + esc(spec.subtitle) : ''}</div></div>
 <main>${(spec.sections || []).map(block).join('\n')}</main>
-<footer>Prepared for ${esc(spec.business)} by Ridgeline Local · ridgelinemarketinghq@gmail.com · Questions? Reply to the email this came with.<br>
+<footer>${spec.footer ? esc(spec.footer) : `Prepared for ${esc(spec.business)} by Ridgeline Local · ridgelinemarketinghq@gmail.com · Questions? Reply to the email this came with.`}<br>
 AI answers change over time; every answer in this report is shown as ChatGPT or Gemini gave it on the date above.</footer>
 </body></html>`;
 }
