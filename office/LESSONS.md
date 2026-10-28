@@ -25,3 +25,7 @@ skills/<agent>/SKILL.md first. Nothing here without evidence.
   and barbershops 0 of 7; the ai-check line 14 of 70 (20%) vs who-shows-up 0 of 8; 0 sold.
   Emails taken on the phone: 4 of 16 failed (2 x 550, 1 no-MX domain, 1 invalid '&'), 12 free
   checks delivered, 0 replies at day 1. Cold email: 0 of 10 sends replied, under 20, no reply lesson.
+- 2026-10-28 (Sage): Emails taken on the phone: 5 of 16 failed (31%), the 5th a typo domain
+  (atnt.net for att.net, Gmail Delay 4.4.1, parked domain); free checks delivered 11 of 16, 0 replies
+  at day 2, 0 clients. Calls 119: ai-check line 0 Interested in 13 new calls (14 of 83, 16.9%) vs
+  top-5 3 of 15 (20%); 0 sold. Cold email: 12 sends (4 crew, 8 hand), 0 replies, under 20, no reply lesson.
