@@ -1,0 +1,46 @@
+{
+ "id": "ec-2026-10-29-6418",
+ "at": "2026-10-29T12:37:20.541467Z",
+ "domains": {
+  "airsolutionspros.com": {
+   "mx": true,
+   "why": "MX airsolutionspros-com.mail.protection.outlook.com"
+  },
+  "becoolhvac.com": {
+   "mx": true,
+   "why": "MX alt1.aspmx.l.google.com"
+  },
+  "elevatemedwellness.com": {
+   "mx": true,
+   "why": "MX aspmx.l.google.com"
+  },
+  "fairoutdoordesign.com": {
+   "mx": true,
+   "why": "no MX but has A record (mail may still work)"
+  },
+  "gulftel.com": {
+   "mx": true,
+   "why": "MX mx.centurylink.net"
+  },
+  "kentslandscaping.com": {
+   "mx": true,
+   "why": "MX kentslandscaping-com.mx1.arsmtp.com"
+  },
+  "pathwayhealthandbeauty.com": {
+   "mx": true,
+   "why": "MX pathwayhealthandbeauty-com.mail.protection.outlook.com"
+  },
+  "patriotlawnandpest.com": {
+   "mx": true,
+   "why": "MX patriotlawnandpest-com.mail.protection.outlook.com"
+  },
+  "revampedowasso.com": {
+   "mx": true,
+   "why": "MX alt4.aspmx.l.google.com"
+  },
+  "yahoo.com": {
+   "mx": true,
+   "why": "MX mta6.am0.yahoodns.net"
+  }
+ }
+}
