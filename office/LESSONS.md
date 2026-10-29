@@ -29,3 +29,9 @@ skills/<agent>/SKILL.md first. Nothing here without evidence.
   (atnt.net for att.net, Gmail Delay 4.4.1, parked domain); free checks delivered 11 of 16, 0 replies
   at day 2, 0 clients. Calls 119: ai-check line 0 Interested in 13 new calls (14 of 83, 16.9%) vs
   top-5 3 of 15 (20%); 0 sold. Cold email: 12 sends (4 crew, 8 hand), 0 replies, under 20, no reply lesson.
+- 2026-10-29 (Sage): Email-first overflow (Foley + 10 towns): 20 of 30 new leads with an email
+  (19 own site), own sites readable 33 of 44, vs 0 of 15 emails Foley-only on 10-26; 15 touch-1
+  sends vs 2 on 10-28. Calls 137: roofing 0 of 23 Interested vs auto repair 16 of 72 (22.2%); calls
+  at 2-4 PM 15 of 81 (18.5%) vs 9-11 AM 4 of 54 (7.4%); 0 sold. Cold email: 27 sends (19 crew, 8
+  hand), 0 replies, but 15 of 27 are under 1 hour old: no reply lesson until 11-01 (day 3).
+  Free checks delivered 13 of 18 taken, 0 replies at day 1-3, 0 clients.
