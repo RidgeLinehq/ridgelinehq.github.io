@@ -35,3 +35,9 @@ skills/<agent>/SKILL.md first. Nothing here without evidence.
   at 2-4 PM 15 of 81 (18.5%) vs 9-11 AM 4 of 54 (7.4%); 0 sold. Cold email: 27 sends (19 crew, 8
   hand), 0 replies, but 15 of 27 are under 1 hour old: no reply lesson until 11-01 (day 3).
   Free checks delivered 13 of 18 taken, 0 replies at day 1-3, 0 clients.
+- 2026-10-30 (Sage): Emails printed on the business's own site bounced 0 of 15 at day 1 (10-29
+  sends) and 0 of 19 at 10 minutes (10-30), vs 5 of 16 (31%) for emails taken on the phone. Free
+  checks delivered by email after a call: 0 replies of 13 at day 2-4 (one follow-up 10-27, price
+  note 10-28), 0 clients: the next touch for those 13 is a call. Cold email: 46 sends (38 crew, 8
+  hand), 0 replies; pattern A 0 of 20, B 0 of 16; levers loss 0 of 18, gap detail 0 of 13, give 0
+  of 5; 34 of 38 crew sends are under 2 days old, so no reply-rate lesson until 11-02.
