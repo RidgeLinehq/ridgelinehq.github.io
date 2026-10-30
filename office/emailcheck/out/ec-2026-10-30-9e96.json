@@ -1,0 +1,62 @@
+{
+ "id": "ec-2026-10-30-9e96",
+ "at": "2026-10-30T12:35:43.045335Z",
+ "domains": {
+  "aol.com": {
+   "mx": true,
+   "why": "MX mx-aol.mail.gm0.yahoodns.net"
+  },
+  "coastalfamily-dentistry.com": {
+   "mx": true,
+   "why": "MX smtp.google.com"
+  },
+  "cowetadentalandimplants.com": {
+   "mx": true,
+   "why": "MX alt2.aspmx.l.google.com"
+  },
+  "cox.net": {
+   "mx": true,
+   "why": "MX mta6.am0.yahoodns.net"
+  },
+  "dentistryforyousandsprings.com": {
+   "mx": true,
+   "why": "MX dentistryforyousandsprings-com.mail.protection.outlook.com"
+  },
+  "drpamelaedwardsdentistry.com": {
+   "mx": true,
+   "why": "MX aspmx.l.google.com"
+  },
+  "fairhopedentist.com": {
+   "mx": true,
+   "why": "MX fairhopedentist-com.mail.protection.outlook.com"
+  },
+  "fulksfamilydentistry.com": {
+   "mx": true,
+   "why": "MX alt2.aspmx.l.google.com"
+  },
+  "kinarddentalarts.com": {
+   "mx": true,
+   "why": "MX kinarddentalarts-com.mail.protection.outlook.com"
+  },
+  "owassosmiles.com": {
+   "mx": true,
+   "why": "MX mx10.antispam.mailspamprotection.com"
+  },
+  "rainesfamilydental.com": {
+   "mx": true,
+   "why": "MX alt1.aspmx.l.google.com"
+  },
+  "salinefamilydental.com": {
+   "mx": true,
+   "why": "MX salinefamilydental-com.mail.protection.outlook.com"
+  },
+  "sapulpafamilydental.com": {
+   "mx": true,
+   "why": "MX sapulpafamilydental-com.mail.protection.outlook.com"
+  },
+  "sbcglobal.net": {
+   "mx": true,
+   "why": "MX mx-att.mail.am0.yahoodns.net"
+  }
+ }
+}
