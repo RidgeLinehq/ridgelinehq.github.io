@@ -320,6 +320,7 @@ window.render=function(t){
     [...document.querySelectorAll('#tG .bar')].forEach((el,i)=>{el.style.transform=`scaleX(${i<1?1:1-th*.85})`;el.style.opacity=i<1?1:1-th*.7});
     [0,1,2,3,4].forEach(i=>{$('rv'+i).style.opacity=i<1?1:1-fw});
     [['stG',T.thin+.1],['stR',(T.few!==undefined?T.few:T.thin+.22)+.1]].forEach(([id,t0])=>{const s=back(lin(t,t0,t0+.3));const e=$(id);e.style.opacity=clamp(s*1.5);e.style.transform=`translate(-50%,-50%) rotate(-9deg) scale(${.6+.4*s})`});
+    (T.pulse||[]).forEach(([t0,id])=>{const k=lin(t,t0,t0+.5);const e=$(id);e.style.boxShadow=(k>0&&k<1)?`0 0 0 ${12*(1-k)}px rgba(255,138,42,${.95*(1-k)}),0 60px 140px rgba(0,0,0,.6)`:'0 60px 140px rgba(0,0,0,.6)'});
     const ap=lin(t,T.tiles[1]+.3,T.tiles[1]+1.0); ['arL','arR'].forEach(id=>{const p=$(id);const L=p.getTotalLength();p.style.strokeDasharray=L;p.style.strokeDashoffset=L*(1-eo(ap))});
     const cs=back(lin(t,T.tiles[1]+.9,T.tiles[1]+1.3)); const C=$('chip'); C.style.opacity=clamp(cs*1.5);
     const sw2=lin(t,T.other,T.other+.3); // flip the chip to the real name ChatGPT picked
