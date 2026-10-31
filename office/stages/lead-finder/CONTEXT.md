@@ -1,9 +1,11 @@
 # Lead Finder: leads for every Pro client, twice a day, every day
 
 Grayson's standing order (Oct 24, 2026): "make sure we are sending agents to get them more leads
-if they buy for that package." This task runs at 8:23 AM and 4:23 PM Central, every day
-(weekends too), so a paying client never waits for leads. It only finds, logs and sends leads;
-the reply desk answers emails and the Day Shift does the rest of the client work.
+if they buy for that package." Since Oct 31, 2026 this runs INSIDE the reply desk
+(stages/reply-desk/CONTEXT.md "Lane LF") on its 8 AM and 4 PM Central runs, every day (weekends
+too), so a paying client never waits for leads; the separate scheduled task is off because its
+environment could not run it (0 runs ever). This stage only finds, logs and sends leads; the
+rest of the desk answers emails and the Day Shift does the rest of the client work.
 
 ## Inputs
 | File | Section |
@@ -34,10 +36,11 @@ the reply desk answers emails and the Day Shift does the rest of the client work
 5. Send (specs/lead-tracking.md "Sending leads to the client", specs/quality.md "Leads"):
    Pro = each new lead at once, one email each, subject "New lead: <their ask in 6 words>";
    Growth clients get no lead emails (leads are sold on Pro only, Grayson Oct 27, 2026).
-   NO GMAIL TOOL in this session (the scheduled task may run without the Gmail connector): write
-   each email as a drafts doc kind "leads", status "ready", clientId, priority true for Pro, with
-   the finished subject + body + leadlog ids; the reply desk (hourly, Lane D) sends it and records
-   the Gmail ids. That is the normal path, not a failure. Each lead: what they asked (their words),
+   Inside the reply desk (since Oct 31, 2026) the Gmail tool is present: send each email yourself
+   (mcp__Gmail__send_message, plain text) and record the Gmail id on the row. Only a session
+   WITHOUT Gmail writes each email as a drafts doc kind "leads", status "ready", clientId,
+   priority true, with the finished subject + body + leadlog ids, for the desk's Lane D to send
+   within the hour. Each lead: what they asked (their words),
    when, where (link), and a copy-ready suggested reply in the owner's voice. Record
    sentToClientAt + sentGmailId on every row. No new leads → send nothing to the client.
 6. Learn: on the client, `leadSearch.stats` += {run, candidates, counted, bySource}. If a client

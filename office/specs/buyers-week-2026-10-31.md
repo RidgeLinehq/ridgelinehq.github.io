@@ -19,8 +19,10 @@ free AI check, then $39.99 a month). Everything automated and ready.
 - Free checks: 13 delivered since Oct 26 after calls, 0 replies, 0 clients. Calls 137: auto repair
   16 of 72 Interested (22%), roofing 0 of 23; 2 to 4 PM 18.5% vs 9 to 11 AM 7.4%.
 - Open: the Lead Finder scheduled task had never run (0 run-log lines): it fired in the Default
-  cloud environment, whose setup script runs `make me` and dies before the session starts. Moved
-  Oct 31 to the office's own environment (the one the reply desk runs in); the old task is off.
+  cloud environment, whose setup script runs `make me` and dies before the session starts, and a
+  task made from outside the desk's environment has no Gmail, database or repo access. Since Oct
+  31 the reply desk does the Lead Finder's work itself on its 8 AM and 4 PM runs (Lane LF); the
+  separate task is off.
   Old bad prospect addresses are closed, not chased (Grayson, Oct 31: "those are long gone").
 - New since today: every cold email is under 90 words, three short paragraphs, built by
   `office/tools/cold_email.py` with the card (specs/email-rules.md "Shape" and "The HTML version").
@@ -55,7 +57,7 @@ goal the week works for; it is not promised.
 | Quinn | every new lead scored the same run; auto repair and dental first in the call list; 0 held for a Google count | "## Quinn" |
 | Parker | an angle on every Qualified lead with an email; the loss line names real competitors from an AI check when one exists; two subject patterns alive | "## Parker" |
 | Echo + Mara | the cap sent every weekday inside the window, each built by cold_email.py (under 90 / 60 / 45 words, three paragraphs, the card), QA 80+, a Gmail id on every send; follow-ups due go first and count toward the cap; a shortfall names its one cause | "## Echo", "## Mara sends" |
-| Reply desk | every reply within one run; every "yes" gets the check the same run; Buyer rules 1 to 7 on time; I2 follow-ups on their day | health/desk lanes, clients work items |
+| Reply desk | every reply within one run; every "yes" gets the check the same run; Buyer rules 1 to 7 on time; I2 follow-ups on their day; Lane LF (the Lead Finder) on the 8 AM and 4 PM runs with health/leadfinder written each time | health/desk lanes, clients work items |
 | Clients (09) | every active client has a done work item inside 48 hours of onboarding; week-1 fixes checked live; Monday test buy 85+ on the first grade | "## Clients" |
 | Sage | the first reply-rate lesson at day 3 of the Oct 30 batch (Nov 2); old shape (46 sends) vs new shape (first 20 sends) scored apart; levers and subject patterns by reply | "## Sage", LESSONS.md |
 | Nova | Monday and Thursday: one brief in the video-briefs.md format with the hook, the pop-up text and the second it appears | "## Nova" |

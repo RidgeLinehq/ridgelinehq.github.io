@@ -17,6 +17,7 @@ first emails and client work; this desk sends and answers, any day.
 | shared/alerts.md | all |
 | specs/quality.md | all (every client deliverable passes it; Speed) |
 | specs/buyers-week-2026-10-31.md | Buyer rules (the first 7 days of every paying client) |
+| stages/lead-finder/CONTEXT.md | all, only on the 8 AM and 4 PM Central runs (Lane LF) |
 | specs/client-happiness.md | 1 (touchpoints: the 2-a-week rule, the formats), 2 (win emails), 4 (catch confusion), 5 (cancel = learn) |
 | specs/email-rules.md | QA gate 5 to 7, "Reply handling" |
 | shared/gateway.md | Protocol |
@@ -346,6 +347,28 @@ Lane E: the person asked him for it on the phone. Every run:
    so the Emergency Watch sees it too; then handle it now if it is yours.
 Voicemail follow-ups (kind "voicemail_email") are Echo's (Day Shift 04 step C2): cold touches that
 pass every email gate. This desk never sends them.
+
+## Lane LF: the Lead Finder, inside this desk (8 AM and 4 PM Central runs; Grayson, Oct 31, 2026)
+The separate "Ridgeline · Lead Finder" scheduled task never ran once (0 run-log lines): its cloud
+environment died before the session started, and a task made from outside this desk's
+environment has no Gmail, no office database and no repo access. This desk has all three, so the
+desk does it. Grayson, Oct 24: "make sure we are sending agents to get them more leads if they
+buy for that package... people are paying really big money for this."
+1. When: the first run that starts at or after 8:00 AM Central and the first at or after 4:00 PM
+   Central, every day. Read health/leadfinder (create it if missing). If its lastSlot already
+   equals "<day key>-am" (before 4 PM) or "<day key>-pm" (after), skip this lane. Otherwise set
+   lastSlot now (if_version) so a second run in the same slot never repeats the work.
+2. No active Pro client (clients where status == active and plan == pro) → health/leadfinder
+   {at, state:"idle", lastSlot, clients:0, note:"no lead clients"} and move on. Cheap, every time.
+3. Otherwise run stages/lead-finder/CONTEXT.md steps 1 to 7 for every active Pro client, in this
+   run, inside a 12-minute budget: the Reddit job file (town + terms only, never a client name),
+   the web searches, honest judging, leadlog rows, and the lead emails SENT BY YOU with
+   mcp__Gmail__send_message (one email per lead, specs/quality.md "Leads"; no drafts detour, this
+   desk has Gmail), sentToClientAt + sentGmailId on every row, leadSearch.stats on the client.
+4. End: health/leadfinder {at, state:"idle", lastSlot, clients, candidates, counted, sent,
+   note:"<one line>"} and a run-log line `--task lead-finder` next to this run's own line. Any
+   failure is an alert (shared/alerts.md), never silence. Over budget: finish the client you are
+   on, note "<n> clients left for the next slot", and continue with Lane F.
 
 ## Lane F: tell Grayson (SendUserMessage, only when there is something new)
 - NEW CLIENT (always its own message): "🚨💰 NEW CLIENT: <business> just paid <plan> $<price>!
