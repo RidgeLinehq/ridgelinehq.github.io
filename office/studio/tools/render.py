@@ -130,7 +130,7 @@ def ding():  # soft two-note confirmation
     b = np.sin(2 * np.pi * 1318.5 * np.maximum(0, t - 0.09)) * np.exp(-np.maximum(0, t - 0.09) * 8) * (t > 0.09)
     return (a + b) * 0.35
 FX = {"whoosh": whoosh, "tap": tap, "thud": thud, "pop": pop, "riser": riser, "impact": impact, "tick": tick, "ding": ding}
-gains = {"whoosh": 0.35, "tap": 0.5, "thud": 0.7, "pop": 0.4, "riser": 0.45, "impact": 0.9, "tick": 0.35, "ding": 0.5}
+gains = {"whoosh": 0.35, "tap": 0.5, "thud": 0.55, "pop": 0.4, "riser": 0.4, "impact": 0.45, "tick": 0.35, "ding": 0.5}
 for t, kind in cfg.get("sfx", []):
     put(FX[kind](), t, gains[kind])
 fx = np.clip(fx, -1, 1)
@@ -150,7 +150,7 @@ def mux(dest, with_music):
     """voice (front, EQ + compression) + optional music ducked under the voice + sfx -> two-pass loudnorm -> AAC, video copied."""
     vo, music = cfg["vo"], cfg.get("music") if with_music else None
     vg = cfg.get("voGain", 1.6)
-    I = cfg.get("loudI", -14) if music else cfg.get("loudI_voice", cfg.get("loudI", -14) + 1)  # no music bed: pauses are silent, aim a touch hotter
+    I = cfg.get("loudI", -14) if music else cfg.get("loudI_voice", cfg.get("loudI", -14))
     TP = cfg.get("loudTP", -1.5)
     chain = ("[1:a]aresample=44100,highpass=f=70,equalizer=f=140:t=q:w=1:g=2.5,equalizer=f=3200:t=q:w=1.2:g=3,equalizer=f=9000:t=q:w=1:g=1.5,"
              "acompressor=threshold=-20dB:ratio=3:attack=5:release=120,volume=" + str(vg) + ",apad=whole_dur=" + str(cfg["dur"] + 0.5) + ",asplit=2[vo][sc];")  # padded so the sidechain (and the music under it) lasts the whole cut
@@ -163,20 +163,21 @@ def mux(dest, with_music):
     else:
         chain += "[sc]anullsink;[2:a]aresample=44100,volume=0.9[fx];[vo][fx]amix=inputs=2:normalize=0"
         inputs += ["-i", os.path.join(work, "fx.wav")]
-    chain += ",alimiter=limit=0.95,atrim=0:" + str(cfg["dur"])
-    ln = "loudnorm=I=" + str(I) + ":TP=" + str(TP) + ":LRA=11"
-    # pass 1: measure, so pass 2 can apply a linear (transparent) gain that lands on the target
-    r = subprocess.run(["ffmpeg", "-hide_banner", "-i", video] + inputs + ["-filter_complex", chain + "," + ln + ":print_format=json[a]", "-map", "[a]", "-f", "null", "-"],
+    chain += ",alimiter=limit=0.95:level=0,atrim=0:" + str(cfg["dur"])  # level=0: a ceiling, not an auto-normaliser
+    # pass 1: measure integrated loudness; pass 2: one linear gain to the target, then a true ceiling.
+    # (loudnorm's own linear mode silently falls back to dynamic mode when the gain would push the peak over TP,
+    #  and dynamic mode delays and truncates the tail; a plain gain + limiter is deterministic.)
+    r = subprocess.run(["ffmpeg", "-hide_banner", "-i", video] + inputs + ["-filter_complex", chain + ",loudnorm=I=" + str(I) + ":TP=" + str(TP) + ":print_format=json[a]", "-map", "[a]", "-f", "null", "-"],
                        capture_output=True, text=True)
     m = json.loads(r.stderr[r.stderr.rfind("{"):r.stderr.rfind("}") + 1])
-    ln2 = (ln + ":measured_I=" + m["input_i"] + ":measured_TP=" + m["input_tp"] + ":measured_LRA=" + m["input_lra"] + ":measured_thresh=" + m["input_thresh"]
-           + ":offset=" + m["target_offset"] + ":linear=true")
-    full = chain + "," + ln2 + ",afade=t=out:st=" + str(cfg["dur"] - 1.3) + ":d=1.3[a]"
+    gain = round(I - float(m["input_i"]), 2)
+    ceiling = round(10 ** ((TP - 1.5) / 20), 3)  # 1.5 dB under the true-peak target: the AAC encoder overshoots limited transients
+    full = chain + ",volume=" + str(gain) + "dB,aresample=48000,alimiter=limit=" + str(ceiling) + ":level=0:attack=4:release=80,afade=t=out:st=" + str(cfg["dur"] - 1.3) + ":d=1.3[a]"  # resample BEFORE the ceiling: the encoder must not resample after it
     cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", video] + inputs + [
            "-filter_complex", full, "-map", "0:v", "-map", "[a]", "-c:v", "copy",
            "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-t", str(cfg["dur"]), "-movflags", "+faststart", dest]
     subprocess.run(cmd, check=True)
-    print("wrote", dest, "(measured", m["input_i"], "LUFS -> target", I, ")", flush=True)
+    print("wrote", dest, "(measured", m["input_i"], "LUFS, gain", gain, "dB, ceiling", TP, "dBFS)", flush=True)
 
 if variants:
     for v in variants:

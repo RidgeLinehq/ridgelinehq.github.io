@@ -6,16 +6,16 @@ Character counts below were measured by script, not estimated.
 
 ## Files (which cut goes where first)
 
-| Platform | Hook | File to post | Fallback file | Cover frame |
-|---|---|---|---|---|
-| TikTok (first) | B, the demo: phone types the Dalton question into ChatGPT, three names appear, then "Your business: not mentioned" | /home/user/ridgelinehq.github.io/office/studio/out/launch-demo-tiktok-voice.mp4 | /home/user/ridgelinehq.github.io/office/studio/out/launch-demo-tiktok-full.mp4 | About 3.45 s (demo.json tl.you 3.15 + 0.3): the "not mentioned" row under the three names, the "Example · real answer · checked Oct 28, 2026" label inside the frame |
-| Instagram Reels (first) | C, the question: "When somebody asks ChatGPT who to call, is it you?" then the answer card | /home/user/ridgelinehq.github.io/office/studio/out/launch-question-instagram-voice.mp4 | /home/user/ridgelinehq.github.io/office/studio/out/launch-question-instagram-full.mp4 | About 3.5 s (question.json hookSlam 3.12 + 0.35, before card_in 3.68): "is it you?" with the orange underline at full width, the last frame before the card |
-| Facebook Reels (first) | A, the loss: "Your competitor just got recommended by ChatGPT. You didn't." then the answer card | /home/user/ridgelinehq.github.io/office/studio/out/launch-loss-facebook-voice.mp4 | /home/user/ridgelinehq.github.io/office/studio/out/launch-loss-facebook-full.mp4 | About 4.25 s (loss.json hookSlam 3.9 + 0.35): right after "You didn't." lands, underline at full width |
+| Platform | Hook | File to post | Fallback file | Cover image | Length |
+|---|---|---|---|---|---|
+| TikTok (first) | B, the demo: the phone types the Dalton question into ChatGPT, three names appear, then "Your business: not mentioned" | office/studio/out/launch-demo-tiktok-voice.mp4 | office/studio/out/launch-demo-tiktok-full.mp4 | office/studio/out/launch-demo-cover.jpg (3.45 s: the "not mentioned" row under the three names, Example label in frame) | 33.0 s |
+| Instagram Reels (first) | C, the question: "When somebody asks ChatGPT who to call, is it you?" then the answer card | office/studio/out/launch-question-instagram-voice.mp4 | office/studio/out/launch-question-instagram-full.mp4 | office/studio/out/launch-question-cover.jpg (3.5 s: "is it you?" with the orange rule, the last frame before the card) | 33.2 s |
+| Facebook Reels (first) | A, the loss: "Your competitor just got recommended by ChatGPT. You didn't." then the answer card | office/studio/out/launch-loss-facebook-voice.mp4 | office/studio/out/launch-loss-facebook-full.mp4 | office/studio/out/launch-loss-cover.jpg (4.25 s: right after "You didn't." lands) | 33.8 s |
 
 - -voice.mp4 = voice plus sound effects, no music. Post this and add a sound from the app's library at 20 to 30 percent. -full.mp4 = the same plus the repo's own music, ducked under the voice. Post it with no added sound, only when the app's library has nothing usable that day. Never put a library sound on a -full file.
 - All six are 1080x1920, 9:16, 30 fps, captions burned in. The platform in the filename is only where that cut posts first; every file runs on every platform (see the rotation plan).
-- Measured lengths and loudness are in the quality-gate table at the end of this file.
-- Cover times come from the timeline values in the JSONs. Confirm each by scrubbing the render. Never use the typing frame (no payoff) or the end card (prices are not a thumbnail).
+- Every file is 1080x1920, 30 fps, H.264 + AAC, 15 to 16 MB. Loudness and the quality-gate results are in the table at the end of this file.
+- The cover images are exported from the renders at those times (TikTok and Instagram let you upload a cover; Facebook picks from the video, so scrub to the same second). Never use the typing frame (no payoff) or the end card (prices are not a thumbnail).
 
 ## TikTok
 
@@ -278,3 +278,31 @@ Rules all week: never delete a post in week 1 (TikTok can re-serve it days later
 3. Never a password. The owner adds ridgelinemarketinghq@gmail.com as a Manager on the Google Business Profile and we apply the fixes; without access, every change is sent ready to paste.
 4. No contract. Cancel anytime by replying "cancel" to any email.
 5. The Second Month Free Guarantee (Growth and Pro) only word for word, always with the terms link https://ridgelinehq.github.io/guarantee.html: "If your first month brings you zero tracked leads AND no improvement in your AI visibility, your second month is free. No arguing."
+
+## Quality gate (office/studio/CONTEXT.md), measured Oct 31, 2026
+
+Numbers from `python3 office/studio/tools/qa.py <file>` (ffmpeg volumedetect and ebur128). Frames: 10 per file pulled and looked at, plus every rendered frame scanned by `tools/glitchscan.py` (0 single-frame paint glitches in 2,999 frames).
+
+| File | Length | Mean | Peak | Integrated |
+|---|---|---|---|---|
+| launch-demo-tiktok-voice.mp4 | 33.03 s | -16.2 dB | -2.8 dB | -15.7 LUFS |
+| launch-demo-tiktok-full.mp4 | 33.03 s | -15.3 dB | -2.7 dB | -15.7 LUFS |
+| launch-question-instagram-voice.mp4 | 33.23 s | -15.7 dB | -2.4 dB | -15.5 LUFS |
+| launch-question-instagram-full.mp4 | 33.23 s | -15.0 dB | -2.5 dB | -15.4 LUFS |
+| launch-loss-facebook-voice.mp4 | 33.78 s | -15.7 dB | -1.7 dB | -15.5 LUFS |
+| launch-loss-facebook-full.mp4 | 33.78 s | -15.1 dB | -1.2 dB | -15.5 LUFS |
+
+Ducking check on the loss cut: during speech (17.2 to 19.6 s) the full mix is 0.2 dB louder than the voice-only mix, so the music sits under the voice; in a pause (14.15 to 14.45 s) the voice-only file is silence (-59 dB) and the full file carries the music at -20.9 dB.
+
+| Gate line | demo-tiktok | question-instagram | loss-facebook |
+|---|---|---|---|
+| Real site on screen 8 s or more, free-check form visibly filled, tap ring on the button | pass: 13.8 to 28.6 s (14.8 s), fields typed 22.75 to 26.65, tap at 27.55 | pass: 14.0 to 28.8 s (14.8 s), typed 22.95 to 26.85, tap at 27.75 | pass: 14.55 to 29.35 s (14.8 s), typed 23.5 to 27.4, tap at 28.3 |
+| Hook is a true fact from a real check, with its date | pass: aicheck-2026-10-28-dalton-7915.json, ChatGPT web search on, label "Example · real answer · checked Oct 28, 2026" on every card frame | pass (same card) | pass (same card) |
+| No text cut off, no caption over the phone screen, no empty white card | pass: captions at 1320 px, phone ends at 1295 px, card grows with its content | pass | pass |
+| Voice clearly audible over the music at every word; music ducked under speech | pass (table above) | pass | pass |
+| Nothing invented: no fake client, review count, ranking or result | pass: form typed with "Your Auto Shop / Dalton, GA / Auto repair / you@yourshop.com", never submitted; the review tile has no numbers or stars-as-rating | pass | pass |
+| No last name, hometown or personal details | pass: the only personal reference is the first name on the live site's own footer and phone line | pass | pass |
+| 28 to 34 s, 1080x1920, 30 fps, captions burned in 3 to 6 words at a time | pass: 33.03 s | pass: 33.23 s | pass: 33.78 s |
+| Mean around -15 dB, peak under -1 dB | pass | pass | pass |
+
+One open item for you (not a gate line): Dalton, GA is the town in the newest real check. It is not in settings.targets. If Dalton is your hometown or where you work, say so and I will rebuild the cards from the Cabot, AR salon check of the same day (one spec change, one render).

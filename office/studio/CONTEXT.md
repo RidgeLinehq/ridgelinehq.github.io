@@ -10,10 +10,14 @@ Grayson's standard (Oct 22, 2026): "as close to an actual commercial as you can.
 ```
 office/studio/
   CONTEXT.md          (you are here)
-  tools/render.py     (stage.html + ad.json -> frames -> MP4 with voice, music, sfx)
+  tools/render.py     (stage.html + ad.json -> frames -> MP4 with voice, music, sfx; --ad <file>, --variants voice,full, --mux-only)
   tools/music.py      (fallback: original music bed from numpy when no track is available)
+  tools/vo.py         (free neural voice from inside the container: speak, silences, concat; no Action round trip)
+  tools/qa.py         (10 frames + contact sheet + loudness numbers for a finished MP4)
+  tools/glitchscan.py (scans every rendered frame for a single-frame paint glitch)
   ad<N>/stage.html    (the scene graph of one commercial: window.render(t) draws time t)
   ad<N>/ad.json       (timing, captions, sfx, audio paths; see ad2/ad.json for the full shape)
+  ad5/spec.json       (one body timeline + three hooks -> make_ads.py writes loss.json, demo.json, question.json)
   media/              (voice MP3s, music, fonts; written by the two Actions below)
   fetch/<id>.json     (ask the "studio fetch" Action to download https files into media/)
   tts/<id>.json       (ask the "studio voice" Action to speak lines with a free neural voice)
@@ -25,7 +29,10 @@ office/studio/
 - **Fetch**: push `fetch/<id>.json` = `{"id","files":[{"url":"https://...","path":"office/studio/media/..."}]}`.
   The Action downloads each file (https only, 50 MB max) and pushes it back in about a minute.
   Poll with `git fetch origin main && git ls-tree -r --name-only origin/main | grep <path>`.
-- **Voice**: push `tts/<id>.json` = `{"id","lines":[{"voice","text","path":"office/studio/media/....mp3","rate":"+4%"}]}`.
+- **Voice, from inside the container (Oct 31, 2026)**: `python3 office/studio/tools/vo.py speak <out.mp3> "<text>"` runs
+  edge-tts through the proxy (it passes `--proxy $HTTPS_PROXY` and the CA bundle itself), about 10 s per line. Use the
+  Action below only when the container has no network.
+- **Voice (Action)**: push `tts/<id>.json` = `{"id","lines":[{"voice","text","path":"office/studio/media/....mp3","rate":"+4%"}]}`.
   Free Microsoft neural voices through edge-tts. Good male ad voices: `en-US-AndrewMultilingualNeural`
   (warm, natural), `en-US-BrianMultilingualNeural` (younger, upbeat), `en-US-GuyNeural` (classic announcer),
   `en-US-ChristopherNeural` (deep). Grayson picks the voice; record the pick in `settings/main.studio.voice`.
@@ -53,7 +60,17 @@ office/studio/
 6. **Render**: `python3 office/studio/tools/render.py office/studio/ad<N> office/studio/out/<name>.mp4`
    (1080x1920, 30 fps, about 3 to 8 minutes). Then pull 10 frames from the MP4 and look again, and check
    loudness (`ffmpeg -i out.mp4 -af volumedetect -f null -`: mean around -15 dB, max under -1 dB).
-7. Commit `ad<N>/`, `out/<name>.mp4` and the media it used. Never commit `__pycache__` or work folders.
+7. Commit `ad<N>/`, `out/<name>.mp4` and the media it used. Never commit `__pycache__` or work folders (`*.work/` is gitignored).
+
+## Lessons from ad5 (the launch cuts, Oct 31, 2026)
+- Render the video once and mux each audio variant with `-c:v copy` (`--variants voice,full`): half the encode time.
+- Chromium needs `--disable-checker-imaging --disable-partial-raster` and a two-frame settle before each screenshot, or a
+  scaled iframe tile can come out unpainted in one frame. `tools/glitchscan.py` catches it if it happens.
+- Loudness: measure once, apply one linear gain, then a true ceiling 1.5 dB under the target, resampled to 48 kHz BEFORE
+  the ceiling. loudnorm's linear mode silently falls back to dynamic mode (and truncates the tail) when the gain would
+  push the peak over the target; the AAC encoder overshoots limited transients by about 1.5 dB.
+- Keep captions at 1320 px or higher: TikTok and Reels draw their own caption block over the bottom ~300 px.
+- The site's section ids change; `siteInit()` must fall back instead of looping when an id is missing.
 
 ## Quality gate (a post that fails any line is not posted)
 
