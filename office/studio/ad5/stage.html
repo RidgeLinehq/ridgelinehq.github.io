@@ -39,7 +39,7 @@ body{font-family:"Inter Tight",system-ui,sans-serif;color:#fff;position:relative
 .caret{display:inline-block;width:4px;height:44px;background:var(--ink);vertical-align:-8px;margin-left:4px}
 .dots{display:flex;gap:12px;margin:0 0 0 6px;opacity:0;max-height:0;overflow:hidden}
 .dots i{width:16px;height:16px;border-radius:50%;background:#b5bcc6;display:block}
-.a{margin-top:0;font:500 34px/1.3 "Inter Tight";color:var(--muted);opacity:0;max-height:0;overflow:hidden}
+.a{margin-top:0;font:500 29px/1.3 "Inter Tight";color:var(--muted);opacity:0;max-height:0;overflow:hidden}
 .li{display:flex;gap:24px;align-items:center;padding:20px 0;border-top:2px solid #e8e4da;font:700 44px/1.15 "Inter Tight";opacity:0;max-height:0;overflow:hidden}
 .li b{font-family:"Instrument Serif",serif;font-weight:400;color:#a8843f;font-size:48px;width:60px;flex:none}
 .li.more{font:500 28px "Inter Tight";color:#9aa3ad;padding:14px 0 0;border-top:0;opacity:0;max-height:0;overflow:hidden}
@@ -59,7 +59,7 @@ body{font-family:"Inter Tight",system-ui,sans-serif;color:#fff;position:relative
 .bar.s{width:70%}.bar.m{width:88%}
 .rv{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:2px solid #ece8de}
 .rv .av{width:46px;height:46px;border-radius:50%;background:#c9d0d8;flex:none}
-.rv .st{font:700 26px "Inter Tight";color:#e3a43c;letter-spacing:2px}
+.rv .st{font:700 30px "Inter Tight";color:#e3a43c}
 .rv .ln{flex:1;height:16px;border-radius:8px;background:#dfe3e8}
 .stamp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-9deg);border:8px solid var(--orange);color:var(--orange);background:rgba(255,253,248,.92);padding:10px 30px;border-radius:18px;font:900 74px/1 "Inter Tight";letter-spacing:.04em;opacity:0;white-space:nowrap}
 #arrows{position:absolute;left:0;right:0;top:600px;height:140px}
@@ -116,7 +116,7 @@ body{font-family:"Inter Tight",system-ui,sans-serif;color:#fff;position:relative
 
 <!-- HOOK TEXT (loss / question) -->
 <div class="scene" id="sHook">
-  <div class="eyebrow" style="top:300px" id="hookEyebrow"><i></i>Real answer · checked Oct 28, 2026</div>
+  <div class="eyebrow" style="top:300px" id="hookEyebrow"><i></i>Example · real answer · checked Oct 28, 2026</div>
   <div id="hookbox"><div id="hl1"></div><div id="hl2"></div></div>
   <div id="hookline"></div>
 </div>
@@ -128,7 +128,7 @@ body{font-family:"Inter Tight",system-ui,sans-serif;color:#fff;position:relative
     <div class="head"><div class="dot"></div>ChatGPT<small>web search on</small></div>
     <div class="q"><span id="qt"></span><span class="caret" id="caret"></span></div>
     <div class="dots" id="dots"><i></i><i></i><i></i></div>
-    <div class="a" id="aintro">For Dalton, I’d start here:</div>
+    <div class="a" id="aintro">For a Dalton homeowner who wants reliable, local, not-too-fancy auto repair, I’d start here:</div>
     <div id="alist"></div>
     <div id="you"><div class="x">✕</div><div>Your business<span class="sm">not mentioned</span></div><div class="ring" id="r1"></div><div class="ring" id="r2"></div></div>
   </div></div>
@@ -194,7 +194,7 @@ const esc=s=>s.replace(/&/g,'&amp;');
 
 // build static content
 $('alist').innerHTML=NAMES.map((n,i)=>`<div class="li" id="a${i}"><b>0${i+1}</b>${esc(n)}</div>`).join('')+`<div class="li more" id="amore">…and 1 more</div>`;
-$('rvs').innerHTML=[0,1,2,3,4].map(i=>`<div class="rv" id="rv${i}"><div class="av"></div><div class="st">★★★★★</div><div class="ln"></div></div>`).join('');
+$('rvs').innerHTML=[0,1,2,3,4].map(i=>`<div class="rv" id="rv${i}"><div class="av"></div><div class="st">★</div><div class="ln"></div></div>`).join('');
 const H = HOOKS[HOOK] || HOOKS.loss;
 const W1 = H.l1.split(' ');
 $('hl1').innerHTML=W1.map((w,i)=>`<span class="w${/chatgpt/i.test(w)?' ai':''}" id="hw${i}">${w}</span>`).join('');
@@ -303,7 +303,7 @@ window.render=function(t){
     const th=t>=T.think[0]&&t<T.think[1]; $('dots').style.opacity=th?1:0;
     [...$('dots').children].forEach((d,i)=>{d.style.transform=`translateY(${Math.sin(t*9+i*1.1)*7}px)`});
     const th2=t>=T.think[0]&&t<T.think[1]; const dd=$('dots'); dd.style.maxHeight=th2?'60px':'0'; dd.style.marginTop=th2?'30px':'0';
-    const ai=eo(lin(t,T.think[1]-.05,T.think[1]+.25)); $('aintro').style.opacity=ai; $('aintro').style.maxHeight=(ai*90)+'px'; $('aintro').style.marginTop=(ai*34)+'px';
+    const ai=eo(lin(t,T.think[1]-.05,T.think[1]+.25)); $('aintro').style.opacity=ai; $('aintro').style.maxHeight=(ai*96)+'px'; $('aintro').style.marginTop=(ai*30)+'px';
     NAMES.forEach((_,i)=>{const g=lin(t,T.names[i]-.12,T.names[i]+.1);const s=back(lin(t,T.names[i],T.names[i]+.3));const e=$('a'+i);e.style.opacity=clamp(s*1.4);e.style.maxHeight=(g*94)+'px';e.style.paddingTop=e.style.paddingBottom=(g*17)+'px';e.style.transform=`translateX(${(1-s)*70}px)`});
     const mo=eo(lin(t,T.names[2]+.25,T.names[2]+.5)); $('amore').style.opacity=mo*.9; $('amore').style.maxHeight=(mo*50)+'px';
     const ys=back(lin(t,T.you,T.you+.32)); const Y=$('you');
@@ -325,7 +325,7 @@ window.render=function(t){
     const cs=back(lin(t,T.tiles[1]+.9,T.tiles[1]+1.3)); const C=$('chip'); C.style.opacity=clamp(cs*1.5);
     const sw2=lin(t,T.other,T.other+.3); // flip the chip to the real name ChatGPT picked
     C.style.transform=`scale(${.8+.2*cs}) rotateX(${sw2<.5?sw2*180:(sw2-1)*180}deg)`;
-    if(sw2>=.5){$('chipTxt').innerHTML=`${esc(NAMES[0])}<small>is who it named instead</small>`;$('chipCk').style.opacity=1;$('chipCk').style.transform=`scale(${back(lin(t,T.other+.15,T.other+.45))})`}
+    if(sw2>=.5){$('chipTxt').innerHTML=`${esc(NAMES[0])}<small>named by ChatGPT · example, Oct 28, 2026</small>`;$('chipCk').style.opacity=1;$('chipCk').style.transform=`scale(${back(lin(t,T.other+.15,T.other+.45))})`}
     else{$('chipTxt').innerHTML=`ChatGPT reads these<small>then picks who to name</small>`;$('chipCk').style.opacity=0}
   }
   // ---- PHONE
