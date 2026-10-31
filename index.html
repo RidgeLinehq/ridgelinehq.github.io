@@ -5,17 +5,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ridgeline Local — Get recommended by ChatGPT and Google AI</title>
 <meta name="description" content="We help local businesses show up when customers ask AI who to call, and make it easy for happy customers to leave reviews. Start with a free AI check.">
-<meta name="theme-color" content="#f6f2e8">
-<meta property="og:title" content="Ridgeline Local — Get recommended by ChatGPT and Google AI">
+<meta name="theme-color" content="#04211a">
+<meta property="og:title" content="Ridgeline Local — Get found. Get chosen.">
 <meta property="og:description" content="Free AI check: see who ChatGPT and Gemini recommend in your town. Plans from $39.99 a month. No contract.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ridgelinehq.github.io/">
-<meta property="og:image" content="https://ridgelinehq.github.io/assets/og-main-street.jpg">
+<meta property="og:image" content="https://ridgelinehq.github.io/assets/og-dusk.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://ridgelinehq.github.io/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23142f27'/%3E%3Cpath d='M4 25 L12 11.5 L16.5 18 L20.5 12.5 L28 25 Z' fill='%23d2b375'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23f6f4eb'/%3E%3Cpath d='M13.5 31V9h7.5a5.5 5.5 0 0 1 0 11H13.5' fill='none' stroke='%23082f28' stroke-width='5.5'/%3E%3Cpath d='M18 20l9.5 11' stroke='%23082f28' stroke-width='5.5'/%3E%3Cpath d='M28.5 13l3.75-6 3.75 6z' fill='%2357f2af'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script>(function(){var h=document.documentElement;var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;if(!reduce)h.className+=" js-anim";var done=reduce,go=function(){if(!done){done=true;h.className+=" fonts-in"}};window.__fontsGo=function(){if(document.fonts&&document.fonts.load){Promise.all([document.fonts.load("400 1em Anton"),document.fonts.load("400 1em Inter")]).then(go,go)}else{go()}};if(!reduce)setTimeout(go,1500)})();</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all';window.__fontsGo&&window.__fontsGo()">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap"></noscript>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","name":"Ridgeline Local","url":"https://ridgelinehq.github.io/","email":"ridgelinemarketinghq@gmail.com","telephone":"+1-615-318-0687","description":"Helps local businesses get recommended by ChatGPT and Google AI, and makes it easy for happy customers to leave reviews.","areaServed":"United States","priceRange":"$39.99 - $125 per month"}
 </script>
@@ -24,504 +27,560 @@
 </script>
 <style>
 /* =====================================================================
-   RIDGELINE LOCAL — warm ivory, forest green, brass. Motion with purpose.
+   RIDGELINE LOCAL — deep forest, bright mint, warm cream, brass details.
+   Big condensed headlines, real photos, motion with purpose.
    ===================================================================== */
 :root{
   color-scheme:light;
-  --forest:#142f27;
-  --forest-2:#1b3b31;
-  --pine:#235444;
-  --ink:#15271f;
-  --ivory:#f6f2e8;
-  --ivory-2:#ede7d8;
-  --white:#fffdf9;
-  --brass:#d2b375;
-  --brass-2:#e4cc99;
-  --brass-text:#7f6233;
-  --brass-num:#9a7a45;
-  --mint:#e3efe7;
-  --sage:#e9eee3;
-  --muted:#5a6a60;
-  --muted-dark:#cfd9cf;
-  --line:#e3ded0;
-  --line-dark:rgba(255,255,255,.16);
-  --good:#2f7d5a;
+  --forest-900:#04211a;
+  --forest-800:#082f28;
+  --forest-700:#0f3d33;
+  --forest-600:#16503f;
+  --ink:#142721;
+  --cream:#f6f4eb;
+  --cream-2:#fbf7ec;
+  --cream-3:#ece8d8;
+  --white:#fffdf7;
+  --mint:#57f2af;
+  --mint-2:#8af7c9;
+  --mint-dim:rgba(87,242,175,.14);
+  --gold:#c9a85c;
+  --gold-2:#e2c87f;
+  --gold-text:#866a2c;
+  --muted:#5c6b63;
+  --muted-dark:#b9c8bf;
+  --line:#e2ddcc;
+  --line-dark:rgba(246,244,235,.14);
+  --good:#1f8a5b;
   --bad:#b23a2d;
-  --max:1120px;
-  --r:20px;
-  --display:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --max:1180px;
+  --r:18px;
+  --display:"Anton","Impact","Arial Narrow",system-ui,sans-serif;
   --body:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
   --ease:cubic-bezier(.16,1,.3,1);
-  --shadow:0 24px 60px rgba(10,30,22,.16);
-  --shadow-sm:0 10px 30px rgba(10,30,22,.10);
+  --shadow:0 30px 70px rgba(4,33,26,.22);
+  --shadow-sm:0 12px 32px rgba(4,33,26,.12);
 }
-@property --a{syntax:"<angle>";inherits:false;initial-value:0deg}
 
 /* ---------- base ---------- */
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--white);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html{scroll-padding-top:84px;-webkit-text-size-adjust:100%}
+html.smooth{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit}
 button,input,select,textarea{font:inherit;color:inherit}
 button,a{-webkit-tap-highlight-color:transparent}
 button{cursor:pointer}
 img,svg{max-width:100%;display:block}
 h1,h2,h3,h4,p,ul,ol,figure{margin:0}
-h1,h2{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:1.02;text-wrap:balance;font-variation-settings:"opsz" 96}
-h2{font-size:clamp(2.1rem,4.4vw,3.4rem)}
-h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-.02em;line-height:1.2}
-:where(a,button,summary,input,select,textarea):focus-visible{outline:3px solid var(--brass-text);outline-offset:3px;border-radius:6px}
-.on-dark :where(a,button):focus-visible,.close :where(a,button):focus-visible,.sticky-cta a:focus-visible{outline-color:var(--brass)}
-.form :where(a,button,input):focus-visible{outline-color:var(--brass-text)}
+h1,h2{font-family:var(--display);font-weight:400;line-height:.98;letter-spacing:.005em;text-wrap:balance}
+h2{font-size:clamp(2.2rem,5.6vw + .4rem,4.3rem)}
+h3{font-family:var(--display);font-weight:400;font-size:1.55rem;letter-spacing:.01em;line-height:1.1}
+:where(a,button,summary,input,select,textarea):focus-visible{outline:3px solid var(--gold-text);outline-offset:3px;border-radius:6px}
+.on-dark :where(a,button):focus-visible,.on-deep :where(a,button):focus-visible,.g-line :where(a):focus-visible,footer :where(a,button):focus-visible,.hero :where(a,button):focus-visible,.close :where(a,button):focus-visible,.nav :where(a,button):focus-visible,.sheet :where(a,button):focus-visible,.sticky-cta a:focus-visible,.plan.hot :where(a):focus-visible{outline-color:var(--mint)}
+.form :where(a,button,input,select,textarea):focus-visible{outline-color:var(--gold-text)}
 [hidden]{display:none!important}
 .wrap{width:min(var(--max),calc(100% - 48px));margin-inline:auto}
-.section{padding-block:clamp(64px,8vw,112px);position:relative}
-.on-ivory{background:var(--ivory)}
-.on-dark{background:var(--forest);color:#fff}
-.kicker{display:inline-flex;align-items:center;gap:10px;font-size:.74rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--brass-text)}
-.kicker::before{content:"";width:28px;height:2px;background:var(--brass);border-radius:2px}
-.on-dark .kicker{color:var(--brass)}
+.section{padding-block:clamp(72px,9vw,124px);position:relative}
+.on-cream{background:var(--cream)}
+.on-white{background:var(--white)}
+.on-dark{background:var(--forest-800);color:var(--cream-2)}
+.on-deep{background:var(--forest-900);color:var(--cream-2)}
+.kicker{display:inline-flex;align-items:center;gap:14px;font-size:.74rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-text)}
+.kicker::before{content:"";width:34px;height:2px;background:var(--gold);border-radius:2px}
+.on-dark .kicker,.on-deep .kicker,.hero .kicker{color:var(--gold)}
 .lede{color:var(--muted);font-size:clamp(1.05rem,1.6vw,1.2rem);max-width:56ch;line-height:1.6}
-.on-dark .lede{color:var(--muted-dark)}
-.head{max-width:760px;display:grid;gap:18px;margin-bottom:clamp(34px,5vw,56px)}
+.on-dark .lede,.on-deep .lede{color:var(--muted-dark)}
+.head{max-width:820px;display:grid;gap:20px;margin-bottom:clamp(38px,5vw,64px)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.skip{position:fixed;left:16px;top:-100px;z-index:100;background:var(--brass);color:var(--forest);padding:12px 18px;border-radius:8px;font-weight:600;text-decoration:none}
+.skip{position:fixed;left:16px;top:-100px;z-index:100;background:var(--mint);color:var(--forest-900);padding:12px 18px;border-radius:8px;font-weight:600;text-decoration:none}
 .skip:focus{top:12px}
 
 /* ---------- buttons ---------- */
-.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:14px 26px;border-radius:999px;border:1px solid transparent;font-family:var(--body);font-weight:600;font-size:1.02rem;line-height:1.3;text-decoration:none;transition:transform .25s var(--ease),background .2s,border-color .2s,box-shadow .25s;white-space:nowrap}
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:54px;padding:14px 26px;border-radius:12px;border:1px solid transparent;font-family:var(--body);font-weight:600;font-size:1.02rem;line-height:1.3;text-decoration:none;transition:transform .25s var(--ease),background .2s,border-color .2s,box-shadow .25s,color .2s;white-space:nowrap}
 .btn svg{width:18px;height:18px;flex:none;transition:transform .25s var(--ease)}
-.btn-brass{background:var(--brass);color:var(--forest);box-shadow:0 10px 28px rgba(210,179,117,.35)}
-.btn-brass:hover{background:var(--brass-2);box-shadow:0 14px 34px rgba(210,179,117,.45)}
-.btn-forest{background:var(--forest);color:#fff;box-shadow:0 10px 28px rgba(20,47,39,.22)}
-.btn-forest:hover{background:var(--pine)}
-.btn-light{background:var(--white);color:var(--forest);border-color:#cfc9b8}
-.btn-light:hover{border-color:var(--forest);background:#fff}
+.btn-cream{background:var(--cream-2);color:var(--forest-900);box-shadow:0 14px 34px rgba(0,0,0,.28)}
+.btn-cream:hover{background:#fff}
+.btn-mint{background:var(--mint);color:var(--forest-900);box-shadow:0 14px 34px rgba(87,242,175,.25)}
+.btn-mint:hover{background:var(--mint-2)}
+.btn-forest{background:var(--forest-800);color:var(--cream-2);box-shadow:0 12px 30px rgba(8,47,40,.22)}
+.btn-forest:hover{background:var(--forest-700)}
+.btn-outline{background:transparent;color:var(--forest-900);border-color:#c8c2ad}
+.btn-outline:hover{border-color:var(--forest-900);background:var(--white)}
+.on-dark .btn-outline,.on-deep .btn-outline{color:var(--cream-2);border-color:rgba(246,244,235,.35)}
+.on-dark .btn-outline:hover,.on-deep .btn-outline:hover{border-color:var(--cream-2);background:rgba(255,255,255,.06)}
+.fallback .btn-outline,.on-dark .fallback .btn-outline{color:var(--forest-900);border-color:#c8c2ad;background:#fff}
+.fallback .btn-outline:hover,.on-dark .fallback .btn-outline:hover{border-color:var(--forest-900);background:#fff}
 .btn-block{width:100%}
-.btn-lg{min-height:60px;padding:16px 32px;font-size:1.08rem}
-@media(hover:hover){.btn:hover{transform:translateY(-2px)}.btn:hover svg{transform:translateX(4px)}}
-.btn-pulse::after{content:"";position:absolute;inset:-4px;border-radius:inherit;border:2px solid var(--brass);opacity:0;animation:ring 1.8s var(--ease) 1.4s 2}
-@keyframes ring{0%{opacity:.8;transform:scale(.96)}100%{opacity:0;transform:scale(1.18)}}
-.link{font-weight:600;color:inherit;text-decoration:underline;text-underline-offset:5px;text-decoration-color:var(--brass);text-decoration-thickness:2px;transition:text-decoration-color .2s}
+.btn-lg{min-height:62px;padding:16px 32px;font-size:1.08rem}
+@media(hover:hover){.btn:hover{transform:translateY(-2px)}.btn:hover svg{transform:translateX(5px)}}
+.btn-pulse::after{content:"";position:absolute;inset:-5px;border-radius:16px;border:2px solid var(--mint);opacity:0;animation:ring 1.8s var(--ease) 1.6s 2}
+@keyframes ring{0%{opacity:.9;transform:scale(.97)}100%{opacity:0;transform:scale(1.14)}}
+.link{font-weight:600;color:inherit;text-decoration:underline;text-underline-offset:6px;text-decoration-color:var(--gold);text-decoration-thickness:2px;transition:text-decoration-color .2s,color .2s}
 .link:hover{text-decoration-color:currentColor}
-
-/* ---------- decorative contour lines ---------- */
-.contours{position:absolute;pointer-events:none;width:min(900px,110%);height:auto;opacity:.5;color:#c9bf9f;will-change:transform}
-.on-dark .contours{color:var(--brass);opacity:.14}
-.drift{animation:drift 26s ease-in-out infinite alternate}
-@keyframes drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-30px,18px,0)}}
+.arrow-link{display:inline-flex;align-items:center;gap:10px;color:var(--gold-text);font-weight:600;font-size:.92rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none}
+.arrow-link svg{width:34px;height:14px;color:var(--gold);transition:transform .3s var(--ease)}
+.arrow-link:hover svg{transform:translateX(6px)}
 
 /* ---------- nav ---------- */
-.nav{position:sticky;top:0;z-index:50;background:rgba(246,242,232,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s,background .3s}
-.nav.scrolled{background:rgba(255,253,249,.92);border-bottom-color:var(--line);box-shadow:0 6px 24px rgba(20,47,39,.06)}
-.progress{position:absolute;left:0;bottom:-1px;height:3px;width:100%;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,var(--brass),var(--brass-num));transition:transform .1s linear}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;background:transparent;transition:background .35s,box-shadow .35s,border-color .35s;border-bottom:1px solid transparent}
+.nav.scrolled,.nav.open{background:rgba(4,33,26,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom-color:var(--line-dark)}
+.progress{position:absolute;left:0;bottom:-1px;height:2px;width:100%;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,var(--mint),var(--gold));transition:transform .1s linear}
 .anim-off,.anim-off *,.anim-off *::before,.anim-off *::after{animation-play-state:paused!important}
-.nav-in{height:70px;display:flex;align-items:center;justify-content:space-between;gap:18px}
-.brand{display:flex;align-items:center;min-height:44px;gap:10px;font-family:var(--display);font-weight:800;font-size:1.1rem;letter-spacing:-.02em;white-space:nowrap;text-decoration:none;color:var(--forest)}
-.brand svg{width:36px;height:36px;color:var(--forest)}
-.brand small{font-family:var(--body);font-weight:600;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--brass-text);margin-left:2px}
-.nav-links{display:flex;align-items:center;gap:28px}
-.nav-links a:not(.btn){position:relative;color:var(--ink);font-weight:500;font-size:.94rem;text-decoration:none;padding-block:10px}
-.nav-links a:not(.btn)::after{content:"";position:absolute;left:0;right:0;bottom:4px;height:2px;background:var(--brass);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.nav-in{height:76px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;align-items:center;min-height:44px;gap:12px;font-family:var(--display);font-weight:400;font-size:1.45rem;letter-spacing:.02em;white-space:nowrap;text-decoration:none;color:var(--cream-2)}
+.brand svg{width:40px;height:40px;flex:none}
+.brand em{font-style:normal;color:var(--gold-2);margin-left:.28em}
+.nav-links{display:flex;align-items:center;gap:30px}
+.nav-links a:not(.btn){position:relative;color:var(--cream-2);font-weight:600;font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;padding-block:10px}
+.nav-links a:not(.btn):not(.nav-tel)::after{content:"";position:absolute;left:0;right:0;bottom:4px;height:2px;background:var(--mint);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
 .nav-links a:not(.btn):hover::after{transform:scaleX(1)}
-.nav .btn{min-height:44px;padding:10px 20px;font-size:.93rem;box-shadow:none}
-.menu-btn{display:none;width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:var(--white);place-items:center;color:var(--forest)}
-.menu-btn svg{width:20px;height:20px}
+.nav .btn{min-height:46px;padding:10px 20px;font-size:.92rem;box-shadow:none;border-radius:10px}
+.nav .lbl-short{display:none}
+@media(max-width:560px){.nav .lbl-long{display:none}.nav .lbl-short{display:inline}}
+.nav-tel{display:inline-flex;align-items:center;gap:8px;letter-spacing:.04em!important;text-transform:none!important;font-size:.92rem!important}
+.nav-tel svg{width:16px;height:16px;color:var(--mint)}
+.menu-btn{display:none;width:46px;height:46px;border:1px solid var(--line-dark);border-radius:12px;background:rgba(255,255,255,.06);place-items:center;color:var(--cream-2)}
+.menu-btn svg{width:22px;height:22px}
 .sheet{display:none}
-@media(max-width:860px){
+@media(max-width:1199px){.nav-links a.nav-tel{display:none}.nav-links{gap:22px}}
+@media(max-width:980px){
   .nav-links{gap:12px}
   .nav-links a:not(.btn){display:none}
   .menu-btn{display:grid}
-  .sheet{display:block;position:fixed;inset:var(--navh,70px) 0 0;z-index:49;background:var(--ivory);padding:20px 24px calc(24px + env(safe-area-inset-bottom));transform:translateY(-8px);opacity:0;visibility:hidden;transition:opacity .25s,transform .3s var(--ease),visibility .25s;overflow:auto}
+  .sheet{display:block;position:fixed;inset:var(--navh,76px) 0 0;z-index:49;background:var(--forest-900);color:var(--cream-2);padding:18px 24px calc(28px + env(safe-area-inset-bottom));transform:translateY(-8px);opacity:0;visibility:hidden;transition:opacity .25s,transform .3s var(--ease),visibility .25s;overflow:auto}
   .sheet[data-open="true"]{opacity:1;transform:none;visibility:visible}
-  .sheet a{display:flex;justify-content:space-between;align-items:center;padding:18px 2px;border-bottom:1px solid var(--line);font-family:var(--display);font-weight:800;font-size:1.6rem;letter-spacing:-.02em;color:var(--forest);text-decoration:none;opacity:0;transform:translateX(-10px);transition:opacity .35s var(--ease),transform .35s var(--ease)}
+  .sheet a{display:flex;justify-content:space-between;align-items:center;padding:18px 2px;border-bottom:1px solid var(--line-dark);font-family:var(--display);font-size:2.1rem;letter-spacing:.01em;color:var(--cream-2);text-decoration:none;opacity:0;transform:translateX(-10px);transition:opacity .35s var(--ease),transform .35s var(--ease)}
   .sheet[data-open="true"] a{opacity:1;transform:none}
-  .sheet[data-open="true"] a:nth-child(2){transition-delay:.05s}.sheet[data-open="true"] a:nth-child(3){transition-delay:.1s}.sheet[data-open="true"] a:nth-child(4){transition-delay:.15s}.sheet[data-open="true"] a:nth-child(5){transition-delay:.2s}
-  .sheet a svg{width:20px;height:20px;color:var(--brass-text)}
-  .sheet .btn{margin-top:22px;border-bottom:0;font-size:1.05rem;justify-content:center;font-family:var(--body);letter-spacing:0;color:var(--forest)}
+  .sheet[data-open="true"] a:nth-child(2){transition-delay:.05s}.sheet[data-open="true"] a:nth-child(3){transition-delay:.1s}.sheet[data-open="true"] a:nth-child(4){transition-delay:.15s}.sheet[data-open="true"] a:nth-child(5){transition-delay:.2s}.sheet[data-open="true"] a:nth-child(6){transition-delay:.25s}.sheet[data-open="true"] a:nth-child(7){transition-delay:.3s}
+  .sheet a svg{width:22px;height:22px;color:var(--gold)}
+  .sheet .btn{margin-top:24px;border-bottom:0;font-size:1.05rem;justify-content:center;font-family:var(--body);letter-spacing:0}
+  .sheet .btn-cream{color:var(--forest-900)}
 }
 
 /* ---------- hero ---------- */
-.hero{position:relative;overflow:hidden;background:var(--ivory)}
-.hero::before{content:"";position:absolute;width:720px;height:720px;right:-220px;top:-260px;border-radius:50%;background:radial-gradient(closest-side,rgba(210,179,117,.42),rgba(210,179,117,0));pointer-events:none;animation:breathe 9s ease-in-out infinite alternate}
-@keyframes breathe{from{transform:scale(.92)}to{transform:scale(1.08)}}
-.hero .contours{left:-140px;bottom:-120px}
-.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,470px);gap:clamp(32px,5vw,72px);align-items:center;padding:clamp(64px,8vw,112px) 0 clamp(56px,7vw,96px)}
-.hero h1{font-size:clamp(2.6rem,5.6vw,4.7rem);margin:22px 0 22px;color:var(--forest)}
-.hero h1 .w{display:inline-block}
-.js-anim .hero h1 .w{opacity:0;transform:translateY(.55em) rotate(2deg)}
-.js-anim.fonts-in .hero h1 .w{animation:wordUp .8s var(--ease) forwards;animation-delay:calc(.15s + var(--i)*.055s)}
-.hero h1 .hi{color:var(--brass-num);position:relative}
-.hero h1 .hi::after{content:"";position:absolute;left:0;right:0;bottom:.04em;height:.14em;background:var(--brass);opacity:.55;border-radius:3px;transform-origin:left}
-.js-anim .hero h1 .hi::after{transform:scaleX(0)}
-.js-anim.fonts-in .hero h1 .hi::after{animation:underline .7s var(--ease) 1s forwards}
-@keyframes wordUp{to{opacity:1;transform:none}}
-@keyframes underline{to{transform:scaleX(1)}}
-.hero .lede{max-width:36em;font-size:clamp(1.1rem,1.7vw,1.25rem)}
+.hero{position:relative;overflow:hidden;background:var(--forest-900);color:var(--cream-2);min-height:min(100vh,940px);min-height:min(100svh,940px);display:flex;flex-direction:column}
+.hero-photo{position:absolute;inset:0 0 0 auto;width:60%;z-index:0;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 34%,#000 100%);mask-image:linear-gradient(90deg,transparent 0,#000 34%,#000 100%)}
+.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:66% 50%;transform:scale(1.12);animation:kenburns 9s var(--ease) forwards}
+.hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,33,26,.25) 0%,rgba(4,33,26,0) 30%,rgba(4,33,26,0) 60%,rgba(4,33,26,.9) 100%)}
+@keyframes kenburns{to{transform:scale(1)}}
+.hero-glow{position:absolute;z-index:0;left:-220px;bottom:-260px;width:720px;height:720px;border-radius:50%;background:radial-gradient(closest-side,rgba(87,242,175,.16),rgba(87,242,175,0));pointer-events:none;animation:breathe 10s ease-in-out infinite alternate}
+@keyframes breathe{from{transform:scale(.9)}to{transform:scale(1.1)}}
+.hero-grid{position:relative;z-index:1;flex:1;display:grid;align-items:center;padding:clamp(112px,16vh,180px) 0 clamp(56px,7vw,90px)}
+.hero-copy{max-width:700px}
+.hero h1{font-size:clamp(3.2rem,9vw,8.6rem);line-height:.9;letter-spacing:.005em;text-transform:uppercase;margin:26px 0 26px;color:var(--cream-2);text-wrap:initial}
+.hero h1 .line{display:block;overflow:hidden;padding:.06em 0 .04em;margin:-.04em 0;white-space:nowrap}
+.hero h1 .line span{display:block}
+.hero h1 .hi{color:var(--mint)}
+.js-anim .hero h1 .line span{transform:translateY(112%)}
+.js-anim.fonts-in .hero h1 .line span{animation:lineUp .95s var(--ease) forwards;animation-delay:calc(.1s + var(--i)*.14s)}
+@keyframes lineUp{to{transform:none}}
+.hero .lede{color:rgba(251,247,236,.82);max-width:34em;font-size:clamp(1.08rem,1.6vw,1.25rem)}
 .js-anim .fade-in{opacity:0}
 .js-anim.fonts-in .fade-in{animation:fadeUp .9s var(--ease) forwards}
-.fade-in.d1{animation-delay:.1s}.fade-in.d2{animation-delay:.6s}.fade-in.d3{animation-delay:.8s}.fade-in.d4{animation-delay:1s}
+.fade-in.d1{animation-delay:.05s}.fade-in.d2{animation-delay:.55s}.fade-in.d3{animation-delay:.75s}.fade-in.d4{animation-delay:.95s}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.cta-row{display:flex;gap:14px 24px;flex-wrap:wrap;align-items:center;margin:32px 0 18px}
-.cta-row .link{color:var(--forest);padding-block:10px}
-.assure{display:flex;flex-wrap:wrap;gap:8px 20px;padding:0;list-style:none;color:var(--muted);font-size:.9rem;font-weight:500}
-.assure li{display:inline-flex;align-items:center;gap:7px}
-.assure svg{width:15px;height:15px;color:var(--good)}
+.cta-row{display:flex;gap:14px 26px;flex-wrap:wrap;align-items:center;margin:34px 0 20px}
+.cta-row .link{color:var(--cream-2);padding-block:10px}
+.assure{display:flex;flex-wrap:wrap;gap:8px 22px;padding:0;list-style:none;color:rgba(251,247,236,.78);font-size:.92rem;font-weight:500}
+.assure li{display:inline-flex;align-items:center;gap:8px}
+.assure svg{width:16px;height:16px;color:var(--mint)}
+.hero-tel{margin-top:18px;color:rgba(251,247,236,.7);font-size:.95rem}
+.hero-tel a{color:var(--cream-2);font-weight:600;text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:4px;white-space:nowrap}
 
-/* ---------- animated AI demo card ---------- */
-.demo-wrap{position:relative}
+/* the AI demo card: floats over the photo */
+.demo-wrap{position:absolute;z-index:2;right:max(24px,calc((100% - var(--max))/2));bottom:clamp(96px,13vh,140px);width:min(390px,34vw)}
 .js-anim .demo-wrap{opacity:0}
-.js-anim.fonts-in .demo-wrap{animation:fadeUp 1s var(--ease) .5s forwards}
-.demo{position:relative;background:var(--white);border:1px solid rgba(20,47,39,.08);border-radius:var(--r);padding:18px 18px 20px;box-shadow:var(--shadow);transform:rotate(-1.2deg);transition:transform .5s var(--ease)}
+.js-anim.fonts-in .demo-wrap{animation:fadeUp 1s var(--ease) .6s forwards}
+.demo{position:relative;background:rgba(4,33,26,.8);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(246,244,235,.16);border-radius:var(--r);padding:18px 18px 18px;box-shadow:var(--shadow);transform:rotate(-1.5deg);transition:transform .5s var(--ease)}
 .demo-wrap:hover .demo{transform:rotate(0deg)}
-.demo-top{display:flex;align-items:center;gap:6px;padding:0 2px 14px;border-bottom:1px solid var(--line);margin-bottom:16px}
-.demo-top i{width:10px;height:10px;border-radius:50%;background:var(--line)}
-.demo-top i:nth-child(1){background:#e7b4a8}.demo-top i:nth-child(2){background:#e9d6a6}.demo-top i:nth-child(3){background:#bcd9c4}
-.demo-top span{margin-left:auto;font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.bubble{max-width:92%;padding:12px 15px;border-radius:16px;font-size:.98rem;line-height:1.45}
-.bubble.user{margin-left:auto;background:var(--forest);color:#fff;border-bottom-right-radius:5px}
-.bubble.user .caret{display:inline-block;width:2px;height:1em;background:var(--brass);vertical-align:-.15em;margin-left:2px;animation:blink .9s steps(1) infinite}
+.demo-top{display:flex;align-items:center;gap:6px;padding:0 2px 14px;border-bottom:1px solid var(--line-dark);margin-bottom:16px}
+.demo-top i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.18)}
+.demo-top i:nth-child(1){background:#e07a6a}.demo-top i:nth-child(2){background:#e6c25f}.demo-top i:nth-child(3){background:var(--mint)}
+.demo-top span{margin-left:auto;font-size:.66rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-dark)}
+.bubble{max-width:92%;padding:12px 15px;border-radius:16px;font-size:.96rem;line-height:1.45}
+.bubble.user{margin-left:auto;background:var(--cream-2);color:var(--forest-900);border-bottom-right-radius:5px;font-weight:500}
+.bubble.user .caret{display:inline-block;width:2px;height:1em;background:var(--forest-900);vertical-align:-.15em;margin-left:2px;animation:blink .9s steps(1) infinite}
 .demo.answered .bubble.user .caret,.demo.thinking .bubble.user .caret{display:none}
 @keyframes blink{50%{opacity:0}}
-.bubble.ai{position:relative;margin-top:12px;background:var(--ivory);border-bottom-left-radius:5px;opacity:0;transform:translateY(8px);transition:opacity .4s var(--ease),transform .5s var(--ease)}
+.bubble.ai{position:relative;margin-top:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);border-bottom-left-radius:5px;opacity:0;transform:translateY(8px);transition:opacity .4s var(--ease),transform .5s var(--ease)}
 .demo.thinking .bubble.ai,.demo.answered .bubble.ai{opacity:1;transform:none}
 .dots{position:absolute;left:15px;top:16px;display:flex;gap:5px;opacity:0;transition:opacity .2s}
-.dots i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:bounce 1s ease-in-out infinite}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--muted-dark);animation:bounce 1s ease-in-out infinite}
 .dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
 @keyframes bounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-5px);opacity:1}}
 .demo.thinking .dots{opacity:1}
 .demo .answer{visibility:hidden}
 .demo.answered .answer{visibility:visible}
-.answer p{font-size:.92rem;color:var(--muted);margin-bottom:8px}
+.answer p{font-size:.9rem;color:var(--muted-dark);margin-bottom:8px}
 .answer ol{list-style:none;padding:0;margin:0;display:grid;gap:7px;counter-reset:d}
-.answer li{counter-increment:d;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:var(--white);border:1px solid var(--line);font-weight:500;font-size:.95rem;opacity:0;transform:translateX(-8px)}
+.answer li{counter-increment:d;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);font-weight:500;font-size:.93rem;color:var(--cream-2);opacity:0;transform:translateX(-8px)}
 .demo.answered .answer li{animation:slideIn .5s var(--ease) forwards;animation-delay:calc(.1s + var(--i)*.22s)}
-.answer li::before{content:counter(d);width:22px;height:22px;border-radius:50%;background:var(--sage);color:var(--forest);font-size:.75rem;font-weight:700;display:grid;place-items:center;flex:none}
-.answer li.you{border-color:var(--brass);background:linear-gradient(90deg,rgba(210,179,117,.18),rgba(210,179,117,.02));font-weight:600}
-.answer li.you::before{background:var(--brass);color:var(--forest)}
-.answer .chip{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--forest);background:var(--brass);padding:4px 9px;border-radius:20px;transform:scale(.6);opacity:0}
+.answer li::before{content:counter(d);width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.1);color:var(--cream-2);font-size:.74rem;font-weight:700;display:grid;place-items:center;flex:none}
+.answer li.you{border-color:rgba(87,242,175,.6);background:var(--mint-dim);font-weight:600}
+.answer li.you::before{background:var(--mint);color:var(--forest-900)}
+.answer .chip{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--forest-900);background:var(--mint);padding:4px 9px;border-radius:20px;transform:scale(.6);opacity:0}
 .demo.answered .answer .chip{animation:pop .45s var(--ease) forwards;animation-delay:.75s}
 @media(max-width:480px){.bubble.user{min-height:calc(2.9em + 24px)}}
 .answer .chip svg{width:11px;height:11px}
 @keyframes slideIn{to{opacity:1;transform:none}}
 @keyframes pop{to{opacity:1;transform:none}}
-.demo-note{margin-top:14px;font-size:.78rem;color:var(--muted);text-align:center}
-.demo-badge{position:absolute;z-index:2;top:-16px;left:-10px;background:var(--forest);color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;border-radius:999px;box-shadow:var(--shadow-sm);transform:rotate(-4deg)}
+.demo-note{margin-top:14px;font-size:.78rem;color:var(--muted-dark);text-align:center}
+.demo-badge{position:absolute;z-index:2;top:-16px;left:-10px;background:var(--gold);color:var(--forest-900);font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:8px 14px;border-radius:999px;box-shadow:var(--shadow-sm);transform:rotate(-4deg)}
+
+/* trades strip along the bottom of the hero */
+.strip{position:relative;z-index:1;border-top:1px solid var(--line-dark);background:linear-gradient(180deg,rgba(4,33,26,0),rgba(4,33,26,.5))}
+.strip-in{display:flex;align-items:center;gap:28px;min-height:64px}
+.motion-btn{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line-dark);background:rgba(255,255,255,.06);color:var(--cream-2);display:grid;place-items:center;padding:0;transition:background .2s,border-color .2s}
+.motion-btn:hover{background:rgba(255,255,255,.12);border-color:rgba(246,244,235,.4)}
+.motion-btn svg{width:13px;height:13px}
+.motion-btn .ic-play{display:none}
+html.motion-off .motion-btn .ic-play{display:block}
+html.motion-off .motion-btn .ic-pause{display:none}
+html.motion-off .track,html.motion-off .hero-glow,html.motion-off .hero-photo img,html.motion-off .close-bg,html.motion-off .g-line::before,html.motion-off .shot-chip i,html.motion-off .btn-pulse::after,html.motion-off .dots i{animation-play-state:paused}
+.strip-label{flex:none;font-size:.7rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);padding-right:28px;border-right:1px solid var(--line-dark)}
+.marquee{flex:1;min-width:0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.track{display:flex;align-items:center;gap:0;width:max-content;animation:scrollX 60s linear infinite}
+.marquee:hover .track{animation-play-state:paused}
+.track span{display:inline-flex;align-items:center;font-size:.74rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(251,247,236,.74);white-space:nowrap}
+.track span::after{content:"/";color:var(--gold);margin:0 22px;opacity:.9;font-weight:400}
+@keyframes scrollX{to{transform:translateX(-50%)}}
+
+/* ---------- proof: a real AI answer ---------- */
+.proof{overflow:hidden}
+.proof-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(36px,6vw,96px);align-items:center}
+.phone-frame{position:relative;max-width:340px;margin-inline:auto;padding:12px;background:#0b0b0b;border-radius:44px;box-shadow:0 0 0 1px #2a2a2a,0 46px 90px rgba(4,33,26,.3);transform:rotate(-3deg);transition:transform .6s var(--ease)}
+@media(hover:hover){.phone-frame:hover{transform:rotate(0)}}
+.phone-frame img{border-radius:32px;width:100%;height:auto}
+.proof-tag{position:absolute;z-index:2;top:-14px;right:22px;display:inline-flex;align-items:center;gap:6px;background:var(--mint);color:var(--forest-900);font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:7px 12px;border-radius:999px;box-shadow:var(--shadow-sm);transform:rotate(3deg)}
+.proof-tag svg{width:13px;height:13px}
+.proof h2{margin:20px 0 20px}
+.proof-list{list-style:none;padding:0;margin:28px 0 32px;display:grid;gap:18px}
+.proof-list li{display:grid;grid-template-columns:40px 1fr;gap:16px;align-items:start;color:var(--muted)}
+.proof-list b{display:block;color:var(--ink);font-weight:600;margin-bottom:2px}
+.proof-list .ic{width:40px;height:40px;border-radius:12px;background:var(--forest-800);display:grid;place-items:center;color:var(--mint)}
+.proof-list .ic svg{width:18px;height:18px}
+.proof-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px}
+.proof-note{margin-top:16px;font-size:.84rem;color:var(--muted)}
 
 /* ---------- free check (dark band with form) ---------- */
 .check{position:relative;overflow:hidden}
-.check .contours{right:-200px;top:-80px}
-.check-grid{position:relative;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(30px,5vw,72px);align-items:center}
-.check h2{margin:18px 0 16px}
-.check-list{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:12px}
-.check-list li{display:flex;gap:12px;align-items:flex-start;color:var(--muted-dark);font-size:1rem}
-.check-list svg{width:22px;height:22px;flex:none;color:var(--brass);margin-top:1px}
-.form{background:var(--white);color:var(--ink);border-radius:var(--r);padding:28px;box-shadow:var(--shadow)}
-.form h3{font-size:1.6rem;margin-bottom:4px}
+.check::before{content:"";position:absolute;right:-300px;top:-300px;width:800px;height:800px;border-radius:50%;background:radial-gradient(closest-side,rgba(87,242,175,.12),rgba(87,242,175,0));pointer-events:none}
+.check-grid{position:relative;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(30px,5vw,80px);align-items:center}
+.check h2{margin:20px 0 18px}
+.check-list{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:14px}
+.check-list li{display:flex;gap:14px;align-items:flex-start;color:var(--muted-dark);font-size:1.02rem}
+.check-list svg{width:22px;height:22px;flex:none;color:var(--mint);margin-top:2px}
+.form{background:var(--cream-2);color:var(--ink);border-radius:var(--r);padding:30px;box-shadow:var(--shadow)}
+.form h3{font-size:2rem;margin-bottom:4px}
 .form .hint{color:var(--muted);font-size:.92rem}
 .field{margin-top:14px}
 .field label{display:block;font-weight:600;font-size:.86rem;margin-bottom:6px}
 .field label span{color:var(--muted);font-weight:500}
-.field input,.fallback textarea{width:100%;min-height:50px;padding:12px 14px;border-radius:12px;border:1px solid #b9b3a1;background:#fffefb;color:var(--ink);font-size:1rem;transition:border-color .2s,box-shadow .2s}
-.field input:focus{outline:none;border:2px solid var(--brass-text);padding:11px 13px;box-shadow:0 0 0 3px rgba(127,98,51,.28)}
-.field.err input{border-color:var(--bad);box-shadow:0 0 0 4px rgba(178,58,45,.12);animation:shake .4s var(--ease)}
+.field input,.field select,.field textarea,.fallback textarea{width:100%;min-height:52px;padding:12px 14px;border-radius:10px;border:1px solid #8c877a;background:#fff;color:var(--ink);font-size:1rem;font-family:inherit;transition:border-color .2s,box-shadow .2s}
+.field textarea{min-height:96px;resize:vertical;line-height:1.45}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border:2px solid var(--forest-800);padding:11px 13px;box-shadow:0 0 0 3px rgba(87,242,175,.35)}
+.field.err input,.field.err select,.field.err textarea{border-color:var(--bad);box-shadow:0 0 0 4px rgba(178,58,45,.12);animation:shake .4s var(--ease)}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .field .msg{display:none;color:var(--bad);font-size:.84rem;margin-top:6px;font-weight:500}
 .field.err .msg{display:block}
 .fields-2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
-.form .btn{margin-top:20px}
+.form .btn{margin-top:22px}
 .form .tiny{font-size:.84rem;color:var(--muted);margin-top:12px;line-height:1.5}
-.form-status{font-size:.9rem;margin-top:10px;color:var(--good);font-weight:500;min-height:1.2em}
+.form-status{font-size:.9rem;margin-top:10px;color:#17704a;font-weight:500;min-height:1.2em}
 .done{display:none;text-align:center;padding:8px 2px}
-.done .ok{width:72px;height:72px;border-radius:50%;background:var(--sage);display:grid;place-items:center;margin:0 auto 16px;animation:pop .5s var(--ease)}
-.done .ok svg{width:32px;height:32px;color:var(--good);stroke-dasharray:30;stroke-dashoffset:30;animation:draw .6s var(--ease) .2s forwards}
+.done .ok{width:76px;height:76px;border-radius:50%;background:var(--mint-dim);display:grid;place-items:center;margin:0 auto 16px;animation:pop .5s var(--ease)}
+.done .ok svg{width:34px;height:34px;color:var(--good);stroke-dasharray:30;stroke-dashoffset:30;animation:draw .6s var(--ease) .2s forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
-.done h3{font-size:1.6rem;margin-bottom:8px}
+.done h3{font-size:1.9rem;margin-bottom:8px}
 .done p{color:var(--muted);font-size:.95rem}
-.fallback{margin-top:18px;padding:16px;background:var(--ivory);border-radius:12px;text-align:left;font-size:.9rem}
+.fallback{margin-top:18px;padding:16px;background:var(--cream);border-radius:12px;text-align:left;font-size:.9rem}
 .fallback label{display:block;font-weight:600;margin-bottom:8px}
 .fallback textarea{font-size:.84rem;min-height:150px;resize:vertical}
 .fallback .btn{margin-top:10px;min-height:46px}
 .form[data-state="ready"] .fields{display:none}.form[data-state="ready"] .done{display:block}
-.edit-btn{margin-top:16px;background:none;border:0;padding:8px;font-weight:600;color:var(--forest);text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--brass);text-decoration-thickness:2px}
+.form.failed .done .ok{display:none}
+.edit-btn{margin-top:16px;background:none;border:0;padding:8px;font-weight:600;color:var(--forest-800);text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--gold);text-decoration-thickness:2px}
 
-/* ---------- contact: questions about pricing, leave your number ---------- */
-.contact-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(30px,5vw,72px);align-items:center;margin-top:clamp(48px,7vw,80px)}
-.contact-grid h2{margin:18px 0 14px}
-.contact-grid .lede{color:var(--muted)}
-.field select,.field textarea{width:100%;min-height:50px;padding:12px 14px;border-radius:12px;border:1px solid #b9b3a1;background:#fffefb;color:var(--ink);font-size:1rem;font-family:inherit;transition:border-color .2s,box-shadow .2s}
-.field textarea{min-height:96px;resize:vertical;line-height:1.45}
-.field select:focus,.field textarea:focus{outline:none;border:2px solid var(--brass-text);padding:11px 13px;box-shadow:0 0 0 3px rgba(127,98,51,.28)}
-.field.err select,.field.err textarea{border-color:var(--bad)}
-@media(max-width:860px){.contact-grid{grid-template-columns:1fr}}
-
-/* ---------- marquee ---------- */
-.marquee{overflow:hidden;border-block:1px solid var(--line);background:var(--white);padding:18px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
-.track{display:flex;gap:14px;width:max-content;animation:scrollX 48s linear infinite}
-.marquee:hover .track{animation-play-state:paused}
-.track span{display:inline-flex;align-items:center;gap:10px;padding:9px 18px;border-radius:999px;background:var(--ivory);border:1px solid var(--line);font-weight:500;font-size:.92rem;color:var(--ink);white-space:nowrap}
-.track span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--brass)}
-@keyframes scrollX{to{transform:translateX(-50%)}}
-
-/* ---------- what we do (cards) ---------- */
-.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
-.card{position:relative;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:30px 28px 28px;display:flex;flex-direction:column;transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .3s;overflow:hidden}
-@media(hover:hover){.card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:#d9d2bf}}
-.card .num{font-family:var(--display);font-size:.95rem;font-weight:700;color:var(--brass-text);margin-bottom:6px;letter-spacing:.04em}
-.card h3{margin-bottom:10px}
-.card p{color:var(--muted);font-size:.98rem;flex:1}
-.tag{display:inline-flex;align-self:flex-start;margin-top:18px;padding:6px 10px;background:var(--ivory-2);color:var(--brass-text);font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-radius:6px}
-
-/* ---------- photo cards ---------- */
-.shot{position:relative;margin:-30px -28px 24px;aspect-ratio:4/3;overflow:hidden;background:var(--ivory-2)}
-.shot img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
-@media(hover:hover){.card:hover .shot img{transform:scale(1.05)}}
-.shot::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,36,29,0) 55%,rgba(15,36,29,.45))}
-.shot-chip{position:absolute;z-index:1;left:14px;bottom:14px;display:inline-flex;align-items:center;gap:8px;background:rgba(255,253,249,.95);color:var(--ink);border-radius:12px;padding:8px 12px;font-size:.8rem;font-weight:600;box-shadow:var(--shadow-sm)}
-.shot-chip i{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 0 0 rgba(47,125,90,.5);animation:blip 2.4s ease-out infinite}
-.shot-chip svg{width:14px;height:14px;color:var(--brass-num)}
+/* ---------- what we do (photo columns) ---------- */
+.cols{--colgap:clamp(36px,5vw,72px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--colgap)}
+.col{position:relative;display:flex;flex-direction:column}
+.col+.col::before{content:"";position:absolute;left:calc(var(--colgap)/-2);top:0;bottom:0;width:1px;background:#d9d3bf}
+.shot{position:relative;aspect-ratio:4/3;overflow:hidden;border-radius:14px;background:var(--cream-3);box-shadow:var(--shadow-sm)}
+.shot img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease)}
+@media(hover:hover){.col:hover .shot img{transform:scale(1.05)}}
+.shot::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,33,26,0) 55%,rgba(4,33,26,.5))}
+.shot-chip{position:absolute;z-index:1;left:14px;bottom:14px;display:inline-flex;align-items:center;gap:8px;background:rgba(251,247,236,.96);color:var(--ink);border-radius:10px;padding:8px 12px;font-size:.78rem;font-weight:600;box-shadow:var(--shadow-sm)}
+.shot-chip i{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 0 0 rgba(31,138,91,.5);animation:blip 2.4s ease-out infinite}
+.shot-chip svg{width:13px;height:13px;color:var(--gold-text)}
 .shot-chip .st{display:flex;gap:2px}
-@keyframes blip{0%{box-shadow:0 0 0 0 rgba(47,125,90,.55)}70%,100%{box-shadow:0 0 0 9px rgba(47,125,90,0)}}
+@keyframes blip{0%{box-shadow:0 0 0 0 rgba(31,138,91,.55)}70%,100%{box-shadow:0 0 0 9px rgba(31,138,91,0)}}
+.col h3{font-size:clamp(1.7rem,2.4vw,2.2rem);margin:0 0 10px}
+.col p{color:var(--muted);font-size:1rem;flex:1;max-width:36ch}
+.col .tag{display:inline-flex;align-self:flex-start;margin:26px 0 12px;padding:5px 10px;background:var(--forest-800);color:var(--mint);font-size:.66rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border-radius:6px}
+.col .arrow-link{margin-top:22px}
 
-/* ---------- proof: a real AI answer ---------- */
-.proof{overflow:hidden}
-.proof-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(36px,6vw,88px);align-items:center}
-.phone-frame{position:relative;max-width:360px;margin-inline:auto;padding:12px;background:#0b0b0b;border-radius:44px;box-shadow:0 0 0 1px #2a2a2a,0 40px 80px rgba(10,30,22,.28);transform:rotate(-2.5deg);transition:transform .6s var(--ease)}
-@media(hover:hover){.phone-frame:hover{transform:rotate(0)}}
-.phone-frame img{border-radius:32px;width:100%;height:auto}
-.proof-tag{position:absolute;z-index:2;top:-14px;right:28px;display:inline-flex;align-items:center;gap:6px;background:var(--brass);color:var(--forest);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:7px 12px;border-radius:999px;box-shadow:var(--shadow-sm);transform:rotate(2.5deg)}
-.proof-tag svg{width:13px;height:13px}
-.proof h2{margin:18px 0 18px}
-.proof-list{list-style:none;padding:0;margin:26px 0 30px;display:grid;gap:16px}
-.proof-list li{display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:start;color:var(--muted)}
-.proof-list b{display:block;color:var(--ink);font-weight:600;margin-bottom:2px}
-.proof-list .ic{width:34px;height:34px;border-radius:10px;background:var(--mint);display:grid;place-items:center;color:var(--forest)}
-.proof-list .ic svg{width:16px;height:16px}
-.proof-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px}
-.proof-note{margin-top:16px;font-size:.84rem;color:var(--muted)}
+/* ---------- samples: the real Welcome Pack and the emails ---------- */
+.samples .pages{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 18px;margin:0 -2px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.samples .pg{flex:0 0 min(72vw,300px);scroll-snap-align:start;text-decoration:none;color:inherit;display:grid;gap:10px;min-width:0}
+.samples .pg img{width:100%;height:auto;aspect-ratio:935/1210;border-radius:12px;border:1px solid var(--line);box-shadow:var(--shadow-sm);background:#fff;display:block;transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+@media(hover:hover){.samples .pg:hover img{transform:translateY(-6px);box-shadow:var(--shadow)}}
+.samples .pg span{font-size:.8rem;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.sample-ctas{display:flex;gap:22px;align-items:center;flex-wrap:wrap;margin:10px 0 40px}
+.sample-note{margin:0;color:var(--ink);font-size:1rem;max-width:52ch}
+.mails{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.mailcard{background:var(--cream);border:1px solid var(--line);border-radius:var(--r);padding:28px 26px;display:flex;flex-direction:column;gap:8px;min-width:0;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+@media(hover:hover){.mailcard:hover{transform:translateY(-4px);box-shadow:var(--shadow-sm)}}
+.mailcard .num{font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-text)}
+.mailcard h3{margin:0;font-size:1.6rem}
+.mailcard .from{font-size:.86rem;color:var(--muted);margin:0}
+.mailcard p{margin:0;font-size:.98rem;color:var(--ink)}
+.mailcard .sig{color:var(--muted);font-size:.9rem;margin-top:4px}
+.sample-fine{margin-top:20px;font-size:.86rem;color:var(--muted);max-width:70ch}
 
-/* ---------- how it works (dark, drawn line) ---------- */
+/* ---------- how it works (dark, drawn line, big numbers) ---------- */
 .how{position:relative;overflow:hidden}
-.how .contours{left:-160px;bottom:-140px}
-.steps{position:relative;list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;counter-reset:s}
-.steps::before{content:"";position:absolute;left:28px;right:calc((100% - 56px)/3 - 28px);top:28px;height:2px;background:linear-gradient(90deg,var(--brass),rgba(210,179,117,.35));transform:scaleX(0);transform-origin:left;transition:transform 1.4s var(--ease) .2s}
+.how::after{content:"";position:absolute;left:-200px;bottom:-320px;width:760px;height:760px;border-radius:50%;background:radial-gradient(closest-side,rgba(201,168,92,.12),rgba(201,168,92,0));pointer-events:none}
+.steps{position:relative;z-index:1;list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;counter-reset:s}
+.steps::before{content:"";position:absolute;left:0;right:calc(100%/3 - 32px);top:30px;height:1px;background:linear-gradient(90deg,var(--gold),rgba(201,168,92,.25));transform:scaleX(0);transform-origin:left;transition:transform 1.4s var(--ease) .2s}
 .steps.in::before{transform:scaleX(1)}
 .step{counter-increment:s;position:relative;padding-top:0}
-.step .n{position:relative;width:56px;height:56px;border-radius:50%;background:var(--forest);border:2px solid var(--brass);color:var(--brass);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:1.25rem;margin-bottom:22px;transform:scale(.4);opacity:0;transition:transform .6s var(--ease),opacity .4s}
+.step .n{position:relative;display:block;width:fit-content;font-family:var(--display);font-size:3.6rem;line-height:1;color:var(--mint);margin-bottom:22px;background:var(--forest-900);padding-right:18px;transform:translateY(12px);opacity:0;transition:transform .7s var(--ease),opacity .5s}
 .step .n::before{content:"0" counter(s)}
 .steps.in .step .n{transform:none;opacity:1}
-.steps.in .step:nth-child(2) .n{transition-delay:.45s}.steps.in .step:nth-child(3) .n{transition-delay:.9s}
-.step h3{font-size:1.4rem;margin-bottom:8px;color:#fff}
-.step p{color:var(--muted-dark);font-size:1rem;max-width:34ch}
-.how .btn{margin-top:40px}
+.steps.in .step:nth-child(2) .n{transition-delay:.4s}.steps.in .step:nth-child(3) .n{transition-delay:.8s}
+.step h3{font-size:1.75rem;margin-bottom:10px;color:var(--cream-2)}
+.step p{color:var(--muted-dark);font-size:1rem;max-width:36ch}
+.how .btn{margin-top:48px}
 
 /* ---------- pricing ---------- */
 .plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
-.plan{position:relative;display:flex;flex-direction:column;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:30px 26px 26px;box-shadow:var(--shadow-sm);transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.plan{position:relative;display:flex;flex-direction:column;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:32px 28px 28px;box-shadow:var(--shadow-sm);transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
 @media(hover:hover){.plan:hover{transform:translateY(-6px);box-shadow:var(--shadow)}}
-.plan.hot{border-color:transparent;box-shadow:0 26px 60px rgba(20,48,38,.18);isolation:isolate}
-.plan.hot::before{content:"";position:absolute;inset:-2px;border-radius:calc(var(--r) + 2px);background:conic-gradient(from var(--a),var(--forest),var(--brass),var(--forest) 45%,var(--brass) 70%,var(--forest));z-index:-1;animation:spin 7s linear infinite}
-.plan.hot::after{content:"";position:absolute;inset:0;border-radius:var(--r);background:var(--white);z-index:-1}
-@keyframes spin{to{--a:360deg}}
-.plan .badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--brass);color:var(--forest);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;border-radius:20px;white-space:nowrap;box-shadow:var(--shadow-sm)}
-.plan h3{font-size:1.5rem}
+.plan.hot{background:var(--forest-900);color:var(--cream-2);border-color:var(--forest-900);box-shadow:0 30px 70px rgba(4,33,26,.3),0 0 0 1px rgba(87,242,175,.25)}
+.plan.hot::before{content:"";position:absolute;inset:0;border-radius:var(--r);background:radial-gradient(60% 50% at 100% 0%,rgba(87,242,175,.18),transparent 70%);pointer-events:none}
+.plan .badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--mint);color:var(--forest-900);font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:7px 14px;border-radius:20px;white-space:nowrap;box-shadow:var(--shadow-sm)}
+.plan h3{font-size:2rem}
 .plan .for{font-size:.95rem;color:var(--muted);margin-top:6px;min-height:2.9em}
-.plan .amt{font-family:var(--display);font-weight:800;font-size:3rem;letter-spacing:-.03em;line-height:1;margin:18px 0 4px}
+.plan.hot .for{color:var(--muted-dark)}
+.plan .amt{font-family:var(--display);font-size:3.6rem;line-height:1;margin:20px 0 4px;letter-spacing:.01em}
 .plan .amt small{font-family:var(--body);font-weight:500;font-size:1rem;letter-spacing:0;color:var(--muted);margin-left:6px}
-.plan ul{list-style:none;padding:0;margin:20px 0 22px;display:grid;gap:11px;font-size:.96rem}
+.plan.hot .amt{color:var(--mint)}
+.plan.hot .amt small{color:var(--muted-dark)}
+.plan ul{list-style:none;padding:0;margin:22px 0 24px;display:grid;gap:12px;font-size:.96rem}
 .plan li{display:flex;gap:10px;line-height:1.45}
 .plan li svg{width:17px;height:17px;flex:none;margin-top:4px;color:var(--good)}
+.plan.hot li svg{color:var(--mint)}
 .plan li.plus{font-weight:600}
 .plan .btn{margin-top:auto;width:100%}
 .plan .nocontract{text-align:center;font-size:.86rem;color:var(--muted);margin-top:12px}
-.plan .nudge{text-align:center;font-size:.84rem;color:var(--brass-text);font-weight:500;margin-top:6px}
-.g-line{margin-top:30px;display:flex;gap:18px;align-items:flex-start;padding:22px 24px;border-radius:16px;background:var(--forest);color:#fff;position:relative;overflow:hidden}
-.g-line::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(210,179,117,.12) 50%,transparent 70%);transform:translateX(-100%);animation:sheen 6s ease-in-out infinite}
+.plan.hot .nocontract{color:var(--muted-dark)}
+.g-line{margin-top:32px;display:flex;gap:20px;align-items:flex-start;padding:24px 26px;border-radius:16px;background:var(--forest-800);color:var(--cream-2);position:relative;overflow:hidden}
+.g-line::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(87,242,175,.10) 50%,transparent 70%);transform:translateX(-100%);animation:sheen 6s ease-in-out infinite}
 @keyframes sheen{0%,30%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
-.g-line svg{width:30px;height:30px;flex:none;color:var(--brass);margin-top:2px}
-.g-line strong{display:block;font-family:var(--display);font-size:1.25rem;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+.g-line svg{width:32px;height:32px;flex:none;color:var(--gold);margin-top:2px}
+.g-line strong{display:block;font-family:var(--display);font-weight:400;font-size:1.5rem;letter-spacing:.01em;margin-bottom:4px}
 .g-line p{color:var(--muted-dark);font-size:.95rem;line-height:1.55}
-.g-line a{color:#fff}
+.g-line a{color:var(--cream-2)}
 .secure{display:flex;align-items:center;gap:8px;margin-top:18px;font-size:.84rem;color:var(--muted)}
 .secure svg{width:14px;height:14px;flex:none}
 
+/* ---------- contact: questions about pricing, leave your number ---------- */
+.contact-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(30px,5vw,80px);align-items:center;margin-top:clamp(56px,8vw,96px);padding-top:clamp(56px,8vw,96px);border-top:1px solid #d9d3bf}
+.contact-grid h2{margin:20px 0 16px}
+.contact-grid .check-list li{color:var(--muted)}
+.contact-grid .check-list svg{color:var(--gold-text)}
+.contact-grid .form{box-shadow:var(--shadow-sm);border:1px solid var(--line)}
+.tel-btn{margin-top:24px}
+.tel-btn svg,.sheet .btn svg{width:18px;height:18px}
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr}}
+
 /* ---------- faq (animated accordion) ---------- */
-.faq{max-width:820px;display:grid;gap:2px}
-.q{border-bottom:1px solid var(--line)}
+.faq{max-width:860px;display:grid;gap:2px}
+.q{border-bottom:1px solid #d9d3bf}
 .q-h{margin:0;font:inherit}
-.q-btn{width:100%;background:none;border:0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:68px;padding:18px 2px;font-family:var(--display);font-weight:700;font-size:1.2rem;letter-spacing:-.02em;color:var(--ink)}
-.q-btn .plus{flex:none;width:32px;height:32px;border-radius:50%;border:1px solid #c9c3b2;display:grid;place-items:center;color:var(--brass-text);transition:transform .4s var(--ease),background .25s,border-color .25s,color .25s}
+.q-btn{width:100%;background:none;border:0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:72px;padding:20px 2px;font-family:var(--body);font-weight:600;font-size:1.15rem;letter-spacing:-.005em;color:var(--ink)}
+.q-btn .plus{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid #c0b9a3;display:grid;place-items:center;color:var(--gold-text);transition:transform .4s var(--ease),background .25s,border-color .25s,color .25s}
 .q-btn .plus svg{width:14px;height:14px}
-.q-btn[aria-expanded="true"] .plus{transform:rotate(135deg);background:var(--forest);border-color:var(--forest);color:#fff}
+.q-btn[aria-expanded="true"] .plus{transform:rotate(135deg);background:var(--forest-800);border-color:var(--forest-800);color:var(--mint)}
 .q-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease),visibility 0s .45s;visibility:hidden}
 .q-panel.open{grid-template-rows:1fr;visibility:visible;transition:grid-template-rows .45s var(--ease),visibility 0s}
 .q-inner{overflow:hidden}
-.q-inner p{padding:0 2px 22px;color:var(--muted);max-width:68ch;font-size:1rem}
-
-/* ---------- closing band ---------- */
-.close{position:relative;overflow:hidden;color:#fff;background:#0f241d}
-.close-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 50%;transform:scale(1.06);animation:pan 24s ease-in-out infinite alternate}
-@keyframes pan{from{transform:scale(1.06) translateX(0)}to{transform:scale(1.06) translateX(-2.5%)}}
-.close::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(15,36,29,.96) 0%,rgba(20,47,39,.86) 42%,rgba(20,47,39,.25) 100%)}
-.close .contours{z-index:1}
-.close .contours{right:-220px;top:-60px;color:var(--brass);opacity:.16}
-.close-in{position:relative;z-index:2;padding:clamp(72px,9vw,120px) 0;max-width:680px;text-align:left}
-.close h2{font-size:clamp(2.3rem,4.6vw,3.8rem);margin-bottom:16px}
-.close p{color:var(--muted-dark);max-width:48ch;margin-bottom:30px;font-size:1.1rem}
-
-/* ---------- footer ---------- */
-footer{background:#0f241d;padding:40px 0 calc(32px + env(safe-area-inset-bottom));color:var(--muted-dark);font-size:.9rem;border-top:1px solid var(--line-dark)}
-footer .wrap{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:28px}
-footer b{display:flex;align-items:center;gap:9px;color:#fff;font-family:var(--display);font-weight:800;font-size:1rem;margin-bottom:8px}
-footer b svg{width:26px;height:26px}
-footer a{display:inline-block;padding:4px 0;color:#fff;text-decoration:underline;text-decoration-color:var(--brass);text-underline-offset:4px;overflow-wrap:anywhere}
-footer .mail{font-size:1.02rem;font-weight:600}
-
-/* ---------- sticky mobile CTA ---------- */
-.sticky-cta{position:fixed;bottom:0;inset-inline:0;z-index:40;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(20,47,39,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line-dark);box-shadow:0 -10px 30px rgba(0,0,0,.18);transform:translateY(0);transition:transform .35s var(--ease),visibility 0s}
-.sticky-cta[hidden]{display:block!important;transform:translateY(110%);pointer-events:none;visibility:hidden;transition:transform .35s var(--ease),visibility 0s .35s}
-.sticky-cta:not([hidden]),.sticky-cta[hidden]{display:flex!important;gap:10px}
-.sticky-cta .btn{min-height:50px}
-.sticky-cta .btn-brass{flex:1}
-.btn-call{flex:none;background:transparent;color:#fff;border-color:rgba(255,255,255,.4);padding-inline:18px}
-.btn-call svg{width:18px;height:18px}
-.nav-tel{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:.94rem;color:var(--forest);text-decoration:none;white-space:nowrap}
-.nav-tel svg{width:17px;height:17px;color:var(--brass-text)}
-@media(max-width:1180px){.nav-links .nav-tel{display:none}}
-.hero-tel{margin-top:16px;color:var(--muted);font-size:.95rem}
-.hero-tel a{color:var(--forest);font-weight:600;text-decoration:underline;text-decoration-color:var(--brass);text-underline-offset:4px;white-space:nowrap}
-.tel-btn{margin-top:22px}
-.tel-btn svg,.sheet .btn svg{width:18px;height:18px}
-.close-ctas{display:flex;flex-wrap:wrap;align-items:center;gap:16px 26px}
-.close-tel{display:inline-flex;align-items:center;gap:8px;color:#fff;font-weight:600;text-decoration:underline;text-decoration-color:var(--brass);text-underline-offset:5px}
-.close-tel svg{width:18px;height:18px;color:var(--brass)}
+.q-inner p{padding:0 2px 24px;color:var(--muted);max-width:68ch;font-size:1rem}
 
 /* ---------- about ---------- */
-.about{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,48px);align-items:start;max-width:860px}
-.about-pic{width:clamp(92px,16vw,150px);aspect-ratio:1;border-radius:50%;background:var(--forest);color:var(--brass);display:grid;place-items:center;font-family:var(--display,inherit);font-weight:800;font-size:clamp(2.2rem,5vw,3.4rem);overflow:hidden;box-shadow:0 0 0 6px var(--ivory),0 0 0 7px var(--brass)}
+.about{display:grid;grid-template-columns:auto 1fr;gap:clamp(22px,4vw,52px);align-items:start;max-width:900px}
+.about-pic{width:clamp(96px,16vw,156px);aspect-ratio:1;border-radius:50%;background:var(--forest-900);color:var(--mint);display:grid;place-items:center;font-family:var(--display);font-size:clamp(2.6rem,5vw,4rem);overflow:hidden;box-shadow:0 0 0 6px var(--white),0 0 0 7px var(--gold)}
 .about-pic img{width:100%;height:100%;object-fit:cover}
 .about p{color:var(--muted);font-size:1.06rem;max-width:60ch;margin:0 0 14px}
 .about .sig{color:var(--ink);font-weight:600;margin-top:14px}
 @media (max-width:560px){.about{grid-template-columns:1fr}}
+
+/* ---------- closing band ---------- */
+.close{position:relative;overflow:hidden;color:var(--cream-2);background:var(--forest-900)}
+.close-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:30% 50%;transform:scale(1.06);animation:pan 26s ease-in-out infinite alternate;opacity:.9}
+@keyframes pan{from{transform:scale(1.06) translateX(0)}to{transform:scale(1.06) translateX(-2.5%)}}
+.close::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(4,33,26,.97) 0%,rgba(4,33,26,.9) 38%,rgba(4,33,26,.45) 70%,rgba(4,33,26,.3) 100%)}
+.close::after{content:"";position:absolute;inset:auto 0 0;height:160px;z-index:1;background:linear-gradient(180deg,rgba(4,33,26,0),rgba(4,33,26,.85))}
+.close-in{position:relative;z-index:2;padding:clamp(88px,11vw,150px) 0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:center}
+.close h2{font-size:clamp(2rem,10.5vw,7.2rem);line-height:.92;text-transform:uppercase;margin-bottom:22px;text-wrap:initial}
+.close h2 .line{display:block;white-space:nowrap}
+.close h2 .hi{color:var(--mint)}
+.close p{color:var(--muted-dark);max-width:44ch;margin-bottom:32px;font-size:1.12rem}
+.close-ctas{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px}
+.close-tel{display:inline-flex;align-items:center;gap:8px;color:var(--cream-2);font-weight:600;text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:5px}
+.close-tel svg{width:18px;height:18px;color:var(--gold)}
+.motto{display:grid;grid-template-columns:1px auto;gap:28px;align-items:stretch;align-self:stretch;padding-left:clamp(20px,4vw,60px)}
+.motto i{display:block;background:linear-gradient(180deg,rgba(201,168,92,0),var(--gold) 20%,var(--gold) 80%,rgba(201,168,92,0))}
+.motto p{margin:0;display:flex;flex-direction:column;justify-content:center;gap:10px;font-size:.74rem;font-weight:600;letter-spacing:.34em;text-transform:uppercase;color:var(--cream-2);line-height:1.2}
+.motto p span{display:block}
+.motto p span:nth-child(n+3){color:var(--gold-2)}
+
+/* ---------- footer ---------- */
+footer{background:var(--forest-900);padding:52px 0 calc(36px + env(safe-area-inset-bottom));color:var(--muted-dark);font-size:.92rem;border-top:1px solid var(--line-dark)}
+footer .wrap{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px}
+footer .brand{margin-bottom:14px}
+footer .motto-line{font-size:.68rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);max-width:26ch;line-height:1.7}
+footer b{display:block;color:var(--cream-2);font-family:var(--body);font-weight:700;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:12px}
+footer a{display:inline-block;padding:4px 0;color:var(--cream-2);text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:4px;overflow-wrap:anywhere}
+footer .mail{font-size:1.02rem;font-weight:600}
+footer .copy{grid-column:1/-1;border-top:1px solid var(--line-dark);padding-top:22px;margin-top:10px;font-size:.84rem;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;color:var(--muted-dark)}
+
+/* ---------- sticky mobile CTA ---------- */
+.sticky-cta{position:fixed;bottom:0;inset-inline:0;z-index:40;display:flex;gap:10px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(4,33,26,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line-dark);box-shadow:0 -10px 30px rgba(0,0,0,.25);transform:translateY(0);transition:transform .35s var(--ease),visibility 0s}
+.sticky-cta.is-off{transform:translateY(110%);pointer-events:none;visibility:hidden;transition:transform .35s var(--ease),visibility 0s .35s}
+.sticky-cta .btn{min-height:50px}
+.sticky-cta .btn-cream{flex:1}
+.btn-call{flex:none;background:transparent;color:var(--cream-2);border-color:rgba(246,244,235,.4);padding-inline:18px}
+.btn-call svg{width:18px;height:18px}
+
 /* ---------- scroll reveal + motion safety ---------- */
-.reveal-wait{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal-wait{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
 .reveal-wait.in{opacity:1;transform:none}
-[data-stagger]>*{transition-delay:calc(var(--d,0)*90ms)}
+[data-stagger].reveal-wait{opacity:1;transform:none;transition:none}
+[data-stagger].reveal-wait:not(.in)>*{opacity:0}
+[data-stagger].reveal-wait.in>*{animation:fadeUp .8s var(--ease) backwards;animation-delay:calc(var(--d,0)*100ms)}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0s!important}
   .reveal-wait{opacity:1;transform:none}
-  .hero h1 .w{opacity:1;transform:none}
+  [data-stagger].reveal-wait:not(.in)>*{opacity:1}
+  .hero h1 .line span{transform:none}
+  .hero-photo img{transform:none}
   .fade-in,.demo-wrap{opacity:1}
   .answer li,.answer .chip{opacity:1;transform:none}
   .steps::before{transform:none}.step .n{transform:none;opacity:1}
-  .track{animation:none;flex-wrap:wrap;width:auto;justify-content:center}
-  .marquee{-webkit-mask-image:none;mask-image:none}
+  .track{animation:none;flex-wrap:wrap;width:auto;row-gap:8px}
+  .marquee{-webkit-mask-image:none;mask-image:none;overflow:visible}
+  .strip-in{min-height:0;padding:14px 0;align-items:flex-start}
+  .motion-btn{display:none}
   .q-panel{transition:none}
   .close-bg{animation:none}.shot-chip i{animation:none}
 }
 
 /* ---------- responsive ---------- */
-@media(max-width:1000px){
-  .hero-grid{grid-template-columns:minmax(0,1fr) minmax(300px,420px);gap:32px}
-  .grid-3{gap:16px}
-  .card{padding:26px 22px}
-  .shot{margin:-26px -22px 22px}
-  .plans{gap:14px}
-  .plan{padding:26px 20px 22px}
-  .steps{gap:22px}
-  .steps::before{right:calc((100% - 44px)/3 - 28px)}
+@media(max-width:1180px){
+  .demo-wrap{width:min(360px,33vw)}
+  .hero-copy{max-width:600px}
+  .hero .lede{max-width:30em}
 }
-@media(max-width:860px){
-  .hero-grid{grid-template-columns:minmax(0,1fr);align-items:start;padding-top:clamp(40px,7vw,64px);gap:40px}
-  .hero-copy{max-width:620px}
-  .demo-wrap{max-width:520px}
+@media(max-width:1100px){
+  .hero{min-height:0}
+  .hero-photo{inset:0 0 auto 0;width:100%;height:min(64vw,460px);-webkit-mask-image:linear-gradient(180deg,#000 30%,transparent 100%);mask-image:linear-gradient(180deg,#000 30%,transparent 100%)}
+  .hero-photo img{object-position:60% 50%}
+  .hero-photo::after{background:linear-gradient(180deg,rgba(4,33,26,.45) 0%,rgba(4,33,26,0) 40%,rgba(4,33,26,.72) 100%)}
+  .hero-grid{padding-top:calc(min(64vw,460px) - 90px);display:grid;grid-template-columns:minmax(0,1fr);gap:44px}
+  .hero-copy{max-width:640px;min-width:0}
+  .hero .lede{max-width:34em}
+  .demo-wrap{position:relative;right:auto;bottom:auto;width:min(100%,480px);min-width:0}
   .demo{transform:none}
-  .check-grid{grid-template-columns:minmax(0,1fr);gap:30px}
-  .grid-3{grid-template-columns:minmax(0,1fr)}
-  .proof-grid{grid-template-columns:minmax(0,1fr);gap:44px}
+}
+@media(max-width:1000px){
+  .cols{grid-template-columns:minmax(0,1fr);gap:40px}
+  .col+.col::before{left:0;right:0;top:-20px;bottom:auto;width:auto;height:1px}
+  .col p{max-width:60ch}
+  .plans{gap:14px}
+  .plan{padding:28px 22px 24px}
+  .steps{gap:24px}
+  .steps::before{right:calc(100%/3 - 24px)}
+}
+@media(max-width:900px){
+  .check-grid{grid-template-columns:minmax(0,1fr);gap:34px}
+  .proof-grid{grid-template-columns:minmax(0,1fr);gap:48px}
   .proof-copy{order:-1}
-  .close::before{background:linear-gradient(180deg,rgba(15,36,29,.9) 0%,rgba(20,47,39,.82) 60%,rgba(20,47,39,.6) 100%)}
+  .close::before{background:linear-gradient(180deg,rgba(4,33,26,.92) 0%,rgba(4,33,26,.85) 60%,rgba(4,33,26,.7) 100%)}
+  .close-in{grid-template-columns:minmax(0,1fr)}
+  .motto{display:none}
   .steps{grid-template-columns:minmax(0,1fr);gap:0}
   .steps::before{display:none}
-  .step:not(:last-child)::before{content:"";position:absolute;left:27px;top:56px;bottom:0;width:2px;background:linear-gradient(180deg,var(--brass),rgba(210,179,117,.3));transform:scaleY(0);transform-origin:top;transition:transform .9s var(--ease)}
+  .step{display:grid;grid-template-columns:72px 1fr;gap:0 18px;padding-bottom:36px}
+  .step:not(:last-child)::before{content:"";position:absolute;left:35px;top:56px;bottom:0;width:1px;background:linear-gradient(180deg,var(--gold),rgba(201,168,92,.25));transform:scaleY(0);transform-origin:top;transition:transform .9s var(--ease)}
   .steps.in .step:not(:last-child)::before{transform:scaleY(1)}
   .steps.in .step:nth-child(2)::before{transition-delay:.45s}
-  .step{display:grid;grid-template-columns:56px 1fr;gap:0 18px;padding-bottom:30px}
   .step:last-child{padding-bottom:0}
-  .step .n{margin-bottom:0;grid-row:span 2}
+  .step .n{margin-bottom:0;grid-row:span 2;align-self:start;background:none;font-size:2.6rem;padding:0;width:72px;text-align:center}
   .step p{max-width:none}
-  .plans{grid-template-columns:minmax(0,1fr);gap:22px}
+  .plans{grid-template-columns:minmax(0,1fr);gap:24px}
   .plan.hot{order:-1}
   .plan .for{min-height:0}
+  .mails{grid-template-columns:1fr}
   footer .wrap{grid-template-columns:minmax(0,1fr)}
 }
 @media(max-width:760px){
-  html{scroll-padding-top:76px}
+  html{scroll-padding-top:76px;scroll-padding-bottom:calc(96px + env(safe-area-inset-bottom))}
   .wrap{width:calc(100% - 36px)}
-  .section{padding-block:clamp(56px,10vw,72px)}
-  .nav-in{height:62px}
-  .sheet{--navh:62px}
-  .brand{font-size:1rem}
-  .brand svg{width:32px;height:32px}
+  .section{padding-block:clamp(60px,11vw,80px)}
+  .nav-in{height:66px}
+  .sheet{--navh:66px}
+  .brand{font-size:1.25rem}
+  .brand svg{width:34px;height:34px}
   .nav .btn{padding:9px 14px;font-size:.86rem;min-height:44px}
-  .hero h1{margin:18px 0 18px}
-  .cta-row{margin:26px 0 16px}
+  .hero-grid{padding-top:calc(min(64vw,460px) - 70px)}
+  .hero h1{margin:20px 0 20px}
+  .cta-row{margin:28px 0 18px}
   .cta-row .btn{width:100%}
+  .strip-in{min-height:56px;gap:18px}
+  .strip-label{padding-right:18px}
   .form{padding:24px 20px}
   .g-line{flex-direction:column;gap:12px;padding:20px}
-  .marquee{padding:14px 0}
   footer{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
 }
+@media(max-width:440px){.brand em{display:none}}
 @media(max-width:400px){
   .wrap{width:calc(100% - 32px)}
   .btn{white-space:normal;text-align:center;padding-inline:18px}
-  .hero h1{font-size:2.35rem}
+  .hero h1{font-size:3rem}
   .fields-2{grid-template-columns:minmax(0,1fr);gap:0}
-  .plan .amt{font-size:2.7rem}
-  .brand small{display:none}
+  .plan .amt{font-size:3rem}
   .demo-badge{left:0}
   .phone-frame{max-width:300px}
+  .strip-label{display:none}
 }
 @media(max-width:360px){
+  .answer li{flex-wrap:wrap}
+  .answer .chip{margin-left:32px}
+  #what-title br{display:none}
   .nav-in{gap:8px}
   .nav-links{gap:8px}
   .nav .btn{padding:8px 10px;font-size:.78rem}
   .menu-btn{flex:none}
-  .brand{font-size:.95rem;gap:7px}
+  .brand{font-size:1.1rem;gap:8px}
 }
 @media(max-width:340px){
   .wrap{width:calc(100% - 28px)}
-  .hero h1{font-size:2.1rem}
+  .hero h1{font-size:2.7rem}
 }
-
-/* ---------- samples: the real Welcome Pack and the emails (Oct 28, 2026) ---------- */
-.samples .pages{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 16px;margin:0 -2px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
-.samples .pg{flex:0 0 min(72vw,300px);scroll-snap-align:start;text-decoration:none;color:inherit;display:grid;gap:8px;min-width:0}
-.samples .pg img{width:100%;height:auto;aspect-ratio:935/1210;border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow-sm);background:#fff;display:block;transition:transform .25s var(--ease)}
-@media(hover:hover){.samples .pg:hover img{transform:translateY(-4px)}}
-.samples .pg span{font-size:.82rem;font-weight:600;color:var(--muted)}
-.sample-ctas{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin:8px 0 34px}
-.sample-note{margin:0;color:var(--ink);font-size:1rem;max-width:52ch}
-.mail{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:26px 24px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.mail .num{font-family:var(--display);font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--brass-text)}
-.mail h3{margin:0}
-.mail .from{font-size:.86rem;color:var(--muted);margin:0}
-.mail p{margin:0;font-size:.98rem;color:var(--ink)}
-.mail .sig{color:var(--muted);font-size:.9rem;margin-top:4px}
-.sample-fine{margin-top:18px;font-size:.86rem;color:var(--muted);max-width:70ch}
-@media(max-width:860px){.grid-3.mails{grid-template-columns:1fr}}
 </style>
-<script>(function(){var h=document.documentElement;if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;h.className+=" js-anim";var done=false,go=function(){if(!done){done=true;h.className+=" fonts-in"}};if(document.fonts&&document.fonts.ready){document.fonts.ready.then(go)}setTimeout(go,600)})();</script>
 </head>
 <body>
 <a class="skip" href="#top">Skip to content</a>
 
 <!-- Icon sprite -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-logo" viewBox="0 0 40 40"><path d="M2 31 13.5 11l6 9.5 5-7.5L38 31Z" fill="currentColor"/><path d="M13.5 11 19.5 20.5 16.4 24.9 9.6 17.7Z" fill="#d2b375"/></symbol>
+  <symbol id="i-logo" viewBox="0 0 40 40"><rect width="40" height="40" rx="10" fill="#f6f4eb"/><path d="M13.5 31V9h7.5a5.5 5.5 0 0 1 0 11H13.5" fill="none" stroke="#082f28" stroke-width="5.5"/><path d="M18 20l9.5 11" stroke="#082f28" stroke-width="5.5"/><path d="M28.5 13l3.75-6 3.75 6z" fill="#57f2af"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-arrow-long" viewBox="0 0 48 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h44M38 2l7 6-7 6"/></symbol>
   <symbol id="i-pin" viewBox="0 0 48 48" fill="currentColor"><path d="M24 44s-15-14.2-15-25a15 15 0 0 1 30 0c0 10.8-15 25-15 25Zm0-19a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z"/></symbol>
   <symbol id="i-star" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9Z"/></symbol>
   <symbol id="i-phone" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6h8l3 9-5 3a22 22 0 0 0 10 10l3-5 9 3v8a4 4 0 0 1-4 4C21 38 10 27 10 10a4 4 0 0 1 4-4Z"/></symbol>
@@ -531,51 +590,54 @@ footer .mail{font-size:1.02rem;font-weight:600}
   <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
   <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
-  <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></symbol>
-  <symbol id="i-contours" viewBox="0 0 720 360" fill="none" stroke="currentColor" stroke-width="1"><path d="M-20 60q180-110 360 0t400 0"/><path d="M-20 90q180-110 360 0t400 0"/><path d="M-20 120q180-110 360 0t400 0"/><path d="M-20 150q180-110 360 0t400 0"/><path d="M-20 180q180-110 360 0t400 0"/><path d="M-20 210q180-110 360 0t400 0"/><path d="M-20 240q180-110 360 0t400 0"/><path d="M-20 270q180-110 360 0t400 0"/><path d="M-20 300q180-110 360 0t400 0"/></symbol>
 </svg>
 
 <header class="nav" id="nav">
   <div class="wrap nav-in">
-    <a class="brand" href="#top" aria-label="Ridgeline Local home"><svg aria-hidden="true"><use href="#i-logo"/></svg>Ridgeline<small>Local</small></a>
+    <a class="brand" href="#top" aria-label="Ridgeline Local home"><svg aria-hidden="true"><use href="#i-logo"/></svg>Ridgeline<em>Local</em></a>
     <nav class="nav-links" aria-label="Primary">
       <a href="#what">What we do</a>
       <a href="#samples">Samples</a>
       <a href="#how">How it works</a>
       <a href="#pricing">Pricing</a>
-      <a href="#about">About</a>
       <a href="#faq">FAQ</a>
-      <a href="#contact">Contact</a>
       <a class="nav-tel" href="tel:+16153180687"><svg aria-hidden="true"><use href="#i-phone"/></svg>(615) 318-0687</a>
-      <a class="btn btn-forest" href="#free-check">Free AI check</a>
+      <a class="btn btn-cream" href="#free-check"><span class="lbl-long">Get my free check</span><span class="lbl-short">Free check</span> <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sheet" aria-label="Open menu"><svg aria-hidden="true"><use href="#i-menu"/></svg></button>
     </nav>
   </div>
   <div class="progress" id="progress" aria-hidden="true"></div>
 </header>
-<div class="sheet" id="sheet" data-open="false">
+<nav class="sheet" id="sheet" data-open="false" aria-label="Menu">
   <a href="#what">What we do <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  <a href="#samples">Samples <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#how">How it works <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#pricing">Pricing <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#about">About <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#faq">FAQ <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
   <a href="#contact">Contact <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-  <a class="btn btn-brass" href="#free-check">Get my free AI check</a>
-  <a class="btn btn-light" href="tel:+16153180687"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call (615) 318-0687</a>
-</div>
+  <a class="btn btn-cream" href="#free-check">Get my free AI check</a>
+  <a class="btn btn-outline" href="tel:+16153180687"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call (615) 318-0687</a>
+</nav>
 
 <main id="top">
 
 <!-- ===================== HERO ===================== -->
 <section class="hero" aria-labelledby="hero-title" data-anim>
-  <svg class="contours drift" id="heroContours" aria-hidden="true"><use href="#i-contours"/></svg>
+  <div class="hero-photo" id="heroPhoto" aria-hidden="true">
+    <picture>
+      <source media="(max-width:1100px)" srcset="assets/hero-dusk-m.jpg">
+      <img src="assets/hero-dusk.jpg" width="1600" height="900" fetchpriority="high" decoding="async" alt="">
+    </picture>
+  </div>
+  <div class="hero-glow" aria-hidden="true"></div>
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <span class="kicker fade-in d1">For the businesses that keep towns running</span>
-      <h1 id="hero-title"><span class="w" style="--i:0">Get</span> <span class="w" style="--i:1">your</span> <span class="w" style="--i:2">business</span> <span class="w" style="--i:3">recommended</span> <span class="w" style="--i:4">by</span> <span class="w hi" style="--i:5">ChatGPT</span> <span class="w" style="--i:6">and</span> <span class="w hi" style="--i:7">Google&nbsp;AI.</span></h1>
-      <p class="lede fade-in d2">We help local businesses show up when customers ask AI who to call, and make it easy for happy customers to leave reviews.</p>
+      <h1 id="hero-title"><span class="line"><span style="--i:0">Get found.</span></span><span class="line hi"><span style="--i:1">Get chosen.</span></span></h1>
+      <p class="lede fade-in d2">We help local businesses get recommended by ChatGPT and Google AI, and make it easy for happy customers to leave reviews.</p>
       <div class="cta-row fade-in d3">
-        <a class="btn btn-brass btn-lg btn-pulse" href="#free-check">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-cream btn-lg btn-pulse" href="#free-check">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a class="link" href="#pricing">See pricing</a>
       </div>
       <ul class="assure fade-in d4" aria-label="The basics">
@@ -590,7 +652,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
       <span class="demo-badge">Example</span>
       <div class="demo" id="demo" role="group" aria-label="Example of a customer asking an AI assistant who to call">
         <div class="demo-top"><i></i><i></i><i></i><span>AI assistant</span></div>
-        <div class="bubble user"><span id="demoQ">Who’s the best roofer in Tulsa?</span><span class="caret" aria-hidden="true"></span></div>
+        <div class="bubble user"><span id="demoQ">Who’s the best barber in Asheville?</span><span class="caret" aria-hidden="true"></span></div>
         <div class="bubble ai" aria-live="off">
           <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
           <div class="answer">
@@ -606,18 +668,23 @@ footer .mail{font-size:1.02rem;font-weight:600}
       </div>
     </div>
   </div>
+
+  <div class="strip">
+    <div class="wrap strip-in">
+      <span class="strip-label">Built for</span>
+      <div class="marquee" aria-hidden="true">
+        <div class="track" id="track">
+          <span>Roofers</span><span>Dentists</span><span>Barbers</span><span>Plumbers</span><span>Restaurants</span><span>Salons</span><span>HVAC</span><span>Gyms</span><span>Landscapers</span><span>Auto shops</span><span>Cleaners</span><span>Med spas</span><span>Electricians</span><span>Pet groomers</span><span>Contractors</span><span>Tree services</span>
+        </div>
+      </div>
+      <button class="motion-btn" id="motionBtn" type="button" aria-pressed="false" aria-label="Pause animations"><svg class="ic-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="4" width="5" height="16" rx="1"/><rect x="14" y="4" width="5" height="16" rx="1"/></svg><svg class="ic-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></button>
+    </div>
+  </div>
+  <p class="sr">Built for roofers, dentists, barbers, plumbers, restaurants, salons, HVAC, gyms, landscapers, auto shops, cleaners, med spas, electricians, pet groomers, contractors, tree services and more.</p>
 </section>
 
-<!-- ===================== BUSINESS TYPES MARQUEE ===================== -->
-<div class="marquee" aria-hidden="true" data-anim>
-  <div class="track" id="track">
-    <span>Roofers</span><span>Dentists</span><span>Barbers</span><span>Plumbers</span><span>Restaurants</span><span>Salons</span><span>HVAC</span><span>Gyms</span><span>Landscapers</span><span>Auto shops</span><span>Cleaners</span><span>Med spas</span><span>Electricians</span><span>Pet groomers</span><span>Contractors</span><span>Tree services</span>
-  </div>
-</div>
-<p class="sr">Built for roofers, dentists, barbers, plumbers, restaurants, salons, HVAC, gyms, landscapers, auto shops, cleaners, med spas, electricians, pet groomers, contractors, tree services and more.</p>
-
 <!-- ===================== PROOF: A REAL AI ANSWER ===================== -->
-<section class="section proof" id="proof" aria-labelledby="proof-title" data-anim>
+<section class="section on-cream proof" id="proof" aria-labelledby="proof-title" data-anim>
   <div class="wrap proof-grid">
     <div data-reveal>
       <div class="phone-frame">
@@ -642,7 +709,6 @@ footer .mail{font-size:1.02rem;font-weight:600}
 
 <!-- ===================== FREE CHECK (form) ===================== -->
 <section class="section on-dark check" id="free-check" aria-labelledby="check-title" data-anim>
-  <svg class="contours drift" aria-hidden="true"><use href="#i-contours"/></svg>
   <div class="wrap check-grid">
     <div data-reveal>
       <span class="kicker">Free AI check</span>
@@ -668,7 +734,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
         <div class="field"><label for="email">Your email <span>(we send the check here)</span></label><input id="email" name="email" type="email" required autocomplete="email" inputmode="email" maxlength="160" placeholder="you@yourbusiness.com" aria-describedby="email-msg"><div class="msg" id="email-msg">Add an email so we can send your check.</div></div>
         <div class="field"><label for="phone">Phone <span>(optional)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="40" placeholder="(555) 555-5555"></div>
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button class="btn btn-brass btn-block btn-lg" type="submit" id="submitBtn">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <button class="btn btn-forest btn-block btn-lg" type="submit" id="submitBtn">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
         <p class="tiny">No card, no sales call. We only use your email to send your check and answer you.</p>
       </div>
       <div class="done">
@@ -679,7 +745,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
           <label for="requestCopy">Our form didn’t go through. Tap below to send it by email instead, or copy it to <a class="link" href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a>.</label>
           <a class="btn btn-forest btn-block" id="mailtoBtn" href="mailto:ridgelinemarketinghq@gmail.com">Send by email</a>
           <textarea id="requestCopy" readonly rows="7"></textarea>
-          <button class="btn btn-light btn-block" type="button" id="copyRequest"><svg aria-hidden="true"><use href="#i-copy"/></svg><span>Copy request</span></button>
+          <button class="btn btn-outline btn-block" type="button" id="copyRequest"><svg aria-hidden="true"><use href="#i-copy"/></svg><span>Copy request</span></button>
         </div>
         <button class="edit-btn" type="button" id="editRequest">Edit my details</button>
       </div>
@@ -690,72 +756,71 @@ footer .mail{font-size:1.02rem;font-weight:600}
 </section>
 
 <!-- ===================== WHAT WE DO ===================== -->
-<section class="section" id="what" aria-labelledby="what-title" data-anim>
+<section class="section on-cream" id="what" aria-labelledby="what-title" data-anim>
   <div class="wrap">
     <div class="head" data-reveal>
-      <span class="kicker">What we help with</span>
-      <h2 id="what-title">More visibility. More reasons to choose you.</h2>
+      <span class="kicker">How we help</span>
+      <h2 id="what-title">You do the good work.<br>We help people find it.</h2>
       <p class="lede">Practical help with the online details that decide who gets the call.</p>
     </div>
-    <div class="grid-3" data-reveal data-stagger>
-      <article class="card" style="--d:0">
+    <div class="cols" data-reveal data-stagger>
+      <article class="col" style="--d:0">
         <figure class="shot"><img src="assets/photo-main-street-card.jpg" width="960" height="720" loading="lazy" decoding="async" alt="Main street storefronts at sunset: a cafe, a barbershop and a flower shop with customers walking in"><figcaption class="shot-chip"><i aria-hidden="true"></i>Found when locals ask AI</figcaption></figure>
-        <span class="num">01</span>
-        <h3>Google &amp; AI visibility</h3>
+        <span class="tag">All plans</span>
+        <h3>Get found</h3>
         <p>Clear, consistent information about your business where Google, ChatGPT and Gemini look for it.</p>
-        <span class="tag">All plans</span>
+        <a class="arrow-link" href="#free-check">Check my visibility <svg aria-hidden="true"><use href="#i-arrow-long"/></svg></a>
       </article>
-      <article class="card" style="--d:1">
-        <figure class="shot"><img src="assets/photo-review-counter.jpg" width="960" height="720" loading="lazy" decoding="async" alt="A customer at a coffee shop counter opens a five-star review screen on her phone"><figcaption class="shot-chip"><span class="st" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>Review in 10 seconds</figcaption></figure>
-        <span class="num">02</span>
-        <h3>10-second reviews</h3>
+      <article class="col" style="--d:1">
+        <figure class="shot"><img src="assets/photo-workshop-phone.jpg" width="960" height="720" loading="lazy" decoding="async" alt="A woodworker in his sunlit workshop checks his phone at the workbench"><figcaption class="shot-chip"><span class="st" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>Review in 10 seconds</figcaption></figure>
+        <span class="tag">All plans</span>
+        <h3>Build trust</h3>
         <p>A review link and a QR card for the counter, so happy customers can leave a Google review in about ten seconds.</p>
-        <span class="tag">All plans</span>
+        <a class="arrow-link" href="#pricing">See the review system <svg aria-hidden="true"><use href="#i-arrow-long"/></svg></a>
       </article>
-      <article class="card" style="--d:2">
+      <article class="col" style="--d:2">
         <figure class="shot"><img src="assets/photo-owner-call.jpg" width="960" height="720" loading="lazy" decoding="async" alt="A business owner at his shop desk takes a call and writes down a job, work van parked outside"><figcaption class="shot-chip"><i aria-hidden="true"></i>New lead: needs a quote</figcaption></figure>
-        <span class="num">03</span>
-        <h3>Local leads</h3>
-        <p>People nearby asking for what you do, found by AI and sent straight to your inbox.</p>
         <span class="tag">Pro</span>
+        <h3>Connect with customers</h3>
+        <p>People nearby asking for what you do, found by AI and sent straight to your inbox.</p>
+        <a class="arrow-link" href="#pricing">See the Pro plan <svg aria-hidden="true"><use href="#i-arrow-long"/></svg></a>
       </article>
     </div>
   </div>
 </section>
 
-<!-- ===================== SAMPLES (Oct 28, 2026) ===================== -->
-<section class="section on-ivory samples" id="samples" aria-labelledby="samples-title" data-anim>
+<!-- ===================== SAMPLES ===================== -->
+<section class="section on-white samples" id="samples" aria-labelledby="samples-title" data-anim>
   <div class="wrap">
     <div class="head" data-reveal>
       <span class="kicker">What you get, exactly</span>
       <h2 id="samples-title">Here’s a real Welcome Pack.</h2>
       <p class="lede">Every client gets one like this within the hour of signing up: your starting AI score, who AI recommends instead of you, your Google profile fixes, a review kit and your first 30 days. This one was built for a made-up plumber, so nothing private is shown.</p>
     </div>
-    <div class="pages" data-reveal aria-label="Sample Welcome Pack pages, swipe to see all seven">
-      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-1.jpg" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 1: starting AI visibility score 0 out of 100, and who ChatGPT and Gemini recommend instead"><span>1 · Your starting score</span></a>
-      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-2.jpg" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 2: review count and rating from public copies, and the gaps that cost calls, each with its source"><span>2 · What we found on your profile</span></a>
-      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-3.jpg" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 3: the hours fix and the category fix, marked do first"><span>3 · Fixes 1 and 2: hours, categories</span></a>
-      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-4.jpg" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 4: a ready description and a services list"><span>4 · Fixes 3 and 4: description, services</span></a>
-      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-5.jpg" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 5: five customer questions with answers and ten photo ideas"><span>5 · Q&A and photo ideas</span></a>
-      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-6.jpg" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 6: how we get the review link, the text to send after a job and the line for staff"><span>6 · Your review kit</span></a>
-      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-7.jpg" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 7: the 30-day plan, the guarantee and the sources"><span>7 · Your first 30 days</span></a>
+    <div class="pages" data-reveal role="region" aria-label="Sample Welcome Pack pages">
+      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-1-600.jpg" srcset="assets/sample/welcome-pack-1-600.jpg 600w, assets/sample/welcome-pack-1.jpg 935w" sizes="(max-width:760px) 72vw, 300px" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 1: starting AI visibility score 0 out of 100, and who ChatGPT and Gemini recommend instead"><span>1 · Your starting score</span></a>
+      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-2-600.jpg" srcset="assets/sample/welcome-pack-2-600.jpg 600w, assets/sample/welcome-pack-2.jpg 935w" sizes="(max-width:760px) 72vw, 300px" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 2: review count and rating from public copies, and the gaps that cost calls, each with its source"><span>2 · What we found on your profile</span></a>
+      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-3-600.jpg" srcset="assets/sample/welcome-pack-3-600.jpg 600w, assets/sample/welcome-pack-3.jpg 935w" sizes="(max-width:760px) 72vw, 300px" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 3: the hours fix and the category fix, marked do first"><span>3 · Fixes 1 and 2: hours, categories</span></a>
+      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-4-600.jpg" srcset="assets/sample/welcome-pack-4-600.jpg 600w, assets/sample/welcome-pack-4.jpg 935w" sizes="(max-width:760px) 72vw, 300px" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 4: a ready description and a services list"><span>4 · Fixes 3 and 4: description, services</span></a>
+      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-5-600.jpg" srcset="assets/sample/welcome-pack-5-600.jpg 600w, assets/sample/welcome-pack-5.jpg 935w" sizes="(max-width:760px) 72vw, 300px" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 5: five customer questions with answers and ten photo ideas"><span>5 · Q&A and photo ideas</span></a>
+      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-6-600.jpg" srcset="assets/sample/welcome-pack-6-600.jpg 600w, assets/sample/welcome-pack-6.jpg 935w" sizes="(max-width:760px) 72vw, 300px" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 6: how we get the review link, the text to send after a job and the line for staff"><span>6 · Your review kit</span></a>
+      <a class="pg" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener"><img src="assets/sample/welcome-pack-7-600.jpg" srcset="assets/sample/welcome-pack-7-600.jpg 600w, assets/sample/welcome-pack-7.jpg 935w" sizes="(max-width:760px) 72vw, 300px" width="935" height="1210" loading="lazy" decoding="async" alt="Sample Welcome Pack page 7: the 30-day plan, the guarantee and the sources"><span>7 · Your first 30 days</span></a>
     </div>
     <div class="sample-ctas" data-reveal>
       <a class="btn btn-forest" href="samples/welcome-pack-sample.pdf" target="_blank" rel="noopener">Open the full sample PDF <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       <p class="sample-note">Add us as a Manager on your Google listing (3 minutes, no password) and we make these changes for you. Prefer to keep the keys? Everything comes written out, ready to paste.</p>
     </div>
-    <div class="grid-3 mails" data-reveal data-stagger>
-      <article class="mail" style="--d:0"><span class="num">Day 3</span><h3>The check-in</h3><p class="from">Subject: Quick check</p><p>Quick check: did the profile changes make sense? Reply with anything confusing and I’ll make it simpler.</p><p class="sig">Grayson<br>Ridgeline Local</p></article>
-      <article class="mail" style="--d:1"><span class="num">The day it happens</span><h3>The win email</h3><p class="from">Subject: ChatGPT named you today</p><p>ChatGPT named Riverbend Plumbing Co. #3 today for “best plumber in Millbrook” (not named when we started). Word for word: “Riverbend Plumbing Co., praised for fast water-heater swaps and clear pricing.” Next we’re working on your November Google post.</p><p class="sig">Grayson<br>Ridgeline Local</p></article>
-      <article class="mail" style="--d:2"><span class="num">Day 21</span><h3>What we did so far</h3><p class="from">Subject: What we did so far (week 3)</p><p>Hours, categories and description set on your Google listing (Oct 3). Review kit and QR card sent (Oct 3). Reviews 38 → 44. AI re-checks Oct 10 and Oct 17: ChatGPT now names you for one of your three questions. Week 4: your Google post and the Yahoo category fix.</p><p class="sig">Grayson<br>Ridgeline Local</p></article>
+    <div class="mails" data-reveal data-stagger>
+      <article class="mailcard" style="--d:0"><span class="num">Day 3</span><h3>The check-in</h3><p class="from">Subject: Quick check</p><p>Quick check: did the profile changes make sense? Reply with anything confusing and I’ll make it simpler.</p><p class="sig">Grayson<br>Ridgeline Local</p></article>
+      <article class="mailcard" style="--d:1"><span class="num">The day it happens</span><h3>The win email</h3><p class="from">Subject: ChatGPT named you today</p><p>ChatGPT named Riverbend Plumbing Co. #3 today for “best plumber in Millbrook” (not named when we started). Word for word: “Riverbend Plumbing Co., praised for fast water-heater swaps and clear pricing.” Next we’re working on your November Google post.</p><p class="sig">Grayson<br>Ridgeline Local</p></article>
+      <article class="mailcard" style="--d:2"><span class="num">Day 21</span><h3>What we did so far</h3><p class="from">Subject: What we did so far (week 3)</p><p>Hours, categories and description set on your Google listing (Oct 3). Review kit and QR card sent (Oct 3). Reviews 38 → 44. AI re-checks Oct 10 and Oct 17: ChatGPT now names you for one of your three questions. Week 4: your Google post and the Yahoo category fix.</p><p class="sig">Grayson<br>Ridgeline Local</p></article>
     </div>
     <p class="sample-fine" data-reveal>Sample emails for the same made-up plumber, written the way we write them: one real number or one finished piece of work per email, never fluff. Never more than two emails a week outside replies and leads.</p>
   </div>
 </section>
 
 <!-- ===================== HOW IT WORKS ===================== -->
-<section class="section on-dark how" id="how" aria-labelledby="how-title" data-anim>
-  <svg class="contours drift" aria-hidden="true"><use href="#i-contours"/></svg>
+<section class="section on-deep how" id="how" aria-labelledby="how-title" data-anim>
   <div class="wrap">
     <div class="head" data-reveal>
       <span class="kicker">How it works</span>
@@ -766,12 +831,12 @@ footer .mail{font-size:1.02rem;font-weight:600}
       <li class="step"><span class="n" aria-hidden="true"></span><div><h3>We fix your profile for you and set up 10-second reviews</h3><p>Add us as a Manager on your Google listing (3 minutes, no password) and we make the changes ourselves. Then we hand you a review link and QR card your customers can use on the spot.</p></div></li>
       <li class="step"><span class="n" aria-hidden="true"></span><div><h3>You show up more and get more calls</h3><p>Clear info and fresh reviews are what Google and AI look for. We keep it moving month to month.</p></div></li>
     </ol>
-    <div data-reveal><a class="btn btn-brass" href="#free-check">Start with the free check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
+    <div data-reveal><a class="btn btn-cream btn-lg" href="#free-check">Start with the free check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
   </div>
 </section>
 
 <!-- ===================== PRICING ===================== -->
-<section class="section on-ivory" id="pricing" aria-labelledby="pricing-title" data-anim>
+<section class="section on-cream" id="pricing" aria-labelledby="pricing-title" data-anim>
   <div class="wrap">
     <div class="head" data-reveal>
       <span class="kicker">Pricing</span>
@@ -789,7 +854,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
           <li><svg aria-hidden="true"><use href="#i-check"/></svg>Google Business Profile cleanup: done for you as your Manager, or written out ready to paste</li>
           <li><svg aria-hidden="true"><use href="#i-check"/></svg>10-second review system: your review link and a QR card</li>
         </ul>
-        <a class="btn btn-light plan-go" data-plan="starter" data-href="https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07" href="https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07">Try Starter <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-outline plan-go" data-plan="starter" data-href="https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07" href="https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07">Try Starter <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <p class="nocontract">No contract. Cancel anytime.</p>
       </article>
 
@@ -804,7 +869,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
           <li><svg aria-hidden="true"><use href="#i-check"/></svg>Review growth: we email review requests to your customers</li>
           <li><svg aria-hidden="true"><use href="#i-check"/></svg>AI visibility tracking: weekly checks, monthly report</li>
         </ul>
-        <a class="btn btn-forest plan-go" data-plan="growth" data-href="https://buy.stripe.com/14AbJ168z9msbrAdWtaEE08" href="https://buy.stripe.com/14AbJ168z9msbrAdWtaEE08">Start Growth <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-mint plan-go" data-plan="growth" data-href="https://buy.stripe.com/14AbJ168z9msbrAdWtaEE08" href="https://buy.stripe.com/14AbJ168z9msbrAdWtaEE08">Start Growth <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <p class="nocontract">No contract. Cancel anytime.</p>
       </article>
 
@@ -817,7 +882,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
           <li><svg aria-hidden="true"><use href="#i-check"/></svg>AI-found leads sent to your inbox</li>
           <li><svg aria-hidden="true"><use href="#i-check"/></svg>Every lead logged, so you can see what turned into work</li>
         </ul>
-        <a class="btn btn-light plan-go" data-plan="pro" data-href="https://buy.stripe.com/8x200jgNd6ag3Z8aKhaEE09" href="https://buy.stripe.com/8x200jgNd6ag3Z8aKhaEE09">Start Pro <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-outline plan-go" data-plan="pro" data-href="https://buy.stripe.com/8x200jgNd6ag3Z8aKhaEE09" href="https://buy.stripe.com/8x200jgNd6ag3Z8aKhaEE09">Start Pro <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <p class="nocontract">No contract. Cancel anytime.</p>
       </article>
     </div>
@@ -837,9 +902,9 @@ footer .mail{font-size:1.02rem;font-weight:600}
         <h2>Questions? Call, or leave your number.</h2>
         <p class="lede">Not sure which plan fits, or want to talk it through first? Call Grayson directly, or send your number and he’ll call you back, usually the same day.</p>
         <a class="btn btn-forest btn-lg tel-btn" href="tel:+16153180687"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call (615) 318-0687</a>
-        <ul class="check-list" style="margin-top:18px">
-          <li style="color:var(--muted)"><svg aria-hidden="true"><use href="#i-phone"/></svg>A real call from a real person. No robocalls, no texts.</li>
-          <li style="color:var(--muted)"><svg aria-hidden="true"><use href="#i-shield"/></svg>We never sell or share your number.</li>
+        <ul class="check-list" style="margin-top:20px">
+          <li><svg aria-hidden="true"><use href="#i-phone"/></svg>A real call from a real person. No robocalls, no texts.</li>
+          <li><svg aria-hidden="true"><use href="#i-shield"/></svg>We never sell or share your number.</li>
         </ul>
       </div>
       <form class="form" id="contactForm" data-state="idle" action="https://formsubmit.co/ridgelinemarketinghq@gmail.com" method="POST" novalidate data-reveal>
@@ -876,7 +941,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
 </section>
 
 <!-- ===================== ABOUT ===================== -->
-<section class="section on-ivory" id="about" aria-labelledby="about-title">
+<section class="section on-white" id="about" aria-labelledby="about-title">
   <div class="wrap">
     <div class="head" data-reveal>
       <span class="kicker">Who you’re working with</span>
@@ -895,7 +960,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
 </section>
 
 <!-- ===================== FAQ ===================== -->
-<section class="section" id="faq" aria-labelledby="faq-title">
+<section class="section on-cream" id="faq" aria-labelledby="faq-title">
   <div class="wrap">
     <div class="head" data-reveal>
       <span class="kicker">Questions</span>
@@ -914,12 +979,14 @@ footer .mail{font-size:1.02rem;font-weight:600}
 
 <!-- ===================== CLOSING BAND ===================== -->
 <section class="close" aria-labelledby="close-title" data-anim>
-  <img class="close-bg" src="assets/photo-main-street-wide.jpg" width="1440" height="810" decoding="async" alt="">
-  <svg class="contours drift" aria-hidden="true"><use href="#i-contours"/></svg>
-  <div class="wrap"><div class="close-in" data-reveal>
-    <h2 id="close-title">Let’s put your business on the map.</h2>
-    <p>Start with your free AI visibility check.</p>
-    <div class="close-ctas"><a class="btn btn-brass btn-lg" href="#free-check">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="close-tel" href="tel:+16153180687"><svg aria-hidden="true"><use href="#i-phone"/></svg>or call (615) 318-0687</a></div>
+  <img class="close-bg" src="assets/photo-main-street-wide.jpg" width="1440" height="810" loading="lazy" decoding="async" alt="">
+  <div class="wrap"><div class="close-in">
+    <div data-reveal>
+      <h2 id="close-title"><span class="line">Your next customer</span><span class="line hi">is looking.</span></h2>
+      <p>Start with your free AI visibility check. One minute, no card, and you see exactly what ChatGPT and Gemini say about your business.</p>
+      <div class="close-ctas"><a class="btn btn-cream btn-lg" href="#free-check">Start with a free check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="close-tel" href="tel:+16153180687"><svg aria-hidden="true"><use href="#i-phone"/></svg>or call (615) 318-0687</a></div>
+    </div>
+    <div class="motto" aria-hidden="true"><i></i><p><span>Same</span><span>great</span><span>towns</span><span>brighter</span><span>tomorrows</span></p></div>
   </div></div>
 </section>
 
@@ -927,15 +994,16 @@ footer .mail{font-size:1.02rem;font-weight:600}
 
 <footer>
   <div class="wrap">
-    <div><b><svg aria-hidden="true"><use href="#i-logo"/></svg>Ridgeline Local</b>Local businesses. Clear next steps.</div>
+    <div><a class="brand" href="#top" aria-label="Ridgeline Local home"><svg aria-hidden="true"><use href="#i-logo"/></svg>Ridgeline<em>Local</em></a><p class="motto-line">Local businesses. A brighter tomorrow.</p></div>
     <div><b>Contact</b><a class="mail" href="tel:+16153180687">(615) 318-0687</a><br><a class="mail" href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a><br>A real person reads every email.</div>
-    <div><b>More</b><a href="guarantee.html">Guarantee terms</a> · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a><br>© <span id="year">2026</span> Ridgeline Local</div>
+    <div><b>More</b><a href="guarantee.html">Guarantee terms</a> · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a><br><a href="#free-check">Free AI check</a> · <a href="#pricing">Pricing</a> · <a href="#contact">Call me back</a></div>
+    <div class="copy"><span>© <span id="year">2026</span> Ridgeline Local</span><span>We help local businesses get recommended by ChatGPT and Google AI.</span></div>
   </div>
 </footer>
 
-<aside class="sticky-cta" id="stickyCta" aria-label="Get your free AI check or call" hidden>
+<aside class="sticky-cta is-off" id="stickyCta" aria-label="Get your free AI check or call">
   <a class="btn btn-call" href="tel:+16153180687" aria-label="Call (615) 318-0687"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call</a>
-  <a class="btn btn-brass" href="#free-check">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  <a class="btn btn-cream" href="#free-check">Get my free AI check <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
 </aside>
 
 <script>
@@ -949,7 +1017,14 @@ footer .mail{font-size:1.02rem;font-weight:600}
 
   $("#year").textContent=new Date().getFullYear();
 
-  /* ---- nav: elevation + reading progress ---- */
+  /* ---- land exactly on #section links even after the web fonts change the layout; smooth scrolling only after that ---- */
+  var userScrolled=false;
+  ["wheel","touchmove","keydown"].forEach(function(ev){window.addEventListener(ev,function(){userScrolled=true},{passive:true,once:true})});
+  function landOnHash(){var id=location.hash.slice(1),el=id&&document.getElementById(id);if(el&&!userScrolled)el.scrollIntoView({behavior:"auto",block:"start"})}
+  window.addEventListener("load",function(){landOnHash();requestAnimationFrame(function(){document.documentElement.classList.add("smooth")})});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){setTimeout(landOnHash,0)});
+
+  /* ---- nav: solid after the first scroll + reading progress ---- */
   var nav=$("#nav"),progress=$("#progress"),navTick=false;
   function updateNav(){
     var y=window.scrollY,h=document.documentElement.scrollHeight-window.innerHeight;
@@ -965,20 +1040,22 @@ footer .mail{font-size:1.02rem;font-weight:600}
   function setMenu(open){
     menuOpen=open;
     sheet.setAttribute("data-open",open?"true":"false");
+    nav.classList.toggle("open",open);
     menuBtn.setAttribute("aria-expanded",open?"true":"false");
     menuBtn.setAttribute("aria-label",open?"Close menu":"Open menu");
     menuBtn.innerHTML='<svg aria-hidden="true"><use href="#'+(open?"i-x":"i-menu")+'"/></svg>';
     document.body.style.overflow=open?"hidden":"";
+    $$("main,footer,#stickyCta").forEach(function(el){if(open)el.setAttribute("inert","");else el.removeAttribute("inert")});
     scheduleSticky();
   }
   menuBtn.addEventListener("click",function(){setMenu(sheet.getAttribute("data-open")!=="true")});
   $$("a",sheet).forEach(function(a){a.addEventListener("click",function(){setMenu(false)})});
-  window.addEventListener("resize",function(){if(window.innerWidth>860&&menuOpen)setMenu(false)});
+  window.addEventListener("resize",function(){if(window.innerWidth>980&&menuOpen)setMenu(false)});
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&menuOpen){setMenu(false);menuBtn.focus()}});
 
   /* ---- hero demo: a customer asks, the AI answers, your name is in the list ---- */
   var demo=$("#demo"),dq=$("#demoQ");
-  var scenes=[["roofer","Tulsa"],["dentist","Boise"],["barber","Asheville"],["plumber","Fort Smith"],["landscaper","Cabot"],["auto shop","Owasso"],["salon","Foley"]];
+  var scenes=[["barber","Asheville"],["roofer","Tulsa"],["dentist","Boise"],["plumber","Fort Smith"],["landscaper","Cabot"],["auto shop","Owasso"],["salon","Foley"]];
   var si=0,dt=null;
   function later(fn,ms){dt=setTimeout(fn,ms)}
   function typeText(txt,done){
@@ -994,11 +1071,24 @@ footer .mail{font-size:1.02rem;font-weight:600}
           later(function(){demo.classList.remove("thinking");demo.classList.add("answered");
             later(scene,4600)},900)},500)})},450);
   }
-  if(reduce||!demo){demo.classList.add("answered")}
+  var motionOff=false,heroVisible=true;
+  function startDemo(){clearTimeout(dt);if(!reduce&&demo&&!motionOff&&heroVisible&&!document.hidden)later(scene,600)}
+  function stopDemo(){clearTimeout(dt)}
+  if(reduce||!demo){if(demo)demo.classList.add("answered")}
   else{
-    scene();
-    document.addEventListener("visibilitychange",function(){if(document.hidden){clearTimeout(dt)}else{clearTimeout(dt);scene()}});
+    if(!("IntersectionObserver" in window))startDemo();
+    document.addEventListener("visibilitychange",function(){if(document.hidden)stopDemo();else startDemo()});
   }
+  /* ---- pause / play for everything that moves (WCAG 2.2.2) ---- */
+  var motionBtn=$("#motionBtn");
+  if(motionBtn){motionBtn.addEventListener("click",function(){
+    motionOff=!motionOff;
+    document.documentElement.classList.toggle("motion-off",motionOff);
+    motionBtn.setAttribute("aria-pressed",motionOff?"true":"false");
+    motionBtn.setAttribute("aria-label",motionOff?"Play animations":"Pause animations");
+    if(motionOff){stopDemo();if(demo){demo.classList.remove("thinking");demo.classList.add("answered");dq.textContent="Who’s the best barber in Asheville?"}}
+    else startDemo();
+  })}
 
   /* ---- marquee: duplicate the track so the loop is seamless ---- */
   var track=$("#track");
@@ -1009,24 +1099,24 @@ footer .mail{font-size:1.02rem;font-weight:600}
   if("IntersectionObserver" in window&&!reduce){
     try{
       var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{rootMargin:"0px 0px -10% 0px",threshold:.1});
-      targets.forEach(function(el){el.classList.add("reveal-wait");io.observe(el)});
+      targets.forEach(function(el){var r=el.getBoundingClientRect();if(r.top<window.innerHeight&&r.bottom>0){el.classList.add("reveal-wait","in")}else{el.classList.add("reveal-wait");io.observe(el)}});
       var so=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){steps.classList.add("in");so.unobserve(steps)}})},{threshold:.25});
       so.observe(steps);
     }catch(_){targets.forEach(function(el){el.classList.remove("reveal-wait")});steps.classList.add("in")}
   }else{steps.classList.add("in")}
 
-  /* ---- hero contours: gentle parallax ---- */
-  var hc=$("#heroContours"),pTick=false;
-  if(hc&&!reduce){window.addEventListener("scroll",function(){if(!pTick){pTick=true;requestAnimationFrame(function(){var y=window.scrollY;if(y<900)hc.style.translate="0 "+(y*.12)+"px";pTick=false})}},{passive:true})}
+  /* ---- hero photo: gentle parallax ---- */
+  var hp=$("#heroPhoto"),pTick=false;
+  if(hp&&!reduce){window.addEventListener("scroll",function(){if(!pTick){pTick=true;requestAnimationFrame(function(){var y=window.scrollY;if(y<1200)hp.style.translate="0 "+(y*.18)+"px";pTick=false})}},{passive:true})}
 
   /* ---- pause looping animations while their section is off screen ---- */
   if("IntersectionObserver" in window){
-    try{var ao=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle("anim-off",!e.isIntersecting)})},{rootMargin:"120px 0px"});$$("[data-anim]").forEach(function(el){ao.observe(el)})}catch(_){}
+    try{var ao=new IntersectionObserver(function(es){es.forEach(function(e){var off=!e.isIntersecting;e.target.classList.toggle("anim-off",off);if(e.target.classList.contains("hero")){heroVisible=!off;if(off)stopDemo();else startDemo()}})},{rootMargin:"120px 0px"});$$("[data-anim]").forEach(function(el){ao.observe(el)})}catch(_){if(!reduce)startDemo()}
   }
 
-  /* ---- sticky mobile CTA (hidden while the form is on screen) ---- */
+  /* ---- sticky mobile CTA (hidden while a form is on screen) ---- */
   var sticky=$("#stickyCta"),formWrap=$("#free-check"),scheduled=false;
-  function updateSticky(){var r=formWrap.getBoundingClientRect();var passed=r.bottom<0;var c=$("#contactForm").getBoundingClientRect();var onContact=c.top<window.innerHeight&&c.bottom>0;sticky.hidden=!(window.innerWidth<=760&&passed&&!onContact&&!menuOpen);scheduled=false}
+  function updateSticky(){var r=formWrap.getBoundingClientRect();var passed=r.bottom<0;var c=$("#contactForm").getBoundingClientRect();var onContact=c.top<window.innerHeight&&c.bottom>0;sticky.classList.toggle("is-off",!(window.innerWidth<=760&&passed&&!onContact&&!menuOpen));scheduled=false}
   function scheduleSticky(){if(!scheduled){scheduled=true;requestAnimationFrame(updateSticky)}}
   window.addEventListener("scroll",scheduleSticky,{passive:true});
   window.addEventListener("resize",scheduleSticky);
@@ -1080,6 +1170,7 @@ footer .mail{font-size:1.02rem;font-weight:600}
   }
   ["business","town","service","email"].forEach(function(id){$("#"+id).addEventListener("input",function(){fieldOf(this).classList.remove("err");this.removeAttribute("aria-invalid")})});
   function showFallback(subject,body){
+    form.classList.add("failed");
     $("#doneTitle").textContent="One more tap";
     $("#doneText").textContent="";
     $("#requestCopy").value="Subject: "+subject+"\n\n"+body;
@@ -1130,11 +1221,11 @@ footer .mail{font-size:1.02rem;font-weight:600}
     fetch(FORM_URL,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(payload)})
       .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j}})})
       .then(function(res){if(!res.ok||String(res.j.success)==="false")throw new Error("not sent")})
-      .catch(function(){$("#cDoneTitle").textContent="One more tap";$("#cDoneText").textContent="";$("#cMailto").href="mailto:"+EMAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);$("#cFallback").hidden=false})
+      .catch(function(){cForm.classList.add("failed");$("#cDoneTitle").textContent="One more tap";$("#cDoneText").textContent="";$("#cMailto").href="mailto:"+EMAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);$("#cFallback").hidden=false})
       .then(function(){cForm.setAttribute("data-state","ready");cBtn.disabled=false;cBtn.innerHTML=cLabel;cForm.scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"});$("#cDoneTitle").focus({preventScroll:true})});
   });
-  $("#cEdit").addEventListener("click",function(){cForm.setAttribute("data-state","idle");$("#cFallback").hidden=true;$("#cDoneTitle").textContent="Got it. Grayson will call you.";$("#cDoneText").textContent="Usually the same day. If you left an email, the plans and prices are on their way there too.";$("#c-name").focus()});
-  $("#editRequest").addEventListener("click",function(){form.setAttribute("data-state","idle");status.textContent="";$("#emailFallback").hidden=true;$("#doneTitle").textContent="Got it. Your check is on the way.";$("#doneText").textContent="We’ll email you what ChatGPT and Gemini say about your business, usually within the hour.";$("#business").focus()});
+  $("#cEdit").addEventListener("click",function(){cForm.setAttribute("data-state","idle");cForm.classList.remove("failed");$("#cFallback").hidden=true;$("#cDoneTitle").textContent="Got it. Grayson will call you.";$("#cDoneText").textContent="Usually the same day. If you left an email, the plans and prices are on their way there too.";$("#c-name").focus()});
+  $("#editRequest").addEventListener("click",function(){form.setAttribute("data-state","idle");form.classList.remove("failed");status.textContent="";$("#emailFallback").hidden=true;$("#doneTitle").textContent="Got it. Your check is on the way.";$("#doneText").textContent="We’ll email you what ChatGPT and Gemini say about your business, usually within the hour.";$("#business").focus()});
 })();
 </script>
 </body>
