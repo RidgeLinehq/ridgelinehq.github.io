@@ -171,8 +171,8 @@ def mux(dest, with_music):
                        capture_output=True, text=True)
     m = json.loads(r.stderr[r.stderr.rfind("{"):r.stderr.rfind("}") + 1])
     gain = round(I - float(m["input_i"]), 2)
-    ceiling = round(10 ** ((TP - 1.5) / 20), 3)  # 1.5 dB under the true-peak target: the AAC encoder overshoots limited transients
-    full = chain + ",volume=" + str(gain) + "dB,aresample=48000,alimiter=limit=" + str(ceiling) + ":level=0:attack=4:release=80,afade=t=out:st=" + str(cfg["dur"] - 1.3) + ":d=1.3[a]"  # resample BEFORE the ceiling: the encoder must not resample after it
+    ceiling = round(10 ** ((TP - 2.0) / 20), 3)  # 2 dB under the true-peak target: the AAC encoder overshoots limited transients
+    full = chain + ",volume=" + str(gain) + "dB,aresample=48000,alimiter=limit=" + str(ceiling) + ":level=0:attack=4:release=80,pan=stereo|c0=c0|c1=c0,afade=t=out:st=" + str(cfg["dur"] - 1.3) + ":d=1.3[a]"  # resample BEFORE the ceiling; pan = exact mono->stereo copy (ffmpeg's -ac 2 upmix drops 3 dB, and some phone players mishandle mono AAC)
     cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", video] + inputs + [
            "-filter_complex", full, "-map", "0:v", "-map", "[a]", "-c:v", "copy",
            "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-t", str(cfg["dur"]), "-movflags", "+faststart", dest]

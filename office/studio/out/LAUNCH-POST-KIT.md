@@ -283,14 +283,14 @@ Rules all week: never delete a post in week 1 (TikTok can re-serve it days later
 
 Numbers from `python3 office/studio/tools/qa.py <file>` (ffmpeg volumedetect and ebur128). Frames: 10 per file pulled and looked at, plus every rendered frame scanned by `tools/glitchscan.py` (0 single-frame paint glitches in 2,999 frames); a second, independent inspection pass caught two G3 defects in the first render (a caption crossing the phone during its entrance, the done-state headline under the site header), both fixed and re-rendered before this table was measured.
 
-| File | Length | Mean | Peak | Integrated |
+| File | Length | Mean | Peak | Audio |
 |---|---|---|---|---|
-| launch-demo-tiktok-voice.mp4 | 33.03 s | -16.2 dB | -2.8 dB | -15.7 LUFS |
-| launch-demo-tiktok-full.mp4 | 33.03 s | -15.5 dB | -2.2 dB | -15.8 LUFS |
-| launch-question-instagram-voice.mp4 | 33.23 s | -15.7 dB | -2.4 dB | -15.5 LUFS |
-| launch-question-instagram-full.mp4 | 33.23 s | -15.2 dB | -2.4 dB | -15.5 LUFS |
-| launch-loss-facebook-voice.mp4 | 33.78 s | -15.7 dB | -1.7 dB | -15.5 LUFS |
-| launch-loss-facebook-full.mp4 | 33.78 s | -15.2 dB | -2.5 dB | -15.5 LUFS |
+| launch-demo-tiktok-voice.mp4 | 33.03 s | -16.5 dB | -1.5 dB | stereo AAC 48 kHz |
+| launch-demo-tiktok-full.mp4 | 33.03 s | -15.8 dB | -2.5 dB | stereo AAC 48 kHz |
+| launch-question-instagram-voice.mp4 | 33.23 s | -15.9 dB | -2.2 dB | stereo AAC 48 kHz |
+| launch-question-instagram-full.mp4 | 33.23 s | -15.4 dB | -2.4 dB | stereo AAC 48 kHz |
+| launch-loss-facebook-voice.mp4 | 33.78 s | -15.9 dB | -2.4 dB | stereo AAC 48 kHz |
+| launch-loss-facebook-full.mp4 | 33.78 s | -15.4 dB | -3.0 dB | stereo AAC 48 kHz |
 
 Ducking check on the loss cut: during speech (17.2 to 19.6 s) the full mix is about 0.2 dB louder than the voice-only mix, so the music sits under the voice; in a pause (14.15 to 14.45 s) the voice-only file is silence (-59 dB) and the full file carries the music at -20.9 dB.
 
