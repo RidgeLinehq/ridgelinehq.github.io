@@ -3,10 +3,11 @@ Usage: python3 render.py <ad folder> <out.mp4> [--fps 30] [--only t1,t2,...  (ju
                          [--ad <file.json>] [--variants voice,full] [--mux-only]
 The ad folder holds stage.html and ad.json (or the file named by --ad):
   {"dur": seconds, "vo": "path to voice mp3", "music": "path to wav" or null, "captions": [[t0, t1, "text with *highlight*"], ...],
-   "sfx": [[t, "whoosh|tap|thud|pop|riser|impact|tick|ding"], ...], "capTop": 1430, "musicVol": 0.55, "voGain": 1.6}
+   "sfx": [[t, "whoosh|tap|thud|pop|riser|impact|tick|ding"], ...], "capTop": 1430, "musicVol": 0.55, "voGain": 1.6,
+   "preset": "medium", "crf": 19, "loudI": -14, "loudTP": -1.5}
 --variants voice,full  renders the frames once and muxes twice: <out>-voice.mp4 (voice + sfx, no music bed, for
                        posting with a platform sound) and <out>-full.mp4 (voice + sfx + music ducked under speech).
---mux-only             skips the frame render and reuses <out>.work from the last run (fast audio iterations).
+--mux-only             skips the frame render (and the video encode when <out>.work/video.mp4 exists) and reuses <out>.work.
 Chromium: uses Playwright's own browser, or CHROMIUM_PATH / /opt/pw-browsers/chromium when that is not installed.
 """
 import json, os, sys, subprocess, threading, shutil, functools, http.server, socketserver, wave
@@ -133,8 +134,17 @@ fx = np.clip(fx, -1, 1)
 with wave.open(os.path.join(work, "fx.wav"), "wb") as w:
     w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes((fx * 32767).astype("<i2").tobytes())
 
-# ---- mux: frames + voice (front) + music (ducked under the voice) + fx
+# ---- video once (the variants share every frame), then one audio mix per variant muxed with -c:v copy
+video = os.path.join(work, "video.mp4")
+if not (mux_only and os.path.exists(video)):
+    subprocess.run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-framerate", str(fps), "-i", os.path.join(work, "f%05d.jpg"),
+                    "-vf", cfg.get("grade", "eq=contrast=1.05:saturation=1.08,noise=alls=3:allf=t"),
+                    "-c:v", "libx264", "-preset", cfg.get("preset", "medium"), "-crf", str(cfg.get("crf", 19)), "-pix_fmt", "yuv420p", "-profile:v", "high",
+                    "-t", str(cfg["dur"]), video], check=True)
+    print("video encoded", flush=True)
+
 def mux(dest, with_music):
+    """voice (front, EQ + compression) + optional music ducked under the voice + sfx -> loudnorm -> AAC, video copied."""
     vo, music = cfg["vo"], cfg.get("music") if with_music else None
     vg = cfg.get("voGain", 1.6)
     I, TP = cfg.get("loudI", -14), cfg.get("loudTP", -1.5)
@@ -150,10 +160,8 @@ def mux(dest, with_music):
         chain += "[sc]anullsink;[2:a]aresample=44100,volume=0.9[fx];[vo][fx]amix=inputs=2:normalize=0"
         inputs += ["-i", os.path.join(work, "fx.wav")]
     chain += (",alimiter=limit=0.95,loudnorm=I=" + str(I) + ":TP=" + str(TP) + ":LRA=11,afade=t=out:st=" + str(cfg["dur"] - 1.3) + ":d=1.3[a]")
-    cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
-           "-framerate", str(fps), "-i", os.path.join(work, "f%05d.jpg")] + inputs + [
-           "-filter_complex", chain, "-map", "0:v", "-map", "[a]", "-vf", cfg.get("grade", "eq=contrast=1.05:saturation=1.08,noise=alls=3:allf=t"),
-           "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-pix_fmt", "yuv420p", "-profile:v", "high",
+    cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", video] + inputs + [
+           "-filter_complex", chain, "-map", "0:v", "-map", "[a]", "-c:v", "copy",
            "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-t", str(cfg["dur"]), "-movflags", "+faststart", dest]
     subprocess.run(cmd, check=True)
     print("wrote", dest, flush=True)

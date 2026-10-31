@@ -5,6 +5,9 @@
  "musicVol": 0.6,
  "voGain": 1.6,
  "capTop": 1400,
+ "preset": "medium",
+ "crf": 20,
+ "grade": "eq=contrast=1.05:saturation=1.08,noise=alls=2:allf=t",
  "text": {
   "lossL1": "Your competitor just got recommended by ChatGPT.",
   "lossL2": "You didn’t.",

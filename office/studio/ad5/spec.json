@@ -585,5 +585,8 @@
     "pop"
    ]
   ]
- }
+ },
+ "preset": "medium",
+ "crf": 20,
+ "grade": "eq=contrast=1.05:saturation=1.08,noise=alls=2:allf=t"
 }
