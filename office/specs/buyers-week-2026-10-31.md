@@ -18,9 +18,10 @@ free AI check, then $39.99 a month). Everything automated and ready.
   19 of 20 sent by Mara, 0 failed.
 - Free checks: 13 delivered since Oct 26 after calls, 0 replies, 0 clients. Calls 137: auto repair
   16 of 72 Interested (22%), roofing 0 of 23; 2 to 4 PM 18.5% vs 9 to 11 AM 7.4%.
-- Open: 5 bounced prospect addresses still need a working email (reply desk, since Oct 29). The
-  Lead Finder scheduled task FAILED Oct 31 at 4:23 PM Central (21:23 UTC) before it started (its cloud environment's
-  setup script runs `make me` and dies); it fails every run until the script is fixed.
+- Open: the Lead Finder scheduled task had never run (0 run-log lines): it fired in the Default
+  cloud environment, whose setup script runs `make me` and dies before the session starts. Moved
+  Oct 31 to the office's own environment (the one the reply desk runs in); the old task is off.
+  Old bad prospect addresses are closed, not chased (Grayson, Oct 31: "those are long gone").
 - New since today: every cold email is under 90 words, three short paragraphs, built by
   `office/tools/cold_email.py` with the card (specs/email-rules.md "Shape" and "The HTML version").
 
@@ -67,11 +68,9 @@ goal the week works for; it is not promised.
 ## Grayson's taps (the only things the crew may not do itself)
 1. Merge branch `claude/ai-agents-buyer-prep-l307ph` into main: the card image and these rules go
    live on the site and in the crews' clones only from main.
-2. Fix the cloud environment's setup script (it runs `make me`: "No rule to make target 'me'"):
-   Claude app → the environment's settings → setup script → remove or correct that line. Until
-   then the Lead Finder task errors before it starts.
-3. The 5 bounced prospect addresses: a working email on the next call, logged on the page.
-4. Film the Nova briefs when there is time; the office never waits on them.
+2. Film the Nova briefs when there is time; the office never waits on them.
+(The Default cloud environment's setup script still runs `make me` and dies; nothing in the office
+depends on it since Oct 31, so it is not a tap. Old bad prospect addresses are not a tap either.)
 
 ## What a win looks like on Nov 7 (measured, not promised)
 100 crew emails sent inside the gates (5 weekdays x 20) in the new shape, 0 bounces or spam
