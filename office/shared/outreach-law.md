@@ -43,8 +43,14 @@ Business-to-business cold email is legal in the US when every message:
   as personal, never anything from a private profile.
 
 ## Deliverability (how the Gmail account stays out of spam)
-- Plain text. No images, no attachments, no tracking pixels, no HTML templates.
-- One link at most (the site). No link shorteners.
+- A plain note with one card (Grayson, Oct 31, 2026). Every cold email goes out as plain text
+  PLUS the same words in simple HTML with ONE small hosted picture, the Ridgeline card
+  (https://ridgelinehq.github.io/assets/email/free-ai-check.png, under 70 KB, alt text, linked
+  to the site), built by office/tools/cold_email.py. That card is the one link. No tracking
+  pixels, no attachments, no other images, no background images, no buttons, no templates.
+- One link at most (the card, to the site). No link shorteners.
+- Watch it: if Sage finds a complaint, a spam flag or a bounce rate above the plain-text days
+  after the card went on, Echo drops the card the same run and writes the numbers in LESSONS.md.
 - Personal, specific, short. Spam filters and owners both read the first line.
 - Volume ramp: 10 a day for the first week, 15 the second, 20 after (shared/rules.md caps).
   Spread sends over the window, not all at once (the sending step pauses a few seconds between

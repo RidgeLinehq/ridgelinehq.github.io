@@ -64,12 +64,12 @@ checked what it says about him. That gap is the whole sale.
   for the year. If it doesn't earn that back, cancel by email."
 
 ## Follow-up cadence (3 touches, same thread)
-- Touch 1 (day 0): the loss + the free check + tiny ask. Under 120 words.
+- Touch 1 (day 0): the loss + the free check + tiny ask. Under 90 words.
 - Touch 2 (day +4): new value, not "just following up": one more specific finding ("I also
-  noticed your Yelp page isn't claimed; that's a 10-minute fix") + the ask again. Under 80.
+  noticed your Yelp page isn't claimed; that's a 10-minute fix") + the ask again. Under 60.
 - Touch 3 (day +8 or more): the break-up. Short, warm, takes the pressure off, leaves the door
   open: "I'll stop here. The check is still free if you want it; just reply 'send it'." Under
-  60 words. Break-up emails get replies because the pressure is gone.
+  45 words. Break-up emails get replies because the pressure is gone.
 - No reply after 3 = Not a fit. Never a fourth email. Never a guilt trip.
 
 ## Subject lines (short, specific, honest; test two patterns per week, Sage scores them)

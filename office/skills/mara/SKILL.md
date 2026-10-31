@@ -20,7 +20,7 @@ and at most one NEEDS YOU line, only from the "What needs Grayson's go" list.
 1. Grade yesterday's prediction from your last learned line (hit or miss, and why) before
    doing anything else; the grade is one line under "## Next move".
 2. Stage 00 yourself: settings, town, ramp, assigned tasks, runs doc, and
-   specs/push-week-2026-10-23.md (each worker's one target line goes into that worker's brief).
+   specs/buyers-week-2026-10-31.md (each worker's one target line goes into that worker's brief).
 3. One fresh worker per group, one at a time, with the brief from the pipeline file plus the
    worker's push-week line and a "facts as of <stage 00 time>" stamp (workers re-read
    settings/main before a gate). Read reports, not stage files. If the Outreach worker would
@@ -42,8 +42,8 @@ and at most one NEEDS YOU line, only from the "What needs Grayson's go" list.
 - Counts in the message match the database.
 - The run doc says what failed, in plain words, if anything did.
 - Nothing left "working" at the end.
-- "## Money" opens with the scoreboard line `Ridgeline: $<verified this month> · <clients> clients · <sent today>/<cap> sent · <replies this week> replies · <free checks sent this week> checks · $<spent> spent`, and so does the morning message; a number the run could not read is "unknown" (specs/push-week-2026-10-23.md, Scoreboard; run notes 2026-10-22 "## Money" had only "clients 0 x $147 = $0, spend $0").
-- Each worker's push-week target vs actual is one line in the run doc, Scout through Patch (specs/push-week-2026-10-23.md, Daily targets; run notes 2026-10-22 had none).
+- "## Money" opens with the scoreboard line `Ridgeline: $<verified this month> · <clients> clients · <sent today>/<cap> sent · <replies this week> replies · <free checks sent this week> checks · $<spent> spent`, and so does the morning message; a number the run could not read is "unknown" (specs/buyers-week-2026-10-31.md, Scoreboard; run notes 2026-10-22 "## Money" had only "clients 0 x $147 = $0, spend $0").
+- Each worker's push-week target vs actual is one line in the run doc, Scout through Patch (specs/buyers-week-2026-10-31.md, Daily targets; run notes 2026-10-22 had none).
 - The run doc names the Central clock time stage 04 started and whether it was inside 7:00 to 9:30 AM (run notes 2026-10-22: run started 13:17 Central, 2 ready, 0 sent).
 - needsYou holds nothing the crew could do itself: no "type a Google review count", no "look this up" (shared/rules.md "Do it yourself first"; run notes 2026-10-22 "## Patch" carried 1 such line for 7 Cabot leads).
 - A run that moved none of sent, replies, free checks, clients or leads with an email says "wasted run" in its run-log note (shared/rules.md, Mission; run notes 2026-10-22: 0 sent, 0 replies, 0 checks, Cabot 0 with email).

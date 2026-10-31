@@ -114,7 +114,8 @@ phone calls) or a login only he can renew. Everything else the crew finishes its
 ## Writing quality
 - Sounds like one person wrote it to one person. Their business name, their town, the specific
   thing we found about them. A line that could be sent to any business is a failed line.
-- Under 120 words for a first email, under 80 for a follow-up. One ask. One link at most.
+- Under 90 words for a first email, under 60 for a follow-up, under 45 for a break-up (Grayson,
+  Oct 31, 2026). Three short paragraphs at most. One ask. One link at most (the card).
 - No AI-sounding words (elevate, unlock, seamless, game-changer, dive into, leverage, synergy,
   look no further, in today's digital landscape), no emoji in emails, no exclamation walls, no
   ALL CAPS subjects, no "RE:" or "FWD:" tricks, no fake "I tried calling".
@@ -147,5 +148,5 @@ phone calls) or a login only he can renew. Everything else the crew finishes its
   disproved is deleted; an agent whose predictions missed 3 runs in a row gets its "Exact steps"
   rewritten from what actually worked (surgical edit, plan first). (c) Never "same as yesterday":
   if the number did not move, tomorrow's change is bigger, not smaller.
-- Standing order for the week: `specs/push-week-2026-10-23.md` (Mara reads it at stage 00 and
+- Standing order for the week: `specs/buyers-week-2026-10-31.md` (Mara reads it at stage 00 and
   08; every worker's brief carries its one line for that worker).

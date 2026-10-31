@@ -82,7 +82,7 @@ only, no prose padding.
 
 | Stage | Loads |
 |-------|-------|
-| 00 | `shared/repo.md` ("Getting it"), `specs/push-week-2026-10-23.md` (the week's standing order: Mara puts each worker's one line into its brief) |
+| 00 | `shared/repo.md` ("Getting it"), `specs/buyers-week-2026-10-31.md` (the week's standing order: Mara puts each worker's one line into its brief) |
 | 01 | `call_kit/kit.json` (niches), `office/tools/call_desk.py stock` output, `specs/offer.md` (Targets), `shared/outreach-law.md` ("Where leads come from"), `skills/scout/SKILL.md`, `LESSONS.md`, `references/database-fields.md` (leads) |
 | 02 | `references/scoring.md`, `skills/quinn/SKILL.md`, `specs/call-script.md` ("Ranking the call list"), `shared/gateway.md` |
 | 03 | `specs/sales-psychology.md`, `specs/offer.md`, `skills/parker/SKILL.md` |
@@ -90,7 +90,7 @@ only, no prose padding.
 | 05 | `specs/video-briefs.md`, `specs/sales-psychology.md` ("For Nova"), `skills/nova/SKILL.md` |
 | 06 | `office/tools/call_desk.py stats` output, `specs/email-rules.md` ("Reply handling"), `skills/sage/SKILL.md`, `LESSONS.md`, `references/database-fields.md` (lessons, workflow, clients) |
 | 07 | `skills/patch/SKILL.md`, `shared/repo.md` ("Write paths"), `references/database-fields.md` (health) |
-| 08 | `skills/mara/SKILL.md`, `shared/logging.md`, `shared/repo.md` ("Committing"), `specs/push-week-2026-10-23.md` ("Scoreboard": the money line and the day's targets vs actual) |
+| 08 | `skills/mara/SKILL.md`, `shared/logging.md`, `shared/repo.md` ("Committing"), `specs/buyers-week-2026-10-31.md` ("Scoreboard": the money line and the day's targets vs actual) |
 | 09 | `specs/client-delivery.md`, `specs/client-happiness.md`, `specs/quality.md`, `specs/lead-tracking.md`, `specs/offer.md` (The plans, Promises), `shared/gateway.md`, `shared/alerts.md`, `skills/echo/SKILL.md`, `skills/parker/SKILL.md`, `office/examples/welcome-pack.json` (every Monday, and before any Welcome Pack or report) |
 
 Do NOT load: every skill, every spec, `office/server/`, `office/page/`, `index.html` (Patch
