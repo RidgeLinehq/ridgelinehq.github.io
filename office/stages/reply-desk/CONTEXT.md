@@ -16,6 +16,7 @@ first emails and client work; this desk sends and answers, any day.
 | specs/lead-tracking.md | The lead log, Sending leads, "Did this lead turn into a job?" |
 | shared/alerts.md | all |
 | specs/quality.md | all (every client deliverable passes it; Speed) |
+| specs/buyers-week-2026-10-31.md | Buyer rules (the first 7 days of every paying client) |
 | specs/client-happiness.md | 1 (touchpoints: the 2-a-week rule, the formats), 2 (win emails), 4 (catch confusion), 5 (cancel = learn) |
 | specs/email-rules.md | QA gate 5 to 7, "Reply handling" |
 | shared/gateway.md | Protocol |

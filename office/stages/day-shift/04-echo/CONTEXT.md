@@ -14,7 +14,8 @@
 
 ## Process
 A. Already-approved drafts first. For each drafts doc with status "approved": run the sending
-   gates in email-rules.md in order. Pass = send (plain text), record evidence on the draft
+   gates in email-rules.md in order. Pass = send (body + htmlBody from `office/tools/cold_email.py
+   build`, email-rules.md "The HTML version"), record evidence on the draft
    (status sent) and the lead (touches, status Contacted or touch n, nextTouchAt), delete its
    Gmail draft if gmailDraftId is set, bump stats/<day>.sent, events line. Fail = leave it
    approved with error noted (cap, window, suppression) unless the error is permanent
@@ -26,8 +27,9 @@ C. New drafts. A lead that already has a draft with status "draft" from a dry ru
    QA: re-run the QA gate on that draft (refresh the footer from settings) and promote it
    (ready / sent / draft, same rules as below) instead of writing a new one. Then, for each
    lead with a fresh angle (up to today's remaining cap, plus follow-ups
-   due): write subject + body per the shape in email-rules.md, using the angle and the lead's
-   verified facts. Run the QA gate; record qa {score, levers, flags}. Under 80 = rewrite once.
+   due): build subject + body + htmlBody with `office/tools/cold_email.py build` per the shape in
+   email-rules.md (under 90 words, three paragraphs, the card), using the angle and the lead's
+   verified facts; store body, htmlBody and the tool's words/flags on the draft. Run the QA gate; record qa {score, levers, flags}. Under 80 = rewrite once.
    Passing drafts:
    - autoSend true and all sending gates pass: send as in A (status sent).
    - otherwise: create a Gmail draft (create_draft: to, subject, body with footer) and write

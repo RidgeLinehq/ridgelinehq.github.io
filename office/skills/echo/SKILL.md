@@ -9,8 +9,9 @@ updated: 2026-10-23
 
 ## Job
 Send the full daily cap of QA 80+ first emails inside the 7:00 to 9:30 AM Central window every
-weekday, each written as one owner to another from the angle and verified facts, each recorded
-with its Gmail message id, and 0 sends outside a gate; when autoSend is off the same drafts go
+weekday, each written as one owner to another from the angle and verified facts, each under 90
+words in three short paragraphs with the Ridgeline card (email-rules.md "Shape" and "The HTML
+version", Grayson, Oct 31, 2026), each recorded with its Gmail message id, and 0 sends outside a gate; when autoSend is off the same drafts go
 to Gmail as drafts for Grayson, and every opt-out is honored the same run. Judged every run on
 sent of cap, ready, Gmail ids and blockers (run doc "## Echo"), and at 20 sends on replies per
 100.
@@ -25,8 +26,10 @@ sent of cap, ready, Gmail ids and blockers (run doc "## Echo"), and at 20 sends 
    ready drafts Grayson sent himself (record evidence), then, when autoSend is true, ready
    drafts the crew wrote in an earlier run and could not send (blocker window or cap: refresh
    the footer, re-run the sending gates, send when they pass), then new drafts.
-4. Write each email from the angle and the verified facts: loss, detail, give, one ask, the
-   signature, the opt-out line, the mailing address. Under 120 / 80 / 60 words.
+4. Write each email from the angle and the verified facts as a spec for
+   `python3 office/tools/cold_email.py build <spec.json>` (loss, give, one ask, the signature, the
+   opt-out line, the mailing address; the tool adds the card and prints body + htmlBody). Under
+   90 / 60 / 45 words, three short paragraphs at most. Not ok = rewrite; never a hand-made body.
 5. QA gate: facts, specific, length, one ask, law, words, promises, levers. Score it. Under 80
    = rewrite once.
 6. Create the Gmail draft (autoSend off) or send (autoSend on, gates pass). Record ids. Outside
@@ -38,6 +41,9 @@ sent of cap, ready, Gmail ids and blockers (run doc "## Echo"), and at 20 sends 
 - Every sent draft has a gmailMessageId. Every ready draft has the footer.
 - Sent today <= cap; weekday; inside the window; nobody suppressed.
 - No two bodies alike. Reads like a person. No banned words, no emoji, one link at most.
+- Every cold email was built by cold_email.py and sent as body + htmlBody with the card (or,
+  when the tool said "card offline", without it and the run doc says so); under 90 / 60 / 45
+  words, three paragraphs at most (Grayson, Oct 31, 2026: 46 sends at 88 to 112 words, 0 replies).
 - The clock was read first: a send call happens only on a weekday between 7:00 and 9:30 AM
   Central; outside it every passing draft is "ready" with the blocker and the clock time
   written, and no send is attempted (email-rules.md sending gate 3; run notes 2026-10-22,
@@ -66,3 +72,4 @@ sent of cap, ready, Gmail ids and blockers (run doc "## Echo"), and at 20 sends 
 - 2026-10-28 (first test buy, Welcome Pack for a real Cabot AR plumber, not a client): a fresh grader scored the crew-style pack 71 (wrong "304 Google reviews" stat = True 0; a DO FIRST that told an emergency plumber to close weekends; review-link homework), then 88 after its fixes. The writer missed all three. Rules now in specs/quality.md "Rules from the first test buy"; golden example in office/examples/welcome-pack.json. Predict: next Monday's test buy scores 85+ on the first grade.
 - 2026-10-29 (run 0719): prediction (2 of 2 approved sent by Mara, 0 bounces by 10-29) HIT on bounces: mailer-daemon 2d shows 0 new (only the known luckysauto delay). 15 first touches approved (QA 82-88, 88-112 words), 0 sent by Echo per the task prompt; shortfall 5 of cap 20 because Qualified with email = 15. Gate 7: MX job ec-2026-10-29-6418 written before any send (10 domains), gmail.com already MX yes. Tomorrow: keep writing the job first, and put a "Ridgeline Local helps local businesses..." line in every body so the service-offer law check is explicit. Predict: 0 bounces of today's 15 by 10-30.
 - 2026-10-30 (run 0712): prediction (0 bounces of the 15 by 10-30) HIT: mailer-daemon 7d shows only the 4 known Oct 26 threads. 19 first touches approved (QA 80-88, 89-111 words), 0 sent by Echo per the task prompt; shortfall 1 of cap 20 because Qualified with email = 19. Gate 7: job ec-2026-10-30-9e96 (14 domains) written before any send; 5 addresses already MX yes. Lowest QA was Coweta (80) because its search check named no competitors. Tomorrow: when a lead has no named competitors and no AI check, ask Scout's enrichment for one site-specific gap before drafting. Predict: 0 bounces of today's 19 by 11-02.
+- 2026-10-31 (Grayson's order): 46 cold sends (38 crew, 8 hand) at 88 to 112 words of plain text, 0 replies. From the next send day every cold email is under 90 words, three short paragraphs, built by office/tools/cold_email.py with the Ridgeline card and sent as body + htmlBody (email-rules.md "Shape", "The HTML version"); Sage scores the first 20 new-shape sends apart from the 46 old ones. Predict: 20 of 20 built ok on the first try on 11-02 (follow-ups due go first), 0 bounces, first reply by 11-06.

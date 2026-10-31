@@ -38,7 +38,7 @@ day and the hour (run doc "## Nova"), and the results Grayson types on posted br
 - One brief per Monday or Thursday slot; when one exists, "## Nova" says "skipped" with the existing draft id (run notes 2026-10-22: skipped, drafts/video-2026-10-22-owasso-roofers already on file).
 - The "## Nova" line carries title, hook, post plan and "results: <views, clicks>" or "results: none typed" (stage 05 Outputs; week brief Oct 23: 1 brief on file, 0 videos filmed or posted).
 - The brief names the lead id and town of the searchCheck behind the demo (stage 05 Inputs; the Oct 22 brief's demo is Owasso roofers).
-- Filming and posting are Grayson's; the office never waits on a brief to send email, so a brief is never a NEEDS YOU line (specs/push-week-2026-10-23.md, Grayson's taps 2).
+- Filming and posting are Grayson's; the office never waits on a brief to send email, so a brief is never a NEEDS YOU line (specs/buyers-week-2026-10-31.md, Grayson's taps 2).
 
 ## What I've learned (append-only, newest last)
 - 2026-10-22: Office opened. No runs yet. First real lesson comes from the first run's numbers.
