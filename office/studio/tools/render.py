@@ -144,12 +144,13 @@ if not (mux_only and os.path.exists(video)):
     print("video encoded", flush=True)
 
 def mux(dest, with_music):
-    """voice (front, EQ + compression) + optional music ducked under the voice + sfx -> loudnorm -> AAC, video copied."""
+    """voice (front, EQ + compression) + optional music ducked under the voice + sfx -> two-pass loudnorm -> AAC, video copied."""
     vo, music = cfg["vo"], cfg.get("music") if with_music else None
     vg = cfg.get("voGain", 1.6)
-    I, TP = cfg.get("loudI", -14), cfg.get("loudTP", -1.5)
+    I = cfg.get("loudI", -14) if music else cfg.get("loudI_voice", cfg.get("loudI", -14) + 1)  # no music bed: pauses are silent, aim a touch hotter
+    TP = cfg.get("loudTP", -1.5)
     chain = ("[1:a]aresample=44100,highpass=f=70,equalizer=f=140:t=q:w=1:g=2.5,equalizer=f=3200:t=q:w=1.2:g=3,equalizer=f=9000:t=q:w=1:g=1.5,"
-             "acompressor=threshold=-20dB:ratio=3:attack=5:release=120,volume=" + str(vg) + ",asplit=2[vo][sc];")
+             "acompressor=threshold=-20dB:ratio=3:attack=5:release=120,volume=" + str(vg) + ",apad=whole_dur=" + str(cfg["dur"] + 0.5) + ",asplit=2[vo][sc];")  # padded so the sidechain (and the music under it) lasts the whole cut
     inputs = ["-i", vo]
     if music:
         chain += ("[2:a]aresample=44100,volume=" + str(cfg.get("musicVol", 0.55)) + "[mu];"
@@ -159,12 +160,20 @@ def mux(dest, with_music):
     else:
         chain += "[sc]anullsink;[2:a]aresample=44100,volume=0.9[fx];[vo][fx]amix=inputs=2:normalize=0"
         inputs += ["-i", os.path.join(work, "fx.wav")]
-    chain += (",alimiter=limit=0.95,loudnorm=I=" + str(I) + ":TP=" + str(TP) + ":LRA=11,afade=t=out:st=" + str(cfg["dur"] - 1.3) + ":d=1.3[a]")
+    chain += ",alimiter=limit=0.95,atrim=0:" + str(cfg["dur"])
+    ln = "loudnorm=I=" + str(I) + ":TP=" + str(TP) + ":LRA=11"
+    # pass 1: measure, so pass 2 can apply a linear (transparent) gain that lands on the target
+    r = subprocess.run(["ffmpeg", "-hide_banner", "-i", video] + inputs + ["-filter_complex", chain + "," + ln + ":print_format=json[a]", "-map", "[a]", "-f", "null", "-"],
+                       capture_output=True, text=True)
+    m = json.loads(r.stderr[r.stderr.rfind("{"):r.stderr.rfind("}") + 1])
+    ln2 = (ln + ":measured_I=" + m["input_i"] + ":measured_TP=" + m["input_tp"] + ":measured_LRA=" + m["input_lra"] + ":measured_thresh=" + m["input_thresh"]
+           + ":offset=" + m["target_offset"] + ":linear=true")
+    full = chain + "," + ln2 + ",afade=t=out:st=" + str(cfg["dur"] - 1.3) + ":d=1.3[a]"
     cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", video] + inputs + [
-           "-filter_complex", chain, "-map", "0:v", "-map", "[a]", "-c:v", "copy",
+           "-filter_complex", full, "-map", "0:v", "-map", "[a]", "-c:v", "copy",
            "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-t", str(cfg["dur"]), "-movflags", "+faststart", dest]
     subprocess.run(cmd, check=True)
-    print("wrote", dest, flush=True)
+    print("wrote", dest, "(measured", m["input_i"], "LUFS -> target", I, ")", flush=True)
 
 if variants:
     for v in variants:
