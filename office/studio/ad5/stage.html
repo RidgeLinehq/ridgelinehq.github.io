@@ -282,7 +282,7 @@ window.render=function(t){
   $('prog').style.width=(t/DATA.dur*100)+'%';
 
   // ---- HOOK text (loss / question)
-  if(HOOK!=='demo' && sceneStyle('sHook',t,0,T.hook_end,'cut','through',.01,.3)){
+  if(HOOK!=='demo' && sceneStyle('sHook',t,0,T.hook_end,'cut','through',.01,.22)){
     W1.forEach((_,i)=>{const t0=T.hookWords[0]+i*T.hookWords[1];const s=back(lin(t,t0,t0+.18));const e=$('hw'+i);e.style.opacity=clamp(s*1.5);e.style.transform=`translateY(${(1-s)*40}px) scale(${.7+.3*s})`});
     const s=back(lin(t,T.hookSlam,T.hookSlam+.3)); const h2=$('hl2');
     h2.style.opacity=clamp(lin(t,T.hookSlam,T.hookSlam+.08)*2);

@@ -1,0 +1,432 @@
+{
+ "dur": 32.2,
+ "vo": "office/studio/media/ad5/vo-demo.mp3",
+ "music": "office/studio/media/ad5/music.wav",
+ "musicVol": 0.6,
+ "voGain": 1.6,
+ "capTop": 1400,
+ "text": {
+  "lossL1": "Your competitor just got recommended by ChatGPT.",
+  "lossL2": "You didn’t.",
+  "qL1": "When somebody asks ChatGPT who to call…",
+  "qL2": "is it you?"
+ },
+ "tl": {
+  "hook": "demo",
+  "hookWords": [
+   0,
+   0
+  ],
+  "hookSlam": 99,
+  "hook_end": 0,
+  "card_in": 0,
+  "qType": [
+   -0.5,
+   1.2
+  ],
+  "think": [
+   1.3,
+   1.95
+  ],
+  "names": [
+   2.05,
+   2.25,
+   2.45
+  ],
+  "you": 3.15,
+  "card_end": 5.652,
+  "why_in": 5.852,
+  "tiles": [
+   6.052,
+   7.402
+  ],
+  "thin": 8.502,
+  "other": 10.802,
+  "why_end": 11.902,
+  "phone_in": 11.902,
+  "scroll": [
+   [
+    13.402,
+    14.402,
+    "top",
+    "proof"
+   ],
+   [
+    16.002,
+    17.002,
+    "proof",
+    "what"
+   ],
+   [
+    18.402,
+    19.302,
+    "what",
+    "form"
+   ],
+   [
+    23.702,
+    24.302,
+    "form",
+    "btn"
+   ]
+  ],
+  "tapBiz": 19.452,
+  "typeBiz": [
+   19.552,
+   20.052
+  ],
+  "tapTown": 20.552,
+  "typeTown": [
+   20.652,
+   21.052
+  ],
+  "tapServ": 21.652,
+  "typeServ": [
+   21.752,
+   22.152
+  ],
+  "tapEmail": 22.702,
+  "typeEmail": [
+   22.802,
+   23.502
+  ],
+  "tapBtn": 25.702,
+  "done": 26.002,
+  "phone_end": 27.302,
+  "end_in": 27.402,
+  "chips": [
+   [
+    13.702,
+    "Found on Google",
+    "gold"
+   ],
+   [
+    15.102,
+    "AI recommended",
+    "gold"
+   ],
+   [
+    18.002,
+    "Easy reviews",
+    "gold"
+   ],
+   [
+    19.452,
+    "No contract"
+   ],
+   [
+    20.602,
+    "No password"
+   ],
+   [
+    21.702,
+    "Cancel anytime"
+   ],
+   [
+    24.552,
+    "No card needed"
+   ]
+  ],
+  "cuts": [
+   5.752,
+   11.902,
+   27.402
+  ]
+ },
+ "captions": [
+  [
+   3.29,
+   3.95,
+   "*Not* *even* mentioned."
+  ],
+  [
+   5.102,
+   8.002,
+   "*AI* leans on your | *Google* *profile* | and *reviews.*"
+  ],
+  [
+   8.512,
+   9.292,
+   "Thin profile,"
+  ],
+  [
+   9.692,
+   10.542,
+   "few reviews,"
+  ],
+  [
+   10.802,
+   11.712,
+   "they name | *somebody* *else.*"
+  ],
+  [
+   12.142,
+   15.892,
+   "*Ridgeline* *Local* | gets you found | on *Google* | and recommended | by *AI,*"
+  ],
+  [
+   16.332,
+   18.942,
+   "and makes it easy | for happy customers | to leave *reviews.*"
+  ],
+  [
+   19.382,
+   20.122,
+   "*No* *contract.*"
+  ],
+  [
+   20.552,
+   21.242,
+   "*No* *password.*"
+  ],
+  [
+   21.652,
+   22.412,
+   "Cancel *anytime.*"
+  ],
+  [
+   22.932,
+   24.242,
+   "*Free* AI check | first,"
+  ],
+  [
+   24.542,
+   25.022,
+   "*no* *card.*"
+  ],
+  [
+   25.432,
+   27.182,
+   "What's *ChatGPT* say | about *you?*"
+  ],
+  [
+   27.582,
+   28.242,
+   "Link in *bio.*"
+  ],
+  [
+   28.732,
+   29.692,
+   "*Free* *AI* *check.*"
+  ],
+  [
+   30.122,
+   30.822,
+   "Takes about | a *minute.*"
+  ]
+ ],
+ "sfx": [
+  [
+   0.05,
+   "tick"
+  ],
+  [
+   0.16,
+   "tick"
+  ],
+  [
+   0.27,
+   "tick"
+  ],
+  [
+   0.38,
+   "tick"
+  ],
+  [
+   0.49,
+   "tick"
+  ],
+  [
+   0.6,
+   "tick"
+  ],
+  [
+   0.71,
+   "tick"
+  ],
+  [
+   0.82,
+   "tick"
+  ],
+  [
+   0.93,
+   "tick"
+  ],
+  [
+   1.04,
+   "tick"
+  ],
+  [
+   1.15,
+   "tick"
+  ],
+  [
+   1.25,
+   "pop"
+  ],
+  [
+   2.05,
+   "pop"
+  ],
+  [
+   2.25,
+   "pop"
+  ],
+  [
+   2.45,
+   "pop"
+  ],
+  [
+   2.7,
+   "riser"
+  ],
+  [
+   3.15,
+   "impact"
+  ],
+  [
+   5.652,
+   "whoosh"
+  ],
+  [
+   6.052,
+   "pop"
+  ],
+  [
+   7.402,
+   "pop"
+  ],
+  [
+   8.502,
+   "thud"
+  ],
+  [
+   9.702,
+   "thud"
+  ],
+  [
+   10.802,
+   "pop"
+  ],
+  [
+   11.852,
+   "whoosh"
+  ],
+  [
+   13.702,
+   "pop"
+  ],
+  [
+   15.102,
+   "pop"
+  ],
+  [
+   18.002,
+   "pop"
+  ],
+  [
+   19.452,
+   "pop"
+  ],
+  [
+   19.452,
+   "tap"
+  ],
+  [
+   19.602,
+   "tick"
+  ],
+  [
+   19.702,
+   "tick"
+  ],
+  [
+   19.802,
+   "tick"
+  ],
+  [
+   19.902,
+   "tick"
+  ],
+  [
+   20.552,
+   "tap"
+  ],
+  [
+   20.602,
+   "pop"
+  ],
+  [
+   20.702,
+   "tick"
+  ],
+  [
+   20.802,
+   "tick"
+  ],
+  [
+   20.902,
+   "tick"
+  ],
+  [
+   21.652,
+   "tap"
+  ],
+  [
+   21.702,
+   "pop"
+  ],
+  [
+   21.802,
+   "tick"
+  ],
+  [
+   21.902,
+   "tick"
+  ],
+  [
+   22.002,
+   "tick"
+  ],
+  [
+   22.702,
+   "tap"
+  ],
+  [
+   22.852,
+   "tick"
+  ],
+  [
+   22.952,
+   "tick"
+  ],
+  [
+   23.052,
+   "tick"
+  ],
+  [
+   23.152,
+   "tick"
+  ],
+  [
+   23.252,
+   "tick"
+  ],
+  [
+   24.552,
+   "pop"
+  ],
+  [
+   25.702,
+   "tap"
+  ],
+  [
+   26.002,
+   "ding"
+  ],
+  [
+   27.302,
+   "whoosh"
+  ]
+ ]
+}
