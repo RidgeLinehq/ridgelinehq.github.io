@@ -46,13 +46,15 @@ def chunks(captions):
 data = {"dur": cfg["dur"], "captions": chunks(cfg["captions"]), "tl": cfg.get("tl", {}), "bgs": cfg.get("bgs", []),
         "hook": cfg.get("hook", ""), "text": cfg.get("text", {})}
 
+# no deferred rasterization: a scaled iframe tile that is not painted yet shows up as a hole in one frame
+FLAGS = ["--disable-gpu-vsync", "--force-color-profile=srgb", "--disable-checker-imaging", "--disable-partial-raster", "--disable-lcd-text"]
 def launch(p):
     try:
-        return p.chromium.launch(args=["--disable-gpu-vsync", "--force-color-profile=srgb"])
+        return p.chromium.launch(args=FLAGS)
     except Exception as e:
         exe = os.environ.get("CHROMIUM_PATH") or "/opt/pw-browsers/chromium"
         if not os.path.exists(exe): raise
-        return p.chromium.launch(executable_path=exe, args=["--disable-gpu-vsync", "--force-color-profile=srgb"])
+        return p.chromium.launch(executable_path=exe, args=FLAGS)
 
 if not mux_only:
     class Q(http.server.SimpleHTTPRequestHandler):
@@ -70,6 +72,7 @@ if not mux_only:
         pg.goto(stage_url); pg.evaluate("window.ready"); pg.wait_for_timeout(800)
         for i, t in enumerate(times):
             pg.evaluate(f"window.render({t})")
+            pg.evaluate("new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))")  # let the compositor commit the frame
             name = f"still-{t:05.2f}.png" if only else f"f{i:05d}.jpg"
             if only: pg.screenshot(path=os.path.join(work, name))
             else: pg.screenshot(path=os.path.join(work, name), type="jpeg", quality=93)

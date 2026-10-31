@@ -2,7 +2,7 @@
  "music": "office/studio/media/ad5/music.wav",
  "musicVol": 0.6,
  "voGain": 1.6,
- "capTop": 1400,
+ "capTop": 1320,
  "text": {
   "lossL1": "Your competitor just got recommended by ChatGPT.",
   "lossL2": "You didn’t.",

@@ -4,7 +4,7 @@
  "music": "office/studio/media/ad5/music.wav",
  "musicVol": 0.6,
  "voGain": 1.6,
- "capTop": 1400,
+ "capTop": 1320,
  "preset": "medium",
  "crf": 20,
  "grade": "eq=contrast=1.05:saturation=1.08,noise=alls=2:allf=t",
