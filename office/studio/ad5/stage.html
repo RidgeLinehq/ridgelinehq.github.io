@@ -1,0 +1,366 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:"Inter Tight";src:url(/office/studio/media/fonts/InterTight.ttf);font-weight:100 900}
+@font-face{font-family:"Instrument Serif";src:url(/office/studio/media/fonts/InstrumentSerif-Regular.ttf)}
+@font-face{font-family:"Instrument Serif";font-style:italic;src:url(/office/studio/media/fonts/InstrumentSerif-Italic.ttf)}
+:root{--navy:#0b141d;--navy2:#13212f;--orange:#ff8a2a;--orange2:#ffb067;--gold:#f3dca6;--gold2:#e2c27e;--ink:#0b141d;--muted:#66727f;--paper:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--navy)}
+body{font-family:"Inter Tight",system-ui,sans-serif;color:#fff;position:relative;perspective:2400px}
+#bg{position:absolute;inset:-200px;background:radial-gradient(120% 80% at 50% 0%,#17283a 0%,var(--navy) 60%,#070d14 100%)}
+#grid{position:absolute;left:-300px;top:-300px;width:1680px;height:2520px;opacity:.16;color:#9fb4c8}
+.blob{position:absolute;border-radius:50%;filter:blur(110px);mix-blend-mode:screen}
+#b1{width:980px;height:980px;background:rgba(255,138,42,.30)}
+#b2{width:900px;height:900px;background:rgba(60,120,220,.26)}
+#b3{width:760px;height:760px;background:rgba(243,220,166,.14)}
+#fx{position:absolute;inset:0}
+#sweep{position:absolute;top:-400px;width:420px;height:2800px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.20),transparent);transform:rotate(18deg);opacity:0;mix-blend-mode:screen}
+#vig{position:absolute;inset:0;background:radial-gradient(130% 90% at 50% 45%,transparent 55%,rgba(0,0,0,.6) 100%)}
+.scene{position:absolute;inset:0;opacity:0;transform-origin:50% 45%}
+.eyebrow{position:absolute;left:0;right:0;text-align:center;font:700 28px/1 "Inter Tight";letter-spacing:.22em;text-transform:uppercase;color:var(--gold);text-shadow:0 2px 12px rgba(0,0,0,.6)}
+.eyebrow i{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--orange);margin:0 14px 2px 0;vertical-align:middle;box-shadow:0 0 18px var(--orange)}
+.card{background:var(--paper);border-radius:46px;color:var(--ink);box-shadow:0 60px 140px rgba(0,0,0,.6)}
+/* ---------- hook text ---------- */
+#hookbox{position:absolute;left:70px;right:70px;top:430px}
+#hl1{font:800 112px/1.06 "Inter Tight";letter-spacing:-.03em;text-shadow:0 10px 40px rgba(0,0,0,.55)}
+#hl1 .w{display:inline-block;margin-right:.24em;transform-origin:50% 90%}
+#hl1 .w.ai{color:var(--gold)}
+#hl2{margin-top:64px;font:900 150px/0.95 "Inter Tight";letter-spacing:-.05em;color:var(--orange);text-shadow:0 0 60px rgba(255,138,42,.45),0 16px 50px rgba(0,0,0,.6);opacity:0;transform-origin:30% 50%;white-space:nowrap}
+#hl2.small{font-size:128px}
+#hookline{position:absolute;left:70px;height:14px;width:0;background:var(--orange);border-radius:7px;box-shadow:0 0 24px rgba(255,138,42,.7)}
+/* ---------- answer card ---------- */
+#cardwrap{position:absolute;left:66px;right:66px;top:330px;padding:5px;border-radius:52px}
+.chat{padding:52px 54px 54px;position:relative}
+.chat .head{display:flex;align-items:center;gap:18px;font:700 36px "Inter Tight";margin-bottom:32px}
+.chat .dot{width:22px;height:22px;border-radius:50%;background:#2fbf71;box-shadow:0 0 0 8px rgba(47,191,113,.18)}
+.chat .head small{margin-left:auto;font:500 24px "Inter Tight";color:var(--muted)}
+.q{margin-left:auto;max-width:92%;background:#eef1f6;border-radius:34px 34px 8px 34px;padding:28px 36px;font:500 42px/1.25 "Inter Tight";min-height:112px}
+.caret{display:inline-block;width:4px;height:44px;background:var(--ink);vertical-align:-8px;margin-left:4px}
+.dots{display:flex;gap:12px;margin:0 0 0 6px;opacity:0;max-height:0;overflow:hidden}
+.dots i{width:16px;height:16px;border-radius:50%;background:#b5bcc6;display:block}
+.a{margin-top:0;font:500 34px/1.3 "Inter Tight";color:var(--muted);opacity:0;max-height:0;overflow:hidden}
+.li{display:flex;gap:24px;align-items:center;padding:20px 0;border-top:2px solid #e8e4da;font:700 44px/1.15 "Inter Tight";opacity:0;max-height:0;overflow:hidden}
+.li b{font-family:"Instrument Serif",serif;font-weight:400;color:#a8843f;font-size:48px;width:60px;flex:none}
+.li.more{font:500 28px "Inter Tight";color:#9aa3ad;padding:14px 0 0;border-top:0;opacity:0;max-height:0;overflow:hidden}
+#you{margin-top:0;background:var(--orange);color:#fff;border-radius:26px;padding:30px 34px;font:900 50px/1.1 "Inter Tight";display:flex;align-items:center;gap:22px;opacity:0;position:relative;box-shadow:0 20px 50px rgba(255,138,42,.35)}
+#you .x{width:70px;height:70px;border-radius:50%;background:#fff;color:var(--orange);display:grid;place-items:center;font:900 48px "Inter Tight";flex:none}
+#you span.sm{display:block;font:600 26px/1.1 "Inter Tight";opacity:.9;margin-top:6px;letter-spacing:.02em}
+.ring{position:absolute;left:0;top:0;width:100%;height:100%;border-radius:26px;border:4px solid var(--orange);opacity:0;pointer-events:none}
+/* ---------- why ---------- */
+#why{position:absolute;left:60px;right:60px;top:330px;height:960px}
+.tile{position:absolute;top:0;width:470px;height:560px;padding:34px 32px;border-radius:40px;transform-origin:50% 100%}
+#tG{left:0}#tR{right:0}
+.tile h4{font:800 36px/1.05 "Inter Tight";display:flex;align-items:center;gap:14px;margin-bottom:26px}
+.tile h4 svg{width:40px;height:40px;flex:none}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.pgrid i{display:block;height:92px;border-radius:14px;background:linear-gradient(135deg,#d7dde6,#b9c3d0)}
+.bar{height:22px;border-radius:11px;background:#d8dde4;margin:16px 0;transform-origin:0 50%}
+.bar.s{width:70%}.bar.m{width:88%}
+.rv{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:2px solid #ece8de}
+.rv .av{width:46px;height:46px;border-radius:50%;background:#c9d0d8;flex:none}
+.rv .st{font:700 26px "Inter Tight";color:#e3a43c;letter-spacing:2px}
+.rv .ln{flex:1;height:16px;border-radius:8px;background:#dfe3e8}
+.stamp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-9deg);border:8px solid var(--orange);color:var(--orange);background:rgba(255,253,248,.92);padding:10px 30px;border-radius:18px;font:900 74px/1 "Inter Tight";letter-spacing:.04em;opacity:0;white-space:nowrap}
+#arrows{position:absolute;left:0;right:0;top:600px;height:140px}
+#arrows svg{position:absolute;left:0;top:0;width:960px;height:140px;overflow:visible}
+#chip{position:absolute;left:50%;top:760px;width:760px;margin-left:-380px;height:170px;border-radius:40px;background:#fff;color:var(--ink);display:flex;align-items:center;gap:26px;padding:0 40px;font:800 44px/1.1 "Inter Tight";box-shadow:0 40px 100px rgba(0,0,0,.5);transform-origin:50% 50%}
+#chip .gdot{width:28px;height:28px;border-radius:50%;background:#2fbf71;flex:none;box-shadow:0 0 0 10px rgba(47,191,113,.16)}
+#chip .ck{margin-left:auto;width:64px;height:64px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font:900 40px "Inter Tight";flex:none;opacity:0}
+#chip small{display:block;font:600 24px/1 "Inter Tight";color:var(--muted);margin-top:8px;letter-spacing:.06em;text-transform:uppercase}
+/* ---------- phone ---------- */
+#phone{position:absolute;left:10.5px;top:200px;width:699px;height:1480px;border-radius:92px;background:linear-gradient(145deg,#2a2f38,#0b0d11);padding:14px;box-shadow:0 0 0 3px #3a414c,inset 0 0 0 2px #555,0 80px 160px rgba(0,0,0,.7);opacity:0;transform-origin:50% 0%}
+#screen{width:671px;height:1452px;border-radius:80px;overflow:hidden;position:relative;background:#fff}
+#site{width:375px;height:772px;border:0;transform:scale(1.7893);transform-origin:0 0;position:absolute;left:0;top:70px}
+#sbar{position:absolute;left:0;right:0;top:0;height:70px;background:#fffdf8;display:flex;align-items:center;justify-content:space-between;padding:6px 64px 0 70px;font:600 30px "Inter Tight";color:#111;z-index:4}
+#island{position:absolute;top:24px;left:50%;width:190px;height:54px;margin-left:-95px;background:#000;border-radius:30px;z-index:5}
+#glare{position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.16) 45%,transparent 55%);z-index:6;pointer-events:none}
+#tap{position:absolute;width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;background:rgba(255,138,42,.55);border:7px solid #fff;box-shadow:0 6px 24px rgba(0,0,0,.35);opacity:0;z-index:20}
+#ripple{position:absolute;width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;border:6px solid var(--orange2);opacity:0;z-index:19}
+#brand{position:absolute;left:0;right:0;top:92px;display:flex;align-items:center;justify-content:center;gap:22px;opacity:0}
+#brand span{font:800 46px "Inter Tight";letter-spacing:.16em}
+.chips{position:absolute;left:655px;top:440px;width:370px}
+.chip{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.22);backdrop-filter:blur(10px);border-radius:26px;padding:18px 22px;font:800 32px/1.05 "Inter Tight";margin-bottom:18px;opacity:0;transform-origin:0 50%;box-shadow:0 20px 60px rgba(0,0,0,.35);white-space:nowrap}
+.chip i{width:42px;height:42px;border-radius:50%;background:var(--orange);display:grid;place-items:center;flex:none;font:900 26px "Inter Tight";font-style:normal;color:#fff}
+.chip.gold i{background:var(--gold);color:var(--ink)}
+/* ---------- end card ---------- */
+#endbox{position:absolute;left:0;right:0;top:300px;text-align:center}
+.logo{display:flex;align-items:center;justify-content:center;gap:24px}
+.logo span{font:800 44px "Inter Tight";letter-spacing:.2em}
+#free{margin-top:84px;font:900 224px/0.9 "Inter Tight";letter-spacing:-.05em;color:var(--orange);text-shadow:0 0 80px rgba(255,138,42,.45),0 20px 60px rgba(0,0,0,.6)}
+#free small{display:block;font:900 142px/0.95 "Inter Tight";letter-spacing:-.04em;color:#fff;text-shadow:0 14px 50px rgba(0,0,0,.6)}
+#arrowup{margin:44px auto 0;width:140px;height:140px}
+#bio{margin-top:8px;font:800 80px/1 "Inter Tight";letter-spacing:-.02em}
+#url{margin-top:30px;display:inline-block;padding:22px 46px;border-radius:99px;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.28);font:700 44px/1 "Inter Tight";letter-spacing:.01em}
+#prices{margin-top:44px;font:600 36px/1.4 "Inter Tight";color:#cfd8e2}
+#prices b{color:#fff;font-weight:800}
+#prices .nc{display:block;margin-top:8px;color:var(--gold);font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:32px}
+/* ---------- captions ---------- */
+#cap{position:absolute;left:70px;right:150px;top:1400px;text-align:center;z-index:50;font:900 84px/1.08 "Inter Tight";letter-spacing:-.01em;color:#fff;
+ text-shadow:0 4px 0 rgba(0,0,0,.5),0 12px 34px rgba(0,0,0,.75);-webkit-text-stroke:3px rgba(5,8,15,.9);paint-order:stroke fill}
+#cap .w{display:inline-block;margin:0 .13em;transform-origin:50% 80%}
+#cap .hl{color:var(--gold)}
+#prog{position:absolute;left:0;top:0;height:10px;background:linear-gradient(90deg,var(--orange),var(--orange2));z-index:70;box-shadow:0 0 20px rgba(255,138,42,.8)}
+</style></head>
+<body>
+<div id="bg"></div>
+<svg id="grid" viewBox="0 0 720 1080" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="1.1">
+  <g id="gl"></g>
+</svg>
+<div class="blob" id="b1"></div><div class="blob" id="b2"></div><div class="blob" id="b3"></div>
+<canvas id="fx" width="1080" height="1920"></canvas>
+<div id="sweep"></div><div id="vig"></div>
+
+<!-- HOOK TEXT (loss / question) -->
+<div class="scene" id="sHook">
+  <div class="eyebrow" style="top:300px" id="hookEyebrow"><i></i>Real answer · checked Oct 28, 2026</div>
+  <div id="hookbox"><div id="hl1"></div><div id="hl2"></div></div>
+  <div id="hookline"></div>
+</div>
+
+<!-- ANSWER CARD -->
+<div class="scene" id="sCard">
+  <div class="eyebrow" style="top:232px"><i></i>Example · real answer · checked Oct 28, 2026</div>
+  <div id="cardwrap"><div class="card chat">
+    <div class="head"><div class="dot"></div>ChatGPT<small>web search on</small></div>
+    <div class="q"><span id="qt"></span><span class="caret" id="caret"></span></div>
+    <div class="dots" id="dots"><i></i><i></i><i></i></div>
+    <div class="a" id="aintro">For Dalton, I’d start here:</div>
+    <div id="alist"></div>
+    <div id="you"><div class="x">✕</div><div>Your business<span class="sm">not mentioned</span></div><div class="ring" id="r1"></div><div class="ring" id="r2"></div></div>
+  </div></div>
+</div>
+
+<!-- WHY -->
+<div class="scene" id="sWhy">
+  <div class="eyebrow" style="top:232px"><i></i>What AI reads before it answers</div>
+  <div id="why">
+    <div class="card tile" id="tG">
+      <h4><svg viewBox="0 0 48 48" fill="#ff8a2a"><path d="M24 44s-15-14.2-15-25a15 15 0 0 1 30 0c0 10.8-15 25-15 25Zm0-19a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z"/></svg>Your Google profile</h4>
+      <div class="pgrid"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="bar m"></div><div class="bar s"></div><div class="bar m"></div><div class="bar s"></div>
+      <div class="stamp" id="stG">THIN</div>
+    </div>
+    <div class="card tile" id="tR">
+      <h4><svg viewBox="0 0 24 24" fill="#e3a43c"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9Z"/></svg>Your reviews</h4>
+      <div id="rvs"></div>
+      <div class="stamp" id="stR">FEW</div>
+    </div>
+    <div id="arrows"><svg viewBox="0 0 960 140"><path id="arL" d="M235 0 C235 90, 480 60, 480 140" stroke="#ff8a2a" stroke-width="8" fill="none" stroke-linecap="round"/><path id="arR" d="M725 0 C725 90, 480 60, 480 140" stroke="#ff8a2a" stroke-width="8" fill="none" stroke-linecap="round"/></svg></div>
+    <div id="chip"><div class="gdot"></div><div id="chipTxt">ChatGPT reads these<small>then picks who to name</small></div><div class="ck" id="chipCk">✓</div></div>
+  </div>
+</div>
+
+<!-- PHONE with the real site -->
+<div id="brand"><svg width="76" height="52" viewBox="0 0 60 40"><path d="M2 38 L22 10 L32 22 L40 12 L58 38Z" fill="#fff"/><path d="M22 10 L28 18.5 L24 18 L19 14Z" fill="#ff8a2a"/><path d="M40 12 L46 20.5 L42 20 L37 16Z" fill="#ff8a2a"/></svg><span>RIDGELINE LOCAL</span></div>
+<div id="phone"><div id="screen"><div id="island"></div><div id="sbar"><span>9:41</span><span style="letter-spacing:4px">▮▮▮ ◉ ▭</span></div><iframe id="site" src="/index.html"></iframe><div id="ripple"></div><div id="tap"></div><div id="glare"></div></div></div>
+<div class="chips" id="chips"></div>
+
+<!-- END CARD -->
+<div class="scene" id="sEnd">
+  <div id="endbox">
+    <div class="logo"><svg width="96" height="64" viewBox="0 0 60 40"><path d="M2 38 L22 10 L32 22 L40 12 L58 38Z" fill="#fff"/><path d="M22 10 L28 18.5 L24 18 L19 14Z" fill="#ff8a2a"/><path d="M40 12 L46 20.5 L42 20 L37 16Z" fill="#ff8a2a"/></svg><span>RIDGELINE LOCAL</span></div>
+    <div id="free">FREE<small>AI CHECK</small></div>
+    <svg id="arrowup" viewBox="0 0 100 100" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"><path d="M50 88V16M22 44l28-28 28 28"/></svg>
+    <div id="bio">Link in bio</div>
+    <div id="url">ridgelinehq.github.io</div>
+    <div id="prices">Starter <b>$39.99</b> · Growth <b>$75</b> · Pro <b>$125</b><span class="nc">No contract</span></div>
+  </div>
+</div>
+
+<div id="cap"></div>
+<div id="prog"></div>
+
+<script>
+const DATA = window.AD_DATA || {dur:32,captions:[],tl:{},text:{}}, T = DATA.tl, TX = DATA.text || {};
+const HOOK = T.hook || 'loss';
+// The real check: office/gw/out/aicheck-2026-10-28-dalton-7915.json (ChatGPT, web search on, 2026-10-28)
+const Q = "Who are the best auto repair shops in Dalton, GA?";
+const NAMES = ["Tate Automotive", "Taylor’s Tire & Service", "Elite Auto Repair"];
+const HOOKS = {
+  loss: {l1: TX.lossL1 || "Your competitor just got recommended by ChatGPT.", l2: TX.lossL2 || "You didn’t."},
+  question: {l1: TX.qL1 || "When somebody asks ChatGPT who to call…", l2: TX.qL2 || "is it you?"}
+};
+const $ = id => document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const lin=(t,a,b)=>clamp((t-a)/(b-a));
+const eo=x=>1-Math.pow(1-x,3), ex=x=>x>=1?1:1-Math.pow(2,-10*x), eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const back=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const esc=s=>s.replace(/&/g,'&amp;');
+
+// build static content
+$('alist').innerHTML=NAMES.map((n,i)=>`<div class="li" id="a${i}"><b>0${i+1}</b>${esc(n)}</div>`).join('')+`<div class="li more" id="amore">…and 1 more</div>`;
+$('rvs').innerHTML=[0,1,2,3,4].map(i=>`<div class="rv" id="rv${i}"><div class="av"></div><div class="st">★★★★★</div><div class="ln"></div></div>`).join('');
+const H = HOOKS[HOOK] || HOOKS.loss;
+const W1 = H.l1.split(' ');
+$('hl1').innerHTML=W1.map((w,i)=>`<span class="w${/chatgpt/i.test(w)?' ai':''}" id="hw${i}">${w}</span>`).join('');
+$('hl2').textContent=H.l2; if(H.l2.length>13) $('hl2').classList.add('small');
+const CHIPS = (T.chips||[]);
+$('chips').innerHTML=CHIPS.map((c,i)=>`<div class="chip${c[2]==='gold'?' gold':''}" id="ch${i}"><i>${c[2]==='gold'?'★':'✓'}</i>${c[1]}</div>`).join('');
+// contour grid
+$('gl').innerHTML=[...Array(26)].map((_,i)=>`<path d="M-40 ${i*44} q180 -70 360 0 t400 0 t400 0"/>`).join('');
+
+// particles (deterministic embers)
+let seed=11; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+const P=[...Array(110)].map(()=>({x:rnd()*1080,y:rnd()*1920,r:1.5+rnd()*rnd()*12,s:25+rnd()*80,a:.12+rnd()*.5,tw:rnd()*6.28,warm:rnd()<.72,dx:(rnd()-.5)*34}));
+const ctx=$('fx').getContext('2d');
+function particles(t){
+  ctx.clearRect(0,0,1080,1920);
+  for(const p of P){
+    const y=((p.y-t*p.s)%2000+2000)%2000-40, x=p.x+Math.sin(t*.5+p.tw)*p.dx;
+    const a=p.a*(.6+.4*Math.sin(t*2+p.tw));
+    const g=ctx.createRadialGradient(x,y,0,x,y,p.r*2.2);
+    const c=p.warm?'255,170,90':'160,196,255';
+    g.addColorStop(0,`rgba(${c},${a})`);g.addColorStop(1,`rgba(${c},0)`);
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,p.r*2.2,0,6.283);ctx.fill();
+  }
+}
+// scene transitions
+function sceneStyle(id,t,tin,tout,inK,outK,dIn=.38,dOut=.32){
+  const el=$(id); if(t<tin-.01||t>tout+dOut){el.style.opacity=0;return 0}
+  let o=1,x=0,s=1,b=0,ry=0;
+  const pi=ex(lin(t,tin,tin+dIn)), po=lin(t,tout,tout+dOut);
+  if(inK==='zoom'){s*=.82+.18*pi;b+=(1-pi)*14;o*=clamp(pi*1.6)}
+  if(inK==='right'){x+=(1-pi)*1150;b+=(1-pi)*18;ry+=(1-pi)*-25}
+  if(inK==='up'){s*=.9+.1*pi;b+=(1-pi)*12;o*=clamp(pi*1.6)}
+  if(inK==='flip'){ry+=(1-pi)*-95;o*=clamp(pi*2);x+=(1-pi)*200}
+  if(inK==='cut'){o*=t>=tin?1:0}
+  if(outK==='through'){s*=1+po*po*.7;b+=po*16;o*=1-po}
+  if(outK==='left'){x-=po*po*1150;b+=po*18;ry+=po*25}
+  if(outK==='flip'){ry+=po*95;o*=1-po*po;x-=po*200}
+  s*=1+.035*lin(t,tin,tout); // slow push-in so nothing sits still
+  el.style.opacity=o; el.style.filter=b>.3?`blur(${b}px)`:'none';
+  el.style.transform=`translateX(${x}px) rotateY(${ry}deg) scale(${s})`;
+  return o;
+}
+function glowBorder(id,t){$(id).style.background=`conic-gradient(from ${t*120}deg,#ff8a2a,rgba(255,138,42,0) 25%,#7fa8ff 50%,rgba(127,168,255,0) 75%,#ff8a2a)`}
+
+// ---- the real site inside the phone
+let S=null; const SC=1.7893;
+function siteInit(){
+  const w=$('site').contentWindow, d=w.document;
+  const st=d.createElement('style');
+  st.textContent=`@font-face{font-family:"Bricolage Grotesque";src:url(/office/studio/media/fonts/InterTight.ttf);font-weight:100 900}
+  @font-face{font-family:"Inter";src:url(/office/studio/media/fonts/InterTight.ttf);font-weight:100 900}
+  *{scroll-behavior:auto!important;animation-duration:0s!important;animation-delay:0s!important;transition-duration:0s!important}
+  .reveal-wait,.fade-in,.demo-wrap,.hero h1 .w{opacity:1!important;transform:none!important}
+  .hero h1 .hi::after{transform:none!important}
+  #stickyCta{display:none!important}
+  html{scrollbar-width:none}::-webkit-scrollbar{display:none}`;
+  d.head.appendChild(st);
+  d.querySelectorAll('img').forEach(i=>{i.loading='eager';i.decoding='sync'});
+  const top=id=>{const e=d.getElementById(id); if(!e){console.warn('missing #'+id);return 0} return e.getBoundingClientRect().top+w.scrollY};
+  S={w,d,top:0,proof:top('proof')-40,what:top('what-title')-70,form:top('business')-150,btn:top('submitBtn')-520};
+}
+function elPoint(id){const r=S.d.getElementById(id).getBoundingClientRect();return {x:(r.left+r.width*0.5)*SC,y:70+(r.top+r.height/2)*SC}}
+function tap(t,t0,p){
+  const k=t-t0,tp=$('tap'),rp=$('ripple');
+  if(!p||k<-0.3||k>0.6){tp.style.opacity=0;rp.style.opacity=0;return}
+  tp.style.left=rp.style.left=p.x+'px';tp.style.top=rp.style.top=p.y+'px';
+  tp.style.opacity=k<0?eo(lin(k,-0.3,0)):1-lin(k,0.3,0.6);
+  tp.style.transform=`scale(${k>=0&&k<0.15?0.8:1})`;
+  const r=lin(k,0,0.5);rp.style.opacity=k>=0?(1-r)*0.9:0;rp.style.transform=`scale(${1+r*1.8})`;
+}
+function typeInto(id,text,t,t0,t1){const v=text.slice(0,Math.round(text.length*lin(t,t0,t1)));const e=S.d.getElementById(id);if(e&&e.value!==v)e.value=v}
+function caption(t){
+  const c=DATA.captions.find(c=>t>=c.t0&&t<c.t1),el=$('cap');
+  if(!c){el.innerHTML='';return}
+  const k=t-c.t0;
+  el.innerHTML=c.words.map((w,i)=>{const s=back(lin(k,i*0.055,i*0.055+0.2));return `<span class="w${w.hl?' hl':''}" style="transform:translateY(${(1-s)*30}px) scale(${0.65+0.35*s});opacity:${clamp(s*1.6)}">${w.w}</span>`}).join('');
+}
+function shakeAt(t,t0,amp=14,len=.35){return t>t0&&t<t0+len?Math.sin((t-t0)*90)*(1-lin(t,t0,t0+len))*amp:0}
+
+window.render=function(t){
+  // living background
+  $('grid').style.transform=`translate(${Math.sin(t/6)*60}px,${-t*9}px) rotate(${Math.sin(t/9)*2}deg)`;
+  $('b1').style.transform=`translate(${-260+Math.sin(t*.35)*260}px,${-200+Math.cos(t*.3)*220}px)`;
+  $('b2').style.transform=`translate(${520+Math.cos(t*.28)*260}px,${1150+Math.sin(t*.33)*260}px)`;
+  $('b3').style.transform=`translate(${260+Math.sin(t*.22+2)*300}px,${600+Math.cos(t*.25)*300}px)`;
+  particles(t);
+  let sw=null; (T.cuts||[]).forEach(c=>{const d=t-c; if(d>-.1&&d<.7) sw=d});
+  const SW=$('sweep'); if(sw===null){SW.style.opacity=0}else{const k=lin(sw,-.1,.7);SW.style.opacity=Math.sin(k*Math.PI);SW.style.left=(-500+k*2100)+'px'}
+  $('prog').style.width=(t/DATA.dur*100)+'%';
+
+  // ---- HOOK text (loss / question)
+  if(HOOK!=='demo' && sceneStyle('sHook',t,0,T.hook_end,'cut','through',.01,.3)){
+    W1.forEach((_,i)=>{const t0=T.hookWords[0]+i*T.hookWords[1];const s=back(lin(t,t0,t0+.18));const e=$('hw'+i);e.style.opacity=clamp(s*1.5);e.style.transform=`translateY(${(1-s)*40}px) scale(${.7+.3*s})`});
+    const s=back(lin(t,T.hookSlam,T.hookSlam+.3)); const h2=$('hl2');
+    h2.style.opacity=clamp(lin(t,T.hookSlam,T.hookSlam+.08)*2);
+    h2.style.transform=`translateX(${shakeAt(t,T.hookSlam,18)}px) scale(${0.4+0.6*s}) rotate(${(1-s)*-6}deg)`;
+    const hb=$('hl1').getBoundingClientRect(); const L=$('hookline'); L.style.top=(hb.bottom+28)+'px'; L.style.width=(940*eo(lin(t,T.hookSlam-.2,T.hookSlam+.35)))+'px';
+    $('hookEyebrow').style.opacity=eo(lin(t,.3,.8));
+  }
+  // ---- ANSWER CARD
+  {const cin=HOOK==='demo'?0:T.card_in; const inK=HOOK==='demo'?'cut':(HOOK==='question'?'right':'zoom');
+   if(sceneStyle('sCard',t,cin,T.card_end,inK,'flip',.4,.34)){
+    glowBorder('cardwrap',t);
+    const qp=lin(t,T.qType[0],T.qType[1]); $('qt').textContent=Q.slice(0,Math.round(Q.length*qp));
+    $('caret').style.opacity=(t<T.qType[1]+.25&&Math.floor(t*3)%2==0)?1:0;
+    const th=t>=T.think[0]&&t<T.think[1]; $('dots').style.opacity=th?1:0;
+    [...$('dots').children].forEach((d,i)=>{d.style.transform=`translateY(${Math.sin(t*9+i*1.1)*7}px)`});
+    const th2=t>=T.think[0]&&t<T.think[1]; const dd=$('dots'); dd.style.maxHeight=th2?'60px':'0'; dd.style.marginTop=th2?'30px':'0';
+    const ai=eo(lin(t,T.think[1]-.05,T.think[1]+.25)); $('aintro').style.opacity=ai; $('aintro').style.maxHeight=(ai*90)+'px'; $('aintro').style.marginTop=(ai*34)+'px';
+    NAMES.forEach((_,i)=>{const g=lin(t,T.names[i]-.12,T.names[i]+.1);const s=back(lin(t,T.names[i],T.names[i]+.3));const e=$('a'+i);e.style.opacity=clamp(s*1.4);e.style.maxHeight=(g*100)+'px';e.style.paddingTop=e.style.paddingBottom=(g*20)+'px';e.style.transform=`translateX(${(1-s)*70}px)`});
+    const mo=eo(lin(t,T.names[2]+.25,T.names[2]+.5)); $('amore').style.opacity=mo*.9; $('amore').style.maxHeight=(mo*50)+'px';
+    const ys=back(lin(t,T.you,T.you+.32)); const Y=$('you');
+    Y.style.opacity=clamp(lin(t,T.you,T.you+.06)*2); const yg=lin(t,T.you-.14,T.you+.02); Y.style.maxHeight=(yg*160)+'px'; Y.style.marginTop=(yg*26)+'px'; Y.style.paddingTop=Y.style.paddingBottom=(yg*30)+'px'; Y.style.overflow='hidden';
+    Y.style.transform=`translateX(${shakeAt(t,T.you,16)}px) scale(${0.5+0.5*ys})`;
+    ['r1','r2'].forEach((r,i)=>{const k=((t-T.you-i*.45)%.9+.9)%.9/.9; const on=t>T.you+.1; $(r).style.opacity=on?(1-k)*.75:0; $(r).style.transform=`scale(${1+k*.10},${1+k*.32})`});
+    const dim=lin(t,T.you,T.you+.35); $('alist').style.filter=`brightness(${1-dim*.18})`;
+  }}
+  // ---- WHY
+  if(sceneStyle('sWhy',t,T.why_in,T.why_end,'flip','left',.42,.32)){
+    [['tG',0],['tR',1]].forEach(([id,i])=>{const s=back(lin(t,T.tiles[i],T.tiles[i]+.4));const e=$(id);e.style.opacity=clamp(s*1.4);e.style.transform=`translateY(${(1-s)*120}px) scale(${.9+.1*s})`});
+    const th=eo(lin(t,T.thin,T.thin+.5));
+    [...document.querySelectorAll('#tG .pgrid i')].forEach((el,i)=>{el.style.opacity=i<2?1:1-th});
+    [...document.querySelectorAll('#tG .bar')].forEach((el,i)=>{el.style.transform=`scaleX(${i<1?1:1-th*.85})`;el.style.opacity=i<1?1:1-th*.7});
+    [0,1,2,3,4].forEach(i=>{$('rv'+i).style.opacity=i<1?1:1-th});
+    ['stG','stR'].forEach((id,i)=>{const s=back(lin(t,T.thin+.15+i*.12,T.thin+.45+i*.12));const e=$(id);e.style.opacity=clamp(s*1.5);e.style.transform=`translate(-50%,-50%) rotate(-9deg) scale(${.6+.4*s})`});
+    const ap=lin(t,T.tiles[1]+.3,T.tiles[1]+1.0); ['arL','arR'].forEach(id=>{const p=$(id);const L=p.getTotalLength();p.style.strokeDasharray=L;p.style.strokeDashoffset=L*(1-eo(ap))});
+    const cs=back(lin(t,T.tiles[1]+.9,T.tiles[1]+1.3)); const C=$('chip'); C.style.opacity=clamp(cs*1.5);
+    const sw2=lin(t,T.other,T.other+.3); // flip the chip to the real name ChatGPT picked
+    C.style.transform=`scale(${.8+.2*cs}) rotateX(${sw2<.5?sw2*180:(sw2-1)*180}deg)`;
+    if(sw2>=.5){$('chipTxt').innerHTML=`${esc(NAMES[0])}<small>is who it named instead</small>`;$('chipCk').style.opacity=1;$('chipCk').style.transform=`scale(${back(lin(t,T.other+.15,T.other+.45))})`}
+    else{$('chipTxt').innerHTML=`ChatGPT reads these<small>then picks who to name</small>`;$('chipCk').style.opacity=0}
+  }
+  // ---- PHONE
+  {const ph=$('phone'); let o=0,ty=0,s=.80,rx=0,ry=0,tx=0;
+   if(t>=T.phone_in&&t<T.phone_end+.45){
+     const pi=ex(lin(t,T.phone_in,T.phone_in+.65)); o=clamp(pi*1.5); ty=(1-pi)*900; rx=(1-pi)*38; tx=(1-pi)*300;
+     ry=-9+Math.sin(t*.7)*4; rx+=3+Math.sin(t*.5)*2;
+     const po=lin(t,T.phone_end,T.phone_end+.26); s*=1+po*po*1.3; o*=clamp(1-po*1.5);
+   }
+   ph.style.opacity=o; ph.style.transform=`translate(${tx}px,${ty}px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${s})`;
+   $('glare').style.transform=`translateX(${Math.sin(t*.7)*120}px)`;
+   const bo=t>=T.phone_in&&t<T.phone_end?eo(lin(t,T.phone_in+.2,T.phone_in+.7))*(1-lin(t,T.phone_end,T.phone_end+.2)):0;
+   $('brand').style.opacity=bo; $('brand').style.transform=`translateY(${(1-bo)*-30}px)`;
+   CHIPS.forEach((c,i)=>{const e=$('ch'+i); const on=t>=c[0]&&t<T.phone_end+.1; const s=back(lin(t,c[0],c[0]+.35)); const off=lin(t,T.phone_end,T.phone_end+.2);
+     e.style.opacity=on?clamp(s*1.5)*(1-off):0; e.style.transform=`translateX(${(1-s)*160}px) scale(${.85+.15*s}) rotate(${(1-s)*4}deg)`});
+   if(S&&o>0){
+     let y=0;
+     (T.scroll||[]).forEach(([a,b,k0,k1])=>{if(t>=a)y=S[k0]+(S[k1]-S[k0])*eio(lin(t,a,b))});
+     S.w.scrollTo(0,y);
+     const F=[['business','Your Auto Shop','Biz'],['town','Dalton, GA','Town'],['service','Auto repair','Serv'],['email','you@yourshop.com','Email']];
+     F.forEach(([id,txt,k])=>{const tt=T['type'+k]; if(!tt||t<tt[0]-.05) typeInto(id,'',t,0,1); else typeInto(id,txt,t,tt[0],tt[1])});
+     let p=null,t0=0;
+     F.forEach(([id,txt,k],i)=>{const tp=T['tap'+k]; const nx=i<F.length-1?T['tap'+F[i+1][2]]:T.tapBtn; if(tp!==undefined&&t>tp-.3&&t<nx-.3){p=elPoint(id);t0=tp}});
+     if(T.tapBtn!==undefined&&t>T.tapBtn-.3&&t<T.tapBtn+.6){p=elPoint('submitBtn');t0=T.tapBtn}
+     tap(t,t0,p);
+     const form=S.d.getElementById('leadForm'); if(form){const want=t>=T.done?'ready':'idle'; if(form.getAttribute('data-state')!==want) form.setAttribute('data-state',want)}
+   }}
+  // ---- END CARD
+  if(sceneStyle('sEnd',t,T.end_in,DATA.dur+1,'up','none',.5)){
+    const k=t-T.end_in;
+    $('free').style.transform=`scale(${1+0.02*Math.sin(k*4)})`;
+    const bounce=Math.abs(Math.sin(k*3.2))*26; $('arrowup').style.transform=`translateY(${-bounce}px)`;
+    $('arrowup').style.opacity=eo(lin(k,.35,.7)); $('bio').style.opacity=eo(lin(k,.45,.8));
+    $('url').style.opacity=eo(lin(k,.7,1.0)); $('url').style.transform=`translateY(${(1-eo(lin(k,.7,1.0)))*30}px)`;
+    $('prices').style.opacity=eo(lin(k,1.0,1.4));
+  }
+  caption(t);
+};
+window.ready=new Promise(res=>{const fr=$('site');let tries=0;const go=()=>{try{siteInit()}catch(e){if(++tries<25)setTimeout(go,200);else console.warn('siteInit gave up',e)}};
+  fr.addEventListener('load',()=>setTimeout(()=>{go();const w=fr.contentWindow;Promise.all([...w.document.images].map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r}))).then(()=>setTimeout(()=>res(true),400))},600));
+  setTimeout(()=>res(true),15000);});
+</script>
+</body></html>
