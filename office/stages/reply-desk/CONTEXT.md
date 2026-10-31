@@ -316,9 +316,12 @@ Lane E: the person asked him for it on the phone. Every run:
    nothing.
 2b. EMAIL CHECK (Oct 27, 2026): `python3 office/tools/email_check.py check <followUp.email>`. ok false
    (typo domain, fake or no-mail domain) → send nothing; followUp {status "needs-email", note
-   <reason + fix>} and one needsYou line "<business>: <fix>" so Grayson gets the right address on a
-   callback. A typo with an obvious fix (atnt.net → att.net) is still NOT sent to the guess: he
-   confirms it first. A check already sent to this business in the last 30 days → send that one again
+   <reason + fix>} and one needsYou line "<business>: <fix>" ONCE, on the run it is found (Grayson,
+   Oct 31, 2026: "those are long gone, stop bringing those up"). It is never listed again: the next
+   run sets followUp {status "done", note "no working email"}, the lead keeps its status and stays
+   on the call list, and health/desk.needsYou carries only lines found this run. A bounced
+   follow-up is handled the same way: noted on the lead once, never re-listed. A typo with an
+   obvious fix (atnt.net → att.net) is still NOT sent to the guess: he confirms it first. A check already sent to this business in the last 30 days → send that one again
    (free-check.md) instead of a new gateway job.
 3. Otherwise Lane B for it, in this same run: business, town, state from the lead, trade phrase =
    the kit niche's `plural` (office/call_kit/kit.json; lead.niche), reusing markets/<niche>-<town>-<st>

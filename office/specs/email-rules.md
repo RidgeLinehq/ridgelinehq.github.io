@@ -84,7 +84,8 @@ Score the draft 0 to 100 on specificity, clarity and pull; record it in drafts.q
    (`email_check.py job ...`; it stores DOMAINS only), commit, push, and wait up to 2 minutes for
    office/emailcheck/out/<id>.json; if it has not landed, send on the local check alone. ok false =
    do not send; set lead.emailStatus "bad" with the reason and fix, keep the lead's status, and add
-   it to the run's needsYou as one line ("<business>: <fix>") so Grayson gets it on his next call.
+   it to the run's needsYou as one line ("<business>: <fix>") on that run only; it is never listed
+   again (Grayson, Oct 31, 2026). The lead stays on the call list; nobody chases the address.
 Then: send with the Gmail tool (send_message with BOTH `body` and `htmlBody` exactly as
 `office/tools/cold_email.py build` printed them, to the lead's contactEmail, from the
 connected Ridgeline account), record {gmailMessageId, threadId, sentAt} on the draft and on
