@@ -12,13 +12,14 @@ free AI check, then $39.99 a month). Everything automated and ready.
 - Clients 0 paying (1 test client, not counted), revenue $0 a month, spend $0.
 - Leads 440: New 153, Researching 120, Qualified 20 (0 with email), Contacted 36, Replied 5,
   Meeting 15, Not a fit 46, Suppressed 44. Follow-ups due: Nov 1 x2, Nov 2 x15, Nov 3 x19.
-- Cold email: 46 sends (38 crew, 8 hand) at 88 to 112 words, plain text, 0 replies, 0 bounces on
-  own-site emails. Push week sent 38 of its 50 target (2, 0, 0, 2, 15, 19). Cap 20, window 7:00
-  to 9:30 AM Central, Oct 30: 19 of 20 sent by Mara, 0 failed.
+- Cold email: 46 sends (38 crew, 8 hand), plain text; the 34 crew sends of Oct 29 to 30 ran 88 to
+  112 words each (run notes 10-29, 10-30); 0 replies, 0 bounces on own-site emails. Push week
+  sent 38 of its 50 target (2, 0, 0, 2, 15, 19). Cap 20, window 7:00 to 9:30 AM Central, Oct 30:
+  19 of 20 sent by Mara, 0 failed.
 - Free checks: 13 delivered since Oct 26 after calls, 0 replies, 0 clients. Calls 137: auto repair
   16 of 72 Interested (22%), roofing 0 of 23; 2 to 4 PM 18.5% vs 9 to 11 AM 7.4%.
-- Open: 5 bounced prospect addresses still need a working email (reply desk, since Oct 30). The
-  Lead Finder scheduled task FAILED Oct 31 21:23 Central before it started (its cloud environment's
+- Open: 5 bounced prospect addresses still need a working email (reply desk, since Oct 29). The
+  Lead Finder scheduled task FAILED Oct 31 at 4:23 PM Central (21:23 UTC) before it started (its cloud environment's
   setup script runs `make me` and dies); it fails every run until the script is fixed.
 - New since today: every cold email is under 90 words, three short paragraphs, built by
   `office/tools/cold_email.py` with the card (specs/email-rules.md "Shape" and "The HTML version").

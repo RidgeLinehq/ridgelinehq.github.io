@@ -32,7 +32,7 @@ C. New drafts. A lead that already has a draft with status "draft" from a dry ru
    verified facts; store body, htmlBody and the tool's words/flags on the draft. Run the QA gate; record qa {score, levers, flags}. Under 80 = rewrite once.
    Passing drafts:
    - autoSend true and all sending gates pass: send as in A (status sent).
-   - otherwise: create a Gmail draft (create_draft: to, subject, body with footer) and write
+   - otherwise: create a Gmail draft (create_draft: to, subject, body with footer, htmlBody) and write
      drafts/<id> status "ready" with gmailDraftId and gmailDraftUrl. If the Gmail draft call
      fails, status ready without the ids (the page shows Copy).
    dryRun true: write drafts with status "draft" and qa only; create no Gmail draft, send nothing.

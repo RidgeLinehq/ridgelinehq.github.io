@@ -96,7 +96,8 @@ keeps its status.
 
 ## When autoSend is false (the default)
 Echo creates the email as a Gmail DRAFT in the Ridgeline account (create_draft; to, subject,
-body) AND writes drafts/<id> with status "ready", gmailDraftId and the draft's viewUrl. Grayson
+body AND htmlBody exactly as cold_email.py printed them, so the card goes when he taps Send) AND
+writes drafts/<id> with status "ready", gmailDraftId and the draft's viewUrl. Grayson
 either taps Send inside Gmail (the office detects the sent message next run by searching
 `in:sent to:<address>` and records it) or taps Approve on the page (the office sends it on the
 next run and deletes the Gmail draft). Reject on the page = status rejected, lead stays

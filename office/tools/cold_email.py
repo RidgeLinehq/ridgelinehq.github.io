@@ -19,7 +19,7 @@ Spec (JSON):
    "signature": "Grayson\nRidgeline Local",     # settings.signature
    "optOutLine": "If you'd rather not hear from me, reply 'no thanks' and I'll stop.",
    "mailingAddress": "123 Main St, Town, ST 12345",   # settings.mailingAddress, complete
-   "card": true}                                 # false only for a reply inside an existing thread
+   "card": true}                                 # false only when answering someone who wrote back; follow-ups and break-ups keep it
 
 Send with mcp__Gmail__send_message using BOTH fields: body = the plain text, htmlBody = the HTML.
 The card is the email's ONE link. No other URL may appear in the paragraphs or the ask.
