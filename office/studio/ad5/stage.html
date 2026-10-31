@@ -196,7 +196,7 @@ const W1 = H.l1.split(' ');
 $('hl1').innerHTML=W1.map((w,i)=>`<span class="w${/chatgpt/i.test(w)?' ai':''}" id="hw${i}">${w}</span>`).join('');
 $('hl2').textContent=H.l2; if(H.l2.length>13) $('hl2').classList.add('small');
 const CHIPS = (T.chips||[]);
-$('chips').innerHTML=CHIPS.map((c,i)=>`<div class="chip${c[2]==='gold'?' gold':''}" id="ch${i}"><i>${c[2]==='gold'?'★':'✓'}</i>${c[1]}</div>`).join('');
+$('chips').innerHTML=CHIPS.map((c,i)=>`<div class="chip${c[2]==='gold'?' gold':''}" id="ch${i}"><i>${c[2]==='gold'?'→':'✓'}</i>${c[1]}</div>`).join('');
 // contour grid
 $('gl').innerHTML=[...Array(26)].map((_,i)=>`<path d="M-40 ${i*44} q180 -70 360 0 t400 0 t400 0"/>`).join('');
 
