@@ -261,327 +261,337 @@
   }
  },
  "body": {
-  "dur_after_start": 27.1,
+  "dur_after_start": 27.2,
   "cuts": [
    0.65,
-   6.8,
-   22.3
+   7.9,
+   22.6
   ],
   "tl": {
    "card_end": 0.55,
    "why_in": 0.75,
    "tiles": [
-    0.95,
-    2.3
+    0.78,
+    2.4
    ],
-   "thin": 3.4,
-   "other": 5.7,
-   "why_end": 6.8,
-   "phone_in": 6.8,
+   "thin": 4.1,
+   "few": 5.4,
+   "other": 6.5,
+   "why_end": 7.9,
+   "phone_in": 7.9,
    "scroll": [
     [
-     8.3,
-     9.3,
+     9.4,
+     10.4,
      "top",
      "proof"
     ],
     [
-     10.9,
-     11.9,
+     12.8,
+     13.7,
      "proof",
      "what"
     ],
     [
-     13.3,
-     14.2,
+     15.6,
+     16.5,
      "what",
      "form"
     ],
     [
-     18.6,
-     19.2,
+     20.6,
+     21.1,
      "form",
      "btn"
     ]
    ],
-   "tapBiz": 14.35,
+   "tapBiz": 16.7,
    "typeBiz": [
-    14.45,
-    14.95
+    16.8,
+    17.3
    ],
-   "tapTown": 15.45,
+   "tapTown": 17.75,
    "typeTown": [
-    15.55,
-    15.95
+    17.85,
+    18.3
    ],
-   "tapServ": 16.55,
+   "tapServ": 18.85,
    "typeServ": [
-    16.65,
-    17.05
+    18.95,
+    19.4
    ],
-   "tapEmail": 17.6,
+   "tapEmail": 19.7,
    "typeEmail": [
-    17.7,
-    18.4
+    19.8,
+    20.5
    ],
-   "tapBtn": 20.6,
-   "done": 20.9,
-   "phone_end": 22.2,
-   "end_in": 22.3
+   "tapBtn": 21.4,
+   "done": 21.7,
+   "phone_end": 22.5,
+   "end_in": 22.6
   },
   "chips": [
    [
-    8.6,
+    10.9,
     "Google profile",
     "gold"
    ],
    [
-    10.0,
+    12.2,
     "AI visibility",
     "gold"
    ],
    [
-    12.9,
+    15.4,
     "Review system",
     "gold"
    ],
    [
-    14.35,
+    16.7,
     "No contract"
    ],
    [
-    15.5,
+    17.75,
     "No password"
    ],
    [
-    16.6,
+    18.85,
     "Cancel anytime"
    ],
    [
-    19.45,
+    21.7,
     "No card needed"
    ]
   ],
   "captions": [
    [
     0.0,
-    2.9,
-    "*AI* leans on your | *Google* *profile* | and *reviews.*"
+    1.93,
+    "AI tools | don't drive | around *town.*"
    ],
    [
-    3.41,
-    4.19,
-    "Thin profile,"
+    2.35,
+    3.58,
+    "They read your | *Google* *profile.*"
    ],
    [
-    4.59,
-    5.44,
-    "few reviews,"
+    4.08,
+    4.91,
+    "Thin *profile,*"
    ],
    [
-    5.7,
-    6.61,
+    5.36,
+    6.24,
+    "few *reviews,*"
+   ],
+   [
+    6.48,
+    7.46,
     "they name | *somebody* *else.*"
    ],
    [
-    7.04,
-    10.79,
-    "*Ridgeline* *Local* | gets you found | on *Google* | and recommended | by *AI,*"
+    7.89,
+    9.98,
+    "That's the part | *Ridgeline* *Local* | handles."
    ],
    [
-    11.23,
-    13.84,
-    "and makes it easy | for happy customers | to leave *reviews.*"
+    10.42,
+    12.98,
+    "We get you found | on *Google* | and recommended | by *AI,*"
    ],
    [
-    14.28,
-    15.02,
-    "*No* *contract.*"
+    13.45,
+    16.21,
+    "and make it easy | for happy customers | to leave *reviews.*"
    ],
    [
-    15.45,
-    16.14,
-    "*No* *password.*"
+    16.66,
+    17.45,
+    "*No* *contract,*"
    ],
    [
-    16.55,
-    17.31,
-    "Cancel *anytime.*"
+    17.7,
+    18.5,
+    "*no* *password,*"
    ],
    [
-    17.83,
-    19.14,
-    "*Free* AI check | first,"
+    18.8,
+    19.6,
+    "cancel *anytime.*"
    ],
    [
-    19.44,
-    19.92,
+    20.13,
+    21.38,
+    "*Free* *AI* *check* | first,"
+   ],
+   [
+    21.67,
+    22.17,
     "*no* *card.*"
    ],
    [
-    20.33,
-    22.08,
-    "What's *ChatGPT* say | about *you?*"
-   ],
-   [
-    22.48,
-    23.14,
+    22.56,
+    23.18,
     "Link in *bio.*"
    ],
    [
-    23.63,
+    23.66,
     24.59,
     "*Free* *AI* *check.*"
    ],
    [
-    25.02,
-    25.72,
+    25.04,
+    25.77,
     "Takes about | a *minute.*"
    ]
   ],
   "sfx": [
    [
-    3.4,
-    "thud"
-   ],
-   [
-    4.6,
-    "thud"
-   ],
-   [
-    5.7,
-    "pop"
-   ],
-   [
-    6.75,
-    "whoosh"
-   ],
-   [
-    8.6,
-    "pop"
-   ],
-   [
-    10.0,
-    "pop"
-   ],
-   [
-    12.9,
-    "pop"
-   ],
-   [
-    14.35,
-    "tap"
-   ],
-   [
-    14.5,
-    "tick"
-   ],
-   [
-    14.6,
-    "tick"
-   ],
-   [
-    14.7,
-    "tick"
-   ],
-   [
-    14.8,
-    "tick"
-   ],
-   [
-    15.45,
-    "tap"
-   ],
-   [
-    15.6,
-    "tick"
-   ],
-   [
-    15.7,
-    "tick"
-   ],
-   [
-    15.8,
-    "tick"
-   ],
-   [
-    16.55,
-    "tap"
-   ],
-   [
-    16.7,
-    "tick"
-   ],
-   [
-    16.8,
-    "tick"
-   ],
-   [
-    16.9,
-    "tick"
-   ],
-   [
-    17.6,
-    "tap"
-   ],
-   [
-    17.75,
-    "tick"
-   ],
-   [
-    17.85,
-    "tick"
-   ],
-   [
-    17.95,
-    "tick"
-   ],
-   [
-    18.05,
-    "tick"
-   ],
-   [
-    18.15,
-    "tick"
-   ],
-   [
-    14.35,
-    "pop"
-   ],
-   [
-    15.5,
-    "pop"
-   ],
-   [
-    16.6,
-    "pop"
-   ],
-   [
-    19.45,
-    "pop"
-   ],
-   [
-    20.6,
-    "tap"
-   ],
-   [
-    20.9,
-    "ding"
-   ],
-   [
-    22.2,
-    "whoosh"
-   ],
-   [
     0.55,
     "whoosh"
    ],
    [
-    2.3,
+    2.4,
     "pop"
    ],
    [
-    0.95,
+    4.1,
+    "thud"
+   ],
+   [
+    5.4,
+    "thud"
+   ],
+   [
+    6.5,
+    "pop"
+   ],
+   [
+    7.85,
+    "whoosh"
+   ],
+   [
+    10.9,
+    "pop"
+   ],
+   [
+    12.2,
+    "pop"
+   ],
+   [
+    15.4,
+    "pop"
+   ],
+   [
+    16.7,
+    "tap"
+   ],
+   [
+    16.85,
+    "tick"
+   ],
+   [
+    16.95,
+    "tick"
+   ],
+   [
+    17.05,
+    "tick"
+   ],
+   [
+    17.15,
+    "tick"
+   ],
+   [
+    16.7,
+    "pop"
+   ],
+   [
+    17.75,
+    "tap"
+   ],
+   [
+    17.9,
+    "tick"
+   ],
+   [
+    18.0,
+    "tick"
+   ],
+   [
+    18.1,
+    "tick"
+   ],
+   [
+    17.75,
+    "pop"
+   ],
+   [
+    18.85,
+    "tap"
+   ],
+   [
+    19.0,
+    "tick"
+   ],
+   [
+    19.1,
+    "tick"
+   ],
+   [
+    19.2,
+    "tick"
+   ],
+   [
+    18.85,
+    "pop"
+   ],
+   [
+    19.7,
+    "tap"
+   ],
+   [
+    19.85,
+    "tick"
+   ],
+   [
+    19.95,
+    "tick"
+   ],
+   [
+    20.05,
+    "tick"
+   ],
+   [
+    20.15,
+    "tick"
+   ],
+   [
+    20.25,
+    "tick"
+   ],
+   [
+    20.35,
+    "tick"
+   ],
+   [
+    21.4,
+    "tap"
+   ],
+   [
+    21.7,
+    "ding"
+   ],
+   [
+    21.7,
+    "pop"
+   ],
+   [
+    22.5,
+    "whoosh"
+   ],
+   [
+    0.8,
     "pop"
    ]
   ]

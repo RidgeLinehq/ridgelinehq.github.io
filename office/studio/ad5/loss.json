@@ -1,5 +1,5 @@
 {
- "dur": 32.95,
+ "dur": 33.05,
  "vo": "office/studio/media/ad5/vo-loss.mp3",
  "music": "office/studio/media/ad5/music.wav",
  "musicVol": 0.6,
@@ -40,101 +40,102 @@
   "card_end": 6.396,
   "why_in": 6.596,
   "tiles": [
-   6.796,
-   8.146
+   6.626,
+   8.246
   ],
-  "thin": 9.246,
-  "other": 11.546,
-  "why_end": 12.646,
-  "phone_in": 12.646,
+  "thin": 9.946,
+  "few": 11.246,
+  "other": 12.346,
+  "why_end": 13.746,
+  "phone_in": 13.746,
   "scroll": [
    [
-    14.146,
-    15.146,
+    15.246,
+    16.246,
     "top",
     "proof"
    ],
    [
-    16.746,
-    17.746,
+    18.646,
+    19.546,
     "proof",
     "what"
    ],
    [
-    19.146,
-    20.046,
+    21.446,
+    22.346,
     "what",
     "form"
    ],
    [
-    24.446,
-    25.046,
+    26.446,
+    26.946,
     "form",
     "btn"
    ]
   ],
-  "tapBiz": 20.196,
+  "tapBiz": 22.546,
   "typeBiz": [
-   20.296,
-   20.796
+   22.646,
+   23.146
   ],
-  "tapTown": 21.296,
+  "tapTown": 23.596,
   "typeTown": [
-   21.396,
-   21.796
+   23.696,
+   24.146
   ],
-  "tapServ": 22.396,
+  "tapServ": 24.696,
   "typeServ": [
-   22.496,
-   22.896
+   24.796,
+   25.246
   ],
-  "tapEmail": 23.446,
+  "tapEmail": 25.546,
   "typeEmail": [
-   23.546,
-   24.246
+   25.646,
+   26.346
   ],
-  "tapBtn": 26.446,
-  "done": 26.746,
-  "phone_end": 28.046,
-  "end_in": 28.146,
+  "tapBtn": 27.246,
+  "done": 27.546,
+  "phone_end": 28.346,
+  "end_in": 28.446,
   "chips": [
    [
-    14.446,
+    16.746,
     "Google profile",
     "gold"
    ],
    [
-    15.846,
+    18.046,
     "AI visibility",
     "gold"
    ],
    [
-    18.746,
+    21.246,
     "Review system",
     "gold"
    ],
    [
-    20.196,
+    22.546,
     "No contract"
    ],
    [
-    21.346,
+    23.596,
     "No password"
    ],
    [
-    22.446,
+    24.696,
     "Cancel anytime"
    ],
    [
-    25.296,
+    27.546,
     "No card needed"
    ]
   ],
   "cuts": [
    4.3,
    6.496,
-   12.646,
-   28.146
+   13.746,
+   28.446
   ]
  },
  "captions": [
@@ -150,77 +151,82 @@
   ],
   [
    5.846,
-   8.746,
-   "*AI* leans on your | *Google* *profile* | and *reviews.*"
+   7.776,
+   "AI tools | don't drive | around *town.*"
   ],
   [
-   9.256,
-   10.036,
-   "Thin profile,"
+   8.196,
+   9.426,
+   "They read your | *Google* *profile.*"
   ],
   [
-   10.436,
-   11.286,
-   "few reviews,"
+   9.926,
+   10.756,
+   "Thin *profile,*"
   ],
   [
-   11.546,
-   12.456,
+   11.206,
+   12.086,
+   "few *reviews,*"
+  ],
+  [
+   12.326,
+   13.306,
    "they name | *somebody* *else.*"
   ],
   [
-   12.886,
-   16.636,
-   "*Ridgeline* *Local* | gets you found | on *Google* | and recommended | by *AI,*"
+   13.736,
+   15.826,
+   "That's the part | *Ridgeline* *Local* | handles."
   ],
   [
-   17.076,
-   19.686,
-   "and makes it easy | for happy customers | to leave *reviews.*"
+   16.266,
+   18.826,
+   "We get you found | on *Google* | and recommended | by *AI,*"
   ],
   [
-   20.126,
-   20.866,
-   "*No* *contract.*"
+   19.296,
+   22.056,
+   "and make it easy | for happy customers | to leave *reviews.*"
   ],
   [
-   21.296,
-   21.986,
-   "*No* *password.*"
+   22.506,
+   23.296,
+   "*No* *contract,*"
   ],
   [
-   22.396,
-   23.156,
-   "Cancel *anytime.*"
+   23.546,
+   24.346,
+   "*no* *password,*"
   ],
   [
-   23.676,
-   24.986,
-   "*Free* AI check | first,"
+   24.646,
+   25.446,
+   "cancel *anytime.*"
   ],
   [
-   25.286,
-   25.766,
+   25.976,
+   27.226,
+   "*Free* *AI* *check* | first,"
+  ],
+  [
+   27.516,
+   28.016,
    "*no* *card.*"
   ],
   [
-   26.176,
-   27.926,
-   "What's *ChatGPT* say | about *you?*"
-  ],
-  [
-   28.326,
-   28.986,
+   28.406,
+   29.026,
    "Link in *bio.*"
   ],
   [
-   29.476,
+   29.506,
    30.436,
    "*Free* *AI* *check.*"
   ],
   [
-   30.866,
-   31.566,
+   30.886,
+   31.616,
    "Takes about | a *minute.*"
   ]
  ],
@@ -258,143 +264,147 @@
    "whoosh"
   ],
   [
-   6.796,
+   6.646,
    "pop"
   ],
   [
-   8.146,
+   8.246,
    "pop"
   ],
   [
-   9.246,
+   9.946,
    "thud"
   ],
   [
-   10.446,
+   11.246,
    "thud"
   ],
   [
-   11.546,
+   12.346,
    "pop"
   ],
   [
-   12.596,
+   13.696,
    "whoosh"
   ],
   [
-   14.446,
+   16.746,
    "pop"
   ],
   [
-   15.846,
+   18.046,
    "pop"
   ],
   [
-   18.746,
-   "pop"
-  ],
-  [
-   20.196,
-   "pop"
-  ],
-  [
-   20.196,
-   "tap"
-  ],
-  [
-   20.346,
-   "tick"
-  ],
-  [
-   20.446,
-   "tick"
-  ],
-  [
-   20.546,
-   "tick"
-  ],
-  [
-   20.646,
-   "tick"
-  ],
-  [
-   21.296,
-   "tap"
-  ],
-  [
-   21.346,
-   "pop"
-  ],
-  [
-   21.446,
-   "tick"
-  ],
-  [
-   21.546,
-   "tick"
-  ],
-  [
-   21.646,
-   "tick"
-  ],
-  [
-   22.396,
-   "tap"
-  ],
-  [
-   22.446,
+   21.246,
    "pop"
   ],
   [
    22.546,
-   "tick"
-  ],
-  [
-   22.646,
-   "tick"
-  ],
-  [
-   22.746,
-   "tick"
-  ],
-  [
-   23.446,
-   "tap"
-  ],
-  [
-   23.596,
-   "tick"
-  ],
-  [
-   23.696,
-   "tick"
-  ],
-  [
-   23.796,
-   "tick"
-  ],
-  [
-   23.896,
-   "tick"
-  ],
-  [
-   23.996,
-   "tick"
-  ],
-  [
-   25.296,
    "pop"
   ],
   [
-   26.446,
+   22.546,
    "tap"
   ],
   [
-   26.746,
+   22.696,
+   "tick"
+  ],
+  [
+   22.796,
+   "tick"
+  ],
+  [
+   22.896,
+   "tick"
+  ],
+  [
+   22.996,
+   "tick"
+  ],
+  [
+   23.596,
+   "pop"
+  ],
+  [
+   23.596,
+   "tap"
+  ],
+  [
+   23.746,
+   "tick"
+  ],
+  [
+   23.846,
+   "tick"
+  ],
+  [
+   23.946,
+   "tick"
+  ],
+  [
+   24.696,
+   "pop"
+  ],
+  [
+   24.696,
+   "tap"
+  ],
+  [
+   24.846,
+   "tick"
+  ],
+  [
+   24.946,
+   "tick"
+  ],
+  [
+   25.046,
+   "tick"
+  ],
+  [
+   25.546,
+   "tap"
+  ],
+  [
+   25.696,
+   "tick"
+  ],
+  [
+   25.796,
+   "tick"
+  ],
+  [
+   25.896,
+   "tick"
+  ],
+  [
+   25.996,
+   "tick"
+  ],
+  [
+   26.096,
+   "tick"
+  ],
+  [
+   26.196,
+   "tick"
+  ],
+  [
+   27.246,
+   "tap"
+  ],
+  [
+   27.546,
    "ding"
   ],
   [
-   28.046,
+   27.546,
+   "pop"
+  ],
+  [
+   28.346,
    "whoosh"
   ]
  ]
