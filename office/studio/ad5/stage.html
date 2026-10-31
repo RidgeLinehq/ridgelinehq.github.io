@@ -67,7 +67,7 @@ body{font-family:"Inter Tight",system-ui,sans-serif;color:#fff;position:relative
 #chip{position:absolute;left:50%;top:760px;width:760px;margin-left:-380px;height:170px;border-radius:40px;background:#fff;color:var(--ink);display:flex;align-items:center;gap:26px;padding:0 40px;font:800 44px/1.1 "Inter Tight";box-shadow:0 40px 100px rgba(0,0,0,.5);transform-origin:50% 50%}
 #chip .gdot{width:28px;height:28px;border-radius:50%;background:#2fbf71;flex:none;box-shadow:0 0 0 10px rgba(47,191,113,.16)}
 #chip .ck{margin-left:auto;width:64px;height:64px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font:900 40px "Inter Tight";flex:none;opacity:0}
-#chip small{display:block;font:600 24px/1 "Inter Tight";color:var(--muted);margin-top:8px;letter-spacing:.06em;text-transform:uppercase}
+#chip small{display:block;font:600 21px/1 "Inter Tight";color:var(--muted);margin-top:8px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
 /* ---------- phone ---------- */
 #phone{position:absolute;left:10.5px;top:170px;width:699px;height:1480px;border-radius:92px;background:linear-gradient(145deg,#2a2f38,#0b0d11);padding:14px;box-shadow:0 0 0 3px #3a414c,inset 0 0 0 2px #555,0 80px 160px rgba(0,0,0,.7);opacity:0;transform-origin:50% 0%}
 #screen{width:671px;height:1452px;border-radius:80px;overflow:hidden;position:relative;background:#fff}
@@ -254,7 +254,7 @@ function siteInit(){
   d.head.appendChild(st);
   d.querySelectorAll('img').forEach(i=>{i.loading='eager';i.decoding='sync'});
   const top=id=>{const e=d.getElementById(id); if(!e){console.warn('missing #'+id);return 0} return e.getBoundingClientRect().top+w.scrollY};
-  S={w,d,top:0,proof:top('proof')-40,what:top('what-title')-70,form:top('business')-150,btn:top('submitBtn')-520};
+  S={w,d,top:0,proof:top('proof')-40,what:top('what-title')-70,form:top('business')-150,btn:top('submitBtn')-520,done:top('leadForm')-96};
 }
 function elPoint(id){const r=S.d.getElementById(id).getBoundingClientRect();return {x:(r.left+r.width*0.5)*SC,y:70+(r.top+r.height/2)*SC}}
 function tap(t,t0,p){
@@ -325,15 +325,15 @@ window.render=function(t){
     const cs=back(lin(t,T.tiles[1]+.9,T.tiles[1]+1.3)); const C=$('chip'); C.style.opacity=clamp(cs*1.5);
     const sw2=lin(t,T.other,T.other+.3); // flip the chip to the real name ChatGPT picked
     C.style.transform=`scale(${.8+.2*cs}) rotateX(${sw2<.5?sw2*180:(sw2-1)*180}deg)`;
-    if(sw2>=.5){$('chipTxt').innerHTML=`${esc(NAMES[0])}<small>named by ChatGPT · example, Oct 28, 2026</small>`;$('chipCk').style.opacity=1;$('chipCk').style.transform=`scale(${back(lin(t,T.other+.15,T.other+.45))})`}
+    if(sw2>=.5){$('chipTxt').innerHTML=`${esc(NAMES[0])}<small>named by ChatGPT · example · Oct 28, 2026</small>`;$('chipCk').style.opacity=1;$('chipCk').style.transform=`scale(${back(lin(t,T.other+.15,T.other+.45))})`}
     else{$('chipTxt').innerHTML=`ChatGPT reads these<small>then picks who to name</small>`;$('chipCk').style.opacity=0}
   }
   // ---- PHONE
   {const ph=$('phone'); let o=0,ty=0,s=.76,rx=0,ry=0,tx=0;
    if(t>=T.phone_in&&t<T.phone_end+.45){
-     const pi=ex(lin(t,T.phone_in,T.phone_in+.65)); o=clamp(pi*1.5); ty=(1-pi)*900; rx=(1-pi)*38; tx=(1-pi)*300;
+     const pi=ex(lin(t,T.phone_in,T.phone_in+.65)); o=clamp(pi*1.5); ty=(1-pi)*-240; rx=(1-pi)*-28; tx=(1-pi)*120; s*=.72+.28*pi;
      ry=-9+Math.sin(t*.7)*4; rx+=3+Math.sin(t*.5)*2;
-     const po=lin(t,T.phone_end,T.phone_end+.26); s*=1+po*po*1.3; o*=clamp(1-po*1.5);
+     const po=lin(t,T.phone_end,T.phone_end+.26); s*=1-po*.3; ty-=po*220; o*=clamp(1-po*1.5);
    }
    ph.style.opacity=o; ph.style.transform=`translate(${tx}px,${ty}px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${s})`;
    $('glare').style.transform=`translateX(${Math.sin(t*.7)*120}px)`;
@@ -344,12 +344,13 @@ window.render=function(t){
    if(S&&o>0){
      let y=0;
      (T.scroll||[]).forEach(([a,b,k0,k1])=>{if(t>=a)y=S[k0]+(S[k1]-S[k0])*eio(lin(t,a,b))});
+     if(T.done!==undefined&&t>=T.done){const k=eio(lin(t,T.done,T.done+.4)); y=y+(S.done-y)*k}
      S.w.scrollTo(0,y);
      const F=[['business','Your Auto Shop','Biz'],['town','Dalton, GA','Town'],['service','Auto repair','Serv'],['email','you@yourshop.com','Email']];
      F.forEach(([id,txt,k])=>{const tt=T['type'+k]; if(!tt||t<tt[0]-.05) typeInto(id,'',t,0,1); else typeInto(id,txt,t,tt[0],tt[1])});
      let p=null,t0=0;
      F.forEach(([id,txt,k],i)=>{const tp=T['tap'+k]; const nx=i<F.length-1?T['tap'+F[i+1][2]]:T.tapBtn; if(tp!==undefined&&t>tp-.3&&t<nx-.3){p=elPoint(id);t0=tp}});
-     if(T.tapBtn!==undefined&&t>T.tapBtn-.3&&t<T.tapBtn+.6){p=elPoint('submitBtn');t0=T.tapBtn}
+     if(T.tapBtn!==undefined&&t>T.tapBtn-.3&&t<Math.min(T.tapBtn+.6,T.done!==undefined?T.done:1e9)){p=elPoint('submitBtn');t0=T.tapBtn}
      tap(t,t0,p);
      const form=S.d.getElementById('leadForm'); if(form){const want=t>=T.done?'ready':'idle'; if(form.getAttribute('data-state')!==want) form.setAttribute('data-state',want)}
    }}

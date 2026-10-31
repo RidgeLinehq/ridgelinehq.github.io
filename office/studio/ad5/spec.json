@@ -1,6 +1,6 @@
 {
  "music": "office/studio/media/ad5/music.wav",
- "musicVol": 0.6,
+ "musicVol": 0.5,
  "voGain": 1.6,
  "capTop": 1320,
  "text": {
@@ -43,7 +43,7 @@
     [
      0.26,
      3.45,
-     "Your *competitor* | just got | recommended by *ChatGPT.*"
+     "Your *competitor* just got | recommended by *ChatGPT.*"
     ],
     [
      3.9,
@@ -115,7 +115,7 @@
     [
      0.26,
      2.5,
-     "When somebody | asks *ChatGPT* | who to call…"
+     "When somebody asks *ChatGPT* | who to call…"
     ],
     [
      3.12,
@@ -391,28 +391,23 @@
    ],
    [
     4.99,
-    5.74,
-    "Thin *profile,*"
-   ],
-   [
-    6.22,
     7.04,
-    "few *reviews,*"
+    "Thin *profile,* few *reviews,*"
    ],
    [
     7.31,
     8.27,
-    "they name | *somebody* *else.*"
+    "they name *somebody* *else.*"
    ],
    [
     8.72,
     10.86,
-    "That's the part | *Ridgeline* *Local* | handles."
+    "That's the part | *Ridgeline* *Local* handles."
    ],
    [
     11.3,
     13.94,
-    "We get you found | on *Google* | and recommended by *AI,*"
+    "We get you found on *Google* | and recommended by *AI,*"
    ],
    [
     14.4,
@@ -421,13 +416,8 @@
    ],
    [
     17.61,
-    18.4,
-    "*No* *contract,*"
-   ],
-   [
-    18.69,
     19.52,
-    "*no* *password,*"
+    "*No* *contract,* *no* *password,*"
    ],
    [
     19.84,
@@ -437,7 +427,7 @@
    [
     21.17,
     22.36,
-    "*Free* *AI* *check* | first,"
+    "*Free* *AI* *check* first,"
    ],
    [
     22.69,
@@ -457,7 +447,7 @@
    [
     26.06,
     26.73,
-    "Takes about | a *minute.*"
+    "Takes about a *minute.*"
    ]
   ],
   "sfx": [

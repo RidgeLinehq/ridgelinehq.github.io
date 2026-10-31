@@ -2,7 +2,7 @@
  "dur": 33.03,
  "vo": "office/studio/media/ad5/vo-demo.mp3",
  "music": "office/studio/media/ad5/music.wav",
- "musicVol": 0.6,
+ "musicVol": 0.5,
  "voGain": 1.6,
  "capTop": 1320,
  "preset": "medium",
@@ -170,28 +170,23 @@
   ],
   [
    10.092,
-   10.842,
-   "Thin *profile,*"
-  ],
-  [
-   11.322,
    12.142,
-   "few *reviews,*"
+   "Thin *profile,* few *reviews,*"
   ],
   [
    12.412,
    13.372,
-   "they name | *somebody* *else.*"
+   "they name *somebody* *else.*"
   ],
   [
    13.822,
    15.962,
-   "That's the part | *Ridgeline* *Local* | handles."
+   "That's the part | *Ridgeline* *Local* handles."
   ],
   [
    16.402,
    19.042,
-   "We get you found | on *Google* | and recommended by *AI,*"
+   "We get you found on *Google* | and recommended by *AI,*"
   ],
   [
    19.502,
@@ -200,13 +195,8 @@
   ],
   [
    22.712,
-   23.502,
-   "*No* *contract,*"
-  ],
-  [
-   23.792,
    24.622,
-   "*no* *password,*"
+   "*No* *contract,* *no* *password,*"
   ],
   [
    24.942,
@@ -216,7 +206,7 @@
   [
    26.272,
    27.462,
-   "*Free* *AI* *check* | first,"
+   "*Free* *AI* *check* first,"
   ],
   [
    27.792,
@@ -236,7 +226,7 @@
   [
    31.162,
    31.832,
-   "Takes about | a *minute.*"
+   "Takes about a *minute.*"
   ]
  ],
  "sfx": [

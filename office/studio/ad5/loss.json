@@ -2,7 +2,7 @@
  "dur": 33.78,
  "vo": "office/studio/media/ad5/vo-loss.mp3",
  "music": "office/studio/media/ad5/music.wav",
- "musicVol": 0.6,
+ "musicVol": 0.5,
  "voGain": 1.6,
  "capTop": 1320,
  "preset": "medium",
@@ -152,7 +152,7 @@
   [
    0.26,
    3.45,
-   "Your *competitor* | just got | recommended by *ChatGPT.*"
+   "Your *competitor* just got | recommended by *ChatGPT.*"
   ],
   [
    3.9,
@@ -176,28 +176,23 @@
   ],
   [
    10.836,
-   11.586,
-   "Thin *profile,*"
-  ],
-  [
-   12.066,
    12.886,
-   "few *reviews,*"
+   "Thin *profile,* few *reviews,*"
   ],
   [
    13.156,
    14.116,
-   "they name | *somebody* *else.*"
+   "they name *somebody* *else.*"
   ],
   [
    14.566,
    16.706,
-   "That's the part | *Ridgeline* *Local* | handles."
+   "That's the part | *Ridgeline* *Local* handles."
   ],
   [
    17.146,
    19.786,
-   "We get you found | on *Google* | and recommended by *AI,*"
+   "We get you found on *Google* | and recommended by *AI,*"
   ],
   [
    20.246,
@@ -206,13 +201,8 @@
   ],
   [
    23.456,
-   24.246,
-   "*No* *contract,*"
-  ],
-  [
-   24.536,
    25.366,
-   "*no* *password,*"
+   "*No* *contract,* *no* *password,*"
   ],
   [
    25.686,
@@ -222,7 +212,7 @@
   [
    27.016,
    28.206,
-   "*Free* *AI* *check* | first,"
+   "*Free* *AI* *check* first,"
   ],
   [
    28.536,
@@ -242,7 +232,7 @@
   [
    31.906,
    32.576,
-   "Takes about | a *minute.*"
+   "Takes about a *minute.*"
   ]
  ],
  "sfx": [
