@@ -41,3 +41,9 @@ skills/<agent>/SKILL.md first. Nothing here without evidence.
   note 10-28), 0 clients: the next touch for those 13 is a call. Cold email: 46 sends (38 crew, 8
   hand), 0 replies; pattern A 0 of 20, B 0 of 16; levers loss 0 of 18, gap detail 0 of 13, give 0
   of 5; 34 of 38 crew sends are under 2 days old, so no reply-rate lesson until 11-02.
+- 2026-11-02 (Sage): Old email shape (plain text, pattern A/B subjects, sent through 10-30): 0 replies
+  in 46 sends (38 crew, 8 hand) at day 3 to 14; A 0 of 20, B 0 of 16; loss 0 of 18, gap detail 0 of 13,
+  give 0 of 5; dentist 0 of 17; 1 hard bounce in 38 crew sends (own-site email). New shape (card, html,
+  t1 under 90 words, t2 a new finding) started 11-02: 0 of 20 at 10 minutes, too early; scored apart in
+  workflow/v1-echo-card-shape, first read 11-05 (day 3), verdict after 30 sends. Free checks: 0 replies
+  of 13 delivered at day 5-7, 0 clients. Calls: 137, no new calls since 10-28, no new call lesson.
