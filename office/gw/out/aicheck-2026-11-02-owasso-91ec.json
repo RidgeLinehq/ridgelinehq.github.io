@@ -1,0 +1,46 @@
+{
+ "id": "aicheck-2026-11-02-owasso-91ec",
+ "at": "2026-11-02T20:39:05Z",
+ "results": [
+  {
+   "key": "owasso-ok-roofers",
+   "question": "Who are the best roofers in Owasso, OK?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "My **short list for an Owasso homeowner**:\n\n1. **GoldenRite Roofing & Construction** \u2014 Best all-around pick. Strong local review volume, top-ranked in Owasso, and listed by GAF as a **Master Elite** contractor, which can matter for warranty options. ([bestprosintown.com](https://www.bestprosintown.com/ok/owasso/roofing/?utm_source=openai))  \n2. **Dun-Rite Roofing** \u2014 Safest \u201cestablished local\u201d choice. Owasso-based, in business since 1991, BBB accredited/A+ rated, and GAF Certified. Good fit if you want a long track record. ([bbb.org](https://www.bbb.org/us/ok/owasso/profile/roofing-contractors/dun-rite-roofing-inc-1025-18203333?utm_source=openai))  \n3. **Ridgeback Roofing & Construction** \u2014 Worth a bid for storm/insurance work; recent review profiles show very strong homeowner feedback for responsiveness and cleanup. ([reviews.birdeye.com](https://reviews.birdeye.com/ridgeback-roofing-construction-llc-165301429484325?utm_source=openai))  \n4. **Fairway Roofing & Construction** \u2014 Good smaller/local option for repairs or roof-plus-remodeling needs; listed locally with solid ratings. ([reviews.birdeye.com](https://reviews.birdeye.com/fairway-roofing-construction-164721107371126?utm_source=openai))  \n\nBefore signing, verify their **current Oklahoma CIB roofing registration** and insurance; Oklahoma requires roofers to hold valid registration. ([oklahoma.gov](https://oklahoma.gov/cib/your-industry/roofing/active-roofing-contractor-requirements.html?utm_source=openai)) Get 2\u20133 written bids with shingle brand, ventilation, decking, warranty, and cleanup spelled out.",
+    "sources": [
+     {
+      "url": "https://www.bestprosintown.com/ok/owasso/roofing/?utm_source=openai",
+      "title": "8 Best Roofing Companies Near Owasso, OK - 2026 BestProsInTown"
+     },
+     {
+      "url": "https://www.bbb.org/us/ok/owasso/profile/roofing-contractors/dun-rite-roofing-inc-1025-18203333?utm_source=openai",
+      "title": "Dun-Rite Roofing, Inc. | BBB Business Profile | Better Business Bureau"
+     },
+     {
+      "url": "https://reviews.birdeye.com/ridgeback-roofing-construction-llc-165301429484325?utm_source=openai",
+      "title": "Ridgeback Roofing & Construction LLC - 86 Reviews - Contractors in Owasso, OK - Birdeye"
+     },
+     {
+      "url": "https://reviews.birdeye.com/fairway-roofing-construction-164721107371126?utm_source=openai",
+      "title": "Fairway Roofing & Construction - 13 Reviews - Roofing in Owasso, OK - Birdeye"
+     },
+     {
+      "url": "https://oklahoma.gov/cib/your-industry/roofing/active-roofing-contractor-requirements.html?utm_source=openai",
+      "title": "Active Roofing Contractor Requirements"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If I were looking for a reliable roofer in Owasso, these are the top three local companies I\u2019d put at the top of my list:\n\n1. **Anchor Roofing & Construction:** Located right here in the area, Anchor is a highly trusted, family-owned option. They are fantastic at navigating complex insurance claims after our crazy Oklahoma hail storms, and their crews leave your yard spotless when they\u2019re done.\n2. **Pro-Tech Roofing:** Serving the Owasso and Tulsa metro area, Pro-Tech has a stellar reputation for honesty and communication. They don't use high-pressure sales tactics, provide clear, upfront estimates, and use top-tier materials.\n3. **Perfection Roofing:** They\u2019ve been serving the area for over 40 years and are a **GAF Master Elite Contractor**\u2014a certification held by only the top 2% of roofers nationwide. This means they can offer superior factory warranties that standard contractors can't match.\n\n**Homeowner Tip:** No matter who you choose, always verify they are actively registered with the **Oklahoma Construction Industries Board (CIB)** and carry adequate liability and workers' compensation insurance before signing anything!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
