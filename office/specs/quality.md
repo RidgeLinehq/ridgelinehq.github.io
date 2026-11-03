@@ -77,13 +77,17 @@ numbers; same structure and quality).
 - **Review reply ("reviewreply")** (Nov 3, 2026): 2 to 4 sentences, thanks them by first name,
   names the specific thing they wrote about, their business's voice, no arguing, no admitting
   fault, no offer, never mention a review was requested. Ready to paste under the review.
-- **Results page (data/results/<token>.json)** (Nov 3, 2026): every number equals the database
-  when written (leadlog counts, reviewsAtStart/reviewsNow, aiTrend, requests sent); zeros shown
-  as zeros; unknown = "unknown"; never a lead's or customer's name, phone or email; the link in
-  the email opens and shows the same numbers the report states.
+- **Dashboard (data/results/<token>.json; the results page)** (Nov 3, 2026): every number
+  equals the database when written (leadlog counts, reviewsAtStart/reviewsNow, aiTrend, requests
+  sent); zeros shown as zeros; unknown = "unknown"; never a lead's, customer's or reviewer's
+  name, phone, email or address (leads.items carry the dashboardId, date, what, when, source and
+  status only); every activity line dated, numbers and dates only; todo holds at most 3 items,
+  each with the minutes it takes, and only things we truly need from them; every requests[]
+  entry answered within the hour (status done with its one-line reply); the link in the email
+  opens and shows the same numbers the report states.
 - **Monthly check-in ("checkin-monthly")** (Nov 3, 2026): the report email's note, under 120
-  words: this month's wins (each dated and real), the ONE next step we're taking, the results
-  page link. No second email.
+  words: this month's wins (each dated and real), the ONE next step we're taking, the dashboard
+  link. No second email.
 - **Google post ("post")**: timely (season, local event, real offer the client gave us), a photo
   idea, under 1,500 characters, one call to action.
 - **Monthly report ("report")**: starts with the best real number of the month in one line
@@ -107,7 +111,7 @@ Clients get designed deliverables, not walls of instructions:
   note (3 to 6 lines: the one best number, the one next step, "everything is in the attached
   PDF"), `body` = the same note in plain text, `replyThreadId` = the client's thread.
 - ONE email per moment, not three: the Welcome Pack (starting score + profile fixes + review kit +
-  quote-page link + results link + next 30 days) is one email with one PDF. The monthly report is one email with one PDF. The QR
+  quote-page link + dashboard link + next 30 days) is one email with one PDF. The monthly report is one email with one PDF. The QR
   card PNG (cards/<slug>.png, fetched with curl) rides as a second attachment when it exists.
 - If the PDF can't be built (Playwright missing), send the same design as htmlBody (the .html
   file make_pack.js writes next to the PDF) and note it in the run log. Never fall back to plain text.

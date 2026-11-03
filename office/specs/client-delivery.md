@@ -4,8 +4,8 @@ Grayson's standing order (Oct 24, 2026): "Fully automatic. No approvals from me.
 below is done by the crew, or by one Action, or is one tap for the client. Grayson is told, never
 asked, except for the alerts in shared/alerts.md.
 Grayson's standing order (Nov 3, 2026): every plan is "Leads + Reviews" from day one: a
-quote-request page with lead alerts, review requests and review replies, a private results page
-and one monthly check-in. Starter $39.99 gets all of it; Growth $75 adds the weekly AI checks,
+quote-request page with lead alerts, review requests and review replies, a private dashboard
+(the results page) and one monthly check-in. Starter $39.99 gets all of it; Growth $75 adds the weekly AI checks,
 monthly profile updates and Google posts; Pro $125 adds the AI Lead Finder and competitor
 tracking (specs/offer.md).
 
@@ -45,12 +45,16 @@ tracking (specs/offer.md).
      false, and the Welcome Pack asks the client to reply "got it" when the text arrives. No reply
      or "no text" → email only (client.leadAlertsVerified false), logged, and the client told.
    - **First review requests** to the customers they gave, the same day (rules below).
-   - **Results page**: token + data/results/<token>.json written ("Results page" below).
+   - **Dashboard**: token + data/results/<token>.json written with every list empty ("Dashboard
+     (the results page)" below). The link is private: it goes only to the client.
    - **Welcome Pack** (one email, one PDF, specs/quality.md): starting score, profile fixes,
-     review kit (link + QR card), the quote-page link and tracking links, the results link.
+     review kit (link + QR card), the quote-page link and tracking links, the dashboard link
+     (one line on what it shows: leads, reviews, what we did, what we need from them).
    Tells Grayson "NEW CLIENT". If the Stripe email came but no onboarding form within 24 hours:
    one friendly reminder with the form link; again at 72 hours; then alert Grayson.
-5. **Work begins** (Day Shift 09, next weekday morning, and every weekday after).
+5. **Work begins** (Day Shift 09, next weekday morning, and every weekday after). Day 3: the
+   check-in's ONE question (specs/client-happiness.md §1) is about the dashboard: "Did you open
+   your dashboard yet? <link> Reply with anything confusing and I'll make it simpler."
 
 ## Week 1 (Day Shift 09)
 | Item | Output |
@@ -95,9 +99,10 @@ Tell Grayson in the morning report only: "<business> flat at day N; tried: <fix>
 ## Monthly (startedAt day-of-month)
 - (Nov 3, 2026, every plan) ONE email: the monthly report PDF (leads by source and outcome, new
   reviews, star-rating change; AI score on Growth/Pro) with the check-in as its note (wins + the
-  one next step we're taking, under 120 words, the results page link; specs/client-happiness.md
+  one next step we're taking, under 120 words, the dashboard link; specs/client-happiness.md
   §1). The "Did this lead turn into a customer?" email (specs/lead-tracking.md) goes to every
-  plan. The same run updates data/results/<token>.json ("Results page" below) before the send.
+  plan and lists only the leads still pending (answers given on the dashboard already count).
+  The same run updates data/results/<token>.json ("Dashboard" below) before the send.
 - Pro: a short promo video (Nova, office/studio/CONTEXT.md, the client's own photos and facts;
   their real reviews quoted only with the reviewer's first name and the exact words), rendered,
   committed under office/studio/out/clients/<slug>-<yyyymm>.mp4, link emailed with the report.
@@ -112,15 +117,65 @@ the evidence in office/playbooks/README.md (numbers, never a client's name or co
 Clients worker (Day Shift 09) applies each adopted idea to every active account that month,
 logged in client.fixesTried {at, fix, result, from:"playbooks/README.md <date>"}.
 
-## Results page (Nov 3, 2026)
-Every client has https://ridgelinehq.github.io/results.html?c=<token>, token = 16 random hex
-(client.resultsToken), backed by data/results/<token>.json in the public repo. NUMBERS ONLY:
-{business, town, plan, period, leads:{bySource, byOutcome}, reviews:{atStart, now}, rating,
-requestsSent, ai:{score, trend, named} (Growth/Pro), done[], next[], links:{quotePage,
-reviewLink}, guarantee:{status}, updatedAt}. Never a lead's name, phone or email; never
-client.customers; every number equals the database when written; zeros shown honestly; unknown =
-"unknown". Written at onboarding (reply desk), updated on the monthly date and whenever a win is
-logged (Day Shift 09). The link goes in the Welcome Pack and every monthly email.
+## Dashboard (the results page) (Nov 3, 2026)
+Every client has ONE private page, https://ridgelinehq.github.io/results.html?c=<token>, token =
+16 random hex (client.resultsToken), backed by data/results/<token>.json in the public repo. The
+"results page" and the "dashboard" are the same page; the specs say "dashboard" from here on.
+The link goes in the Welcome Pack and every monthly email, to the client only; never posted,
+never a case study.
+
+**The JSON** (numbers only; data/results/sample.json is the reference shape):
+- Existing: {business, town, plan, period, leads:{bySource, outcome}, reviews:{atStart, now},
+  rating, requestsSent, ai:{score, trend, named} (Growth/Pro), done[], next[], links:{quotePage,
+  reviewLink}, guarantee:{status}, updatedAt}.
+- leads.items: [{id, at, what, when, source, status}]. id = "L-0007": short, per client, in
+  logging order, stable, never reused; the same id sits on the leadlog row (dashboardId) so the
+  client's answers can be applied. at "YYYY-MM-DD"; what ("Roof repair") and when ("This week")
+  as the lead typed them; source "quote-page" | "google-profile" | "lead-finder" |
+  "client-forward"; status "new" | "pending" | "customer" | "no-customer" (the mapping from the
+  row: specs/lead-tracking.md "The dashboard's lead list"). NO names, phones, emails or
+  addresses, ever.
+- reviews.recent: [{at, stars (1 to 5), replied true|false}] for public Google reviews, no
+  reviewer names or text; reviews.history: [{at, count}], one point per weekly profile check.
+- posts: [{at, title, status:"live"|"scheduled"|"draft"}] (Google posts; Growth/Pro; [] on
+  Starter).
+- todo: [{id:"T1", text, minutes, done:false}]: the 0 to 3 things we need from the client right
+  now ("Accept our Manager invite on Google (2 minutes)", "Reply with your Google review link
+  (1 minute)"), each with the minutes it takes. An id stays with its item while it is open; done
+  items drop off the next refresh.
+- activity: [{at, text, kind:"lead"|"review"|"profile"|"ai"|"post"|"email"|"request"}]: the
+  last 20 things we did or that happened, one line each, newest first, every line dated,
+  numbers and dates only ("New lead through your quote page: roof repair, this week").
+- requests: [{at, text, status:"received"|"done", reply}]: what the client asked us through the
+  dashboard (text = the ask in our words, under 100 characters) and what we did (reply, one
+  line).
+- alerts: "text and email" | "email only": what the client chose (client.leadAlerts; "email
+  only" once leadAlertsVerified is false). Never the cell number itself.
+
+**Privacy:** numbers, dates and our own one-liners only. Never a lead's, customer's or
+reviewer's name, phone, email or address, never client.customers, even when the client typed
+one into a dashboard request. Every number equals the database when written; zeros shown
+honestly; unknown = "unknown".
+
+**When it is written:** at onboarding (reply desk Lane C: every list empty); on every Day Shift
+09 run that touches the client (7b); on every reply-desk run that logs a lead or a dashboard
+action for that client (Lane K; it is the one client file the desk may write any run); and on
+the monthly date, before the report goes out. Commit "results: <token>" (no business name in
+the message), pull --rebase, push.
+
+**Dashboard actions** (reply desk Lane K): the dashboard is static, so every action the client
+takes posts a FormSubmit email to the Ridgeline inbox, subject "Dashboard — <business>
+[<token>]: <action>", fields token, business, action, details, page. Token = client.resultsToken
+(the business name is a label, never the match); a token that matches no client → ignore the
+email and alert Grayson once. FormSubmit is never replied to: anything we say goes to the
+client's own address in their thread.
+
+| Action | details | What the desk does |
+|---|---|---|
+| lead-outcome | "L-0007 → customer" / "L-0007 → no-customer" / "L-0007 → pending" | jobAnswer on that leadlog row (answer "job" for customer, "no job" for no-customer, "pending" for pending; answeredAt now; source "dashboard"), then leads.items[].status and leads.outcome in the JSON. It counts exactly like a monthly-email answer. NO email back (the dashboard already confirmed it) unless the id matches no row of theirs: then one line asking which lead they meant. |
+| review-requests | the names and emails the owner typed (real recent customers) | Add them to client.customers (database only, never the repo or the JSON), queue the review requests under "Review requests to real customers" below, ONE short confirmation: "Got them: 3 review requests go out today." |
+| request | free text (a change they want: hours, a service, a Google post idea, pause review requests, a question) | Answer within the hour like any client email (Lane C2), do what is in scope for their plan, record it in requests[] (status received → done, with the one-line reply) and in the client's thread. |
+| todo-done | "T1" | Verify when we can (Manager invite = Google's acceptance email; review link = client.reviewLink), mark todo[].done true in the JSON, thank them in one line only if it unblocks work. |
 
 ## Review requests to real customers (the rules)
 - Only addresses the owner gave us, for people who actually bought from them. One request per
@@ -140,7 +195,7 @@ refunded automatically. Disputes: evidence PDF to Grayson the same run. Reply de
 ## Cancel or pause
 "cancel" from a client → Stripe job `{"id": "c-<clientId>-<day>", "action": "cancel", "session"|"emailHash": ...}`
 (same rules as specs/guarantee.md §4: no email in the file), client.status cancelled once the out
-file says ok, and a short confirmation with the date the last paid period ends. ok false → alert. Their quote page and results JSON stay up 30 days, then are removed.
+file says ok, and a short confirmation with the date the last paid period ends. ok false → alert. Their quote page and dashboard JSON stay up 30 days, then are removed.
 
 ## Quality and happiness
 Every deliverable passes specs/quality.md (85+, scored by a fresh grader) before it is ready, and goes out

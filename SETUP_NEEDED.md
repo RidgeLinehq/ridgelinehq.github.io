@@ -8,8 +8,12 @@ link and rewrites `data/stripe-links.json`, which the site reads) and change the
 `index.html`. The Second Month Free Guarantee now covers all plans ("zero new leads AND zero new
 reviews"). Every client now gets a quote-request page (`ridgelinehq.github.io/p/<slug>/`), lead
 texts to their own cell through their carrier's email-to-text address (email always too), a
-private results page at `results.html?c=<token>`, and an industry playbook in
+private dashboard (the results page) at `results.html?c=<token>`, and an industry playbook in
 `office/playbooks/` (insurance agents, roofers, home services, salons, other).
+The dashboard link goes only to that client (Welcome Pack and monthly email; never posted, never
+a case study), and anything they do on it (mark a lead a customer, add customers for review
+requests, ask for a change, tick a to-do) lands in the Ridgeline Gmail as a "Dashboard —
+<business>" email that the desk handles by itself within the hour; nothing to tap.
 
 Everything else runs by itself. These are the only taps that need you. Each one works from
 Safari/Chrome on your phone. If a GitHub page looks cramped, tap **aA → Request Desktop Website**

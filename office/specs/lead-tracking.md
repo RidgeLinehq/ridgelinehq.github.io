@@ -9,7 +9,8 @@ minutes and asked about monthly. The Lead Finder (Reddit + web search) stays Pro
 `leadlog/<clientId>-<yyyymmdd>-<4 hex>` = {clientId, at (ISO), source, sourceUrl, contact:{name,
 phone, email, handle}, summary (one line, their words), what, when, area, followUpTip, status,
 counted, sentToClientAt, sentGmailId, jobAnswer:{askedAt, answer:"job"|"no job"|"pending"|"no
-answer", answeredAt, value}, createdBy, notes}
+answer", answeredAt, value, source:"email"|"dashboard"}, dashboardId ("L-0007", Nov 3, 2026),
+createdBy, notes}
 - The lead standard (Nov 3, 2026): every lead sent or logged carries name, contact, what they
   want, when, where (area), source and date, plus the follow-up tip (one line, the owner's best
   next move: "Call before 5 today; they want a quote this week"). A piece the source didn't give
@@ -23,7 +24,12 @@ answer", answeredAt, value}, createdBy, notes}
   tests, or anything older than 14 days when found. Write the reason in notes when false.
 - Contact info is only what the source showed publicly or the person typed into a form. Never
   look a person up, never guess an email.
-- The database is private; NOTHING from leadlog goes in the public repo.
+- The database is private; NOTHING from leadlog goes in the public repo except the dashboard's
+  lead list below (id, date, what, when, source, status; never contact, summary, area, details
+  or the URL).
+- dashboardId (Nov 3, 2026): "L-" + a 4-digit number per client, in logging order, given when
+  the row is created, never reused or renumbered. It is the only piece of a lead that reaches the
+  public dashboard JSON, so the owner's answer on the dashboard can be applied to the right row.
 
 ## Allowed sources (only these; Grayson Oct 24, 2026: "must be legit")
 | Source | How | Needs |
@@ -54,15 +60,35 @@ decides whether and how to answer.
 
 ## "Did this lead turn into a customer?" (monthly, every plan since Nov 3, 2026; Lane D of the reply desk)
 On the client's monthly date (startedAt day-of-month), one email to the owner listing every lead
-sent in the last 30 days still at status sent/contacted, numbered: "Reply with the numbers that
+sent in the last 30 days still at status sent/contacted AND still pending (no jobAnswer, or
+"pending" / "no answer"; a lead already answered on the dashboard is left out, and nothing
+pending = no email that month), numbered: "Reply with the numbers that
 became customers (e.g. 1, 4), or 'none'." Parse the reply: listed numbers → job, the rest → no
 job; "none" → all no job; no reply in 7 days → no answer. Log jobAnswer on each row (the field
-keeps its name; "job" = became a customer). Never assume.
+keeps its name; "job" = became a customer; source "email"). Never assume.
+The dashboard path (Nov 3, 2026): the dashboard shows the same leads by dashboardId and the
+owner taps customer / no-customer / pending on each. It arrives as a "Dashboard — <business>
+[<token>]: lead-outcome" email (reply desk Lane K) and counts exactly like a monthly-email
+answer: jobAnswer {answer "job" | "no job" | "pending", answeredAt now, source "dashboard"} on
+that row, status job / no job, and the JSON refreshed the same run. Two answers for one lead:
+the newer one stands. The guarantee and the report read jobAnswer and never care which path.
+
+## The dashboard's lead list (leads.items; Nov 3, 2026)
+data/results/<token>.json (specs/client-delivery.md "Dashboard (the results page)") carries one
+item per counted lead: {id: dashboardId, at: the date only, what, when (as typed), source,
+status}. NO names, phones, emails, addresses, handles or URLs: contact, summary, area, details
+and sourceUrl never leave the database. source maps from the row: lead-page → "quote-page";
+gbp-message, gbp-call → "google-profile"; reddit, web-search → "lead-finder"; client-forward,
+free-check-referral → "client-forward". status: "customer" (jobAnswer job), "no-customer" (no
+job), "pending" (asked and not answered, or the owner tapped pending), "new" (logged, not asked
+yet). Leads counted false are left out. Whoever logs or answers a lead (desk Lanes G and K, Day
+Shift 09 7b) refreshes the list in the same run.
 
 ## The monthly results report (Day Shift 09 drafts it, reply desk sends it)
 Per client, every plan, plain text, under 250 words:
 - Leads this month: N (by source; lead-page and gbp on every plan, reddit/web-search on Pro),
-  leads that became customers: J (from their answers), "not answered yet" when unknown.
+  leads that became customers: J (from their answers, by email or on the dashboard), "not
+  answered yet" when unknown.
 - Growth/Pro: AI visibility: score at start (baseline) vs now, and this month's trend line from
   aiTrend (e.g. "0 → 17 → 33"), plus who ChatGPT and Gemini name now.
 - Reviews gained: review count at start vs now and the star-rating change (from the public
@@ -71,6 +97,6 @@ Per client, every plan, plain text, under 250 words:
 - Work done this month (from client.work and the profile changes log), next month's plan.
 - Pro: competitor tracking (the businesses named instead of them, week by week) and the video link.
 - (Nov 3, 2026) The report email's note IS the monthly check-in (specs/client-happiness.md §1:
-  wins + the one next step, under 120 words, the results page link; one email, never two). The
-  same run writes data/results/<token>.json (specs/client-delivery.md "Results page", numbers
-  only) BEFORE the email goes out, so the link shows this month's numbers.
+  wins + the one next step, under 120 words, the dashboard link; one email, never two). The
+  same run writes data/results/<token>.json (specs/client-delivery.md "Dashboard (the results
+  page)", numbers only) BEFORE the email goes out, so the link shows this month's numbers.

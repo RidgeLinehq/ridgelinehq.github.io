@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Your results — Ridgeline Local</title>
-<meta name="description" content="Your monthly Ridgeline Local results: leads, reviews, Google rating and AI search visibility.">
+<title>Your dashboard — Ridgeline Local</title>
+<meta name="description" content="Your Ridgeline Local dashboard: every lead, every review, your Google rating, your AI search visibility, what we did and what we're doing next.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#04211a">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23f6f4eb'/%3E%3Cpath d='M13.5 31V9h7.5a5.5 5.5 0 0 1 0 11H13.5' fill='none' stroke='%23082f28' stroke-width='5.5'/%3E%3Cpath d='M18 20l9.5 11' stroke='%23082f28' stroke-width='5.5'/%3E%3Cpath d='M28.5 13l3.75-6 3.75 6z' fill='%2357f2af'/%3E%3C/svg%3E">
@@ -12,365 +12,561 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--forest:#082f28;--deep:#04211a;--ink:#142721;--ivory:#f6f4eb;--white:#fffdf7;--cream:#fbf7ec;--brass:#c9a85c;--brass-text:#866a2c;--mint:#57f2af;--muted:#5c6b63;--muted-dark:#b9c8bf;--line:#e2ddcc;--sage:#e3efe7}
+:root{--forest:#082f28;--forest-700:#0f3d33;--deep:#04211a;--ink:#142721;--ivory:#f6f4eb;--white:#fffdf7;--cream:#fbf7ec;--brass:#c9a85c;--brass-text:#866a2c;--mint:#57f2af;--mint-dim:rgba(87,242,175,.14);--muted:#5c6b63;--muted-dark:#b9c8bf;--line:#e2ddcc;--sage:#e3efe7;--good:#1f8a5b;--good-dark:#16503f;--good-light:#cfe3d7;--bad:#b23a2d;--r:16px;--shadow:0 14px 40px rgba(4,33,26,.10);--ease:cubic-bezier(.16,1,.3,1)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--white);color:var(--ink);font:16.5px/1.65 "Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+html{scroll-padding-top:120px;scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.6 "Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:var(--forest);text-decoration:underline;text-decoration-color:var(--brass);text-decoration-thickness:2px;text-underline-offset:4px}
-a:focus-visible{outline:3px solid #b98f4a;outline-offset:3px;border-radius:4px}
-.wrap{width:min(760px,calc(100% - 36px));margin-inline:auto}
-.nav{background:var(--deep);color:var(--cream);border-bottom:1px solid rgba(246,244,235,.14)}
+:where(a,button,input,select,textarea,summary):focus-visible{outline:3px solid #b98f4a;outline-offset:3px;border-radius:6px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+img,svg{max-width:100%;display:block}
+h1,h2,h3,p,ul,ol{margin:0}
+[hidden]{display:none!important}
+.wrap{width:min(1100px,calc(100% - 36px));margin-inline:auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* nav */
+.nav{background:var(--deep);color:var(--ivory);border-bottom:1px solid rgba(246,244,235,.14)}
 .nav .wrap{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.brand{display:flex;align-items:center;gap:11px;font:400 1.3rem/1 "Anton","Impact",system-ui,sans-serif;letter-spacing:.02em;text-decoration:none;color:var(--cream)}
+.brand{display:flex;align-items:center;gap:11px;font:400 1.3rem/1 "Anton","Impact",system-ui,sans-serif;letter-spacing:.02em;text-decoration:none;color:var(--ivory)}
 .brand em{font-style:normal;color:#e2c87f;margin-left:.28em}
 .brand svg{width:34px;height:34px;flex:none}
-.back{font-size:.9rem;font-weight:600;padding:10px 0;color:var(--cream)}
-header.top{background:var(--deep);color:var(--cream);padding:56px 0 48px}
-.kicker{display:block;font-size:.74rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
-.kicker::after{content:"";display:block;width:44px;height:2px;background:var(--brass);margin-top:12px}
-.badge{display:inline-block;margin-left:10px;padding:3px 10px;border:1px solid var(--brass);border-radius:999px;font-size:.66rem;letter-spacing:.16em;color:#e2c87f;vertical-align:middle}
-h1{font:400 clamp(2.2rem,6.5vw,3.6rem)/1.05 "Anton","Impact",system-ui,sans-serif;letter-spacing:.005em;margin:22px 0 16px;color:var(--cream);overflow-wrap:anywhere}
-h1 em{font-style:normal;color:var(--mint);display:block;font-size:.72em;margin-top:8px}
-.meta{margin-top:14px;font-size:.85rem;color:var(--muted)}
-header.top .meta{color:var(--muted-dark);margin-top:8px}
-header.top .meta.note{color:var(--cream);background:rgba(246,244,235,.07);border:1px solid rgba(246,244,235,.16);border-radius:10px;padding:8px 12px;display:inline-block;margin-top:16px}
-main{padding:40px 0 64px}
-h2{font:700 1.1rem/1.3 "Inter",system-ui,sans-serif;margin:0 0 6px;letter-spacing:-.01em}
-.sec{margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
-.sec h2{font-size:1.18rem;margin-bottom:8px}
-.lede{margin:0 0 14px;color:var(--muted)}
-.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0}
-@media(min-width:700px){.tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}}
-.tile{background:var(--cream);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;min-width:0}
-.tile .lab{font-size:.76rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;line-height:1.3}
-.tile .val{font:400 2.3rem/1 "Anton","Impact",system-ui,sans-serif;color:var(--forest);letter-spacing:.01em;overflow-wrap:anywhere}
-.tile .val small{font:600 .9rem/1 "Inter",system-ui,sans-serif;color:var(--muted);margin-left:5px;letter-spacing:0}
-.tile .sub{margin:9px 0 0;font-size:.82rem;color:var(--muted);line-height:1.4}
-.tile .sub b{color:var(--forest);font-weight:600}
-.meaning{margin:18px 0 0;font-size:.92rem;color:var(--muted)}
-ul.plain{margin:0;padding-left:22px}
-ul.plain li{margin:7px 0}
-ul.plain li::marker{color:var(--brass-text)}
-.chart{position:relative;margin:16px 0 4px}
-.chart svg{display:block;width:100%;height:auto;overflow:visible}
-.chart text{font-family:"Inter",system-ui,sans-serif;fill:var(--muted);font-size:12px}
+.brand .dash{margin-left:14px;padding-left:14px;border-left:1px solid rgba(246,244,235,.2);font:600 .72rem/1 "Inter",system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-dark)}
+.back{font-size:.9rem;font-weight:600;padding:10px 0;color:var(--ivory);white-space:nowrap}
+@media(max-width:480px){.brand .dash{display:none}.brand{font-size:1.1rem}}
+
+/* header */
+header.top{position:relative;overflow:hidden;background:var(--deep);color:var(--ivory);padding:44px 0 40px}
+header.top::before{content:"";position:absolute;right:-220px;top:-260px;width:640px;height:640px;border-radius:50%;background:radial-gradient(closest-side,rgba(87,242,175,.16),rgba(87,242,175,0));pointer-events:none}
+header.top .wrap{position:relative}
+.kicker{display:inline-flex;align-items:center;gap:12px;font-size:.74rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
+.kicker::before{content:"";width:30px;height:2px;background:var(--brass)}
+.badge{display:inline-block;padding:4px 10px;border:1px solid var(--brass);border-radius:999px;font-size:.64rem;letter-spacing:.16em;color:#e2c87f;vertical-align:middle;text-transform:uppercase;font-weight:700}
+h1{font:400 clamp(2.2rem,6vw,3.8rem)/1 "Anton","Impact",system-ui,sans-serif;letter-spacing:.005em;margin:18px 0 10px;color:var(--ivory);overflow-wrap:anywhere}
+h1 em{font-style:normal;color:var(--mint)}
+.hmeta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.88rem;color:var(--muted-dark)}
+.hmeta b{color:var(--ivory);font-weight:600}
+.note{margin-top:16px;display:inline-block;padding:9px 13px;background:rgba(246,244,235,.07);border:1px solid rgba(246,244,235,.16);border-radius:10px;font-size:.88rem;color:var(--ivory)}
+.headline{margin-top:22px;max-width:62ch;font-size:clamp(1.08rem,2vw,1.3rem);line-height:1.5;color:var(--ivory)}
+.headline b{color:var(--mint);font-weight:600}
+.quick{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.qbtn{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:9px 16px;border-radius:10px;border:1px solid rgba(246,244,235,.3);background:rgba(255,255,255,.06);color:var(--ivory);font-weight:600;font-size:.9rem;text-decoration:none}
+.qbtn.mint{background:var(--mint);color:var(--deep);border-color:var(--mint)}
+.qbtn svg{width:16px;height:16px}
+
+/* tabs */
+.tabs{position:sticky;top:0;z-index:30;background:rgba(251,247,236,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:8px 0}
+.tabs .wrap::-webkit-scrollbar{display:none}
+.tabs a{flex:none;padding:9px 13px;border-radius:999px;font-size:.84rem;font-weight:600;text-decoration:none;color:var(--muted);white-space:nowrap}
+.tabs a.on{background:var(--forest);color:var(--ivory)}
+.tabs a:hover{color:var(--forest)}
+.tabs a.on:hover{color:var(--ivory)}
+
+/* layout */
+main{padding:28px 0 72px}
+.sec{margin-top:40px}
+.sec-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px;margin-bottom:14px}
+.sec h2{font:400 1.75rem/1.1 "Anton","Impact",system-ui,sans-serif;letter-spacing:.01em}
+.sec .lede{color:var(--muted);font-size:.95rem;max-width:64ch}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:20px;min-width:0}
+.card h3{font:700 1rem/1.3 "Inter",system-ui,sans-serif;letter-spacing:-.01em;margin-bottom:6px}
+.card .hint{font-size:.86rem;color:var(--muted);margin-bottom:12px}
+.card.dark{background:var(--forest);color:var(--ivory);border-color:var(--forest)}
+.card.dark h3{color:var(--ivory)}
+.card.dark .hint,.card.dark p{color:var(--muted-dark)}
+.card.sage{background:var(--sage);border-color:#d3e3d8}
+.rule-line{font-size:.9rem;color:var(--muted);margin-top:14px}
+.rule-line b{color:var(--ink);font-weight:600}
+
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.kpi{position:relative;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:16px 16px 14px;min-width:0;box-shadow:0 1px 0 rgba(4,33,26,.03)}
+.kpi .lab{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);line-height:1.3}
+.kpi .val{margin-top:8px;font:400 2.4rem/1 "Anton","Impact",system-ui,sans-serif;color:var(--forest);letter-spacing:.01em;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.kpi .val small{font:600 .82rem/1 "Inter",system-ui,sans-serif;color:var(--muted);letter-spacing:0}
+.kpi .delta{display:inline-flex;align-items:center;gap:4px;font:600 .78rem/1 "Inter",system-ui,sans-serif;color:var(--good);background:var(--mint-dim);padding:4px 8px;border-radius:999px;letter-spacing:0}
+.kpi .delta.flat{color:var(--muted);background:var(--ivory)}
+.kpi .sub{margin-top:8px;font-size:.8rem;color:var(--muted);line-height:1.4}
+.kpi .spark{position:absolute;right:14px;top:14px;width:84px;height:28px;opacity:.95}
+.kpi.locked{background:var(--ivory);border-style:dashed}
+.kpi.locked .val{color:var(--muted)}
+
+/* charts */
+.chart{position:relative;margin:10px 0 0}
+.chart svg{width:100%;height:auto;overflow:visible}
+.chart text{font-family:"Inter",system-ui,sans-serif;fill:var(--muted);font-size:11px}
 .chart .grid{stroke:var(--line);stroke-width:1}
 .chart .base{stroke:#cfc9b4;stroke-width:1}
-.chart .ln{fill:none;stroke:var(--forest);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
-.chart .pt{fill:var(--white);stroke:var(--forest);stroke-width:2}
-.chart .pt.last{fill:var(--forest)}
-.chart .hit{fill:transparent;cursor:default;outline:none}
-.chart .hit:focus-visible+.pt,.chart .hit:hover+.pt{stroke-width:3}
-.chart .dl{fill:var(--forest);font-weight:600;text-anchor:middle}
-.tip{position:absolute;left:0;top:0;pointer-events:none;background:var(--deep);color:var(--cream);font-size:.8rem;line-height:1.3;padding:6px 10px;border-radius:8px;white-space:nowrap;opacity:0;transform:translate(-50%,calc(-100% - 12px));transition:opacity .12s}
+.chart .ln{fill:none;stroke:var(--good);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.chart .area{fill:rgba(31,138,91,.08)}
+.chart .pt{fill:var(--white);stroke:var(--good);stroke-width:2}
+.chart .pt.last{fill:var(--good)}
+.chart .cross{stroke:var(--brass-text);stroke-width:1;stroke-dasharray:3 3;opacity:0}
+.chart .hit{fill:transparent}
+.chart .lbl{font-weight:600;fill:var(--ink)}
+.tip{position:absolute;pointer-events:none;background:var(--deep);color:var(--ivory);font-size:.78rem;font-weight:600;padding:6px 9px;border-radius:8px;white-space:nowrap;transform:translate(-50%,calc(-100% - 10px));opacity:0;transition:opacity .15s}
 .tip.on{opacity:1}
-.chartlist{font-size:.84rem;color:var(--muted);margin-top:4px}
-.chartlist summary{cursor:pointer}
-.chartlist ul{margin:6px 0 0;padding-left:20px}
-table.named{width:100%;border-collapse:collapse;margin-top:18px;font-size:.92rem}
-.named th{text-align:left;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 12px 8px 0;border-bottom:2px solid var(--line)}
-.named td{padding:10px 12px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}
-.named td:last-child,.named th:last-child{padding-right:0}
-.named .yes{color:var(--forest);font-weight:600;white-space:nowrap}
-.named .no{color:var(--muted);white-space:nowrap}
-@media(max-width:560px){
-  .named thead{display:none}
-  .named tr{display:block;padding:10px 0;border-bottom:1px solid var(--line)}
-  .named td{display:flex;gap:10px;padding:3px 0;border:0}
-  .named td.q{display:block;margin-bottom:5px;font-weight:600}
-  .named td:not(.q)::before{content:attr(data-label);flex:0 0 72px;font-size:.76rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:2px}
-}
-.small{font-size:.84rem;color:var(--muted);margin-top:14px}
-.linkrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
-.linkrow:first-of-type{border-top:0;padding-top:4px}
-.linkrow .ln{grid-column:1/-1;font-size:.76rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
-.linkrow a.url{font:500 .88rem/1.45 ui-monospace,Menlo,Consolas,monospace;overflow-wrap:anywhere;min-width:0;text-decoration-thickness:1.5px}
-.btn{padding:9px 14px;background:var(--forest);color:#fff;border:0;border-radius:10px;font:600 .86rem/1 "Inter",system-ui,sans-serif;cursor:pointer;white-space:nowrap}
-.btn:hover{background:var(--deep)}
-.btn:focus-visible{outline:3px solid #b98f4a;outline-offset:3px}
-.box{margin-top:30px;padding:20px;background:var(--sage);border-radius:14px}
-.box h2{margin-bottom:8px}
-.box p{margin:0 0 10px;color:var(--ink)}
-.box p:last-child{margin-bottom:0}
-.box.cream{background:var(--cream);border:1px solid var(--line)}
+details.aslist{margin-top:8px;font-size:.84rem;color:var(--muted)}
+details.aslist summary{cursor:pointer;font-weight:600;color:var(--brass-text)}
+details.aslist ul{margin:6px 0 0;padding-left:18px}
+.bars{display:grid;gap:9px;margin-top:8px}
+.bar{display:grid;grid-template-columns:minmax(110px,30%) 1fr auto;gap:10px;align-items:center;font-size:.9rem}
+.bar .trk{display:block;height:12px;background:var(--ivory);border-radius:6px;overflow:hidden}
+.bar .fil{display:block;height:100%;background:var(--good);border-radius:6px;min-width:4px}
+.bar .n{font-weight:700;color:var(--forest);min-width:2ch;text-align:right}
+.seg{display:flex;height:34px;border-radius:9px;overflow:hidden;gap:2px;background:var(--ivory);margin-top:10px}
+.seg i{display:flex;align-items:center;justify-content:center;font:600 .8rem/1 "Inter",system-ui,sans-serif;color:#fff;min-width:0;overflow:hidden;white-space:nowrap}
+.seg .c{background:var(--good-dark)}.seg .p{background:var(--good)}.seg .x{background:var(--good-light);color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:10px;font-size:.84rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+/* tables and lists */
+.tbl{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:8px}
+.tbl th{text-align:left;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:8px 8px 8px 0;border-bottom:1px solid var(--line)}
+.tbl td{padding:11px 8px 11px 0;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.chip{display:inline-block;padding:3px 9px;border-radius:999px;font-size:.74rem;font-weight:600;background:var(--ivory);color:var(--muted);white-space:nowrap}
+.chip.good{background:var(--mint-dim);color:var(--good-dark)}
+.chip.gold{background:#f3e8cc;color:var(--brass-text)}
+.chip.dark{background:var(--forest);color:var(--ivory)}
+.sel{min-height:40px;padding:6px 10px;border:1px solid #b9b3a1;border-radius:9px;background:#fff;font-size:.86rem;max-width:100%}
+.noted{display:block;margin-top:5px;font-size:.74rem;color:var(--good-dark);font-weight:600}
+.stars{color:var(--brass-text);letter-spacing:.1em;font-size:.95rem}
+.list{list-style:none;padding:0;margin:0}
+.list li{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line);font-size:.93rem}
+.list li:last-child{border-bottom:0}
+.list .when{flex:none;width:64px;font-size:.78rem;color:var(--muted);padding-top:3px}
+.list .k{flex:none;width:28px;height:28px;border-radius:8px;background:var(--forest);color:var(--mint);display:grid;place-items:center;font:700 .66rem/1 "Inter",system-ui,sans-serif;letter-spacing:.04em}
+.list .k.review{background:#f3e8cc;color:var(--brass-text)}.list .k.ai{background:var(--mint-dim);color:var(--good-dark)}.list .k.profile{background:var(--sage);color:var(--good-dark)}.list .k.post{background:var(--ivory);color:var(--muted)}.list .k.email,.list .k.request{background:var(--ivory);color:var(--muted)}
+ul.plain{margin:0;padding-left:20px}
+ul.plain li{margin:7px 0;font-size:.95rem}
+ul.plain li::marker{color:var(--brass-text)}
+
+/* links */
+.lnk{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.lnk:last-child{border-bottom:0}
+.lnk .lab{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.lnk a{display:block;font-size:.88rem;overflow-wrap:anywhere}
+.lnk .acts{display:flex;gap:6px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:8px 14px;border-radius:10px;border:1px solid transparent;background:var(--forest);color:#fff;font-weight:600;font-size:.88rem;text-decoration:none;transition:transform .2s var(--ease),background .2s}
+.btn:hover{background:var(--forest-700)}
+.btn.lite{background:var(--white);color:var(--forest);border-color:#c8c2ad}
+.btn.lite:hover{background:var(--ivory)}
+.btn.mint{background:var(--mint);color:var(--deep)}
+.btn.lg{min-height:50px;padding:12px 20px;font-size:1rem}
+.btn[disabled]{opacity:.6;cursor:default}
+.qr{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center;margin-top:14px}
+.qr img{width:120px;border-radius:10px;border:1px solid var(--line);background:#fff}
+@media(max-width:420px){.qr{grid-template-columns:1fr}}
+
+/* forms */
+.field{margin-top:12px}
+.field label{display:block;font-weight:600;font-size:.86rem;margin-bottom:6px}
+.field textarea,.field input{width:100%;min-height:50px;padding:12px 14px;border-radius:10px;border:1px solid #b9b3a1;background:#fff;font-size:.95rem}
+.field textarea{min-height:110px;resize:vertical;line-height:1.5}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.presets button{padding:8px 12px;border-radius:999px;border:1px solid #c8c2ad;background:var(--white);font-size:.84rem;font-weight:600;color:var(--forest)}
+.presets button:hover{background:var(--ivory)}
+.form-note{font-size:.82rem;color:var(--muted);margin-top:10px}
+
+/* todo */
+.todo{list-style:none;padding:0;margin:0}
+.todo li{display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line)}
+.todo li:last-child{border-bottom:0}
+.todo input{width:22px;height:22px;margin:2px 0 0;accent-color:var(--forest)}
+.todo .t{font-size:.95rem}
+.todo .m{font-size:.78rem;color:var(--muted);white-space:nowrap;padding-top:3px}
+.todo li.done .t{text-decoration:line-through;color:var(--muted)}
+.empty{padding:18px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:.92rem;text-align:center}
+
+/* misc */
+.err{padding:22px;background:var(--sage);border-radius:14px}
+.err h2{font:700 1.15rem/1.3 "Inter",system-ui,sans-serif;margin-bottom:8px}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translate(-50%,20px);z-index:60;background:var(--deep);color:var(--ivory);padding:12px 18px;border-radius:12px;font-weight:600;font-size:.9rem;box-shadow:var(--shadow);opacity:0;transition:opacity .25s,transform .3s var(--ease);max-width:calc(100% - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
 footer{background:var(--deep);color:var(--muted-dark);padding:28px 0 calc(28px + env(safe-area-inset-bottom));font-size:.88rem}
 footer a{color:#fff}
-[hidden]{display:none !important}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-@media(max-width:420px){.brand{font-size:1.1rem}.tile{padding:14px 13px 12px}.tile .val{font-size:2.05rem}}
+@media(max-width:860px){.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.g2,.g3{grid-template-columns:minmax(0,1fr)}.kpi .spark{display:none}.bar{grid-template-columns:minmax(90px,36%) 1fr auto}
+  .tbl.stack thead{display:none}.tbl.stack tr{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;padding:12px 0;border-bottom:1px solid var(--line)}.tbl.stack tr:last-child{border-bottom:0}.tbl.stack td{display:block;padding:0;border:0}.tbl.stack td[data-l]::before{content:attr(data-l);display:block;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:2px}.tbl.stack td.full{grid-column:1/-1}}
+@media(max-width:380px){.kpis{grid-template-columns:minmax(0,1fr)}.wrap{width:calc(100% - 28px)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.toast,.btn{transition:none}}
+@media print{.nav,.tabs,.quick,.toast,footer{display:none}body{background:#fff}.card,.kpi{break-inside:avoid}}
 </style>
 </head>
 <body>
 <nav class="nav" aria-label="Site">
   <div class="wrap">
-    <a class="brand" href="./" aria-label="Ridgeline Local home"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#f6f4eb"/><path d="M13.5 31V9h7.5a5.5 5.5 0 0 1 0 11H13.5" fill="none" stroke="#082f28" stroke-width="5.5"/><path d="M18 20l9.5 11" stroke="#082f28" stroke-width="5.5"/><path d="M28.5 13l3.75-6 3.75 6z" fill="#57f2af"/></svg><span>Ridgeline<em>Local</em></span></a>
+    <a class="brand" href="./" aria-label="Ridgeline Local home"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#f6f4eb"/><path d="M13.5 31V9h7.5a5.5 5.5 0 0 1 0 11H13.5" fill="none" stroke="#082f28" stroke-width="5.5"/><path d="M18 20l9.5 11" stroke="#082f28" stroke-width="5.5"/><path d="M28.5 13l3.75-6 3.75 6z" fill="#57f2af"/></svg><span>Ridgeline<em>Local</em></span><span class="dash">Dashboard</span></a>
     <a class="back" href="./">← Home</a>
   </div>
 </nav>
 
-<header class="top">
+<header class="top" id="top">
   <div class="wrap">
-    <span class="kicker">Your results<span class="badge" id="badge" hidden>Sample</span></span>
-    <h1 id="h1"><span id="biz">Loading your results</span><em id="town" hidden></em></h1>
-    <p class="meta" id="meta" hidden></p>
-    <p class="meta" id="period" hidden></p>
-    <p class="meta note" id="sampleNote" hidden>This is a sample. Your page shows your own numbers.</p>
+    <span class="kicker">Your dashboard <span class="badge" id="sampleBadge" hidden>Sample</span></span>
+    <h1 id="h1">Loading your numbers…</h1>
+    <div class="hmeta" id="hmeta"></div>
+    <p class="headline" id="headline"></p>
+    <div class="quick" id="quick"></div>
+    <div class="note" id="sampleNote" hidden>This is a sample. Your dashboard shows your own numbers, and every button below sends straight to us.</div>
   </div>
 </header>
 
+<nav class="tabs" id="tabs" aria-label="Dashboard sections" hidden>
+  <div class="wrap">
+    <a href="#overview" class="on">Overview</a><a href="#leads">Leads</a><a href="#reviews">Reviews</a><a href="#ai">AI visibility</a><a href="#page">Your page</a><a href="#todo">To-do</a><a href="#ask">Ask us</a><a href="#activity">Activity</a>
+  </div>
+</nav>
+
 <main>
   <div class="wrap">
-    <noscript><div class="box"><h2>This page needs JavaScript.</h2><p>Turn it on, or reply to any email from us and we’ll send your numbers another way.</p></div></noscript>
-
-    <div class="box" id="err" hidden>
-      <h2>That link didn't work.</h2>
-      <p>We couldn't find this results page. Reply to any email from us or write to <a href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a> and we'll resend your link.</p>
+    <div class="err" id="err" hidden>
+      <h2>We couldn’t find this dashboard.</h2>
+      <p>Reply to any email from us or write to <a href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a> and we’ll resend your link.</p>
     </div>
+    <div id="app" hidden>
 
-    <div id="ready" hidden>
-      <section id="tilesSec" aria-labelledby="tilesH">
-        <h2 id="tilesH" class="sr">This month at a glance</h2>
-        <div class="tiles" id="tiles"></div>
-        <p class="meaning" id="meaning">Leads are people who contacted you through your quote page, your Google listing or the Lead Finder. Every lead is someone who asked to hear from you. Reviews and the rating are counted on your Google listing. We only collect genuine reviews from your real customers.</p>
+      <!-- OVERVIEW -->
+      <section class="sec" id="overview" aria-labelledby="ov-h" style="margin-top:0">
+        <div class="sec-h"><h2 id="ov-h">This month at a glance</h2><p class="lede" id="ov-period"></p></div>
+        <div class="kpis" id="kpis"></div>
+        <p class="rule-line"><b>Every lead is someone who asked to hear from you.</b> <b>We only collect genuine reviews from your real customers.</b> Leads are people who contacted you through your quote page, your Google listing or, on Pro, the Lead Finder. Reviews and your rating are counted on your Google listing.</p>
+        <div class="grid g2" style="margin-top:16px">
+          <div class="card"><h3>What we did this month</h3><ul class="plain" id="done"></ul></div>
+          <div class="card dark"><h3>Next step we’re taking</h3><ul class="plain" id="next"></ul></div>
+        </div>
+        <div class="card sage" id="guarantee" hidden style="margin-top:14px"><h3>Second Month Free Guarantee</h3><p id="gText"></p><p class="form-note" style="margin-top:6px">If month one brings zero new leads and zero new reviews, month two is free. <a href="guarantee.html">Read the terms</a>.</p></div>
       </section>
 
-      <section class="sec" id="aiSec" hidden>
-        <h2>AI search visibility</h2>
-        <p class="lede" id="aiLede"></p>
-        <div class="chart" id="chart"><div class="tip" id="tip" aria-hidden="true"></div></div>
-        <details class="chartlist" id="chartList" hidden><summary>Show the weekly scores as a list</summary><ul id="chartUl"></ul></details>
-        <table class="named" id="named" hidden>
-          <thead><tr><th scope="col">Question we asked</th><th scope="col">ChatGPT</th><th scope="col">Gemini</th></tr></thead>
-          <tbody id="namedBody"></tbody>
-        </table>
-        <p class="small">Scores come from the latest check. Gemini answers without web search and moves around from week to week, so we track the trend rather than any single check. We save the exact answers; ask and we’ll send them.</p>
-      </section>
-      <section class="sec" id="aiOff" hidden>
-        <p class="lede" style="margin:0">AI search visibility is included on Growth and Pro.</p>
-      </section>
-
-      <section class="sec" id="doneSec" hidden>
-        <h2>What we did this month</h2>
-        <ul class="plain" id="doneUl"></ul>
-      </section>
-
-      <section class="sec" id="nextSec" hidden>
-        <h2>Next step we're taking</h2>
-        <ul class="plain" id="nextUl"></ul>
+      <!-- LEADS -->
+      <section class="sec" id="leads" aria-labelledby="ld-h">
+        <div class="sec-h"><h2 id="ld-h">Leads</h2><p class="lede">Every person who asked for you, where they came from, and what happened next. Names and numbers are in your lead texts and emails. We never put them on a web page.</p></div>
+        <div class="grid g2">
+          <div class="card"><h3>Where your leads came from</h3><p class="hint">Since you started with us.</p><div class="bars" id="srcBars"></div></div>
+          <div class="card"><h3>What happened to them</h3><p class="hint">Tell us below when a lead turns into a customer. It keeps your numbers honest and shapes what we do next.</p><div class="seg" id="segOut" role="img"></div><div class="legend" id="segLeg"></div></div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <h3>Every lead</h3>
+          <p class="hint">Change the outcome and we log it. No email needed.</p>
+          <div style="overflow-x:auto"><table class="tbl stack" id="leadTbl"><thead><tr><th>What they asked for</th><th>When</th><th>Came from</th><th>Outcome</th></tr></thead><tbody></tbody></table></div>
+          <div class="empty" id="leadEmpty" hidden>No lead requests yet. Your quote page is live and linked from your Google profile; the first one will show up here the minute it lands.</div>
+        </div>
+        <div class="card dark" style="margin-top:14px">
+          <h3>How leads reach you</h3>
+          <p>Each one arrives <b id="alertHow">by text and email</b> within minutes with the person’s name, contact, what they need and when. Follow up fast: call back within 5 minutes if you can. A fast call back is the single biggest factor in winning the job.</p>
+          <p style="margin-top:10px">Say: “Hi, this is <span id="bizSay">your business</span>. You just sent us a request. I can help with that. When works for a quick chat?”</p>
+        </div>
       </section>
 
-      <section class="sec" id="linksSec" hidden>
-        <h2>Your links</h2>
-        <p class="lede">Share these anywhere: texts, invoices, your truck, your counter.</p>
-        <div id="links"></div>
+      <!-- REVIEWS -->
+      <section class="sec" id="reviews" aria-labelledby="rv-h">
+        <div class="sec-h"><h2 id="rv-h">Reviews</h2><p class="lede">Real customers, one short request with your link, replies drafted for you. We only collect genuine reviews from your real customers.</p></div>
+        <div class="grid g2">
+          <div class="card"><h3>Your Google reviews</h3><p class="hint" id="rvHint"></p><div class="chart" id="rvChart"></div></div>
+          <div class="card"><h3>Recent reviews</h3><p class="hint">From your public Google listing. Forward any new review to us and we draft the reply.</p><ul class="list" id="rvList"></ul><div class="empty" id="rvEmpty" hidden>No new reviews since we started. Your first requests are out; we’ll show each one here as it lands.</div></div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <h3>Ask more customers for a review</h3>
+          <p class="hint">Paste recent, real customers (name and email, one per line, up to 10). Each gets one short email with your review link. No incentives, no pressure, no filtering.</p>
+          <div class="field"><label for="custList">Customers to ask</label><textarea id="custList" placeholder="Dana R., dana@example.com&#10;Marcus T., marcus@example.com"></textarea></div>
+          <button class="btn" type="button" id="custSend">Send them to Ridgeline</button>
+          <p class="form-note">We only collect genuine reviews from your real customers. Only people who actually bought from you.</p>
+        </div>
       </section>
 
-      <div class="box cream">
-        <h2>How leads reach you</h2>
-        <p>Each lead arrives by email and text within minutes with the person's name, contact, what they need and when. Follow-up tip: call back within 5 minutes if you can. A fast call back is the single biggest factor in winning the job.</p>
-      </div>
+      <!-- AI -->
+      <section class="sec" id="ai" aria-labelledby="ai-h">
+        <div class="sec-h"><h2 id="ai-h">AI search visibility</h2><p class="lede" id="aiLede">Each week we ask ChatGPT and Gemini three questions a customer in your town would ask, and note whether they name you.</p></div>
+        <div id="aiOn">
+          <div class="grid g2">
+            <div class="card"><h3>Your AI score</h3><p class="hint">0 to 100. Named in the first three answers scores full points.</p><div class="chart" id="aiChart"></div></div>
+            <div class="card"><h3>The questions, this week</h3><div style="overflow-x:auto"><table class="tbl stack" id="aiTbl"><thead><tr><th>Question we asked</th><th>ChatGPT</th><th>Gemini</th></tr></thead><tbody></tbody></table></div><div id="compBox" hidden><p class="hint" style="margin:14px 0 8px">Who AI names instead of you right now</p><div id="comp" class="presets" style="margin:0"></div></div></div>
+          </div>
+          <p class="form-note">Scores come from the latest check. Gemini answers without web search and moves around from week to week, so we track the trend rather than any single check. We save the exact answers; ask and we’ll send them.</p>
+        </div>
+        <div class="card" id="aiOff" hidden><h3>Included on Growth and Pro</h3><p class="hint" style="margin:0">Weekly ChatGPT and Gemini checks, your AI score here and in your report, and monthly Google posts. <a href="./#pricing">See the plans</a>, or just reply to any email from us.</p></div>
+      </section>
 
-      <div class="box cream">
-        <h2>Reviews</h2>
-        <p>Forward any new review to us and we draft the reply for you. We only collect genuine reviews from your real customers.</p>
-      </div>
+      <!-- YOUR PAGE -->
+      <section class="sec" id="page" aria-labelledby="pg-h">
+        <div class="sec-h"><h2 id="pg-h">Your page and links</h2><p class="lede">Share these anywhere: texts, invoices, your truck, your counter. Every request from them reaches your phone.</p></div>
+        <div class="grid g2">
+          <div class="card"><h3>Your links</h3><div id="links"></div><div class="qr" id="qrBox" hidden><img id="qrImg" alt="Your review QR card" loading="lazy"><div><b style="font-size:.95rem">Your review card</b><p class="hint" style="margin:4px 0 10px">Print it for the counter, the invoice or the truck. Customers scan it and land on your review link.</p><a class="btn lite" id="qrOpen" href="#" target="_blank" rel="noopener">Open and print</a></div></div></div>
+          <div class="card"><h3>Tracking links</h3><p class="hint">Same page, different link per place, so we can see which one brings the requests.</p><div id="track"></div></div>
+        </div>
+        <div class="card" id="postsCard" hidden style="margin-top:14px"><h3>Google posts</h3><p class="hint">We write and publish these on your Google listing. Want one about something specific? Ask below.</p><ul class="list" id="posts"></ul></div>
+      </section>
 
-      <div class="box" id="gBox" hidden>
-        <h2>Second Month Free Guarantee</h2>
-        <p id="gText"></p>
-        <p class="small" style="margin-top:0">If month one brings zero new leads and zero new reviews, month two is free. <a href="guarantee.html">Read the terms</a>.</p>
-      </div>
-    </div>
+      <!-- TODO -->
+      <section class="sec" id="todo" aria-labelledby="td-h">
+        <div class="sec-h"><h2 id="td-h">To-do</h2><p class="lede">The few things only you can do. Tick it and we know.</p></div>
+        <div class="card"><ul class="todo" id="todoList"></ul><div class="empty" id="todoEmpty" hidden>Nothing needed from you right now. We’re on it.</div></div>
+      </section>
 
-    <div class="box">
-      <h2>Questions? Just reply.</h2>
-      <p>Reply to any email from us or write to <a href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a>. A person answers.</p>
+      <!-- ASK -->
+      <section class="sec" id="ask" aria-labelledby="ak-h">
+        <div class="sec-h"><h2 id="ak-h">Ask us anything</h2><p class="lede">Change your hours, add a service, request a Google post, pause review requests, or just ask. A real person answers, usually within the hour.</p></div>
+        <div class="grid g2">
+          <div class="card">
+            <div class="presets" id="presets"></div>
+            <div class="field"><label for="askText">What do you need?</label><textarea id="askText" placeholder="e.g. We’re closed the week of Thanksgiving. Can you update the hours on Google?"></textarea></div>
+            <button class="btn lg" type="button" id="askSend">Send to Ridgeline</button>
+            <p class="form-note">Goes straight to our inbox with your business name. Prefer email? Reply to any message from us.</p>
+          </div>
+          <div class="card"><h3>What you’ve asked for</h3><ul class="list" id="reqList"></ul><div class="empty" id="reqEmpty" hidden>Nothing yet. Anything you send shows up here with what we did about it.</div></div>
+        </div>
+      </section>
+
+      <!-- ACTIVITY -->
+      <section class="sec" id="activity" aria-labelledby="ac-h">
+        <div class="sec-h"><h2 id="ac-h">Everything we did</h2><p class="lede">Dated, in order, no fluff.</p></div>
+        <div class="card"><ul class="list" id="actList"></ul><button class="btn lite" type="button" id="actMore" hidden style="margin-top:12px">Show everything</button></div>
+      </section>
+
+      <div class="card sage" style="margin-top:40px"><h3>Questions? Just reply.</h3><p style="margin:0">Reply to any email from us or write to <a href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a>. A person answers.</p></div>
     </div>
   </div>
 </main>
 
-<footer><div class="wrap">© 2026 Ridgeline Local · <a href="./">Home</a> · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a></div></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<footer><div class="wrap">© 2026 Ridgeline Local · <a href="./">Home</a> · <a href="guarantee.html">Guarantee</a> · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a></div></footer>
 
 <script>
 (function(){
   "use strict";
-  var $=function(id){return document.getElementById(id)};
-  var MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
-  var SOURCES={"quote-page":"quote page","google-profile":"Google profile","lead-finder":"Lead Finder"};
-  var PLANS={starter:"Starter",growth:"Growth",pro:"Pro"};
-  var LINKS=[["quotePage","Your quote-request page"],["reviewLink","Your Google review link"],["reviewCard","Your review card (QR)"]];
+  var EMAIL="ridgelinemarketinghq@gmail.com", FORM_URL="https://formsubmit.co/ajax/"+EMAIL;
+  var $=function(s,c){return (c||document).querySelector(s)};
+  var $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+  function el(tag,attrs,html){var e=document.createElement(tag);if(attrs)Object.keys(attrs).forEach(function(k){if(k==="class")e.className=attrs[k];else e.setAttribute(k,attrs[k])});if(html!=null)e.innerHTML=html;return e}
+  var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  function pd(s){var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(String(s||""));return m?new Date(+m[1],+m[2]-1,+m[3]):null}
+  function fd(s,long){var d=pd(s);if(!d)return esc(s||"");return MON[d.getMonth()]+" "+d.getDate()+(long?", "+d.getFullYear():"")}
+  function num(v){return (typeof v==="number"&&isFinite(v))?v:null}
+  function plural(n,one,many){return n===1?one:(many||one+"s")}
 
-  function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
-  function num(v){return typeof v==="number"&&isFinite(v)}
-  function str(v){return typeof v==="string"&&v.trim()?v.trim():""}
-  function parseDate(s){var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(String(s||""));if(!m)return null;var d=new Date(+m[1],+m[2]-1,+m[3]);return isNaN(d)?null:d}
-  function longDate(s){var d=parseDate(s);return d?MONTHS[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear():""}
-  function shortDate(s){var d=parseDate(s);return d?MONTHS[d.getMonth()].slice(0,3)+" "+d.getDate():""}
-  function periodText(p){
-    if(!p)return "";var a=parseDate(p.from),b=parseDate(p.to);
-    if(a&&b){
-      if(a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth())return MONTHS[a.getMonth()]+" "+a.getDate()+" – "+b.getDate()+", "+b.getFullYear();
-      if(a.getFullYear()===b.getFullYear())return MONTHS[a.getMonth()]+" "+a.getDate()+" – "+MONTHS[b.getMonth()]+" "+b.getDate()+", "+b.getFullYear();
-      return longDate(p.from)+" – "+longDate(p.to);
-    }
-    return a?"from "+longDate(p.from):(b?"to "+longDate(p.to):"");
-  }
-  function fmt(n,dec){if(dec)return (Math.round(n*10)/10).toFixed(1);return Math.round(n).toLocaleString("en-US")}
-  function signed(n,dec){return (n>0?"+":n<0?"−":"±")+fmt(Math.abs(n),dec)}
-  function delta(n,dec){return Math.abs(n)<(dec?.05:.5)?document.createTextNode("no change"):el("b",null,signed(n,dec))}
-  function planName(p){p=str(p).toLowerCase();return PLANS[p]||(p?p.charAt(0).toUpperCase()+p.slice(1):"")}
-  function clearNode(n){while(n.firstChild)n.removeChild(n.firstChild)}
+  /* ---- token + data ---- */
+  var q=new URLSearchParams(location.search);
+  var raw=(q.get("c")||"").trim().toLowerCase();
+  var token=raw||"sample", isSample=token==="sample";
+  var valid=/^[a-z0-9]{6,40}$/.test(token);
+  var D=null, over=loadLocal();
+  function loadLocal(){try{return JSON.parse(localStorage.getItem("rl-dash:"+token)||"{}")}catch(e){return {}}}
+  function saveLocal(){try{localStorage.setItem("rl-dash:"+token,JSON.stringify(over))}catch(e){}}
 
-  /* ---------- state ---------- */
-  function showError(){
-    $("biz").textContent="Your results";$("town").hidden=true;
-    $("meta").hidden=true;$("period").hidden=true;$("sampleNote").hidden=true;$("badge").hidden=true;
-    $("ready").hidden=true;$("err").hidden=false;
-    document.title="Results page — Ridgeline Local";
+  if(!valid){showErr()}
+  else{
+    fetch("data/results/"+token+".json",{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){
+      if(!d||typeof d.business!=="string")throw 0;D=d;render()}).catch(showErr);
   }
+  function showErr(){$("#err").hidden=false;$("#h1").textContent="Hmm.";$("#hmeta").textContent="";document.title="Dashboard not found — Ridgeline Local"}
 
-  /* ---------- tiles ---------- */
-  function tile(label,value,small,subNodes){
-    var t=el("div","tile");t.appendChild(el("p","lab",label));
-    var v=el("div","val",value);if(small)v.appendChild(el("small",null,small));t.appendChild(v);
-    if(subNodes&&subNodes.length){var s=el("p","sub");subNodes.forEach(function(n){s.appendChild(typeof n==="string"?document.createTextNode(n):n)});t.appendChild(s)}
-    return t;
-  }
-  function buildTiles(d){
-    var out=[],L=d.leads||{},R=d.reviews||{},A=d.ai||{};
-    if(num(L.thisMonth)){
-      var parts=[];if(L.bySource&&typeof L.bySource==="object"){Object.keys(L.bySource).forEach(function(k){var n=L.bySource[k];if(num(n)&&n>0)parts.push(fmt(n)+" "+(SOURCES[k]||k.replace(/-/g," ")))})}
-      out.push(tile("Leads this month",fmt(L.thisMonth),null,[parts.length?parts.join(" · "):(L.thisMonth===0?"None yet this month.":"")].filter(Boolean)));
-    }
-    if(num(L.total))out.push(tile("Leads total",fmt(L.total),null,["Since you started with us."]));
-    if(L.outcome&&typeof L.outcome==="object"){
-      var c=num(L.outcome.customer)?L.outcome.customer:0,nc=num(L.outcome.noCustomer)?L.outcome.noCustomer:0,pd=num(L.outcome.pending)?L.outcome.pending:0,ans=c+nc;
-      var sub=[ans+" answered so far"];if(pd>0)sub.push(pd+" pending");
-      out.push(tile("Became customers",fmt(c),"of "+ans,[sub.join(" · ")]));
-    }
-    if(num(R.now)&&num(R.atStart)){
-      var nodes=[fmt(R.atStart)+" → "+fmt(R.now)];if(num(R.requestsSent))nodes.push(" · "+fmt(R.requestsSent)+" requests sent");
-      out.push(tile("New reviews",signed(R.now-R.atStart),null,nodes));
-    }else if(num(R.now)){out.push(tile("Google reviews",fmt(R.now),null,[]))}
-    if(num(R.ratingNow)){
-      var rn=[];if(num(R.ratingAtStart)){rn.push(fmt(R.ratingAtStart,1)+" → "+fmt(R.ratingNow,1)+" · ");rn.push(delta(R.ratingNow-R.ratingAtStart,1))}else rn.push("on Google");
-      out.push(tile("Google rating",fmt(R.ratingNow,1),null,rn));
-    }
-    if(A.enabled&&num(A.scoreNow)){
-      var an=[];if(num(A.scoreAtStart)){an.push(fmt(A.scoreAtStart)+" → "+fmt(A.scoreNow)+" · ");an.push(delta(A.scoreNow-A.scoreAtStart))}else an.push("out of 100");
-      out.push(tile("AI score",fmt(A.scoreNow),"/100",an));
-    }
-    var host=$("tiles");clearNode(host);out.forEach(function(t){host.appendChild(t)});
-    $("tilesSec").hidden=out.length===0;
+  /* ---- toast + actions ---- */
+  var toastT;
+  function toast(msg){var t=$("#toast");t.textContent=msg;t.classList.add("on");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("on")},3200)}
+  function sendAction(action,details,ok){
+    if(isSample){toast("This is the sample. On your dashboard this goes straight to us.");if(ok)ok();return}
+    var subject="Dashboard — "+D.business+" ["+token+"]: "+action;
+    var payload={_subject:subject,_template:"box",_captcha:"false",token:token,business:D.business,action:action,details:details,page:location.href};
+    fetch(FORM_URL,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(payload)})
+      .then(function(r){return r.json().then(function(j){if(!r.ok||String(j.success)==="false")throw 0})})
+      .then(function(){toast("Sent. We’ll take care of it.");if(ok)ok()})
+      .catch(function(){
+        toast("Couldn’t send. Opening your email instead.");
+        location.href="mailto:"+EMAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(details+"\n\n(token "+token+")");
+      });
   }
 
-  /* ---------- chart ---------- */
-  var chartPts=null,lastW=0;
-  function drawChart(){
-    var host=$("chart"),tip=$("tip"),pts=chartPts;
-    if(!pts||!pts.length){return}
-    var old=host.querySelector("svg");if(old)host.removeChild(old);
-    var W=Math.max(260,Math.floor(host.clientWidth||600)),H=W<480?200:230,pL=34,pR=26,pT=22,pB=30,n=pts.length;
-    var NS="http://www.w3.org/2000/svg";
-    function mk(t,a){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);return e}
-    var svg=mk("svg",{viewBox:"0 0 "+W+" "+H,width:W,height:H,role:"img","aria-label":"AI score by week, 0 to 100"});
-    var x=function(i){return n===1?pL+(W-pL-pR)/2:pL+i*(W-pL-pR)/(n-1)};
-    var y=function(s){return pT+(100-Math.max(0,Math.min(100,s)))*(H-pT-pB)/100};
-    [0,50,100].forEach(function(g){svg.appendChild(mk("line",{x1:pL,x2:W-pR,y1:y(g),y2:y(g),"class":g===0?"base":"grid"}));var t=mk("text",{x:pL-8,y:y(g)+4,"text-anchor":"end"});t.textContent=g;svg.appendChild(t)});
-    var step=n<=6?1:Math.ceil((n-1)/5);
-    pts.forEach(function(p,i){if(i%step===0||i===n-1){var t=mk("text",{x:x(i),y:H-8,"text-anchor":i===0?"start":(i===n-1?"end":"middle")});t.textContent=shortDate(p.at);svg.appendChild(t)}});
-    if(n>1){var dd=pts.map(function(p,i){return (i?"L":"M")+x(i).toFixed(1)+" "+y(p.score).toFixed(1)}).join(" ");svg.appendChild(mk("path",{d:dd,"class":"ln"}))}
-    pts.forEach(function(p,i){
-      var cx=x(i),cy=y(p.score),label=shortDate(p.at)+": "+fmt(p.score);
-      var hit=mk("circle",{cx:cx,cy:cy,r:16,"class":"hit",tabindex:"0",role:"img","aria-label":label});
-      var dot=mk("circle",{cx:cx,cy:cy,r:5,"class":"pt"+(i===n-1?" last":"")});
-      svg.appendChild(hit);svg.appendChild(dot);
-      /* direct-label first and last point; skip the first when its value is already printed on the axis at that height */
-      var onAxis=p.score===0||p.score===50||p.score===100;
-      if(i===n-1||(i===0&&!onAxis)){var dl=mk("text",{x:cx,y:cy-12,"class":"dl"});dl.textContent=fmt(p.score);if(i===0&&n>1){dl.setAttribute("text-anchor","start");dl.setAttribute("x",cx-4)}if(i===n-1&&n>1){dl.setAttribute("text-anchor","end");dl.setAttribute("x",cx+4)}svg.appendChild(dl)}
-      var show=function(){tip.textContent=label;tip.style.left=cx+"px";tip.style.top=cy+"px";tip.classList.add("on")};
-      var hide=function(){tip.classList.remove("on")};
-      hit.addEventListener("mouseenter",show);hit.addEventListener("mouseleave",hide);hit.addEventListener("focus",show);hit.addEventListener("blur",hide);
+  /* ---- charts ---- */
+  function spark(points,key){ /* small sparkline, de-emphasized, last point accent */
+    var vals=points.map(function(p){return num(p[key])}).filter(function(v){return v!==null});if(vals.length<2)return "";
+    var W=84,H=28,max=Math.max.apply(null,vals),min=Math.min.apply(null,vals),n=vals.length;
+    var pts=vals.map(function(v,i){return [(i/(n-1))*(W-4)+2, H-3-((v-min)/((max-min)||1))*(H-8)]});
+    var d=pts.map(function(p,i){return (i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)}).join(" ");
+    var l=pts[pts.length-1];
+    return '<svg class="spark" viewBox="0 0 '+W+' '+H+'" aria-hidden="true"><path d="'+d+'" fill="none" stroke="#b9c8bf" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="'+l[0].toFixed(1)+'" cy="'+l[1].toFixed(1)+'" r="3.5" fill="#1f8a5b"/></svg>';
+  }
+  function lineChart(host,points,key,opts){ /* single-series line with crosshair + tooltip, plus a list view */
+    opts=opts||{};host.innerHTML="";
+    var pts=points.map(function(p){return {at:p.at,v:num(p[key])}}).filter(function(p){return p.v!==null});
+    if(pts.length<2){host.innerHTML='<p class="hint">Not enough checks yet to draw a line. The first points land here after week two.</p>';return}
+    var W=560,H=210,pl=34,pr=18,pt=18,pb=30,n=pts.length;
+    var max=opts.max||Math.max.apply(null,pts.map(function(p){return p.v}).concat([1])),min=opts.min!=null?opts.min:0;
+    if(opts.pad&&!opts.max){max=Math.ceil(max*1.08)}
+    var X=function(i){return pl+(W-pl-pr)*(n>1?i/(n-1):.5)},Y=function(v){return pt+(H-pt-pb)*(1-(v-min)/((max-min)||1))};
+    var g='',k;
+    [0,.5,1].forEach(function(f){var v=min+(max-min)*f,y=Y(v);g+='<line class="'+(f?'grid':'base')+'" x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y.toFixed(1)+'" y2="'+y.toFixed(1)+'"/><text x="'+(pl-8)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end">'+Math.round(v)+'</text>'});
+    var d=pts.map(function(p,i){return (i?"L":"M")+X(i).toFixed(1)+" "+Y(p.v).toFixed(1)}).join(" ");
+    var area=d+" L"+X(n-1).toFixed(1)+" "+Y(min).toFixed(1)+" L"+X(0).toFixed(1)+" "+Y(min).toFixed(1)+" Z";
+    var step=Math.max(1,Math.ceil(n/5)),lab='';
+    pts.forEach(function(p,i){if(i%step===0||i===n-1)lab+='<text x="'+X(i).toFixed(1)+'" y="'+(H-8)+'" text-anchor="'+(i===0?'start':i===n-1?'end':'middle')+'">'+fd(p.at)+'</text>'});
+    var circles=pts.map(function(p,i){return '<circle class="pt'+(i===n-1?' last':'')+'" cx="'+X(i).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="4"/>'}).join("");
+    var last=pts[n-1];
+    var svg='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(opts.label||'')+'">'+g+'<path class="area" d="'+area+'"/><path class="ln" d="'+d+'"/>'+circles+
+      '<text class="lbl" x="'+(X(n-1)).toFixed(1)+'" y="'+(Y(last.v)-10).toFixed(1)+'" text-anchor="end">'+last.v+'</text>'+lab+
+      '<line class="cross" id="cross" x1="0" x2="0" y1="'+pt+'" y2="'+(H-pb)+'"/><rect class="hit" x="'+pl+'" y="0" width="'+(W-pl-pr)+'" height="'+H+'"/></svg><div class="tip" id="tip"></div>';
+    host.innerHTML=svg;
+    var listEl=el("details",{class:"aslist"},'<summary>Show as a list</summary><ul>'+pts.map(function(p){return '<li>'+fd(p.at,true)+': '+p.v+(opts.unit||'')+'</li>'}).join("")+'</ul>');
+    host.appendChild(listEl);
+    var svgEl=$("svg",host),tip=$(".tip",host),cross=$(".cross",host);
+    function move(e){
+      var r=svgEl.getBoundingClientRect(),cx=(e.touches?e.touches[0].clientX:e.clientX)-r.left,sx=cx*(W/r.width);
+      var best=0,bd=1e9;pts.forEach(function(p,i){var dd=Math.abs(X(i)-sx);if(dd<bd){bd=dd;best=i}});
+      cross.setAttribute("x1",X(best));cross.setAttribute("x2",X(best));cross.style.opacity=1;
+      tip.textContent=fd(pts[best].at)+" · "+pts[best].v+(opts.unit||"");tip.style.left=(X(best)*(r.width/W))+"px";tip.style.top=(Y(pts[best].v)*(r.height/H))+"px";tip.classList.add("on");
+    }
+    function leave(){cross.style.opacity=0;tip.classList.remove("on")}
+    svgEl.addEventListener("mousemove",move);svgEl.addEventListener("touchstart",move,{passive:true});svgEl.addEventListener("touchmove",move,{passive:true});
+    svgEl.addEventListener("mouseleave",leave);svgEl.addEventListener("touchend",leave);
+  }
+  function rankedBars(host,rows){ /* one hue, direct labels, largest first */
+    host.innerHTML="";var max=Math.max.apply(null,rows.map(function(r){return r.n}).concat([1]));
+    rows.sort(function(a,b){return b.n-a.n}).forEach(function(r){
+      host.appendChild(el("div",{class:"bar"},'<span>'+esc(r.label)+'</span><span class="trk"><span class="fil" style="width:'+(r.n?Math.max(4,r.n/max*100):0)+'%"></span></span><span class="n">'+r.n+'</span>'));
     });
-    host.appendChild(svg);lastW=W;
   }
-  window.addEventListener("resize",function(){var t;return function(){clearTimeout(t);t=setTimeout(function(){var h=$("chart");if(chartPts&&h.clientWidth&&Math.floor(h.clientWidth)!==lastW)drawChart()},150)}}());
 
-  function buildAI(d){
-    var A=d.ai;
-    if(!A||!A.enabled){$("aiSec").hidden=true;$("aiOff").hidden=false;return}
-    $("aiOff").hidden=true;$("aiSec").hidden=false;
-    var town=str(d.town);
-    $("aiLede").textContent="Each week we ask ChatGPT and Gemini three questions a customer"+(town?" in "+town:"")+" would ask, and note whether they name you. The score runs from 0 to 100.";
-    var pts=Array.isArray(A.trend)?A.trend.filter(function(t){return t&&num(t.score)&&parseDate(t.at)}).sort(function(a,b){return parseDate(a.at)-parseDate(b.at)}):[];
-    chartPts=pts.length?pts:null;
-    var host=$("chart");var old=host.querySelector("svg");if(old)host.removeChild(old);var oldP=host.querySelector("p");if(oldP)host.removeChild(oldP);
-    if(pts.length){drawChart();var ul=$("chartUl");clearNode(ul);pts.forEach(function(p){ul.appendChild(el("li",null,longDate(p.at)+": "+fmt(p.score)))});$("chartList").hidden=false}
-    else{host.appendChild(el("p","small","Your first weekly check is on the way."));$("chartList").hidden=true}
-    var rows=Array.isArray(A.named)?A.named.filter(function(r){return r&&str(r.question)}):[];
-    var body=$("namedBody");clearNode(body);
-    rows.forEach(function(r){
-      var tr=el("tr");tr.appendChild(el("td","q",str(r.question)));
-      [["chatgpt","ChatGPT"],["gemini","Gemini"]].forEach(function(c){var v=str(r[c[0]])||"—";var td=el("td",/^named/i.test(v)?"yes":(/^not/i.test(v)?"no":""),v);td.setAttribute("data-label",c[1]);tr.appendChild(td)});
-      body.appendChild(tr);
+  /* ---- render ---- */
+  var SRC={"quote-page":"Your quote page","google-profile":"Your Google profile","lead-finder":"Lead Finder (Pro)","client-forward":"Forwarded by you","direct":"Direct"};
+  var STATUS={"customer":["Became a customer","good"],"no-customer":["Not this time",""],"pending":["Still talking","gold"],"new":["New","dark"]};
+  function render(){
+    var d=D, L=d.leads||{}, R=d.reviews||{}, A=d.ai||{}, planName={starter:"Starter: Leads + Reviews",growth:"Growth",pro:"Pro"}[String(d.plan||"").toLowerCase()]||"";
+    document.title=d.business+" — Your dashboard — Ridgeline Local";
+    if(isSample){$("#sampleBadge").hidden=false;$("#sampleNote").hidden=false}
+    $("#h1").innerHTML=esc(d.business)+(d.town?' <em>· '+esc(d.town)+'</em>':'');
+    var meta=[];if(d.updatedAt)meta.push('Updated <b>'+fd(d.updatedAt,true)+'</b>');if(planName)meta.push('<b>'+esc(planName)+'</b> plan');if(num(d.monthNumber))meta.push('Month <b>'+d.monthNumber+'</b>');if(d.alerts)meta.push('Lead alerts: <b>'+esc(d.alerts)+'</b>');
+    $("#hmeta").innerHTML=meta.map(function(m){return '<span>'+m+'</span>'}).join("");
+    if(d.period&&d.period.from)$("#ov-period").textContent="Covers "+fd(d.period.from)+" to "+fd(d.period.to,true)+".";
+
+    /* headline sentence */
+    var parts=[],tm=num(L.thisMonth),gained=(num(R.now)!==null&&num(R.atStart)!==null)?R.now-R.atStart:null;
+    if(tm!==null)parts.push(tm?'<b>'+tm+'</b> '+plural(tm,'person asked','people asked')+' for a quote':'no quote requests yet');
+    if(gained!==null)parts.push('<b>'+(gained>0?'+':'')+gained+'</b> new '+plural(Math.abs(gained),'review'));
+    if(A.enabled&&(A.named||[]).length){var nm=A.named.filter(function(r){return /^named/i.test(r.chatgpt||"")}).length;parts.push('ChatGPT names you for <b>'+nm+' of '+A.named.length+'</b> questions')}
+    $("#headline").innerHTML=parts.length?('This month: '+parts.join(', ').replace(/, ([^,]*)$/,' and $1')+'.'):'';
+
+    /* quick actions */
+    var qk=$("#quick"),lk=d.links||{};
+    if(lk.quotePage)qk.appendChild(el("a",{class:"qbtn mint",href:lk.quotePage,target:"_blank",rel:"noopener"},'Open my quote page'));
+    if(lk.reviewLink){var b=el("button",{class:"qbtn",type:"button"},'Copy my review link');b.addEventListener("click",function(){copy(lk.reviewLink,b,"Copy my review link")});qk.appendChild(b)}
+    qk.appendChild(el("a",{class:"qbtn",href:"#ask"},'Ask us something'));
+
+    /* KPIs */
+    var k=$("#kpis");k.innerHTML="";
+    function kpi(lab,val,small,sub,sp,delta){k.appendChild(el("div",{class:"kpi"},(sp||'')+'<div class="lab">'+esc(lab)+'</div><div class="val">'+val+(small?'<small>'+small+'</small>':'')+(delta||'')+'</div>'+(sub?'<div class="sub">'+sub+'</div>':'')))}
+    var items=(L.items||[]).slice();
+    if(tm!==null){var bs=L.bySource||{},bits=Object.keys(bs).filter(function(s){return bs[s]}).map(function(s){return bs[s]+' '+(SRC[s]||s).toLowerCase().replace("your ","")});
+      kpi("Leads this month",tm,"",bits.length?esc(bits.join(" · ")):(num(L.total)!==null?L.total+" since you started":""),spark(weekly(items,d.period),"n"))}
+    if(num(L.total)!==null&&L.total!==tm)kpi("Leads total",L.total,"","Since you started with us.");
+    var oc=L.outcome||{},c=num(oc.customer),nc=num(oc.noCustomer),pn=num(oc.pending);
+    if(c!==null){var answered=c+(nc||0);kpi("Became customers",c,answered?"of "+answered+" answered":"",(pn?pn+" still talking · ":"")+"tell us below when one closes")}
+    if(gained!==null)kpi("New reviews",(gained>0?"+":"")+gained,"",R.atStart+" → "+R.now+(num(R.requestsSent)!==null?" · "+R.requestsSent+" requests sent":""),spark(R.history||[],"count"));
+    if(num(R.ratingNow)!==null){var dr=num(R.ratingAtStart)!==null?Math.round((R.ratingNow-R.ratingAtStart)*10)/10:null;kpi("Google rating",R.ratingNow,"★",dr!==null?R.ratingAtStart+" → "+R.ratingNow:"",null,dr!==null?'<span class="delta'+(dr?'':' flat')+'">'+(dr>0?'+':'')+dr+'</span>':'')}
+    if(A.enabled&&num(A.scoreNow)!==null){var ds=num(A.scoreAtStart)!==null?A.scoreNow-A.scoreAtStart:null;kpi("AI score",A.scoreNow,"/100",ds!==null?A.scoreAtStart+" → "+A.scoreNow+" since day 1":"",spark(A.trend||[],"score"),ds!==null?'<span class="delta'+(ds?'':' flat')+'">'+(ds>0?'+':'')+ds+'</span>':'')}
+    else if(!A.enabled){k.appendChild(el("div",{class:"kpi locked"},'<div class="lab">AI score</div><div class="val">—</div><div class="sub">Included on Growth and Pro. <a href="./#pricing">See the plans</a></div>'))}
+
+    /* done / next / guarantee */
+    fillList("#done",d.done,"Setup is under way. The first items land here within the hour.");fillList("#next",d.next,"Your first plan is being written now.");
+    if(d.guarantee&&d.guarantee.applies!==false&&(d.guarantee.status||d.guarantee.note)){var g=d.guarantee,st=String(g.status||"").toLowerCase();$("#guarantee").hidden=false;
+      $("#gText").textContent=(g.checkDay?"Checked on "+fd(g.checkDay,true)+". ":"")+(g.note||"")+(st==="not owed"?" The guarantee was not triggered, so month two is billed as normal.":st==="owed"?" The guarantee applies: your second month is free, and the credit is on your account.":st==="pending"?" We check on day 28.":"")}
+
+    /* LEADS */
+    var bs2=L.bySource||{},rows=Object.keys(bs2).map(function(s){return {label:SRC[s]||s,n:num(bs2[s])||0}});
+    if(rows.length)rankedBars($("#srcBars"),rows);else $("#srcBars").innerHTML='<p class="hint">Nothing to show yet.</p>';
+    var segs=[["c",c||0,"Became a customer"],["p",pn||0,"Still talking"],["x",nc||0,"Not this time"]],tot=segs.reduce(function(a,s){return a+s[1]},0);
+    var seg=$("#segOut");seg.innerHTML="";seg.setAttribute("aria-label",segs.map(function(s){return s[2]+": "+s[1]}).join(", "));
+    if(tot){segs.forEach(function(s){if(s[1])seg.appendChild(el("i",{class:s[0],style:"flex:"+s[1]},s[1]))})}else seg.innerHTML='<i class="x" style="flex:1">No leads yet</i>';
+    $("#segLeg").innerHTML=segs.map(function(s){return '<span><i class="'+s[0]+'" style="background:'+({c:"#16503f",p:"#1f8a5b",x:"#cfe3d7"})[s[0]]+'"></i>'+s[2]+'</span>'}).join("");
+    var tb=$("#leadTbl tbody");tb.innerHTML="";
+    items.sort(function(a,b){return String(b.at).localeCompare(String(a.at))});
+    if(!items.length){$("#leadTbl").hidden=true;$("#leadEmpty").hidden=false}
+    items.forEach(function(it){
+      var st=(over.leads&&over.leads[it.id])||it.status||"pending",tr=el("tr");
+      tr.innerHTML='<td class="full" style="white-space:nowrap"><b>'+esc(it.what||"Request")+'</b> <span class="chip" style="margin-left:6px">'+fd(it.at)+'</span></td><td data-l="When">'+esc(it.when||"")+'</td><td data-l="Came from"><span class="chip">'+esc(SRC[it.source]||it.source||"")+'</span></td><td data-l="Outcome" class="full"></td>';
+      var sel=el("select",{class:"sel","aria-label":"Outcome for "+esc(it.id)},'<option value="pending">Still talking</option><option value="customer">Became a customer</option><option value="no-customer">Not this time</option>');
+      sel.value=st==="new"?"pending":st;
+      var noted=el("span",{class:"noted"},over.leads&&over.leads[it.id]?"Noted":"");
+      sel.addEventListener("change",function(){var v=sel.value;sendAction("lead-outcome",it.id+" → "+v+" ("+(it.what||"")+", "+fd(it.at,true)+")",function(){over.leads=over.leads||{};over.leads[it.id]=v;saveLocal();noted.textContent="Noted";refreshOutcome()})});
+      var td=tr.lastElementChild;td.appendChild(sel);td.appendChild(noted);tb.appendChild(tr);
     });
-    $("named").hidden=rows.length===0;
-  }
+    function refreshOutcome(){var cc=0,pp=0,xx=0;items.forEach(function(it){var s=(over.leads&&over.leads[it.id])||it.status;if(s==="customer")cc++;else if(s==="no-customer")xx++;else pp++});
+      seg.innerHTML="";[["c",cc],["p",pp],["x",xx]].forEach(function(s){if(s[1])seg.appendChild(el("i",{class:s[0],style:"flex:"+s[1]},s[1]))})}
+    if(over.leads&&Object.keys(over.leads).length)refreshOutcome();
+    $("#alertHow").textContent=d.alerts==="email only"?"by email":"by text and email";$("#bizSay").textContent=d.business;
 
-  /* ---------- lists, links, guarantee ---------- */
-  function buildList(items,ulId,secId){
-    var arr=Array.isArray(items)?items.filter(str):[];var ul=$(ulId);clearNode(ul);
-    arr.forEach(function(s){ul.appendChild(el("li",null,str(s)))});$(secId).hidden=arr.length===0;
-  }
-  function copyText(text,btn,src){
-    var done=function(){btn.textContent="Copied";setTimeout(function(){btn.textContent="Copy"},1800)};
-    var fb=function(){try{var r=document.createRange();r.selectNodeContents(src);var s=window.getSelection();s.removeAllRanges();s.addRange(r);document.execCommand("copy");s.removeAllRanges();done()}catch(e){btn.textContent="Select and copy"}};
-    try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(done,fb);else fb()}catch(e){fb()}
-  }
-  function buildLinks(d){
-    var L=d.links&&typeof d.links==="object"?d.links:{};var host=$("links");clearNode(host);var count=0;
-    LINKS.forEach(function(k){
-      var u=str(L[k[0]]);if(!/^https?:\/\//i.test(u))return;count++;
-      var row=el("div","linkrow");row.appendChild(el("span","ln",k[1]));
-      var a=el("a","url",u);a.href=u;a.target="_blank";a.rel="noopener";row.appendChild(a);
-      var b=el("button","btn","Copy");b.type="button";b.setAttribute("aria-label","Copy "+k[1].toLowerCase());b.addEventListener("click",function(){copyText(u,b,a)});row.appendChild(b);
-      host.appendChild(row);
-    });
-    $("linksSec").hidden=count===0;
-  }
-  function buildGuarantee(d){
-    var G=d.guarantee;if(!G||typeof G!=="object"||G.applies===false){$("gBox").hidden=true;return}
-    var st=str(G.status).toLowerCase(),day=longDate(G.checkDay),note=str(G.note),txt;
-    if(/owed|free|applied|credit/.test(st)&&!/not/.test(st))txt="Your month one brought no new leads and no new reviews, so your second month is free. We apply the credit and email you the same day.";
-    else if(/not/.test(st))txt=(day?"Checked on "+day+". ":"")+(note?note+" ":"")+"The guarantee was not triggered, so month two is billed as normal.";
-    else txt=(day?"We run the check on "+day+". ":"We run the check at the end of month one. ")+(note||"");
-    if(/owed|free|applied|credit/.test(st)&&!/not/.test(st)&&note)txt+=" "+note;
-    $("gText").textContent=txt.trim();$("gBox").hidden=false;
-  }
+    /* REVIEWS */
+    $("#rvHint").textContent=(num(R.atStart)!==null?R.atStart+" when we started":"")+(num(R.now)!==null?", "+R.now+" now":"")+(num(R.repliesDrafted)!==null?". "+R.repliesDrafted+" replies drafted for you.":"");
+    lineChart($("#rvChart"),R.history||[],"count",{label:"Google review count by week",pad:true,min:Math.max(0,Math.min.apply(null,(R.history||[]).map(function(h){return num(h.count)||0}).concat([num(R.atStart)||0]))-2)});
+    var rl=$("#rvList");rl.innerHTML="";var rec=(R.recent||[]).slice(0,8);
+    if(!rec.length)$("#rvEmpty").hidden=false;
+    rec.forEach(function(r){var s=Math.max(0,Math.min(5,num(r.stars)||0));rl.appendChild(el("li",null,'<span class="when">'+fd(r.at)+'</span><span style="flex:1"><span class="stars" aria-label="'+s+' stars">'+"★".repeat(s)+'<span style="color:#d9d3bf">'+"★".repeat(5-s)+'</span></span><br><span class="chip'+(r.replied?' good':' gold')+'">'+(r.replied?'Reply drafted for you':'Reply on its way')+'</span></span>'))});
+    $("#custSend").addEventListener("click",function(){var t=$("#custList").value.trim();if(!t){toast("Add at least one customer first.");$("#custList").focus();return}var n=t.split(/\n/).filter(function(l){return l.trim()}).length;sendAction("review-requests",t,function(){$("#custList").value="";toast(isSample?"Sample: nothing was sent.":"Got them: "+n+" review "+plural(n,"request")+" on the way.")})});
 
-  /* ---------- render ---------- */
-  function render(d,isSample){
-    var biz=str(d.business)||"Your business",town=str(d.town);
-    document.title=biz+" — Your results — Ridgeline Local";
-    $("biz").textContent=biz;
-    if(town){$("town").textContent=town+".";$("town").hidden=false}else $("town").hidden=true;
-    var m=[];var up=longDate(d.updatedAt);if(up)m.push("Updated "+up);var pn=planName(d.plan);if(pn)m.push(pn+" plan");if(num(d.monthNumber))m.push("Month "+fmt(d.monthNumber));
-    $("meta").textContent=m.join(" · ");$("meta").hidden=m.length===0;
-    var per=periodText(d.period);$("period").textContent=per?"This report covers "+per+".":"";$("period").hidden=!per;
-    $("badge").hidden=!isSample;$("sampleNote").hidden=!isSample;
-    buildTiles(d);buildAI(d);buildList(d.done,"doneUl","doneSec");buildList(d.next,"nextUl","nextSec");buildLinks(d);buildGuarantee(d);
-    $("err").hidden=true;$("ready").hidden=false;
-    if(chartPts)drawChart();
-  }
+    /* AI */
+    if(A.enabled){
+      lineChart($("#aiChart"),A.trend||[],"score",{max:100,label:"AI visibility score by week",unit:"/100"});
+      var at=$("#aiTbl tbody");at.innerHTML="";(A.named||[]).forEach(function(r){at.appendChild(el("tr",null,'<td class="full">'+esc(r.question)+'</td><td data-l="ChatGPT">'+cell(r.chatgpt)+'</td><td data-l="Gemini">'+cell(r.gemini)+'</td>'))});
+      if((A.competitors||[]).length){$("#compBox").hidden=false;$("#comp").innerHTML=A.competitors.map(function(c){return '<span class="chip">'+esc(c)+'</span>'}).join("")}
+    }else{$("#aiOn").hidden=true;$("#aiOff").hidden=false;$("#aiLede").textContent="Weekly ChatGPT and Gemini checks are part of Growth and Pro."}
+    function cell(v){var s=String(v||"");return /^named/i.test(s)?'<span class="chip good">'+esc(s)+'</span>':'<span class="chip">'+esc(s||"—")+'</span>'}
 
-  /* ---------- boot ---------- */
-  var raw=new URLSearchParams(location.search).get("c"),token=null,isSample=false;
-  if(raw===null||raw.trim()===""){token="sample";isSample=true}
-  else{raw=raw.trim().toLowerCase();if(/^[a-z0-9]{6,40}$/.test(raw)){token=raw;isSample=raw==="sample"}}
-  if(!token){showError();return}
-  fetch("data/results/"+token+".json",{cache:"no-store"})
-    .then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()})
-    .then(function(d){if(!d||typeof d!=="object"||Array.isArray(d)||!str(d.business))throw new Error("bad data");render(d,isSample)})
-    .catch(function(){showError()});
+    /* LINKS */
+    var ln=$("#links");ln.innerHTML="";
+    linkRow(ln,"Your quote-request page",lk.quotePage);linkRow(ln,"Your Google review link",lk.reviewLink);linkRow(ln,"Your Google listing",lk.googleProfile);
+    if(!lk.quotePage&&!lk.reviewLink)ln.innerHTML='<p class="hint">Your links land here within the hour of signup.</p>';
+    if(lk.reviewCard){$("#qrBox").hidden=false;var im=$("#qrImg");im.src=lk.reviewCard;im.addEventListener("error",function(){$("#qrBox").hidden=true});$("#qrOpen").href=lk.reviewCard}
+    var tr=$("#track");tr.innerHTML="";
+    if(lk.quotePage){[["gbp","Google profile website button"],["card","Review card and invoices"],["facebook","Facebook and social posts"],["ad","Ads and flyers"]].forEach(function(s){linkRow(tr,s[1],lk.quotePage+(lk.quotePage.indexOf("?")>-1?"&":"?")+"src="+s[0])})}else tr.innerHTML='<p class="hint">Ready once your quote page is live.</p>';
+    if((d.posts||[]).length){$("#postsCard").hidden=false;var pl=$("#posts");pl.innerHTML="";d.posts.forEach(function(p){pl.appendChild(el("li",null,'<span class="when">'+fd(p.at)+'</span><span style="flex:1">'+esc(p.title)+'</span><span class="chip'+(p.status==="live"?" good":p.status==="scheduled"?" gold":"")+'">'+esc(p.status||"")+'</span>'))})}
+
+    /* TODO */
+    var tl=$("#todoList");tl.innerHTML="";var todos=(d.todo||[]).filter(function(t){return t&&t.text});
+    if(!todos.length)$("#todoEmpty").hidden=false;
+    todos.forEach(function(t){var done=!!(t.done||(over.todo&&over.todo[t.id]));var li=el("li",{class:done?"done":""});var cb=el("input",{type:"checkbox",id:"td-"+esc(t.id)});cb.checked=done;
+      li.appendChild(cb);li.appendChild(el("label",{class:"t",for:"td-"+esc(t.id)},esc(t.text)));li.appendChild(el("span",{class:"m"},num(t.minutes)?t.minutes+" min":""));
+      cb.addEventListener("change",function(){if(cb.checked){sendAction("todo-done",t.id+": "+t.text,function(){over.todo=over.todo||{};over.todo[t.id]=true;saveLocal();li.classList.add("done")})}else{li.classList.remove("done");if(over.todo){delete over.todo[t.id];saveLocal()}}});
+      tl.appendChild(li)});
+    if(todos.length&&todos.every(function(t){return t.done||(over.todo&&over.todo[t.id])}))$("#todoEmpty").hidden=false;
+
+    /* ASK */
+    var pr=$("#presets");["Update my hours","Add a service","Post about…","Pause review requests for now","Call me about something"].forEach(function(p){var b=el("button",{type:"button"},esc(p));b.addEventListener("click",function(){var ta=$("#askText");ta.value=(ta.value?ta.value+"\n":"")+p.replace("…"," ");ta.focus()});pr.appendChild(b)});
+    $("#askSend").addEventListener("click",function(){var t=$("#askText").value.trim();if(!t){toast("Tell us what you need first.");$("#askText").focus();return}sendAction("request",t,function(){$("#askText").value="";over.requests=over.requests||[];over.requests.unshift({at:today(),text:t,status:"received",reply:"Sent to Ridgeline."});saveLocal();renderReq()})});
+    function renderReq(){var rq=$("#reqList");rq.innerHTML="";var all=(over.requests||[]).concat(d.requests||[]).slice(0,10);
+      if(!all.length){$("#reqEmpty").hidden=false;return}$("#reqEmpty").hidden=true;
+      all.forEach(function(r){rq.appendChild(el("li",null,'<span class="when">'+fd(r.at)+'</span><span style="flex:1">'+esc(r.text)+(r.reply?'<br><span class="hint" style="margin:2px 0 0;display:block">'+esc(r.reply)+'</span>':'')+'</span><span class="chip'+(r.status==="done"?" good":" gold")+'">'+esc(r.status==="done"?"Done":"Received")+'</span>'))})}
+    renderReq();
+
+    /* ACTIVITY */
+    var acts=(d.activity||[]).slice(),al=$("#actList"),LIM=8;
+    function drawActs(all){al.innerHTML="";(all?acts:acts.slice(0,LIM)).forEach(function(a){al.appendChild(el("li",null,'<span class="when">'+fd(a.at)+'</span><span class="k '+esc(a.kind||"")+'" aria-hidden="true">'+kindLabel(a.kind)+'</span><span style="flex:1">'+esc(a.text)+'</span>'))})}
+    if(!acts.length){acts=(d.done||[]).map(function(t){return {at:d.updatedAt,text:t,kind:"profile"}})}
+    drawActs(false);if(acts.length>LIM){$("#actMore").hidden=false;$("#actMore").addEventListener("click",function(){drawActs(true);$("#actMore").hidden=true})}
+
+    $("#app").hidden=false;$("#tabs").hidden=false;setupTabs();
+    if(location.hash){var t=document.getElementById(location.hash.slice(1));if(t)t.scrollIntoView()}
+  }
+  function kindLabel(k){return ({lead:"Lead",review:"Rev",ai:"AI",profile:"Goog",post:"Post",email:"Mail",request:"Ask"})[k]||"•"}
+  function fillList(sel,arr,empty){var u=$(sel);u.innerHTML="";(arr&&arr.length?arr:[empty]).forEach(function(t){u.appendChild(el("li",null,esc(t)))})}
+  function linkRow(host,label,url){if(!url)return;var row=el("div",{class:"lnk"},'<div><div class="lab">'+esc(label)+'</div><a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(url)+'</a></div>');var acts=el("div",{class:"acts"});var b=el("button",{class:"btn lite",type:"button"},"Copy");b.addEventListener("click",function(){copy(url,b,"Copy")});acts.appendChild(b);row.appendChild(acts);host.appendChild(row)}
+  function copy(txt,btn,orig){function ok(){btn.textContent="Copied";setTimeout(function(){btn.textContent=orig},1600)}function fb(){var t=document.createElement("textarea");t.value=txt;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();try{document.execCommand("copy");ok()}catch(e){btn.textContent="Select and copy"}document.body.removeChild(t)}if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(ok,fb)}else fb()}
+  function today(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+  function weekly(items,period){ /* leads per week inside the period, for the sparkline */
+    var from=period&&pd(period.from),to=period&&pd(period.to);if(!from||!to||!items.length)return [];
+    var weeks=Math.max(1,Math.ceil((to-from)/(7*864e5))),bins=[];for(var i=0;i<weeks;i++)bins.push({n:0});
+    items.forEach(function(it){var dt=pd(it.at);if(!dt)return;var w=Math.floor((dt-from)/(7*864e5));if(w>=0&&w<weeks)bins[w].n++});return bins;
+  }
+  function setupTabs(){
+    var links=$$("#tabs a"),secs=links.map(function(a){return document.getElementById(a.getAttribute("href").slice(1))});
+    function set(id){links.forEach(function(a){var on=a.getAttribute("href")==="#"+id;a.classList.toggle("on",on);if(on&&a.scrollIntoView){try{a.scrollIntoView({block:"nearest",inline:"center"})}catch(e){}}})}
+    if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)set(e.target.id)})},{rootMargin:"-40% 0px -55% 0px"});secs.forEach(function(s){if(s&&!s.hidden)io.observe(s)})}
+    links.forEach(function(a){a.addEventListener("click",function(){set(a.getAttribute("href").slice(1))})});
+  }
 })();
 </script>
 </body>
