@@ -81,11 +81,11 @@ test, createdAt, updatedAt}. The crew never changes status or notes after creati
 
 ## clients/<id>
 {leadId, businessName, town, state, contactEmail, phone, services, googleProfile, slug,
- plan:"starter"|"growth"|"pro", billing:"monthly"|"yearly", price, foundingLocked:bool, startedAt,
+ plan:"starter"|"growth"|"pro", billing:"monthly", price, startedAt,
  stripe:{customerEmail, lastPaymentAt, messageId, amount}, stripeSession:"cs_..."|"none",
  aiQuestions:[{key, question}], baseline:{score, points, answers, jobId, at, detail},
  aiTrend:[{at, score, jobId, named}], competitorsNow:[...],
- guarantee:{checkedAt, leads, baselineScore, dayScore, owed, jobId, stripeJob, applied, appliedAt, what},
+ guarantee:{checkedAt, leads, reviewsAtStart, reviewsNow, reviewsGained, baselineScore, dayScore, owed, jobId, stripeJob, applied},
  audit:{at, ...}, profileLog:[{at, field, before, after, source}], reviewsAtStart, reviewsNow:{count, at, source},
  customers:[{email, firstName, addedAt, askedAt}] (never in the repo), fixesTried:[{at, fix, result}], flatAt,
  managerAccess:true|false|"invited"|"later"|"no-access" (the onboarding form's manager_access; true once Google's acceptance email arrives), reviewLink, reviewCard, landing:{slug, url},
@@ -95,13 +95,25 @@ test, createdAt, updatedAt}. The crew never changes status or notes after creati
  work:[{item, status:"todo"|"drafted"|"done", t, draftId}], reportDue,
  status:"awaiting-onboarding"|"awaiting-payment"|"active"|"paused"|"cancelled", notes, createdAt, updatedAt}
  Standard work items: welcome-sent, onboarding, baseline, manager-access, review-link,
- profile-audit, buildout-plan, buildout-applied, review-kit, review-requests, lead-page (Pro),
- week-post, report-<yyyy-mm>, jobcheck-<yyyy-mm>, video-<yyyy-mm> (Pro), guarantee (Growth/Pro)
+ profile-audit, buildout-plan, buildout-applied, review-kit, review-requests, lead-page (every plan),
+ lead-alert-test, results-page, week-post, report-<yyyy-mm>, checkin-<yyyy-mm>, jobcheck-<yyyy-mm>,
+ video-<yyyy-mm> (Pro), guarantee (every plan). Client fields added Nov 3, 2026: leadCell, leadCarrier,
+ leadAlerts ("text and email"|"email only"), leadAlertsVerified, industry, serviceArea, hours,
+ reviewLink, resultsToken (16 hex; the public file data/results/<token>.json is the client's
+ dashboard, the results page, and holds numbers only), reviewsAtStart {count, rating, source, at},
+ reviewsNow {count, rating, source, at}. Dashboard fields (Nov 3, 2026): todo:[{id:"T1", text,
+ minutes, done, verified}] (what we need from them; 09 writes it, the desk flips done on a
+ dashboard "todo-done"), requests:[{at, text, status:"received"|"done", reply}] (what they asked
+ through the dashboard; the desk writes it, Lane K, and the JSON mirrors it), reviewRequestsPaused
+ (bool; a dashboard "request" to pause; nobody sends review requests while true).
  (No client is on the retired $147 founding plan; plan "founding" is legacy and unused.)
 
 ## leadlog/<clientId>-<yyyymmdd>-<4 hex>
 specs/lead-tracking.md "The lead log" (source, sourceUrl, contact, summary, status, counted,
-sentToClientAt, sentGmailId, jobAnswer, notes). Never in the repo.
+sentToClientAt, sentGmailId, jobAnswer, notes). Never in the repo, except (Nov 3, 2026)
+dashboardId ("L-0007": per client, in logging order, never reused) with the row's date, what,
+when, source and status, which go to the dashboard JSON as leads.items. jobAnswer.source is
+"dashboard" | "email": where the owner's answer came from.
 
 ## alerts/<key>
 {key, what, firstAt, lastAt, count, emailedAt, resolvedAt} (shared/alerts.md)

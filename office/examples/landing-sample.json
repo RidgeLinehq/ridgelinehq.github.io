@@ -1,0 +1,14 @@
+{
+  "slug": "sample-cedar-ridge-roofing",
+  "business": "Cedar Ridge Roofing",
+  "town": "Millbrook",
+  "state": "AR",
+  "phone": "(501) 555-0142",
+  "services": ["Roof repair", "Roof replacement", "Storm damage inspection", "Gutter repair"],
+  "about": "Family-owned roofing crew serving Millbrook and the county since 2012. Free inspections, honest quotes.",
+  "leadEmail": "example@example.com",
+  "hours": "Mon–Sat 7–6",
+  "industry": "roofers",
+  "reviewLine": "Rated 4.8 on Google",
+  "noindex": true
+}

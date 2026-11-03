@@ -32,13 +32,14 @@ If they hesitate: "It takes me two minutes and it's yours to keep either way. Wh
 send it?"
 
 If they ask what it costs: "The check is free. If you want help after, plans start at $39.99 a
-month, no contract. Most people pick Growth at $75: we fix your Google profile, get you
-reviews from your real customers, and keep it moving every month. Pro at $125 adds leads we find
-and send you. And on Growth and Pro, if your first month brings zero leads and no improvement,
-your second month is free. But first let me send you the check so you can see it for yourself."
+month, no contract: that's Leads + Reviews, your own quote-request page, your Google profile
+fixed, and review requests to your real customers. Growth at $75 adds the weekly ChatGPT and
+Gemini checks. Pro at $125 adds leads we find and send you. And on every plan,
+if your first month brings zero new leads and zero new reviews, your second month is free. But
+first let me send you the check so you can see it for yourself."
 
-If they ask what we do in one line: "We get your business found on Google and recommended by AI
-like ChatGPT and Gemini, and we make it easy for your happy customers to leave reviews."
+If they ask what we do in one line: "We get you new customers who asked to hear from you, more
+real Google reviews, and your name in the answer when people ask ChatGPT and Gemini who to call."
 
 If they ask how you found them: "Your Google listing. I work with local businesses, and I check
 how AI answers for each kind of business in a town."

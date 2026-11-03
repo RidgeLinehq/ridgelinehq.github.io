@@ -27,4 +27,4 @@ settings read; town chosen; cap within the ladder; runId written.
 | Where | What |
 |---|---|
 | runs/<runId> | created |
-| output/<day>-run.md | `# Day Shift <day>` and `## Settings` (town, trades, cap, autoSend, dryRun, foundingSpots, skips) |
+| output/<day>-run.md | `# Day Shift <day>` and `## Settings` (town, trades, cap, autoSend, dryRun, skips) |

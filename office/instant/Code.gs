@@ -23,6 +23,9 @@ var CFG = {
   SITE: 'https://ridgelinehq.github.io',
   LABEL_DONE: 'RL-Instant-Sent',
   LABEL_FAIL: 'RL-Instant-Failed',
+  LABEL_TEXTED: 'RL-Instant-Texted',
+  LABEL_NOTEXT: 'RL-Instant-NoText',
+  TEXT_MAX: 10,
   MAX_PER_RUN: 3,
   OPENAI_MODELS: ['gpt-5.5', 'gpt-5.5-mini', 'gpt-5-mini', 'gpt-4.1-mini'],
   GEMINI_MODELS: ['gemini-3.6-flash', 'gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'],
@@ -63,6 +66,7 @@ function processInbox() {
         fail_(th, 'error: ' + e.message);
       }
     });
+    processLeads_();
     PropertiesService.getScriptProperties().setProperty('lastRunAt', new Date().toISOString());
   } finally {
     lock.releaseLock();
@@ -114,7 +118,7 @@ function freeCheck_(th, f) {
   lines.push('The 3 fixes I\'d make first:');
   fixes.forEach(function (fx, i) { lines.push((i + 1) + '. ' + fx); });
   lines.push('');
-  lines.push('Want us to do it for you? Plans start at $39.99 a month, no contract. Most businesses pick Growth ($75): we fix all of the above and keep it moving every month, and if your first month brings zero tracked leads and no improvement in your AI visibility, your second month is free (terms: ' + CFG.SITE + '/guarantee.html).');
+  lines.push('Want us to do it for you? Plans start at $39.99 a month (Leads + Reviews: your own quote-request page, Google profile optimization and real-customer review growth), no contract. Growth ($75) adds weekly ChatGPT and Gemini checks. Every plan: if your first month brings zero new leads and zero new reviews, your second month is free (terms: ' + CFG.SITE + '/guarantee.html).');
   lines.push('See the plans: ' + CFG.SITE + '/#pricing', '');
   lines.push('Or just reply with any question.', '', CFG.SIGNATURE, '', CFG.OPT_OUT, CFG.ADDRESS);
   GmailApp.sendEmail(f.email, 'Your free AI check: ' + biz + ' in ' + place.town, lines.join('\n'), { name: 'Grayson at Ridgeline Local', replyTo: CFG.ME });
@@ -130,7 +134,7 @@ function pickFixes_(res) {
   if (!cn && !gn) fixes.push('Your Google Business Profile needs your exact services and a description that says what you do and the towns you serve; both tools lean on it.');
   else if (cn !== gn) fixes.push('The tool that missed you is reading a thin or inconsistent profile; the same name, address and phone on Google, Yelp and Facebook fixes most of that.');
   else fixes.push('You\'re named, so keep the lead: post a Google update every week and keep your hours and services current so the tools keep picking you.');
-  fixes.push('Ask every happy customer for a Google review with a text and a QR card; both tools quote review counts and recent reviews.');
+  fixes.push('Ask every customer for a Google review after the job, not just the happy ones, with a text and a QR card; both tools quote review counts and recent reviews.');
   fixes.push('Add 10 or more real photos of your work and your place to Google, and reply to every review by first name within a week; both are signals these tools read.');
   return fixes;
 }
@@ -162,8 +166,9 @@ function onboarding_(th, f) {
   });
   var score = Math.round(points / 6 * 100);
   var plan = (f.plan || '').toLowerCase();
-  var planName = { starter: 'Starter', growth: 'Growth', pro: 'Pro' }[plan] || 'your plan';
+  var planName = { starter: 'Starter (Leads + Reviews)', growth: 'Growth', pro: 'Pro' }[plan] || 'your plan';
   var biz = f.business;
+  rememberLeadCell_(biz, f.leadCell, f.leadAlerts);
   var L = [];
   L.push('Hi there,', '');
   L.push('Welcome to Ridgeline Local, and thank you. ' + biz + ' is set up on ' + planName + ' and the work has started.', '');
@@ -179,22 +184,29 @@ function onboarding_(th, f) {
     detail.forEach(function (d) { (d.competitors || []).forEach(function (n) { comp[n] = (comp[n] || 0) + 1; }); });
     var top = Object.keys(comp).sort(function (a, b) { return comp[b] - comp[a]; }).slice(0, 4);
     if (top.length) L.push('', 'The businesses they named most: ' + top.join(', ') + '.');
-    L.push('', 'This is your day-1 number. We re-check every week and show you the trend in your monthly report.');
+    if (plan === 'starter') L.push('', 'This is a one-time look. Weekly tracking and your AI score on your dashboard are part of Growth.');
+    else L.push('', 'This is your day-1 number. We re-check every week and show you the trend in your monthly report.');
   } else {
     L.push('Your starting AI visibility score is running now; it will follow in a separate email shortly.');
   }
   L.push('', 'WHAT HAPPENS NEXT (nothing for you to chase):');
-  L.push('1. Within the hour: your full Welcome Pack (a PDF): this score in detail, your Google profile fixes written out and ready to paste (about 10 minutes for you), and your review kit.');
-  L.push('2. Then your QR review card for the counter, as soon as you reply with your Google review link.');
-  if (plan === 'pro') L.push('3. Within 24 hours: your own lead page with tracking links. Leads from it reach you the moment they come in.');
-  if (plan === 'pro') L.push('4. Leads we find go straight to this email, and every one is logged.');
-  if (plan === 'growth' || plan === 'pro') L.push('', 'Your Second Month Free Guarantee is on: if your first month brings zero tracked leads and no improvement in your AI visibility, your second month is free. Terms: ' + CFG.SITE + '/guarantee.html');
-  L.push('', 'Optional, 3 minutes: add ' + CFG.ME + ' as a Manager on your Google Business Profile (Google Maps app > your profile > ⋯ > Business Profile settings > People and access > Add > Manager). It lets us log the messages and calls your profile gets. Never a password.');
+  L.push('1. Within the hour: your Welcome Pack (a PDF) with your Google profile fixes (we apply them as your Manager, or you paste them), your review kit, the link to your own quote-request page, and the link to your private results page.');
+  L.push('2. Lead alerts: every request from your quote-request page or your Google profile reaches you by email' + (/text/i.test(f.leadAlerts || 'text') ? ' and by text to ' + (f.leadCell || 'your cell') : '') + ' within minutes, with the person\'s name, what they need and when, plus a tip on following up fast. We send one test request so you can confirm it arrives.');
+  L.push('3. Your QR review card for the counter, as soon as we have your Google review link' + (f.reviewLink ? ' (thanks, we have it)' : ' (reply with it, or we pull it as your Manager)') + '. ' + (f.customers ? 'The customers you listed get their review request today.' : 'Send us the names and emails of recent customers any time and we ask them for you.'));
+  if (plan === 'pro') L.push('4. Leads we find in public posts go straight to this email too, and every one is logged.');
+  L.push('', 'Every lead is someone who asked to hear from you. We only collect genuine reviews from your real customers.');
+  L.push('', 'Your Second Month Free Guarantee is on: if your first month brings you zero new leads and zero new reviews, your second month is free. No arguing. Terms: ' + CFG.SITE + '/guarantee.html');
+  var mgr = String(f.manager || 'later').toLowerCase();
+  if (/invited/.test(mgr)) L.push('', 'Thanks for the Manager invite: we accept it within the hour and make your Google profile changes ourselves, usually within 2 business days.');
+  else if (/no.?access/.test(mgr)) L.push('', 'No Google access? Your Welcome Pack works from public information and shows how to claim your listing (free, about 5 minutes).');
+  else L.push('', 'When you have 3 minutes: add ' + CFG.ME + ' as a Manager on your Google Business Profile (Google Maps app > your profile > ⋯ > Business Profile settings > People and access > Add > Manager). Then we make your Google profile changes ourselves and log the messages and calls your profile gets; until then everything comes written out, ready to paste. Never a password.');
   L.push('', 'Questions? Just reply to this email.', '', CFG.SIGNATURE);
   GmailApp.sendEmail(f.email, 'Welcome to Ridgeline Local' + (anyOk ? ': your starting AI score is ' + score + '/100' : ''), L.join('\n'),
                      { name: 'Grayson at Ridgeline Local', replyTo: CFG.ME });
   log_('onboarding', biz, { business: biz, email: f.email, phone: f.phone || '', city: place.label, services: f.services || '', type: f.type || '',
     googleProfile: f.google || '', plan: plan, billing: f.billing || '', stripeSession: f.session || '', questions: qs,
+    leadCell: f.leadCell || '', leadCarrier: f.leadCarrier || '', leadAlerts: f.leadAlerts || '', industry: f.industry || '',
+    serviceArea: f.serviceArea || '', hours: f.hours || '', reviewLink: f.reviewLink || '', hasCustomers: !!f.customers, notes: f.notes || '',
     baseline: anyOk ? { score: score, points: points, answers: 6, at: new Date().toISOString(), by: 'ridgeline-instant', detail: detail } : null,
     sentAt: new Date().toISOString() });
   th.addLabel(label_(CFG.LABEL_DONE));
@@ -202,6 +214,56 @@ function onboarding_(th, f) {
 }
 
 function say_(d) { return !d.ok ? 'no answer' : (d.rank === null ? 'not named' : (d.rank <= 3 ? 'named, top 3' : 'named')); }
+
+// ---------------------------------------------------------------- lead alerts by text (Nov 3, 2026)
+// Every quote-page lead lands here as "Lead for <slug> — <business>: ..." (FormSubmit already copied it to
+// the client's email). If the client asked for texts and Twilio is set up (script properties TWILIO_SID,
+// TWILIO_TOKEN, TWILIO_FROM; SETUP_NEEDED.md "Text alerts"), this texts the client's own cell within a
+// minute. The cell comes from their onboarding form (rememberLeadCell_). Nobody else is ever texted.
+
+function rememberLeadCell_(biz, cell, alerts) {
+  var d = String(cell || '').replace(/\D/g, '');
+  if (d.length === 10) d = '1' + d;
+  if (d.length !== 11 || d.charAt(0) !== '1' || /email only/i.test(alerts || '')) return;
+  PropertiesService.getScriptProperties().setProperty('LEADCELL:' + slugify_(biz), '+' + d);
+}
+
+function processLeads_() {
+  var q = 'subject:"Lead for" newer_than:2d -label:' + CFG.LABEL_TEXTED + ' -label:' + CFG.LABEL_NOTEXT +
+          ' -label:' + CFG.LABEL_FAIL + ' -in:sent';
+  GmailApp.search(q, 0, CFG.TEXT_MAX).forEach(function (th) {
+    try { leadText_(th); } catch (e) { fail_(th, 'lead text error: ' + e.message); }
+  });
+}
+
+function leadText_(th) {
+  var f = parseFields_(th.getMessages()[0].getPlainBody() || '');
+  var p = PropertiesService.getScriptProperties();
+  var to = p.getProperty('LEADCELL:' + slugify_(f.business || ''));
+  var sid = p.getProperty('TWILIO_SID'), tok = p.getProperty('TWILIO_TOKEN'), from = p.getProperty('TWILIO_FROM');
+  if (!to || !sid || !tok || !from) { th.addLabel(label_(CFG.LABEL_NOTEXT)); return; }
+  var body = 'New lead for ' + (f.business || 'you') + ': ' + (f.name || 'someone') + ', ' + (f.phone || 'no phone given') +
+    (f.what ? '. ' + f.what : '') + (f.when ? ' · ' + f.when : '') + (f.area ? ' · ' + f.area : '') +
+    '. Call back within 5 minutes if you can. Details are in your email. - Ridgeline Local';
+  sendText_(sid, tok, from, to, body);
+  th.addLabel(label_(CFG.LABEL_TEXTED));
+}
+
+function sendText_(sid, tok, from, to, body) {
+  var r = UrlFetchApp.fetch('https://api.twilio.com/2010-04-01/Accounts/' + sid + '/Messages.json', {
+    method: 'post', muteHttpExceptions: true,
+    headers: { Authorization: 'Basic ' + Utilities.base64Encode(sid + ':' + tok) },
+    payload: { To: to, From: from, Body: String(body).slice(0, 480) } });
+  if (r.getResponseCode() >= 300) throw new Error('Twilio ' + r.getResponseCode() + ' ' + r.getContentText().slice(0, 160));
+}
+
+/** Run once from the editor after adding TWILIO_* and TWILIO_TEST_TO (your own cell, +1XXXXXXXXXX). */
+function textTest() {
+  var p = PropertiesService.getScriptProperties();
+  sendText_(p.getProperty('TWILIO_SID'), p.getProperty('TWILIO_TOKEN'), p.getProperty('TWILIO_FROM'), p.getProperty('TWILIO_TEST_TO'),
+    'Ridgeline Local test: lead texts are on. New leads will look like this. - Ridgeline Local');
+  return 'sent';
+}
 
 // ---------------------------------------------------------------- AI calls
 
@@ -336,7 +398,21 @@ var KEYS_ = {
   manager: ['manager access', 'manager_access'],
   plan: ['plan'],
   billing: ['billing'],
-  session: ['stripe session', 'stripe_session']
+  session: ['stripe session', 'stripe_session'],
+  leadCell: ['lead cell', 'lead_cell', 'cell phone for lead alerts'],
+  leadCarrier: ['lead carrier', 'lead_carrier'],
+  leadAlerts: ['lead alerts', 'lead_alerts'],
+  industry: ['industry'],
+  serviceArea: ['service area', 'service_area'],
+  hours: ['hours'],
+  reviewLink: ['review link', 'review_link'],
+  customers: ['customers'],
+  notes: ['notes'],
+  name: ['name', 'your name'],
+  what: ['what', 'what do you need'],
+  when: ['when', 'when do you need it'],
+  area: ['area', 'your address or area'],
+  leadFor: ['lead for', 'lead_for']
 };
 
 function parseFields_(text) {
@@ -350,7 +426,7 @@ function parseFields_(text) {
     if ((m = L.match(/^([A-Za-z _\/]{2,40}?)\s*(?:[:：]|\t+)\s*(.+)$/)) && key(m[1])) { if (!f[key(m[1])]) f[key(m[1])] = m[2].trim(); continue; }
     if (key(L) && i + 1 < lines.length && !key(lines[i + 1])) { if (!f[key(L)]) f[key(L)] = lines[i + 1]; i++; }
   }
-  Object.keys(f).forEach(function (k) { if (/^(not given|none|unknown)$/i.test(f[k])) delete f[k]; });
+  Object.keys(f).forEach(function (k) { if (/^(not given|none|none yet|unknown|n\/a|n\/a \(email only\))$/i.test(f[k])) delete f[k]; });
   if (f.email) { var em = f.email.match(/[^\s<>"]+@[^\s<>"]+\.[^\s<>"]+/); f.email = em ? em[0] : ''; }
   return f;
 }

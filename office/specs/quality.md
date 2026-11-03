@@ -70,18 +70,35 @@ numbers; same structure and quality).
   you" offer.
 - **Review request ("reviewreq")**: warm, short, from "<business>", their first name if known,
   one link, no pressure, no incentive.
-- **Leads ("leads")**: each lead with what they asked in their own words, when, where, a link or
-  contact, and a suggested reply the owner can copy (2 sentences, friendly, with their booking
-  link or phone).
+- **Leads ("leads")** (the standard, Nov 3, 2026, every plan): each lead with name, contact,
+  what they asked in their own words, when, where (area), source and date, the follow-up tip,
+  and a suggested reply the owner can copy (2 sentences, friendly, with their booking link or
+  phone). "not given" for a piece the source didn't show; never guessed.
+- **Review reply ("reviewreply")** (Nov 3, 2026): 2 to 4 sentences, thanks them by first name,
+  names the specific thing they wrote about, their business's voice, no arguing, no admitting
+  fault, no offer, never mention a review was requested. Ready to paste under the review.
+- **Dashboard (data/results/<token>.json; the results page)** (Nov 3, 2026): every number
+  equals the database when written (leadlog counts, reviewsAtStart/reviewsNow, aiTrend, requests
+  sent); zeros shown as zeros; unknown = "unknown"; never a lead's, customer's or reviewer's
+  name, phone, email or address (leads.items carry the dashboardId, date, what, when, source and
+  status only); every activity line dated, numbers and dates only; todo holds at most 3 items,
+  each with the minutes it takes, and only things we truly need from them; every requests[]
+  entry answered within the hour (status done with its one-line reply); the link in the email
+  opens and shows the same numbers the report states.
+- **Monthly check-in ("checkin-monthly")** (Nov 3, 2026): the report email's note, under 120
+  words: this month's wins (each dated and real), the ONE next step we're taking, the dashboard
+  link. No second email.
 - **Google post ("post")**: timely (season, local event, real offer the client gave us), a photo
   idea, under 1,500 characters, one call to action.
 - **Monthly report ("report")**: starts with the best real number of the month in one line
   ("You got 4 leads and ChatGPT now names you for 'best barber in Tulsa'"), then leads, jobs,
   AI score trend, reviews, work done, next month's plan in 3 bullets.
-- **Lead page (Pro)**: their real services, their phone as the big button, fast on a phone,
-  checked by opening it after the push (curl or WebFetch) before the link is sent.
+- **Quote page (every plan, Nov 3, 2026)**: their real services, their phone as the big button,
+  the playbook's cta/whenOptions/extraQuestion, the consent line, fast on a phone, checked by
+  opening it after the push (curl or WebFetch) before the link is sent; the lead test request
+  sent and logged the same day.
 - **Promo video (Pro)**: office/studio quality gate; their real photos and facts; captions
-  readable on mute; 20 to 35 seconds; their phone or lead page at the end.
+  readable on mute; 20 to 35 seconds; their phone or quote page at the end.
 
 ## Format: real, branded files (Grayson, Oct 24, 2026: "are they going to get sent a file?")
 Clients get designed deliverables, not walls of instructions:
@@ -94,7 +111,7 @@ Clients get designed deliverables, not walls of instructions:
   note (3 to 6 lines: the one best number, the one next step, "everything is in the attached
   PDF"), `body` = the same note in plain text, `replyThreadId` = the client's thread.
 - ONE email per moment, not three: the Welcome Pack (starting score + profile fixes + review kit +
-  next 30 days) is one email with one PDF. The monthly report is one email with one PDF. The QR
+  quote-page link + dashboard link + next 30 days) is one email with one PDF. The monthly report is one email with one PDF. The QR
   card PNG (cards/<slug>.png, fetched with curl) rides as a second attachment when it exists.
 - If the PDF can't be built (Playwright missing), send the same design as htmlBody (the .html
   file make_pack.js writes next to the PDF) and note it in the run log. Never fall back to plain text.
@@ -103,9 +120,11 @@ Clients get designed deliverables, not walls of instructions:
 
 ## Speed (the first impression is the product)
 - Instantly: the form sends the buyer a confirmation email (FormSubmit autoresponse). Within the hour of the onboarding form: the baseline score email AND the profile fixes AND the
-  review kit (the reply desk builds and sends these in the same run; Day Shift 09 refines later).
-- Pro lead page live within 24 hours of onboarding.
-- New leads (Pro only): the run they are found.
+  review kit AND the quote page (the reply desk builds and sends these in the same run; Day Shift 09 refines later).
+- Quote page live within the hour of onboarding, every plan (Nov 3, 2026); the lead-text test
+  and the first review requests to the customers they gave go out the same day.
+- Lead Finder leads (Pro): the run they are found. Quote-page leads: within minutes, by the form
+  itself (email + text to the client's own cell), every plan.
 - Nothing ready sits undelivered more than 2 hours (the reply desk sends every ready item each run; a send that fails is an alert).
 
 ## Learn from every client
