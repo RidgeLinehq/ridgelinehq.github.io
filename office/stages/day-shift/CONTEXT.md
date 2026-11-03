@@ -19,7 +19,7 @@ gates in specs/email-rules.md. It never texts, calls, DMs or posts.
    override them). Then read office/stages/day-shift/<stage folder>/CONTEXT.md for each of your
    stages in order, and load ONLY what each Inputs table names (the sections it names).
    Settings today: paused <bool>, dryRun <bool>, autoSend <bool>, dailyEmailCap <n>, town
-   <town, state>, trades <list>, foundingSpots <n>. Write your outputs where each stage's
+   <town, state>, trades <list>. Write your outputs where each stage's
    Outputs table says; after each stage append one line to events/<day key> (shape in
    database.md) and append your section to office/stages/day-shift/output/<day key>-run.md
    under the heading the stage names. Set your crew doc working/idle as database.md says.

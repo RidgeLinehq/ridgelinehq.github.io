@@ -90,7 +90,7 @@ Ridgeline Gmail:
 
 ## 4. Reddit leads for the Lead Finder (10 minutes, optional, only if you want Reddit as a source)
 The Lead Finder (Pro) already uses: web search for public posts, your clients' Google profile
-messages (when they add us as Manager), and Pro lead-page forms. Reddit is one more source and
+messages (when they add us as Manager), and every client's quote-request page form. Reddit is one more source and
 needs a free Reddit app:
 1. Log into Reddit in your browser. Open **reddit.com/prefs/apps** (use Desktop site).
 2. Tap **create another app**. Name: `ridgeline-lead-finder`. Pick **script**. Redirect uri:

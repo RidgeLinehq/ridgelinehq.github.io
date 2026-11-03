@@ -61,7 +61,7 @@ office/landing/[slug].json for make_landing.py:
   "hours": "Mon-Fri 7-6, Sat 8-2",
   "about": "Roof repairs, replacements and storm inspections in [Town] and nearby. Written estimates, [licensed and insured in [ST] / insured].",
   "cta": "Request a free roof inspection",
-  "services": ["Roof repair", "Roof replacement", "Storm damage inspection", "Gutter repair", "Something else"],
+  "services": ["Roof repair", "Roof replacement", "Storm damage inspection", "Gutter repair"],
   "whenOptions": ["As soon as possible", "This week", "This month", "Just getting prices"],
   "extraQuestion": {"label": "Is this an insurance claim?", "options": ["Not sure", "Yes, I have a claim", "No"]},
   "reviewLine": "Rated [4.8] on Google by [62] [Town] homeowners.",
@@ -69,7 +69,7 @@ office/landing/[slug].json for make_landing.py:
 }
 ```
 
-reviewLine uses only the real rating and count from their Google profile (or the copy site, labeled); leave it out if unknown.
+services: the client's real services in their words (the tool adds "Something else" itself). reviewLine uses only the real rating and count from their Google profile (or the copy site, labeled); leave it out if unknown.
 
 **Follow-up tip (goes in every lead alert):** Call within 15 minutes while the roof is on their mind. No answer: leave a 15-second voicemail with your name and "I can come look at it [tomorrow morning]", then text the same line from your own phone. If they ticked "Yes, I have a claim", ask for the claim number on the call, not at the door.
 
@@ -157,6 +157,6 @@ Every post is about a real job, a real season or a real offer the owner gave us;
 
 - **Week 1:** Manager access granted; categories, services, description, hours (with the emergency branch) and Q&A live; first ten photos up; the lead page live with the owner's phone as the big button and opened once to check it.
 - **Week 2:** the owner sends the last ten finished jobs' emails; review requests go out at the rules' pace; the QR card is on the invoice template and in the truck; the first Google post is up.
-- **Week 3:** first review replies drafted and posted; the weekly visibility check records what ChatGPT and Gemini said word for word; Pro: the first lead alerts with the follow-up tip, and the owner has called one back the same day.
+- **Week 3:** first review replies drafted and posted; the weekly visibility check records what ChatGPT and Gemini said word for word; the first lead alerts with the follow-up tip have landed (every plan), and the owner has called one back the same day; Pro: the first Lead Finder leads.
 - **Week 4:** the monthly check-in asks which leads became jobs; the report shows the real counts, zeros included, the AI answers quoted, and next month's three bullets.
 - **Signals we want (not numbers):** the owner pasted the fixes within a week; new reviews name the town and the job ("hail", "leak", "[Street]"); the profile check finds the new description on the copy sites; leads get a call back inside the hour; nobody has asked us to send a review request to a friend.

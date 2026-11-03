@@ -42,9 +42,12 @@ before updating it and pass if_version). Day key = TZ=America/Chicago date +%F.
      freecheck → record the lead, freeCheck {status "sent", by "ridgeline-instant"}, aiCheck from
      the JSON, status Meeting, drafts kind freecheck sent (evidence: the sent email in Sent mail to
      that address); onboarding → create/update the client from the JSON (facts, plan, billing,
-     stripeSession, aiQuestions = questions, baseline = baseline, aiTrend [baseline]); work items
-     welcome-sent + onboarding + baseline done; then do everything else in Lane C step 3 that the
-     JSON doesn't cover (first delivery: quote page, lead test, review requests, dashboard JSON, Welcome Pack).
+     stripeSession, aiQuestions = questions, baseline = baseline, aiTrend [baseline]); the JSON
+     carries hasCustomers only, so read the customers list from the "Onboarding —" form thread
+     itself (Lane C step 2) into client.customers BEFORE the first review requests (Nov 3, 2026);
+     work items welcome-sent + onboarding + baseline done; then do everything else in Lane C step 3
+     that the JSON doesn't cover (first delivery: quote page, lead test, review requests, dashboard
+     JSON, Welcome Pack).
      Label the log thread Ridgeline-Handled. NEVER re-send a check or welcome that Instant sent.
    - Form threads labeled RL-Instant-Sent: already answered; only record (above) and label handled.
    - Form threads labeled RL-Instant-Failed: handle normally (Lane A/B/C) through the gateway.
@@ -161,7 +164,8 @@ Search `(from:stripe.com OR subject:"Onboarding —") newer_than:7d -label:Ridge
    acceptance email turns it true, step 6; and since Nov 3, 2026: lead_cell, lead_carrier,
    lead_alerts, industry, service_area, hours, review_link, customers, notes → client.leadCell,
    leadCarrier, leadAlerts ("text and email" | "email only"; missing = "email only"), industry
-   (insurance-agents | roofers | home-services | salons | other), serviceArea, hours, reviewLink
+   (as the slug the form posts: insurance-agents | roofers | home-services | salons | other),
+   serviceArea, hours, reviewLink
    (→ the card job, step 5), customers [{email, firstName, addedAt, askedAt:null}] (one per line,
    up to 10, database only, never the repo), notes): match to the client by email (or
    create the client if the payment email hasn't arrived yet: status "awaiting-payment"; it

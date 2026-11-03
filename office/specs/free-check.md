@@ -63,8 +63,7 @@ Three fixes I'd make first:
 
 If you'd rather have it done for you: plans start at $39.99 a month (Leads + Reviews: your own
 quote-request page, your Google profile optimized, review requests to your real customers), no
-contract. Most businesses pick Growth ($75): everything in Starter plus weekly ChatGPT and Gemini
-checks. On every plan, if your first month brings zero new leads and zero new reviews, your
+contract. Growth ($75) adds weekly ChatGPT and Gemini checks. On every plan, if your first month brings zero new leads and zero new reviews, your
 second month is free (terms: https://ridgelinehq.github.io/guarantee.html).
 See the plans: https://ridgelinehq.github.io/#pricing
 

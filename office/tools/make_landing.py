@@ -14,9 +14,11 @@ Input JSON (public facts only, approved by the client in onboarding):
   services                 list of up to 10 short labels: chips in the header and the "What do you need?" choices
   about                    one or two plain sentences
   leadCc                   optional list of extra addresses (same check as leadEmail), joined into _cc with
-                           leadEmail. A carrier email-to-text address (5555551234@txt.att.net,
-                           5555551234@vtext.com, 5555551234@tmomail.net) turns every lead into a text alert
-                           on the owner's phone, with no texting service and nothing to install.
+                           leadEmail. A carrier email-to-text address (5555551234@vtext.com,
+                           5555551234@tmomail.net) turns every lead into a text alert on the owner's
+                           phone where the carrier still runs one (AT&T closed txt.att.net in June 2025;
+                           the live carrier list is in specs/client-delivery.md "Lead alerts"). Ridgeline
+                           Instant texts through Twilio first when it is set up.
   hours                    optional, e.g. "Mon-Sat 7-6"
   industry                 optional slug (roofers, dentists, ...); kept on the page as data-industry
   cta                      optional form heading; default "Request a quote"
@@ -29,7 +31,7 @@ Input JSON (public facts only, approved by the client in onboarding):
                            "Health insurance quote", "Both", "Not sure yet"]}
   noindex                  optional bool; true adds <meta name="robots" content="noindex"> (samples, tests)
   consentLine              optional; {business} is filled in. Default: "By sending this you're asking
-                           {business} to contact you about your request. Your details go only to {business}."
+                           {business} to contact you about your request. Your details go to {business}, delivered by Ridgeline Local, and to no one else."
 
 Form fields: name*, phone*, email, what (services + "Something else"), when (whenOptions), the extra
 question when given, area, details, and a honeypot. The page POSTs JSON to FormSubmit
@@ -58,7 +60,7 @@ EMAIL_RE = re.compile(r"[^\s@\"<>,]+@[^\s@\"<>,]+\.[^\s@\"<>,]+")
 DEFAULT_WHEN = ["As soon as possible", "This week", "This month", "Just getting prices"]
 DEFAULT_CTA = "Request a quote"
 DEFAULT_CONSENT = ("By sending this you're asking {business} to contact you about your request. "
-                   "Your details go only to {business}.")
+                   "Your details go to {business}, delivered by Ridgeline Local, and to no one else.")
 FOLLOW_UP_TIP = ("Call back within 5 minutes if you can. A fast call back is the single biggest factor in "
                  "winning the job. Say: Hi {name}, this is {business}. You just sent us a request about {what}. "
                  "I can help with that. When works for a quick chat?")
@@ -75,7 +77,7 @@ TPL = string.Template("""<!doctype html>
 <title>$title</title>
 <meta name="description" content="$description">$head_extra
 <meta name="theme-color" content="#04211a">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
 <style>
 :root{--forest:#04211a;--forest-2:#082f28;--mint:#57f2af;--cream:#f6f4eb;--cream-2:#fbf7ec;--white:#fffdf7;--brass:#c9a85c;--brass-ink:#866a2c;--ink:#142721;--muted:#5c6b63;--sage:#e3efe7;--line:#e2ddcc;--bad:#9b2f2a}
 *{box-sizing:border-box}

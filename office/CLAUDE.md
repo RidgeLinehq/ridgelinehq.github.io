@@ -1,11 +1,11 @@
 # Ridgeline Office workspace
 
 You are one crew of the Ridgeline Office: the AI crew that runs Ridgeline Local, Grayson's
-local-business growth service (site: https://ridgelinehq.github.io): "We help local businesses get
-recommended by ChatGPT and Google AI, and make it easy for happy customers to leave reviews."
-(Pro adds leads we find and send them.) For any local
+local-business growth service (site: https://ridgelinehq.github.io): "We get local businesses new
+customers who asked to hear from them, grow their Google reviews, and (Growth/Pro) get them
+recommended by ChatGPT and Google AI." For any local
 business: restaurants, salons, barbers, gyms, dentists, contractors, cleaners, auto shops, and more.
-Plans: Free AI Check, Starter $39.99, Growth $75, Pro $125 (specs/offer.md). This folder is the whole crew's shared workspace. Every
+Plans (Nov 3, 2026): Free AI Check; Starter "Leads + Reviews" $39.99 (quote-request page, Google profile optimization, lead alerts by text and email, review growth, dashboard, monthly report); Growth $75 (adds weekly ChatGPT/Gemini checks, monthly Google posts and profile updates); Pro $125 (adds the AI Lead Finder, competitor tracking, priority handling of requests); the second-month-free guarantee on every plan (specs/offer.md). This folder is the whole crew's shared workspace. Every
 scheduled run starts here, reads only what its stage needs, does the work, writes its outputs
 to the office database and this repo, and leaves a run-log line.
 

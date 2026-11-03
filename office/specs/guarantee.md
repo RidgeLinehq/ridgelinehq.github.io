@@ -30,8 +30,10 @@ Owner: the reply desk (it runs every 2 hours, every day, so day 28 is never miss
    append the same to `reviewTrend`.
 5. Email the client their starting numbers in the welcome thread: the AI score, who ChatGPT and
    Gemini named, the exact question asked, and their review count and rating today. Every plan
-   gets the baseline (it powers the monthly report and the results page) and every plan gets the
-   guarantee line.
+   gets the baseline and every plan gets the guarantee line. Starter gets the starting score once,
+   as a one-time look (one line in the email: weekly tracking and the AI score on the dashboard
+   are Growth/Pro); Growth/Pro get the weekly re-checks that power the monthly report and the
+   dashboard (Nov 3, 2026).
 6. Gateway failed → retry next run (max 3 runs), then alert Grayson (shared/alerts.md). The
    guarantee clock does not wait: if no baseline exists by day 7, the client's baseline score is
    recorded as 0 (the most generous reading for the client) and the alert says so. The AI score

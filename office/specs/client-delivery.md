@@ -53,8 +53,9 @@ competitor tracking (specs/offer.md).
    Tells Grayson "NEW CLIENT". If the Stripe email came but no onboarding form within 24 hours:
    one friendly reminder with the form link; again at 72 hours; then alert Grayson.
 5. **Work begins** (Day Shift 09, next weekday morning, and every weekday after). Day 3: the
-   check-in's ONE question (specs/client-happiness.md §1) is about the dashboard: "Did you open
-   your dashboard yet? <link> Reply with anything confusing and I'll make it simpler."
+   check-in's ONE question (specs/client-happiness.md §1) is about the dashboard: "Quick check:
+   did you open your dashboard, and did your first lead text come through? Reply with anything
+   confusing and I'll make it simpler."
 
 ## Week 1 (Day Shift 09)
 | Item | Output |
@@ -78,7 +79,7 @@ competitor tracking (specs/offer.md).
   Google emails us as Manager) gets a drafted reply the same run, kind "reviewreply": short,
   specific to what they wrote, no arguing, no admitting fault, never mention a review was
   requested. The desk emails it to the client in the same run, ready to paste.
-- **Google post draft** (one per week, kind "post") for the owner to paste.
+- **Google post draft** (Growth/Pro only; one per week, kind "post") for the owner to paste.
 
 ## Flat after 2 weeks: fix it ourselves (Day Shift 09)
 At day 14+ (and every 14 days after), a client is FLAT when aiTrend has no point above baseline
@@ -89,7 +90,8 @@ same run, without asking anyone, pick the next 2 untried fixes from this ladder 
 2. Second review push: a new review request email to customers who haven't been asked (or ask the
    owner again for 10 customer emails).
 3. Pro: add 2 more Lead Finder searches (nearby towns within 25 miles, synonyms of their service).
-4. New Google post angle + 5 Q&A pairs for the profile (people ask, owner answers).
+4. Growth/Pro only: a new Google post angle + 5 Q&A pairs for the profile (people ask, owner
+   answers).
 5. Listing consistency: find their name/address/phone on Yelp, Facebook page, Apple Maps,
    Bing Places (public pages, WebSearch); list mismatches with the exact fix, email to owner.
 6. Refresh the quote page copy (every plan) with the services people ask about in logged leads
@@ -125,9 +127,13 @@ The link goes in the Welcome Pack and every monthly email, to the client only; n
 never a case study.
 
 **The JSON** (numbers only; data/results/sample.json is the reference shape):
-- Existing: {business, town, plan, period, leads:{bySource, outcome}, reviews:{atStart, now},
-  rating, requestsSent, ai:{score, trend, named} (Growth/Pro), done[], next[], links:{quotePage,
-  reviewLink}, guarantee:{status}, updatedAt}.
+- Existing (the keys results.html reads, Nov 3, 2026): {business, town, plan, industry, updatedAt,
+  period:{from, to}, monthNumber, alerts, leads:{thisMonth, total, bySource, outcome:{customer,
+  noCustomer, pending}, items[]}, reviews:{atStart, now, ratingAtStart, ratingNow, requestsSent,
+  repliesDrafted, history[], recent[]}, ai:{enabled, scoreAtStart, scoreNow, trend[], named[],
+  competitors[]} (enabled true on Growth/Pro), posts[], todo[], activity[], requests[], done[],
+  next[], links:{quotePage, reviewLink, reviewCard, googleProfile}, guarantee:{applies, checkDay,
+  status, note}}.
 - leads.items: [{id, at, what, when, source, status}]. id = "L-0007": short, per client, in
   logging order, stable, never reused; the same id sits on the leadlog row (dashboardId) so the
   client's answers can be applied. at "YYYY-MM-DD"; what ("Roof repair") and when ("This week")
@@ -185,7 +191,8 @@ client's own address in their thread.
   won't email you again." Replies of stop → suppression.
 - Max 25 per client per day, inside the normal sending window, through the reply desk.
 - Never write a review, never ask staff or friends to post one, never offer anything for one.
-- Texting customers is the owner's (we give them the ready text); the crew never sends SMS.
+- Texting customers is the owner's (we give them the ready text); the crew never texts customers
+  or strangers; the only text is the lead alert to the client's own cell (Nov 3, 2026).
 
 ## Refunds (terms.html: payments are final)
 No refunds. A refund request gets a kind reply, an offer to cancel future charges and to make it

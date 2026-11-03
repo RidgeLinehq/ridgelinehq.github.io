@@ -15,9 +15,9 @@ product.
 | Plan | Price | What's in it |
 |---|---|---|
 | Free AI Check | $0, always, no card | What ChatGPT and Gemini answer for their kind of business in their town (exact words, from the gateway), them vs the competitors named, the 3 fixes we'd make first. The main call to action everywhere. |
-| Starter "Leads + Reviews" | $39.99/month (same Stripe price and link as the old Starter) | LEAD GENERATION: their own quote-request page with tracking links (office/tools/make_landing.py; now for EVERY plan, not a Pro bonus); Google Business Profile optimization done for them as Manager (Grayson applies the crew's fields from the Google Maps app, usually within 2 business days, and we confirm it is live; without access it is written out ready to paste and we check it went live); the lead-capture form. Every lead reaches them by email and, when they asked for it, by text to their own cell (carrier email-to-text address in the form's _cc) within minutes: the person's name, contact, what they want and when, plus a follow-up tip. REVIEW GROWTH: review requests emailed to their real customers after each job/sale, their Google review link + the QR card for the counter, and we draft their replies to reviews. Lead log with the monthly "did it turn into a customer?" question. A private results page (numbers only, updated monthly). Monthly check-in email (wins + the next step). Monthly report (leads, new reviews, star-rating change). The Second Month Free Guarantee. |
+| Starter "Leads + Reviews" | $39.99/month (same Stripe price and link as the old Starter) | LEAD GENERATION: their own quote-request page with tracking links (office/tools/make_landing.py; now for EVERY plan, not a Pro bonus); Google Business Profile optimization done for them as Manager (Grayson applies the crew's fields from the Google Maps app, usually within 2 business days, and we confirm it is live; without access it is written out ready to paste and we check it went live); the lead-capture form. Every lead reaches them by email (always) and, when they asked for it, by text to their own cell within minutes (Twilio through Ridgeline Instant first; the carrier email-to-text address in the form's _cc only where a carrier still runs one): the person's name, contact, what they want and when, plus a follow-up tip. REVIEW GROWTH: review requests emailed to their real customers after each job/sale, their Google review link + the QR card for the counter, and we draft their replies to reviews. Lead log with the monthly "did it turn into a customer?" question. A private results page (numbers only, updated monthly). Monthly check-in email (wins + the next step). Monthly report (leads, new reviews, star-rating change). The Second Month Free Guarantee. |
 | Growth (RECOMMENDED) | $75/month | Everything in Starter + AI search visibility (weekly ChatGPT and Gemini checks, who they name, the AI score on the results page and in the report) + monthly profile updates and Google posts done for them. |
-| Pro | $125/month | Everything in Growth + the AI Lead Finder (public posts where people nearby ask for their kind of business, sent to them as they are found; specs/lead-tracking.md) + competitor tracking (who AI names instead of them, week by week). |
+| Pro | $125/month | Everything in Growth + the AI Lead Finder (public posts where people nearby ask for their kind of business, sent to them as they are found; specs/lead-tracking.md) + competitor tracking (who AI names instead of them, week by week) + priority handling of requests. |
 
 Every plan: same-day setup from the onboarding form (the fields are in "After paying"); the
 industry playbook in office/playbooks/<industry>.md (insurance-agents, roofers, home-services,
@@ -68,7 +68,8 @@ Deals (Grayson, Nov 3, 2026):
 "If your first month brings you zero new leads AND zero new reviews, your second month is free.
 No arguing." How it is measured and paid: specs/guarantee.md. Always link the terms, never reword
 them. The AI score no longer gates the guarantee (Nov 3, 2026); the baseline AI check still runs
-for every client because the monthly report and the results page use it.
+for every client: Starter gets it once, as a one-time look in the welcome (one line that weekly
+tracking is Growth); Growth/Pro get the weekly tracking the monthly report and the dashboard use.
 
 ## Promises the crew may NOT make
 (Never bring these up unprompted: lead with what we do and the guarantee. If a prospect asks
@@ -92,12 +93,13 @@ so Grayson can change the wording; the crew does not quietly under-deliver.
 ## After paying (specs/client-delivery.md is the whole flow)
 Stripe checkout → welcome.html onboarding form (business name, Google profile link, phone,
 services, city, email, manager_access, and since Nov 3, 2026: lead_cell, lead_carrier,
-lead_alerts (text and email | email only), industry (insurance-agents | roofers | home-services |
-salons | other), service_area, hours, review_link, customers, notes) → the reply desk's welcome
+lead_alerts (text and email | email only), industry (a slug: insurance-agents | roofers |
+home-services | salons | other), service_area, hours, review_link, customers, notes) → the reply desk's welcome
 email + baseline AI check + reviewsAtStart (specs/guarantee.md §1) → work begins THE SAME DAY:
 the quote-request page is built (make_landing.py) and its link sent; the lead-capture form is
-wired to their email and, when lead_alerts is "text and email", to their carrier email-to-text
-address in _cc (email always, text only when asked); the Google Business Profile optimization is
+wired to their email (always) and, when lead_alerts is "text and email", to their cell: Twilio
+through Ridgeline Instant first, the carrier email-to-text address in _cc only where a carrier
+still runs one; the Google Business Profile optimization is
 applied as Manager or sent ready to paste; the review link + QR card go out and the first review
 requests go to the customers they listed; the results page token is created
 (data/results/<token>.json) and the industry playbook is opened. The form asks them to add

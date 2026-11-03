@@ -81,11 +81,11 @@ test, createdAt, updatedAt}. The crew never changes status or notes after creati
 
 ## clients/<id>
 {leadId, businessName, town, state, contactEmail, phone, services, googleProfile, slug,
- plan:"starter"|"growth"|"pro", billing:"monthly"|"yearly", price, foundingLocked:bool, startedAt,
+ plan:"starter"|"growth"|"pro", billing:"monthly", price, startedAt,
  stripe:{customerEmail, lastPaymentAt, messageId, amount}, stripeSession:"cs_..."|"none",
  aiQuestions:[{key, question}], baseline:{score, points, answers, jobId, at, detail},
  aiTrend:[{at, score, jobId, named}], competitorsNow:[...],
- guarantee:{checkedAt, leads, baselineScore, dayScore, owed, jobId, stripeJob, applied, appliedAt, what},
+ guarantee:{checkedAt, leads, reviewsAtStart, reviewsNow, reviewsGained, baselineScore, dayScore, owed, jobId, stripeJob, applied},
  audit:{at, ...}, profileLog:[{at, field, before, after, source}], reviewsAtStart, reviewsNow:{count, at, source},
  customers:[{email, firstName, addedAt, askedAt}] (never in the repo), fixesTried:[{at, fix, result}], flatAt,
  managerAccess:true|false|"invited"|"later"|"no-access" (the onboarding form's manager_access; true once Google's acceptance email arrives), reviewLink, reviewCard, landing:{slug, url},

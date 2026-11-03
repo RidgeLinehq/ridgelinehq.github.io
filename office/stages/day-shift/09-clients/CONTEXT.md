@@ -121,10 +121,13 @@ real clients.
 7b. **Dashboard JSON (the results page)** (Nov 3, 2026): data/results/<client.resultsToken>.json
    per specs/client-delivery.md "Dashboard (the results page)", numbers only. Write or refresh
    it on EVERY run that touches the client (any step here changed something for them), on the
-   monthly date, and whenever a win is logged (8b): the existing numbers (leads by source and
-   outcome from leadlog, reviews atStart/now, rating, requestsSent, ai score/trend/named rows on
-   Growth/Pro, done[], next[], links, guarantee status, alerts = client.leadAlerts, updatedAt)
-   plus, every time:
+   monthly date, and whenever a win is logged (8b): the keys results.html reads (business, town,
+   plan, industry, updatedAt, period{from,to}, monthNumber, alerts = client.leadAlerts,
+   leads{thisMonth, total, bySource, outcome{customer, noCustomer, pending}} from leadlog,
+   reviews{atStart, now, ratingAtStart, ratingNow, requestsSent, repliesDrafted},
+   ai{enabled (true on Growth/Pro), scoreAtStart, scoreNow, trend[], named[], competitors[]},
+   done[], next[], links{quotePage, reviewLink, reviewCard, googleProfile}, guarantee{applies,
+   checkDay, status, note}) plus, every time:
    - leads.items: one per counted leadlog row {id: dashboardId, at, what, when, source, status}
      (specs/lead-tracking.md "The dashboard's lead list"; a row with no dashboardId yet gets the
      client's next "L-" number, written on the row first). Never a name, phone, email, address,
@@ -158,10 +161,10 @@ real clients.
    active client this month (a draft, a quote-page change, a review push, a post angle; one per
    client per run), logged in client.fixesTried {at, fix, result, from:"playbooks/README.md
    <date>"}. Never the same idea twice for one client.
-8. Weekly Google post draft (kind "post"), Mondays.
+8. Weekly Google post draft (kind "post"), Mondays, Growth/Pro only (Nov 3, 2026).
 8b. **Happiness** (specs/client-happiness.md): day-3 check-in (kind "checkin"; its ONE question
-   since Nov 3, 2026: "Did you open your dashboard yet? <link> Reply with anything confusing and
-   I'll make it simpler."; care.question carries it), day-21 "what we
+   since Nov 3, 2026: "Quick check: did you open your dashboard, and did your first lead text come
+   through? Reply with anything confusing and I'll make it simpler."; care.question carries it), day-21 "what we
    did so far" (kind "update"), a win email (kind "win"; every checkin draft carries care = {kind, question} and every win draft
    care = {kind, proof}, which the desk copies into client.checkins / client.wins when it sends) the
    run a proven win shows up (a score

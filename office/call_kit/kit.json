@@ -1,5 +1,5 @@
 {
- "version": "10.1",
+ "version": "10.2",
  "script": {
   "opener": "Hi, is this {owner_or_business}? This is Grayson with Ridgeline Local. I'll be quick. I ran a free check on how {business} shows up when people ask ChatGPT and Google's AI for a {trade} in {town}. Got 30 seconds?",
   "value": "Right now when someone asks for a {trade} in {town}, the AI recommends {competitor_or_others} and {business} {ai_result}. We fix that: we clean up your Google profile and help your real customers leave reviews, so the AI starts recommending you.",
@@ -8,7 +8,7 @@
  "objections": {
   "Not interested": "Totally fair. Can I still send the free report? If it's not useful, just delete it.",
   "We get enough work": "That's great to hear. This just makes sure the AI keeps sending people your way as more folks search that way.",
-  "How much is it?": "The check is free. Plans start at $39.99 a month, no contract, cancel anytime by email. Most people pick Growth at $75: we keep your Google profile and reviews moving every month, with a second-month-free guarantee. Pro at $125 adds leads we find and send you. Let me send the free check first so you can see if you even need it.",
+  "How much is it?": "The check is free. Plans start at $39.99 a month, no contract, cancel anytime by email, with a second-month-free guarantee on every plan. Growth at $75 adds weekly ChatGPT and Gemini checks. Pro at $125 adds leads we find and send you. Let me send the free check first so you can see if you even need it.",
   "Is this a scam?": "Fair question. I'll email the report from ridgelinemarketinghq@gmail.com and you can check it against ChatGPT yourself.",
   "How did you find me?": "Your website or your Google listing. {town} is one of the towns I'm calling this week.",
   "Call me later": "No problem. What's a better day and time? I'll put it down.",
@@ -16,7 +16,7 @@
   "How do you get reviews?": "Only from your real customers. You can send us their emails and we send a short, friendly request from your business, or you use the ready-made text and QR card we give you. We never write or buy reviews.",
   "Are these fake reviews?": "No, never. Fake reviews can get your Google profile suspended. We only ask your real customers.",
   "Do I have to do the work?": "Barely. We write every Google profile fix ready to paste, about 10 minutes for you, and we check it went live. We handle the review requests and the monthly AI report.",
-  "What's the guarantee?": "On Growth and Pro: if your first month brings zero tracked leads and no improvement in your AI visibility, your second month is free. The full terms are on our website.",
+  "What's the guarantee?": "On every plan: if your first month brings zero new leads and zero new reviews, your second month is free. Terms are on the website.",
   "Just send me info": "Happy to. What's the best email? I'll send your free AI check: what ChatGPT and Gemini say about {business} versus who they recommend, and the three things I'd fix. It takes a minute to read."
  },
  "outcomes": {
@@ -97,7 +97,7 @@
   "session_min_leads": 25,
   "rotation_epoch": "2026-01-01"
  },
- "updated": "2026-10-26: Top 5 in town (Who's On Top + pitch line), niches, pitch lines, voicemail + sold outcomes, cold call sessions.",
+ "updated": "2026-11-03: guarantee on every plan (zero new leads AND zero new reviews), Growth = weekly AI checks. 2026-10-26: Top 5 in town (Who's On Top + pitch line), niches, pitch lines, voicemail + sold outcomes, cold call sessions.",
  "niches": [
   {
    "id": "restaurants",

@@ -33,8 +33,8 @@ send it?"
 
 If they ask what it costs: "The check is free. If you want help after, plans start at $39.99 a
 month, no contract: that's Leads + Reviews, your own quote-request page, your Google profile
-fixed, and review requests to your real customers. Most people pick Growth at $75, which adds the
-weekly ChatGPT and Gemini checks. Pro at $125 adds leads we find and send you. And on every plan,
+fixed, and review requests to your real customers. Growth at $75 adds the weekly ChatGPT and
+Gemini checks. Pro at $125 adds leads we find and send you. And on every plan,
 if your first month brings zero new leads and zero new reviews, your second month is free. But
 first let me send you the check so you can see it for yourself."
 

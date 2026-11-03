@@ -118,7 +118,7 @@ function freeCheck_(th, f) {
   lines.push('The 3 fixes I\'d make first:');
   fixes.forEach(function (fx, i) { lines.push((i + 1) + '. ' + fx); });
   lines.push('');
-  lines.push('Want us to do it for you? Plans start at $39.99 a month (Leads + Reviews: your own quote-request page, Google profile optimization and real-customer review growth), no contract. Most businesses pick Growth ($75): everything in Starter plus weekly ChatGPT and Gemini checks. Every plan: if your first month brings zero new leads and zero new reviews, your second month is free (terms: ' + CFG.SITE + '/guarantee.html).');
+  lines.push('Want us to do it for you? Plans start at $39.99 a month (Leads + Reviews: your own quote-request page, Google profile optimization and real-customer review growth), no contract. Growth ($75) adds weekly ChatGPT and Gemini checks. Every plan: if your first month brings zero new leads and zero new reviews, your second month is free (terms: ' + CFG.SITE + '/guarantee.html).');
   lines.push('See the plans: ' + CFG.SITE + '/#pricing', '');
   lines.push('Or just reply with any question.', '', CFG.SIGNATURE, '', CFG.OPT_OUT, CFG.ADDRESS);
   GmailApp.sendEmail(f.email, 'Your free AI check: ' + biz + ' in ' + place.town, lines.join('\n'), { name: 'Grayson at Ridgeline Local', replyTo: CFG.ME });
@@ -134,7 +134,7 @@ function pickFixes_(res) {
   if (!cn && !gn) fixes.push('Your Google Business Profile needs your exact services and a description that says what you do and the towns you serve; both tools lean on it.');
   else if (cn !== gn) fixes.push('The tool that missed you is reading a thin or inconsistent profile; the same name, address and phone on Google, Yelp and Facebook fixes most of that.');
   else fixes.push('You\'re named, so keep the lead: post a Google update every week and keep your hours and services current so the tools keep picking you.');
-  fixes.push('Ask every happy customer for a Google review with a text and a QR card; both tools quote review counts and recent reviews.');
+  fixes.push('Ask every customer for a Google review after the job, not just the happy ones, with a text and a QR card; both tools quote review counts and recent reviews.');
   fixes.push('Add 10 or more real photos of your work and your place to Google, and reply to every review by first name within a week; both are signals these tools read.');
   return fixes;
 }
@@ -184,18 +184,22 @@ function onboarding_(th, f) {
     detail.forEach(function (d) { (d.competitors || []).forEach(function (n) { comp[n] = (comp[n] || 0) + 1; }); });
     var top = Object.keys(comp).sort(function (a, b) { return comp[b] - comp[a]; }).slice(0, 4);
     if (top.length) L.push('', 'The businesses they named most: ' + top.join(', ') + '.');
-    L.push('', 'This is your day-1 number. We re-check every week and show you the trend in your monthly report.');
+    if (plan === 'starter') L.push('', 'This is a one-time look. Weekly tracking and your AI score on your dashboard are part of Growth.');
+    else L.push('', 'This is your day-1 number. We re-check every week and show you the trend in your monthly report.');
   } else {
     L.push('Your starting AI visibility score is running now; it will follow in a separate email shortly.');
   }
   L.push('', 'WHAT HAPPENS NEXT (nothing for you to chase):');
   L.push('1. Within the hour: your Welcome Pack (a PDF) with your Google profile fixes (we apply them as your Manager, or you paste them), your review kit, the link to your own quote-request page, and the link to your private results page.');
   L.push('2. Lead alerts: every request from your quote-request page or your Google profile reaches you by email' + (/text/i.test(f.leadAlerts || 'text') ? ' and by text to ' + (f.leadCell || 'your cell') : '') + ' within minutes, with the person\'s name, what they need and when, plus a tip on following up fast. We send one test request so you can confirm it arrives.');
-  L.push('3. Your QR review card for the counter, as soon as we have your Google review link' + (f.reviewLink ? ' (thanks, we have it)' : ' (reply with it, or we pull it as your Manager)') + '. ' + (f.customers ? 'The customers you listed get their review request today.' : 'Send us the names and emails of recent happy customers any time and we ask them for you.'));
+  L.push('3. Your QR review card for the counter, as soon as we have your Google review link' + (f.reviewLink ? ' (thanks, we have it)' : ' (reply with it, or we pull it as your Manager)') + '. ' + (f.customers ? 'The customers you listed get their review request today.' : 'Send us the names and emails of recent customers any time and we ask them for you.'));
   if (plan === 'pro') L.push('4. Leads we find in public posts go straight to this email too, and every one is logged.');
   L.push('', 'Every lead is someone who asked to hear from you. We only collect genuine reviews from your real customers.');
   L.push('', 'Your Second Month Free Guarantee is on: if your first month brings you zero new leads and zero new reviews, your second month is free. No arguing. Terms: ' + CFG.SITE + '/guarantee.html');
-  L.push('', 'Optional, 3 minutes: add ' + CFG.ME + ' as a Manager on your Google Business Profile (Google Maps app > your profile > ⋯ > Business Profile settings > People and access > Add > Manager). It lets us log the messages and calls your profile gets. Never a password.');
+  var mgr = String(f.manager || 'later').toLowerCase();
+  if (/invited/.test(mgr)) L.push('', 'Thanks for the Manager invite: we accept it within the hour and make your Google profile changes ourselves, usually within 2 business days.');
+  else if (/no.?access/.test(mgr)) L.push('', 'No Google access? Your Welcome Pack works from public information and shows how to claim your listing (free, about 5 minutes).');
+  else L.push('', 'When you have 3 minutes: add ' + CFG.ME + ' as a Manager on your Google Business Profile (Google Maps app > your profile > ⋯ > Business Profile settings > People and access > Add > Manager). Then we make your Google profile changes ourselves and log the messages and calls your profile gets; until then everything comes written out, ready to paste. Never a password.');
   L.push('', 'Questions? Just reply to this email.', '', CFG.SIGNATURE);
   GmailApp.sendEmail(f.email, 'Welcome to Ridgeline Local' + (anyOk ? ': your starting AI score is ' + score + '/100' : ''), L.join('\n'),
                      { name: 'Grayson at Ridgeline Local', replyTo: CFG.ME });
@@ -422,7 +426,7 @@ function parseFields_(text) {
     if ((m = L.match(/^([A-Za-z _\/]{2,40}?)\s*(?:[:：]|\t+)\s*(.+)$/)) && key(m[1])) { if (!f[key(m[1])]) f[key(m[1])] = m[2].trim(); continue; }
     if (key(L) && i + 1 < lines.length && !key(lines[i + 1])) { if (!f[key(L)]) f[key(L)] = lines[i + 1]; i++; }
   }
-  Object.keys(f).forEach(function (k) { if (/^(not given|none|unknown)$/i.test(f[k])) delete f[k]; });
+  Object.keys(f).forEach(function (k) { if (/^(not given|none|none yet|unknown|n\/a|n\/a \(email only\))$/i.test(f[k])) delete f[k]; });
   if (f.email) { var em = f.email.match(/[^\s<>"]+@[^\s<>"]+\.[^\s<>"]+/); f.email = em ? em[0] : ''; }
   return f;
 }

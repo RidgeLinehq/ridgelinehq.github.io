@@ -62,7 +62,7 @@ One shared config; swap the services list for the trade (cleaners and landscaper
   "hours": "Mon-Fri 7-6, [emergency line 24 hours]",
   "about": "[Plumbing] repairs and installs in [Town] and nearby. Written estimates, [licensed and insured in [ST], license #[number] / insured].",
   "cta": "Request a service call",
-  "services": ["Leak or drip", "Clogged drain", "Water heater", "Toilet or faucet", "Something else"],
+  "services": ["Leak or drip", "Clogged drain", "Water heater", "Toilet or faucet"],
   "whenOptions": ["Emergency, today", "This week", "This month", "Just getting prices"],
   "extraQuestion": {"label": "Is this for your home or a business?", "options": ["Home", "Business / rental"]},
   "reviewLine": "Rated [4.9] on Google by [118] [Town] customers.",
@@ -70,7 +70,7 @@ One shared config; swap the services list for the trade (cleaners and landscaper
 }
 ```
 
-Services lists by trade (five options, "Something else" last): HVAC ["No cooling", "No heat", "Tune-up or maintenance", "New system quote", "Something else"]; Electrician ["Outlet or switch", "Panel or breaker", "Lighting or ceiling fan", "EV charger or new circuit", "Something else"]; Cleaner ["Regular cleaning", "Deep clean", "Move-in / move-out", "Office cleaning", "Something else"]; Landscaper ["Lawn mowing", "Yard clean-up", "Planting or beds", "Hardscape or drainage", "Something else"]; Handyman ["Repairs around the house", "Mounting or assembly", "Drywall or paint", "Doors, locks or fixtures", "Something else"]. reviewLine uses only the real rating and count (source labeled); leave it out if unknown.
+Services lists by trade (four options; the tool adds "Something else" itself, never list it): HVAC ["No cooling", "No heat", "Tune-up or maintenance", "New system quote"]; Electrician ["Outlet or switch", "Panel or breaker", "Lighting or ceiling fan", "EV charger or new circuit"]; Cleaner ["Regular cleaning", "Deep clean", "Move-in / move-out", "Office cleaning"]; Landscaper ["Lawn mowing", "Yard clean-up", "Planting or beds", "Hardscape or drainage"]; Handyman ["Repairs around the house", "Mounting or assembly", "Drywall or paint", "Doors, locks or fixtures"]. reviewLine uses only the real rating and count (source labeled); leave it out if unknown.
 
 **Follow-up tip (goes in every lead alert):** Call within 5 minutes; an "Emergency, today" lead calls the next name on the list if you do not pick up. No answer: leave a 10-second voicemail with your name and the earliest window, then text the same line from your own phone. "Business / rental" leads want an invoice by email and a repeat contact; ask who signs off before you quote.
 
@@ -158,6 +158,6 @@ Each idea names the trade it fits; adapt the angle to the client's trade. Every 
 
 - **Week 1:** Manager access granted; hours (with the emergency branch), categories, services, description and Q&A live; first ten photos up; the lead page live with the owner's phone as the big button and opened once to check it.
 - **Week 2:** the owner sends the last ten finished jobs' emails; review requests go out at the rules' pace; the QR card is on the invoice template and in the van; the first Google post is up.
-- **Week 3:** first review replies drafted and posted; the weekly visibility check records what ChatGPT and Gemini said word for word; Pro: the first lead alerts with the follow-up tip, and the owner has called one back within the hour.
+- **Week 3:** first review replies drafted and posted; the weekly visibility check records what ChatGPT and Gemini said word for word; the first lead alerts with the follow-up tip have landed (every plan), and the owner has called one back within the hour; Pro: the first Lead Finder leads.
 - **Week 4:** the monthly check-in asks which leads became jobs; the report shows the real counts, zeros included, the AI answers quoted, and next month's three bullets.
 - **Signals we want (not numbers):** the owner pasted the fixes within a week; new reviews name the town, the tech and the job ("water heater", "[Street]"); the profile check finds the new description on the copy sites; "Emergency, today" leads get a call back inside the hour; the services list matches what people actually ask for on the lead page.
