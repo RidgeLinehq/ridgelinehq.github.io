@@ -47,3 +47,9 @@ skills/<agent>/SKILL.md first. Nothing here without evidence.
   t1 under 90 words, t2 a new finding) started 11-02: 0 of 20 at 10 minutes, too early; scored apart in
   workflow/v1-echo-card-shape, first read 11-05 (day 3), verdict after 30 sends. Free checks: 0 replies
   of 13 delivered at day 5-7, 0 clients. Calls: 137, no new calls since 10-28, no new call lesson.
+- 2026-11-03 (Sage): First cold-email reply in 86 sends (46 old shape, 40 new shape): a "Send it" to the
+  new-shape t3 break-up (lever take the pressure off, subject "<Business> + ChatGPT", ask "Just reply
+  send it") from an Owasso roofer that also had t1 10-23, t2 10-28 and one call; 5.5 h after send; the
+  reply desk sent the free check 45 minutes later. t1 and t2 so far 0 of 85 (39 of 40 new-shape threads
+  under 2 days old). New shape 1 of 40 (2.5 per 100) vs old 0 of 46; verdict stays 11-06 (one reply,
+  confidence 30). Free checks delivered 14 (prospects), 0 clients. Calls 137, unchanged.
