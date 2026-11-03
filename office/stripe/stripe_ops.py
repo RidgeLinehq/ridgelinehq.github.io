@@ -45,12 +45,12 @@ def terms_text(plan):
 
 # Prices in cents. Monthly only (yearly billing was retired Oct 27, 2026).
 PLANS = {
-    "starter": {"name": "Ridgeline Local Starter", "monthly": 3999,
-                "desc": "Leads + Reviews: your quote-request page, Google Business Profile optimization, lead alerts by text and email, review growth, results page, monthly report."},
+    "starter": {"name": "Ridgeline Local Starter: Leads + Reviews", "monthly": 3999,
+                "desc": "Leads + Reviews: your quote-request page, Google Business Profile optimization, lead alerts by text and email, review growth, your own dashboard, monthly report. Second Month Free Guarantee."},
     "growth": {"name": "Ridgeline Local Growth", "monthly": 7500,
-               "desc": "Everything in Starter + AI search visibility (ChatGPT and Gemini checks), monthly profile updates and Google posts."},
+               "desc": "Everything in Starter + AI search visibility (ChatGPT and Gemini checks), monthly profile updates and Google posts. Second Month Free Guarantee."},
     "pro": {"name": "Ridgeline Local Pro", "monthly": 12500,
-            "desc": "Everything in Growth + the AI Lead Finder and competitor tracking."},
+            "desc": "Everything in Growth + the AI Lead Finder, competitor tracking and priority requests. Second Month Free Guarantee."},
 }
 BILLINGS = ("monthly",)
 
@@ -120,7 +120,11 @@ def all_pages(path, params):
 def ensure_product(plan, p):
     found = call("GET", "products/search", {"query": f"metadata['rl_plan']:'{plan}' AND active:'true'"}).get("data", [])
     if found:
-        return found[0]["id"]
+        prod = found[0]
+        if prod.get("name") != p["name"] or (prod.get("description") or "") != p["desc"]:
+            call("POST", f"products/{prod['id']}", {"name": p["name"], "description": p["desc"]})
+            print(f"{plan} product name/description updated")
+        return prod["id"]
     return call("POST", "products", {"name": p["name"], "description": p["desc"], "metadata": {"rl_plan": plan}},
                 idem=f"rl-product-{plan}")["id"]
 
