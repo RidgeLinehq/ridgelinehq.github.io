@@ -1,0 +1,10 @@
+{
+ "id": "ec-2026-11-03-bed8",
+ "at": "2026-11-03T13:59:15.296008Z",
+ "domains": {
+  "sjillspurlindmd.net": {
+   "mx": true,
+   "why": "MX sjillspurlindmd-net.mail.protection.outlook.com"
+  }
+ }
+}
