@@ -13,7 +13,7 @@ first emails and client work; this desk sends and answers, any day.
 | specs/free-check.md | all |
 | specs/client-delivery.md | The flow, Dashboard (the results page), Review requests, Cancel |
 | specs/guarantee.md | all (baseline, day-28 check, paying it; Nov 3, 2026: every plan, the condition zero new leads AND zero new reviews in month one) |
-| specs/lead-tracking.md | The lead log, Sending leads, "Did this lead turn into a customer?" |
+| specs/lead-tracking.md | The lead log, Sending leads, "Did this lead turn into a customer?", The dashboard's lead list (Lanes G and K) |
 | office/playbooks/<industry>.md | only the new client's own, Lane C step 3 ("other" = none) |
 | shared/alerts.md | all |
 | specs/quality.md | all (every client deliverable passes it; Speed) |
@@ -186,8 +186,9 @@ Search `(from:stripe.com OR subject:"Onboarding —") newer_than:7d -label:Ridge
    outcome, reviews atStart from the audit, rating, requestsSent, done[], next[], links,
    guarantee status, alerts = client.leadAlerts, and every list EMPTY: leads.items [],
    reviews.recent [], reviews.history [], posts [], todo [], activity [], requests []; Day
-   Shift 09 fills them on its first run), commit "results: <token>", push; (d2) LEAD TEST: ONE request through the live page (name "TEST from Ridgeline",
-   what "setup test"), leadlog row counted false, and the pack asks them to reply "got it" when
+   Shift 09 fills them on its first run), commit "results: <token>", push; (d2) LEAD TEST: ONE
+   request through the live page (name "TEST from Ridgeline", what "setup test"), leadlog row
+   counted false, and the pack asks them to reply "got it" when
    the text arrives (Lane C2); (d3) FIRST REVIEW REQUESTS: client.customers from the form → one
    review request each today (Lane D "reviewreq" rules: max 25, inside the sending window,
    askedAt set); (e) FIRST DELIVERY in this same run (specs/quality.md "Speed" and "Format"):
@@ -384,7 +385,7 @@ Kind "leads": the leads email to the owner (the Lead Finder writes them finished
 this lane, priority true before anything else); set sentToClientAt + sentGmailId on each leadlog row.
 Kind "jobcheck": the monthly "did it turn into a customer?" email (every plan since Nov 3, 2026).
 Kind "report" goes out WITH its "checkin-monthly" note in ONE email (Nov 3, 2026): the note is the
-htmlBody + body (under 120 words: wins + the one next step + the results link
+htmlBody + body (under 120 words: wins + the one next step + the dashboard link
 https://ridgelinehq.github.io/results.html?c=<client.resultsToken>), the PDF attached; never a
 second email; mark both drafts sent with the one Gmail id. Kind "reviewreply": the drafted reply
 to paste, a short note with no PDF, sent the run it is ready (doesn't count toward the 3 per run

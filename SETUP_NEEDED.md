@@ -126,6 +126,7 @@ and (when they asked) by text to their own cell, Google profile optimization and
 review requests to real customers + review link and QR card + drafted review replies, weekly AI
 re-checks (Growth/Pro), monthly profile updates and Google posts (Growth/Pro), lead finding and
 competitor tracking (Pro), the lead log on every plan, monthly "did it turn into a customer?"
-emails, results pages and reports, the first-of-the-month review of what worked across clients,
+emails, client dashboards and reports (and whatever a client asks for on their dashboard), the
+first-of-the-month review of what worked across clients,
 flat-client fixes, day-28 guarantee check + Stripe credit + client email (all plans),
 cancellations, and alert emails to you when anything breaks.

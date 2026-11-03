@@ -5,9 +5,9 @@ below is done by the crew, or by one Action, or is one tap for the client. Grays
 asked, except for the alerts in shared/alerts.md.
 Grayson's standing order (Nov 3, 2026): every plan is "Leads + Reviews" from day one: a
 quote-request page with lead alerts, review requests and review replies, a private dashboard
-(the results page) and one monthly check-in. Starter $39.99 gets all of it; Growth $75 adds the weekly AI checks,
-monthly profile updates and Google posts; Pro $125 adds the AI Lead Finder and competitor
-tracking (specs/offer.md).
+(the results page) and one monthly check-in. Starter $39.99 gets all of it; Growth $75 adds the
+weekly AI checks, monthly profile updates and Google posts; Pro $125 adds the AI Lead Finder and
+competitor tracking (specs/offer.md).
 
 ## The flow
 1. **Pick a plan** on https://ridgelinehq.github.io/#pricing → start.html → Stripe checkout (link
