@@ -1,0 +1,11 @@
+{
+ "business": "Cedar Ridge Roofing", "town": "Millbrook, AR", "plan": "growth", "industry": "roofers",
+ "updatedAt": "2026-11-01", "period": {"from": "2026-10-01", "to": "2026-10-31"}, "monthNumber": 1,
+ "leads": {"thisMonth": 6, "total": 6, "bySource": {"quote-page": 4, "google-profile": 2, "lead-finder": 0}, "outcome": {"customer": 2, "noCustomer": 1, "pending": 3}},
+ "reviews": {"atStart": 38, "now": 44, "ratingAtStart": 4.6, "ratingNow": 4.8, "requestsSent": 10},
+ "ai": {"enabled": true, "scoreAtStart": 0, "scoreNow": 33, "trend": [{"at": "2026-10-01", "score": 0}, {"at": "2026-10-08", "score": 17}, {"at": "2026-10-15", "score": 17}, {"at": "2026-10-22", "score": 33}, {"at": "2026-10-29", "score": 33}], "named": [{"question": "Who are the best roofers in Millbrook, AR?", "chatgpt": "Named #3", "gemini": "Not named"}, {"question": "Can you recommend a good roofer in Millbrook, AR?", "chatgpt": "Not named", "gemini": "Named"}, {"question": "Which roofers in Millbrook, AR have the best reviews?", "chatgpt": "Named #2", "gemini": "Not named"}]},
+ "done": ["Hours, categories and description set on your Google listing (Oct 3)", "Quote-request page live with tracking links (Oct 2)", "Review requests sent to 10 recent customers (Oct 6)", "Replies drafted for 4 new reviews"],
+ "next": ["November Google post: storm-season roof inspections", "Add 'gutter repair' to your services and your quote page"],
+ "links": {"quotePage": "https://ridgelinehq.github.io/samples/quote-page/", "reviewLink": "https://g.page/r/example/review", "reviewCard": "https://ridgelinehq.github.io/cards/example.png"},
+ "guarantee": {"applies": true, "checkDay": "2026-10-29", "status": "not owed", "note": "6 new leads and 6 new reviews in month one."}
+}

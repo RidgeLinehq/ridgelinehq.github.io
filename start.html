@@ -64,7 +64,7 @@ footer a{color:#fff}
   "use strict";
   /* ?plan=starter|growth|pro  ?client_reference_id=NAME (or ?ref=NAME)  ?email=you@x.com */
   var q=new URLSearchParams(location.search);
-  var names={starter:"Starter · $39.99/month",growth:"Growth · $75/month",pro:"Pro · $125/month"};
+  var names={starter:"Starter (Leads + Reviews) · $39.99/month",growth:"Growth · $75/month",pro:"Pro · $125/month"};
   var LINKS={starter:"https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07",growth:"https://buy.stripe.com/14AbJ168z9msbrAdWtaEE08",pro:"https://buy.stripe.com/8x200jgNd6ag3Z8aKhaEE09"};
   var plan=(q.get("plan")||"growth").toLowerCase();if(!names[plan])plan="growth";
   var label=names[plan];

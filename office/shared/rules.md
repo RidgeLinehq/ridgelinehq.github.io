@@ -66,7 +66,8 @@ checks sent, clients), was a wasted run and says so in its run-log line.
 - Create, change, re-enable, fire or delete a scheduled task or its schedule.
 - Change the website's offer, prices, guarantee, copy or form (Patch may fix a broken page
   element after a 3-line plan; copy and prices are Grayson's). Allowed without asking: building
-  Pro clients' lead pages under p/<slug>/, and data/stripe-links.json (written only by the Stripe Action).
+  every client's quote-request page under p/<slug>/ (Nov 3, 2026), the client's results numbers under
+  data/results/<token>.json, and data/stripe-links.json (written only by the Stripe Action).
 - Contact a lead whose status is Suppressed or Not a fit, or anyone on the suppression list.
 - Text, call, DM or message a prospect on any channel other than email. (Review request
   emails to a paying client's own real customers, from the list the client gave us, are allowed:

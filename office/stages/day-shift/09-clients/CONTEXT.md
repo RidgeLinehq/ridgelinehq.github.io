@@ -4,6 +4,8 @@ Grayson's standing order (Oct 24, 2026): for every paying client the crew automa
 optimizes their Google profile and tracks changes, runs review requests to their REAL customers,
 re-checks AI visibility weekly and logs the trend, finds and sends leads (Pro), and flags
 any client whose numbers are flat after 2 weeks and tries new fixes on its own. No approvals.
+Nov 3, 2026: every plan gets a quote page with lead alerts, review replies, a results page and
+one monthly check-in; the first run of each month applies Sage's "What worked" lines to every account.
 The reply desk owns signup, baseline, the day-28 guarantee check and lead intake; this stage
 owns the work.
 
@@ -15,6 +17,9 @@ owns the work.
 | specs/quality.md | all (every drafted item passes it before status ready; reports and packs are branded PDFs via office/tools/make_pack.js) |
 | office/examples/welcome-pack.json | all: the golden Welcome Pack (fictional business, 88+). Read it before Step 0 and before any plan, kit or report; match or beat it, never copy its facts. Missing from disk = the clone's sparse list lacks office/examples: run `git sparse-checkout add office/examples` first |
 | specs/lead-tracking.md | all |
+| office/playbooks/<industry>.md | only the client's own (client.industry; "other" = none, use the specs), read BEFORE the profile fixes, the quote-page config and the review kit (Nov 3, 2026) |
+| office/playbooks/README.md | "What worked" lines, first run of each month only (step 7c) |
+| specs/guarantee.md | the condition only (Nov 3, 2026: every plan; zero new leads AND zero new reviews in month one → month two free); the desk runs the check, you keep the numbers it reads true |
 | specs/offer.md | The plans, Promises the crew may NOT make |
 | shared/gateway.md | Protocol |
 | shared/alerts.md | all |
@@ -45,9 +50,14 @@ real clients.
    message and emails Grayson the PDF.
 
 ## Process (per active client, oldest first; write the crew doc "working: Clients: <business>")
-1. **Week 1 items** not yet done (client.work): profile audit, profile fixes ("buildout-plan",
-   drafts kind "plan"), review kit (kind "kit": the text + card link + "send us your customers'
-   emails"), Pro lead page if the desk hasn't built it. Status "ready", clientId set; the desk
+1. **Week 1 items** not yet done (client.work): the client's playbook first (Inputs), then
+   profile audit, profile fixes ("buildout-plan", drafts kind "plan"), review kit (kind "kit": the
+   text + card link + "send us your customers' emails"), and the quote page for EVERY plan (Nov 3,
+   2026): the desk builds it within the hour of onboarding; here confirm p/<slug>/ is live (curl
+   or WebFetch) and the lead test is in leadlog, refine office/landing/<slug>.json from the
+   playbook (cta, reviewLine, whenOptions, extraQuestion; leadEmail/leadCc untouched) →
+   `python3 office/tools/make_landing.py office/landing/<slug>.json`, commit. Missing = build it
+   now (reply-desk Lane C step 3 rules). Status "ready", clientId set; the desk
    emails them. No reviewLink yet → kit uses the "Get more reviews" how-to and asks for it.
    managerAccess true (we do it for them, Oct 28, 2026): make sure one open tasks doc
    {agent:"grayson", kind:"apply-google", clientId} exists with the plan's fields (the desk
@@ -57,6 +67,12 @@ real clients.
    "reviewreq" with recipients (max 25) and the request text (rules in client-delivery.md).
    None given yet and the kit went out 7+ days ago → one short ask to the owner for 10 emails
    (kind "fix"). Never more than one ask per 14 days.
+2b. **Review replies** (Nov 3, 2026, every plan): a new review seen this run (a client forward or
+   Google's Manager notice in their thread, or a new public review whose text step 4 can read)
+   with no reply drafted yet → drafts kind "reviewreply" (specs/quality.md: 2 to 4 sentences,
+   specific to what they wrote, no arguing, no admitting fault, never mention a review was
+   requested), status ready; the desk sends it the same run. Reviews that arrive between runs
+   are the desk's (Lane G).
 3. **Weekly AI re-check** (last aiTrend point 7+ days old): batch the due clients' aiQuestions
    into gateway jobs (max 6 queries per job), wait for the out files (protocol), score each with
    `python3 office/tools/ai_score.py --name "<business>" --keys <their 3 keys> <out file>`,
@@ -85,19 +101,40 @@ real clients.
       priority). The desk sends them within 2 hours; Pro leads found in this run also go out in
       this run if the Gmail send tool is available here (record the id), else the desk's next run.
 6. **Flat check** (client day 14+, every 14 days): FLAT = no aiTrend point above baseline AND
-   (Pro) 0 counted leads AND reviews gained 0 or unknown. Flat → pick the next 2 untried
-   fixes from the ladder in client-delivery.md, do them in this run (draft what goes to the
+   0 counted leads from any source (every plan has a quote page) AND reviews gained 0 or
+   unknown. Flat → pick the next 2 untried fixes from the ladder in client-delivery.md, do them
+   in this run (draft what goes to the
    owner as kind "fix", add searches, etc.), record client.fixesTried. Also add the line
    "<business> flat at day N; tried: <fix>, <fix>" to the run notes for the morning report.
-7. **Monthly** (on the client's monthly date): drafts kind "jobcheck" (Growth/Pro) and kind
-   "report" (all plans) per specs/lead-tracking.md; Pro: the promo video (Nova, studio), linked
-   in the report. Real numbers only; unknown = "unknown".
+7. **Monthly** (on the client's monthly date, EVERY plan since Nov 3, 2026): drafts kind
+   "jobcheck" ("Did this lead turn into a customer?", specs/lead-tracking.md) and kind "report"
+   with its note as kind "checkin-monthly" (one email, Lane D: this month's wins + the ONE next
+   step we're taking + the results link, under 120 words; specs/client-happiness.md §1); AI score
+   lines on Growth/Pro only; Pro: the promo video (Nova, studio), linked in the report. Real
+   numbers only; unknown = "unknown". Write the results JSON (7b) BEFORE the report goes ready.
+7b. **Results JSON** (Nov 3, 2026): data/results/<client.resultsToken>.json per
+   specs/client-delivery.md "Results page": numbers only (leads by source and outcome from
+   leadlog, reviews atStart/now, rating, requestsSent, ai score/trend/named rows on Growth/Pro,
+   done[], next[], links, guarantee status, updatedAt). Write it on the monthly date and whenever
+   a win is logged (8b). Every number equals the database; zeros stay zeros; never a lead's name,
+   phone or email, never client.customers. Commit "results: <token>" (no business name in the
+   message), pull --rebase, push. A client with no resultsToken (pre-Nov 3) → make one (16
+   random hex), store client.resultsToken, write the file, put the link in their next email.
+7c. **Keep improving** (first run of each month, Nov 3, 2026): put every active client's numbers
+   in your report to Mara, one line each: `IMPROVE: <clientId> | leads by source | reviews gained
+   | AI trend | fixesTried`. Sage turns them into dated "What worked" lines with the evidence in
+   office/playbooks/README.md (no client names). Each line marked adopt → apply the idea to every
+   active client this month (a draft, a quote-page change, a review push, a post angle; one per
+   client per run), logged in client.fixesTried {at, fix, result, from:"playbooks/README.md
+   <date>"}. Never the same idea twice for one client.
 8. Weekly Google post draft (kind "post"), Mondays.
 8b. **Happiness** (specs/client-happiness.md): day-3 check-in (kind "checkin"), day-21 "what we
    did so far" (kind "update"), a win email (kind "win"; every checkin draft carries care = {kind, question} and every win draft
    care = {kind, proof}, which the desk copies into client.checkins / client.wins when it sends) the
    run a proven win shows up (a score
-   gain counts only once it holds 2 checks in a row), the simpler-version redo for any client
+   gain counts only once it holds 2 checks in a row; Nov 3, 2026 win kinds also "first-lead", the
+   first lead through their quote page, and "first-review", the first new review since we started;
+   every logged win updates the results JSON, 7b), the simpler-version redo for any client
    who asked "how" or hasn't acted in 7 days, and renewal-in-3-days with zero wins → strongest
    honest update + flat ladder today. Log each response in skills/echo "What I've learned".
 9. Anything that failed for a client (gateway 3x, lead finder error, a WebSearch dead end that
@@ -140,14 +177,15 @@ report; care notes under 60 words you grade yourself, qa.by "self", and the desk
 Every drafted item has qa {score, by, weakest, rewrites} per specs/quality.md and 85+ (or 75+ with
 an alert); packs and reports carry qa.by "grader". Every drafted item names the client and uses only facts from the client, the lead log, the
 gateway text or a source URL. No invented review counts, leads or scores. Nothing from leadlog
-or client.customers in the repo. Lead finder and gateway jobs carry town + trade only.
+or client.customers in the repo; data/results/*.json carries numbers only, never a lead's or
+customer's name, phone or email (Nov 3, 2026). Lead finder and gateway jobs carry town + trade only.
 
 ## Outputs
 | Where | What |
 |---|---|
-| drafts/<id> (kinds plan, kit, reviewreq, fix, leads, jobcheck, report, post, checkin, update, win) | status ready, clientId set |
-| clients/<id> | work[], aiTrend, competitorsNow, profileLog, reviewsNow, fixesTried, flatAt, reportDue, updatedAt (checkins[], wins[] and lastUpdateAt are written by the reply desk when it sends; 09 only reads them) |
+| drafts/<id> (kinds plan, kit, reviewreq, reviewreply, fix, leads, jobcheck, report, checkin-monthly, post, checkin, update, win) | status ready, clientId set |
+| clients/<id> | work[], aiTrend, competitorsNow, profileLog, reviewsNow, fixesTried, flatAt, reportDue, resultsToken (only when missing), updatedAt (checkins[], wins[] and lastUpdateAt are written by the reply desk when it sends; 09 only reads them) |
 | leadlog/<id> | new leads |
-| repo | office/gw/jobs/*, office/leadfinder/jobs/*, office/landing/*.json + p/<slug>/ (Pro) |
+| repo | office/gw/jobs/*, office/leadfinder/jobs/*, office/landing/*.json + p/<slug>/ (every plan), data/results/<token>.json (numbers only, 7b) |
 | events/<day> | "Clients: <n> active, <m> items drafted, <l> leads, <f> flat" |
 | output/<day>-run.md | `## Clients`: per client one line: score trend, leads, items drafted, flat?, next due |

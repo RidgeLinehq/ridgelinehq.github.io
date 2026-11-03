@@ -32,11 +32,11 @@ checked what it says about him. That gap is the whole sale.
    the source is named and linked. Never invented testimonials.
 6. No scarcity. There is no founding deal, spot count or deadline (Grayson, Oct 27, 2026), so
    say nothing about limits. The easy next step is the pitch: no contract, cancel anytime,
-   Growth and Pro carry the Second Month Free Guarantee.
+   every plan carries the Second Month Free Guarantee (Nov 3, 2026).
 7. Authority through evidence, not titles. We never claim to be an agency with a team. We show
    what ChatGPT actually said, the number, the fix. "Here's what AI says. Here's why. Here's the fix." The
    person who shows you the problem is the person you hire to fix it.
-8. Remove risk. The guarantee (Growth/Pro: zero tracked leads and no AI improvement in month 1 = month 2 free), month to month,
+8. Remove risk. The guarantee (every plan: zero new leads and zero new reviews in month 1 = month 2 free), month to month,
    cancel by replying to an email, no contract, no password. Say it once, late, when they are
    deciding, not in the opener.
 9. Momentum. Every message ends with the next step being one tap: reply "yes", open the link,
@@ -56,8 +56,8 @@ checked what it says about him. That gap is the whole sale.
 - "Is this a scam?" → "Fair question. It's one person, no contract, no password, cancel by
   email, and the first thing you get is free. Here's the website: ridgelinehq.github.io."
 - "Can you guarantee I'll be #1?" → "No, and anyone who says they can is lying to you. What I
-  do guarantee, on Growth and Pro: if your first month brings zero tracked leads and no improvement
-  in your AI visibility, your second month is free. And I show you what the AI tools say every month."
+  do guarantee, on every plan: if your first month brings zero new leads and zero new reviews, your
+  second month is free. And I show you your real numbers every month on your results page."
 - "Not now." → "No problem. I'll send the free check anyway so you have it. Mind if I check
   back in a month?"
 - "Too expensive." → "It's less than one small repair job a month. One extra job a month pays

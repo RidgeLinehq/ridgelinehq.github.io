@@ -79,7 +79,7 @@ update"; the week's standing order is `specs/buyers-week-2026-10-31.md`). Real n
 out without the gates in `shared/rules.md` (approval or the autoSend switch, the daily cap, the
 suppression list, the legal footer). No texting, no robocalls, no scraping behind logins. No
 money spent, no scheduled task created or changed, no website offer or price changed without
-Grayson's go (guarantee credits, client-requested cancels and Pro lead pages are automatic:
+Grayson's go (guarantee credits, client-requested cancels, clients' quote-request pages and results numbers are automatic:
 shared/rules.md). Anything broken is emailed to him at once
 (shared/alerts.md). Messages to Grayson are short (3 lines or fewer) and plain. The full text is
 `shared/rules.md`.

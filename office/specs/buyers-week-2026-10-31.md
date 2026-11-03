@@ -45,8 +45,10 @@ goal the week works for; it is not promised.
 4. Day 3: the check-in note (specs/client-happiness.md). Day 7: the first weekly AI re-check.
 5. Every client email answered within one run. Any unhappy, confused or "cancel" word: a kind
    reply plus an alert to Grayson in the same run (shared/alerts.md). Never argue.
-6. Pro: leads emailed the run they are found, twice a day. Growth and Pro: the guarantee stands
-   word for word (specs/offer.md). Nothing promised beyond offer.md; zeros shown honestly.
+6. Every plan: quote-page leads reach the owner by text and email the moment they come in (the
+   form's copy), and the lead test on day 0 confirms it. Pro: Lead Finder leads emailed the run
+   they are found, twice a day. Every plan: the guarantee stands word for word (specs/offer.md,
+   Nov 3, 2026: zero new leads and zero new reviews in month one = month two free). Nothing promised beyond offer.md; zeros shown honestly.
 7. Every deliverable is a real branded file (specs/quality.md "Format"), specific to their
    business, with a sources block. One invented fact = score 0 = not sent.
 

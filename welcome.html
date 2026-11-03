@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Welcome — Ridgeline Local</title>
-<meta name="description" content="You’re in. Two quick steps to get your Ridgeline Local service started.">
+<meta name="description" content="You’re in. One short form and one Google tap, and your Ridgeline Local setup starts today.">
 <meta name="theme-color" content="#04211a">
 <link rel="canonical" href="https://ridgelinehq.github.io/welcome.html">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23f6f4eb'/%3E%3Cpath d='M13.5 31V9h7.5a5.5 5.5 0 0 1 0 11H13.5' fill='none' stroke='%23082f28' stroke-width='5.5'/%3E%3Cpath d='M18 20l9.5 11' stroke='%23082f28' stroke-width='5.5'/%3E%3Cpath d='M28.5 13l3.75-6 3.75 6z' fill='%2357f2af'/%3E%3C/svg%3E">
@@ -63,6 +63,15 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
 .fallback{display:none;margin-top:14px}
 .fallback textarea{width:100%;min-height:140px;padding:10px;border-radius:9px;border:1px solid #b9b3a1;font:13px/1.4 ui-monospace,Menlo,monospace}
 .planline{font-weight:600}
+.f.err select{border-color:#b23a2d}
+.f.err .choices label{border-color:#b23a2d}
+.f .hint{margin:6px 0 0;font-size:.84rem;color:var(--muted)}
+.f select{appearance:none;-webkit-appearance:none;padding-right:42px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 8l5 5 5-5' fill='none' stroke='%23142721' stroke-width='2'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:18px}
+.f>.choices{margin-top:0}
+.f.hide{display:none}
+.sec{margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
+.sec h2{font-size:1.05rem;margin:0}
+.sec p{margin:4px 0 0;color:var(--muted);font-size:.92rem}
 
 /* Manager access (proposed Oct 28, 2026): the one step that unlocks the real Google listing */
 .mgr{margin-top:24px;padding:16px;border:2px solid var(--brass);border-radius:14px;background:#fbf8f0;min-width:0}
@@ -98,8 +107,8 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
   <div class="wrap">
     <span class="kicker">You’re in</span>
     <h1>Welcome to <em>Ridgeline Local.</em></h1>
-    <div class="promise">One short form (about 2 minutes) and one Google tap (3 minutes) that lets us do the work for you. We run your <strong>starting AI visibility check</strong> right away and email you the result.</div>
-    <p class="meta planline" id="planLine">No contract. Cancel anytime by replying to any email.</p>
+    <div class="promise">One short form (about 3 minutes) and one Google tap (3 minutes) that lets us do the work for you. Setup starts <strong>the same day</strong> this form arrives: your quote-request page link, your review kit and your results page link reach your inbox within the hour.</div>
+    <p class="meta planline" id="planLine">No contract. Cancel anytime by replying “cancel” to any email.</p>
   </div>
 </header>
 
@@ -108,17 +117,34 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
     <form class="ob" id="ob" novalidate>
       <h2 style="font-size:1.35rem">Tell us about your business</h2>
       <div class="f"><label for="b">Business name</label><input id="b" required maxlength="120" autocomplete="organization"><div class="msg">Please add your business name.</div></div>
-      <div class="f"><label for="gp">Google Business Profile link <span>(optional, but it helps)</span></label><input id="gp" type="url" inputmode="url" maxlength="300" placeholder="Paste the link from Google Maps → Share"><div class="msg">That doesn’t look like a link.</div></div>
-      <div class="f"><label for="ph">Business phone</label><input id="ph" type="tel" inputmode="tel" required maxlength="40" autocomplete="tel"><div class="msg">Please add a phone number.</div></div>
-      <div class="f"><label for="ty">What kind of business?</label><input id="ty" required maxlength="80" list="kinds" placeholder="e.g. barber, dentist, gym, plumber"><div class="msg">Please tell us what kind of business you are.</div>
-        <datalist id="kinds"><option value="Barber"><option value="Salon"><option value="Restaurant"><option value="Gym"><option value="Dentist"><option value="Contractor"><option value="Cleaning service"><option value="Auto shop"><option value="Plumber"><option value="HVAC"><option value="Med spa"><option value="Landscaping"><option value="Pet grooming"></datalist></div>
-      <div class="f"><label for="sv">What do you do? <span>(your main services)</span></label><textarea id="sv" required maxlength="500" placeholder="e.g. haircuts, beard trims, kids cuts"></textarea><div class="msg">Please list your main services.</div></div>
+      <div class="f"><label for="ind">Your industry</label><select id="ind" required><option value="">Choose one</option><option>Insurance agent (life / health)</option><option>Roofer</option><option>Home services (plumbing, HVAC, electrical, cleaning, landscaping, handyman)</option><option>Salon / barber / spa</option><option>Other local business</option></select><p class="hint">We start from a playbook built for your kind of business.</p><div class="msg">Please pick the closest match.</div></div>
+      <div class="f"><label for="ty">What kind of business? <span>(in your own words)</span></label><input id="ty" required maxlength="80" list="kinds" placeholder="e.g. roofer, life insurance agent, barber, plumber"><div class="msg">Please tell us what kind of business you are.</div>
+        <datalist id="kinds"><option value="Roofer"><option value="Life insurance agent"><option value="Health insurance agent"><option value="Plumber"><option value="HVAC"><option value="Electrician"><option value="Cleaning service"><option value="Landscaping"><option value="Handyman"><option value="Barber"><option value="Salon"><option value="Med spa"><option value="Restaurant"><option value="Gym"><option value="Dentist"><option value="Auto shop"><option value="Pet grooming"></datalist></div>
+      <div class="f"><label for="sv">What do you do? <span>(your main services)</span></label><textarea id="sv" required maxlength="500" placeholder="e.g. roof repair, full replacements, storm damage inspections"></textarea><div class="msg">Please list your main services.</div></div>
       <div class="f"><label for="ct">City and state</label><input id="ct" required maxlength="100" placeholder="e.g. Tulsa, OK" autocomplete="address-level2"><div class="msg">Please add your city and state.</div></div>
+      <div class="f"><label for="sa">Towns or area you serve</label><input id="sa" required maxlength="200" placeholder="e.g. Tulsa, Broken Arrow, Bixby, within 25 miles"><div class="msg">Please tell us the towns or area you serve.</div></div>
+      <div class="f"><label for="hrs">Your hours <span>(optional)</span></label><input id="hrs" maxlength="120" placeholder="e.g. Mon–Fri 8–5, Sat 9–1"></div>
+      <div class="f"><label for="ph">Business phone</label><input id="ph" type="tel" inputmode="tel" required maxlength="40" autocomplete="tel"><div class="msg">Please add a phone number.</div></div>
+      <div class="f"><label for="gp">Google Business Profile link <span>(optional, but it helps)</span></label><input id="gp" type="url" inputmode="url" maxlength="300" placeholder="Paste the link from Google Maps → Share"><div class="msg">That doesn’t look like a link.</div></div>
+      <div class="f"><label for="rl">Your Google review link, if you have it <span>(optional)</span></label><input id="rl" type="url" inputmode="url" maxlength="300" placeholder="e.g. https://g.page/r/…"><p class="hint">Don’t have it? We pull it once we’re a Manager.</p><div class="msg">That doesn’t look like a link.</div></div>
+
+      <div class="sec"><h2>Where your leads go</h2><p>Every lead is someone who asked to hear from you. You get their name, contact, what they want and when, plus a follow-up tip. Texts go only to your own cell number.</p></div>
       <div class="f"><label for="em">Email for reports and leads</label><input id="em" type="email" required maxlength="160" autocomplete="email" inputmode="email"><div class="msg">Please add an email we can reach you at.</div></div>
+      <div class="f"><label for="lc">Cell phone for lead alerts</label><input id="lc" type="tel" inputmode="tel" required maxlength="40" autocomplete="tel"><p class="hint">Leads are texted and emailed to you within minutes.</p><div class="msg">Please add your cell number (at least 7 digits).</div></div>
+      <div class="f" id="la"><div class="choices" role="radiogroup" aria-labelledby="laQ">
+        <p class="q" id="laQ">How should lead alerts reach you?</p>
+        <label for="la1"><input type="radio" name="la" id="la1" value="text and email" checked> Text and email</label>
+        <label for="la2"><input type="radio" name="la" id="la2" value="email only"> Email only</label>
+      </div><div class="msg">Pick one.</div></div>
+      <div class="f" id="lcarBox"><label for="lcar">Your cell carrier <span>(for the text alerts)</span></label><select id="lcar"><option value="">Choose one</option><option>AT&amp;T</option><option>T-Mobile</option><option>Verizon</option><option>US Cellular</option><option>Cricket</option><option>Boost</option><option>Metro by T-Mobile</option><option>Google Fi</option><option>Other / not sure</option></select><p class="hint">Texts come from our texting number, or your carrier’s email-to-text address where it still works. Email alerts always go out too, so you never miss one.</p><div class="msg">Please pick your carrier, or “Other / not sure”.</div></div>
+
+      <div class="sec"><h2>Your first reviews</h2><p>After each job we email your customer a short review request with your link. You also get a QR card for the counter, and we draft your replies to every new review.</p></div>
+      <div class="f"><label for="cus">Recent happy customers to ask for a review <span>(optional)</span></label><textarea id="cus" maxlength="1500" placeholder="Name and email, one per line, up to 10"></textarea><p class="hint">We only collect genuine reviews from your real customers. Only people who actually bought from you.</p></div>
+      <div class="f"><label for="nts">Anything we should know? <span>(optional)</span></label><textarea id="nts" maxlength="1000" placeholder="e.g. busiest season, what jobs you want more of, how you’d like to be called"></textarea></div>
 
       <fieldset class="f mgr" id="mgrBox">
         <legend><span>The step that lets us do the work for you</span>Add us as a Manager on your Google listing (3 minutes, once)</legend>
-        <p class="why">Google doesn’t let outside tools touch your listing, and the copies on other sites are often wrong. As a Manager on your listing we make the changes ourselves: hours, categories, description, services, Q&amp;A, your monthly Google posts and the photos you send us. We also pull your review link and see the messages and missed calls that come through Google. You stay the owner. Never a password. Remove us any time.</p>
+        <p class="why">Google doesn’t let outside tools touch your listing, and the copies on other sites are often wrong. As a Manager on your listing we optimize it ourselves: hours, categories, description, services, Q&amp;A and the photos you send us, and on Growth and Pro your monthly updates and Google posts. We also pull your review link and see the messages and missed calls that come through Google. You stay the owner. Never a password. Remove us any time.</p>
         <ol class="path">
           <li>Open the Google Maps app and tap your business profile (or search your business name on Google while signed in) → <strong>⋯</strong> or <strong>Edit profile</strong> → <strong>Business Profile settings</strong> → <strong>People and access</strong>.</li>
           <li>Tap <strong>Add</strong>, paste the email below, choose <strong>Manager</strong>, tap <strong>Invite</strong>.</li>
@@ -134,12 +160,12 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
       </fieldset>
 
       <button class="go" id="go" type="submit">Start my work →</button>
-      <p class="meta">We never ask for a password. Leads and reports go to the email above.</p>
+      <p class="meta">We never ask for a password. Lead alerts go to the cell number and email above; reports and your results page go to the email.</p>
     </form>
 
     <div class="ok" id="ok" role="status" aria-live="polite">
-      <h2 id="okTitle">Got it. We’re starting now.</h2>
-      <p id="okText">Your starting AI visibility check is running and a confirmation email is on its way. Your score comes first, usually within the hour. Your Welcome Pack (profile fixes, review kit, your first 30 days) follows within the hour too.</p>
+      <h2 id="okTitle">Got it. Setup starts today.</h2>
+      <p id="okText">Setup is underway and a confirmation email is on its way. Within the hour you get your Welcome Pack: your quote-request page link, your review kit and your results page link. From then on, every lead reaches you by text and email within minutes.</p>
       <div class="okstep" id="okMgr" style="display:none">
         <strong>One more thing, 3 minutes, and we do the Google work for you:</strong>
         <ol>
@@ -157,23 +183,25 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
     <ol class="terms steps" style="margin-top:34px">
       <li><div><h2>What happens next</h2>
         <ul>
-          <li><strong>Today:</strong> your starting AI visibility check (what ChatGPT and Gemini say, and your score).</li>
-          <li><strong>Within the hour:</strong> your Welcome Pack: your profile fixes, your review request kit, and your first 30 days.</li>
-          <li><strong>Within 2 business days, with Manager access:</strong> we make the Google profile changes for you and send a note listing each one. Rather keep the keys? Everything comes written out, ready to paste.</li>
+          <li><strong>Today:</strong> setup starts the same day this form arrives. We build your quote-request page with tracking links and get to work on your Google Business Profile.</li>
+          <li><strong>Within the hour:</strong> your Welcome Pack: your quote-request page link, your review kit (review link, QR card and a ready-to-send request) and your private results page link.</li>
+          <li><strong>Within 2 business days, with Manager access:</strong> we optimize your Google listing for you and send a note listing each change. Rather keep the keys? Everything comes written out, ready to paste.</li>
+          <li><strong>Every lead, within minutes:</strong> a text and an email with the person’s name, contact, what they want and when, plus a follow-up tip. Each one goes in your lead log, where we track whether it turned into a customer.</li>
+          <li><strong>After each job:</strong> a review request goes to your real customer, and we draft your replies to new reviews.</li>
           <li><strong>Day 3:</strong> a one-question check-in, so nothing stays confusing.</li>
-          <li><strong>Growth and Pro, every week:</strong> we re-check ChatGPT and Gemini and keep your profile moving. When something wins, you hear about it the same day.</li>
-          <li><strong>Pro:</strong> leads go to your email as we find them.</li>
-          <li><strong>Growth and Pro, every month:</strong> a short report: AI score then vs now, reviews gained, and on Pro, the leads we sent.</li>
+          <li><strong>Growth and Pro, every week:</strong> we check what ChatGPT and Gemini say about your kind of business near you and keep your AI score on your results page. Growth and Pro also get monthly profile updates and Google posts.</li>
+          <li><strong>Pro:</strong> the AI Lead Finder sends you public posts where people nearby ask for your kind of business, and we track your competitors.</li>
+          <li><strong>Every month:</strong> your results page is updated and you get a check-in email and a short report: leads, new reviews and your star-rating change (plus your AI score on Growth and Pro).</li>
         </ul></div></li>
       <li><div><h2>Why Manager access: so we do it, not you</h2>
-        <p>We make the changes in your listing instead of sending you homework. We see your listing the way you do, instead of guessing from copies on other sites. Google sends us your profile’s message and call notices, so we can log your leads. And we grab your review link ourselves, so your review kit is ready the same day. You can remove us any time in the same People and access screen.</p></div></li>
+        <p>We make the changes in your listing instead of sending you homework. We see your listing the way you do, instead of guessing from copies on other sites. Google sends us your profile’s message and call notices, so those leads land in your lead log too. And we grab your review link ourselves, so your review kit is ready the same day. You can remove us any time in the same People and access screen.</p></div></li>
     </ol>
 
     <div class="box">
       <h2>Questions? Just reply.</h2>
       <p>Every email from us can be answered. <a href="mailto:ridgelinemarketinghq@gmail.com">ridgelinemarketinghq@gmail.com</a></p>
     </div>
-    <p class="small">Paid by mistake or twice? Reply to your receipt and we’ll fix it the same day. Growth and Pro include the <a href="guarantee.html">Second Month Free Guarantee</a>.</p>
+    <p class="small">Paid by mistake or twice? Reply to your receipt and we’ll fix it the same day. Every plan includes the <a href="guarantee.html">Second Month Free Guarantee</a>: if your first month brings zero new leads and zero new reviews, your second month is free. We check on day 28 and apply it automatically. No contract; cancel any time by replying “cancel” to any email.</p>
   </div>
 </main>
 
@@ -183,23 +211,31 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
   "use strict";
   var EMAIL="ridgelinemarketinghq@gmail.com";
   var q=new URLSearchParams(location.search);
-  var plans={starter:"Starter ($39.99/month)",growth:"Growth ($75/month)",pro:"Pro ($125/month)"};
+  var plans={starter:"Starter: Leads + Reviews ($39.99/month)",growth:"Growth ($75/month)",pro:"Pro ($125/month)"};
   var plan=(q.get("plan")||"").toLowerCase(),billing=(q.get("billing")||"monthly").toLowerCase(),session=q.get("session_id")||"";
-  if(plans[plan]){document.getElementById("planLine").textContent="Your plan: "+plans[plan]+". No contract. Cancel anytime by replying to any email."}
+  if(plans[plan]){document.getElementById("planLine").textContent="You’re on "+plans[plan]+". No contract. Cancel anytime by replying “cancel” to any email."}
   var $=function(id){return document.getElementById(id)};
-  var req=["b","ty","ph","sv","ct","em"];
+  var fields=["b","ind","ty","sv","ct","sa","hrs","ph","gp","rl","em","lc","lcar","cus","nts"];
+  var req={b:1,ind:1,ty:1,sv:1,ct:1,sa:1,ph:1,em:1,lc:1};
   function mgrChoice(){var el=document.querySelector('input[name="mgr"]:checked');return el?el.value:""}
+  function laChoice(){var el=document.querySelector('input[name="la"]:checked');return el?el.value:""}
+  function needCarrier(){return laChoice()!=="email only"}
+  function isLink(v){return /^https?:\/\/\S+$/i.test(v)||/^(maps\.app\.goo\.gl|g\.page|goo\.gl|www\.google|google)\S*/i.test(v)}
+  function syncCarrier(){var need=needCarrier();$("lcarBox").classList.toggle("hide",!need);if(!need){$("lcarBox").classList.remove("err")}}
   function val(){
     var good=true;
-    req.concat(["gp"]).forEach(function(id){
-      var el=$(id),f=el.closest(".f");el.value=el.value.trim();
-      var bad=(req.indexOf(id)>-1&&!el.value)||(id==="em"&&el.value&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value))||(id==="gp"&&el.value&&!/^https?:\/\/\S+$/i.test(el.value)&&!/^(maps\.app\.goo\.gl|g\.page|goo\.gl|www\.google|google)\S*/i.test(el.value));
-      f.classList.toggle("err",bad);if(bad&&good){el.focus();good=false}
+    fields.forEach(function(id){
+      var el=$(id),f=el.closest(".f");el.value=el.value.trim();var v=el.value;
+      var bad=(req[id]&&!v)||(id==="em"&&v&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))||((id==="gp"||id==="rl")&&v&&!isLink(v))||(id==="lc"&&v&&v.replace(/\D/g,"").length<7)||(id==="lcar"&&needCarrier()&&!v);
+      f.classList.toggle("err",!!bad);if(bad&&good){el.focus();good=false}
     });
+    var la=!laChoice();$("la").classList.toggle("err",la);if(la&&good){$("la1").focus();good=false}
     var m=!mgrChoice();$("mgrBox").classList.toggle("err",m);if(m&&good){$("mgr1").focus();$("mgrBox").scrollIntoView({block:"center"});good=false}
     return good;
   }
-  req.concat(["gp"]).forEach(function(id){$(id).addEventListener("input",function(){this.closest(".f").classList.remove("err")})});
+  fields.forEach(function(id){["input","change"].forEach(function(ev){$(id).addEventListener(ev,function(){this.closest(".f").classList.remove("err")})})});
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="la"]'),function(r){r.addEventListener("change",function(){$("la").classList.remove("err");syncCarrier()})});
+  syncCarrier();
   Array.prototype.forEach.call(document.querySelectorAll('input[name="mgr"]'),function(r){r.addEventListener("change",function(){$("mgrBox").classList.remove("err")})});
   $("copyMgr").addEventListener("click",function(){
     var btn=this;var done=function(){btn.textContent="Copied";setTimeout(function(){btn.textContent="Copy email"},1800)};
@@ -208,20 +244,23 @@ form.ob{margin-top:8px;padding:24px;background:var(--white);border:1px solid var
   });
   $("ob").addEventListener("submit",function(e){
     e.preventDefault();if(!val())return;
-    var mgr=mgrChoice();
-    var d={business:$("b").value,type_of_business:$("ty").value,google_profile:$("gp").value||"Not given",phone:$("ph").value,services:$("sv").value,city:$("ct").value,email:$("em").value,manager_access:mgr,plan:plan||"unknown",billing:billing,stripe_session:session||"none"};
+    var mgr=mgrChoice(),la=laChoice(),how=la==="email only"?"by email":"by text and email";
+    var one=function(v){return v.replace(/\s*\n+\s*/g," | ")};
+    var d={business:$("b").value,industry:$("ind").value,type_of_business:$("ty").value,google_profile:$("gp").value||"Not given",review_link:$("rl").value||"Not given",phone:$("ph").value,services:one($("sv").value),city:$("ct").value,service_area:$("sa").value,hours:$("hrs").value||"Not given",email:$("em").value,lead_cell:$("lc").value,lead_alerts:la,lead_carrier:la==="email only"?"n/a (email only)":$("lcar").value,customers:one($("cus").value)||"None yet",notes:one($("nts").value)||"None",manager_access:mgr,plan:plan||"unknown",billing:billing,stripe_session:session||"none"};
     var subject="Onboarding — "+d.business;
     var text=Object.keys(d).map(function(k){return k+": "+d[k]}).join("\n");
     $("go").disabled=true;$("go").textContent="Sending…";
-    var mgrLine=mgr==="invited"?"You added us as a Manager on your Google listing: thank you. We accept the invite within the hour and make your profile changes ourselves, usually within 2 business days. You get a note listing each change as it goes live.":mgr==="later"?"The one thing that lets us do the work for you (3 minutes): add ridgelinemarketinghq@gmail.com as a Manager on your Google listing. Google Maps app > your business profile > Edit profile or the three dots > Business Profile settings > People and access > Add > Manager > Invite. Until then, everything comes written out, ready to paste. Never a password; remove us any time.":"No Google access? No problem. Your Welcome Pack works from public information and comes ready to paste, and it shows you how to claim your Google listing (free, about 5 minutes). Once you add us as a Manager, we take the pasting off your plate.";
-    var auto="Thanks, "+d.business+"! You’re all set with Ridgeline Local.\n\nYour work has started. Here’s what lands in your inbox next:\n1. Usually within the hour: your starting AI visibility score, what ChatGPT and Gemini say about your kind of business in "+d.city+", and whether they name you.\n2. Within the hour: your Welcome Pack, one PDF with your Google profile fixes written out and ready to paste (about 10 minutes), your review kit (a ready-to-send text and a QR card for your counter), and your first 30 days.\n3. Day 3: a one-question check-in from us, so nothing stays confusing.\n\n"+mgrLine+"\n\nQuestions? Just reply to this email. A real person answers.\n\nGrayson\nRidgeline Local";
+    var mgrLine=mgr==="invited"?"You added us as a Manager on your Google listing: thank you. We accept the invite within the hour and optimize your profile ourselves, usually within 2 business days. You get a note listing each change as it goes live.":mgr==="later"?"The one thing that lets us do the Google work for you (3 minutes): add ridgelinemarketinghq@gmail.com as a Manager on your Google listing. Google Maps app > your business profile > Edit profile or the three dots > Business Profile settings > People and access > Add > Manager > Invite. Until then, your profile fixes come written out, ready to paste. Never a password; remove us any time.":"No Google access? No problem. Your quote-request page, lead alerts and review kit work without it. Your profile fixes come written out and ready to paste, and your Welcome Pack shows you how to claim your Google listing (free, about 5 minutes). Once you add us as a Manager, we take the pasting off your plate.";
+    var planLine=plan==="growth"?"\n\nGrowth also includes AI search visibility: every week we check what ChatGPT and Gemini say about your kind of business near you, and your AI score sits on your results page and in your report. You also get monthly profile updates and Google posts.":plan==="pro"?"\n\nPro also includes AI search visibility (weekly ChatGPT and Gemini checks, with your AI score on your results page and report), monthly profile updates and Google posts, the AI Lead Finder (public posts where people nearby ask for your kind of business, sent to you) and competitor tracking.":"";
+    var auto="Thanks, "+d.business+"! You’re all set with Ridgeline Local.\n\nSetup starts today. Here’s what lands next:\n1. Within the hour: your Welcome Pack, with your quote-request page link (your own page with tracking links, where people ask for a quote), your review kit (your review link, a QR card for the counter and a ready-to-send request) and your private results page link.\n2. Every lead reaches you "+how+" within minutes: the person’s name, contact, what they want and when, plus a follow-up tip. Every lead is someone who asked to hear from you.\n3. After each job we email your customer a review request, and we draft your replies to new reviews. We only collect genuine reviews from your real customers.\n4. Day 3: a one-question check-in from us, so nothing stays confusing.\n5. Every month: your results page is updated, and you get a check-in email and your report (leads, new reviews, star-rating change)."+planLine+"\n\n"+mgrLine+"\n\nSecond Month Free Guarantee, on every plan: if month one brings zero new leads and zero new reviews, month two is free. We check on day 28 and apply it automatically. Terms: https://ridgelinehq.github.io/guarantee.html\n\nNo contract. To cancel, reply “cancel” to any email.\n\nQuestions? Just reply to this email. A real person answers.\n\nGrayson\nRidgeline Local";
     var payload=Object.assign({_subject:subject,_template:"box",_captcha:"false",_autoresponse:auto},d);
     function done(ok){
       $("ob").style.display=ok?"none":"";$("ok").style.display="block";$("go").disabled=false;$("go").textContent="Start my work →";
       if(ok){
-        if(mgr==="later"){$("okMgr").style.display="block"}
-        else if(mgr==="invited"){$("okText").textContent="Your starting AI visibility check is running and a confirmation email is on its way. Thanks for the Manager invite: we accept it within the hour and make your profile changes ourselves, usually within 2 business days, with a note listing each one. Your Welcome Pack (profile fixes, review kit, your first 30 days) follows within the hour."}
-        else if(mgr==="no-access"){$("okText").textContent="Your starting AI visibility check is running and a confirmation email is on its way. Your Welcome Pack follows within the hour, built from public information and ready to paste, and it shows you how to claim your Google listing (free, about 5 minutes). Once you add us as a Manager, we take the pasting off your plate."}
+        var base="Setup is underway and a confirmation email is on its way. Within the hour you get your Welcome Pack: your quote-request page link, your review kit and your results page link. From then on, every lead reaches you "+how+" within minutes.";
+        if(mgr==="later"){$("okText").textContent=base;$("okMgr").style.display="block"}
+        else if(mgr==="invited"){$("okText").textContent=base+" Thanks for the Manager invite: we accept it within the hour and optimize your Google listing ourselves, usually within 2 business days, with a note listing each change."}
+        else if(mgr==="no-access"){$("okText").textContent=base+" Your profile fixes come written out and ready to paste, and the pack shows you how to claim your Google listing (free, about 5 minutes). Once you add us as a Manager, we take the pasting off your plate."}
       }
       if(!ok){$("okTitle").textContent="One more tap";$("okText").textContent="Our form didn’t go through, so nothing has started yet. Send your details by email below and we take it from there.";$("fb").style.display="block";$("fbText").value="Subject: "+subject+"\n\n"+text;$("fbMail").href="mailto:"+EMAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(text)}
       $("ok").scrollIntoView({block:"center"});

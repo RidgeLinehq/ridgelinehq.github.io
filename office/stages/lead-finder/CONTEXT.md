@@ -35,7 +35,8 @@ rest of the desk answers emails and the Day Shift does the rest of the client wo
    and the near-misses with counted false + why.
 5. Send (specs/lead-tracking.md "Sending leads to the client", specs/quality.md "Leads"):
    Pro = each new lead at once, one email each, subject "New lead: <their ask in 6 words>";
-   Growth clients get no lead emails (leads are sold on Pro only, Grayson Oct 27, 2026).
+   Starter and Growth clients get no Lead Finder emails (the Lead Finder is sold on Pro only, Grayson
+   Oct 27, 2026; their quote-page and Google-profile leads reach them directly, Nov 3, 2026).
    Inside the reply desk (since Oct 31, 2026) the Gmail tool is present: send each email yourself
    (mcp__Gmail__send_message, plain text) and record the Gmail id on the row. Only a session
    WITHOUT Gmail writes each email as a drafts doc kind "leads", status "ready", clientId,

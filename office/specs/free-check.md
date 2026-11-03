@@ -61,9 +61,10 @@ Three fixes I'd make first:
 2. <fix>
 3. <fix>
 
-If you'd rather have it done for you: plans start at $39.99 a month, no contract. Most
-businesses pick Growth ($75): we fix all of the above and keep it moving every month, and if
-your first month brings zero tracked leads and no improvement in your AI visibility, your
+If you'd rather have it done for you: plans start at $39.99 a month (Leads + Reviews: your own
+quote-request page, your Google profile optimized, review requests to your real customers), no
+contract. Most businesses pick Growth ($75): everything in Starter plus weekly ChatGPT and Gemini
+checks. On every plan, if your first month brings zero new leads and zero new reviews, your
 second month is free (terms: https://ridgelinehq.github.io/guarantee.html).
 See the plans: https://ridgelinehq.github.io/#pricing
 
@@ -85,8 +86,8 @@ Ran your check. I asked ChatGPT and Gemini "Who are the best <trade phrase> in <
 ChatGPT named <1>, <2>, <3>. Gemini named <1>, <2>, <3>. <Business> was <named by
 both|named by ChatGPT only|named by Gemini only|not named by either>.
 Three things I'd fix first: <fix 1 short>; <fix 2 short>; <fix 3 short>.
-I can fix all of it from $39.99/mo, month to month. Pro ($125/mo) also sends you leads, and on Growth and Pro, if
-the first month brings zero tracked leads and no AI improvement, month 2 is free. Plans:
+I can fix all of it from $39.99/mo, month to month (Leads + Reviews). Growth ($75/mo) adds the weekly AI checks, Pro ($125/mo) adds leads we find. Every plan: if
+the first month brings zero new leads and zero new reviews, month 2 is free. Plans:
 ridgelinehq.github.io/#pricing. Want me to start?
 ```
 

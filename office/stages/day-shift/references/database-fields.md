@@ -95,8 +95,12 @@ test, createdAt, updatedAt}. The crew never changes status or notes after creati
  work:[{item, status:"todo"|"drafted"|"done", t, draftId}], reportDue,
  status:"awaiting-onboarding"|"awaiting-payment"|"active"|"paused"|"cancelled", notes, createdAt, updatedAt}
  Standard work items: welcome-sent, onboarding, baseline, manager-access, review-link,
- profile-audit, buildout-plan, buildout-applied, review-kit, review-requests, lead-page (Pro),
- week-post, report-<yyyy-mm>, jobcheck-<yyyy-mm>, video-<yyyy-mm> (Pro), guarantee (Growth/Pro)
+ profile-audit, buildout-plan, buildout-applied, review-kit, review-requests, lead-page (every plan),
+ lead-alert-test, results-page, week-post, report-<yyyy-mm>, checkin-<yyyy-mm>, jobcheck-<yyyy-mm>,
+ video-<yyyy-mm> (Pro), guarantee (every plan). Client fields added Nov 3, 2026: leadCell, leadCarrier,
+ leadAlerts ("text and email"|"email only"), leadAlertsVerified, industry, serviceArea, hours,
+ reviewLink, resultsToken (16 hex; the public file data/results/<token>.json holds numbers only),
+ reviewsAtStart {count, rating, source, at}, reviewsNow {count, rating, source, at}.
  (No client is on the retired $147 founding plan; plan "founding" is legacy and unused.)
 
 ## leadlog/<clientId>-<yyyymmdd>-<4 hex>

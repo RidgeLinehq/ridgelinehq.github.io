@@ -10,11 +10,11 @@ something confused them and nobody noticed. Every rule below fights one of those
 ## 1. Touchpoints (the client hears from us at the moments that matter)
 | When | What (one short email, designed note, from the client's thread) | Owner |
 |---|---|---|
-| Within the hour of onboarding | Welcome Pack (already in specs/quality.md "Speed") | reply desk, Lane C |
+| Within the hour of onboarding | Welcome Pack (already in specs/quality.md "Speed") + (Nov 3, 2026) the quote-page link, the results page link, and the lead-text test: ONE test request through their page, "reply 'got it' when the text lands on your phone". No "got it" or "no text" → email-only alerts, and we tell them. | reply desk, Lane C |
 | Day 3 | Check-in, ONE question: "Quick check: did the profile fixes make sense? Reply with anything confusing and I'll make it simpler." Skip if they already replied since the pack. | Day Shift 09 drafts (kind "checkin"), desk sends |
 | The run it happens | **Win email** (see §2) | Day Shift 09 drafts (kind "win"), desk sends same run |
 | Day 21 | "What we did so far": 3 to 5 bullets of real work done (each backed by a Gmail id, commit or row), the one number that moved (or "still moving, here's what's next"), what happens in week 4. Under 80 words. This lands BEFORE the renewal charge so they renew knowing what they paid for. | Day Shift 09 drafts (kind "update"), desk sends |
-| Monthly | Results report PDF (specs/lead-tracking.md, specs/quality.md "report") | as now |
+| Monthly | ONE email (Nov 3, 2026): the results report PDF (specs/lead-tracking.md, specs/quality.md "report") with the monthly check-in as its note: this month's wins (real, dated), the ONE next step we're taking, the results page link https://ridgelinehq.github.io/results.html?c=<token>. Under 120 words. Never a second email. | Day Shift 09 drafts (kind "checkin-monthly" riding with "report"), desk sends |
 
 Never more than 2 emails a week to a client outside replies and leads. No fluff emails ("just
 checking in!"): every email has a real number, a finished piece of work, or one question.
@@ -26,9 +26,15 @@ Send a short win email the run the crew sees any of these, proven by data:
 - A new Google review since the last check (count before → now; never quote a review unless it
   is public and quoted exactly with the reviewer's first name only).
 - A profile fix we sent is now live on Google (the field and what it says now).
-- Pro: a counted lead (already sent as a lead; the win line goes in the next update instead).
+- (Nov 3, 2026) The first lead through their quote page (what they asked and when, which
+  tracking link it came from; the lead itself already reached them by text/email).
+- (Nov 3, 2026) The first new review since we started (count before → now; our drafted reply,
+  kind "reviewreply", rides along).
+- Pro: a counted Lead Finder lead (already sent as a lead; the win line goes in the next update
+  instead).
 One win per email, 2 to 4 lines, the proof, then "Next we're working on <x>." No exaggeration:
-"ChatGPT named you #3 today" not "you're blowing up."
+"ChatGPT named you #3 today" not "you're blowing up." Every logged win also updates
+data/results/<token>.json the same run (specs/client-delivery.md "Results page", numbers only).
 
 ## 3. Results must be real, not noise
 Gemini on the free key answers without a web search, so its answers change run to run and

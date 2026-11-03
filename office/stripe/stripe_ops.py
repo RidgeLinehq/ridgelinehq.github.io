@@ -40,17 +40,17 @@ GUARANTEE_LINE = " Second Month Free Guarantee: ridgelinehq.github.io/guarantee.
 
 
 def terms_text(plan):
-    """The line under the Pay button in checkout. The guarantee is Growth and Pro only."""
-    return TERMS_BASE + (GUARANTEE_LINE if plan in ("growth", "pro") else "")
+    """The line under the Pay button in checkout. The guarantee covers every plan (Grayson, Nov 3, 2026)."""
+    return TERMS_BASE + GUARANTEE_LINE
 
 # Prices in cents. Monthly only (yearly billing was retired Oct 27, 2026).
 PLANS = {
     "starter": {"name": "Ridgeline Local Starter", "monthly": 3999,
-                "desc": "AI visibility check, Google Business Profile cleanup, 10-second review system."},
+                "desc": "Leads + Reviews: your quote-request page, Google Business Profile optimization, lead alerts by text and email, review growth, results page, monthly report."},
     "growth": {"name": "Ridgeline Local Growth", "monthly": 7500,
-               "desc": "Everything in Starter + monthly updates, review growth, AI visibility tracking, Second Month Free Guarantee."},
+               "desc": "Everything in Starter + AI search visibility (ChatGPT and Gemini checks), monthly profile updates and Google posts."},
     "pro": {"name": "Ridgeline Local Pro", "monthly": 12500,
-            "desc": "Everything in Growth + AI-found leads sent to you."},
+            "desc": "Everything in Growth + the AI Lead Finder and competitor tracking."},
 }
 BILLINGS = ("monthly",)
 
@@ -237,7 +237,7 @@ def refund_invoice(inv, amount, job_id):
 def guarantee(job):
     sub = find_subscription(job)
     plan, billing, unit = plan_of(sub)
-    if plan not in ("growth", "pro", "unknown"):
+    if plan not in ("starter", "growth", "pro", "unknown"):  # every plan has the guarantee (Nov 3, 2026)
         raise StripeError(f"plan {plan} has no Second Month Free Guarantee")
     monthly_price = PLANS.get(plan, {}).get("monthly", 0)
     if billing == "yearly":

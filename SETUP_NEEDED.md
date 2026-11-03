@@ -1,5 +1,16 @@
 # SETUP NEEDED (phone only, in order of importance)
 
+## New on Nov 3, 2026 (nothing to tap)
+Starter is now **"Leads + Reviews"** at the same $39.99 price and the same Stripe link, so no
+Stripe tap is needed. If you ever want a different Starter price: edit `PLANS` in
+`office/stripe/stripe_ops.py` (the hourly "Ridgeline Stripe" Action creates the new price and
+link and rewrites `data/stripe-links.json`, which the site reads) and change the price text in
+`index.html`. The Second Month Free Guarantee now covers all plans ("zero new leads AND zero new
+reviews"). Every client now gets a quote-request page (`ridgelinehq.github.io/p/<slug>/`), lead
+texts to their own cell through their carrier's email-to-text address (email always too), a
+private results page at `results.html?c=<token>`, and an industry playbook in
+`office/playbooks/` (insurance agents, roofers, home services, salons, other).
+
 Everything else runs by itself. These are the only taps that need you. Each one works from
 Safari/Chrome on your phone. If a GitHub page looks cramped, tap **aA → Request Desktop Website**
 (iPhone) or **⋮ → Desktop site** (Android).
@@ -37,6 +48,28 @@ You need two keys (they're new copies; the old ones stay where they are):
 If anything goes wrong it emails you "🚨 Ridgeline: instant server problem", and the hourly crew
 still handles everything, so nothing is lost.
 
+## 1b. TEXT ALERTS: lead texts through Twilio (about 10 minutes, once; recommended)
+The site promises each lead by text and email. Email goes out by itself (FormSubmit copies every lead
+to the client the moment it arrives, and the Gmail app shows it on their phone in seconds). Texts need
+a texting number, because the carriers' free email-to-text addresses are shutting down (AT&T closed
+txt.att.net on June 17, 2025; Verizon closes vtext.com on March 31, 2027; T-Mobile's is unreliable).
+Ridgeline Instant (section 1) sends the text through Twilio within a minute of a lead landing, once
+these three script properties exist:
+1. Open **twilio.com** → sign up → upgrade with a card (a trial account can only text numbers you
+   verified yourself) → **Phone Numbers → Buy a number** → pick a **toll-free** US number (about
+   $2 a month; each text about 1 cent).
+2. **Messaging → Regulatory compliance → Toll-free verification**: business Ridgeline Local, the
+   website, use case "lead alerts to our own clients, who opt in on their signup form", sample text
+   "New lead for Cedar Ridge Roofing: Dana, (501) 555-0188. Roof repair · This week. Call back
+   within 5 minutes if you can. - Ridgeline Local". Approval usually takes 1 to 5 business days;
+   until then Twilio blocks toll-free texts, so leads ride on email only.
+3. Twilio console → **Account Info**: copy **Account SID** and **Auth Token**. In script.google.com →
+   Ridgeline Instant → Project Settings → Script properties add `TWILIO_SID`, `TWILIO_TOKEN`,
+   `TWILIO_FROM` (the toll-free number as +1XXXXXXXXXX) and `TWILIO_TEST_TO` (your own cell, same
+   format). In the editor pick **textTest** → Run.
+Done when the test text arrives. The crew's day-0 test on each new client confirms their texts too;
+"no text" → the client is told alerts are email-only until this is on.
+
 ## 2. Make sure Stripe emails you each payment (1 minute; probably already on)
 1. Stripe → tap your profile (top right) → **Profile** → **Communication preferences** (or **Notifications**).
 2. Turn ON **Successful payments** (email) for ridgelinemarketinghq@gmail.com.
@@ -73,16 +106,22 @@ The ChatGPT side costs about 1 to 3 cents per check from your OpenAI credit.
 ---
 
 ### Checkout links (for your own texts and emails)
-Each plan has one Stripe Payment Link (in `data/stripe-links.json`). To know who sent a client,
-add `?client_reference_id=NAME` to the end (letters, digits, dashes and underscores only):
-- Starter: https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07
-- Growth: https://buy.stripe.com/14AbJ168z9msbrAdWtaEE08
-- Pro: https://buy.stripe.com/8x200jgNd6ag3Z8aKhaEE09
+Each plan has one Stripe Payment Link (in `data/stripe-links.json`); every plan's checkout shows
+the Second Month Free Guarantee line. To know who sent a client, add `?client_reference_id=NAME`
+to the end (letters, digits, dashes and underscores only):
+- Starter (Leads + Reviews, $39.99; same link as before Nov 3): https://buy.stripe.com/5kQ8wP0OfdCIdzIf0xaEE07
+- Growth ($75, recommended): https://buy.stripe.com/14AbJ168z9msbrAdWtaEE08
+- Pro ($125): https://buy.stripe.com/8x200jgNd6ag3Z8aKhaEE09
 Or send https://ridgelinehq.github.io/start.html?plan=growth&client_reference_id=NAME and the
 site forwards it to the right link.
 
 ### What the crew does by itself (no taps)
-Free AI checks, signup emails + onboarding, baseline AI score, weekly AI re-checks, Google
-profile fixes and change tracking, review requests to real customers, lead finding + lead log
-(Pro), monthly "did it turn into a job?" emails and reports, flat-client fixes, day-28 guarantee
-check + Stripe credit + client email, cancellations, and alert emails to you when anything breaks.
+Free AI checks, signup emails + same-day onboarding, baseline AI score and starting review
+count, each client's quote-request page with tracking links, lead alerts to the client by email
+and (when they asked) by text to their own cell, Google profile optimization and change tracking,
+review requests to real customers + review link and QR card + drafted review replies, weekly AI
+re-checks (Growth/Pro), monthly profile updates and Google posts (Growth/Pro), lead finding and
+competitor tracking (Pro), the lead log on every plan, monthly "did it turn into a customer?"
+emails, results pages and reports, the first-of-the-month review of what worked across clients,
+flat-client fixes, day-28 guarantee check + Stripe credit + client email (all plans),
+cancellations, and alert emails to you when anything breaks.
