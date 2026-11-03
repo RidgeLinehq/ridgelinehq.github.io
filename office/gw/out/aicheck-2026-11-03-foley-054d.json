@@ -1,0 +1,70 @@
+{
+ "id": "aicheck-2026-11-03-foley-054d",
+ "at": "2026-11-03T13:30:02Z",
+ "results": [
+  {
+   "key": "foley-al-med-spa",
+   "question": "Who are the best med spas in Foley, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a Foley homeowner looking to refresh without driving to Pensacola or Mobile, you\u2019ve got some great local options right in our backyard. Here are the top med spas I\u2019d recommend checking out:\n\n*   **Gulf Coast Plastic Surgery & Medical Spa:** While technically based just down the road, they are a household name for Foley residents wanting top-tier expertise. If you want advanced medical-grade treatments, lasers, or injectables performed by actual medical professionals, this is where most of our neighbors go for guaranteed results.\n*   **The Spa at Portofino / Local Boutique Spas:** For something closer to downtown Foley or near the Beach Express, look into boutique spots offering customized facials, micro-needling, and Botox. They offer that high-end resort feel without the tourist-trap pricing, making it easy to schedule a regular maintenance routine. \n\n**My homeowner advice:** Drop in for a quick consultation first. A good local aesthetician will look at how our brutal Gulf humidity and sun impact *your* specific skin before trying to sell you a package. Stick close to home, build a relationship with a local practitioner, and enjoy the convenience!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "foley-al-pet-grooming",
+   "question": "Who are the best pet groomers in Foley, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a Foley homeowner looking to keep your pets looking sharp, here are the local groomers I\u2019d recommend checking out:\n\n*   **The Bark Shoppe:** A favorite among locals right here in town. Neighbors rave about their gentle handling of anxious pets and their reliability. They do a fantastic job with standard breed cuts and leave your dog smelling great for weeks. \n*   **Foley Pet Center:** If you want convenience, this is a great bet because they combine grooming with veterinary care. It\u2019s ideal for older pets or those with specific medical needs since a vet is right on-site if anything comes up during the groom.\n*   **Paws & Claws Pet Resort:** Located just a short drive away, they offer top-tier full-service grooming alongside boarding. Homeowners love them for their thoroughness\u2014they really take their time with de-shedding treatments, which is a lifesaver in our humid Alabama climate.\n\nBook a few weeks in advance, especially heading into the summer months when everyone\u2019s trying to get their dogs shaved down!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "foley-al-hvac",
+   "question": "Who are the best HVAC companies in Foley, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you're a homeowner in Foley, finding a reliable HVAC tech who knows our brutal coastal humidity is key. Here are three local companies I\u2019d trust with my own AC:\n\n1. **Disclaimer Heating & Air Conditioning** \u2013 A staple in Baldwin County. Locals rave about them because they are honest, show up on time, and won't try to sell you a new system if a simple repair will do. \n\n2. **Hansen Super Techs** \u2013 If you need service fast (and let\u2019s face it, ACs always break on the hottest day of the year), Hansen is great. They have a massive fleet, so response times are usually quick, and their technicians are super knowledgeable and polite.\n\n3. **SanEcoSystems** \u2013 If you're looking for extreme energy efficiency or have indoor air quality issues (huge in Foley), these guys are the experts. They take a whole-home approach and really know their stuff regarding modern heat pumps and ductwork. \n\n**My advice?** Call Disclaimer first for honest repairs, or Hansen if you need an emergency weekend fix. Always get a second opinion if someone tells you to replace the whole unit!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "foley-al-landscaping",
+   "question": "Who are the best landscapers in Foley, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If I were hiring a landscaper in Foley, here are the top local pros I\u2019d trust with my yard:\n\n* **Sunland Lawn Care & Landscaping:** The best all-rounder for weekly maintenance, sod installation, and seasonal flower beds. They are well-known locally for reliability, fair pricing, and keeping lawns looking crisp year-round.\n* **Grasshoppers Landscaping:** The go-to choice if you want a major design transformation\u2014think custom pavers, outdoor lighting, and native plant design. They excel at heavy-duty hardscaping tailored to Baldwin County\u2019s climate.\n* **Coastal Lawn & Turf Care:** If your grass is struggling with weeds, heat, or sandy soil, call these turf experts. They specialize in customized fertilization and weed control specifically for local St. Augustine and Zoysia grasses.\n* **Southern Roots Landscaping:** A great family-owned option fantastic for drainage fixes, palm tree trimming, and quick, thorough yard cleanups.\n\n**My advice:** Call **Sunland** first if you need hassle-free weekly upkeep, or **Grasshoppers** if you\u2019re planning a bigger outdoor overhaul. Always pick a team that understands Foley\u2019s unique coastal soil and summer rain drainage!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}

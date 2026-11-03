@@ -1,0 +1,186 @@
+{
+ "id": "aicheck-2026-11-03-dentists-3a6b",
+ "at": "2026-11-03T13:27:55Z",
+ "results": [
+  {
+   "key": "paragould-ar-dentist",
+   "question": "Who are the best dentists in Paragould, AR?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were picking like a homeowner hiring a local pro, I\u2019d shortlist:\n\n- **Higginbotham Family Dental** \u2014 safest \u201cfirst call\u201d for general family dentistry: very large review base, listed around **4.9 stars with 1,100+ reviews**, so there\u2019s a lot of local signal. ([dentistrydirectories.com](https://www.dentistrydirectories.com/arkansas/paragould?utm_source=openai))  \n- **Smile Designs \u2013 Justin McGarity DDS** \u2014 best pick if cosmetic work matters; their site specifically highlights cosmetic dentistry, and local rankings show **5.0 with ~498 reviews**. ([smiledesignsparagould.com](https://www.smiledesignsparagould.com/?utm_source=openai))  \n- **Rawls Dental Care** \u2014 good smaller-office option; they describe themselves as a **full-service dentist** in Paragould and have strong reviews. ([rawlsdentalcare.com](https://rawlsdentalcare.com/services/?utm_source=openai))  \n- **Paragould Smile Doctors** \u2014 worth calling for all-ages care; their site says **family dentistry for all ages**, and directories show strong ratings. ([smileparagould.com](https://www.smileparagould.com/?utm_source=openai))  \n- **Ridge Kids Dental** \u2014 if this is for children, I\u2019d check them specifically; they\u2019re listed locally with pediatric-oriented providers/services. ([discoverparagould.org](https://www.discoverparagould.org/DocumentCenter/View/2188/Dental-Directory?utm_source=openai))  \n\nBefore booking, verify insurance, new-patient availability, and whether they handle your specific need in-house.",
+    "sources": [
+     {
+      "url": "https://www.dentistrydirectories.com/arkansas/paragould?utm_source=openai",
+      "title": "Dental Practices in Paragould, Arkansas | Dentistry Directories | DentistryDirectories.com"
+     },
+     {
+      "url": "https://www.smiledesignsparagould.com/?utm_source=openai",
+      "title": "Smile Designs - Justin McGarity DDS | Oral Care Paragould AR"
+     },
+     {
+      "url": "https://rawlsdentalcare.com/services/?utm_source=openai",
+      "title": "Services - Rawls Dental Care in Paragould, AR"
+     },
+     {
+      "url": "https://www.smileparagould.com/?utm_source=openai",
+      "title": "Dentist Paragould AR | Paragould Smile Doctors"
+     },
+     {
+      "url": "https://www.discoverparagould.org/DocumentCenter/View/2188/Dental-Directory?utm_source=openai",
+      "title": "Dental Professional Directory"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a reliable local dentist here in Paragould, here are the top three spots I\u2019d comfortably send my own family to:\n\n1. **Fuhrman Family Dentistry**: Dr. Fuhrman and his team are long-time local favorites. They have a fantastic bedside manner, a spotlessly clean office, and excel at making nervous patients feel completely comfortable.\n\n2. **Paragould Family Dentistry**: A great choice if you want modern technology combined with a warm, hometown feel. They offer comprehensive care\u2014from routine cleanings to major cosmetic work\u2014and the staff is great at getting you in and out on time. \n\n3. **Rowland Family Dentistry**: Dr. Rowland has earned a stellar reputation for being gentle, thorough, and transparent about treatment costs. They\u2019re exceptionally patient with kids, making them a great one-stop option for the whole household. \n\nYou really can't go wrong with any of these three. They are all highly respected by neighbors, offer top-notch care, and treat you like family rather than just a chart number.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "ardmore-ok-dentist",
+   "question": "Who are the best dentists in Ardmore, OK?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were choosing a dentist for my own Ardmore household, I\u2019d shortlist:\n\n1. **Storts Family Dentistry \u2013 Ardmore** \u2014 Best all-around pick. Huge local review base, family dentistry for all ages, emergency appointments, preventive care, Invisalign, cosmetic work, and implants. ([dental.me](https://dental.me/ok/ardmore/?utm_source=openai))\n\n2. **Castillo Family Dentistry** \u2014 Strong choice if you want a locally rooted practice; Dr. Castillo is from Ardmore/Plainview, they welcome new patients, and offer cleanings, crowns, implants, Chickasaw MAP referrals, and CareCredit. ([castillofamilydentistry.com](https://www.castillofamilydentistry.com/))\n\n3. **Walnut Ranch Dental Spa** \u2014 I\u2019d call them if comfort/anxiety matters; they rank near the top locally with a 5-star rating and hundreds of reviews. ([walnutranchdentalspa.com](https://walnutranchdentalspa.com/?utm_source=openai))\n\n4. **My Dentist \u2013 Ardmore** \u2014 Practical option for families who need broader services or insurance flexibility; they list restorative care, root canals, Invisalign, and \u201cmost insurance accepted.\u201d ([mydentistardmore.com](https://mydentistardmore.com/))\n\nBefore booking, confirm your insurance, new-patient availability, and whether they\u2019ll give a written treatment estimate.",
+    "sources": [
+     {
+      "url": "https://dental.me/ok/ardmore/?utm_source=openai",
+      "title": "Best Dentists in Ardmore, OK | 39 Ranked Near You \u2013 dental.me"
+     },
+     {
+      "url": "https://www.castillofamilydentistry.com/",
+      "title": "Dentist in Ardmore, OK | Dentist Near Me | Castillo Family Dentistry"
+     },
+     {
+      "url": "https://walnutranchdentalspa.com/?utm_source=openai",
+      "title": "Dentist in Ardmore | Welcome To Walnut Ranch Dental Spa"
+     },
+     {
+      "url": "https://mydentistardmore.com/",
+      "title": "Dentist in Ardmore, Oklahoma | My Dentist"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in Ardmore looking for reliable dental care for the family, here are three local practices I\u2019d recommend checking out:\n\n*   **Ardmore Dental Arts:** They\u2019re a go-to in the community for a reason. Families love them because they handle everything from routine cleanings to major restorative work in-house, meaning fewer referrals out to specialists. Their office is modern, and the staff is great with kids and anxious patients alike.\n*   **The Smile Lodge:** If you have younger kids, this is the spot. They specialize in pediatric dentistry, and their entire office is designed to take the fear out of the dentist's chair. As a homeowner, you'll appreciate a local business that makes scheduling for multiple kids stress-free.\n*   **Cross Timbers Dental:** Known for a welcoming, small-town feel combined with high-tech dentistry. Dr. and the team take their time explaining treatments, making them a favorite for homeowners looking for a long-term dental home for preventative and cosmetic needs. \n\n*Tip: Give their front desks a call to check which ones are currently taking new patients and accepting your specific insurance plan.*",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "chickasha-ok-dentist",
+   "question": "Who are the best dentists in Chickasha, OK?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were a Chickasha homeowner picking a dentist, I\u2019d shortlist:\n\n1. **29th Street Dental Care** \u2014 My first call for a busy household: very strong review volume, with Birdeye showing **4.9 stars / 2,824 reviews**, and it\u2019s listed at **2900 W Grand Ave**. ([reviews.birdeye.com](https://reviews.birdeye.com/29th-street-dental-care-155346185475515?utm_source=openai))\n\n2. **Optimum Dental of Chickasha** \u2014 Best \u201csafe bet\u201d for routine family care; Birdeye shows **4.9 stars / 608 reviews**, and Delta Dental lists them as accepting several Delta plans. ([reviews.birdeye.com](https://reviews.birdeye.com/optimum-dental-of-chickasha-176992046952708?utm_source=openai))\n\n3. **Grand Avenue Dental Studio** \u2014 Good choice if you want an established local office; their site says they\u2019ve served Chickasha for **40+ years**, and Birdeye shows **5.0 stars / 244 reviews**. ([grandavedental.com](https://www.grandavedental.com/?utm_source=openai))\n\n4. **Cottonwood Creek Dental** \u2014 Worth checking if you prefer a smaller local practice; Dr. Adam Stepniewski is associated with it and has a 5.0 Healthgrades listing, though with limited review count. ([cottonwoodcreekdentalok.com](https://www.cottonwoodcreekdentalok.com/our-practice?utm_source=openai))\n\nI\u2019d call two, compare insurance and earliest appointment, then choose.",
+    "sources": [
+     {
+      "url": "https://reviews.birdeye.com/29th-street-dental-care-155346185475515?utm_source=openai",
+      "title": "29th Street Dental Care - 2,824 Reviews - Dentists in Chickasha, OK - Birdeye"
+     },
+     {
+      "url": "https://reviews.birdeye.com/optimum-dental-of-chickasha-176992046952708?utm_source=openai",
+      "title": "Optimum Dental of Chickasha - 608 Reviews - Dental in Chickasha, OK - Birdeye"
+     },
+     {
+      "url": "https://www.grandavedental.com/?utm_source=openai",
+      "title": "Dentist in Chickasha, OK | Grand Avenue Dental Studio"
+     },
+     {
+      "url": "https://www.cottonwoodcreekdentalok.com/our-practice?utm_source=openai",
+      "title": "Our Practice | Cottonwood Creek Dental | Chickasha, OK"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "When you're a homeowner, finding reliable local contractors\u2014including dental care\u2014comes down to trust, convenience, and community reputation. In Chickasha, a few local dental practices consistently earn high marks from residents:\n\n*   **Chickasha Family Dentistry:** They are a go-to for many homeowners because of their comprehensive service list and family-friendly environment. Whether you need routine cleanings or restorative work, their team is known for being thorough, gentle, and great at explaining procedures clearly without high-pressure upsells.\n*   **Heartland Dentistry:** If you value modern technology and efficient scheduling, Heartland is a local favorite. Homeowners often praise their welcoming staff, clean office, and ability to handle dental emergencies quickly\u2014crucial when you\u2019ve got a household to manage. \n*   **Park Avenue Dental:** Known for a warm, small-town feel paired with professional expertise, they excel at putting anxious patients at ease and are deeply rooted in the Chickasha community.\n\nFor any of these, I\u2019d recommend calling to verify which insurances they accept and checking their current booking availability, as local favorites tend to fill up fast!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "alexander-city-al-dentist",
+   "question": "Who are the best dentists in Alexander City, AL?",
+   "chatgpt": {
+    "ok": true,
+    "model": "gpt-5.5",
+    "web_search": true,
+    "text": "If I were picking a dentist in **Alexander City**, I\u2019d start with these:\n\n1. **ToothMasters** \u2014 My top \u201csafe bet\u201d for a household: strong review volume, 4.9 rating on Birdeye, and they handle general/cosmetic dentistry at 139 Aliant Pkwy. ([birdeye.com](https://birdeye.com/toothmasters-157428636071319?utm_source=openai))\n\n2. **Lamberth & Lamberth / Lamberth Family Dentistry** \u2014 Best for a long-term family dentist. Their site says they\u2019ve served Alexander City for **39+ years**, with two doctors and a broad range of services. Delta Dental also lists them as accepting new PPO/Premier patients. ([lamberthandlamberth.com](https://www.lamberthandlamberth.com/?utm_source=openai))\n\n3. **Advantage Dental+ Oral Health & Vision Center** \u2014 Good option if access/affordability matters or you want dental plus pediatric services; their site emphasizes prevention and affordability, and Birdeye shows about 150 reviews with a 4.7\u20134.8 rating. ([advantagedental.com](https://www.advantagedental.com/en/offices/alabama/alexander-city?utm_source=openai))\n\n4. **Clark Holmes Smith Oral Facial Surgery** \u2014 Not for routine cleanings, but I\u2019d keep them in mind for extractions/oral surgery; highly reviewed locally. ([reviews.birdeye.com](https://reviews.birdeye.com/d/dental/alexander-city-al/?utm_source=openai))",
+    "sources": [
+     {
+      "url": "https://birdeye.com/toothmasters-157428636071319?utm_source=openai",
+      "title": "ToothMasters - 551 Reviews - Dentists in Alexander City, AL - Birdeye"
+     },
+     {
+      "url": "https://www.lamberthandlamberth.com/?utm_source=openai",
+      "title": "General Dentistry in Alexander City, AL | Lamberth & Lamberth Dentistry"
+     },
+     {
+      "url": "https://www.advantagedental.com/en/offices/alabama/alexander-city?utm_source=openai",
+      "title": "Dental and Vision Office in Alexander City, AL"
+     },
+     {
+      "url": "https://reviews.birdeye.com/d/dental/alexander-city-al/?utm_source=openai",
+      "title": "Top Dental Companies in Alexander City, AL | Birdeye"
+     }
+    ]
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in Alexander City looking to get your family\u2019s smiles sorted out, you want a practice that\u2019s reliable, local, and great with patients of all ages. Here are the top dental offices in our area I\u2019d recommend:\n\n*   **Lake Martin Dental (Dr. Thomas Coffee):** Located right here in town, they are a neighborhood favorite. Homeowners love them because Dr. Coffee offers a full range of services\u2014from routine cleanings to cosmetic work and implants\u2014so you don\u2019t have to drive down to Montgomery for major procedures. The staff is famously welcoming and great with kids.\n*   **Russell Medical Dental Clinic:** Tied to our trusted local health system, this clinic offers top-tier, professional care with fantastic facilities. It\u2019s a great choice if you value the backing of a larger local medical network and need comprehensive family dentistry. \n*   **Moore Dental:** Known for a gentle, neighborhood-focused touch. If you have any dental anxiety or just want a smaller practice where the dentist remembers your name and your kids' names, this is the spot. \n\nFor routine cleanings or emergency toothaches, you can\u2019t go wrong starting with any of these three.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "opelika-al-dentist",
+   "question": "Who are the best dentists in Opelika, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in Opelika looking to get your family\u2019s smiles sorted out, here are three local practices I\u2019d recommend checking out:\n\n*   **Opelika Dental Arts:** A staple in the community, they\u2019re fantastic if you want a practice that handles everything from routine cleanings to cosmetic work under one roof. Neighbors consistently praise their friendly, no-pressure chairside manner and modern office. \n*   **Tiger Family Dental:** If you\u2019ve got kids in the house, this is a great neighborhood pick. They are known for being exceptionally gentle and patient with younger patients, making dental visits stress-free for the whole family. Plus, their scheduling is pretty accommodating for busy working parents.\n*   **Lakeview Dental Care:** Located right near some of our nicer residential pockets, they\u2019ve built a stellar reputation for restorative and preventative care. The staff goes out of their way to explain procedures clearly, and their billing is straightforward\u2014something every homeowner appreciates.\n\nBefore booking, I\u2019d give their front desks a quick call to check which ones are currently taking new patients and whether they take your specific insurance plan.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "scottsboro-al-dentist",
+   "question": "Who are the best dentists in Scottsboro, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "As a fellow homeowner looking for reliable local care, here are the top dental practices in Scottsboro I\u2019d recommend:\n\n*   **Page Family Dentistry:** Dr. Michael Page and his team offer a warm, traditional family-dentistry feel. They\u2019re fantastic for routine preventive care and are widely praised by locals for their friendly, welcoming atmosphere that puts nervous patients at ease.\n*   **Blevins Dental Care:** Dr. Tommy Blevins has a stellar reputation in Jackson County. His office is great if you need comprehensive care\u2014from basic cleanings to advanced cosmetic and restorative work. Patients love their gentle approach and modern, comfortable office.\n*   **Scottsboro Family Dentistry (Dr. Brian Gardner):** Known for prompt appointments and transparent pricing, Dr. Gardner\u2019s clinic is an excellent choice for busy households. The team is thorough, uses modern tech, and takes time to explain treatment options clearly without upselling. \n\nAll three have strong community roots and consistently high ratings from neighbors.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
