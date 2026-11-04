@@ -53,3 +53,7 @@ skills/<agent>/SKILL.md first. Nothing here without evidence.
   reply desk sent the free check 45 minutes later. t1 and t2 so far 0 of 85 (39 of 40 new-shape threads
   under 2 days old). New shape 1 of 40 (2.5 per 100) vs old 0 of 46; verdict stays 11-06 (one reply,
   confidence 30). Free checks delivered 14 (prospects), 0 clients. Calls 137, unchanged.
+- 2026-11-04 (Sage): New email shape after 60 sends (11-02 to 11-04): t1 0 of 25 and t2 0 of 34 replies at day 0-2,
+  t3 break-up 1 of 1; subject A (what-X) 0 of 30, B (name + AI) 1 of 30; 0 bounces and 0 no/stop in 60 own-site
+  sends. Old shape 0 of 46. 11-04 t1s: 10 of 20 subjects name Gemini (ChatGPT checks out of credit); levers loss
+  0/4, gap 0/9, give 0/3. Verdict on v1-echo-card-shape stays 11-06. Free checks delivered 14, 0 clients. Calls 141 (+4 tree service, 0 interested).
