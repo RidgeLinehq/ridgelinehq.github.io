@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-04-dentists-4d51",
+ "at": "2026-11-04T13:30:28Z",
+ "results": [
+  {
+   "key": "muskogee-ok-dentist",
+   "question": "Who are the best dentists in Muskogee, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable dental care in Muskogee, here are three top local practices I\u2019d recommend to any neighbor:\n\n1. **Muskogee Family Dentistry:** The ideal go-to for standard household care. They\u2019re widely praised for their friendly staff, flexible scheduling, and clear communication. They handle everything from routine cleanings to crowns without making you feel rushed.\n\n2. **Sizemore Family Dentistry:** Perfect if you want a warm, comfortable atmosphere. Dr. Sizemore\u2019s team gets rave reviews for gentle care, taking the time to explain treatment plans, and making anxious patients feel at ease. \n\n3. **Parkway Dental:** Great for modern, comprehensive care. They offer up-to-date dental technology alongside traditional general dentistry. Locals love them for their honest assessments\u2014they never push unnecessary procedures\u2014and efficient office management.\n\nAll three have deep local roots, outstanding reviews, and a track record of treating patients like neighbors rather than numbers.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "altus-ok-dentist",
+   "question": "Who are the best dentists in Altus, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a great local dentist here in Altus, these are the top spots neighbors consistently recommend:\n\n*   **Park Avenue Dental (Dr. Justin Cox):** This is usually the first recommendation for families. Dr. Cox and his team are known for being incredibly gentle, patient, and modern. It\u2019s an ideal choice if you or your kids get a little anxious about going to the dentist, as the staff goes out of their way to make you comfortable.\n*   **Altus Dental Arts:** Excellent choice if you need comprehensive care\u2014everything from standard cleanings to implants and cosmetic procedures. They are thorough, upfront about treatment plans and costs, and super accommodating if you ever have a dental emergency. \n*   **Jackson County Dental:** Perfect if you want that classic, trusted small-town service. The front desk staff is warm and efficient, the hygienists are top-notch, and the practice has built a strong reputation over the years for reliable, painless care.\n\nYou really can\u2019t go wrong with any of these three. I\u2019d recommend giving them a quick call to see who takes your insurance and has the best opening for your schedule.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "elk-city-ok-dentist",
+   "question": "Who are the best dentists in Elk City, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy local care for your family, here are the top-rated dental practices in Elk City I\u2019d recommend:\n\n*   **Elk City Dental Center:** A long-time community favorite for complete family care. They combine state-of-the-art dental technology with a welcoming, down-to-earth environment. It\u2019s a great go-to for everything from routine checkups to cosmetic procedures.\n*   **Main Street Dental:** Ideal if you or your kids get anxious about dental visits. The team is known for being exceptionally gentle, patient, and friendly, making the whole experience stress-free from the moment you walk through the door.\n*   **Grindstaff Dental:** A top pick for comprehensive and restorative care, including implants and crowns. Dr. Grindstaff has a solid reputation for being extremely thorough, honest, and never pushing unnecessary treatments on patients.\n\nAll three have strong roots in the community and great reputations among local homeowners. I\u2019d recommend giving them a quick call to check their current wait times and see who accepts your insurance plan.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "weatherford-ok-dentist",
+   "question": "Who are the best dentists in Weatherford, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable, top-notch dental care right here in Weatherford, three local practices consistently come highest recommended by neighbors:\n\n*   **Mitch & Co. Dental (Dr. Mitch Williams):** Known for a warm, welcoming atmosphere that puts nervous patients at ease. Dr. Williams and his team are incredibly patient, gentle, and fantastic with the whole family, making routine visits stress-free.\n*   **Weatherford Dental Care (Dr. Justin Seibert):** A great option if you appreciate modern technology and comprehensive care under one roof. Neighbors love Dr. Seibert for his thoroughness, modern equipment, and clear, honest communication about treatment plans. \n*   **Weatherford Family Dentistry (Dr. Blake Christensen):** An outstanding all-around family practice. They excel with patients of all ages\u2014including kids\u2014and get high marks for short wait times, a clean office, and helpful, friendly staff who never push unnecessary procedures.\n\nYou really can\u2019t go wrong with any of these three; they all treat you like a neighbor rather than just another appointment.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "talladega-al-dentist",
+   "question": "Who are the best dentists in Talladega, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you just moved to town and need a trustworthy dentist, here are the top local practices I\u2019d recommend to any neighbor:\n\n*   **Barnett Dental Care:** Hands down a local favorite for family care. Dr. Brett Barnett and his staff are known for being exceptionally gentle and patient, making it a great pick if anyone in your house gets anxious about dental visits. The team is warm, down-to-earth, and treats you like family.\n*   **Talladega Dental Associates:** Excellent for comprehensive, modern dental care. Dr. Michael Cullifer and his team offer everything from routine cleanings to more complex restorative work. They use up-to-date technology, keep appointments running on time, and take the time to explain your treatment options clearly without high-pressure upselling. \n\nBoth of these clinics have long-standing, strong reputations in the Talladega community, excellent reviews, and prioritize long-term preventative health. You\u2019ll be in great hands with either choice.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "owasso-ok-dentist",
+   "question": "Who are the best dentists in Owasso, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for top-notch dental care right here in Owasso, three local practices consistently earn glowing reviews from neighbors:\n\n**1. Drake Family Dentistry**\nDr. Bryan Drake and his team are famous for making patients feel comfortable from the moment they walk in. They use state-of-the-art technology, offer exceptionally gentle cleanings, and take the time to explain every procedure clearly\u2014ideal if dental visits make you a bit anxious.\n\n**2. Owasso Family Dentistry**\nA long-standing staple in the community, Dr. J. Keith Smith and Dr. Nicole Nellis provide fantastic multi-generational care. It\u2019s the perfect one-stop shop if you want high-quality routine maintenance for yourself and a warm, patient approach for your kids.\n\n**3. Dental Care of Owasso**\nLed by Dr. Matthew Walker, this modern office is great for busy schedules. They offer flexible hours, same-day emergency appointments, and comprehensive restorative work. Homeowners love their upfront pricing, easy insurance handling, and friendly staff. \n\nAny of these three will take fantastic care of your family\u2019s smiles!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}

@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-04-overflow-1f67",
+ "at": "2026-11-04T13:31:39Z",
+ "results": [
+  {
+   "key": "ozark-al-dentist",
+   "question": "Who are the best dentists in Ozark, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "As a local homeowner, having a trustworthy dentist close to home is a top priority. Here are the top Ozark practices neighbors consistently recommend:\n\n* **Ozark Dental Center:** Dr. Trent Conner and his team are community staples. They offer comprehensive family care\u2014from routine cleanings to advanced procedures. Neighbors love them for their modern technology, prompt appointment times, and warm, unhurried atmosphere.\n* **Nall Family Dentistry:** Dr. John Nall is famous locally for his gentle, patient-first approach. If you or your kids get dentist anxiety, this is your spot. The office is spotless, the staff is incredibly friendly, and they are completely transparent about treatment costs and insurance. \n* **Woodham Dentistry:** An excellent choice for both general family checkups and cosmetic work. They\u2019ve built a strong reputation in the Wiregrass area for reliable service, easy scheduling, and making sure patients stay comfortable during procedures.\n\nYou really can't go wrong with any of these three\u2014they treat you like a neighbor, not just a chart.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "blytheville-ar-dentist",
+   "question": "Who are the best dentists in Blytheville, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in Blytheville looking to get your family\u2019s smiles sorted out, you want a local dentist who is reliable, thorough, and close to home. Here are the top local practices I\u2019d recommend checking out:\n\n*   **Blytheville Dental Clinic (Dr. Lee H. Britt, DDS):** Located right on North 6th Street, Dr. Britt\u2019s office is a staple in the community. Homeowners love them for routine family care because they run an efficient, no-nonsense office and are great with kids. \n*   **Mississippi County Family Dentistry:** Another go-to local practice known for a welcoming atmosphere and comprehensive care. Whether you need a standard cleaning, crowns, or emergency work, their team is praised for being gentle, thorough, and upfront about treatment plans\u2014which makes budgeting for dental health much easier.\n\nBefore booking, I always recommend giving their front desks a quick call to confirm they are taking new patients and that they accept your specific insurance plan. You'll be in good hands with either of these local spots!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "guntersville-al-dentist",
+   "question": "Who are the best dentists in Guntersville, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a reliable local dentist here in Guntersville, a few practices come highly recommended by neighbors:\n\n**1. Lake Guntersville Dentistry**  \nDr. Brett Dothard and Dr. Luke Robinson run a top-notch, modern practice. They use state-of-the-art tech, the office is spotless, and they are fantastic with both kids and adults. It\u2019s the best spot if you want a gentle, efficient team that respects your time.\n\n**2. Guntersville Dental Associates**  \nA longtime staple in our community. The front-desk staff is welcoming, and the hygienists are exceptionally thorough. If you appreciate a warm, small-town feel where the staff actually remembers your family, this is a great choice.\n\n**3. Total Dental Care of Guntersville**  \nDr. Chris Total and his team are known for honest assessments and stress-free care. They do a wonderful job explaining procedures clearly without pushing unnecessary treatments, which is a huge plus when managing a household budget. \n\nYou really can't go wrong with any of these three\u2014I\u2019d suggest calling whichever is closest to your neighborhood to see who has the best opening for your schedule!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "muskogee-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Muskogee, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me for a reliable mechanic around Muskogee, here are the local shops I\u2019d send them to:\n\n1. **Autohaus Automotive:** My top pick for honest diagnostics and general repairs. They have a great reputation for upfront pricing and clear communication\u2014they'll tell you what actually needs fixing now versus what can wait, which saves you real money.\n2. **Xpert Automotive:** A fantastic local option for everything from AC work to complex engine repairs. Their technicians are knowledgeable, fast, and straightforward, making them a great go-to when you have a tricky electrical or mechanical issue.\n3. **T & A Auto Repair:** Excellent for routine maintenance, brakes, and suspension work. They are known around town for fair labor rates, quick turnaround times, and treating customers like neighbors rather than just ticket numbers.\n\n**Neighborly tip:** Because these independent shops stay busy on word-of-mouth recommendations, call ahead a few days in advance to get on their schedule!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "altus-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Altus, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you're looking for trustworthy mechanics around Altus, here are the local spots I\u2019d recommend to any neighbor:\n\n1. **Kopetsky\u2019s Ace Auto Repair:** This is a long-standing local staple. They\u2019re best known for honest diagnostics, fair pricing, and not trying to upsell you on unnecessary repairs. If you have a tricky issue or just want straight answers, Kopetsky\u2019s is top-tier.\n\n2. **Altus Auto Center:** Excellent for your everyday maintenance\u2014brakes, A/C fixes, suspension work, and oil changes. The team here is friendly, turnaround times are quick, and they do a great job keeping you updated while your vehicle is in the shop.\n\n3. **Wilmes Superstore Service Center:** If you drive a newer vehicle, need warranty work, or have complex electrical issues, Wilmes is your best bet. As the main dealership service hub in town, their certified technicians have specialized equipment and use factory OEM parts.\n\n*Quick tip:* Local shops here get busy fast, so call ahead to schedule an appointment earlier in the week!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "guntersville-al-auto-repair",
+   "question": "Who are the best auto repair shops in Guntersville, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy mechanics in town, here are the top local spots I always recommend to neighbors:\n\n*   **D&D Automotive Service:** Hands down one of the most honest shops in the area. They\u2019re fantastic for complex engine or diagnostic work, and they won't try to upsell you on repairs you don't actually need. \n*   **Guntersville Tire & Auto:** My go-to spot for routine maintenance like brakes, tire rotations, alignments, and oil changes. The staff is friendly, the turnaround is quick, and they stand behind their work.\n*   **Sutton\u2019s Auto Repair:** A great, dependable local shop for general repairs. They offer fair, transparent pricing and take the time to explain what\u2019s wrong with your car before doing any work.\n\n**Neighborly tip:** For major repairs at D&D, try to call a few days in advance\u2014because of their great reputation, their schedule fills up fast!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
