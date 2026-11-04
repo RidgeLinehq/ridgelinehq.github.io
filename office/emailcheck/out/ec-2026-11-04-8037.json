@@ -1,0 +1,42 @@
+{
+ "id": "ec-2026-11-04-8037",
+ "at": "2026-11-04T13:39:31.445086Z",
+ "domains": {
+  "att.net": {
+   "mx": true,
+   "why": "MX mx-att.mail.am0.yahoodns.net"
+  },
+  "auburnopelikadental.com": {
+   "mx": true,
+   "why": "MX auburnopelikadental-com.mail.protection.outlook.com"
+  },
+  "castillofamilydentistry.com": {
+   "mx": true,
+   "why": "MX castillofamilydentistry-com.mail.eo.outlook.com"
+  },
+  "hotmail.com": {
+   "mx": true,
+   "why": "MX hotmail-com.olc.protection.outlook.com"
+  },
+  "lamberthandlamberth.com": {
+   "mx": true,
+   "why": "MX lamberthandlamberth-com.mail.protection.outlook.com"
+  },
+  "lifesmilesowasso.com": {
+   "mx": true,
+   "why": "MX aspmx.l.google.com"
+  },
+  "parksavenuedental.com": {
+   "mx": true,
+   "why": "MX alt2.aspmx.l.google.com"
+  },
+  "smiledesignsparagould.com": {
+   "mx": true,
+   "why": "MX mx.smiledesignsparagould.com.cust.a.hostedemail.com"
+  },
+  "sudberrydental.com": {
+   "mx": true,
+   "why": "MX sudberrydental-com.mail.protection.outlook.com"
+  }
+ }
+}
