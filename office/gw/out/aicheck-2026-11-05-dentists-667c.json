@@ -1,0 +1,86 @@
+{
+ "id": "aicheck-2026-11-05-dentists-667c",
+ "at": "2026-11-05T13:37:51Z",
+ "results": [
+  {
+   "key": "clinton-ok-dentist",
+   "question": "Who are the best dentists in Clinton, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": false,
+    "error": "gemini-2.5-flash (grounded=False): 404 This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started)."
+   }
+  },
+  {
+   "key": "anniston-al-dentist",
+   "question": "Who are the best dentists in Anniston, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you're looking for trustworthy local dentists in Anniston who provide great care without pushing unnecessary procedures, here are three top recommendations:\n\n*   **Strickland Dental:** A long-standing family practice with a stellar reputation. They\u2019re ideal if you want a warm, classic office environment. Patients love them because Dr. Strickland and his staff are patient, gentle, and transparent about costs.\n*   **Anniston Dental Group:** Great if you prefer a modern clinic with state-of-the-art technology. They handle everything from basic cleanings to complex restorative work. They\u2019re known for punctual appointment times, excellent communication, and making anxious patients feel at ease.\n*   **Golden Springs Family Dentistry:** Conveniently located and fantastic for general family care. Their front-desk team makes insurance billing painless, and the hygienists are incredibly thorough yet gentle, making routine visits hassle-free.\n\n**Homeowner tip:** Call your top choice directly to double-check their current network status with your dental insurance, as local networks in Calhoun County can occasionally shift.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "sylacauga-al-dentist",
+   "question": "Who are the best dentists in Sylacauga, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": false,
+    "error": "gemini-2.5-flash (grounded=False): 404 This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started)."
+   }
+  },
+  {
+   "key": "arab-al-dentist",
+   "question": "Who are the best dentists in Arab, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a great local dentist in Arab, here are the top spots I\u2019d recommend to neighbors:\n\n*   **Arab Dental Associates:** A long-standing community staple. Dr. Joel Adams and his team are phenomenal for routine family care, crowns, and implants. They are incredibly punctual and efficient, which is a huge plus when you\u2019re trying to manage a busy household schedule.\n*   **Gardner Family Dentistry:** Dr. Deidra Gardner is fantastic if anyone in your house deals with dental anxiety. Her office is warm, modern, and known for a gentle touch. They focus heavily on preventive care and treat you like family from day one.\n*   **Design Dentistry (Dr. Matthew Custer):** Great if you want high-tech care. They offer state-of-the-art technology for cosmetics, single-day crowns, and restorative work. The staff is super friendly and completely transparent about costs before doing any work.\n\nYou really can\u2019t go wrong with any of these three\u2014they\u2019re all well-established in Arab, highly rated by locals, and known for honest, reliable care.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "cabot-ar-plumbing",
+   "question": "Who are the best plumbers in Cabot, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": false,
+    "error": "gemini-2.5-flash (grounded=False): 404 This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started)."
+   }
+  },
+  {
+   "key": "jacksonville-ar-plumbing",
+   "question": "Who are the best plumbers in Jacksonville, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": false,
+    "error": "gemini-2.5-flash (grounded=False): 404 This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started)."
+   }
+  }
+ ]
+}

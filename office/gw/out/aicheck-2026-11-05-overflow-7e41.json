@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-05-overflow-7e41",
+ "at": "2026-11-05T13:44:41Z",
+ "results": [
+  {
+   "key": "clanton-al-dentist",
+   "question": "Who are the best dentists in Clanton, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy local care for your family, a few standout practices in Clanton consistently get top marks from neighbors:\n\n*   **Clanton Dental Care:** Highly recommended for whole-family care. Neighbors love them for their modern equipment, punctual appointments, and gentle approach\u2014ideal if anyone in your house gets a little nervous about dental visits.\n*   **Chilton County Family Dentistry:** A fantastic option for routine preventive care. The staff is exceptionally warm and welcoming, making it a stress-free choice for both kids and adults who want a friendly, small-town feel.\n*   **Flatt Dental:** Dr. David Flatt provides top-notch, comprehensive care. Local homeowners appreciate that he takes the time to explain procedures thoroughly and won\u2019t push unnecessary, expensive treatments\u2014just honest, quality work.\n*   **Progressive Family Dentistry:** Another neighborhood favorite, known for efficient service, easy scheduling, and a clean, comfortable office environment.\n\n*Homeowner tip:* Before booking, call their offices directly to double-check that they are in-network for your specific dental insurance plan to avoid surprise out-of-pocket costs.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "clanton-al-auto-repair",
+   "question": "Who are the best auto repair shops in Clanton, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy mechanics around town, here are the top local spots I always recommend to neighbors:\n\n**1. Pate\u2019s Auto Repair**\nHands down one of the most honest shops in Chilton County. They\u2019re fantastic for routine maintenance and major repairs alike. They\u2019re known for fair pricing, clear explanations, and never trying to upsell you on parts you don't need. \n\n**2. Cates Auto Repair**\nA solid, reliable family-owned shop with a great reputation. If you\u2019re dealing with a tricky check engine light or electrical issue, they do excellent diagnostic work. They\u2019re thorough, friendly, and get the job done right the first time.\n\n**3. Chilton Auto Air & Repair**\nWith Alabama summers, having a good A/C tech is a must. They specialize in heating and cooling systems, but they handle full mechanical work, too. They\u2019re dependable, fast, and very reasonable on labor costs.\n\n**4. B&K Tire & Auto Repair**\nMy top pick for tires, brakes, alignments, and quick oil changes. The staff is always polite, efficient, and great at getting you in and out without hassle. \n\nYou\u2019ll get fair treatment and solid work at any of these local shops!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "pelham-al-dentist",
+   "question": "Who are the best dentists in Pelham, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a great dentist in Pelham, here are three top-rated local practices that fellow homeowners consistently recommend:\n\n*   **Oak Mountain Dental (Dr. Ryan Miller):** Conveniently located on Hwy 119, this practice is ideal if you want modern technology paired with a gentle touch. They\u2019re fantastic for the whole family, incredibly punctual, and very transparent about treatment costs upfront.\n*   **Pelham Dental Care (Dr. Kent Thomas & Team):** A true community staple. Neighbors love the warm, welcoming environment and how patient the staff is\u2014especially if dental visits make you nervous. They handle everything from routine cleanings to complex restorative work expertly.\n*   **Moore Family Dentistry:** If you prefer a traditional, trustworthy neighborhood vibe, Dr. Michael Moore\u2019s team is top-notch. They excel at preventive care, are wonderful with kids, and are known for being honest\u2014they\u2019ll never try to upsell you on unnecessary procedures.\n\nYou really can't go wrong with any of these three options; they\u2019re all reliable, highly rated, and deeply rooted right here in Pelham!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "albertville-al-dentist",
+   "question": "Who are the best dentists in Albertville, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re asking around the neighborhood for a trustworthy local dentist in Albertville, three practices consistently come highly recommended:\n\n1. **Wall Family Dentistry**: Dr. Jonathan Wall and his team offer that true warm, small-town atmosphere. They are fantastic with both kids and adults, known for gentle care, and won't push unnecessary, expensive procedures on you.\n\n2. **Albertville Dental Excellence**: If you want modern dental technology paired with a compassionate staff, this is a standout choice. They excel in everything from routine cleanings to complex cosmetic and restorative work, making them a great all-in-one practice.\n\n3. **Premier Dental of Albertville**: Dr. Rick Wright\u2019s office has a strong reputation for putting anxious patients at ease. The front desk is friendly, scheduling is flexible, and they are upfront about treatment costs\u2014something every homeowner appreciates when managing a budget.\n\nWhether you just need a reliable bi-annual cleaning or extensive dental work, these local practices treat you like a neighbor rather than just a chart number.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "albertville-al-auto-repair",
+   "question": "Who are the best auto repair shops in Albertville, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me where to take their vehicle in Albertville, here are the top local shops I\u2019d recommend based on reputation and trust:\n\n*   **Wilks Tire & Battery Service:** A long-time Sand Mountain staple. They\u2019re my top pick for tires, brakes, and routine maintenance. The team is straightforward, doesn't try to upsell unnecessary work, and gets you back on the road quickly.\n*   **Gilbert Tire & Auto Care:** Excellent for full-service auto repair. Whether you're dealing with a mysterious \"check engine\" light or need major suspension work, their mechanics are thorough and reliable. They stand behind their work and offer fair, transparent pricing.\n*   **Webb Auto Repair:** A fantastic, honest local shop where you deal with friendly, knowledgeable technicians. They take the time to explain repairs clearly without using confusing jargon, making them great if you want no-nonsense service and quick turnarounds.\n\nAll three of these spots have built strong community trust in Marshall County for doing quality work without the dealership price tag.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "miami-ok-dentist",
+   "question": "Who are the best dentists in Miami, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in Miami looking for reliable dental care for the family, here are the local practices I\u2019d recommend checking out:\n\n*   **Miami Family Dentistry (Dr. Taylor & Dr. Lalli):** This is a go-to for many neighbors in the area. They handle everything from routine cleanings to restorative work and implants. Homeowners frequently praise them for their welcoming, family-friendly staff and the ability to get the whole household's appointments scheduled efficiently. \n*   **Grand Dental:** Another top-tier local option known for modern equipment and a comfortable office environment. Locals often highlight their thoroughness in explaining treatment plans\u2014which I really appreciate as a homeowner who likes to budget and plan ahead\u2014as well as their gentle touch with nervous patients.\n*   **Darren K. Smith, DDS:** If you prefer a smaller, relationship-driven practice, Dr. Smith\u2019s office is a community staple. Patients consistently mention the personalized attention and the prompt, no-fuss scheduling.\n\nFor routine cleanings, call a couple of them to check who is currently accepting new patients and takes your specific insurance. You can't go wrong with any of these three for keeping your family smiling.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
