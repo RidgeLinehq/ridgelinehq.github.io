@@ -57,3 +57,8 @@ skills/<agent>/SKILL.md first. Nothing here without evidence.
   t3 break-up 1 of 1; subject A (what-X) 0 of 30, B (name + AI) 1 of 30; 0 bounces and 0 no/stop in 60 own-site
   sends. Old shape 0 of 46. 11-04 t1s: 10 of 20 subjects name Gemini (ChatGPT checks out of credit); levers loss
   0/4, gap 0/9, give 0/3. Verdict on v1-echo-card-shape stays 11-06. Free checks delivered 14, 0 clients. Calls 141 (+4 tree service, 0 interested).
+- 2026-11-05 (Sage): Hard bounces by address type, 82 crew first touches to emails printed on the business's own site:
+  info@ 3 of 17 (18%), other same-business-domain 1 of 27 (4%), free mail (gmail/yahoo/sbcglobal) 0 of 38. 3 of the 11-05 20
+  bounced within 4 minutes while the MX job passed 11 of 11 domains: MX does not catch a dead mailbox. Replies: new shape 1 of 80
+  (t1 0 of 45, t2 0 of 34, t3 1 of 1; A 0 of 40, B 1 of 40; loss 0 of 18, gap 0 of 15, give 0 of 3), old shape 0 of 46. Free checks
+  delivered 14, 0 clients. Calls 141, unchanged.
