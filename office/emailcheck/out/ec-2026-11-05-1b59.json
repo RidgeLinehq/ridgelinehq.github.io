@@ -1,0 +1,50 @@
+{
+ "id": "ec-2026-11-05-1b59",
+ "at": "2026-11-05T13:54:20.498104Z",
+ "domains": {
+  "altusautorepair.com": {
+   "mx": true,
+   "why": "MX mx1-hosting.jellyfish.systems"
+  },
+  "elkcreekdentalcenter.com": {
+   "mx": true,
+   "why": "MX aspmx.l.google.com"
+  },
+  "grandsteadautomotive.com": {
+   "mx": true,
+   "why": "MX smtp.google.com"
+  },
+  "johnjenningsdental.com": {
+   "mx": true,
+   "why": "MX johnjenningsdental-com.mail.protection.outlook.com"
+  },
+  "kjmechanicalllc.com": {
+   "mx": true,
+   "why": "MX alt1.aspmx.l.google.com"
+  },
+  "muskogeedentalandimplants.com": {
+   "mx": true,
+   "why": "MX aspmx.l.google.com"
+  },
+  "muskogeepediatricdental.com": {
+   "mx": true,
+   "why": "MX muskogeepediatricdental-com.mail.protection.outlook.com"
+  },
+  "schoonmakerdds.com": {
+   "mx": true,
+   "why": "no MX but has A record (mail may still work)"
+  },
+  "smilesmiami.com": {
+   "mx": true,
+   "why": "MX smtp.google.com"
+  },
+  "valverdefamilydentistry.com": {
+   "mx": true,
+   "why": "no MX but has A record (mail may still work)"
+  },
+  "zackdollardmd.com": {
+   "mx": true,
+   "why": "MX mx00.ionos.com"
+  }
+ }
+}
