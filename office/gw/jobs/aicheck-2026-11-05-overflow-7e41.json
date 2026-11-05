@@ -1,0 +1,41 @@
+{
+  "id": "aicheck-2026-11-05-overflow-7e41",
+  "queries": [
+    {
+      "key": "clanton-al-dentist",
+      "question": "Who are the best dentists in Clanton, AL?",
+      "city": "Clanton",
+      "region": "Alabama"
+    },
+    {
+      "key": "clanton-al-auto-repair",
+      "question": "Who are the best auto repair shops in Clanton, AL?",
+      "city": "Clanton",
+      "region": "Alabama"
+    },
+    {
+      "key": "pelham-al-dentist",
+      "question": "Who are the best dentists in Pelham, AL?",
+      "city": "Pelham",
+      "region": "Alabama"
+    },
+    {
+      "key": "albertville-al-dentist",
+      "question": "Who are the best dentists in Albertville, AL?",
+      "city": "Albertville",
+      "region": "Alabama"
+    },
+    {
+      "key": "albertville-al-auto-repair",
+      "question": "Who are the best auto repair shops in Albertville, AL?",
+      "city": "Albertville",
+      "region": "Alabama"
+    },
+    {
+      "key": "miami-ok-dentist",
+      "question": "Who are the best dentists in Miami, OK?",
+      "city": "Miami",
+      "region": "Oklahoma"
+    }
+  ]
+}

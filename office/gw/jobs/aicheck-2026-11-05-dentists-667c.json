@@ -1,0 +1,41 @@
+{
+  "id": "aicheck-2026-11-05-dentists-667c",
+  "queries": [
+    {
+      "key": "clinton-ok-dentist",
+      "question": "Who are the best dentists in Clinton, OK?",
+      "city": "Clinton",
+      "region": "Oklahoma"
+    },
+    {
+      "key": "anniston-al-dentist",
+      "question": "Who are the best dentists in Anniston, AL?",
+      "city": "Anniston",
+      "region": "Alabama"
+    },
+    {
+      "key": "sylacauga-al-dentist",
+      "question": "Who are the best dentists in Sylacauga, AL?",
+      "city": "Sylacauga",
+      "region": "Alabama"
+    },
+    {
+      "key": "arab-al-dentist",
+      "question": "Who are the best dentists in Arab, AL?",
+      "city": "Arab",
+      "region": "Alabama"
+    },
+    {
+      "key": "cabot-ar-plumbing",
+      "question": "Who are the best plumbers in Cabot, AR?",
+      "city": "Cabot",
+      "region": "Arkansas"
+    },
+    {
+      "key": "jacksonville-ar-plumbing",
+      "question": "Who are the best plumbers in Jacksonville, AR?",
+      "city": "Jacksonville",
+      "region": "Arkansas"
+    }
+  ]
+}
