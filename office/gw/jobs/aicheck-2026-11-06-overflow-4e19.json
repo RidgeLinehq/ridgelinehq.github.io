@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-06-overflow-4e19",
+ "queries": [
+  {
+   "key": "forrest-city-ar-dentist",
+   "question": "Who are the best dentists in Forrest City, AR?",
+   "city": "Forrest City",
+   "region": "Arkansas"
+  },
+  {
+   "key": "bristow-ok-dentist",
+   "question": "Who are the best dentists in Bristow, OK?",
+   "city": "Bristow",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "clarksville-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Clarksville, AR?",
+   "city": "Clarksville",
+   "region": "Arkansas"
+  },
+  {
+   "key": "foley-al-dentist",
+   "question": "Who are the best dentists in Foley, AL?",
+   "city": "Foley",
+   "region": "Alabama"
+  },
+  {
+   "key": "foley-al-auto-repair",
+   "question": "Who are the best auto repair shops in Foley, AL?",
+   "city": "Foley",
+   "region": "Alabama"
+  },
+  {
+   "key": "hartselle-al-dentist",
+   "question": "Who are the best dentists in Hartselle, AL?",
+   "city": "Hartselle",
+   "region": "Alabama"
+  }
+ ]
+}

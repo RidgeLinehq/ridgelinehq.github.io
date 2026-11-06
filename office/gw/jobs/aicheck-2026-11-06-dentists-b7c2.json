@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-06-dentists-b7c2",
+ "queries": [
+  {
+   "key": "wetumpka-al-dentist",
+   "question": "Who are the best dentists in Wetumpka, AL?",
+   "city": "Wetumpka",
+   "region": "Alabama"
+  },
+  {
+   "key": "eufaula-al-dentist",
+   "question": "Who are the best dentists in Eufaula, AL?",
+   "city": "Eufaula",
+   "region": "Alabama"
+  },
+  {
+   "key": "greenwood-ar-dentist",
+   "question": "Who are the best dentists in Greenwood, AR?",
+   "city": "Greenwood",
+   "region": "Arkansas"
+  },
+  {
+   "key": "oneonta-al-dentist",
+   "question": "Who are the best dentists in Oneonta, AL?",
+   "city": "Oneonta",
+   "region": "Alabama"
+  },
+  {
+   "key": "pocahontas-ar-dentist",
+   "question": "Who are the best dentists in Pocahontas, AR?",
+   "city": "Pocahontas",
+   "region": "Arkansas"
+  },
+  {
+   "key": "purcell-ok-dentist",
+   "question": "Who are the best dentists in Purcell, OK?",
+   "city": "Purcell",
+   "region": "Oklahoma"
+  }
+ ]
+}
