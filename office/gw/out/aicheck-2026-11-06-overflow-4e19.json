@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-06-overflow-4e19",
+ "at": "2026-11-06T13:31:18Z",
+ "results": [
+  {
+   "key": "forrest-city-ar-dentist",
+   "question": "Who are the best dentists in Forrest City, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If I were asking my neighbors in Forrest City for a solid dental recommendation, two local practices consistently top the list:\n\n**1. Forrest City Dental (Dr. Taylor Mustian & Team)**\nThis is the go-to for comprehensive care. Whether you just need a routine tune-up, a emergency filling, or cosmetic work, they\u2019ve got the technology and expertise to handle it locally. The staff treats you like family, the office is clean, and they\u2019re great about walking you through treatment plans without pushing unnecessary extras.\n\n**2. Deakins Family Dentistry (Dr. Benji Deakins)**\nIf you prefer a classic, trusted hometown practice, Dr. Deakins is top-notch. It\u2019s a warm, family-oriented office where the staff actually remembers your name. They are exceptionally gentle, fantastic with kids, and ideal for anyone who gets a bit anxious in the dentist's chair. You get honest advice and reliable, high-quality care.\n\n**Bottom line:** Both of these offices are reliable, fair on pricing, and well-respected around town. I\u2019d give both a call and go with whoever has the earliest opening that fits your schedule!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "bristow-ok-dentist",
+   "question": "Who are the best dentists in Bristow, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you're a local homeowner looking for reliable, long-term dental care right here in town, two practices consistently come top-recommended by neighbors:\n\n**1. Bristow Dental Arts (Dr. Justin Yeary)**  \nThis is a top pick for comprehensive family care. Dr. Yeary has deep local roots and offers modern dental technology\u2014from digital imaging to cosmetic and restorative work\u2014in a clean, comfortable office. It\u2019s ideal if you want up-to-date techniques combined with a genuinely friendly, patient-first approach.\n\n**2. Family Dental Care of Bristow (Dr. Mark Smith)**  \nIf you prefer a traditional, tight-knit community feel, Dr. Smith\u2019s practice is a staple. The staff is exceptionally welcoming, making it a stress-free choice for routine cleanings, preventive care, and basic dental work for the whole family. They\u2019ve earned decades of trust in Creek County.\n\n**Why these two?** \nFor homeowners, convenience, honest care, and community trust are key. Both offices are right in town, highly rated for gentle treatment, and known for giving straightforward advice without trying to upsell you on unnecessary procedures.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "clarksville-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Clarksville, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you're a homeowner in Clarksville needing reliable auto repair, here are the local shops I trust and recommend keeping on speed dial:\n\n*   **B&B Automotive:** Located right on Main Street, these folks are my go-to for general diagnostics and honest everyday repairs. As a homeowner, you appreciate a shop that doesn't try to upsell you on work you don't need. They are dependable, locally owned, and great at explaining car trouble in plain English.\n*   **Clarksville Auto Repair:** If you\u2019re dealing with major mechanical issues\u2014like transmission work, suspension, or complex engine diagnostics\u2014this is the place to go. They\u2019ve been serving our community for years with skilled mechanics who get the job done right the first time, minimizing the headache of car trouble. \n*   **O'Keeffe's Tire & Auto:** For routine maintenance like oil changes, brake pads, and especially new tires to handle those winding Ozark roads, O'Keeffe's is fantastic. They are efficient, competitively priced, and get you back on the road quickly without wasting your Saturday.\n\nStick with any of these three, and your vehicles will be in good hands.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "foley-al-dentist",
+   "question": "Who are the best dentists in Foley, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy local care, here are the top dental practices in Foley I\u2019d recommend to my own neighbors:\n\n* **Foley Dental Associates:** The gold standard for long-standing, community-focused care. Dr. Hal Jones and his team are known for being straightforward, extremely reliable, and never pushing unnecessary, expensive treatments. Perfect for routine family maintenance.\n* **Sand Dollar Dental:** If you or your kids get anxious about dental visits, Dr. Stephen Lester is the answer. Locals love this office for its warm, welcoming atmosphere and gentle approach to care. \n* **South Baldwin Family Dental:** Dr. Will Stringer runs a fantastic, modern clinic. They excel at everything from preventive care to cosmetics and emergencies. Plus, their front office is legendary for making insurance billing easy and hassle-free.\n* **Riviera Dental Care:** Great for busy families who need flexible scheduling. Their staff is warm, fast, and excellent at clearly explaining your options before doing any work, so there are zero financial surprises.\n\nStick with any of these four, and your family's teeth\u2014and your budget\u2014will be in great hands.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "foley-al-auto-repair",
+   "question": "Who are the best auto repair shops in Foley, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy mechanics around Foley, here are the local spots my neighbors and I rely on:\n\n*   **Foley Tire & Auto Center:** My go-to for routine maintenance, brakes, and tires. They\u2019re a long-standing local favorite because they\u2019re honest, fast, and won\u2019t try to upsell you on repairs you don't actually need.\n*   **Coastal Car Care:** Excellent if your car is making a weird noise or has a check-engine light you can't figure out. Their mechanics are great at diagnostics, explain issues in plain English, and give fair, upfront pricing. \n*   **Mastertech Auto Care:** Perfect for complex engine or electrical work. What I love about them is their transparency\u2014they send digital inspections with photos straight to your phone so you can see exactly what needs fixing before approving any work. \n\nYou really can\u2019t go wrong with any of these three for keeping your vehicles running smoothly around Baldwin County!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "hartselle-al-dentist",
+   "question": "Who are the best dentists in Hartselle, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you're looking for a reliable local dentist in Hartselle, a few practices consistently get top marks from neighbors for trustworthy, comfortable care:\n\n*   **Drake Family Dentistry:** Dr. Justin Drake runs a fantastic, modern practice. He\u2019s known for being gentle, incredibly thorough, and taking the time to explain your options without pushing unnecessary procedures. The office staff is warm and makes you feel right at home.\n*   **Hartselle Dental Associates:** Dr. Alan Willis and his team are a long-standing staple in our community. They are fantastic for the whole family, especially if you have kids or feel a bit anxious about dental visits. They\u2019re punctual, professional, and very fair on pricing.\n*   **Sublett Family Dentistry:** Dr. Mike Sublett offers that ideal, small-town down-to-earth feel combined with excellent clinical skill. If you want a straightforward, highly experienced dentist who treats you like a neighbor rather than just a patient, this is a great choice. \n\nYou really can't go wrong with any of these three\u2014they all have great reputations for quality work and keeping local families comfortable.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
