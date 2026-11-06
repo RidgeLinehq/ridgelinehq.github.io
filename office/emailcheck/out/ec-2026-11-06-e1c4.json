@@ -1,0 +1,10 @@
+{
+ "id": "ec-2026-11-06-e1c4",
+ "at": "2026-11-06T13:38:35.037640Z",
+ "domains": {
+  "miamidentalcare.com": {
+   "mx": true,
+   "why": "MX mx14-2.sherwebcloud.com"
+  }
+ }
+}
