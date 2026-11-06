@@ -62,3 +62,9 @@ skills/<agent>/SKILL.md first. Nothing here without evidence.
   bounced within 4 minutes while the MX job passed 11 of 11 domains: MX does not catch a dead mailbox. Replies: new shape 1 of 80
   (t1 0 of 45, t2 0 of 34, t3 1 of 1; A 0 of 40, B 1 of 40; loss 0 of 18, gap 0 of 15, give 0 of 3), old shape 0 of 46. Free checks
   delivered 14, 0 clients. Calls 141, unchanged.
+- 2026-11-06 (Sage): First reply-rate verdict, old and new shape scored apart. New shape (card, html, short; 11-02 to 11-05)
+  1 reply in 80 sends (1.25 per 100) vs old shape 0 in 46: +1.25 points, under the 2-point bar, so workflow
+  v1-echo-card-shape is rolled back (steps untouched; the shape stays as Grayson's order). By touch t1 0 of 45, t2 0 of 34
+  (39 at day 3-4), t3 break-up 1 of 1; subject A 0 of 40, B 1 of 40 (0 of 39 on t1/t2); levers loss 0 of 18, gap 0 of 15,
+  give 0 of 3, take the pressure off 1 of 1; dentists 0 of 66 across both shapes. Next measured test: the t3 break-up
+  (15 sent 11-06, 19 due 11-09). Free checks delivered 14, 0 clients. Calls 141, unchanged.
