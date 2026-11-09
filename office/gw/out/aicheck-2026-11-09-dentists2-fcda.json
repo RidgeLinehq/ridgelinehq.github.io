@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-09-dentists2-fcda",
+ "at": "2026-11-09T13:35:09Z",
+ "results": [
+  {
+   "key": "el-reno-ok-dentist",
+   "question": "Who are the best dentists in El Reno, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a top-notch local dentist right here in El Reno, these are the two best options neighbors consistently recommend:\n\n**1. El Reno Family Dentistry (Dr. Adam Cohlmia)**\nThis is usually the top recommendation in town. Dr. Cohlmia\u2019s office combines modern technology with a genuinely warm, comfortable environment. They offer comprehensive care\u2014everything from routine cleanings to implants and cosmetic work\u2014meaning you rarely have to drive to Oklahoma City or Yukon for specialized procedures. \n\n**2. Kanaly Family Dentistry (Dr. Patrick Kanaly)**\nIf you prefer a classic, small-town feel where the team remembers your family, Dr. Kanaly is fantastic. Neighbors love this office for its punctual appointments, transparent pricing, and remarkably gentle approach. It\u2019s an ideal spot if you or your kids get a bit nervous about dental visits.\n\nBoth practices are known for being incredibly clean, friendly, and honest about what treatments you actually need. You\u2019ll be in great hands with either one!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "blackwell-ok-dentist",
+   "question": "Who are the best dentists in Blackwell, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "As a homeowner, I know how important it is to find reliable, local professionals who treat you like a neighbor. For dentistry right here in Blackwell, two local practices stand out:\n\n**1. Blackwell Family Dentistry (Dr. Alan Mitchell & Dr. Jason Mitchell)**  \nThis is the go-to staple in town. They provide comprehensive care for all ages\u2014from routine checkups to implants and crowns. Having both generations in practice brings a great mix of deep community trust and modern techniques. It\u2019s practical, top-notch care that keeps you from having to drive out of town.\n\n**2. List Dental Clinic (Dr. Joseph List)**  \nIf you prefer a smaller, low-stress environment, Dr. List is fantastic. Patients love his gentle approach and honest communication\u2014no selling you treatments you don't need. It\u2019s ideal for preventive care and standard dental work with a very personal touch.\n\nBoth of these clinics have strong local roots, excellent patient reviews, and friendly staff, making them the easiest recommendations for keeping your family\u2019s dental care close to home.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "anadarko-ok-dentist",
+   "question": "Who are the best dentists in Anadarko, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re living in Anadarko and want to keep your dental care local without driving to Chickasha or Lawton, here are the top recommendations:\n\n**1. Anadarko Dental Center (Dr. Justin Beasley)**\nThis is the go-to spot for most local families. Dr. Beasley and his staff are fantastic\u2014they\u2019re known for being gentle, thorough, and great at keeping patients comfortable, even if you get anxious in the chair. They handle everything from routine cleanings and fillings to crowns and emergency work, making it the best all-around family practice in town.\n\n**2. Anadarko Indian Health Center Dental Clinic**\nIf you or your family members are eligible for IHS services, this local clinic is an outstanding resource. They provide high-quality preventative and restorative care right on East Central Boulevard, saving you a long commute while offering comprehensive treatments.\n\n**Pro-tip for homeowners:** For basic family care, routine cleanings, and immediate needs, **Anadarko Dental Center** is hands-down your best local option. If you ever need complex oral surgery or specialized orthodontics, most locals make the easy 20-minute drive over to Chickasha, but for everyday dental health, you're in great hands right here in town.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "skiatook-ok-dentist",
+   "question": "Who are the best dentists in Skiatook, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a great local dentist right here in Skiatook, here are the top spots neighbors consistently recommend:\n\n**1. Cooper Family Dentistry (Dr. Chace Cooper)**\nThis is a go-to pick for families. Dr. Cooper and his team are known for being exceptionally gentle, welcoming, and great with kids. The office is modern, and they take the stress out of everything from routine cleanings to crowns.\n\n**2. Skiatook Dental Associates**\nA long-standing staple in our community. Patients love them because they\u2019re straightforward and don't try to upsell you on unnecessary procedures. The hygienists are thorough yet gentle, and the front desk staff makes handling insurance painless. \n\n**3. Arens Dental Care (Dr. Michael Arens)**\nIf you or someone in your house gets dental anxiety, Dr. Arens is fantastic. He\u2019s patient, takes the time to explain every step, and focuses heavily on patient comfort so you never feel rushed or nervous in the chair.\n\nAll three offer that honest, small-town service where they treat you like a neighbor, not just a chart.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "pell-city-al-dentist",
+   "question": "Who are the best dentists in Pell City, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a solid local dentist here in Pell City, these are the top three practices I\u2019d recommend to any neighbor:\n\n1. **Pell City Family Dentistry:** Hands down the go-to for comprehensive family care. Dr. Barnett and Dr. Cates run a great office with a super friendly hygienist team. They're gentle, fantastic with kids, and keep appointments running right on time.\n2. **Complete Dental Care of Pell City:** If you need modern, restorative work\u2014like crowns, implants, or cosmetic care\u2014Dr. Kevin Deason is fantastic. He uses up-to-date technology, and his staff makes dealing with insurance and scheduling completely hassle-free.\n3. **Dorsett Dental:** Dr. Trey Dorsett runs a wonderful, locally-rooted practice known for its personalized, conservative approach. He takes the time to explain your options clearly and never pushes unnecessary procedures, which is a huge plus.\n\nAll three have stellar reputations around town for being honest, patient-focused, and comfortable. You really can\u2019t go wrong with any of them!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "calera-al-dentist",
+   "question": "Who are the best dentists in Calera, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "Hey neighbor! If you\u2019re looking for trustworthy, top-rated dentists right here in Calera, here are the local practices I\u2019d recommend checking out:\n\n*   **Timberline Dental:** Located off Hwy 31, Dr. Thomas Adams and his team run a modern, immaculate office. They\u2019re fantastic with up-to-date tech and have a real talent for easing anxiety for both kids and adults. \n*   **Calera Dental Center:** A longstanding staple in our community. Locals love them for their gentle touch, friendly hygienists, and honest approach\u2014they explain costs upfront and won't pressure you into unnecessary procedures.\n*   **Calera Family Dentistry:** If you prefer a warm, small-town feel where the team takes time to get to know you, this is a great choice. They are excellent with preventive care, work well with major insurance plans, and are very accommodating if you need a quick appointment for a toothache.\n\nAll three have great reputations with Shelby County homeowners for being reliable, clean, and family-friendly. I'd start with whichever is closest to your neighborhood!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}

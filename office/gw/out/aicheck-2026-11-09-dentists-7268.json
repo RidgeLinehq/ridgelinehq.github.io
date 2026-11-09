@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-09-dentists-7268",
+ "at": "2026-11-09T13:33:22Z",
+ "results": [
+  {
+   "key": "van-buren-ar-dentist",
+   "question": "Who are the best dentists in Van Buren, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me for dental recommendations in Van Buren, here are the top three local spots I\u2019d point them to:\n\n*   **Koonce Family Dentistry:** Dr. Mark Koonce is a local staple. If you want a traditional, family-oriented practice where the team remembers your name and treats kids and adults with equal care, this is the spot. They\u2019re honest, gentle, and never try to upsell unnecessary work.\n*   **Ridgeview Dental (Dr. Michael Higgins):** Perfect if you\u2019re looking for a comfortable, modern office with the latest technology. Dr. Higgins and his staff are exceptionally patient and gentle, making them a great choice if you get a little anxious about dental visits. \n*   **Van Buren Dentistry:** A reliable, high-rated option for busy families. They handle everything from routine cleanings to cosmetic procedures, their scheduling is flexible, and the front-office staff makes dealing with insurance simple and painless.\n\nYou really can\u2019t go wrong with any of these\u2014they all have fantastic reputations around town and treat their patients like neighbors.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "marion-ar-dentist",
+   "question": "Who are the best dentists in Marion, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy dental care right here in Marion, here are the top local practices I\u2019d recommend to a neighbor:\n\n*   **Marion Dental Clinic:** Dr. Kenneth Magness and his team are community staples. They\u2019re fantastic for the whole family, consistently on schedule, and known for a gentle touch\u2014ideal if you have kids or get anxious about dental visits. \n*   **Fitts Dental Clinic (Dr. Joe Fitts):** A fantastic option if you prefer a smaller, highly personalized feel. Dr. Fitts takes the time to thoroughly explain treatments, focuses heavily on preventive care, and uses modern tech to keep procedures quick and comfortable.\n*   **Reddick Family Dentistry:** (Located right on the Marion/West Memphis border). They are a go-to for many locals because of their honest, upfront pricing, friendly front-desk staff, and ability to squeeze you in quickly for unexpected dental emergencies.\n\n**My take:** For routine family cleanings and a seamless office experience, **Marion Dental Clinic** is hard to beat. If you want a smaller office with extra one-on-one time with the dentist, book with **Dr. Fitts**.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "wynne-ar-dentist",
+   "question": "Who are the best dentists in Wynne, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you're looking for reliable dental care in Wynne, three local practices consistently come top-recommended by neighbors:\n\n*   **Wynne Dental Clinic (Dr. Matt Ford & Dr. Mike Ford):** A true hometown staple. They are fantastic for routine family cleanings, crowns, and preventive care. The staff is exceptionally warm, efficient, and great at keeping anxious patients comfortable.\n*   **Bridges Family Dentistry (Dr. T.J. Bridges):** Hands-down one of the best spots if you have kids or prefer a highly personalized, small-town touch. Dr. Bridges takes time to explain every option clearly without rushing you, and the office is modern and spotless. \n*   **Cross County Dental Center:** A great choice if you need comprehensive or emergency work (like a sudden toothache or repair). They use updated dental tech, handle complex procedures locally so you don't have to drive to Jonesboro or Memphis, and work well with most insurance plans.\n\n**Why these three?** All of them have deep roots in Cross County, stellar reviews for gentle care, and front-desk teams that treat you like a neighbor rather than a chart number.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "dardanelle-ar-dentist",
+   "question": "Who are the best dentists in Dardanelle, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you want great dental care right here in town without having to cross the bridge into Russellville, here are the top local recommendations:\n\n**1. Dardanelle Family Dental (Dr. Justin Acord)**\nThis is a top pick for complete family care. Dr. Acord and his staff are exceptionally gentle and patient\u2014a huge plus if you have kids or dental anxiety. The clinic is modern, clean, and honest; they focus on high-quality preventative care and crowns without trying to upsell you on unnecessary procedures. \n\n**2. Dardanelle Dental Clinic (Dr. Scott Sappenfield)**\nA long-standing staple in our community, Dr. Sappenfield offers trustworthy, down-to-earth service. He\u2019s highly experienced and straightforward about what work actually needs to be done. It\u2019s an ideal practice for reliable routine maintenance, fillings, and handling sudden dental emergencies quickly.\n\nBoth of these offices have welcoming front-desk teams that make navigating insurance easy and treat you like a neighbor rather than just another appointment on the schedule. You\u2019re in good hands with either one!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "sallisaw-ok-dentist",
+   "question": "Who are the best dentists in Sallisaw, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a reliable local dentist here in Sallisaw, a few practices always come at the top of neighbor recommendations:\n\n*   **Sallisaw Dental Care** (Dr. Justin White & team): This is the top pick for most families. They operate a modern office, handle everything from routine cleanings to complex procedures like implants, and are fantastic about fitting you in quickly if a dental emergency pops up.\n*   **Sequoyah Dental** (Dr. Chris O\u2019Rorke): If you or your kids get anxious about dental visits, this is your spot. The staff is known throughout town for being exceptionally gentle, patient, and welcoming, which takes the stress out of regular checkups.\n*   **Ecker Dental**: A long-standing, trusted staple in our community. Dr. Arthur Ecker provides reliable, highly experienced care with a classic small-town personal touch where they actually take the time to get to know you.\n\nIf you want a modern, all-in-one clinic for the whole family, go with **Sallisaw Dental Care**. If you prefer a quieter, ultra-gentle environment, **Sequoyah Dental** is hard to beat.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "tecumseh-ok-dentist",
+   "question": "Who are the best dentists in Tecumseh, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in Tecumseh looking for dental care, you don\u2019t have to drive into Shawnee for quality work. Here are the local practices I\u2019d recommend checking out:\n\n**1. Tecumseh Family Dentistry**  \n*Why them:* Located right on Broadway, they are the go-to neighborhood spot for routine family care. Homeowners love them because they take the stress out of dental visits for kids and adults alike. Their staff is exceptionally warm, and they handle everything from routine cleanings to fillings without making you feel rushed. \n\n**2. Shawnee Dental (Servicing Tecumseh)**  \n*Why them:* While technically just a few minutes down the road in Shawnee, almost every Tecumseh homeowner uses them for major procedures. If you need crowns, bridges, or emergency dental work, their team is top-tier. They have modern equipment and a great reputation for handling insurance smoothly\u2014huge pluses when you're managing a household budget.\n\n**My advice:** Call Tecumseh Family Dentistry first to see if they're taking new patients for your routine cleanings. If you need specialized restorative work, head just down the highway to Shawnee Dental.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
