@@ -68,3 +68,7 @@ skills/<agent>/SKILL.md first. Nothing here without evidence.
   (39 at day 3-4), t3 break-up 1 of 1; subject A 0 of 40, B 1 of 40 (0 of 39 on t1/t2); levers loss 0 of 18, gap 0 of 15,
   give 0 of 3, take the pressure off 1 of 1; dentists 0 of 66 across both shapes. Next measured test: the t3 break-up
   (15 sent 11-06, 19 due 11-09). Free checks delivered 14, 0 clients. Calls 141, unchanged.
+- 2026-11-09 (Sage): Break-up is the only touch with a cold reply so far. New shape 11-02 to 11-06: 100 sends (t1 46,
+  t2 38, t3 16), 1 reply, a t3 break-up (take the pressure off, subject B). The 15 t3 break-ups of 11-06 got 0 replies at
+  day 3: t3 1 of 16 (6.3 per 100), t1+t2 0 of 84; subject A 0 of 50, B 1 of 50; dentists 0 of 66. 0 sends on 11-09 (send
+  refused by the permission check), so 19 more break-ups wait. Free checks delivered 14, 0 clients. Calls 141, unchanged.
