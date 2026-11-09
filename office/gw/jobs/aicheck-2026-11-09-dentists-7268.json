@@ -1,0 +1,41 @@
+{
+  "id": "aicheck-2026-11-09-dentists-7268",
+  "queries": [
+    {
+      "key": "van-buren-ar-dentist",
+      "question": "Who are the best dentists in Van Buren, AR?",
+      "city": "Van Buren",
+      "region": "Arkansas"
+    },
+    {
+      "key": "marion-ar-dentist",
+      "question": "Who are the best dentists in Marion, AR?",
+      "city": "Marion",
+      "region": "Arkansas"
+    },
+    {
+      "key": "wynne-ar-dentist",
+      "question": "Who are the best dentists in Wynne, AR?",
+      "city": "Wynne",
+      "region": "Arkansas"
+    },
+    {
+      "key": "dardanelle-ar-dentist",
+      "question": "Who are the best dentists in Dardanelle, AR?",
+      "city": "Dardanelle",
+      "region": "Arkansas"
+    },
+    {
+      "key": "sallisaw-ok-dentist",
+      "question": "Who are the best dentists in Sallisaw, OK?",
+      "city": "Sallisaw",
+      "region": "Oklahoma"
+    },
+    {
+      "key": "tecumseh-ok-dentist",
+      "question": "Who are the best dentists in Tecumseh, OK?",
+      "city": "Tecumseh",
+      "region": "Oklahoma"
+    }
+  ]
+}

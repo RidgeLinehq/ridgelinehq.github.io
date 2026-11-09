@@ -1,0 +1,41 @@
+{
+  "id": "aicheck-2026-11-09-overflow-39a4",
+  "queries": [
+    {
+      "key": "leeds-al-dentist",
+      "question": "Who are the best dentists in Leeds, AL?",
+      "city": "Leeds",
+      "region": "Alabama"
+    },
+    {
+      "key": "tallassee-al-dentist",
+      "question": "Who are the best dentists in Tallassee, AL?",
+      "city": "Tallassee",
+      "region": "Alabama"
+    },
+    {
+      "key": "saraland-al-dentist",
+      "question": "Who are the best dentists in Saraland, AL?",
+      "city": "Saraland",
+      "region": "Alabama"
+    },
+    {
+      "key": "heber-springs-ar-auto-repair",
+      "question": "Who are the best auto repair shops in Heber Springs, AR?",
+      "city": "Heber Springs",
+      "region": "Arkansas"
+    },
+    {
+      "key": "tecumseh-ok-auto-repair",
+      "question": "Who are the best auto repair shops in Tecumseh, OK?",
+      "city": "Tecumseh",
+      "region": "Oklahoma"
+    },
+    {
+      "key": "calera-al-auto-repair",
+      "question": "Who are the best auto repair shops in Calera, AL?",
+      "city": "Calera",
+      "region": "Alabama"
+    }
+  ]
+}

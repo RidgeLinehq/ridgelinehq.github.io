@@ -1,0 +1,41 @@
+{
+  "id": "aicheck-2026-11-09-auto-90b3",
+  "queries": [
+    {
+      "key": "pell-city-al-auto-repair",
+      "question": "Who are the best auto repair shops in Pell City, AL?",
+      "city": "Pell City",
+      "region": "Alabama"
+    },
+    {
+      "key": "leeds-al-auto-repair",
+      "question": "Who are the best auto repair shops in Leeds, AL?",
+      "city": "Leeds",
+      "region": "Alabama"
+    },
+    {
+      "key": "marion-ar-auto-repair",
+      "question": "Who are the best auto repair shops in Marion, AR?",
+      "city": "Marion",
+      "region": "Arkansas"
+    },
+    {
+      "key": "owasso-ok-dentist",
+      "question": "Who are the best dentists in Owasso, OK?",
+      "city": "Owasso",
+      "region": "Oklahoma"
+    },
+    {
+      "key": "owasso-ok-auto-repair",
+      "question": "Who are the best auto repair shops in Owasso, OK?",
+      "city": "Owasso",
+      "region": "Oklahoma"
+    },
+    {
+      "key": "owasso-ok-barber",
+      "question": "Who are the best barbershops in Owasso, OK?",
+      "city": "Owasso",
+      "region": "Oklahoma"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "id": "aicheck-2026-11-09-dentists2-fcda",
+  "queries": [
+    {
+      "key": "el-reno-ok-dentist",
+      "question": "Who are the best dentists in El Reno, OK?",
+      "city": "El Reno",
+      "region": "Oklahoma"
+    },
+    {
+      "key": "blackwell-ok-dentist",
+      "question": "Who are the best dentists in Blackwell, OK?",
+      "city": "Blackwell",
+      "region": "Oklahoma"
+    },
+    {
+      "key": "anadarko-ok-dentist",
+      "question": "Who are the best dentists in Anadarko, OK?",
+      "city": "Anadarko",
+      "region": "Oklahoma"
+    },
+    {
+      "key": "skiatook-ok-dentist",
+      "question": "Who are the best dentists in Skiatook, OK?",
+      "city": "Skiatook",
+      "region": "Oklahoma"
+    },
+    {
+      "key": "pell-city-al-dentist",
+      "question": "Who are the best dentists in Pell City, AL?",
+      "city": "Pell City",
+      "region": "Alabama"
+    },
+    {
+      "key": "calera-al-dentist",
+      "question": "Who are the best dentists in Calera, AL?",
+      "city": "Calera",
+      "region": "Alabama"
+    }
+  ]
+}
