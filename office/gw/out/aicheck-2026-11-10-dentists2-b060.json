@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-10-dentists2-b060",
+ "at": "2026-11-10T13:58:13Z",
+ "results": [
+  {
+   "key": "hueytown-al-dentist",
+   "question": "Who are the best dentists in Hueytown, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable local dentists right here in Hueytown, here are the top practices I\u2019d recommend to any neighbor:\n\n*   **Benton Family Dentistry:** A true local staple right on Hueytown Road. The Bentons run a warm, family-oriented office that\u2019s fantastic for everything from routine cleanings to crowns. The staff is welcoming, punctual, and great with kids.\n*   **Hueytown Dental Center:** Conveniently located on Allison-Bonnett Memorial Drive, Dr. Everts and his team offer top-tier, modern care. They handle everything from preventive maintenance to complex cosmetic work and implants, and they\u2019re famously gentle if you get anxious in the chair.\n*   **Medical Center Dental Care (Just down the road in Bessemer):** If you don't mind a 5-minute drive, Dr. Cable and his team are widely trusted by Hueytown residents. They\u2019re known for honest, conservative care\u2014they\u2019ll never try to upsell you on unnecessary procedures, and their pricing is very transparent.\n\nFor great bedside manner, fair pricing, and trustworthy service, you can't go wrong with any of these choices.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "selma-al-dentist",
+   "question": "Who are the best dentists in Selma, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a reliable local dentist in Selma, here are the top practices I\u2019d recommend to any neighbor:\n\n**1. Avery & Avery Dentistry**\nA true Selma staple. The Avery family has been caring for local smiles for decades. They\u2019re fantastic for routine family care and are known for being extremely gentle, trustworthy, and welcoming. Perfect if you want a practice with deep community roots.\n\n**2. Stewart Family Dentistry (Dr. Stephen Stewart)**\nDr. Stewart and his team run a clean, modern, and highly comfortable office. Locals love them for their friendly bedside manner, punctual scheduling, and thorough approach to preventive care and restorations. \n\n**3. Parkman Dental (Dr. Paul Parkman)**\nA great choice for comprehensive general and cosmetic dentistry. Dr. Parkman is known for taking the time to explain your options clearly without pressuring you into unnecessary procedures, and his staff makes scheduling and insurance seamless. \n\nAll three have outstanding reputations in town, so you really can't go wrong depending on which location is most convenient for your household.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "jacksonville-al-dentist",
+   "question": "Who are the best dentists in Jacksonville, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a reliable local dentist here in Jacksonville, a few practices consistently come top-recommended by neighbors:\n\n*   **Jacksonville Family Dentistry**: This is the go-to for most local families. Dr. Followell and his team are known for being exceptionally gentle and great with kids. The office is modern, takes most insurance, and covers everything from routine cleanings to advanced procedures under one roof.\n*   **Williams Family Dentistry**: Dr. Mark Williams has a fantastic reputation for traditional, honest care. If you prefer a cozy, small-town practice where the dentist actually takes time to chat with you and never pushes unnecessary treatments, this is your best bet. \n*   **Jacksonville Dental Care**: A great choice if you value up-to-date dental tech and flexible scheduling. They\u2019re highly rated for painless procedures, quick emergency appointments, and top-tier cosmetic work.\n\n**Bottom line for a homeowner:** If you have a busy family and want a modern practice that can get everyone in efficiently, book with **Jacksonville Family Dentistry**. If you want a close-knit, long-term relationship with a classic neighborhood dentist, call **Williams Family Dentistry**.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "bella-vista-ar-dentist",
+   "question": "Who are the best dentists in Bella Vista, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "As a fellow homeowner, having a reliable local dentist you can trust is just as important as having a good contractor. Here are three top-rated Bella Vista practices I\u2019d recommend to any neighbor:\n\n1. **Bella Vista Dental Arts:** Dr. John Morrow and his team are highly praised for their gentle approach and thorough care. They use modern technology for everything from routine cleanings to implants, and they excel at making nervous patients feel completely comfortable. \n\n2. **Osborn Dental:** Dr. Chris Osborn runs a fantastic, family-oriented practice. Locals love this office for its punctual appointment times, friendly staff, and upfront, transparent pricing with no high-pressure sales tactics.\n\n3. **Bella Vista Family Dental:** A great option if you want a dependable practice for the whole household. They offer comprehensive preventive and restorative care, handle dental emergencies quickly, and genuinely treat you like a neighbor rather than a chart number.\n\nAll three have outstanding reviews from long-time NWA residents and accept most major insurance plans. I'd call whichever one is closest to your village to see who has an opening that fits your schedule!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "texarkana-ar-dentist",
+   "question": "Who are the best dentists in Texarkana, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in Texarkana looking for a reliable family dentist, here are the local practices I\u2019d recommend to my neighbors:\n\n*   **Texarkana Dental Care:** They are a go-to for busy families because they handle everything under one roof\u2014from routine cleanings to implants\u2014and their hours are super convenient for working homeowners. \n*   **Discovery Dental:** Dr. Hveem and the team are fantastic if you have dental anxiety. Their office is modern, the staff is exceptionally welcoming, and they really take the time to explain treatments without rushing you.\n*   **Smile Crafters:** If you need cosmetic work or restorative care, these folks do phenomenal work. Their attention to detail is top-notch, and the office environment feels more like a upscale lounge than a clinic.\n\nAny of these three will take great care of your household's smiles!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "oxford-al-dentist",
+   "question": "Who are the best dentists in Oxford, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in Oxford looking for a reliable dentist for the family, here are three local practices I\u2019d recommend:\n\n**1. Oxford Dental Care**\n*   **Why:** Located right in town, they are a go-to for families because of their comprehensive care and welcoming staff. Whether you need routine cleanings, pediatric dentistry, or restorative work like crowns, they handle it efficiently. Homeowners love their convenient scheduling and gentle approach with nervous patients.\n\n**2. Bucy Dental**\n*   **Why:** Dr. Bucy has built a fantastic reputation in the local community for high-end cosmetic and restorative dentistry. If you\u2019re looking to invest in veneers, implants, or just want a meticulous check-up, this is the place. Neighbors often praise their modern office and the thorough, unhurried attention you get from the dentist.\n\n**3. Oxford Family Dentistry**\n*   **Why:** Known for a warm, neighborly atmosphere, they excel at preventative and emergency care. If a family member chips a tooth over the weekend, they are known for accommodating urgent needs quickly. \n\nFor routine neighborhood maintenance, stick with **Oxford Dental Care**, but if you want specialized cosmetic work, book a consultation at **Bucy Dental**.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}

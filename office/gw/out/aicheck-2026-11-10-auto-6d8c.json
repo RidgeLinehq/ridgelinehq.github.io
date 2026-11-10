@@ -1,0 +1,70 @@
+{
+ "id": "aicheck-2026-11-10-auto-6d8c",
+ "at": "2026-11-10T13:55:42Z",
+ "results": [
+  {
+   "key": "selma-al-auto-repair",
+   "question": "Who are the best auto repair shops in Selma, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy mechanics in Selma, here are the top local spots I recommend to neighbors:\n\n*   **Moore-Vickers Tire & Auto:** A long-standing staple in Selma. They are my top recommendation for routine maintenance, tires, and major repairs. They\u2019re known for honest pricing, clear communication, and never upselling you on work you don't actually need.\n*   **Selma Tire & Alignment:** Excellent for suspension issues, brake work, and alignment. They have a great reputation for fast turnaround times and friendly, down-to-earth customer service that makes you feel like family.\n*   **Standard Auto Repair:** A solid choice for trickier diagnostic work, electrical issues, or engine trouble. The mechanics here are knowledgeable, straightforward, and give you honest assessments before starting any job. \n\nFor peace of mind, stick with these established local businesses\u2014they rely on community trust and take pride in keeping Selma driving safely.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "mustang-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Mustang, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me where to take their car in Mustang, here are the specific local shops I\u2019d recommend:\n\n**1. Christian Brothers Automotive (Mustang Rd):** \nMy top pick for major repairs and overall customer service. They send clear digital photo inspections to your phone before doing any work so you can see exactly what\u2019s wrong. Their 3-year/36,000-mile warranty gives great peace of mind, and they even offer a free shuttle to drop you back home while your car is serviced.\n\n**2. Mustang Car Care:** \nA fantastic, long-standing local shop right in town. They\u2019re widely trusted for fair pricing, quick turnarounds, and straightforward advice. They won\u2019t try to upsell you on unnecessary extras, making them my go-to for routine maintenance, oil changes, and brakes.\n\n**3. Integrity Auto Care (Mustang/Yukon border):** \nA favorite among Mustang residents for tricky diagnostic issues. The mechanics here are extremely honest; they'll tell you upfront what needs to be fixed immediately for safety versus what can wait until your next paycheck. \n\nYou really can't go wrong with any of these three for reliable, neighborhood-level service.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "jenks-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Jenks, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you live in Jenks and need a reliable mechanic, here are the local shops I\u2019d trust with my own vehicles:\n\n**1. Tate Automotive**\nHands down, one of the most honest operations around. They are locally owned and have built a stellar reputation for Jenks and South Tulsa residents. Whether it\u2019s routine maintenance or a complex engine diagnostic, they take the time to explain what\u2019s actually wrong without pushing unnecessary repairs. \n\n**2. Christian Brothers Automotive (Jenks)**\nWhile technically a franchise, the Jenks location is locally operated and sets the gold standard for customer service. Their waiting room is spotless, they send digital inspection reports with photos right to your phone, and their work is backed by a great warranty. It\u2019s a bit pricier than a mom-and-pop shop, but the peace of mind and professionalism are worth it.\n\n**3. Riverside Auto Repair**\nIf you want a traditional, no-nonsense neighborhood garage, this is it. They\u2019ve been serving the area for years, and their mechanics are old-school experts who know how to fix things right the first time. They\u2019re straightforward, fair on pricing, and won't upsell you.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "bella-vista-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Bella Vista, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you live in Bella Vista, you know our winding, hilly roads and steep driveways are tough on vehicles. When car trouble strikes, you want someone local, honest, and reliable. Here are the shops I trust and recommend to my neighbors:\n\n**1. Bella Vista Automotive**\nThey are right in town, which is super convenient. What I love about them is their transparency\u2014they\u2019ll show you the worn part, explain what needs fixing without the mechanic jargon, and never push unnecessary services. Great for routine maintenance and diagnostics.\n\n**2. Slaughter\u2019s Service Center**\nJust down the road in Bentonville, Slaughter\u2019s is a staple for folks in our area who don\u2019t mind a short drive for top-tier work. They are a family-owned institution known for old-school customer service and deep mechanical expertise. If you have a stubborn issue other shops can't figure out, this is the place to go.\n\n**3. Firestone Complete Auto Care (Bentonville/Bella Vista border)**\nIf you need standardized work like tires, alignments, or quick brake jobs, their location near the interstate is hard to beat. They offer solid warranties that are easy to honor if you travel.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
