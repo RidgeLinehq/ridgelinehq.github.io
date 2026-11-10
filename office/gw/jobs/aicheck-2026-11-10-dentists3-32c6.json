@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-10-dentists3-32c6",
+ "queries": [
+  {
+   "key": "maumelle-ar-dentist",
+   "question": "Who are the best dentists in Maumelle, AR?",
+   "city": "Maumelle",
+   "region": "Arkansas"
+  },
+  {
+   "key": "choctaw-ok-dentist",
+   "question": "Who are the best dentists in Choctaw, OK?",
+   "city": "Choctaw",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "helena-al-dentist",
+   "question": "Who are the best dentists in Helena, AL?",
+   "city": "Helena",
+   "region": "Alabama"
+  },
+  {
+   "key": "northport-al-auto-repair",
+   "question": "Who are the best auto repair shops in Northport, AL?",
+   "city": "Northport",
+   "region": "Alabama"
+  },
+  {
+   "key": "glenpool-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Glenpool, OK?",
+   "city": "Glenpool",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "hueytown-al-auto-repair",
+   "question": "Who are the best auto repair shops in Hueytown, AL?",
+   "city": "Hueytown",
+   "region": "Alabama"
+  }
+ ]
+}

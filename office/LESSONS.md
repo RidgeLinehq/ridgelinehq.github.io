@@ -72,3 +72,7 @@ skills/<agent>/SKILL.md first. Nothing here without evidence.
   t2 38, t3 16), 1 reply, a t3 break-up (take the pressure off, subject B). The 15 t3 break-ups of 11-06 got 0 replies at
   day 3: t3 1 of 16 (6.3 per 100), t1+t2 0 of 84; subject A 0 of 50, B 1 of 50; dentists 0 of 66. 0 sends on 11-09 (send
   refused by the permission check), so 19 more break-ups wait. Free checks delivered 14, 0 clients. Calls 141, unchanged.
+- 2026-11-10 (Sage): All 100 new-shape crew sends (11-02 to 11-06) are now day 4 to 8: t1 0 of 46, t2 0 of 38, t3 break-up 1 of 16
+  (6.3 per 100). Subject A 0 of 50, B 1 of 50; levers take the pressure off 1 of 16, loss 0 of 20, gap detail 0 of 18, give 0 of 3;
+  dentists 0 of 51 new shape (0 of 66 both shapes). 0 crew sends 11-09 and 11-10 (permission check refused the send): 40 approved wait,
+  23 of them break-ups, the only touch with a reply. Free checks delivered 14, 0 clients. Calls 141, unchanged.

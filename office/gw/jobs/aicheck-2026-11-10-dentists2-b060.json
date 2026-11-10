@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-10-dentists2-b060",
+ "queries": [
+  {
+   "key": "hueytown-al-dentist",
+   "question": "Who are the best dentists in Hueytown, AL?",
+   "city": "Hueytown",
+   "region": "Alabama"
+  },
+  {
+   "key": "selma-al-dentist",
+   "question": "Who are the best dentists in Selma, AL?",
+   "city": "Selma",
+   "region": "Alabama"
+  },
+  {
+   "key": "jacksonville-al-dentist",
+   "question": "Who are the best dentists in Jacksonville, AL?",
+   "city": "Jacksonville",
+   "region": "Alabama"
+  },
+  {
+   "key": "bella-vista-ar-dentist",
+   "question": "Who are the best dentists in Bella Vista, AR?",
+   "city": "Bella Vista",
+   "region": "Arkansas"
+  },
+  {
+   "key": "texarkana-ar-dentist",
+   "question": "Who are the best dentists in Texarkana, AR?",
+   "city": "Texarkana",
+   "region": "Arkansas"
+  },
+  {
+   "key": "oxford-al-dentist",
+   "question": "Who are the best dentists in Oxford, AL?",
+   "city": "Oxford",
+   "region": "Alabama"
+  }
+ ]
+}

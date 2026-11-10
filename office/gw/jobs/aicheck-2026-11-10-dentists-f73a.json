@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-10-dentists-f73a",
+ "queries": [
+  {
+   "key": "trussville-al-dentist",
+   "question": "Who are the best dentists in Trussville, AL?",
+   "city": "Trussville",
+   "region": "Alabama"
+  },
+  {
+   "key": "mustang-ok-dentist",
+   "question": "Who are the best dentists in Mustang, OK?",
+   "city": "Mustang",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "west-memphis-ar-dentist",
+   "question": "Who are the best dentists in West Memphis, AR?",
+   "city": "West Memphis",
+   "region": "Arkansas"
+  },
+  {
+   "key": "northport-al-dentist",
+   "question": "Who are the best dentists in Northport, AL?",
+   "city": "Northport",
+   "region": "Alabama"
+  },
+  {
+   "key": "glenpool-ok-dentist",
+   "question": "Who are the best dentists in Glenpool, OK?",
+   "city": "Glenpool",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "jenks-ok-dentist",
+   "question": "Who are the best dentists in Jenks, OK?",
+   "city": "Jenks",
+   "region": "Oklahoma"
+  }
+ ]
+}

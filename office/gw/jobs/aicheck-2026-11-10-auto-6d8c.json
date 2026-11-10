@@ -1,0 +1,29 @@
+{
+ "id": "aicheck-2026-11-10-auto-6d8c",
+ "queries": [
+  {
+   "key": "selma-al-auto-repair",
+   "question": "Who are the best auto repair shops in Selma, AL?",
+   "city": "Selma",
+   "region": "Alabama"
+  },
+  {
+   "key": "mustang-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Mustang, OK?",
+   "city": "Mustang",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "jenks-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Jenks, OK?",
+   "city": "Jenks",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "bella-vista-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Bella Vista, AR?",
+   "city": "Bella Vista",
+   "region": "Arkansas"
+  }
+ ]
+}
