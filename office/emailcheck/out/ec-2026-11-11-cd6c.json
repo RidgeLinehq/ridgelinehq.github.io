@@ -1,0 +1,34 @@
+{
+ "id": "ec-2026-11-11-cd6c",
+ "at": "2026-11-11T13:47:07.632434Z",
+ "domains": {
+  "brookwooddental.com": {
+   "mx": true,
+   "why": "MX brookwooddental-com.mail.protection.outlook.com"
+  },
+  "carexpertsok.com": {
+   "mx": true,
+   "why": "MX alt3.aspmx.l.google.com"
+  },
+  "clayellisdmd.com": {
+   "mx": true,
+   "why": "MX clayellisdmd-com.p40.mxthunder.net"
+  },
+  "deerfootdentist.com": {
+   "mx": true,
+   "why": "MX aspmx.l.google.com"
+  },
+  "mintdentalar.com": {
+   "mx": true,
+   "why": "MX ASPMX.L.GOOGLE.com"
+  },
+  "rainbowcityfamilydentistry.com": {
+   "mx": true,
+   "why": "MX rainbowcityfamilydentistry.com"
+  },
+  "vestaviasmiles.net": {
+   "mx": true,
+   "why": "MX alt3.aspmx.l.google.com"
+  }
+ }
+}
