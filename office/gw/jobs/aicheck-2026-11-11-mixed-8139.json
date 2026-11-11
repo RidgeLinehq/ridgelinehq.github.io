@@ -1,0 +1,29 @@
+{
+ "id": "aicheck-2026-11-11-mixed-8139",
+ "queries": [
+  {
+   "key": "hokes-bluff-al-auto-repair",
+   "question": "Who are the best auto repair shops in Hokes Bluff, AL?",
+   "city": "Hokes Bluff",
+   "region": "Alabama"
+  },
+  {
+   "key": "homewood-al-dentist",
+   "question": "Who are the best dentists in Homewood, AL?",
+   "city": "Homewood",
+   "region": "Alabama"
+  },
+  {
+   "key": "vestavia-hills-al-dentist",
+   "question": "Who are the best dentists in Vestavia Hills, AL?",
+   "city": "Vestavia Hills",
+   "region": "Alabama"
+  },
+  {
+   "key": "pinson-al-dentist",
+   "question": "Who are the best dentists in Pinson, AL?",
+   "city": "Pinson",
+   "region": "Alabama"
+  }
+ ]
+}

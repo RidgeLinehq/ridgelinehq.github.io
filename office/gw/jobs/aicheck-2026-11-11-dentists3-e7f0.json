@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-11-dentists3-e7f0",
+ "queries": [
+  {
+   "key": "centerton-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Centerton, AR?",
+   "city": "Centerton",
+   "region": "Arkansas"
+  },
+  {
+   "key": "prairie-grove-ar-dentist",
+   "question": "Who are the best dentists in Prairie Grove, AR?",
+   "city": "Prairie Grove",
+   "region": "Arkansas"
+  },
+  {
+   "key": "farmington-ar-dentist",
+   "question": "Who are the best dentists in Farmington, AR?",
+   "city": "Farmington",
+   "region": "Arkansas"
+  },
+  {
+   "key": "gadsden-al-dentist",
+   "question": "Who are the best dentists in Gadsden, AL?",
+   "city": "Gadsden",
+   "region": "Alabama"
+  },
+  {
+   "key": "gadsden-al-auto-repair",
+   "question": "Who are the best auto repair shops in Gadsden, AL?",
+   "city": "Gadsden",
+   "region": "Alabama"
+  },
+  {
+   "key": "rainbow-city-al-dentist",
+   "question": "Who are the best dentists in Rainbow City, AL?",
+   "city": "Rainbow City",
+   "region": "Alabama"
+  }
+ ]
+}

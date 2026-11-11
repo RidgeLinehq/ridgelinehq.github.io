@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-11-dentists-037e",
+ "queries": [
+  {
+   "key": "yukon-ok-dentist",
+   "question": "Who are the best dentists in Yukon, OK?",
+   "city": "Yukon",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "yukon-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Yukon, OK?",
+   "city": "Yukon",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "bethany-ok-dentist",
+   "question": "Who are the best dentists in Bethany, OK?",
+   "city": "Bethany",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "del-city-ok-dentist",
+   "question": "Who are the best dentists in Del City, OK?",
+   "city": "Del City",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "newcastle-ok-dentist",
+   "question": "Who are the best dentists in Newcastle, OK?",
+   "city": "Newcastle",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "newcastle-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Newcastle, OK?",
+   "city": "Newcastle",
+   "region": "Oklahoma"
+  }
+ ]
+}

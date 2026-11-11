@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-11-dentists2-c422",
+ "queries": [
+  {
+   "key": "tuttle-ok-dentist",
+   "question": "Who are the best dentists in Tuttle, OK?",
+   "city": "Tuttle",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "kingfisher-ok-dentist",
+   "question": "Who are the best dentists in Kingfisher, OK?",
+   "city": "Kingfisher",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "chandler-ok-dentist",
+   "question": "Who are the best dentists in Chandler, OK?",
+   "city": "Chandler",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "hot-springs-ar-dentist",
+   "question": "Who are the best dentists in Hot Springs, AR?",
+   "city": "Hot Springs",
+   "region": "Arkansas"
+  },
+  {
+   "key": "hot-springs-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Hot Springs, AR?",
+   "city": "Hot Springs",
+   "region": "Arkansas"
+  },
+  {
+   "key": "centerton-ar-dentist",
+   "question": "Who are the best dentists in Centerton, AR?",
+   "city": "Centerton",
+   "region": "Arkansas"
+  }
+ ]
+}
