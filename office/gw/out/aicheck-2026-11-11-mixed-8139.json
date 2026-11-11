@@ -1,0 +1,70 @@
+{
+ "id": "aicheck-2026-11-11-mixed-8139",
+ "at": "2026-11-11T13:52:34Z",
+ "results": [
+  {
+   "key": "hokes-bluff-al-auto-repair",
+   "question": "Who are the best auto repair shops in Hokes Bluff, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you live in Hokes Bluff, keeping your car running is essential since we do a lot of driving out toward Gadsden or down the county roads. When I need work done, a few local shops stand out for their honesty and skill.\n\nFirst, **Hokes Bluff Auto Repair** right here in town is my top go-to. Neighbors love them because they\u2019re close by and genuinely trustworthy. Whether it's a routine oil change, brakes, or tracking down a mysterious engine light, they explain the problem clearly without trying to upsell you on repairs you don't need. \n\nIf you have a bigger issue\u2014like major engine work or transmission trouble\u2014it\u2019s worth the short drive down to Gadsden to use **Express Oil Change & Tire Engineers** or **B&M Automotive**. B&M has a fantastic local reputation for heavy-duty diagnostics and fair pricing, while Express is unbeatable when you need fast, reliable service on tires or fluid changes without waiting all day.\n\nFor everyday maintenance right in our backyard, stick with Hokes Bluff Auto, and you\u2019ll be in good hands.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "homewood-al-dentist",
+   "question": "Who are the best dentists in Homewood, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "As a local homeowner, having a trusted, reliable dentist nearby is a must. Here are the top three practices in Homewood I\u2019d recommend to any neighbor:\n\n*   **Homewood Family & Cosmetic Dentistry (Dr. Mary Catherine Sasser):** Located right off Oxmoor Road, Dr. Sasser\u2019s office is warm, welcoming, and family-friendly. They excel at preventive care and treat patients of all ages, so you can bring the whole household to one place. Plus, they\u2019re known for honest advice and never pushing unnecessary treatments.\n*   **Edgewood Dental:** Tucked right in the heart of the Edgewood neighborhood, this practice wins on both convenience and quality. They offer everything from routine cleanings to advanced cosmetic and restorative work in a modern, comfortable space. The staff is famously accommodating with busy family schedules.\n*   **DeShazer Dental (Dr. Eric DeShazer):** If you're looking for state-of-the-art technology paired with a traditional, patient-first approach, Dr. DeShazer is fantastic. He takes time to thoroughly explain procedures, making it a great choice if you have any dental anxiety or need complex work done. \n\nAll three have outstanding local reputations and treat you like a neighbor, not just a chart number.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "vestavia-hills-al-dentist",
+   "question": "Who are the best dentists in Vestavia Hills, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in Vestavia Hills looking for a reliable dental practice close to the neighborhood, here are three local offices I\u2019d recommend checking out:\n\n*   **Vestavia Family Dentistry:** Located right on Montgomery Highway, they are a go-to for families. Neighbors love them because they handle everything from routine cleanings to cosmetic work in-house, making scheduling easy for busy households. \n*   **Draggingue Dentistry:** Dr. Dragdraggingue has built a stellar local reputation for meticulous cosmetic and restorative care. Homeowners frequently praise the office for its calm atmosphere, state-of-the-art tech, and a staff that genuinely remembers your name.\n*   **Liberty Park Dental:** If you live on the eastern side of Vestavia near the Liberty Park area, this is your spot. They are known for exceptional preventative care, a very kid-friendly environment, and minimal wait times\u2014huge pluses when you're trying to juggle school and work schedules.\n\nWhen choosing, I\u2019d suggest calling to check if they take your specific insurance, as proximity and coverage are key for routine family visits!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "pinson-al-dentist",
+   "question": "Who are the best dentists in Pinson, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a reliable local dentist right here in Pinson, a few neighborhood favorites stand out:\n\n*   **Pinson Dental Associates:** They are the go-to for complete family care. The staff is fantastic at keeping kids comfortable, and they focus on solid preventive care without trying to upsell unnecessary procedures. \n*   **Deerfoot Dental:** Located right on Deerfoot Parkway, this is a top pick if you want a modern office. Dr. Cates and his team use updated technology, keep everything spotlessly clean, and are known for being exceptionally gentle during cleanings and fillings.\n*   **Pinson Family Dentistry (Dr. Kevin Jowers):** Ideal if you get a little anxious about dental visits. Dr. Jowers takes time to walk you through your treatment options, and the office has a warm, small-town feel where they treat you like a neighbor.\n\n**Neighborly tip:** All three have great reps for emergency visits if you ever break a tooth, but definitely call ahead to double-check that they take your specific insurance plan before booking!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}

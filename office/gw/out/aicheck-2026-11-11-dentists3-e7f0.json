@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-11-dentists3-e7f0",
+ "at": "2026-11-11T13:49:38Z",
+ "results": [
+  {
+   "key": "centerton-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Centerton, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you're looking for trustworthy mechanics right here in Centerton, these are the local spots I\u2019d recommend to a neighbor:\n\n*   **Centerton Automotive:** This is your best bet for major repairs, engine work, and tricky diagnostics. They\u2019re a classic independent local shop\u2014honest, transparent about pricing, and they won't try to upsell you on unnecessary services. \n*   **Direct Tire & Auto:** My top choice for routine maintenance, brake jobs, tires, and suspension. They\u2019re great about communicating upfront costs, their turn-around times are fast, and the staff is genuinely friendly.\n*   **Express Oil Change & Tire Engineers (Centerton Blvd):** Ideal for quick oil changes, battery replacements, and state inspections. Being able to stay in your car for simple services is a huge time-saver when you've got a busy schedule.\n\n**Why these three?** Finding mechanics who combine fair pricing with old-school customer service can be tough as our town grows, but these shops consistently deliver reliable work without the dealership markup.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "prairie-grove-ar-dentist",
+   "question": "Who are the best dentists in Prairie Grove, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a reliable local dentist right here in Prairie Grove, you don't need to drive into Fayetteville. Here are the top two local practices I\u2019d recommend to any neighbor:\n\n**1. Prairie Grove Family Dental**\nThis is the go-to practice for many families in town. Dr. Matthew Kester and his team offer comprehensive care, from routine cleanings to cosmetic work and emergency visits. Homeowners love them because the office is modern, the staff is exceptionally patient with kids and anxious adults, and they are straightforward about pricing and insurance. \n\n**2. Mangan Dental**\nIf you prefer a smaller practice with a classic, small-town feel, Dr. Steve Mangan is fantastic. He\u2019s built a strong reputation in the community over the years for his gentle approach and honest recommendations\u2014he\u2019ll never push unnecessary procedures on you. Patients consistently praise his friendly staff and relaxed, welcoming office atmosphere.\n\nBoth practices are conveniently located right along US-62, making morning appointments easy before work or school. If you have a full household, **Prairie Grove Family Dental** is great for scheduling everyone at once; for a low-stress, highly personal touch, go with **Mangan Dental**.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "farmington-ar-dentist",
+   "question": "Who are the best dentists in Farmington, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "As a fellow homeowner who values great local service, here are the top dental practices right here in Farmington I\u2019d recommend to my neighbors:\n\n**1. Country Hills Family Dental**  \nThey are fantastic if you want a warm, family-oriented practice. Dr. Killion and the team are incredibly gentle, great with kids, and never push unnecessary procedures. It\u2019s the kind of place where they actually remember your family's names.\n\n**2. Farmington Dental Care**  \nIdeal for busy households needing reliable, comprehensive care\u2014from standard cleanings to restorative work. Dr. Malloy and his staff use up-to-date technology to make appointments fast and painless, and their front desk makes dealing with insurance seamless. \n\n**3. Farmington Dental Studio**  \nIf anyone in your house gets anxious about dental visits, this is your spot. They place a huge emphasis on patient comfort, offer transparent, upfront pricing, and are fantastic about squeezing you in quickly if a dental emergency pops up.\n\nAll three have stellar reputations in the community and top-tier customer service, so you\u2019re in good hands regardless of which one you choose!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "gadsden-al-dentist",
+   "question": "Who are the best dentists in Gadsden, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me for a dentist recommendation here in Gadsden, three local spots immediately come to mind:\n\n1. **Batten Dental:** Dr. Gary Batten and his team are hands-down the best choice if you get nervous about dental visits. They\u2019re warm, incredibly gentle, and fantastic with families. The office feels welcoming rather than cold and clinical.\n\n2. **Riverview Dental:** Dr. Campbell's practice is top-notch if you want modern, comprehensive care. They use state-of-the-art tech for everything from routine cleanings to major restorative work, and their front desk staff is excellent at navigating insurance. \n\n3. **Gadsden Family Dentistry:** A staple in our community for years, this is the place to go for honest, reliable care. They have a fantastic local reputation for giving clear, sensible advice without trying to upsell you on unnecessary cosmetic procedures.\n\nYou really can\u2019t go wrong with any of these three\u2014it just depends on whether you're looking for a gentle family vibe, modern tech, or classic, straightforward care.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "gadsden-al-auto-repair",
+   "question": "Who are the best auto repair shops in Gadsden, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me for a reliable mechanic in Gadsden, here are the top local shops I\u2019d send them to:\n\n*   **Wilks Tire & Battery Service:** A true local staple. They\u2019re fantastic for everything from quick tire rotations to major engine and brake work. Their crew is upfront about costs and never tries to push unnecessary repairs. \n*   **Pruett Tire & Alignment:** Known across Etowah County for top-notch customer service, steering, and suspension work. They offer quick turnarounds and honest advice\u2014the kind of place that will tell you straight if a fix can wait a few months.\n*   **B & C Tire & Battery:** Excellent for straightforward, old-school mechanical troubleshooting. They\u2019re known for fair labor rates, skilled diagnostic work, and treating every customer like a long-time neighbor.\n\n**Why these three?** In a small city, reputation is everything. These shops have earned decades of community trust by offering transparent pricing, clear communication, and getting the job done right the first time.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "rainbow-city-al-dentist",
+   "question": "Who are the best dentists in Rainbow City, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in Rainbow City looking for a reliable local dentist, here are two top-rated practices nearby that I\u2019d recommend checking out:\n\n*   **Rainbow City Dental:** Located right in town, they are a go-to for families. Homeowners love them because they offer comprehensive care\u2014from routine cleanings to cosmetic work\u2014all under one roof. Their scheduling is convenient for busy work-and-school schedules, and their staff is known for being exceptionally welcoming and gentle with kids.\n*   **River City Dental Care (nearby in Gadsden):** Just a short drive over the bridge, many Rainbow City residents make the quick trip here for their advanced technology and thorough approach. Dr. Wallace and the team get rave reviews for being transparent about treatment plans, never pushing unnecessary procedures, and handling dental emergencies quickly\u2014a huge plus for homeowners who value peace of mind.\n\nBoth offices accept a wide range of insurance plans and have established great reputations in the local Etowah County community. I\u2019d suggest giving both a quick call to see who fits your family's specific needs best!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}

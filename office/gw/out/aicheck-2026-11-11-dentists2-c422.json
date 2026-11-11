@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-11-dentists2-c422",
+ "at": "2026-11-11T13:48:15Z",
+ "results": [
+  {
+   "key": "tuttle-ok-dentist",
+   "question": "Who are the best dentists in Tuttle, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a great dentist right here in Tuttle, two local practices consistently come top-recommended by neighbors:\n\n**1. Tuttle Family Dentistry**  \nThis is the go-to spot for overall family care. Dr. Thomas and his team are fantastic at making patients feel comfortable\u2014a huge plus if you or your kids get nervous about dental visits. They offer comprehensive care from routine cleanings to cosmetic work and implants, so you rarely have to drive into OKC for specialized treatment. The staff is down-to-earth, honest about pricing, and treat you like a neighbor.\n\n**2. Rock Creek Dental**  \nAnother standout option in town. Patients love Rock Creek for their modern facility, cutting-edge technology, and exceptionally friendly staff. Dr. Cox is known for his gentle touch and efficient appointments, getting you in and out without feeling rushed. They\u2019re also wonderfully accommodating if you have a sudden toothache or dental emergency and need a fast appointment.\n\nBoth offices carry that small-town Oklahoma feel where they actually remember your name. You really can't go wrong with either!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "kingfisher-ok-dentist",
+   "question": "Who are the best dentists in Kingfisher, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "As a neighbor, here are the top local dental practices in Kingfisher that I\u2019d comfortably recommend:\n\n**1. Bouziden Family Dentistry (Dr. Brett Bouziden)**\nDr. Bouziden is a go-to for many local families. The practice gets rave reviews for its welcoming atmosphere, modern technology, and genuinely gentle care. If you have kids or get a bit anxious about dental work, his team is exceptional at keeping you comfortable and clearly explaining every step of your treatment.\n\n**2. Kingfisher Family Dentistry (Dr. Patrick Yearwood)**\nA longstanding, highly trusted fixture in town. Patients love the warm, hometown service paired with top-tier professional care. Dr. Yearwood and his staff are known for being prompt, transparent about costs, and excellent with routine preventative care as well as restorative work. \n\nBoth offices are known for friendly staff, painless cleanings, and keeping appointments running on time. I\u2019d call both to see whose schedule and insurance coverage align best with your needs!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "chandler-ok-dentist",
+   "question": "Who are the best dentists in Chandler, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "As a homeowner here in Lincoln County, having a trusted local dentist means you don\u2019t have to waste half your day driving into Edmond or OKC for a routine cleaning. Here are the top local recommendations:\n\n**1. Chandler Dental Clinic (Dr. Jaclyn Higgins)**  \nLocated right on Manvel Ave, this is the main staple in town for good reason. Dr. Higgins and her staff offer fantastic, gentle family care. Neighbors love them because they have that welcoming small-town atmosphere, are great with kids, and are straightforward\u2014they won\u2019t push unnecessary procedures on you.\n\n**2. Stroud Family Dentistry (Dr. Kevin Cox \u2013 ~15 minutes down Route 66)**  \nIf you need complex procedures (like implants or cosmetic work) or want broader scheduling availability, making the quick drive over to Stroud is well worth it. Dr. Cox\u2019s practice uses modern tech, offers comprehensive services, and is widely praised for comfortable, pain-free treatments.\n\n**The Verdict:** Keep it simple and start with **Chandler Dental Clinic** for your regular family maintenance. Having quality care right in town saves time, money, and hassle.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "hot-springs-ar-dentist",
+   "question": "Who are the best dentists in Hot Springs, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trusted local dental care in Hot Springs, here are the top three practices I\u2019d recommend to any neighbor:\n\n*   **Rice Family Dental:** Dr. Lance Rice and his team are a local favorite for routine family care. They are known for honest, zero-pressure advice, fair pricing, and a welcoming, down-to-earth atmosphere that makes you feel right at home. \n*   **Porter Dental Health Clinic:** Dr. Netosha Porter combines cutting-edge technology with a remarkably gentle touch. It\u2019s the go-to spot in town if you get anxious about dental visits or need complex cosmetic and restorative work. \n*   **Trace Creek Dental:** Dr. Josh Mattinson provides outstanding comprehensive care. Locals love this office for its immaculate facility, punctual scheduling, and transparent treatment plans\u2014you'll never be surprised by hidden fees.\n\nAll three have stellar reputations in the area for quality, integrity, and treating patients like neighbors rather than numbers.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "hot-springs-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Hot Springs, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me where to take their car in Hot Springs, here are the local shops I\u2019d recommend:\n\n*   **B&F Tire & Auto Repair:** They\u2019ve been a local staple for years. Whether you need new tires, brake work, or routine maintenance, they\u2019re known for honest, straightforward advice and never pushing unnecessary repairs. \n*   **Hot Springs Auto Repair:** If you\u2019re dealing with tricky engine issues or diagnostic trouble lights, this is the place to go. Their mechanics take the time to explain exactly what\u2019s wrong, provide clear estimates, and do top-tier mechanical work.\n*   **Spa City Tire & Automotive:** Excellent for general maintenance and daily driver repairs. They have a fantastic reputation for fast turnaround times, fair pricing, and friendly customer service that makes you feel valued.\n\nYou really can\u2019t go wrong with any of these three\u2014they\u2019ve built great reputations in the community by treating people right and doing the job correctly the first time.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "centerton-ar-dentist",
+   "question": "Who are the best dentists in Centerton, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "As a neighbor, I know how hard it is to find a dentist you actually trust. If you\u2019re looking right here in Centerton, these are the top local spots I\u2019d recommend to any fellow homeowner:\n\n1. **McCollough Dental:** Hands down a local favorite. Dr. McCollough and his team are known for being incredibly gentle and patient. It\u2019s the best option if you have any dental anxiety or need a place that makes routine visits totally stress-free.\n2. **Centerton Family Dental:** A great all-around practice for adults and teens. They use state-of-the-art tech, the hygienists are thorough yet gentle, and they are super transparent about costs before doing any work\u2014no surprise bills. \n3. **First Impression Family Dentistry:** If you\u2019re balancing a busy family schedule, call them first. They handle both kids and adults fantastically, the office environment is light and friendly, and they are great at block-scheduling family appointments together.\n\nAll three have stellar local reputations, take most major insurance plans, and treat you like a neighbor rather than just a chart number.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}

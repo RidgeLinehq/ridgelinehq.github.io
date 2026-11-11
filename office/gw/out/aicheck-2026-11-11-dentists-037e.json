@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-11-dentists-037e",
+ "at": "2026-11-11T13:47:03Z",
+ "results": [
+  {
+   "key": "yukon-ok-dentist",
+   "question": "Who are the best dentists in Yukon, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "Hey neighbor! If you\u2019re looking for a solid local dentist in Yukon, here are three top spots I\u2019d comfortably send my own family to:\n\n1. **Yukon Dental Care:** Dr. Michael Casler and his team are phenomenal. They\u2019re great if you want a modern, high-tech office that still feels warm and welcoming. They\u2019re super transparent about costs upfront, so you never get hit with surprise bills.\n\n2. **Surber Family Dentistry:** Dr. Stephen Surber is a long-time local favorite. If you or your kids get dental anxiety, this is the place to go. He\u2019s down-to-earth, patient, and takes a gentle, conservative approach\u2014he\u2019ll never try to upsell you on unnecessary procedures.\n\n3. **Parkview Dental:** Perfect for busy households. They\u2019re known for staying right on schedule (no sitting in the waiting room for an hour), having an ultra-clean office, and offering comprehensive care from routine cleanings to cosmetic work. \n\nAll three have stellar reputations right here in the community, so you really can't go wrong depending on which side of town is closest to you!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "yukon-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Yukon, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you're looking for trustworthy mechanics in Yukon, here are three local shops I\u2019d confidently recommend to any neighbor:\n\n*   **Integrity Auto Care:** True to their name, they are famous around town for complete honesty. They\u2019ll never try to upsell you on repairs you don't actually need, and they take the time to explain issues clearly without the jargon.\n*   **Yukon Auto Repair:** A long-standing local staple on Main Street. They offer fair, straightforward pricing and handle everything from routine maintenance to major engine work. Their team is fast, reliable, and deeply rooted in the community.\n*   **Triple J Auto Repair:** Excellent choice if you want top-notch customer service and a quick turnaround. Locals love them because the mechanics are sharp, the quotes are transparent, and they treat your car like it\u2019s their own.\n\n**Pro tip from a neighbor:** Call ahead to schedule an appointment. Because these shops have such great reputations, their bays fill up quickly!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "bethany-ok-dentist",
+   "question": "Who are the best dentists in Bethany, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a reliable local dentist here in Bethany, a few practices stand out for honest, quality care and great customer service:\n\n*   **Bethany Family Dental:** Dr. Scott Robertson and his team are a go-to for that true small-town feel. They\u2019re thorough, fantastic with routine maintenance, and won\u2019t try to upsell you on unnecessary procedures. \n*   **Council Crossing Family Dentistry:** Right off Council Rd, this clinic is ideal if dental visits make you nervous. Neighbors praise them for gentle cleanings, modern equipment, and being completely upfront about costs before starting any work.\n*   **Dental Depot (Bethany location on NW 23rd):** A great option for busy families. The fun train-themed office helps keep kids at ease, and their large team makes scheduling appointments for the whole family on the same day much easier.\n\nFor basic cleanings, emergency fixes, or family care, these three will treat you right without breaking the bank.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "del-city-ok-dentist",
+   "question": "Who are the best dentists in Del City, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy local dentists right here in the Del City area, these are the top spots neighbors consistently recommend:\n\n*   **Del City Family Dental:** My top pick for general family care. The team is warm, the office is modern, and they\u2019re upfront about costs\u2014no pushy upselling on unnecessary procedures. Great for routine cleanings and preventive care.\n*   **Sunnylane Family Dentistry:** A true local staple. Dr. Mark Boren and his staff are fantastic if you have dental anxiety or kids. They are known for gentle, painless work and making sure you feel comfortable in the chair.\n*   **Midwest Dental Arts (Just off SE 29th):** Ideal if you need major restorative work, crowns, or emergency care. They use updated tech that speeds up procedures, and their scheduling is remarkably efficient.\n\n**Why these three?** They all hold outstanding local reputations, offer transparent pricing, and treat you like a neighbor rather than just another appointment slot. \n\nI\u2019d call **Del City Family Dental** first for everyday care, but you\u2019re in good hands with any of these choices.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "newcastle-ok-dentist",
+   "question": "Who are the best dentists in Newcastle, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "Hey neighbor! If you're looking for reliable dental care right here in town, three local practices consistently get top marks from Newcastle homeowners:\n\n1. **Newcastle Family Dentistry (Dr. Kevin Miller):** The top choice for general family care. Dr. Miller and his staff are known for being gentle, running on time, and putting kids at ease. It\u2019s ideal if you want a warm, hassle-free practice for routine family upkeep.\n\n2. **Tri-City Dental Care:** A fantastic option if anyone in your household gets anxious about dental visits. Their team is exceptionally patient, takes the time to explain procedures, and is very transparent about costs and insurance upfront\u2014which is a major plus for managing the family budget.\n\n3. **Newcastle Dental Care:** If you need modern, comprehensive procedures (like cosmetic work, crowns, or implants), this office stands out for using state-of-the-art tech. They\u2019re super responsive and great at squeezing you in quickly if an unexpected emergency pops up. \n\nAll three have fantastic reputations in the community. I\u2019d pick based on what your household needs most right now: easy family maintenance (Newcastle Family), budget transparency (Tri-City), or advanced technology (Newcastle Dental).",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "newcastle-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Newcastle, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me where to take their car here in Newcastle, these are the local spots I\u2019d recommend:\n\n1. **Pettigrew Auto Repair:** Hands down one of the most trusted family-owned shops in town. They are known for honest diagnostics\u2014they\u2019ll tell you what actually needs fixing right now versus what can wait, so you never feel pressured into unnecessary repairs.\n2. **Tri-City Auto Care:** A fantastic, reliable option for both major engine work and general maintenance. The mechanics are super thorough, transparent about pricing before they start, and usually get your vehicle back to you quickly.\n3. **Newcastle Tire & Auto Care:** Your best bet for tires, brake jobs, alignment, and routine oil changes. The staff is friendly, efficient, and great for quick turnarounds when you need to get back on the road safely without breaking the bank.\n\nStick with these local shops\u2014you'll get fair pricing and honest work from folks who care about maintaining a good reputation in our community.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
