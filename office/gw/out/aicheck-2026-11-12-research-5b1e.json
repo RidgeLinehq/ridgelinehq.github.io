@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-12-research-5b1e",
+ "at": "2026-11-12T13:21:45Z",
+ "results": [
+  {
+   "key": "bartlesville-ok-dentist",
+   "question": "Who are the best dentists in Bartlesville, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "As a local, a few top-rated dental practices in Bartlesville stand out depending on what you\u2019re looking for:\n\n*   **Bartlesville Dental Group:** This is my top overall recommendation. Dr. Tiller and his team handle everything from routine cleanings to complex procedures under one roof. The office is modern, the hygienists are gentle, and they excel at keeping anxious patients comfortable.\n*   **Erwin Dental:** Dr. Mark Erwin\u2019s office is fantastic if you want a warm, family-oriented practice. They\u2019re known for being incredibly honest and low-pressure\u2014they never push unnecessary cosmetic work and take the time to explain your options clearly.\n*   **Jackson Dental:** Dr. Robert Jackson has a stellar reputation in town for high-quality, long-term care. It\u2019s an established practice where the staff remembers your name, the office runs on time, and the preventive care is extremely thorough. \n\nAll three have excellent local reviews and friendly front-desk staff who make navigating insurance simple. You can't go wrong with any of them for reliable family dental care.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "bartlesville-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Bartlesville, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy mechanics in Bartlesville, here are three local shops I\u2019d send any neighbor to:\n\n*   **Stith Automotive:** Hands down one of the most honest shops in town. They won't upsell you on things you don't need, their pricing is fair, and they\u2019re great at clearly explaining what needs fixing right now versus what can wait. \n*   **Dooley\u2019s Service Center:** A fantastic, long-standing local spot. The staff is professional, communicative, and reliable. They\u2019re excellent for everything from routine maintenance to trickier engine and electrical diagnostics.\n*   **M&M Tire & Auto Center:** Great for tires, brakes, suspension, and routine service. They\u2019re fast, friendly, and deliver top-notch customer service. It\u2019s a family-friendly shop where they actually remember your name.\n\n**Pro tip:** Call ahead to schedule an appointment\u2014because these guys have earned such good reputations in town, their bays fill up quickly!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "cullman-al-dentist",
+   "question": "Who are the best dentists in Cullman, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me for dentist recommendations around Cullman, here are the local spots I\u2019d send them to:\n\n* **Cullman Cosmetic & Family Dentistry (Dr. Jonathan Echols):** This is your go-to for top-tier family care and cosmetic work. They use modern technology, and the staff is exceptionally good at putting anxious patients at ease. \n* **Signature Smile of Cullman (Dr. Lindsey Rodgers):** A fantastic option if you\u2019re looking for a warm, family-friendly atmosphere. Dr. Rodgers and her team are gentle, thorough, and brilliant with kids. You get personalized attention without feeling rushed through the chair.\n* **Culpepper Family Dentistry (Dr. Ben Culpepper):** A true local staple known for honest, down-to-earth care. If you want a straightforward practice that treats you like family, focuses on preventive health, and doesn't try to upsell unnecessary procedures, Dr. Culpepper is a great choice.\n\n**Why these three?** They all have outstanding reputations in town, stellar patient reviews, and prioritize long-term care over quick turnover. Just call whichever one takes your insurance and has an appointment slot that fits your schedule\u2014you\u2019ll be in great hands with any of them.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "athens-al-dentist",
+   "question": "Who are the best dentists in Athens, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy, long-term dental care in Athens, here are three local practices that neighbors consistently recommend:\n\n*   **Limestone Dental Associates:** A true staple in town. Drs. Joe and Tyler Cannon run a top-tier family practice. They are best known for being honest, thorough, and never pushing unnecessary procedures\u2014just solid, reliable care.\n*   **Clemens Family Dental:** If you want modern technology combined with a gentle touch, Dr. Mark Clemens is a fantastic choice. Patients love the welcoming staff, quick wait times, and comfortable, anxiety-free atmosphere.\n*   **Athens Family Dental:** Great for general, preventive, and cosmetic care. They excel at clear communication, breaking down treatment options and costs upfront so there are no surprises.\n\n**Why they make the list:** All three have strong reputations in Limestone County for fair pricing, high-quality work, and treating patients like neighbors rather than numbers.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "shawnee-ok-dentist",
+   "question": "Who are the best dentists in Shawnee, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "Here are the top-rated local dental practices in Shawnee that homeowners consistently trust for their families:\n\n**1. Shawnee Dental**\n* **Why them:** This is a go-to for comprehensive care. Dr. Brian Boles and the team receive top marks for their modern technology, punctual scheduling, and broad range of services\u2014from routine cleanings to implants\u2014meaning you rarely need to be referred out.\n\n**2. Loudermilk Family Dental**\n* **Why them:** Excellent choice if you want a warm, neighborhood feel. Dr. Glen Loudermilk and his staff are highly praised for their gentle touch, transparent pricing, and patient, friendly approach with both kids and adults.\n\n**3. Vanguard Dental**\n* **Why them:** Known for exceptional customer service and putting anxious patients at ease. Dr. Craig Evans and his team excel at clear communication, taking time to thoroughly explain treatment plans without pushing unnecessary procedures.\n\n*Homeowner Tip:* All three practices have strong local reputations and accept major insurance providers, but be sure to call to verify your specific coverage before booking your initial exam.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "durant-ok-dentist",
+   "question": "Who are the best dentists in Durant, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for a great local dentist in Durant, here are three top-rated spots neighbors frequently recommend:\n\n1. **Westside Family Dentistry**: Dr. Brad West and his team are a go-to for general family care. Locals love them because they\u2019re exceptionally patient, great with kids, and excel at making nervous patients feel comfortable in the chair. \n\n2. **Durant Family Dental**: Dr. Brett Smith's office is fantastic if you need comprehensive care or quick scheduling for an urgent issue. The practice uses modern technology, and the front desk is known for being upfront about insurance and costs, taking the headache out of billing.\n\n3. **Hines Family Dentistry**: Dr. Bryan Hines has a rock-solid reputation in town for honest, conservative care. If you want a down-to-earth dentist who won't push unnecessary cosmetic procedures and simply focuses on keeping your teeth healthy, this is a great choice. \n\nAll three are known for clean facilities, friendly staff, and gentle care, so you really can't go wrong with any of them.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
