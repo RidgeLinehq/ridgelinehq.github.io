@@ -1,0 +1,38 @@
+{
+ "id": "ec-2026-11-12-cfb0",
+ "at": "2026-11-12T13:28:15.349620Z",
+ "domains": {
+  "bartlesvillefamilydental.com": {
+   "mx": true,
+   "why": "MX alt4.aspmx.l.google.com"
+  },
+  "bullarddental.net": {
+   "mx": true,
+   "why": "MX mx.bullarddental.net.cust.b.hostedemail.com"
+  },
+  "colefamilydental.com": {
+   "mx": true,
+   "why": "MX alt4.aspmx.l.google.com"
+  },
+  "dentalartscullman.com": {
+   "mx": true,
+   "why": "MX dentalartscullman-com.mail.protection.outlook.com"
+  },
+  "harbintireauto.com": {
+   "mx": true,
+   "why": "MX mx1.biz.rr.com"
+  },
+  "shawneedentistryandbraces.com": {
+   "mx": true,
+   "why": "MX alt4.aspmx.l.google.com"
+  },
+  "shawneeteeth.com": {
+   "mx": true,
+   "why": "MX aspmx.l.google.com"
+  },
+  "signaturesmilescullman.com": {
+   "mx": true,
+   "why": "MX signaturesmilescullman-com.mail.protection.outlook.com"
+  }
+ }
+}
