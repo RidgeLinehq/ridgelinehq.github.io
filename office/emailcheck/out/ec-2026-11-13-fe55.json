@@ -1,0 +1,34 @@
+{
+ "id": "ec-2026-11-13-fe55",
+ "at": "2026-11-13T14:49:39.167847Z",
+ "domains": {
+  "cfdok.com": {
+   "mx": true,
+   "why": "MX alt4.aspmx.l.google.com"
+  },
+  "garvelcleaningsolutions.com": {
+   "mx": true,
+   "why": "MX aspmx.l.google.com"
+  },
+  "newbeginningsdentistry.com": {
+   "mx": true,
+   "why": "MX newbeginningsdentistry-com.mail.protection.outlook.com"
+  },
+  "precisiontransmissionrepair.com": {
+   "mx": true,
+   "why": "MX smtp.google.com"
+  },
+  "rcsnea.com": {
+   "mx": true,
+   "why": "MX mx1-usg1.ppe-hosted.com"
+  },
+  "windstream.net": {
+   "mx": true,
+   "why": "MX mx01.windstream.net"
+  },
+  "wynnedowntowndental.com": {
+   "mx": true,
+   "why": "MX wynnedowntowndental-com.mail.protection.outlook.com"
+  }
+ }
+}
