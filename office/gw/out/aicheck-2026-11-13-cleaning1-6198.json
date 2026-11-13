@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-13-cleaning1-6198",
+ "at": "2026-11-13T14:49:37Z",
+ "results": [
+  {
+   "key": "cullman-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Cullman, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable house cleaning in Cullman, here are the top services I\u2019d recommend checking out:\n\n1. **Molly Maid (Cullman/North AL):** Your best choice if you want guaranteed reliability and structure. They are fully insured, background-checked, and bring their own supplies. Plus, they offer a 24-hour satisfaction guarantee, making them great for hassle-free, regular recurring cleans.\n\n2. **Dirt Hunters Cleaning Service:** A top-rated local, family-owned option. Cullman residents love them because they are trustworthy, thorough, and do fantastic deep cleans\u2014especially if you need a move-in/move-out service or extra attention to detail.\n\n3. **Cullman Maid Service / Independent Local Cleaners:** For a more personalized touch, local independent outfits (frequently recommended on Cullman community boards) are wonderful. They\u2019re often more flexible with custom requests and offer competitive rates for bi-weekly upkeep.\n\n**My takeaway:** Go with **Molly Maid** if you want corporate reliability and strict scheduling, or reach out to a trusted local team like **Dirt Hunters** if you prefer supporting a small local business that goes the extra mile on deep cleans.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "russellville-ar-house-cleaning",
+   "question": "Who are the best house cleaning services in Russellville, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable house cleaning in the Russellville area, here are the top local recommendations I\u2019d suggest checking out:\n\n1. **Molly Maid (River Valley region):** Perfect if you want a fully bonded, insured, and background-checked team. They are extremely reliable, bring their own supplies, and offer flexible, customizable recurring schedules. \n2. **Dust 2 Shine Cleaning:** A fantastic local favorite known for incredible attention to detail. Homeowners love them for deep cleans and move-in/move-out jobs because they hit the spots people usually forget, like baseboards, blinds, and light fixtures.\n3. **River Valley Spotless / Local Independent Pros:** Great if you prefer supporting an independent local business with a personal touch. Highly rated on local community boards, independent cleaners in the River Valley often offer competitive rates for regular weekly or bi-weekly maintenance.\n\n**Homeowner Tip:** Call 2\u20133 of them for an in-home estimate. Ask if they provide their own cleaning products, confirm if they are insured, and check their cancellation policy before booking your first session.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "searcy-ar-house-cleaning",
+   "question": "Who are the best house cleaning services in Searcy, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy house cleaning in Searcy, here are the top local options I\u2019d recommend checking out:\n\n1. **Clean Sweep Cleaning Service:** A fantastic local favorite for detailed, reliable care. They\u2019re known around White County for being incredibly thorough, prompt, and easy to communicate with\u2014whether you need a one-time deep clean or ongoing maintenance.\n2. **Molly Maid of Central Arkansas:** A great pick if you prefer a fully bonded, insured company with a standard team approach. They serve the Searcy area, offer flexible scheduling (weekly, bi-weekly, or move-in/move-out), and back their work with a 24-hour clean guarantee.\n3. **White County Independent Cleaners (via local connections):** For hyper-local, budget-friendly options, check Searcy community Facebook groups or Nextdoor for well-reviewed independent pros like *Sparkle & Shine* or local sole proprietors. Many offer lower rates and highly personalized service tailored to your home.\n\n**My advice:** Call two of these for a quick walkthrough and quote. Local schedules book up fast, especially around the holidays, so getting on their calendar early is key!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "bartlesville-ok-house-cleaning",
+   "question": "Who are the best house cleaning services in Bartlesville, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If I were looking for reliable house cleaning in Bartlesville, here are the top services I\u2019d recommend based on local reputation and service quality:\n\n1. **Molly Maid of Washington and Osage Counties:** They\u2019re the gold standard for hassle-free reliability. They send insured, background-checked teams, bring all their own supplies, and don't lock you into contracts. They're ideal for consistent weekly or bi-weekly upkeep.\n2. **The Cleaning Authority:** Perfect if you prefer eco-friendly products. They use sustainable, green-seal certified supplies and follow a strict \"Detail-Clean Rotation System,\" ensuring extra attention is paid to areas like baseboards, tile, and appliances on a regular schedule.\n3. **Local Independent Pros (e.g., Custom/Boutique Cleaners):** If you want a single point of contact and a personalized touch, highly rated local independents in town (often found via local community hubs or word-of-mouth) are great for tailored deep cleans, move-in/move-out jobs, and specific custom requests. \n\n**My advice:** Call the top two for a quick, free in-home estimate. It gives you a clear comparison on pricing based on your home's square footage and pet situation!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "durant-ok-house-cleaning",
+   "question": "Who are the best house cleaning services in Durant, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re a Durant homeowner looking to free up your weekends, here are the top local cleaning services I\u2019d recommend:\n\n1. **Molly Maid of Texoma:** Best for hassle-free reliability. They\u2019re fully bonded and insured, send background-checked teams, and bring all their own supplies. They're great for regular recurring visits (weekly or bi-weekly) and offer customizable checklists.\n2. **Texoma Cleaning Services:** A trusted local choice across Bryan County. Homeowners love them for deep cleans, move-in/move-out services, and exceptional attention to detail\u2014especially in kitchens and bathrooms. \n3. **Detail Cleaning & Maid Services (Texoma Area):** Ideal if you want a more personalized, consistent touch from a local team. They are known for flexible scheduling, fair pricing, and great communication with homeowners.\n\n**Why these stand out:** \nIn a smaller market like Durant, reputation is everything. These services consistently get high marks from local residents for trustworthiness, punctuality, and thoroughness. \n\n*Pro Tip:* Call 2\u20133 of them for a free walkthrough or estimate. Always confirm their current availability for your specific neighborhood and ask about any ongoing promotions for first-time clients!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "shawnee-ok-house-cleaning",
+   "question": "Who are the best house cleaning services in Shawnee, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy cleaning help in Shawnee, here are the top recommendations depending on what you need:\n\n1. **Merry Maids (Central Oklahoma):** The best option if you want set-it-and-forget-it reliability. They\u2019re fully insured, bring all their own supplies, and use background-checked teams. They\u2019re great for routine weekly or bi-weekly maintenance cleans, and their satisfaction guarantee gives real peace of mind.\n\n2. **First Class Cleaning Service:** A standout local choice serving Pottawatomie County. They shine on detailed deep cleans and move-in/move-out jobs. If your baseboards, grout, or kitchen appliances need serious attention, their meticulous team is worth every penny.\n\n3. **Okie Maid Services:** Excellent for a more personalized, flexible touch. As a local operation, they\u2019re easier to communicate with directly if you have specific requests (like eco-friendly products or focusing only on high-traffic areas), making them cost-effective for custom tasks.\n\n**Homeowner Tip:** Before signing on for recurring service, ask for a free walk-through quote and double-check that they carry general liability insurance.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}

@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-13-cleaning2-3b8f",
+ "at": "2026-11-13T14:50:46Z",
+ "results": [
+  {
+   "key": "enterprise-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Enterprise, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable house cleaning in Enterprise, here are the top local options I\u2019d recommend checking out:\n\n* **Molly Maid of Dothan & Enterprise:** The best choice if you want a fully insured, background-checked team with standardized processes. They\u2019re super dependable for regular weekly or bi-weekly maintenance and bring all their own supplies.\n* **Wiregrass Cleaning Solutions:** Highly recommended for deep cleans, move-in/move-out services, or getting a home ready to sell. Locals praise them for being meticulous with baseboards, ovens, and hard-to-reach places.\n* **Squeaky Clean Wiregrass:** A fantastic local option if you prefer a smaller team and a more personalized touch. They\u2019re very flexible, easy to communicate with, and willing to tailor their checklist to your specific priority rooms.\n\n**Pro-tip for Enterprise homeowners:** Since we\u2019re right next to Fort Novosel, most of these companies are very experienced with military move-out cleans (PCSing) and often offer military discounts\u2014just be sure to ask when getting your quote!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "sherwood-ar-house-cleaning",
+   "question": "Who are the best house cleaning services in Sherwood, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you're looking for reliable house cleaning in Sherwood, here are three top local recommendations based on quality, reputation, and service options:\n\n1. **Molly Maid of Greater Little Rock:** Perfect if you want consistent, hassle-free routine cleaning. They are fully insured, bring all their own equipment, and don't lock you into contracts. They cover the Sherwood area regularly and are great for standard recurring maintenance.\n\n2. **Two Maids (Central AR):** Ideal if you need flexible service, from quick touch-ups to intensive move-in/move-out cleans. They use a unique \"Pay-for-Performance\" system where the cleaners' pay is directly tied to your feedback rating, which keeps service quality consistently high.\n\n3. **The Cleaning Authority (Little Rock Metro):** The best choice if you prioritize eco-friendly cleaning. They use Green Seal-certified products (safe for kids and pets) and follow a structured \"Detail-Clean Rotation System,\" so different high-traffic zones get a deep clean during every visit.\n\n*Quick tip for Sherwood homeowners:* Reach out to two or three of these for a free estimate\u2014most will provide a customized quote based on your square footage and specific home needs within minutes.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "fairhope-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Fairhope, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable house cleaning in Fairhope, here are the top local companies I\u2019d recommend:\n\n*   **MaidPro Eastern Shore:** Best for custom schedules. They use a tailored 49-point checklist, so you only pay for the specific tasks you want. Locals love their consistency and attention to detail.\n*   **The Cleaning Authority (Eastern Shore):** Ideal if you prefer eco-friendly products. They use non-toxic, sustainable cleaners and a clever \"Detail-Clean Rotation System\" that ensures every area of your home gets a periodic deep clean.\n*   **Molly Maid of Mobile & the Eastern Shore:** Great for hands-off, hassle-free service. They\u2019re fully bonded and insured, bring their own supplies, and don't lock you into long-term contracts. They're well-regarded in Baldwin County for punctuality and professional team cleans.\n\n**Tip:** Most of these services offer free estimates, so I\u2019d grab a quote from two of them to compare pricing for your home\u2019s square footage before deciding!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "albertville-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Albertville, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable house cleaning in Albertville, here are the top local services I\u2019d recommend:\n\n1. **First Class Cleaning Service:** A standout local choice if you need a thorough deep clean or a move-in/move-out overhaul. They pay close attention to detail\u2014getting into the baseboards, blinds, and light fixtures\u2014and have a great reputation around Marshall County.\n2. **Molly Maid of Etowah & Marshall Counties:** Best if you want a fully insured, background-checked team with a standardized process. They bring all their own supplies, offer flexible scheduling, and back their work with a 24-hour satisfaction guarantee.\n3. **Sparkle & Shine Cleaning Services:** Great for ongoing weekly or bi-weekly upkeep. Local homeowners love them for their friendly, trustworthy staff, fair pricing, and ability to tailor the checklist to your specific family\u2019s needs.\n\n**Homeowner Tip:** Good cleaners in the Albertville/Guntersville area book up quickly, especially around the holidays. Call a couple of weeks in advance to get an in-home estimate and lock in a regular spot!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "arab-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Arab, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If I were hiring a house cleaning service in the Arab area, here are the top options I\u2019d recommend looking into:\n\n1. **Two Maids & A Mop (North Alabama):** They cover Marshall County and are fantastic if you want a fully insured, bonded company with a structured system. Their \"Pay-for-Performance\" model keeps crew standards high, and their deep-clean packages are great before hosting.\n\n2. **Molly Maid (Servicing Marshall County):** A dependable choice for routine, ongoing maintenance. They bring all their own eco-friendly supplies, don't require long-term contracts, and customize their checklists to fit your specific home layout and budget.\n\n3. **Local Independent Cleaners (via Arab & Marshall County Networks):** For a more personal, budget-friendly touch, local independent cleaners (like those regularly recommended on the *Arab AL Community* Facebook groups or Nextdoor) are often the best fit. You get direct communication with the exact person cleaning your home, and rates are usually lower than corporate franchises.\n\n**Pro-Tip:** If you want a zero-stress, guaranteed deep clean, go with Two Maids. If you want a consistent, long-term relationship with one trusted person for bi-weekly maintenance, post on a local Arab community board for a top-rated local solo cleaner.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "prattville-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Prattville, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.8-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable help around the house in Prattville, here are the top services I\u2019d recommend checking out:\n\n*   **Two Maids:** A River Region favorite thanks to their \"Pay for Performance\" model\u2014your direct feedback determines the cleaners\u2019 compensation, so they rarely cut corners. They're licensed, bonded, and great for both recurring visits and deep move-out cleans.\n*   **The Cleaning Authority (River Region):** Best for set-it-and-forget-it maintenance. They use a \"Detail-Clean Rotation System,\" which ensures high-maintenance spots like baseboards and cabinet faces get deep-cleaned on a rotating schedule so grime never accumulates. Plus, they use eco-friendly products.\n*   **The Maids:** The top choice if you value speed and thoroughness. Instead of sending one person who takes all day, they typically deploy efficient four-person teams using a strict 22-step cleaning process, getting your house spotless fast.\n\n**Homeowner tip:** I always recommend booking a one-time \"deep clean\" first before setting up recurring service\u2014it sets a solid baseline for the team to maintain.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
