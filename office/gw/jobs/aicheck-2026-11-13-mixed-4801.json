@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-13-mixed-4801",
+ "queries": [
+  {
+   "key": "prattville-al-dentist",
+   "question": "Who are the best dentists in Prattville, AL?",
+   "city": "Prattville",
+   "region": "Alabama"
+  },
+  {
+   "key": "blanchard-ok-dentist",
+   "question": "Who are the best dentists in Blanchard, OK?",
+   "city": "Blanchard",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "paragould-ar-house-cleaning",
+   "question": "Who are the best house cleaning services in Paragould, AR?",
+   "city": "Paragould",
+   "region": "Arkansas"
+  },
+  {
+   "key": "bixby-ok-dentist",
+   "question": "Who are the best dentists in Bixby, OK?",
+   "city": "Bixby",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "chelsea-al-dentist",
+   "question": "Who are the best dentists in Chelsea, AL?",
+   "city": "Chelsea",
+   "region": "Alabama"
+  },
+  {
+   "key": "okmulgee-ok-dentist",
+   "question": "Who are the best dentists in Okmulgee, OK?",
+   "city": "Okmulgee",
+   "region": "Oklahoma"
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-13-cleaning2-3b8f",
+ "queries": [
+  {
+   "key": "enterprise-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Enterprise, AL?",
+   "city": "Enterprise",
+   "region": "Alabama"
+  },
+  {
+   "key": "sherwood-ar-house-cleaning",
+   "question": "Who are the best house cleaning services in Sherwood, AR?",
+   "city": "Sherwood",
+   "region": "Arkansas"
+  },
+  {
+   "key": "fairhope-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Fairhope, AL?",
+   "city": "Fairhope",
+   "region": "Alabama"
+  },
+  {
+   "key": "albertville-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Albertville, AL?",
+   "city": "Albertville",
+   "region": "Alabama"
+  },
+  {
+   "key": "arab-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Arab, AL?",
+   "city": "Arab",
+   "region": "Alabama"
+  },
+  {
+   "key": "prattville-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Prattville, AL?",
+   "city": "Prattville",
+   "region": "Alabama"
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-13-cleaning1-6198",
+ "queries": [
+  {
+   "key": "cullman-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Cullman, AL?",
+   "city": "Cullman",
+   "region": "Alabama"
+  },
+  {
+   "key": "russellville-ar-house-cleaning",
+   "question": "Who are the best house cleaning services in Russellville, AR?",
+   "city": "Russellville",
+   "region": "Arkansas"
+  },
+  {
+   "key": "searcy-ar-house-cleaning",
+   "question": "Who are the best house cleaning services in Searcy, AR?",
+   "city": "Searcy",
+   "region": "Arkansas"
+  },
+  {
+   "key": "bartlesville-ok-house-cleaning",
+   "question": "Who are the best house cleaning services in Bartlesville, OK?",
+   "city": "Bartlesville",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "durant-ok-house-cleaning",
+   "question": "Who are the best house cleaning services in Durant, OK?",
+   "city": "Durant",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "shawnee-ok-house-cleaning",
+   "question": "Who are the best house cleaning services in Shawnee, OK?",
+   "city": "Shawnee",
+   "region": "Oklahoma"
+  }
+ ]
+}
