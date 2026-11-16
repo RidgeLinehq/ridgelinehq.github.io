@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-16-auto-08d0",
+ "queries": [
+  {
+   "key": "fort-payne-al-auto-repair",
+   "question": "Who are the best auto repair shops in Fort Payne, AL?",
+   "city": "Fort Payne",
+   "region": "Alabama"
+  },
+  {
+   "key": "el-dorado-ar-auto-repair",
+   "question": "Who are the best auto repair shops in El Dorado, AR?",
+   "city": "El Dorado",
+   "region": "Arkansas"
+  },
+  {
+   "key": "pine-bluff-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Pine Bluff, AR?",
+   "city": "Pine Bluff",
+   "region": "Arkansas"
+  },
+  {
+   "key": "albertville-al-auto-repair",
+   "question": "Who are the best auto repair shops in Albertville, AL?",
+   "city": "Albertville",
+   "region": "Alabama"
+  },
+  {
+   "key": "van-buren-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Van Buren, AR?",
+   "city": "Van Buren",
+   "region": "Arkansas"
+  },
+  {
+   "key": "harrison-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Harrison, AR?",
+   "city": "Harrison",
+   "region": "Arkansas"
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-16-research-00d9",
+ "queries": [
+  {
+   "key": "ada-ok-dentist",
+   "question": "Who are the best dentists in Ada, OK?",
+   "city": "Ada",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "sapulpa-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Sapulpa, OK?",
+   "city": "Sapulpa",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "mountain-home-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Mountain Home, AR?",
+   "city": "Mountain Home",
+   "region": "Arkansas"
+  },
+  {
+   "key": "greenbrier-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Greenbrier, AR?",
+   "city": "Greenbrier",
+   "region": "Arkansas"
+  },
+  {
+   "key": "tahlequah-ok-dentist",
+   "question": "Who are the best dentists in Tahlequah, OK?",
+   "city": "Tahlequah",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "muscle-shoals-al-dentist",
+   "question": "Who are the best dentists in Muscle Shoals, AL?",
+   "city": "Muscle Shoals",
+   "region": "Alabama"
+  }
+ ]
+}

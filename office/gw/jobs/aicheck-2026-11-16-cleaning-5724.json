@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-16-cleaning-5724",
+ "queries": [
+  {
+   "key": "opelika-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Opelika, AL?",
+   "city": "Opelika",
+   "region": "Alabama"
+  },
+  {
+   "key": "ardmore-ok-house-cleaning",
+   "question": "Who are the best house cleaning services in Ardmore, OK?",
+   "city": "Ardmore",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "phenix-city-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Phenix City, AL?",
+   "city": "Phenix City",
+   "region": "Alabama"
+  },
+  {
+   "key": "troy-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Troy, AL?",
+   "city": "Troy",
+   "region": "Alabama"
+  },
+  {
+   "key": "spanish-fort-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Spanish Fort, AL?",
+   "city": "Spanish Fort",
+   "region": "Alabama"
+  },
+  {
+   "key": "alabaster-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Alabaster, AL?",
+   "city": "Alabaster",
+   "region": "Alabama"
+  }
+ ]
+}

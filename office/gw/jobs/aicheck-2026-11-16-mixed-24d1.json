@@ -1,0 +1,41 @@
+{
+ "id": "aicheck-2026-11-16-mixed-24d1",
+ "queries": [
+  {
+   "key": "hot-springs-ar-house-cleaning",
+   "question": "Who are the best house cleaning services in Hot Springs, AR?",
+   "city": "Hot Springs",
+   "region": "Arkansas"
+  },
+  {
+   "key": "ward-ar-house-cleaning",
+   "question": "Who are the best house cleaning services in Ward, AR?",
+   "city": "Ward",
+   "region": "Arkansas"
+  },
+  {
+   "key": "west-memphis-ar-house-cleaning",
+   "question": "Who are the best house cleaning services in West Memphis, AR?",
+   "city": "West Memphis",
+   "region": "Arkansas"
+  },
+  {
+   "key": "ada-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Ada, OK?",
+   "city": "Ada",
+   "region": "Oklahoma"
+  },
+  {
+   "key": "siloam-springs-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Siloam Springs, AR?",
+   "city": "Siloam Springs",
+   "region": "Arkansas"
+  },
+  {
+   "key": "siloam-springs-ar-dentist",
+   "question": "Who are the best dentists in Siloam Springs, AR?",
+   "city": "Siloam Springs",
+   "region": "Arkansas"
+  }
+ ]
+}
