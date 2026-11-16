@@ -1,0 +1,54 @@
+{
+ "id": "ec-2026-11-16-aba8",
+ "at": "2026-11-16T14:09:13.224292Z",
+ "domains": {
+  "cleaningandmorecullman.com": {
+   "mx": true,
+   "why": "MX cleaningandmorecullman-com.mail.protection.outlook.com"
+  },
+  "dixieboysrepair.com": {
+   "mx": true,
+   "why": "MX mx30.antispam.mailspamprotection.com"
+  },
+  "glendascleaning.com": {
+   "mx": true,
+   "why": "MX glendascleaning.com"
+  },
+  "heavenscentcullman.com": {
+   "mx": true,
+   "why": "MX heavenscentcullman-com.mail.protection.outlook.com"
+  },
+  "hopecleaning.co": {
+   "mx": true,
+   "why": "MX alt3.aspmx.l.google.com"
+  },
+  "icloud.com": {
+   "mx": true,
+   "why": "MX mx01.mail.icloud.com"
+  },
+  "russellvillejanitorial.com": {
+   "mx": true,
+   "why": "MX smtp.google.com"
+  },
+  "southstarcleaning.com": {
+   "mx": true,
+   "why": "MX ALT4.ASPMX.L.GOOGLE.com"
+  },
+  "ssalignments.com": {
+   "mx": true,
+   "why": "MX alt3.aspmx.l.google.com"
+  },
+  "sweethomecleaningservice.com": {
+   "mx": true,
+   "why": "MX mx1-usg1.ppe-hosted.com"
+  },
+  "touchbyuscleaningservicellc.com": {
+   "mx": true,
+   "why": "MX smtp.google.com"
+  },
+  "watsoncleaning.com": {
+   "mx": true,
+   "why": "MX watsoncleaning-com.mail.protection.outlook.com"
+  }
+ }
+}
