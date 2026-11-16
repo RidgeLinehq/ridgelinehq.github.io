@@ -10,8 +10,11 @@ on:
       - "office/stripe/jobs/*.json"
       - "office/stripe/stripe_ops.py"
       - ".github/workflows/stripe.yml"
-  schedule:
-    - cron: "17 * * * *"
+  # Hourly timer switched off 2026-11-16 at Grayson's request (Ridgeline is shut down).
+  # While it ran, it re-created any checkout link that was turned off in Stripe.
+  # To turn it back on, remove the '# ' in front of the next two lines.
+  # schedule:
+  #   - cron: "17 * * * *"
   workflow_dispatch:
 
 permissions:
