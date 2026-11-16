@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-16-mixed-24d1",
+ "at": "2026-11-16T13:35:35Z",
+ "results": [
+  {
+   "key": "hot-springs-ar-house-cleaning",
+   "question": "Who are the best house cleaning services in Hot Springs, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you're looking for trustworthy house cleaning in Hot Springs, here are the top local services I\u2019d recommend to a neighbor:\n\n*   **Spa City Housekeeping:** Perfect for a tailored, personal touch. They are a local favorite known for exceptional reliability, offering everything from routine weekly sweeps to detailed deep cleans and short-term rental turnovers.\n*   **Molly Maid of Hot Springs:** Ideal if you prefer the peace of mind that comes with a nationally backed, fully insured company. Their two-person teams are background-checked, bring their own supplies, and follow a standardized cleaning system that delivers consistent results.\n*   **Diamond Cleaning Services:** A fantastic independent option known for flexibility and attention to detail. Homeowners love them for move-in/move-out cleans and custom maintenance packages at fair local prices.\n\n**Homeowner Tip:** Hot Springs cleaning schedules fill up fast right before summer lake season, so it\u2019s best to call for a quote and book a few weeks in advance!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "ward-ar-house-cleaning",
+   "question": "Who are the best house cleaning services in Ward, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "Since Ward is a tight-knit community, the best cleaning services are top-rated local providers based right here in Lonoke County and nearby Cabot:\n\n1. **Molly Maid of North Pulaski & Lonoke Counties:** The top choice if you want a fully background-checked, insured, and bonded team. They bring all their own eco-friendly supplies, offer flexible recurring schedules, and back their work with a 24-hour satisfaction guarantee.\n2. **Squeaky Clean AR (Servicing Cabot & Ward):** A fantastic local, family-owned option. Homeowners rave about their attention to detail during deep cleans, move-in/move-out services, and their friendly, personal customer service.\n3. **The Maids of Central Arkansas:** Ideal if you want a fast, incredibly thorough job. They send a specialized 4-person team using 22-step cleaning systems and HEPA-filtration vacuums\u2014a huge plus if anyone in your household has allergies.\n\n**My Advice:** If you prefer supporting a local independent business with a personal touch, call Squeaky Clean AR. If you want corporate consistency, background-checked teams, and easy online scheduling, go with Molly Maid. Just be sure to mention you're in Ward to confirm your routine schedule!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "west-memphis-ar-house-cleaning",
+   "question": "Who are the best house cleaning services in West Memphis, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re a homeowner in West Memphis looking for reliable help around the house, here are the top local recommendations serving our area:\n\n*   **Molly Maid (Mid-South Region):** My top recommendation for regular maintenance. They bring all their own supplies, don\u2019t lock you into contracts, and their staff is fully insured and bonded. They're great for tailored, recurring schedules.\n*   **Merry Maids:** Best for thoroughness and peace of mind. Every team member undergoes rigorous background checks, and they offer a 24-hour satisfaction guarantee\u2014if you aren't happy with a spot, they\u2019ll return to reclean it at no extra charge.\n*   **Two Maids (Memphis Metro):** Ideal for deep cleans or move-in/move-out jobs. They use a unique \"Pay for Performance\" model where cleaner compensation is tied directly to your feedback rating, which keeps their quality consistently high.\n\n**Homeowner Tip:** Because West Memphis sits right on the state line, always confirm with the provider that they cover the 72301 zip code without adding a trip fee.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "ada-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Ada, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me where to take their car in Ada, here are the three local shops I\u2019d recommend:\n\n**1. Garrett Auto Repair**  \nThis is my top pick for general mechanics. They\u2019re known around town for honest diagnostics\u2014they\u2019ll tell you straight if a fix can wait, and they won't pad the bill with unnecessary repairs. Great for everything from minor fixes to major engine work.\n\n**2. Ada Tire Center**  \nDon't let the name fool you; they do much more than tires. They\u2019re fantastic for routine maintenance, brakes, alignments, and suspension issues. The crew is fast, fair, and they\u2019ve built a great reputation in the community over the years.\n\n**3. Direct Tire & Auto Repair**  \nIf you\u2019re dealing with a tricky electrical issue, AC problems, or a check engine light, this is the place to go. Their technicians are great at troubleshooting, and they do a fantastic job of explaining the problem clearly before doing any work.\n\nStick with these local spots and you'll get friendly, trustworthy service without the high prices of a dealership lot.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "siloam-springs-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Siloam Springs, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If I were asking a neighbor for a reliable mechanic in Siloam Springs, here are the local shops I\u2019d trust with my family\u2019s vehicles:\n\n*   **Ken\u2019s Auto Repair:** My top recommendation for honest, no-nonsense diagnostics. Ken and his team are famous locally for fair pricing, telling you what actually needs fixing right now versus what can wait, and never upselling unnecessary work.\n*   **Siloam Springs Tire & Auto:** Excellent for routine maintenance, brakes, alignments, and tire replacements. They are quick, dependable, and great about communicating timelines so you aren't left stranded without a car.\n*   **B&C Auto Repair:** A fantastic family-owned option, especially if you\u2019re dealing with bigger, more complex mechanical issues. They have a loyal local following because they stand behind their work and treat customers like actual neighbors. \n\nSkip the overpriced dealerships\u2014these three local spots are fair, reliable, and will take great care of your vehicle without breaking the bank.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "siloam-springs-ar-dentist",
+   "question": "Who are the best dentists in Siloam Springs, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you're a homeowner in Siloam Springs looking for a reliable dental home for the family, here are the local practices I\u2019d recommend checking out:\n\n*   **Siloam Springs Dental:** They are a neighborhood favorite, especially for families. Dr. Lee and the team are known for being exceptionally gentle, making it a go-to if you have anxious kids or need a stress-free cleaning. Their scheduling is also pretty accommodating for busy local work weeks.\n*   **Heartland Dental:** If you want a modern office with the latest tech, this is a solid pick. They handle everything from routine preventative care to more complex restorative work under one roof, which is great so you aren't always getting referred out across town. \n*   **White River Dental:** They\u2019ve built a strong reputation in the community for honest, no-pressure treatment plans. As a homeowner, I appreciate contractors and medical providers who don't try to upsell you on work you don't need\u2014that\u2019s the vibe you get here.\n\n**Bottom line:** Stop by or call to chat about your insurance. All three are deeply rooted in the community and keep local smiles looking great.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}

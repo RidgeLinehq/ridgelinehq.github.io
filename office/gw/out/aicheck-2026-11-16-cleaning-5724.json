@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-16-cleaning-5724",
+ "at": "2026-11-16T13:34:09Z",
+ "results": [
+  {
+   "key": "opelika-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Opelika, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy, reliable house cleaning in the Opelika/Auburn area, here are the top local recommendations I\u2019d give a fellow homeowner:\n\n*   **Two Maids & A Mop (Auburn/Opelika):** A top choice in Lee County. They use a unique \"Pay-for-Performance\" system where the cleaners\u2019 compensation is tied directly to your feedback. That built-in accountability means you get consistent, high-quality work whether it's a routine sweep or a deep clean.\n*   **Molly Maid of Auburn/Opelika:** Ideal if you want dependable structure and peace of mind. They are fully insured, bonded, and bring all their own supplies. They're great for setting up a hassle-free, recurring schedule (weekly, bi-weekly, or monthly).\n*   **The Cleaning Crew:** If you prefer a smaller, hands-on team, this local service gets glowing reviews from Opelika residents. Homeowners love them for their detail-oriented work, friendly staff, and great flexibility with pets.\n\n**My advice:** Call Two Maids and Molly Maid first for quick, transparent online quotes based on your square footage, then compare them with a local team to see who fits your budget and schedule best!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "ardmore-ok-house-cleaning",
+   "question": "Who are the best house cleaning services in Ardmore, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable house cleaning in Ardmore, here are the top options I\u2019d recommend depending on your needs:\n\n1. **Merry Maids (Ardmore/Southern OK):** The top choice for peace of mind. They are fully background-checked, bonded, and insured. They bring their own supplies and offer consistent recurring plans (weekly, bi-weekly), making them perfect if you want a reliable, hassle-free schedule.\n2. **Southern Oklahoma Cleaning Services:** A fantastic local company if you need a thorough deep clean, move-in/move-out service, or customized attention. Local homeowners love them for their detailed work and flexible scheduling.\n3. **Custom Clean & Detailing:** Excellent for both routine residential upkeep and heavy-duty cleans. They have a strong reputation in Carter County for friendly service, honest pricing, and great attention to detail.\n\n**Homeowner Tip:** For budget-friendly solo cleaners, check local Ardmore community boards on Facebook or Nextdoor. Many of the area's best independent cleaners operate strictly by word-of-mouth recommendations there. Just be sure to ask any independent hire for references and proof of insurance before signing on!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "phenix-city-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Phenix City, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable house cleaning in the Phenix City area, here are the top three local services I\u2019d recommend checking out:\n\n1. **Two Maids & A Mop (Phenix City/Columbus area):** My top pick for consistent quality. They use a \"pay-for-performance\" system where the cleaners\u2019 pay is tied directly to your satisfaction score, which keeps their standard of work really high. They\u2019re fully bonded, insured, and great for regular maintenance.\n2. **The Cleaning Authority:** Ideal if you prefer eco-friendly products and sustainable cleaning. They use a \"Detail-Clean Rotation System,\" meaning different areas of your home get an extra-deep scrub on a scheduled cycle, so nothing gets overlooked. \n3. **Molly Maid of Columbus & Phenix City:** Perfect if you want flexibility. They don't require long-term contracts, bring all their own equipment, and offer custom plans whether you need a move-out clean, a one-time deep clean, or weekly visits. \n\n**Local Tip:** Since Phenix City borders Columbus, all three of these companies service our side of the river seamlessly. I\u2019d call two of them for a free in-home estimate to see who fits your budget and schedule best!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "troy-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Troy, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable house cleaning in the Troy area, here are the top options I\u2019d recommend to a neighbor:\n\n1. **Dust 2 Shine Cleaning Services:** A fantastic local, independent option in Pike County. They\u2019re known for being detail-oriented and flexible, making them great for personalized deep cleans or routine weekly maintenance. \n2. **Two Maids & A Mop (Servicing the Wiregrass/Pike County area):** Perfect if you prefer a fully bonded and insured corporate team. They offer customizable cleaning packages\u2014from basic upkeep to move-in/move-out cleans\u2014and use a unique pay-for-performance system that keeps quality high.\n3. **Merry Maids (Regional Franchise):** Servicing Troy and the surrounding region, they\u2019re ideal if you want an established name. They bring their own eco-friendly supplies, use background-checked staff, and offer a 24-hour re-clean guarantee if anything gets missed.\n\n**Homeowner Tip:** Because Troy has a strong local community, also check local Facebook groups (like Troy AL Classifieds). Highly recommended independent local cleaners often advertise there and offer great competitive rates for bi-weekly arrangements.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "spanish-fort-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Spanish Fort, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you're looking for reliable house cleaning here in Spanish Fort, these are the top local services I\u2019d recommend:\n\n*   **MaidPro Eastern Shore:** A huge favorite among locals because of their customized 49-Point Checklist. You can customize your plan to focus only on high-traffic areas if you want to save money.\n*   **Molly Maid of the Eastern Shore:** Great if you want an established, fully insured company with no long-term contracts. They bring all their own supplies and offer a \"Neighborly Done Right Promise\"\u2014if something isn't up to standard, they'll come back and fix it for free.\n*   **The Cleaning Authority (Eastern Shore):** The best choice if you prioritize green cleaning. They use eco-friendly, biodegradable products and run a \"Detail-Clean Rotation System\" so your home gets a regular deep clean without paying extra every time.\n*   **The Maids of the Bay Area:** They send efficient 3-to-4-person teams armed with HEPA-filtration vacuums. Because of the team size, they get in and out fast, which is ideal if you work from home.\n\n**Pro-tip:** All four offer free estimates for Spanish Fort addresses, so call two or three to compare quotes before booking your first clean!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "alabaster-al-house-cleaning",
+   "question": "Who are the best house cleaning services in Alabaster, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for reliable house cleaning in Alabaster, here are the top three local choices I\u2019d recommend checking out:\n\n*   **The Maid Crew:** A favorite among Shelby County locals, they\u2019re known for incredible attention to detail and consistent quality. Whether you need a heavy-duty deep clean or routine upkeep, their team is punctual, friendly, and easy to communicate with.\n*   **Two Maids (serving Pelham & Alabaster):** They use a unique \"pay-for-performance\" model where the cleaners' compensation is directly tied to your feedback score, which keeps quality high. They\u2019re super flexible, offering everything from basic maintenance to deep move-in/move-out cleans.\n*   **Molly Maid of Birmingham & Shelby County:** If you prefer an established, fully bonded, and insured service, this is a very dependable option. They bring their own eco-friendly supplies, don\u2019t lock you into contracts, and customize their checklists based on your home's specific needs.\n\n**Homeowner Tip:** Most of these services offer quick, free quotes online or over the phone. Call two or three to compare rates for your specific square footage before booking!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}

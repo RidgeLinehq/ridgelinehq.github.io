@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-16-research-00d9",
+ "at": "2026-11-16T13:37:09Z",
+ "results": [
+  {
+   "key": "ada-ok-dentist",
+   "question": "Who are the best dentists in Ada, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re settling into Ada and looking for a reliable dentist for the family, here are the top local practices I\u2019d recommend to neighbors:\n\n*   **Sweeny Family Dental:** Dr. Shawn Sweeny run a top-tier practice that is great for the whole household. They use modern technology, the office is spotless, and the team excels at keeping kids (and nervous adults) comfortable during cleanings.\n*   **Ada Family Dentistry:** A dependable staple in the community. They cover everything from routine maintenance to emergency fixes, and locals appreciate their punctual appointments, transparent pricing, and friendly front-desk staff.\n*   **Lighthouse Dental:** Dr. Luke Merifield and his staff are highly rated for gentle, patient-focused care. They take the time to thoroughly explain treatment plans without pushing unnecessary upsales, which is a huge plus.\n*   **Twin Lakes Dental:** Known for a warm, welcoming environment and thorough hygienists. They make scheduling easy for busy families and offer great comprehensive care, from routine checkups to cosmetic work.\n\nAll four of these places have earned strong reputations in town for being honest, skilled, and easy to work with.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "sapulpa-ok-auto-repair",
+   "question": "Who are the best auto repair shops in Sapulpa, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me for reliable auto shop recommendations right here in Sapulpa, here are the top local places I\u2019d suggest:\n\n*   **Nabozny\u2019s Auto Repair:** A staple in town for a reason. This family-owned shop is known for rock-solid honesty. They\u2019ll give you a straight answer, explain what actually needs fixing versus what can wait, and charge fair prices.\n*   **Car Tune Auto Repair:** Fantastic all-around shop for everything from basic oil changes to major diagnostic work. The staff is friendly, efficient, and great at getting your vehicle back on the road without unnecessary delays.\n*   **Alternative Automotive:** Known for top-notch customer service and transparent estimates. They do reliable work, stand behind their repairs, and never try to upsell you on things you don\u2019t need. \n\nYou really can\u2019t go wrong with any of these three\u2014they\u2019ve built great reputations in the community by treating people right and keeping repair bills reasonable.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "mountain-home-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Mountain Home, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you're looking for honest, reliable mechanics around Mountain Home, here are the top local shops I recommend to neighbors:\n\n*   **Auto Services Inc.:** Hands down one of the most trusted spots in Baxter County. They excel at complex diagnostic work, charge fair prices, and won't push unnecessary repairs on you. \n*   **Strahn Auto Repair:** A fantastic, down-to-earth local shop known for integrity. They are always transparent about what needs immediate fixing versus what can wait, which helps keep your household budget intact.\n*   **Plumlee Tire & Auto Care:** Excellent for routine maintenance, brakes, tires, and general repairs. They offer quick turnaround times, friendly customer service, and consistently solid workmanship.\n\nYou can't go wrong with any of these three\u2014they treat you like a neighbor, not just a work order.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "greenbrier-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Greenbrier, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.5-flash-lite",
+    "google_search": false,
+    "text": "If you live in Greenbrier and need a trustworthy mechanic, here are the local shops I\u2019d personally recommend to my neighbors:\n\nFirst is **Greenbrier Auto Repair**. They are a staple right in town and have built a stellar reputation for honesty. If you have an annoying check-engine light or mysterious engine trouble, these are the folks you want looking under the hood. They take the time to explain what\u2019s actually wrong without trying to upsell you on repairs you don't need.\n\nFor everyday maintenance like oil changes, brake pads, or new tires, I always suggest **Christian Brothers Automotive** just down the road. While it's a bit newer to the area, their customer service is top-tier. They have a super clean waiting room with Wi-Fi, and they send you a digital inspection report with pictures right to your phone before doing any work. \n\nBoth of these spots treat customers right, which gives me peace of mind when my family's cars are on the road.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "tahlequah-ok-dentist",
+   "question": "Who are the best dentists in Tahlequah, OK?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me for dentist recommendations here in Tahlequah, these are the local practices I\u2019d tell them to check out first:\n\n* **Moots Family Dentistry:** Dr. Jason Moots and his team are a top choice for families. They\u2019re known for a gentle touch, a spotless office, and a friendly vibe that instantly puts you at ease. They\u2019re honest and won't try to upsell you on procedures you don\u2019t need.\n* **Tahlequah Family Dentistry:** Dr. Justin White offers modern, high-tech care for everything from routine cleanings to crowns and implants. They respect your time, keep appointments running on schedule, and handle insurance paperwork without hassle.\n* **Carson Dental:** If you want a classic, community-focused practice, Dr. Carson\u2019s office is fantastic. The staff is warm and attentive, focusing heavily on preventive care that helps keep long-term out-of-pocket costs down.\n\n**Homeowner tip:** These offices are popular with locals, so if you're due for a routine checkup, call a few weeks in advance to secure a convenient slot.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "muscle-shoals-al-dentist",
+   "question": "Who are the best dentists in Muscle Shoals, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a new neighbor asked me for dentist recommendations in Muscle Shoals, here are the top local practices I\u2019d point them to:\n\n* **Singing River Dentistry:** A top choice if you want modern technology and comprehensive care. They handle everything from routine cleanings to complex cosmetics under one roof, making them super convenient for busy households. \n* **Muscle Shoals Dental Associates:** Ideal if you prefer a classic, long-standing local practice. Dr. Williams and his staff are famous for their gentle bedside manner, clear communication, and taking the time to explain your options without rushing.\n* **Deshler Family Dentistry:** Dr. Eure and Dr. Bennett run a fantastic, welcoming practice for kids and adults alike. They\u2019re known throughout the area for a warm, down-to-earth atmosphere, thorough preventative care, and practical, honest advice.\n\n**Why these picks?** As a homeowner, you want local stability, fair billing, and a dental team that treats you like a neighbor rather than a sales quota. All three of these offices have deep roots in the Shoals and outstanding reputations for put-you-at-ease patient care.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}

@@ -1,0 +1,102 @@
+{
+ "id": "aicheck-2026-11-16-auto-08d0",
+ "at": "2026-11-16T13:31:53Z",
+ "results": [
+  {
+   "key": "fort-payne-al-auto-repair",
+   "question": "Who are the best auto repair shops in Fort Payne, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy mechanics right here in Fort Payne, these local shops come highly recommended by neighbors for their honesty, fair pricing, and quality work:\n\n*   **DeKalb Tire & Auto Center:** The top recommendation for all-around reliability. Whether you need a fresh set of tires, brake work, or routine maintenance, they\u2019re known for straightforward communication and never trying to upsell you on repairs you don't need.\n*   **Landers Auto Repair:** Great choice if you want a true local, independent shop. They excel at diagnostic work\u2014if you\u2019ve got a mysterious check engine light or electrical issue, Landers will figure it out quickly without charging an arm and a leg.\n*   **G & G Auto Repair:** Known around town for honest, down-to-earth service. The mechanics here take the time to explain what\u2019s going on under the hood in plain English before doing any work, which gives you real peace of mind.\n\nFor quick, hassle-free maintenance like oil changes and safety checks, **Express Oil Change & Tire Engineers** on Gault Ave is also a fast and dependable option.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "el-dorado-ar-auto-repair",
+   "question": "Who are the best auto repair shops in El Dorado, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy mechanics right here in El Dorado, these are the local shops I\u2019d recommend to my own neighbors:\n\n*   **Rester\u2019s Auto Repair:** My top pick for tricky diagnostic work or major repairs. They\u2019ve built a stellar local reputation for honesty\u2014they\u2019ll tell you exactly what needs fixing right now and what can wait, without pushing unnecessary upsells. \n*   **Tire & Brake Specialists:** The go-to spot for routine maintenance, new tires, alignments, and brake jobs. The team works quickly, their pricing is fair, and they\u2019re great about getting you back on the road without hassle.\n*   **Kinard Auto Service:** A solid, family-owned option known for friendly, dependable customer service. They do great all-around mechanical work, communicate clearly about costs upfront, and stand behind their repairs.\n\nIf you want fair prices and mechanics who treat you like a neighbor rather than just another ticket, you can\u2019t go wrong with any of these three.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "pine-bluff-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Pine Bluff, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me where to take their car in Pine Bluff, here are the local spots I\u2019d recommend:\n\n**1. Pine Bluff Tire & Auto Service**\nThis is the go-to for routine maintenance, brakes, and tires. The crew is straightforward, they get you in and out quickly, and they won't try to upsell you on things you don't need. \n\n**2. Tate\u2019s Auto Repair**\nFor trickier engine diagnostics, electrical issues, or major repairs, Tate\u2019s is top-notch. It\u2019s a classic, honest local shop where the mechanics explain the problem in plain English and give you a fair, upfront price.\n\n**3. H & H Tire & Battery**\nA true neighborhood staple for suspension work, alignments, and quick battery swaps. They\u2019re friendly, reliable, and have built a great reputation in the community for treat-you-like-family service.\n\nStick with these local crews, and you\u2019ll get honest work without the inflated dealership prices!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "albertville-al-auto-repair",
+   "question": "Who are the best auto repair shops in Albertville, AL?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If a neighbor asked me where to take their car in Albertville, here are the top local shops I\u2019d send them to:\n\n**1. Gilbert Tire & Service**\nA trusted, long-standing staple in town. They handle everything from routine maintenance to major engine repair. Locals love them because they\u2019re upfront about costs, don\u2019t push unnecessary add-ons, and stand behind their work. \n\n**2. Wilks Tire & Battery Service**\nKnown all over the Sand Mountain area for top-tier customer service and fast turnarounds. They\u2019re fantastic for tires, alignments, brakes, and suspension work. Their mechanics are friendly, knowledgeable, and treat you like a neighbor rather than just another ticket.\n\n**3. Sand Mountain Auto Care**\nIf you have a tricky check-engine light or an electrical mystery, this is the place to go. Their technicians are thorough diagnosticians who take the time to explain the issue clearly before doing any work, so there are never any surprise charges.\n\nYou can\u2019t go wrong with any of these three\u2014they\u2019ve built great local reputations by being honest, fair, and reliable.",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "van-buren-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Van Buren, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you're looking for honest, reliable mechanics around Van Buren, here are the top local shops I\u2019d recommend to any neighbor:\n\n**1. Valley Auto Repair**\nHands down one of the most trusted spots in town. They\u2019re famous for honest diagnostics\u2014they\u2019ll tell you what actually needs fixing today versus what can wait. They excel at complex engine and electrical troubleshooting.\n\n**2. Crown Auto Repair**\nCrown is fantastic for routine maintenance and everyday repairs. Their customer service is top-notch, their turnarounds are prompt, and they stand behind their work without trying to upsell you on unnecessary services.\n\n**3. G&S Tire & Auto**\nA great all-around local shop. If you need brakes, tires, suspension work, or a quick tune-up, G&S is reliable and fairly priced. The mechanics are straight-shooters who get you back on the road quickly.\n\n*Pro tip:* The good independent shops in Crawford County stay busy, so try to call a day or two ahead for non-emergency work!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  },
+  {
+   "key": "harrison-ar-auto-repair",
+   "question": "Who are the best auto repair shops in Harrison, AR?",
+   "chatgpt": {
+    "ok": false,
+    "error": "gpt-5.5: 429 You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+   },
+   "gemini": {
+    "ok": true,
+    "model": "gemini-3.6-flash",
+    "google_search": false,
+    "text": "If you\u2019re looking for trustworthy, reliable mechanics right here in Harrison, these are the top local spots I\u2019d recommend:\n\n*   **Hudson Tire & Battery:** A long-standing local staple. They\u2019re fantastic for tires, brake work, alignments, and general maintenance. The crew is straightforward, fast, and never tries to upsell you on things you don't need.\n*   **Action Auto & Tire:** Great all-around shop for standard repairs and engine diagnostics. They\u2019re known around town for fair pricing, honest advice, and getting jobs done right the first time. \n*   **Double T Auto Repair:** Excellent for more complex mechanical issues. They have a reputation for top-notch diagnostic work, great communication while your car is in the shop, and treating customers like neighbors.\n\nStick with any of these three, and you\u2019ll get honest work without the dealership markups!",
+    "sources": [],
+    "note": "Google Search grounding not available on this key's plan; answer is from the model alone"
+   }
+  }
+ ]
+}
