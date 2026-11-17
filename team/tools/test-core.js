@@ -74,7 +74,8 @@ function chi(day, time) {
 }
 
 const MIN = 60000, HOUR = 3600000, DAY = 86400000;
-const CODES = ['auth', 'locked', 'forbidden', 'invalid', 'not_found', 'slot_taken', 'slot_closed', 'busy', 'server'];
+const CODES = ['auth', 'locked', 'forbidden', 'invalid', 'not_found', 'slot_taken', 'slot_closed', 'already_saved', 'busy', 'server'];
+const ALREADY_SAVED = 'Your first try was saved. Check it, then make the change again if you still need to.';
 const SLOTS = ['08:00', '09:30', '12:00', '14:00'];
 const ACTIONS = ['sync', 'logout', 'changePin', 'ackStandards', 'addNote', 'createSale', 'bookJob', 'moveJob', 'updateClient',
   'setJobDone', 'updateJob', 'deleteClient', 'deleteSale', 'updateSale', 'saveMember', 'removeMember', 'resetPin', 'saveSettings',
@@ -116,6 +117,8 @@ function world(opts) {
       /* Hidden from JSON and from key listings; only so that `res.error.code` reads "accepted" in a failure message. */
       Object.defineProperty(res, 'error', { enumerable: false, value: { code: 'accepted', message: '' } });
     }
+    /* Whatever kind of answer it is, a sync in it carries the system's clock as it was when the request was answered. */
+    if (res.sync) eq([res.sync.nowMs, res.sync.nowHM, res.sync.today], [w.t, hm(w.t), dayKey(w.t)], 'the clock in the sync of ' + (req && req.action));
     return res;
   };
   w.call = (who, action, fields) => w.raw(Object.assign({ action: action, token: w.tokens[who] }, fields || {}));
@@ -1123,7 +1126,7 @@ test('the owner can hand a client to another rep: the new rep sees and books for
 section('what each person receives');
 
 function keys(o) { return Object.keys(o).sort().join(','); }
-const TOP_KEYS = 'board,clients,days,jobs,me,notices,problems,rev,sales,same,settings,taken,team,today';
+const TOP_KEYS = 'board,clients,days,jobs,me,notices,nowHM,nowMs,problems,rev,sales,same,settings,taken,team,today';
 
 /* A seeded world with an owner email, a notice or two and a recorded problem, so there is something to leak. */
 function leaky() {
@@ -1250,11 +1253,15 @@ test('a tech stops seeing a job that is cancelled or given to someone else', () 
   eq(w.full('tess').jobs.map((j) => j.id).sort(), [w.ids.jobA, w.ids.jobB].sort());
 });
 
-test('nothing leaks in any kind of answer: sign-in, saves, refusals, replays, fast answers', () => {
+test('nothing leaks in any kind of answer: sign-in, saves, refusals, replays, changed retries, fast answers', () => {
   const w = leaky();
   const pins = { mason: ['Mason Reed', '271845'], jake: ['Jake Miller', '604417'], cole: ['Cole', '906132'], tess: ['Tess Hart', '358206'], owner: ['Grayson', '482913'] };
   Object.keys(pins).forEach((who) => {
     const own = who === 'mason' ? 'A' : 'B', other = who === 'mason' || who === 'cole' ? 'B' : 'A', rep = who === 'mason' || who === 'jake', tech = who === 'cole' || who === 'tess';
+    /* Something this person may save, sent three times under one opId: for real, the same again, and changed. */
+    const save = rep ? ['addNote', { kind: 'client', id: w.ids['client' + own], text: 'fine', opId: 'leak-op-' + who }]
+      : tech ? ['addNote', { kind: 'job', id: w.ids['job' + (who === 'cole' ? 'A' : 'B')], text: 'fine', opId: 'leak-op-' + who }]
+      : ['readNotices', { opId: 'leak-op-' + who }];
     const answers = {
       'sign-in': w.login(who, pins[who][0], pins[who][1]),
       'sync': w.call(who, 'sync'),
@@ -1264,14 +1271,14 @@ test('nothing leaks in any kind of answer: sign-in, saves, refusals, replays, fa
       'owner action': w.call(who, 'saveSettings', { settings: { firstPct: 30 } }),
       'bad request': w.call(who, 'bookJob', { clientId: 'c_missing', date: 'x', time: 'y' }),
       'unknown action': w.call(who, 'dumpEverything'),
-      'own save': rep ? w.call(who, 'addNote', { kind: 'client', id: w.ids['client' + own], text: 'fine', opId: 'leak-op-' + who })
-        : tech ? w.call(who, 'addNote', { kind: 'job', id: w.ids['job' + (who === 'cole' ? 'A' : 'B')], text: 'fine', opId: 'leak-op-' + who })
-        : w.call(who, 'readNotices', { opId: 'leak-op-' + who }),
-      'replay': w.call(who, rep ? 'addNote' : tech ? 'addNote' : 'readNotices', { kind: rep ? 'client' : 'job', id: rep ? w.ids['client' + own] : w.ids['job' + (who === 'cole' ? 'A' : 'B')], text: 'fine', opId: 'leak-op-' + who }),
+      'own save': w.call(who, save[0], save[1]),
+      'replay': w.call(who, save[0], Object.assign({}, save[1])),
+      'changed retry': w.call(who, save[0], Object.assign({}, save[1], { text: 'changed', extra: 1 })),
       'ack': w.call(who, 'ackStandards'),
       'change PIN refused': w.call(who, 'changePin', { oldPin: '000000', newPin: '135790' })
     };
-    ok(answers.replay.replay === true, 'the replay was not a replay for ' + who);
+    ok(answers['own save'].ok && !answers['own save'].replay && answers.replay.replay === true, 'the replay was not a replay for ' + who);
+    eq([answers['changed retry'].ok, answers['changed retry'].error.code, answers['changed retry'].sync.me.id], [false, 'already_saved', w.ids[who]], 'the changed retry for ' + who);
     Object.keys(answers).forEach((label) => assertNoLeak(w, who, answers[label], label));
     if (who !== 'owner') {
       ok(!answers['note on someone else\'s client'].ok && !answers['note on someone else\'s job'].ok && !answers['owner action'].ok, who + ' got through');

@@ -65,7 +65,8 @@ function buildPreview(html, outPath) {
   const fonts = pick(/<link[^>]+fonts\.googleapis\.com[^>]*>/gi);
   const styles = pick(/<style[\s\S]*?<\/style>/gi);
   let body = (html.match(/<body[^>]*>([\s\S]*)<\/body>/i) || [])[1] || '';
-  body = body.replace(/<script[^>]+src=["'][^"']*config\.js["'][^>]*><\/script>/gi, '');
+  /* The preview has no config.js beside it, so tell the page inline that this is sample mode. */
+  body = body.replace(/<script[^>]+src=["'][^"']*config\.js["'][^>]*><\/script>/gi, '<script>window.RIDGELINE_BACKEND = "";<\/script>');
   let out = [title, '<meta name="claude:viewport-fit-sides" content="cover">', fonts, styles, body].join('\n');
   /* The preview has no files beside it, so the one photo travels inside the page. */
   const small = arg('--preview-photo');

@@ -101,19 +101,26 @@ function answerPost_(e) {
 }
 
 /*
- * The only thing this may ever answer is "nothing changed" to someone who is signed in. Any
- * other outcome (signed out, a new day, an error) is thrown away and the request is run again
- * properly, under the lock.
+ * The only thing this may ever answer is "nothing changed" to someone whose sign-in is already
+ * in the cache. Any other outcome (signed out, a sign-in the cache has forgotten, a new day, an
+ * error) is thrown away and the request is run again properly, under the lock.
  *
- * This is the one place that takes the revision number from the cache (newStore_(true)), so
- * that a phone asking every 20 seconds does not use up Google's daily allowance of property
- * reads. See quickRev in the store for why that copy can be trusted.
+ * It runs without the lock, so it only looks. Its store (newStore_(true)) reads the cache and
+ * nothing else: it never opens the sheet and never writes, not even to the cache. That matters
+ * most for sign-ins. If this check could read a sign-in from the sheet and put it in the cache,
+ * it could put back one that a removal, a PIN reset or a sign-out had cleared a moment earlier,
+ * and that phone would stay signed in for up to six hours. A sign-in only ever goes into the
+ * cache under the lock, where nothing else can be clearing it at the same time.
+ *
+ * This is also the one place that takes the revision number from the cache, so that a phone
+ * asking every 20 seconds does not use up Google's daily allowance of property reads. See
+ * quickRev in the store for why that copy can be trusted.
  */
 function answerIfNothingChanged_(req) {
   var store = newStore_(true), env = newEnv_();
   if (req.since !== store.getRev() || req.day !== env.dayKey(env.now())) return null;
   var res = RidgelineCore.create(store, env).handle(req);
-  if (res && res.ok === true && res.sync && res.sync.same === true && !store.hasChanges()) return res;
+  if (res && res.ok === true && res.sync && res.sync.same === true && !store.needsLock()) return res;
   return null;
 }
 
@@ -181,8 +188,9 @@ function release_(lock) {
  * A tab is read at most once per request and kept in memory. put and del change that memory
  * and mark the tab; flush() then rewrites each marked tab in one go.
  *
- * quick: true only for the "nothing changed?" check, which runs without the lock and may take
- * the revision number from the cache. Every other request holds the lock and reads the property.
+ * quick: true only for the "nothing changed?" check, which runs without the lock. That store may
+ * take the revision number from the cache, and it is look-only: see lookOnly at the end. Every
+ * other request holds the lock, reads the property and gets the full store.
  */
 function newStore_(quick) {
   var props = PropertiesService.getScriptProperties();
@@ -412,22 +420,50 @@ function newStore_(quick) {
     }
   }
 
+  function cacheGet(key) {
+    key = String(key);
+    if (key.length > CACHE_MAX_KEY) return null;
+    var value = cache.get(key);
+    return value === null || value === undefined ? null : String(value);
+  }
+
+  /*
+   * The store for the "nothing changed?" check, which holds no lock. It can read the cache and
+   * the revision number. Everything else is only noted: asking for a tab gives an empty list
+   * without opening the sheet, and nothing is written anywhere, the cache included. needsLock()
+   * then says the request wanted more than a look, and it is run again under the lock.
+   */
+  function lookOnly() {
+    var wanted = false;
+    function note() { wanted = true; }
+    return {
+      list: function () { wanted = true; return []; },
+      put: note,
+      del: note,
+      getRev: readRev,
+      setRev: note,
+      cacheGet: cacheGet,
+      cachePut: note,
+      cacheDel: note,
+      needsLock: function () { return wanted; }
+    };
+  }
+
+  if (quick) return lookOnly();
+
   return {
     list: list,
     put: put,
     del: del,
     getRev: getRev,
     setRev: setRev,
-    cacheGet: function (key) {
-      key = String(key);
-      if (key.length > CACHE_MAX_KEY) return null;
-      var value = cache.get(key);
-      return value === null || value === undefined ? null : String(value);
-    },
+    cacheGet: cacheGet,
     cachePut: function (key, value, ttlSeconds) {
       key = String(key);
       value = String(value);
-      /* The cache only ever saves time. Something too big for it is simply not kept. */
+      /* Something too big for the cache is simply not kept. The core knows that: what it must
+         not lose (the memory of a saved action) it keeps under RidgelineCore.LIMITS.retryChars,
+         which is well inside the limit here. */
       if (key.length > CACHE_MAX_KEY || value.length > CACHE_MAX_VALUE) return;
       var seconds = Math.floor(Number(ttlSeconds));
       if (!(seconds >= 1)) seconds = 1;

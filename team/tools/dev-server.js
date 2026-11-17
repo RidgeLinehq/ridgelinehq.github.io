@@ -12,10 +12,17 @@
  * POST /   body: the request as JSON text (the page sends it as text/plain)  ->  the core's answer as JSON
  * GET  /   -> { ok: true, service: 'ridgeline-wash-team', version }   (same as opening the real link)
  *
- * Two test knobs, as a query string on the POST address:
- *   ?delay=1500   wait that many milliseconds before answering (a slow connection)
+ * Three test knobs, as a query string on the POST address. They can be combined (?delay=3000&drop=1):
+ *   ?delay=1500   wait that many milliseconds before answering (a slow connection). If the phone
+ *                 hangs up before the wait is over, the request is not run, unless drop=1 is there too.
  *   ?fail=1       answer HTTP 500 with an HTML page, the way Google does when a script crashes.
- *                 The request is not run, so nothing is saved.
+ *                 The request is not run, so nothing is saved. With fail=1, drop=1 does nothing.
+ *   ?drop=1       a lost answer: the request is run and whatever it does is saved, then the
+ *                 connection is closed without a word. The phone sees a network failure for
+ *                 something that did save. Send the same request again without the knob to see the
+ *                 retry answered from memory (replay: true), or with a changed field to see
+ *                 'already_saved'. With delay, the request runs after the wait even if the phone
+ *                 has stopped waiting by then, like a backend that carries on after the app gave up.
  *
  * Like the real web app, it does not answer a preflight (OPTIONS). If the page ever sends one,
  * the page is sending something other than a plain text body and would fail against Google too.
@@ -173,15 +180,22 @@ const server = http.createServer((req, res) => {
     const text = tooBig ? ' '.repeat(MAX_BODY_CHARS + 1) : Buffer.concat(chunks).toString('utf8');
     const delay = Math.min(MAX_DELAY, Math.max(0, parseInt(url.searchParams.get('delay'), 10) || 0));
     const fail = url.searchParams.get('fail') === '1';
+    const drop = url.searchParams.get('drop') === '1' && !fail;
     const started = Date.now();
     setTimeout(() => {
-      if (res.destroyed) return log(actionOf(text) + '  the phone gave up before the answer');
+      const after = delay ? '  after ' + (Date.now() - started) + ' ms' : '';
+      /* A lost answer (?drop=1) is run whether or not the phone is still waiting for it. */
+      if (res.destroyed && !drop) return log(actionOf(text) + '  the phone gave up before the answer, nothing was run');
       if (fail) {
         log(actionOf(text) + '  answered HTTP 500 with an error page (?fail=1), nothing was run');
         return send(res, 500, 'text/html; charset=utf-8', CRASH_PAGE, true);
       }
       const answer = answerPost(text);
-      log(actionOf(text) + '  ' + outcome(answer) + (delay ? '  after ' + (Date.now() - started) + ' ms' : ''));
+      if (drop) {
+        log(actionOf(text) + '  ' + outcome(answer) + after + ', then the answer was dropped (?drop=1)');
+        return req.socket.destroy();
+      }
+      log(actionOf(text) + '  ' + outcome(answer) + after);
       send(res, 200, JSON_TYPE, JSON.stringify(answer), true);
     }, delay);
   });
@@ -197,7 +211,8 @@ let opened;
 try { opened = seed(); } catch (e) { if (!asProgram) throw e; console.error(e.message); process.exit(1); }
 
 if (!asProgram) {
-  module.exports = { answerPost: answerPost, PEOPLE: PEOPLE, MAX_BODY_CHARS: MAX_BODY_CHARS, opened: opened };
+  /* server: not listening. A test can start it on a port of its own with server.listen(0). */
+  module.exports = { answerPost: answerPost, PEOPLE: PEOPLE, MAX_BODY_CHARS: MAX_BODY_CHARS, opened: opened, server: server };
 } else server.listen(port, () => {
   const at = 'http://localhost:' + port + '/';
   console.log('Ridgeline team backend (local stand-in, core ' + RidgelineCore.VERSION + ') is listening on ' + at);
@@ -209,6 +224,8 @@ if (!asProgram) {
   console.log('  ?backend=' + encodeURIComponent(at));
   console.log('Slow connection:  ?backend=' + encodeURIComponent(at + '?delay=1500'));
   console.log('Crashing backend: ?backend=' + encodeURIComponent(at + '?fail=1'));
+  console.log('A lost answer:    add ?drop=1 to the address of the one request whose answer should be lost');
+  console.log('                  (it is run and saved, then the connection is closed). See the top of this file.');
   console.log('');
   console.log('Data is kept in memory only. Press Ctrl+C to stop.');
 });
