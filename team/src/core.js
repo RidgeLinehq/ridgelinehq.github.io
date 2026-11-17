@@ -204,6 +204,10 @@ var RidgelineCore = (function () {
     return status;
   }
 
+  /* pct percent of a price in whole cents, half a cent rounding up. Worked in whole numbers,
+     because in floating point 5.1% of $15.00 comes out a hair under 76.5 cents and loses a cent. */
+  function share(priceCents, pct) { return Math.round(priceCents * Math.round((pct || 0) * 100) / 10000); }
+
   /*
    * What one sale has earned its rep so far, as dated events.
    * The sale pays firstPct of the price on the day it was sold. A monthly sale also pays
@@ -212,9 +216,9 @@ var RidgelineCore = (function () {
    * The percentages are the ones saved on the sale, so later rate changes never rewrite history.
    */
   function commissionEvents(sale, client, today) {
-    var events = [{ day: sale.day, cents: Math.round(sale.priceCents * (sale.firstPct || 0) / 100), kind: 'first' }];
+    var events = [{ day: sale.day, cents: share(sale.priceCents, sale.firstPct), kind: 'first' }];
     if (sale.billing === 'monthly' && client) {
-      var each = Math.round(sale.priceCents * (sale.monthlyPct || 0) / 100);
+      var each = share(sale.priceCents, sale.monthlyPct);
       for (var k = 1; k <= 600; k++) {
         var due = addMonths(sale.day, k);
         if (due > today) break;
@@ -237,15 +241,19 @@ var RidgelineCore = (function () {
 
   /* ---------- input checks ---------- */
 
+  /* Text from a value a phone sent. A list or an object is not text: it counts as empty.
+     (String() throws on an object such as {"toString": 1}, which a stranger could send.) */
+  function str(v) { return v == null || typeof v === 'object' || typeof v === 'function' ? '' : String(v); }
+
   function line(v, max, required, msg) {
-    var s = v == null ? '' : String(v).replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim();
+    var s = str(v).replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim();
     if (s.length > max) s = s.slice(0, max);
     if (required && !s) throw new AppError('invalid', msg || 'Something is missing.');
     return s;
   }
 
   function para(v, max, required, msg) {
-    var s = v == null ? '' : String(v).replace(/[\u0000-\u0008\u000b-\u001f\u007f]/g, '').replace(/\r\n?/g, '\n').trim();
+    var s = str(v).replace(/\r\n?/g, '\n').replace(/[\u0000-\u0008\u000b-\u001f\u007f]/g, '').trim();
     if (s.length > max) s = s.slice(0, max);
     if (required && !s) throw new AppError('invalid', msg || 'Something is missing.');
     return s;
@@ -264,7 +272,8 @@ var RidgelineCore = (function () {
   }
 
   function payLink(v) {
-    var s = line(v, 300);
+    var s = line(v, 301);
+    if (s.length > 300) throw new AppError('invalid', 'That payment link is too long.');   /* a link cut short is a broken link */
     if (s && !/^https:\/\/[^\s<>"'`]+$/i.test(s)) throw new AppError('invalid', 'A payment link must start with https://');
     return s;
   }
@@ -280,7 +289,7 @@ var RidgelineCore = (function () {
     return out.slice(0, LIMITS.slotsPerDay);
   }
 
-  function normName(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim().toLowerCase(); }
+  function normName(s) { return str(s).replace(/\s+/g, ' ').trim().toLowerCase(); }
 
   /* ---------- the core ---------- */
 
@@ -358,6 +367,7 @@ var RidgelineCore = (function () {
 
     function refreshSessions(m) {
       sessionsOf(m.id).forEach(function (s) {
+        if (env.now() - s.createdAt > LIMITS.sessionDays * 86400000) return;   /* expired: leave it signed out */
         store.cachePut('sess:' + s.id, JSON.stringify({ id: m.id, name: m.name, role: m.role }), 21600);
       });
     }
@@ -382,7 +392,7 @@ var RidgelineCore = (function () {
     }
 
     function login(req) {
-      var name = normName(req.name), pin = String(req.pin == null ? '' : req.pin);
+      var name = normName(req.name), pin = str(req.pin);
       var wrong = new AppError('auth', 'That name and PIN do not match. Check both and try again.');
       if ((parseInt(store.cacheGet('fail:all'), 10) || 0) >= LIMITS.globalTries) {
         throw new AppError('locked', 'Sign-in is paused for a few minutes. Try again shortly.');
@@ -534,6 +544,12 @@ var RidgelineCore = (function () {
       doc.notes = (doc.notes || []).concat([{ at: env.now(), by: me.id, text: text }]).slice(-LIMITS.notesKept);
     }
 
+    /* A job going back on the schedule cannot stay with someone who has left the team. */
+    function dropGoneAssignee(job) {
+      var m = job.assignedTo ? find('team', job.assignedTo) : null;
+      if (!m || !m.active) job.assignedTo = null;
+    }
+
     function setStatus(client, status) {
       if (client.status === status) return;
       client.status = status;
@@ -563,8 +579,8 @@ var RidgelineCore = (function () {
           if (roleChanged && cur.id !== me.id) dropSessions(cur.id); else refreshSessions(cur);
           return { id: cur.id };
         }
-        if (m.pin != null && m.pin !== '' && !pinOk(String(m.pin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
-        var pin = m.pin ? String(m.pin) : randomPin(), salt = String(env.uuid());
+        if (m.pin != null && m.pin !== '' && !pinOk(str(m.pin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
+        var pin = m.pin ? str(m.pin) : randomPin(), salt = String(env.uuid());
         var doc = { id: newId('m'), name: name, role: m.role, salt: salt, pinHash: hashPin(salt, pin), active: true, createdAt: env.now() };
         put('team', doc);
         return { id: doc.id, pin: pin };
@@ -588,8 +604,8 @@ var RidgelineCore = (function () {
         var m = find('team', req.id);
         if (!m || !m.active) throw new AppError('not_found', 'That person is no longer on the team.');
         if (m.id === me.id) throw new AppError('invalid', 'Use Change PIN for your own PIN.');
-        if (req.pin != null && req.pin !== '' && !pinOk(String(req.pin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
-        var pin = req.pin ? String(req.pin) : randomPin();
+        if (req.pin != null && req.pin !== '' && !pinOk(str(req.pin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
+        var pin = req.pin ? str(req.pin) : randomPin();
         m.salt = String(env.uuid()); m.pinHash = hashPin(m.salt, pin);
         put('team', m);
         dropSessions(m.id);
@@ -600,9 +616,9 @@ var RidgelineCore = (function () {
       changePin: { roles: ROLES, run: function (me, req) {
         var m = find('team', me.id);
         if (!m) throw new AppError('auth', 'Please sign in again.');
-        if (hashPin(m.salt, String(req.oldPin == null ? '' : req.oldPin)) !== m.pinHash) throw new AppError('invalid', 'Your current PIN is not right.');
-        if (!pinOk(String(req.newPin == null ? '' : req.newPin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
-        m.salt = String(env.uuid()); m.pinHash = hashPin(m.salt, String(req.newPin));
+        if (hashPin(m.salt, str(req.oldPin)) !== m.pinHash) throw new AppError('invalid', 'Your current PIN is not right.');
+        if (!pinOk(str(req.newPin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
+        m.salt = String(env.uuid()); m.pinHash = hashPin(m.salt, str(req.newPin));
         put('team', m);
         dropSessions(m.id, me.sess);
         return {};
@@ -614,7 +630,7 @@ var RidgelineCore = (function () {
           if (!Array.isArray(p.services) || !p.services.length || p.services.length > LIMITS.services) {
             throw new AppError('invalid', 'Keep at least one service on the list.');
           }
-          var seen = {};
+          var seen = Object.create(null);   /* not {}: a service may be named "constructor" */
           s.services = p.services.map(function (x) {
             var name = line(x && x.name, 40, true, 'Every service needs a name.');
             if (seen[normName(name)]) throw new AppError('invalid', 'Two services have the same name.');
@@ -735,7 +751,7 @@ var RidgelineCore = (function () {
               (job && !job.assignedTo ? '\nNobody is assigned to this job yet.' : ''));
         }
         return { clientId: client.id, saleId: sale.id, jobId: job ? job.id : null,
-          commissionCents: Math.round(price * settings.firstPct / 100) };
+          commissionCents: share(price, settings.firstPct) };
       } },
 
       /* Book a visit for a client who is already in the system. */
@@ -790,6 +806,7 @@ var RidgelineCore = (function () {
             });
             if (clash) throw new AppError('slot_taken', 'That time has since been taken. Move the job to a new time instead.');
             job.status = 'scheduled'; job.doneAt = null; job.doneBy = null;
+            dropGoneAssignee(job);
           } else throw new AppError('invalid', 'That is not a job status.');
         }
         put('jobs', job);
@@ -804,6 +821,7 @@ var RidgelineCore = (function () {
         job.status = done ? 'done' : 'scheduled';
         job.doneAt = done ? env.now() : null;
         job.doneBy = done ? me.id : null;
+        if (!done) dropGoneAssignee(job);
         put('jobs', job);
         var client = find('clients', job.clientId);
         if (done && client && client.status === 'New') { setStatus(client, 'Active'); put('clients', client); }
