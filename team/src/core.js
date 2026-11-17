@@ -33,7 +33,7 @@ var RidgelineCore = (function () {
   var LIMITS = {
     name: 60, line: 160, text: 500, notesKept: 50, noticesKept: 60, problemsKept: 30,
     maxCents: 100000000, sessionDays: 90, loginTries: 5, lockSeconds: 900, globalTries: 40,
-    daysPerCall: 62, slotsPerDay: 24, services: 20
+    daysPerCall: 62, slotsPerDay: 24, services: 20, standardSections: 12, standardItems: 20, standardLine: 240
   };
   var DEFAULT_SETTINGS = {
     id: 'main',
@@ -48,7 +48,45 @@ var RidgelineCore = (function () {
     defaultSlots: ['08:00', '09:30', '12:00', '14:00'],
     defaultTechId: null,
     notifyEmail: '',
-    emailOnBooking: true
+    emailOnBooking: true,
+    /* Company standards: a starting draft built from the job checklist in Grayson's own mockups.
+       The owner edits these in the app; everyone else reads them and confirms they have. */
+    standards: [
+      { id: 'job', title: 'On every job', ordered: true, items: [
+        'Arrive on time. If you will be more than 10 minutes late, call the customer before the start time.',
+        'Take before photos.',
+        'Protect what is nearby. Move or cover furniture, plants, door mats and cars before any water or soap.',
+        'Do the whole job that was sold. If part of it cannot be done safely, stop and call Grayson.',
+        'Take after photos.',
+        'Walk the customer through the finished work before you leave. If nobody is home, add a note to the job.',
+        'Leave the property tidier than you found it. Hoses coiled, gates closed, nothing left behind.',
+        'Mark the job done and add a note about anything the next person should know.'
+      ] },
+      { id: 'show', title: 'How we show up', ordered: false, items: [
+        'Clean clothes and closed-toe shoes. Ridgeline uniforms are coming soon.',
+        'Introduce yourself by name and say you are with Ridgeline Wash Co.',
+        'Be polite and patient with every customer, every time.',
+        "No smoking, vaping or loud music on a customer's property.",
+        'Park where you are not blocking anyone, unless the customer tells you otherwise.'
+      ] },
+      { id: 'safety', title: 'Safety first', ordered: false, items: [
+        'If it is not safe, do not do it. Call Grayson.',
+        'Check your ladder and the ground under it before every climb.',
+        'Keep water and spray away from outlets, power lines, people and pets.',
+        'Wear eye protection and gloves when you use cleaning solution.'
+      ] },
+      { id: 'selling', title: 'Selling the right way', ordered: false, items: [
+        'Be honest about what a service will and will not do.',
+        'Quote only the services and prices Grayson has approved.',
+        'Enter every sale the same day and book the appointment before you leave.',
+        'If someone says no, thank them and move on.'
+      ] },
+      { id: 'wrong', title: 'When something goes wrong', ordered: false, items: [
+        'Damage or a complaint: stop, take a photo, tell the customer we will make it right, and call Grayson right away.',
+        'Add a note to the job so nothing is forgotten.'
+      ] }
+    ],
+    standardsUpdatedAt: 0
   };
 
   /* ---------- small helpers ---------- */
@@ -388,15 +426,16 @@ var RidgelineCore = (function () {
       var meDoc = find('team', me.id) || {};
       var out = {
         rev: rev, today: day, same: false,
-        me: { id: me.id, name: me.name, role: me.role, noticesSeenAt: meDoc.noticesSeenAt || 0 },
+        me: { id: me.id, name: me.name, role: me.role, noticesSeenAt: meDoc.noticesSeenAt || 0, standardsAckAt: meDoc.standardsAckAt || 0 },
         team: team.map(function (m) {
           var v = { id: m.id, name: m.name, role: m.role, active: !!m.active };
-          if (owner) v.createdAt = m.createdAt;
+          if (owner) { v.createdAt = m.createdAt; v.standardsAckAt = m.standardsAckAt || 0; }
           return v;
         }),
         settings: owner ? settings : {
           businessName: settings.businessName, services: settings.services,
-          firstPct: settings.firstPct, monthlyPct: settings.monthlyPct
+          firstPct: settings.firstPct, monthlyPct: settings.monthlyPct,
+          standards: settings.standards, standardsUpdatedAt: settings.standardsUpdatedAt
         },
         days: me.role === 'tech' ? [] : all('days')
           .filter(function (d) { return d.id >= addDays(day, -45); })
@@ -600,6 +639,20 @@ var RidgelineCore = (function () {
           s.notifyEmail = em;
         }
         if (p.emailOnBooking !== undefined) s.emailOnBooking = !!p.emailOnBooking;
+        if (p.standards !== undefined) {
+          if (!Array.isArray(p.standards) || p.standards.length > LIMITS.standardSections) {
+            throw new AppError('invalid', 'Keep the standards to ' + LIMITS.standardSections + ' sections or fewer.');
+          }
+          var next = p.standards.map(function (sec) {
+            var items = (Array.isArray(sec && sec.items) ? sec.items : [])
+              .map(function (it) { return line(it, LIMITS.standardLine); })
+              .filter(function (it) { return it; })
+              .slice(0, LIMITS.standardItems);
+            return { id: line(sec && sec.id, 30) || newId('st'), title: line(sec && sec.title, 60, true, 'Every section needs a title.'),
+              ordered: !!(sec && sec.ordered), items: items };
+          });
+          if (JSON.stringify(next) !== JSON.stringify(s.standards)) { s.standards = next; s.standardsUpdatedAt = env.now(); }
+        }
         s.id = 'main';
         put('settings', s);
         return {};
@@ -827,6 +880,16 @@ var RidgelineCore = (function () {
         else if (job) { job.saleId = null; put('jobs', job); }
         del('sales', sale.id);
         return {};
+      } },
+
+      /* "I have read the company standards." Remembered per person, with the time. */
+      ackStandards: { roles: ROLES, run: function (me) {
+        var m = find('team', me.id);
+        if (!m) throw new AppError('auth', 'Please sign in again.');
+        m.standardsAckAt = env.now();
+        put('team', m);
+        if (me.role !== 'owner') tellOwner('standards', me.name + ' read the company standards.');
+        return { at: m.standardsAckAt };
       } },
 
       readNotices: { roles: ['owner'], run: function (me) {

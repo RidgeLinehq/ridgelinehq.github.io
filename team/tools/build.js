@@ -9,7 +9,8 @@
  *   node tools/build.js --backend-only        Code.gs only
  *   node tools/build.js --out /tmp/x.html     write the page somewhere else (leaves index.html alone)
  *   node tools/build.js --only screens-sales  include only the named screens-* files (comma separated)
- *   node tools/build.js --preview out.html    also write a body-only copy for a Claude artifact preview
+ *   node tools/build.js --preview out.html [--preview-photo small.jpg]
+ *                                             also write a body-only copy for a Claude artifact preview
  */
 const fs = require('fs');
 const path = require('path');
@@ -65,7 +66,12 @@ function buildPreview(html, outPath) {
   const styles = pick(/<style[\s\S]*?<\/style>/gi);
   let body = (html.match(/<body[^>]*>([\s\S]*)<\/body>/i) || [])[1] || '';
   body = body.replace(/<script[^>]+src=["'][^"']*config\.js["'][^>]*><\/script>/gi, '');
-  const out = [title, '<meta name="claude:viewport-fit-sides" content="cover">', fonts, styles, body].join('\n');
+  let out = [title, '<meta name="claude:viewport-fit-sides" content="cover">', fonts, styles, body].join('\n');
+  /* The preview has no files beside it, so the one photo travels inside the page. */
+  const small = arg('--preview-photo');
+  if (small && fs.existsSync(small)) {
+    out = out.split('photo-standard.jpg').join('data:image/jpeg;base64,' + fs.readFileSync(small).toString('base64'));
+  }
   fs.writeFileSync(outPath, out);
 }
 
