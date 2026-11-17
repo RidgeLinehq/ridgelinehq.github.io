@@ -202,7 +202,9 @@
       if (!jobs.length) return;
       var list = h('div', { class: 'list' });
       jobs.forEach(function (job) {
-        var c = App.client(job.clientId), seller = c ? App.nameOf(c.repId, '') : '';
+        /* Who sold it is on the sale; a visit booked later with no sale goes by the client's own rep. */
+        var sale = job.saleId ? App.sale(job.saleId) : null, c = App.client(job.clientId);
+        var seller = App.nameOf(sale ? sale.repId : c ? c.repId : null, '');
         list.appendChild(ui.jobRow(job, { sub: seller ? 'Sold by ' + seller : job.what }));
       });
       bookedEl.appendChild(list);

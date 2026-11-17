@@ -537,6 +537,93 @@ button.day:not([disabled]):active { opacity: .7; }
   .sheet { animation: none; }
   * { scroll-behavior: auto !important; }
 }
+
+/* ---- screens-admin.css ---- */
+/*
+ * Dashboard, Notifications, Team, Settings, Edit standards, Schedule.
+ * Almost everything on these screens is a shared component from app.css; this is the little that is not.
+ */
+
+/* .row-top: a tall row (several lines under the title) keeps its lead and its button level with the title. */
+.row-top { align-items: flex-start; }
+.row-top .rank { line-height: 23px; }
+.row-top .row-right { margin: -10px -6px 0 0; }
+
+/* .board-amt: the dollars sold at the right of a leaderboard row. */
+.board-amt { color: var(--ink); font-weight: 600; }
+
+/* .notice: one line in Notifications. New ones carry an ice dot and heavier words. */
+.notice { align-items: flex-start; }
+.notice .row-title { font-weight: 400; }
+.notice.is-new .row-title { font-weight: 600; }
+.notice-dot { width: 8px; height: 8px; margin-top: 8px; border-radius: 50%; }
+.notice-dot.is-new { background: var(--ice); }
+
+/* A red text button ("Remove section"): the words only, in the problem color. */
+.btn-text.btn-danger { color: var(--bad); }
+
+/* .input-suffix: something inside the right edge of a control (the "%" in Commission). */
+.input-suffix { position: absolute; right: 14px; top: 0; height: var(--tap); display: flex; align-items: center; color: var(--ink-2); pointer-events: none; }
+.input-wrap.has-suffix .input { padding-right: 36px; }
+
+/* .svc-row: one service on one line: name, usual price, remove. .svc-head is the line of column names above. */
+.svc-row { display: grid; grid-template-columns: minmax(0, 1fr) 108px 44px; gap: 8px; align-items: start; }
+.svc-row > .iconbtn { margin-top: 4px; color: var(--ink-2); }
+.svc-head { font-weight: 600; font-size: 14px; color: var(--ink-2); }
+
+/* .add-row: a field with its button beside it, level with the control. */
+.add-row { display: flex; align-items: flex-end; gap: 8px; }
+.add-row > .field { flex: 1 1 auto; }
+
+/* .std-remove: holds the "Remove section" words level with the labels above them, at the foot of a section's block. */
+.std-remove { margin: -4px 0 -8px -14px; }
+
+/* .std-edit: the "one standard per line" box grows with what is typed, so the sheet is the only thing that scrolls. */
+textarea.std-edit { resize: none; overflow: hidden; }
+
+/* ---- screens-calendar.css ---- */
+/* ---------- CALENDAR ---------- */
+/* .time-tags > .time-tag: a day's free times for a rep to read (not buttons, so no border). Tinted like an open day. */
+.time-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.time-tag { display: inline-flex; align-items: center; height: 40px; padding: 0 14px; border-radius: 10px; background: var(--ice-wash); color: var(--ink); font: 600 16px/1 var(--body); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ---- screens-clients.css ---- */
+/* ---------- CLIENTS ---------- */
+/* .client-price: "$150.00 a month" stays in one piece when its line wraps. */
+.client-price { white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* ---- screens-sales.css ---- */
+/*
+ * Sales, the New sale sheet and the Leaderboard: the few pieces app.css does not already have.
+ * Everything else on these screens is a shared class from app.css.
+ */
+
+/* .nums: the numbers card. Two totals side by side, then one big number with small lines under it.
+   Sits on .card.card-flush. The numbers themselves reuse .stat-num, .stat-label and .big-num. */
+.nums-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border-bottom: 1px solid var(--line); }
+.nums-cell { display: flex; flex-direction: column; gap: 4px; min-width: 0; padding: 14px 16px 12px; }
+.nums-cell + .nums-cell { border-left: 1px solid var(--line); }
+.nums-cell .stat-num { white-space: normal; overflow-wrap: anywhere; }   /* a very large total wraps instead of running out of its cell */
+.nums-main { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px 16px; }
+.nums-label { font-size: 14px; line-height: 1.25; color: var(--ink-2); }
+.nums-lines { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 14px; }
+
+/* .amt: the money figure on the right of a row, in full ink (the line under it stays quiet). */
+.amt { color: var(--ink); font-weight: 600; }
+
+/* .sale-sec: a section label with a quiet link on the same line ("Customer" ... "Existing client"). */
+.sale-sec { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; margin: -6px 0 -10px; }
+.sale-sec .label { margin: 0; }
+.sale-sec .btn-text { margin-right: -6px; }
+
+/* .btn-start: a text button that sits at the left edge of a column instead of stretching across it. */
+.btn-start { align-self: flex-start; margin-left: -6px; }
+.callout .btn-start { margin-top: 2px; margin-bottom: -10px; }
+
+/* .sold-head: the check and "Sale saved" at the top of the success view. */
+.sold-head { display: flex; align-items: center; gap: 12px; }
+.sold-head .ico { color: var(--good); }
+.sold-title { font: 800 22px/1.15 var(--display); }
 </style>
 </head>
 <body>
@@ -607,7 +694,8 @@ button.day:not([disabled]):active { opacity: .7; }
  *        dayKey(ms) -> 'YYYY-MM-DD' in the business time zone
  *        hm(ms) -> 'HH:MM' (24 hour) in the business time zone
  *        uuid() -> random string
- *        notify({subject, body})   sends the owner an email; may throw
+ *        notify({subject, body, to})   emails the owner; may throw. A host may instead keep the
+ *                                  message and send it once the data is saved (the Google host does).
  *
  * Every request is { action, token?, since?, day?, opId?, ... } and every answer is
  * { ok: true, result, sync } or { ok: false, error: { code, message }, sync? }.
@@ -625,8 +713,12 @@ var RidgelineCore = (function () {
   var LIMITS = {
     name: 60, line: 160, text: 500, notesKept: 50, noticesKept: 60, problemsKept: 30,
     maxCents: 100000000, sessionDays: 90, loginTries: 5, lockSeconds: 900, globalTries: 40,
+    longTries: 20, longSeconds: 21600,   /* 20 wrong PINs inside 6 hours (the longest the cache remembers) pause that person */
+    retrySeconds: 21600,                 /* how long a saved action is remembered by its opId */
+    docChars: 45000,                     /* the most one record may take as JSON; a cell of the sheet holds 50,000 */
     daysPerCall: 62, slotsPerDay: 24, services: 20, standardSections: 12, standardItems: 20, standardLine: 240
   };
+  var CLIENT_FULL = 'This client\'s record is full. Shorten the name, the address or another detail, then try again.';
   var DEFAULT_SETTINGS = {
     id: 'main',
     businessName: 'Ridgeline Wash Co.',
@@ -806,6 +898,14 @@ var RidgelineCore = (function () {
    * monthlyPct of the price on the same day of every following month, for as long as the
    * client is still New or Active on that day (paused and cancelled months pay nothing).
    * The percentages are the ones saved on the sale, so later rate changes never rewrite history.
+   *
+   * The client's status alone is not enough, because one client can have several sales. So a
+   * monthly sale can carry an endDay, and it pays nothing dated after that day, ever:
+   *   - when the client is set to Cancelled, their monthly sales end that day. If they buy again
+   *     later, the new sale pays; the old one does not start again.
+   *   - when the client buys another monthly plan, the older monthly sale ends that day (it
+   *     also remembers which sale replaced it, as endedBy), so only one plan pays each month.
+   * Pausing sets no endDay: the paused months pay nothing and the pay picks up afterwards.
    */
   function commissionEvents(sale, client, today) {
     var events = [{ day: sale.day, cents: share(sale.priceCents, sale.firstPct), kind: 'first' }];
@@ -813,7 +913,7 @@ var RidgelineCore = (function () {
       var each = share(sale.priceCents, sale.monthlyPct);
       for (var k = 1; k <= 600; k++) {
         var due = addMonths(sale.day, k);
-        if (due > today) break;
+        if (due > today || (sale.endDay && due > sale.endDay)) break;
         var st = statusOn(client, due);
         if (st === 'New' || st === 'Active') events.push({ day: due, cents: each, kind: 'monthly' });
       }
@@ -871,6 +971,12 @@ var RidgelineCore = (function () {
   }
 
   function pinOk(v) { return typeof v === 'string' && /^\d{4,6}$/.test(v); }
+
+  /* One record is one cell of the Google Sheet, and a cell holds 50,000 characters. Whatever can
+     make a record longer checks it here first, before anything is saved, and says what to shorten. */
+  function fits(doc, msg) {
+    if (JSON.stringify(doc).length > LIMITS.docChars) throw new AppError('invalid', msg);
+  }
 
   function cleanSlots(list) {
     var seen = {}, out = [];
@@ -983,6 +1089,43 @@ var RidgelineCore = (function () {
       return n;
     }
 
+    /*
+     * Wrong PINs are counted per person in two ways, whether they are typed at sign-in or as the
+     * "current PIN" when changing a PIN:
+     *   fail:<id>    5 quick ones lock that person for 15 minutes (the count lapses 15 minutes
+     *                after the last wrong try, and a right PIN clears it);
+     *   fail6h:<id>  "count:when the first one was", kept for 6 hours from the first wrong try.
+     *                20 inside that window pause the person until the window runs out, and the
+     *                owner is told once. This is what stops four quiet guesses every 15 minutes.
+     *                A right PIN does not clear it; only time or the owner resetting the PIN does.
+     */
+    function pinLocked(m) {
+      if ((parseInt(store.cacheGet('fail6h:' + m.id), 10) || 0) >= LIMITS.longTries) {
+        throw new AppError('locked', 'Too many wrong tries. This sign-in is paused for a few hours. Ask the owner to reset your PIN.');
+      }
+      if ((parseInt(store.cacheGet('fail:' + m.id), 10) || 0) >= LIMITS.loginTries) {
+        throw new AppError('locked', 'Too many wrong tries. Wait 15 minutes, or ask the owner to reset your PIN.');
+      }
+    }
+
+    function wrongPin(m) {
+      bumpFail('fail:' + m.id);
+      var key = 'fail6h:' + m.id, was = String(store.cacheGet(key) || '').split(':');
+      var n = (parseInt(was[0], 10) || 0) + 1, since = parseInt(was[1], 10) || env.now();
+      var left = LIMITS.longSeconds - Math.floor((env.now() - since) / 1000);
+      if (left < 1) { n = 1; since = env.now(); left = LIMITS.longSeconds; }
+      store.cachePut(key, n + ':' + since, left);
+      if (n === LIMITS.longTries) {
+        tellOwner('signin', 'Someone tried the wrong PIN for ' + m.name + ' ' + n + ' times. Their sign-in is paused for a few hours. Reset their PIN if that was not them.');
+        store.setRev(store.getRev() + 1);
+      }
+    }
+
+    function clearPinFails(memberId) {
+      store.cacheDel('fail:' + memberId);
+      store.cacheDel('fail6h:' + memberId);
+    }
+
     function login(req) {
       var name = normName(req.name), pin = str(req.pin);
       var wrong = new AppError('auth', 'That name and PIN do not match. Check both and try again.');
@@ -994,12 +1137,13 @@ var RidgelineCore = (function () {
       var hits = active.filter(function (m) { return normName(m.name) === name; });
       if (!hits.length) hits = active.filter(function (m) { return normName(m.name).split(' ')[0] === name; });
       if (hits.length !== 1) { bumpFail('fail:all'); throw wrong; }
-      var m = hits[0], key = 'fail:' + m.id;
-      if ((parseInt(store.cacheGet(key), 10) || 0) >= LIMITS.loginTries) {
-        throw new AppError('locked', 'Too many wrong tries. Wait 15 minutes, or ask the owner to reset your PIN.');
-      }
-      if (hashPin(m.salt, pin) !== m.pinHash) { bumpFail(key); bumpFail('fail:all'); throw wrong; }
-      store.cacheDel(key);
+      var m = hits[0];
+      pinLocked(m);
+      if (hashPin(m.salt, pin) !== m.pinHash) { wrongPin(m); bumpFail('fail:all'); throw wrong; }
+      store.cacheDel('fail:' + m.id);
+      /* A sign-in older than 90 days is already refused; this is where it is cleared away. */
+      all('sessions').filter(function (s) { return env.now() - s.createdAt > LIMITS.sessionDays * 86400000; })
+        .forEach(function (s) { store.cacheDel('sess:' + s.id); del('sessions', s.id); });
       var token = String(env.uuid()) + String(env.uuid());
       var hash = sha256(token);
       put('sessions', { id: hash, memberId: m.id, createdAt: env.now() });
@@ -1021,6 +1165,8 @@ var RidgelineCore = (function () {
       var myClients = owner ? clients : rep ? clients.filter(function (c) { return c.repId === me.id; }) : [];
       myClients.forEach(function (c) { mine[c.id] = 1; });
       var mySales = owner ? sales : rep ? sales.filter(function (s) { return s.repId === me.id; }) : [];
+      var mySaleIds = Object.create(null);
+      mySales.forEach(function (s) { mySaleIds[s.id] = 1; });
       var myJobs = owner ? jobs
         : rep ? jobs.filter(function (j) { return mine[j.clientId]; })
         : jobs.filter(function (j) { return j.assignedTo === me.id && j.status !== 'cancelled'; });
@@ -1050,6 +1196,9 @@ var RidgelineCore = (function () {
           var v = clone(s), c = clientById[s.clientId];
           v.clientName = c ? c.name : '';
           v.events = commissionEvents(s, c, day);
+          /* endedBy names the newer plan that took this one's place. A rep is told which sale that
+             is only when it is their own; for someone else's it just says 'other'. */
+          if (v.endedBy && !mySaleIds[v.endedBy]) v.endedBy = 'other';
           return v;
         }),
         jobs: myJobs.map(function (j) {
@@ -1103,9 +1252,28 @@ var RidgelineCore = (function () {
       if (clash) throw new AppError('slot_taken', 'That time was just taken. Pick another.');
     }
 
+    /* A sales rep cannot see or finish a job, so a job only ever goes to a tech or an owner. */
+    function canDoJobs(m) { return !!m && !!m.active && (m.role === 'tech' || m.role === 'owner'); }
+
+    function needJobTaker(id) {
+      var m = find('team', id);
+      if (!m || !m.active) throw new AppError('invalid', 'Pick someone who is on the team.');
+      if (!canDoJobs(m)) throw new AppError('invalid', 'Only a tech or the owner can be given a job. Pick one of them.');
+      return m;
+    }
+
     function defaultTech() {
       var id = getSettings().defaultTechId, m = id ? find('team', id) : null;
-      return m && m.active ? m.id : null;
+      return canDoJobs(m) ? m.id : null;
+    }
+
+    /* Someone who is leaving, or becoming a sales rep, keeps the jobs they finished. The ones
+       still to do go back to nobody, and new jobs stop going to them. */
+    function takeOffJobs(memberId) {
+      all('jobs').filter(function (j) { return j.assignedTo === memberId && j.status === 'scheduled'; })
+        .forEach(function (j) { j.assignedTo = null; put('jobs', j); });
+      var s = find('settings', 'main');
+      if (s && s.defaultTechId === memberId) { s.defaultTechId = null; put('settings', s); }
     }
 
     function whenText(date, time) {
@@ -1136,16 +1304,26 @@ var RidgelineCore = (function () {
       doc.notes = (doc.notes || []).concat([{ at: env.now(), by: me.id, text: text }]).slice(-LIMITS.notesKept);
     }
 
-    /* A job going back on the schedule cannot stay with someone who has left the team. */
+    /* A job going back on the schedule cannot stay with someone who has left the team or sells now. */
     function dropGoneAssignee(job) {
-      var m = job.assignedTo ? find('team', job.assignedTo) : null;
-      if (!m || !m.active) job.assignedTo = null;
+      if (!canDoJobs(job.assignedTo ? find('team', job.assignedTo) : null)) job.assignedTo = null;
     }
 
     function setStatus(client, status) {
       if (client.status === status) return;
       client.status = status;
       client.statusLog = (client.statusLog || []).concat([{ day: today(), status: status }]).slice(-200);
+    }
+
+    /* Ends the monthly pay of this client's monthly sales that are still running (see
+       commissionEvents). `by` is the newer monthly sale taking their place, when that is why. */
+    function endMonthlySales(clientId, day, by) {
+      all('sales').forEach(function (s) {
+        if (s.clientId !== clientId || s.billing !== 'monthly' || s.endDay || s.id === by) return;
+        s.endDay = day;
+        if (by) s.endedBy = by;
+        put('sales', s);
+      });
     }
 
     /* ---------- actions (who may call each, and what it does) ---------- */
@@ -1167,13 +1345,16 @@ var RidgelineCore = (function () {
           }
           var roleChanged = cur.role !== m.role;
           cur.name = name; cur.role = m.role;
+          fits(cur, 'That name is too long to save. Shorten it and try again.');
           put('team', cur);
           if (roleChanged && cur.id !== me.id) dropSessions(cur.id); else refreshSessions(cur);
+          if (roleChanged && !canDoJobs(cur)) takeOffJobs(cur.id);   /* now a sales rep: the same as leaving, as far as jobs go */
           return { id: cur.id };
         }
         if (m.pin != null && m.pin !== '' && !pinOk(str(m.pin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
         var pin = m.pin ? str(m.pin) : randomPin(), salt = String(env.uuid());
         var doc = { id: newId('m'), name: name, role: m.role, salt: salt, pinHash: hashPin(salt, pin), active: true, createdAt: env.now() };
+        fits(doc, 'That name is too long to save. Shorten it and try again.');
         put('team', doc);
         return { id: doc.id, pin: pin };
       } },
@@ -1185,10 +1366,7 @@ var RidgelineCore = (function () {
         m.active = false; m.removedAt = env.now();
         put('team', m);
         dropSessions(m.id);
-        all('jobs').filter(function (j) { return j.assignedTo === m.id && j.status === 'scheduled'; })
-          .forEach(function (j) { j.assignedTo = null; put('jobs', j); });
-        var s = find('settings', 'main');
-        if (s && s.defaultTechId === m.id) { s.defaultTechId = null; put('settings', s); }
+        takeOffJobs(m.id);
         return { id: m.id };
       } },
 
@@ -1201,33 +1379,45 @@ var RidgelineCore = (function () {
         m.salt = String(env.uuid()); m.pinHash = hashPin(m.salt, pin);
         put('team', m);
         dropSessions(m.id);
-        store.cacheDel('fail:' + m.id);
+        clearPinFails(m.id);
         return { id: m.id, pin: pin };
       } },
 
+      /* A wrong "current PIN" counts exactly like a wrong PIN at sign-in, so a phone that is
+         lying around signed in cannot be used to guess its owner's PIN. */
       changePin: { roles: ROLES, run: function (me, req) {
         var m = find('team', me.id);
         if (!m) throw new AppError('auth', 'Please sign in again.');
-        if (hashPin(m.salt, str(req.oldPin)) !== m.pinHash) throw new AppError('invalid', 'Your current PIN is not right.');
+        pinLocked(m);
+        if (hashPin(m.salt, str(req.oldPin)) !== m.pinHash) { wrongPin(m); throw new AppError('invalid', 'Your current PIN is not right.'); }
         if (!pinOk(str(req.newPin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
         m.salt = String(env.uuid()); m.pinHash = hashPin(m.salt, str(req.newPin));
         put('team', m);
         dropSessions(m.id, me.sess);
+        store.cacheDel('fail:' + m.id);
         return {};
       } },
 
       saveSettings: { roles: ['owner'], run: function (me, req) {
         var p = req.settings || {}, s = getSettings();
+        /* The id a list entry keeps: the one it came with, or a fresh one when it came with none
+           or with one that an earlier entry of the same list already has. */
+        function ownId(taken, given, prefix) {
+          var id = line(given, 30);
+          if (!id || taken[id]) id = newId(prefix);
+          taken[id] = 1;
+          return id;
+        }
         if (p.services !== undefined) {
           if (!Array.isArray(p.services) || !p.services.length || p.services.length > LIMITS.services) {
             throw new AppError('invalid', 'Keep at least one service on the list.');
           }
-          var seen = Object.create(null);   /* not {}: a service may be named "constructor" */
+          var seen = Object.create(null), serviceIds = Object.create(null);   /* not {}: a service may be named "constructor" */
           s.services = p.services.map(function (x) {
             var name = line(x && x.name, 40, true, 'Every service needs a name.');
             if (seen[normName(name)]) throw new AppError('invalid', 'Two services have the same name.');
             seen[normName(name)] = 1;
-            return { id: line(x.id, 30) || newId('s'), name: name, priceCents: cents(x.priceCents == null ? 0 : x.priceCents, 'Check the service prices.') };
+            return { id: ownId(serviceIds, x.id, 's'), name: name, priceCents: cents(x.priceCents == null ? 0 : x.priceCents, 'Check the service prices.') };
           });
         }
         if (p.firstPct !== undefined) s.firstPct = pct(p.firstPct);
@@ -1236,11 +1426,7 @@ var RidgelineCore = (function () {
           s.defaultSlots = cleanSlots(p.defaultSlots);
           if (!s.defaultSlots.length) throw new AppError('invalid', 'Keep at least one time slot.');
         }
-        if (p.defaultTechId !== undefined) {
-          var t = p.defaultTechId ? find('team', p.defaultTechId) : null;
-          if (p.defaultTechId && (!t || !t.active)) throw new AppError('invalid', 'Pick someone who is on the team.');
-          s.defaultTechId = t ? t.id : null;
-        }
+        if (p.defaultTechId !== undefined) s.defaultTechId = p.defaultTechId ? needJobTaker(p.defaultTechId).id : null;
         if (p.notifyEmail !== undefined) {
           var em = line(p.notifyEmail, 120);
           if (em && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) throw new AppError('invalid', 'That email address does not look right.');
@@ -1251,17 +1437,19 @@ var RidgelineCore = (function () {
           if (!Array.isArray(p.standards) || p.standards.length > LIMITS.standardSections) {
             throw new AppError('invalid', 'Keep the standards to ' + LIMITS.standardSections + ' sections or fewer.');
           }
+          var sectionIds = Object.create(null);
           var next = p.standards.map(function (sec) {
             var items = (Array.isArray(sec && sec.items) ? sec.items : [])
               .map(function (it) { return line(it, LIMITS.standardLine); })
               .filter(function (it) { return it; })
               .slice(0, LIMITS.standardItems);
-            return { id: line(sec && sec.id, 30) || newId('st'), title: line(sec && sec.title, 60, true, 'Every section needs a title.'),
+            return { id: ownId(sectionIds, sec && sec.id, 'st'), title: line(sec && sec.title, 60, true, 'Every section needs a title.'),
               ordered: !!(sec && sec.ordered), items: items };
           });
           if (JSON.stringify(next) !== JSON.stringify(s.standards)) { s.standards = next; s.standardsUpdatedAt = env.now(); }
         }
         s.id = 'main';
+        fits(s, 'The company standards are too long to save. Shorten a few lines or remove a section, then try again.');
         put('settings', s);
         return {};
       } },
@@ -1287,7 +1475,11 @@ var RidgelineCore = (function () {
         var day = today(), now = env.now(), settings = getSettings();
         var service = line(req.service, 60, true, 'Pick what was sold.');
         var price = cents(req.priceCents, 'Enter the price.');
-        var billing = BILLING.indexOf(req.billing) >= 0 ? req.billing : 'once';
+        var billing = 'once';   /* what a sale is when the request does not say */
+        if (req.billing != null) {
+          if (BILLING.indexOf(req.billing) < 0) throw new AppError('invalid', 'Pick one-time or monthly.');
+          billing = req.billing;
+        }
         var notes = para(req.notes, LIMITS.text);
         var repId = me.id;
         if (me.role === 'owner' && req.repId) {
@@ -1330,9 +1522,11 @@ var RidgelineCore = (function () {
           if (client.status === 'Cancelled' || client.status === 'Paused') setStatus(client, 'Active');
         }
         if (notes) pushNote(client, me, notes);
+        fits(client, notes ? 'There is no room left in this client\'s notes. Shorten the note on this sale and try again.' : CLIENT_FULL);
         put('clients', client);
         put('sales', sale);
         if (job) put('jobs', job);
+        if (!isNew && billing === 'monthly') endMonthlySales(client.id, day, sale.id);   /* one monthly plan pays at a time */
 
         if (me.role !== 'owner') {
           var head = me.name + ' sold ' + service + ' to ' + client.name + ' for ' + money(price) + (billing === 'monthly' ? ' a month' : '');
@@ -1384,11 +1578,7 @@ var RidgelineCore = (function () {
       /* Assign a job, change what needs doing, cancel it or bring it back. */
       updateJob: { roles: ['owner'], run: function (me, req) {
         var job = needJob(req.jobId), p = req.patch || {};
-        if (p.assignedTo !== undefined) {
-          var m = p.assignedTo ? find('team', p.assignedTo) : null;
-          if (p.assignedTo && (!m || !m.active)) throw new AppError('invalid', 'Pick someone who is on the team.');
-          job.assignedTo = m ? m.id : null;
-        }
+        if (p.assignedTo !== undefined) job.assignedTo = p.assignedTo ? needJobTaker(p.assignedTo).id : null;
         if (p.what !== undefined) job.what = line(p.what, LIMITS.line, true, 'Say what needs to be done.');
         if (p.status !== undefined) {
           if (p.status === 'cancelled') job.status = 'cancelled';
@@ -1401,6 +1591,7 @@ var RidgelineCore = (function () {
             dropGoneAssignee(job);
           } else throw new AppError('invalid', 'That is not a job status.');
         }
+        fits(job, 'This job\'s record is full. Shorten what needs to be done, then try again.');
         put('jobs', job);
         return { jobId: job.id };
       } },
@@ -1428,17 +1619,22 @@ var RidgelineCore = (function () {
           var ok = me.role === 'owner' || (me.role === 'tech' && job.assignedTo === me.id) || (me.role === 'rep' && jc && jc.repId === me.id);
           if (!ok) throw new AppError('forbidden', 'That job belongs to someone else.');
           pushNote(job, me, text);
+          fits(job, 'There is no room left in this job\'s notes. Shorten the note and try again.');
           put('jobs', job);
         } else if (req.kind === 'client') {
           var client = needClient(req.id);
           if (!canTouchClient(me, client)) throw new AppError('forbidden', 'That client belongs to another rep.');
           pushNote(client, me, text);
+          fits(client, 'There is no room left in this client\'s notes. Shorten the note and try again.');
           put('clients', client);
         } else throw new AppError('invalid', 'Bad request.');
         return {};
       } },
 
-      /* The owner can change anything; a rep can fix the contact details of their own clients. */
+      /* The owner can change anything; a rep can fix the contact details of their own clients.
+         The owner can also hand a client to another rep (patch.repId). That changes who looks
+         after the client from now on, and so who sees them and books for them. Sales already
+         made stay with whoever made them, commission included. */
       updateClient: { roles: ['owner', 'rep'], run: function (me, req) {
         var client = needClient(req.clientId), p = req.patch || {}, owner = me.role === 'owner';
         if (!canTouchClient(me, client)) throw new AppError('forbidden', 'That client belongs to another rep.');
@@ -1468,8 +1664,27 @@ var RidgelineCore = (function () {
             if (CLIENT_STATUSES.indexOf(p.status) < 0) throw new AppError('invalid', 'That is not a client status.');
             setStatus(next, p.status);
           }
+          if (p.repId !== undefined) {
+            var rep = find('team', p.repId);
+            if (!rep || !rep.active || rep.role === 'tech') throw new AppError('invalid', 'Pick a sales rep who is on the team.');
+            next.repId = rep.id;
+          }
         }
+        fits(next, CLIENT_FULL);
         put('clients', next);
+        if (owner && p.status !== undefined) {
+          var day = today();
+          if (next.status === 'Cancelled') endMonthlySales(next.id, day);
+          else if (client.status === 'Cancelled') {
+            /* A cancel taken back the same day (a slip of the thumb) had not stopped any pay yet,
+               so the plan it ended runs on: the newest one, because only one plan pays at a time. */
+            var back = null;
+            all('sales').forEach(function (s) {
+              if (s.clientId === next.id && s.endDay === day && !s.endedBy && (!back || s.soldAt >= back.soldAt)) back = s;
+            });
+            if (back) { delete back.endDay; put('sales', back); }
+          }
+        }
         return { clientId: next.id };
       } },
 
@@ -1488,6 +1703,14 @@ var RidgelineCore = (function () {
         var job = sale.jobId ? find('jobs', sale.jobId) : null;
         if (job && job.status === 'scheduled') del('jobs', job.id);
         else if (job) { job.saleId = null; put('jobs', job); }
+        /* If this sale had taken the place of an older monthly plan, that plan is the client's
+           plan again. It runs on, or ends when and why the removed sale ended. */
+        all('sales').forEach(function (s) {
+          if (s.endedBy !== sale.id) return;
+          delete s.endDay; delete s.endedBy;
+          if (sale.endDay) { s.endDay = sale.endDay; if (sale.endedBy) s.endedBy = sale.endedBy; }
+          put('sales', s);
+        });
         del('sales', sale.id);
         return {};
       } },
@@ -1550,7 +1773,7 @@ var RidgelineCore = (function () {
         }
         var result = a.run(me, req);
         store.setRev(store.getRev() + 1);
-        if (opKey) store.cachePut(opKey, JSON.stringify(result), 3600);
+        if (opKey) store.cachePut(opKey, JSON.stringify(result), LIMITS.retrySeconds);
         return { ok: true, result: result, sync: req.action === 'logout' ? null : buildSync(me, req) };
       } catch (e) {
         if (e && e.appCode) return fail(e.appCode, e.message, me, req);
@@ -1582,13 +1805,20 @@ var RidgelineCore = (function () {
       owner.salt = String(env.uuid()); owner.pinHash = hashPin(owner.salt, pin);
       put('team', owner);
       dropSessions(owner.id);
-      store.cacheDel('fail:' + owner.id);
+      clearPinFails(owner.id);
       store.cacheDel('fail:all');
       store.setRev(store.getRev() + 1);
       return { name: owner.name, pin: pin };
     }
 
-    return { handle: handle, bootstrap: bootstrap, resetOwnerPin: resetOwnerPin };
+    /* For the host: puts a line on the owner's problems list for something that went wrong
+       outside a request, such as an alert email that could not be sent after the save. */
+    function hostProblem(where, message) {
+      mem = {};
+      recordProblem(where, message);
+    }
+
+    return { handle: handle, bootstrap: bootstrap, resetOwnerPin: resetOwnerPin, recordProblem: hostProblem };
   }
 
   /* A store that lives in memory: used by sample mode in the page and by the tests. */
@@ -1652,7 +1882,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = RidgelineC
  *
  * Everything is placed relative to today, so today always has four jobs (8:00 done, 9:30,
  * 12:00, 2:00 with nobody assigned), yesterday has one job that was never marked done, one
- * client is late paying, and the next three weeks have open days with a few times taken.
+ * client is late paying, one is paused and one has cancelled, and the next three weeks have
+ * open days with a few times taken.
  */
 var RidgelineSample = (function () {
   'use strict';
@@ -1758,6 +1989,20 @@ var RidgelineSample = (function () {
     at(-60, '08:50'); finish(main.jobId);
     at(-59, '09:00'); paid(main.clientId);
 
+    at(-55, '14:30');
+    var pine = sell('Avery', { name: 'Pine Ridge Lake House', contact: 'Hank Sutton', phone: '615-555-0118', email: '', address: '9 Pine Ridge Rd' },
+      'Window cleaning', 14000, 'monthly', 'Lake-side windows and the sunroom', [day(-52), '09:30']);
+    assign(pine.jobId);
+    at(-52, '10:50'); finish(pine.jobId);
+    at(-51, '09:00'); paid(pine.clientId);
+
+    at(-47, '13:10');
+    var maple = sell('Mason', { name: 'Maple Court Rental', contact: 'Gail Norris', phone: '615-555-0176', email: '', address: '31 Maple Ct' },
+      'Pressure wash', 9000, 'monthly', 'Walkways and the shared patio', [day(-45), '12:00']);
+    assign(maple.jobId);
+    at(-45, '13:25'); finish(maple.jobId);
+    at(-44, '09:00'); paid(maple.clientId);
+
     at(-41, '11:05');
     var cafe = sell('Mason', { name: 'Hilltop Cafe', contact: 'Luis Ortega', phone: '615-555-0127', email: '', address: '36 Hilltop Ave' },
       'Window cleaning', 12000, 'monthly', 'Front windows and the patio doors', [day(-38), '08:00']);
@@ -1774,12 +2019,21 @@ var RidgelineSample = (function () {
     at(-31, '13:35'); finish(feed.jobId);
     at(-30, '08:55'); finish(mainSecond); paid(feed.clientId);
 
+    /* One client on hold and one who has left, both before their second month came due. */
+    at(-28, '10:20');
+    call(owner, 'updateClient', { clientId: pine.clientId, patch: { status: 'Paused' } });
+    call(owner, 'addNote', { kind: 'client', id: pine.clientId, text: 'Away for a few months. Paused until they call us to start again.' });
+
     at(-27, '13:20');
     var miller = sell('Avery', { name: 'Miller Family Home', contact: 'Beth Miller', phone: '615-555-0139', email: 'beth@example.com', address: '905 Miller Rd' },
       'House wash', 32500, 'once', 'Whole house wash, vinyl siding', [day(-24), '09:30'], 'Asked us to skip the back deck. It was just stained.');
     assign(miller.jobId);
     at(-24, '11:10'); finish(miller.jobId);
     at(-23, '09:00'); paid(miller.clientId);
+
+    at(-21, '15:00');
+    call(owner, 'updateClient', { clientId: maple.clientId, patch: { status: 'Cancelled' } });
+    call(owner, 'addNote', { kind: 'client', id: maple.clientId, text: 'The owner sold the property, so the monthly service ended.' });
 
     at(-20, '08:05'); call(tokens.Avery, 'ackStandards', {});
 
@@ -3840,6 +4094,2975 @@ var App = (function () {
 
   window.App = App;
   return App;
+})();
+
+;
+/* ---- screens-admin.js ---- */
+/*
+ * Ridgeline Wash Co. team app: the owner's side, and the techs' Schedule.
+ *
+ *   #dashboard (owner)      Needs attention, the numbers, the leaderboard, Coming up
+ *   #schedule  (tech)       jobs from tomorrow on by day, then the last ones finished
+ *   App.actions.openNotices()      the Notifications sheet (the bell)
+ *   App.actions.openTeam()         the Team sheet: add, rename, role, Reset PIN, Remove
+ *   App.actions.openSettings()     the Settings sheet: services, commission, usual times,
+ *                                  who gets new jobs, email alerts, company standards
+ *   App.actions.editStandards()    the Edit standards sheet
+ *
+ * Everything is read from App.data on every render; the only things kept here are view choices.
+ */
+(function () {
+  'use strict';
+
+  var h = App.h, ui = App.ui, fmt = App.fmt;
+  var Core = RidgelineCore, D = Core.dates, LIMITS = Core.LIMITS;
+
+  var ROLE_WORDS = { owner: 'Owner', rep: 'Sales rep', tech: 'Tech' };
+  var ROLE_HELP = {
+    rep: 'Enters their own sales and books the appointments.',
+    tech: 'Sees the jobs given to them and marks them done.',
+    owner: 'Sees and controls everything, like you.'
+  };
+  var ROLE_ORDER = ['rep', 'tech', 'owner'];
+  var NAME_TAKEN = 'Someone on the team already has that name. Add a last initial.';
+
+  /* ================= small helpers ================= */
+
+  function clear(el) { el.textContent = ''; return el; }
+  function byWhen(a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : a.time < b.time ? -1 : a.time > b.time ? 1 : 0; }
+  function byName(a, b) {
+    var x = String(a.name || '').toLowerCase(), y = String(b.name || '').toLowerCase();
+    return x < y ? -1 : x > y ? 1 : 0;
+  }
+  function norm(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim().toLowerCase(); }
+  /* One line of text the way the system will store it. */
+  function oneLine(s) { return String(s == null ? '' : s).replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function sum(list, pick) { var t = 0; list.forEach(function (x) { t += pick(x); }); return t; }
+
+  /* "A", "A and B", "A, B and 2 more" */
+  function names(list) {
+    if (list.length <= 2) return list.join(' and ');
+    return list[0] + ', ' + list[1] + ' and ' + (list.length - 2) + ' more';
+  }
+  function priceLine(service, cents, billing) {
+    return (service || 'Service') + ', ' + fmt.money(cents) + (billing === 'monthly' ? ' a month' : ' one-time');
+  }
+  function whenWords(job) {
+    return job.date === App.today() ? 'today at ' + fmt.time(job.time) : fmt.when(job.date, job.time);
+  }
+  function pctText(n) { return String(Math.round((+n || 0) * 100) / 100) + '%'; }
+  /* The same sum the system does: pct percent of a price, in whole cents. */
+  function share(cents, pct) { return Math.round(cents * Math.round((pct || 0) * 100) / 10000); }
+
+  function openClient(id) {
+    if (typeof App.actions.openClient === 'function') App.act('openClient', id);
+    else App.go('clients');
+  }
+
+  /* A small sheet that lists a few things, each of which opens something. It stays current. */
+  function openList(title, build) {
+    App.sheet.open({
+      title: title, small: true,
+      update: function (sh) { sh.rebuild(); },
+      body: function (el) {
+        var rows = build();
+        if (!rows.length) { el.appendChild(h('p', { class: 'muted' }, 'Nothing left here.')); return; }
+        var list = h('div', { class: 'list' });
+        rows.forEach(function (row) { list.appendChild(row); });
+        el.appendChild(list);
+      }
+    });
+  }
+
+  /* A field with something at its right edge (the "%" in Commission). */
+  function withSuffix(field, text) {
+    var wrap = h('span', { class: 'input-wrap has-suffix' });
+    field.insertBefore(wrap, field.input);
+    wrap.appendChild(field.input);
+    wrap.appendChild(h('span', { class: 'input-suffix', 'aria-hidden': 'true' }, text));
+    return field;
+  }
+
+  /* ================= Dashboard: needs attention ================= */
+
+  function lateClients() {
+    return App.data.clients.filter(function (c) { return c.payStatus === 'late'; }).sort(byName);
+  }
+  function overdueJobs() { return App.data.jobs.filter(App.isOverdue).sort(byWhen); }
+  function looseJobs() {
+    return App.data.jobs.filter(function (j) { return j.status === 'scheduled' && !j.assignedTo; }).sort(byWhen);
+  }
+  /* A sale is waiting while nothing was booked for it: not with the sale, and not for that client since. */
+  function waitingSales() {
+    var d = App.data;
+    return d.sales.filter(function (s) {
+      if (s.jobId) return false;
+      var c = App.client(s.clientId);
+      if (c && c.status === 'Cancelled') return false;
+      return !d.jobs.some(function (j) {
+        return j.clientId === s.clientId && j.status !== 'cancelled' && !j.saleId && (j.createdAt || 0) >= (s.soldAt || 0);
+      });
+    }).sort(function (a, b) { return (a.soldAt || 0) - (b.soldAt || 0); });
+  }
+
+  function lateRows() {
+    return lateClients().map(function (c) {
+      return ui.row({ title: c.name, sub: priceLine(c.service, c.priceCents, c.billing), right: ui.payPill('late'),
+        onTap: function () { openClient(c.id); } });
+    });
+  }
+  function jobRows(pick) {
+    /* Only an overdue job carries its pill here: the sheet's title already says what the rest are. */
+    return function () {
+      return pick().map(function (j) { return ui.jobRow(j, App.isOverdue(j) ? { showDate: true } : { showDate: true, pill: false }); });
+    };
+  }
+  function waitingRows() {
+    return waitingSales().map(function (s) {
+      return ui.row({ title: s.clientName || 'Client',
+        sub: [priceLine(s.service, s.priceCents, s.billing), 'Sold ' + fmt.dayShort(s.day) + ' by ' + App.nameOf(s.repId, 'someone')],
+        onTap: function () { openClient(s.clientId); } });
+    });
+  }
+
+  /* The count that leads a row, in the color of its state (the words beside it say what it is). */
+  function count(n, tone) { return h('span', { class: 'rank' }, h('span', { class: tone }, String(n))); }
+
+  function problemsRow(problems) {
+    var shown = problems.slice(0, 3), more = problems.length - shown.length;
+    var lines = h('span', { class: 'stack-sm' });
+    shown.forEach(function (p) {
+      lines.appendChild(h('span', { class: 'stack-xs' }, h('span', null, p.message), h('span', { class: 'hint' }, fmt.stamp(p.at))));
+    });
+    if (more > 0) lines.appendChild(h('span', { class: 'hint' }, 'And ' + fmt.plural(more, 'older one') + '.'));
+    var clearBtn = ui.button('Clear', { kind: 'text', small: true, onTap: function (e, btn) {
+      ui.save(btn, 'clearProblems', {}, { busyText: 'Clearing...' }).then(function (res) { if (res.ok) App.toast('Cleared.'); });
+    } });
+    return ui.row({ lead: count(problems.length, 'bad'), title: problems.length === 1 ? 'System problem' : 'System problems',
+      sub: lines, right: clearBtn, chevron: false, cls: 'row-top' });
+  }
+
+  function attentionRows() {
+    var d = App.data, today = d.today, rows = [];
+    var late = lateClients(), overdue = overdueJobs(), loose = looseJobs(), waiting = waitingSales();
+
+    if (late.length) {
+      rows.push(ui.row({ lead: count(late.length, 'bad'), title: late.length === 1 ? 'Late payment' : 'Late payments',
+        sub: names(late.map(function (c) { return c.name; })),
+        onTap: function () { if (late.length === 1) openClient(late[0].id); else openList('Late payments', lateRows); } }));
+    }
+    if (overdue.length) {
+      rows.push(ui.row({ lead: count(overdue.length, 'bad'), title: overdue.length === 1 ? 'Overdue job' : 'Overdue jobs',
+        sub: overdue.length === 1
+          ? ((overdue[0].client || {}).name || 'A job') + ', was due ' + fmt.day(overdue[0].date)
+          : names(overdue.map(function (j) { return (j.client || {}).name || 'A job'; })),
+        onTap: function () { if (overdue.length === 1) ui.openJob(overdue[0].id); else openList('Overdue jobs', jobRows(overdueJobs)); } }));
+    }
+    if (loose.length) {
+      rows.push(ui.row({ lead: count(loose.length, 'warn'), title: loose.length === 1 ? 'Job with nobody assigned' : 'Jobs with nobody assigned',
+        sub: loose.length === 1
+          ? ((loose[0].client || {}).name || 'A job') + ', ' + whenWords(loose[0])
+          : names(loose.map(function (j) { return (j.client || {}).name || 'A job'; })),
+        onTap: function () { if (loose.length === 1) ui.openJob(loose[0].id); else openList('Nobody assigned', jobRows(looseJobs)); } }));
+    }
+    if (waiting.length) {
+      rows.push(ui.row({ lead: count(waiting.length, 'warn'), title: waiting.length === 1 ? 'Sale waiting for an appointment' : 'Sales waiting for an appointment',
+        sub: names(waiting.map(function (s) { return s.clientName || 'A client'; })),
+        onTap: function () { if (waiting.length === 1) openClient(waiting[0].clientId); else openList('Waiting for an appointment', waitingRows); } }));
+    }
+
+    var end = D.addDays(today, 6);
+    var free = App.freeDays().filter(function (date) { return date <= end; });
+    if (!free.length) {
+      var anyOpen = (d.days || []).some(function (x) { return x.open && x.date >= today && x.date <= end; });
+      rows.push(ui.row({ lead: count(0, 'warn'),
+        title: anyOpen ? 'Free times in the next 7 days' : 'Open days in the next 7 days',
+        sub: anyOpen ? 'Every open day is full. Open more so your reps can book.' : 'Your reps cannot book until you open some.',
+        onTap: function () { App.go('calendar'); } }));
+    }
+
+    var problems = (d.problems || []).slice().sort(function (a, b) { return (b.at || 0) - (a.at || 0); });
+    if (problems.length) rows.push(problemsRow(problems));
+
+    if (!rows.length) {
+      rows.push(ui.row({ lead: h('span', { class: 'good' }, App.icon('check-circle', 24)), title: 'All clear.' }));
+    }
+    return rows;
+  }
+
+  /* ================= Dashboard: numbers, leaderboard, coming up ================= */
+
+  function statGrid(items) {
+    var el = h('div', { class: 'stat-grid' });
+    items.forEach(function (it) {
+      el.appendChild(h('div', { class: 'stat' }, h('span', { class: 'stat-num' }, it.value), h('span', { class: 'stat-label' }, it.label)));
+    });
+    return el;
+  }
+
+  function numbers() {
+    var d = App.data, wk = D.weekStart(d.today), mo = D.monthStart(d.today);
+    var week = d.sales.filter(function (s) { return s.day >= wk; });
+    var month = d.sales.filter(function (s) { return s.day >= mo; });
+    var price = function (s) { return s.priceCents || 0; };
+    var owed = sum(d.sales, function (s) { return Core.calc.sumEvents(s.events || [], mo, null); });
+    var active = d.clients.filter(function (c) { return c.status === 'Active'; }).length;
+    return statGrid([
+      { value: String(week.length), label: 'Sales this week' },
+      { value: fmt.moneyShort(sum(week, price)), label: 'Revenue this week' },
+      { value: String(month.length), label: 'Sales this month' },
+      { value: fmt.moneyShort(sum(month, price)), label: 'Revenue this month' },
+      { value: String(active), label: 'Active clients' },
+      { value: fmt.moneyShort(owed), label: 'Commission owed this month' }
+    ]);
+  }
+
+  /* The leaderboard belongs to the Sales screens. If that part is not here, a plain ranked list stands in. */
+  var boardPeriod = 'week';
+  var PERIODS = [{ value: 'week', label: 'This week' }, { value: 'month', label: 'This month' }, { value: 'all', label: 'All time' }];
+
+  function simpleBoard(box) {
+    var d = App.data, me = d.me;
+    var from = boardPeriod === 'week' ? D.weekStart(d.today) : boardPeriod === 'month' ? D.monthStart(d.today) : null;
+    var earned = {};
+    d.sales.forEach(function (s) { earned[s.repId] = (earned[s.repId] || 0) + Core.calc.sumEvents(s.events || [], from, null); });
+
+    box.appendChild(ui.segmented({ label: 'Leaderboard for', options: PERIODS, value: boardPeriod,
+      onChange: function (v) { boardPeriod = v; App.refresh(); } }));
+    var rows = (d.board || []).slice().sort(function (a, b) {
+      var x = a[boardPeriod], y = b[boardPeriod];
+      return (y.cents - x.cents) || (y.count - x.count) || byName(a, b);
+    });
+    if (!rows.length) {
+      box.appendChild(h('p', { class: 'muted' }, 'No sales reps yet. Add your people from the menu at the top left.'));
+      return;
+    }
+    var list = h('div', { class: 'list' });
+    rows.forEach(function (r, i) {
+      var p = r[boardPeriod], you = r.id === me.id;
+      list.appendChild(ui.row({
+        lead: h('span', { class: 'rank' + (i === 0 && p.cents > 0 ? ' is-top' : '') }, String(i + 1)),
+        title: you ? h('span', { class: 'cluster' }, r.name, ui.pill('You', 'ice')) : r.name,
+        sub: fmt.plural(p.count, 'sale') + (r.active ? '' : ', no longer on the team'),
+        right: h('span', { class: 'stack-xs' },
+          h('span', { class: 'board-amt' }, fmt.money(p.cents)),
+          h('span', { class: 'small' }, fmt.money(earned[r.id] || 0) + ' commission')),
+        cls: you ? 'is-you' : ''
+      }));
+    });
+    box.appendChild(list);
+  }
+
+  function drawLeaderboard(box) {
+    if (typeof ui.leaderboard === 'function') {
+      try {
+        var made = ui.leaderboard(box, { showCommission: true });
+        if (!box.firstChild && made && made.nodeType && made !== box) box.appendChild(made);
+      } catch (e) {
+        if (window.console && console.error) console.error(e);
+        clear(box);
+      }
+    }
+    if (!box.firstChild) simpleBoard(box);
+  }
+
+  function comingUp() {
+    var d = App.data, end = D.addDays(d.today, 7);
+    var jobs = d.jobs.filter(function (j) { return j.status === 'scheduled' && j.date > d.today && j.date <= end; }).sort(byWhen);
+    if (!jobs.length) return h('p', { class: 'muted' }, 'Nothing is booked in the next 7 days.');
+    var list = h('div', { class: 'list' });
+    jobs.forEach(function (j) {
+      var who = j.assignedTo ? App.nameOf(j.assignedTo, 'Someone') : h('span', { class: 'warn' }, 'Nobody assigned');
+      list.appendChild(ui.jobRow(j, { showDate: true, sub: [j.what, who], pill: false }));
+    });
+    return list;
+  }
+
+  function renderDashboard(root) {
+    root.appendChild(ui.title('Dashboard'));
+
+    root.appendChild(ui.label('Needs attention'));
+    var attention = h('div', { class: 'list' });
+    attentionRows().forEach(function (row) { attention.appendChild(row); });
+    root.appendChild(attention);
+
+    root.appendChild(ui.label('Numbers'));
+    root.appendChild(numbers());
+
+    root.appendChild(ui.label('Leaderboard'));
+    var board = h('div', { class: 'stack' });
+    root.appendChild(board);
+    drawLeaderboard(board);
+
+    root.appendChild(ui.label('Coming up'));
+    root.appendChild(comingUp());
+  }
+
+  /* ================= Schedule (techs) ================= */
+
+  function renderSchedule(root) {
+    var d = App.data, today = d.today, tomorrow = D.addDays(today, 1);
+    var ahead = d.jobs.filter(function (j) { return j.status === 'scheduled' && j.date > today; }).sort(byWhen);
+    var done = d.jobs.filter(function (j) { return j.status === 'done'; })
+      .sort(function (a, b) { return (b.doneAt || 0) - (a.doneAt || 0); }).slice(0, 10);
+
+    root.appendChild(ui.title('Schedule', 'Your jobs from tomorrow on.'));
+
+    if (!ahead.length) {
+      var left = App.jobsOn(today).filter(function (j) { return j.status === 'scheduled'; }).length;
+      root.appendChild(ui.empty(left
+        ? { title: 'No jobs coming up.', text: 'You still have ' + fmt.plural(left, 'job') + ' to do today.', button: { label: 'Go to Today', onTap: function () { App.go('today'); } } }
+        : { title: 'No jobs coming up.', text: 'New jobs show up here as soon as they are given to you.' }));
+    }
+    var list = null, day = '';
+    ahead.forEach(function (j) {
+      if (j.date !== day) {
+        day = j.date;
+        root.appendChild(ui.label((day === tomorrow ? 'Tomorrow, ' : '') + fmt.day(day)));
+        list = h('div', { class: 'list' });
+        root.appendChild(list);
+      }
+      list.appendChild(ui.jobRow(j, { pill: false }));
+    });
+
+    if (done.length) {
+      root.appendChild(ui.label('Recently done'));
+      var doneList = h('div', { class: 'list' });
+      done.forEach(function (j) { doneList.appendChild(ui.jobRow(j, { showDate: true })); });
+      root.appendChild(doneList);
+    }
+  }
+
+  /* ================= Notifications ================= */
+
+  /* The Me sheet is not redrawn when data changes, so its "4 new" would outlive the reading. */
+  function clearNewPill() {
+    var rows = document.querySelectorAll('.sheet .row');
+    for (var i = 0; i < rows.length; i++) {
+      var title = rows[i].querySelector('.row-title'), pill = rows[i].querySelector('.row-right');
+      if (title && pill && title.textContent === 'Notifications' && pill.parentNode) pill.parentNode.removeChild(pill);
+    }
+  }
+
+  App.actions.openNotices = function () {
+    var me = App.me();
+    if (!me || me.role !== 'owner') return;
+    var seenAt = me.noticesSeenAt || 0, marking = false;   /* what was new when the sheet opened stays marked while it is open */
+
+    function markRead() {
+      var now = App.me();
+      if (marking || !now) return;
+      var unread = (App.data.notices || []).some(function (n) { return n.at > (now.noticesSeenAt || 0); });
+      if (!unread) return;
+      marking = true;
+      App.api.send('readNotices', {}).then(function (res) {
+        marking = false;
+        if (res.ok) clearNewPill();
+      });
+    }
+
+    var sheet = App.sheet.open({
+      title: 'Notifications',
+      update: function (sh) { sh.rebuild(); markRead(); },
+      onClose: function () { if (stopClock) stopClock(); },
+      body: function (el) {
+        var list = ((App.data && App.data.notices) || []).slice().sort(function (a, b) { return (b.at || 0) - (a.at || 0); });
+        if (!list.length) {
+          el.appendChild(ui.empty({ title: 'No notifications yet.', text: 'New sales, bookings and finished jobs show up here.' }));
+          return;
+        }
+        var rows = h('div', { class: 'list' });
+        list.forEach(function (n) {
+          var fresh = n.at > seenAt;
+          rows.appendChild(ui.row({
+            lead: h('span', { class: 'notice-dot' + (fresh ? ' is-new' : ''), role: fresh ? 'img' : null, 'aria-label': fresh ? 'New' : null }),
+            title: n.text,
+            sub: fmt.ago(n.at),
+            cls: 'notice' + (fresh ? ' is-new' : '')
+          }));
+        });
+        el.appendChild(rows);
+      }
+    });
+    var stopClock = App.on('tick', function () { sheet.rebuild(); });   /* "5 min ago" keeps up while the sheet is open */
+    markRead();
+  };
+
+  /* ================= Team ================= */
+
+  function readLine(m) {
+    if (!m || m.role === 'owner') return null;
+    if (App.hasRead(m)) return h('span', { class: 'good' }, 'Read the standards ' + fmt.date(m.standardsAckAt));
+    return h('span', { class: 'warn' }, m.standardsAckAt ? 'Has not read the changed standards yet' : 'Standards not read yet');
+  }
+
+  function nameProblem(name, exceptId) {
+    if (!name) return 'Add a name.';
+    var clash = App.people().some(function (t) { return t.id !== exceptId && norm(t.name) === norm(name); });
+    return clash ? NAME_TAKEN : '';
+  }
+
+  /* The new PIN, shown once. */
+  function pinBox(name, pin) {
+    return h('div', { class: 'callout callout-ice' },
+      h('p', { class: 'callout-title' }, 'PIN for ' + name),
+      h('p', { class: 'callout-big' }, pin),
+      h('p', { class: 'small muted' }, 'Tell them in person. It is not shown again.'));
+  }
+
+  function drawTeam(el) {
+    var me = App.me();
+    [['owner', 'Owners'], ['rep', 'Sales reps'], ['tech', 'Techs']].forEach(function (group) {
+      var people = App.people([group[0]]).sort(byName);
+      el.appendChild(ui.label(group[1]));
+      if (!people.length) { el.appendChild(h('p', { class: 'muted' }, 'Nobody yet.')); return; }
+      var list = h('div', { class: 'list' });
+      people.forEach(function (m) {
+        list.appendChild(ui.row({
+          lead: h('span', { class: 'avatar' }, fmt.initials(m.name)),
+          title: m.name, sub: readLine(m),
+          right: m.id === me.id ? ui.pill('You', 'ice') : null,
+          onTap: function () { openPerson(m.id); }
+        }));
+      });
+      el.appendChild(list);
+    });
+  }
+
+  App.actions.openTeam = function () {
+    if (App.role() !== 'owner') return;
+    App.sheet.open({
+      title: 'Team',
+      update: function (sh) { sh.rebuild(); },
+      body: drawTeam,
+      footer: { label: 'Add person', onTap: function () { openAddPerson(); } }
+    });
+  };
+
+  function openAddPerson() {
+    var name, pin, role, roleHint, added = null;
+
+    function form(el, sh) {
+      role = 'rep';
+      name = ui.field({ label: 'Name', name: 'new-name', maxlength: 40, autocapitalize: 'words', hint: 'This is the name they type to sign in.' });
+      roleHint = h('p', { class: 'field-hint' }, ROLE_HELP[role]);
+      var seg = ui.segmented({ label: 'Role', value: role,
+        options: ROLE_ORDER.map(function (r) { return { value: r, label: ROLE_WORDS[r] }; }),
+        onChange: function (v) { role = v; roleHint.textContent = ROLE_HELP[v]; } });
+      pin = ui.field({ label: 'PIN', name: 'new-pin', optional: true, inputmode: 'numeric', maxlength: 6,
+        hint: '4 to 6 digits. Leave it blank and one is made for them.' });
+      clear(el);
+      el.appendChild(name);
+      el.appendChild(h('div', { class: 'field' }, h('span', { class: 'field-label' }, 'Role'), seg, roleHint));
+      el.appendChild(pin);
+      sh.setTitle('Add person');
+      sh.setButton('Add person');
+    }
+
+    function done(el, sh) {
+      clear(el);
+      el.appendChild(h('div', { class: 'stack-xs' },
+        h('p', { class: 'std-ok' }, App.icon('check-circle', 20), h('span', null, added.name + ' is on the team.')),
+        h('p', { class: 'muted' }, 'They sign in with the name ' + added.name + ' and this PIN.')));
+      el.appendChild(pinBox(added.name, added.pin));
+      el.appendChild(ui.button('Add another person', { block: true, icon: 'plus', onTap: function () { added = null; form(el, sh); } }));
+      sh.setTitle('Person added');
+      sh.setButton('Done');
+      sh.body.scrollTop = 0;
+    }
+
+    App.sheet.open({
+      title: 'Add person',
+      body: function (el, sh) { form(el, sh); },
+      footer: { label: 'Add person', onTap: function (sh) {
+        if (added) { sh.close(); return; }
+        var n = oneLine(name.val()), p = pin.val();
+        var problem = nameProblem(n, null);
+        if (problem) { name.setError(problem); sh.reveal(name); return; }
+        if (p && !/^\d{4,6}$/.test(p)) { pin.setError('A PIN is 4 to 6 digits.'); sh.reveal(pin); return; }
+        sh.send('saveMember', { member: { name: n, role: role, pin: p } }).then(function (res) {
+          if (!res.ok) return;
+          added = { name: n, pin: String((res.result && res.result.pin) || p) };
+          done(sh.body, sh);
+        });
+      } }
+    });
+  }
+
+  function openPin(name, pin) {
+    App.sheet.open({
+      title: 'New PIN', small: true,
+      body: function (el) {
+        el.appendChild(h('p', { class: 'muted' }, 'The old PIN no longer works. ' + name + ' signs in again with this one.'));
+        el.appendChild(pinBox(name, pin));
+      },
+      footer: { label: 'Done', onTap: function (sh) { sh.close(); } }
+    });
+  }
+
+  function resetPin(m, rowEl, errorEl) {
+    App.confirm({
+      title: 'Reset the PIN for ' + m.name + '?',
+      text: 'Their old PIN stops working and they are signed out. You get a new one to give them.',
+      yes: 'Reset PIN'
+    }).then(function (yes) {
+      if (!yes) return;
+      ui.save(rowEl, 'resetPin', { id: m.id }, { errorEl: errorEl }).then(function (res) {
+        if (res.ok && res.result && res.result.pin) openPin(m.name, String(res.result.pin));
+      });
+    });
+  }
+
+  function removePerson(m, btn, errorEl, sh) {
+    var open = App.data.jobs.filter(function (j) { return j.assignedTo === m.id && j.status === 'scheduled'; }).length;
+    App.confirm({
+      title: 'Remove ' + m.name + ' from the team?',
+      text: 'They can no longer sign in. Their sales history stays. ' + (open
+        ? 'Their ' + fmt.plural(open, 'open job') + (open === 1 ? ' becomes' : ' become') + ' unassigned.'
+        : 'Any open jobs they have become unassigned.'),
+      yes: 'Remove', danger: true
+    }).then(function (yes) {
+      if (!yes) return;
+      ui.save(btn, 'removeMember', { id: m.id }, { errorEl: errorEl }).then(function (res) {
+        if (!res.ok) return;
+        sh.close();
+        App.toast(m.name + ' is no longer on the team.' + (open ? ' ' + fmt.plural(open, 'job') + (open === 1 ? ' needs' : ' need') + ' someone new.' : ''));
+      });
+    });
+  }
+
+  function openRename(id) {
+    var m = App.member(id);
+    if (!m) return;
+    var mine = id === App.me().id;
+    var box = ui.field({ label: 'Name', name: 'person-name', value: m.name, maxlength: 40, autocapitalize: 'words',
+      hint: mine ? 'This is the name you type to sign in.' : 'This is the name they type to sign in.' });
+    App.sheet.open({
+      title: 'Change name', small: true,
+      body: function (el) { el.appendChild(box); },
+      footer: { label: 'Save', onTap: function (sh) {
+        var now = App.member(id), n = oneLine(box.val());
+        if (!now || !now.active) { sh.close(); return; }
+        var problem = nameProblem(n, id);
+        if (problem) { box.setError(problem); return; }
+        if (n === now.name) { sh.close(); return; }
+        sh.send('saveMember', { member: { id: id, name: n, role: now.role } }).then(function (res) {
+          if (!res.ok) return;
+          sh.close();
+          App.toast('Name changed.');
+        });
+      } }
+    });
+  }
+
+  function openRole(id) {
+    App.sheet.open({
+      title: 'Change role', small: true,
+      update: function (sh) { sh.rebuild(); },
+      body: function (el, sh) {
+        var m = App.member(id);
+        if (!m || !m.active) { el.appendChild(h('p', { class: 'muted' }, 'That person is no longer on the team.')); return; }
+        var list = h('div', { class: 'list' });
+        ROLE_ORDER.forEach(function (r) {
+          list.appendChild(ui.row({
+            title: ROLE_WORDS[r], sub: ROLE_HELP[r], chevron: false,
+            right: m.role === r ? h('span', { class: 'ice' }, App.icon('check', 22)) : null,
+            onTap: function (e, rowEl) {
+              if (m.role === r) { sh.close(); return; }
+              /* A sales rep is never given jobs, so the ones this person still has go back to nobody. Say so first. */
+              var open = r === 'rep' ? App.data.jobs.filter(function (j) { return j.assignedTo === id && j.status === 'scheduled'; }).length : 0;
+              function change() {
+                sh.send('saveMember', { member: { id: id, name: m.name, role: r } }, { button: rowEl }).then(function (res) {
+                  if (!res.ok) return;
+                  sh.close();
+                  App.toast(m.name + ' is now ' + (r === 'owner' ? 'an owner' : r === 'rep' ? 'a sales rep' : 'a tech') + '. ' +
+                    (open ? fmt.plural(open, 'job') + (open === 1 ? ' needs' : ' need') + ' someone new.' : 'They need to sign in again.'));
+                });
+              }
+              if (!open) { change(); return; }
+              App.confirm({
+                title: 'Make ' + m.name + ' a sales rep?',
+                text: 'Sales reps are not given jobs. Their ' + fmt.plural(open, 'open job') + (open === 1 ? ' becomes' : ' become') + ' unassigned.',
+                yes: 'Change role'
+              }).then(function (yes) { if (yes) change(); });
+            }
+          }));
+        });
+        el.appendChild(list);
+        el.appendChild(h('p', { class: 'hint' }, 'Changing the role signs them out. Their PIN stays the same.'));
+      }
+    });
+  }
+
+  function openPerson(id) {
+    var first = App.member(id);
+    if (!first || !first.active) { App.toast('That person is no longer on the team.'); return; }
+    App.sheet.open({
+      title: first.name,
+      update: function (sh) {
+        var now = App.member(id);
+        if (!now || !now.active) { sh.close(); return; }
+        sh.setTitle(now.name);
+        sh.rebuild();
+      },
+      body: function (el, sh) {
+        var m = App.member(id), me = App.me();
+        if (!m || !me) return;
+        var mine = m.id === me.id, read = readLine(m);
+        el.appendChild(h('div', { class: 'me-head' },
+          h('span', { class: 'avatar avatar-lg' }, fmt.initials(m.name)),
+          h('div', { class: 'stack-xs' },
+            h('p', { class: 'me-name' }, m.name),
+            h('p', { class: 'muted' }, ROLE_WORDS[m.role] || ''),
+            read ? h('p', { class: 'small strong' }, read) : null)));
+
+        var list = h('div', { class: 'list' });
+        var error = h('p', { class: 'form-error', role: 'alert', hidden: true });
+        list.appendChild(ui.row({ icon: 'edit', title: 'Change name', onTap: function () { openRename(id); } }));
+        if (!mine) {
+          list.appendChild(ui.row({ icon: 'user', title: 'Change role', right: ROLE_WORDS[m.role] || '', onTap: function () { openRole(id); } }));
+          list.appendChild(ui.row({ icon: 'key', title: 'Reset PIN', chevron: false, onTap: function (e, rowEl) { resetPin(m, rowEl, error); } }));
+        }
+        el.appendChild(list);
+        el.appendChild(error);
+
+        if (mine) {
+          el.appendChild(h('p', { class: 'hint' }, 'This is you. To change your own PIN, use Change PIN in your account.'));
+          return;
+        }
+        var removeError = h('p', { class: 'form-error', role: 'alert', hidden: true });
+        el.appendChild(ui.button('Remove from team', { kind: 'danger', block: true, onTap: function (e, btn) { removePerson(m, btn, removeError, sh); } }));
+        el.appendChild(removeError);
+      }
+    });
+  }
+
+  /* ================= Settings ================= */
+
+  function slotsText(slots) { return (slots || []).map(fmt.time).join(', '); }
+
+  App.actions.openSettings = function () {
+    if (App.role() !== 'owner') return;
+    App.sheet.open({
+      title: 'Settings',
+      update: function (sh) { sh.rebuild(); },
+      body: function (el) {
+        var s = App.data.settings, crew = App.people(['rep', 'tech']), read = crew.filter(App.hasRead).length;
+        var list = h('div', { class: 'list' });
+        list.appendChild(ui.row({ icon: 'schedule', title: 'Services', cls: 'row-clip',
+          sub: (s.services || []).map(function (x) { return x.name; }).join(', '), onTap: openServices }));
+        list.appendChild(ui.row({ icon: 'dollar', title: 'Commission', cls: 'row-clip',
+          sub: pctText(s.firstPct) + ' on a new sale, ' + pctText(s.monthlyPct) + ' each month after', onTap: openCommission }));
+        list.appendChild(ui.row({ icon: 'clock', title: 'Usual appointment times', cls: 'row-clip',
+          sub: slotsText(s.defaultSlots), onTap: openTimes }));
+        list.appendChild(ui.row({ icon: 'user', title: 'Give new jobs to', cls: 'row-clip',
+          sub: App.people().some(function (m) { return m.id === s.defaultTechId; }) ? App.nameOf(s.defaultTechId) : 'Nobody. You assign each job.',
+          onTap: openDefaultTech }));
+        list.appendChild(ui.row({ icon: 'mail', title: 'Email alerts', cls: 'row-clip',
+          sub: s.emailOnBooking ? (s.notifyEmail ? 'On, sent to ' + s.notifyEmail : 'On') : 'Off', onTap: openEmail }));
+        list.appendChild(ui.row({ icon: 'standards', title: 'Company standards', cls: 'row-clip',
+          sub: crew.length ? read + ' of ' + crew.length + ' have read these' : 'What your team reads and confirms',
+          onTap: function () { App.actions.editStandards(); } }));
+        el.appendChild(list);
+      }
+    });
+  };
+
+  /* ----- Services: one line each (name, usual price, remove) ----- */
+
+  function openServices() {
+    var draft = (App.data.settings.services || []).map(function (s) {
+      return { id: s.id, name: s.name, price: s.priceCents ? (s.priceCents / 100).toFixed(2) : '' };
+    });
+    var rows = [], listEl = h('div', { class: 'stack-sm' });
+    var addBtn = ui.button('Add a service', { icon: 'plus', block: true, onTap: function () {
+      read();
+      draft.push({ name: '', price: '' });
+      draw();
+      var last = rows[rows.length - 1];
+      try { last.name.input.focus(); } catch (e) { /* fine */ }
+    } });
+
+    function read() {
+      rows.forEach(function (r) { r.item.name = r.name.input.value; r.item.price = r.price.input.value; });
+    }
+    function draw() {
+      clear(listEl);
+      rows = [];
+      draft.forEach(function (item, i) {
+        var name = ui.field({ name: 'svc-name-' + i, value: item.name, maxlength: 40, placeholder: 'Service name', autocapitalize: 'sentences' });
+        var price = ui.field({ name: 'svc-price-' + i, value: item.price, prefix: '$', inputmode: 'decimal', maxlength: 10 });
+        name.input.setAttribute('aria-label', 'Service name');
+        price.input.setAttribute('aria-label', 'Usual price');
+        var remove = h('button', { type: 'button', class: 'iconbtn', 'aria-label': 'Remove ' + (oneLine(item.name) || 'this service'),
+          disabled: draft.length < 2, onclick: function () {
+            read();
+            draft.splice(draft.indexOf(item), 1);
+            draw();
+          } }, App.icon('trash', 20));
+        rows.push({ item: item, name: name, price: price });
+        listEl.appendChild(h('div', { class: 'svc-row' }, name, price, remove));
+      });
+      addBtn.hidden = draft.length >= LIMITS.services;
+    }
+
+    App.sheet.open({
+      title: 'Services',
+      body: function (el) {
+        el.appendChild(h('p', { class: 'muted' }, 'These are the choices on a new sale. The usual price fills in when a rep picks one. Leave it blank if the price changes from job to job.'));
+        el.appendChild(h('div', { class: 'stack-sm' },
+          h('div', { class: 'svc-row svc-head', 'aria-hidden': 'true' }, h('span', null, 'Service'), h('span', null, 'Usual price'), h('span')),
+          listEl));
+        el.appendChild(addBtn);
+        draw();
+      },
+      footer: { label: 'Save', onTap: function (sh) {
+        read();
+        var seen = Object.create(null), bad = null, out = [];   /* not {}: a service may be called "constructor" */
+        rows.forEach(function (r) {
+          var name = oneLine(r.item.name), text = String(r.item.price || '').trim(), cents = text ? fmt.toCents(text) : 0;
+          if (!name) { r.name.setError('Add a name.'); bad = bad || r.name; }
+          else if (seen[norm(name)]) { r.name.setError('Already on the list.'); bad = bad || r.name; }
+          seen[norm(name)] = true;
+          if (cents == null || cents > LIMITS.maxCents) { r.price.setError('Check the price.'); bad = bad || r.price; }
+          var item = { name: name, priceCents: cents };
+          if (r.item.id) item.id = r.item.id;
+          out.push(item);
+        });
+        if (bad) { sh.reveal(bad); return; }
+        sh.send('saveSettings', { settings: { services: out } }).then(function (res) {
+          if (!res.ok) return;
+          sh.close();
+          App.toast('Services saved.');
+        });
+      } }
+    });
+  }
+
+  /* ----- Commission ----- */
+
+  var PCT_HELP = 'Enter a number from 0 to 100, like 30 or 12.5.';
+
+  function parsePct(text) {
+    var s = String(text == null ? '' : text).replace(/[%\s]/g, '');
+    if (!/^(\d{1,3}(\.\d{0,2})?|\.\d{1,2})$/.test(s)) return null;
+    var n = parseFloat(s);
+    return n >= 0 && n <= 100 ? n : null;
+  }
+
+  function openCommission() {
+    var s = App.data.settings;
+    var example = h('p', { class: 'muted' });
+    function paint() {
+      var a = parsePct(first.val()), b = parsePct(monthly.val());
+      example.hidden = a == null || b == null;
+      if (a == null || b == null) return;
+      example.textContent = 'On a $200.00 monthly sale a rep earns ' + fmt.money(share(20000, a)) + ', then ' +
+        fmt.money(share(20000, b)) + ' every month the client stays.';
+    }
+    var first = withSuffix(ui.field({ label: 'On a new sale', name: 'pct-first', value: String(s.firstPct), inputmode: 'decimal', maxlength: 6, onInput: paint }), '%');
+    var monthly = withSuffix(ui.field({ label: 'Each month after, for monthly clients', name: 'pct-monthly', value: String(s.monthlyPct), inputmode: 'decimal', maxlength: 6, onInput: paint }), '%');
+    paint();
+    App.sheet.open({
+      title: 'Commission', small: true,
+      body: function (el) {
+        el.appendChild(first);
+        el.appendChild(monthly);
+        el.appendChild(example);
+        el.appendChild(h('p', { class: 'hint' }, 'Sales already made keep the rates they were sold at.'));
+      },
+      footer: { label: 'Save', onTap: function (sh) {
+        var a = parsePct(first.val()), b = parsePct(monthly.val());
+        if (a == null) { first.setError(PCT_HELP); sh.reveal(first); return; }
+        if (b == null) { monthly.setError(PCT_HELP); sh.reveal(monthly); return; }
+        sh.send('saveSettings', { settings: { firstPct: a, monthlyPct: b } }).then(function (res) {
+          if (!res.ok) return;
+          sh.close();
+          App.toast('Commission saved.');
+        });
+      } }
+    });
+  }
+
+  /* ----- Usual appointment times ----- */
+
+  function openTimes() {
+    var draft = (App.data.settings.defaultSlots || []).slice().sort();
+    var chips = h('div', { class: 'chips', role: 'group', 'aria-label': 'Usual times' });
+    var error = h('p', { class: 'form-error', role: 'alert', hidden: true });
+    var box = ui.field({ label: 'Add a time', name: 'slot-new', type: 'time', onInput: function () { say(''); } });
+
+    function say(message) { error.textContent = message || ''; error.hidden = !message; }
+    function draw() {
+      clear(chips);
+      draft.forEach(function (t) {
+        chips.appendChild(h('button', { type: 'button', class: 'chip chip-x', 'aria-label': 'Remove ' + fmt.time(t), onclick: function () {
+          draft.splice(draft.indexOf(t), 1);
+          say('');
+          draw();
+        } }, fmt.time(t), App.icon('close', 16)));
+      });
+      if (!draft.length) chips.appendChild(h('p', { class: 'muted' }, 'No times yet. Add at least one.'));
+    }
+    /* Returns false when what is in the box cannot be added. */
+    function add(quiet) {
+      var t = box.val();
+      if (!t) { if (!quiet) say('Pick a time first.'); return !!quiet; }
+      if (!D.isHM(t)) { say('That is not a time.'); return false; }
+      if (draft.indexOf(t) >= 0) { if (!quiet) say(fmt.time(t) + ' is already on the list.'); box.input.value = ''; return !!quiet; }
+      if (draft.length >= LIMITS.slotsPerDay) { say('That is the most times a day can hold.'); return false; }
+      draft.push(t);
+      draft.sort();
+      box.input.value = '';
+      say('');
+      draw();
+      return true;
+    }
+
+    App.sheet.open({
+      title: 'Usual appointment times', small: true,
+      body: function (el) {
+        el.appendChild(h('p', { class: 'muted' }, 'A day you open starts with these times. Days you have already set up keep their own.'));
+        el.appendChild(chips);
+        el.appendChild(h('div', { class: 'add-row' }, box, ui.button('Add', { onTap: function () { add(false); } })));
+        el.appendChild(error);
+        draw();
+      },
+      footer: { label: 'Save', onTap: function (sh) {
+        if (!add(true)) return;                     /* a time typed but not added yet goes in too */
+        if (!draft.length) { say('Keep at least one time.'); return; }
+        sh.send('saveSettings', { settings: { defaultSlots: draft.slice() } }).then(function (res) {
+          if (!res.ok) return;
+          sh.close();
+          App.toast('Usual times saved.');
+        });
+      } }
+    });
+  }
+
+  /* ----- Give new jobs to ----- */
+
+  function openDefaultTech() {
+    App.sheet.open({
+      title: 'Give new jobs to', small: true,
+      update: function (sh) { sh.rebuild(); },
+      body: function (el, sh) {
+        var cur = App.data.settings.defaultTechId || null;
+        if (!App.people().some(function (m) { return m.id === cur; })) cur = null;
+        var order = { tech: 0, owner: 1 };
+        var people = App.people(['tech', 'owner']).sort(function (a, b) { return (order[a.role] - order[b.role]) || byName(a, b); });
+        var list = h('div', { class: 'list' });
+        function pick(id, name, rowEl) {
+          if (id === cur) { sh.close(); return; }
+          sh.send('saveSettings', { settings: { defaultTechId: id } }, { button: rowEl }).then(function (res) {
+            if (!res.ok) return;
+            sh.close();
+            App.toast(id ? 'New jobs go to ' + name + '.' : 'New jobs start with nobody assigned.');
+          });
+        }
+        function mark(on) { return on ? h('span', { class: 'ice' }, App.icon('check', 22)) : null; }
+        list.appendChild(ui.row({ title: 'Nobody', sub: 'You assign each job yourself', right: mark(!cur), chevron: false,
+          onTap: function (e, rowEl) { pick(null, '', rowEl); } }));
+        people.forEach(function (m) {
+          list.appendChild(ui.row({
+            lead: h('span', { class: 'avatar' }, fmt.initials(m.name)), title: m.name, sub: ROLE_WORDS[m.role] || '',
+            right: mark(cur === m.id), chevron: false,
+            onTap: function (e, rowEl) { pick(m.id, m.name, rowEl); }
+          }));
+        });
+        el.appendChild(h('p', { class: 'muted' }, 'Every new appointment goes to this person straight away. You can still change it job by job.'));
+        el.appendChild(list);
+      }
+    });
+  }
+
+  /* ----- Email alerts ----- */
+
+  function openEmail() {
+    var s = App.data.settings;
+    var toggle = ui.toggle({ label: 'Email me when an appointment is booked', checked: !!s.emailOnBooking });
+    var email = ui.field({ label: 'Send it to', name: 'notify-email', type: 'email', value: s.notifyEmail || '', optional: true, maxlength: 120,
+      placeholder: 'you@example.com', autocapitalize: 'none',
+      hint: 'Leave it blank to use the Google account the system was set up with.' });
+    App.sheet.open({
+      title: 'Email alerts', small: true,
+      body: function (el) {
+        el.appendChild(toggle);
+        el.appendChild(email);
+        if (App.mode === 'sample') {
+          el.appendChild(h('div', { class: 'callout' }, h('p', { class: 'small' }, 'Emails start once the system is connected. Nothing is sent while you are looking at sample data.')));
+        }
+      },
+      footer: { label: 'Save', onTap: function (sh) {
+        var to = email.val();
+        if (to && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) { email.setError('That email address does not look right.'); sh.reveal(email); return; }
+        sh.send('saveSettings', { settings: { emailOnBooking: toggle.get(), notifyEmail: to } }).then(function (res) {
+          if (!res.ok) return;
+          sh.close();
+          App.toast(toggle.get() ? 'Email alerts are on.' : 'Email alerts are off.');
+        });
+      } }
+    });
+  }
+
+  /* ================= Edit standards ================= */
+
+  function itemsOf(text) {
+    return String(text == null ? '' : text).split(/\r\n?|\n/).map(oneLine).filter(function (x) { return x; });
+  }
+  function grow(box) {
+    box.style.height = 'auto';
+    box.style.height = (box.scrollHeight + 2) + 'px';
+  }
+
+  function openStandardsEditor(start) {
+    var draft = start || (App.data.settings.standards || []).map(function (s) {
+      return { id: s.id, title: s.title, ordered: !!s.ordered, text: (s.items || []).join('\n') };
+    });
+    var blocks = [], saved = false, listEl = h('div', { class: 'stack' });
+
+    function read() {
+      blocks.forEach(function (b) { b.sec.title = b.title.input.value; b.sec.text = b.box.input.value; b.sec.ordered = b.toggle.get(); });
+    }
+    function cleaned() {
+      return draft.map(function (s) {
+        var out = { title: oneLine(s.title), ordered: !!s.ordered, items: itemsOf(s.text) };
+        if (s.id) out.id = s.id;
+        return out;
+      });
+    }
+    function changed() {
+      if (!App.data) return false;
+      var now = (App.data.settings.standards || []).map(function (s) {
+        return { title: s.title, ordered: !!s.ordered, items: s.items || [], id: s.id };
+      });
+      return JSON.stringify(cleaned()) !== JSON.stringify(now);
+    }
+    function draw() {
+      clear(listEl);
+      blocks = [];
+      draft.forEach(function (sec, i) {
+        var title = ui.field({ label: 'Section title', name: 'std-title-' + i, value: sec.title, maxlength: 60, autocapitalize: 'sentences' });
+        var toggle = ui.toggle({ label: 'Numbered steps', hint: 'For things done in order', checked: sec.ordered });
+        var box = ui.field({ label: 'One standard per line', name: 'std-items-' + i, type: 'textarea', rows: 4, value: sec.text });
+        box.input.classList.add('std-edit');
+        box.input.addEventListener('input', function () { grow(box.input); });
+        var remove = ui.button('Remove section', { kind: 'text', small: true, onTap: function () { removeSection(sec); } });
+        remove.classList.add('btn-danger');
+        var block = { sec: sec, title: title, toggle: toggle, box: box, el: h('div', { class: 'card' }, title, toggle, box, h('div', { class: 'std-remove' }, remove)) };
+        blocks.push(block);
+        listEl.appendChild(block.el);
+      });
+      if (!draft.length) listEl.appendChild(h('p', { class: 'muted' }, 'No sections yet. Add the first one.'));
+      blocks.forEach(function (b) { grow(b.box.input); });
+      addBtn.hidden = draft.length >= LIMITS.standardSections;
+    }
+    function removeSection(sec) {
+      read();
+      var count = itemsOf(sec.text).length, name = oneLine(sec.title);
+      function go() {
+        read();
+        var i = draft.indexOf(sec);
+        if (i >= 0) draft.splice(i, 1);
+        draw();
+      }
+      if (!name && !count) { go(); return; }
+      App.confirm({
+        title: 'Remove this section?',
+        text: (name ? '"' + name + '"' : 'This section') + (count ? ' and its ' + fmt.plural(count, 'standard') : '') + ' will be gone once you save.',
+        yes: 'Remove section', danger: true
+      }).then(function (yes) { if (yes) go(); });
+    }
+    var addBtn = ui.button('Add a section', { icon: 'plus', block: true, onTap: function () {
+      read();
+      draft.push({ title: '', ordered: false, text: '' });
+      draw();
+      var last = blocks[blocks.length - 1];
+      sheet.reveal(last.el);
+      try { last.title.input.focus({ preventScroll: true }); } catch (e) { /* fine */ }
+    } });
+
+    var sheet = App.sheet.open({
+      title: 'Edit standards',
+      body: function (el) {
+        el.appendChild(listEl);
+        el.appendChild(addBtn);
+        draw();
+      },
+      onClose: function () {
+        if (saved) return;
+        read();
+        if (!changed()) return;
+        App.toast('Your changes were not saved.', { action: { label: 'Keep editing', onTap: function () { openStandardsEditor(draft); } } });
+      },
+      footer: { label: 'Save', onTap: function (sh) {
+        read();
+        var bad = null;
+        blocks.forEach(function (b) {
+          var items = itemsOf(b.sec.text);
+          if (!oneLine(b.sec.title)) { b.title.setError('Every section needs a title.'); bad = bad || b.title; }
+          if (!items.length) { b.box.setError('Add at least one standard, or remove this section.'); bad = bad || b.box; }
+          else if (items.length > LIMITS.standardItems) { b.box.setError('Keep a section to ' + LIMITS.standardItems + ' lines or fewer.'); bad = bad || b.box; }
+          else if (items.some(function (it) { return it.length > LIMITS.standardLine; })) {
+            b.box.setError('One of these lines is too long. Keep each under ' + LIMITS.standardLine + ' letters.');
+            bad = bad || b.box;
+          }
+        });
+        if (bad) { sh.reveal(bad); return; }
+        if (!changed()) { saved = true; sh.close(); App.toast('Nothing was changed.'); return; }
+        sh.send('saveSettings', { settings: { standards: cleaned() } }).then(function (res) {
+          if (!res.ok) return;
+          saved = true;
+          sh.close();
+          App.toast(App.people(['rep', 'tech']).length ? 'Standards saved. Your team will be asked to read them again.' : 'Standards saved.');
+        });
+      } }
+    });
+    /* The promise that goes with Save sits under the button, where the brief puts it. */
+    if (sheet.button && sheet.button.parentNode) {
+      sheet.button.parentNode.appendChild(h('p', { class: 'form-note' }, 'Saving a change asks everyone to read these again and confirm.'));
+    }
+    return sheet;
+  }
+
+  App.actions.editStandards = function () {
+    if (App.role() !== 'owner') return;
+    openStandardsEditor(null);
+  };
+
+  /* ================= registering ================= */
+
+  App.screen('dashboard', { roles: ['owner'], title: 'Dashboard', render: renderDashboard });
+  App.screen('schedule', { roles: ['tech'], title: 'Schedule', render: renderSchedule });
+})();
+
+;
+/* ---- screens-calendar.js ---- */
+/*
+ * Ridgeline Wash Co. team app: the Calendar screen (#calendar).
+ *
+ * Owner, "Availability": the month grid with how many times are still free on each open day, the
+ *   Day sheet (open or block one day and set its times), "Open weekdays", "Block all" and
+ *   "Coming up" (the next 14 days of appointments).
+ * Sales rep, "Open days": the same grid to read, not change. Tapping an open day shows its free
+ *   times and the rep's own appointments, with "New sale on this day".
+ */
+(function () {
+  'use strict';
+
+  var h = App.h, ui = App.ui, fmt = App.fmt;
+  var D = RidgelineCore.dates, LIMITS = RidgelineCore.LIMITS;
+
+  /* View state. It lives here because render runs again every time the data changes. */
+  var month = null;        /* the month on show, 'YYYY-MM' */
+  var viewer = null;       /* who that state belongs to */
+  var bulkError = '';      /* why "Open weekdays" or "Block all" last failed */
+
+  /* ---------- small helpers ---------- */
+
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  function clear(el) { el.textContent = ''; return el; }
+  function shiftMonth(ym, n) {
+    var y = +ym.slice(0, 4), m = +ym.slice(5, 7) - 1 + n;
+    y += Math.floor(m / 12);
+    return y + '-' + pad2(((m % 12) + 12) % 12 + 1);
+  }
+  function monthWord(ym) { return fmt.month(ym).split(' ')[0]; }
+  function daysOf(ym) {
+    var out = [], count = D.daysInMonth(+ym.slice(0, 4), +ym.slice(5, 7));
+    for (var i = 1; i <= count; i++) out.push(ym + '-' + pad2(i));
+    return out;
+  }
+  function usualSlots() {
+    var list = (App.data.settings.defaultSlots || []).slice().sort();
+    return list.length ? list : RidgelineCore.DEFAULT_SETTINGS.defaultSlots.slice();
+  }
+  function scheduledOn(date) { return App.jobsOn(date).filter(function (j) { return j.status === 'scheduled'; }); }
+
+  /* A retry after a failed save re-uses its id so nothing is saved twice. That is only right while
+     the thing being saved is the same, so a changed save starts fresh. */
+  function freshSave(btn, fields) {
+    var key = JSON.stringify(fields);
+    if (btn && btn._sent !== key) { btn._sent = key; btn._ops = null; }
+  }
+
+  /* One day of the grid, the same for the owner and for reps: open days say how many times are left. */
+  function dayState(date) {
+    if (date < App.today()) return { state: 'past', disabled: true };
+    var day = App.dayOf(date);
+    if (!day || !day.open) return { state: 'blocked' };
+    var free = App.freeSlots(date).length;
+    return free ? { state: 'open', label: free + ' left' } : { state: 'full', label: 'Full' };
+  }
+
+  function legend() {
+    function item(cls, text) { return h('span', { class: 'legend-item' }, h('span', { class: 'swatch' + (cls ? ' ' + cls : '') }), text); }
+    return h('div', { class: 'legend' }, item('is-open', 'Open'), item('is-full', 'Full'), item('', 'Blocked'), item('is-today', 'Today'));
+  }
+
+  function monthGrid(o) {
+    var now = App.today().slice(0, 7);
+    if (!month || month < now) month = now;
+    var grid = ui.monthGrid({
+      month: month, min: now, max: shiftMonth(now, 12),
+      day: o.day, onPick: o.onPick,
+      onMonth: function (ym) { month = ym; if (o.onMonth) o.onMonth(ym); }
+    });
+    App.live(grid, grid.refresh);      /* a time that passes during the day drops out of "3 left" */
+    return grid;
+  }
+
+  /* ---------- owner: open weekdays, block all ---------- */
+
+  function bulkSave(btn, errorEl, days, doneText) {
+    var fields = { days: days };
+    bulkError = '';
+    freshSave(btn, fields);
+    ui.save(btn, 'setDays', fields, { errorEl: errorEl }).then(function (res) {
+      if (res.skipped) return;
+      if (res.ok) App.toast(doneText);
+      else bulkError = res.error.message;
+    });
+  }
+
+  function openWeekdays(btn, errorEl) {
+    var ym = month, today = App.today(), usual = usualSlots();
+    var left = daysOf(ym).filter(function (date) {
+      var wd = D.weekday(date);
+      return date >= today && wd >= 1 && wd <= 5;
+    });
+    var days = left.filter(function (date) { var cur = App.dayOf(date); return !(cur && cur.open); });
+    if (!left.length) { App.toast('No weekdays are left in ' + monthWord(ym) + '.'); return; }
+    if (!days.length) { App.toast('Every weekday left in ' + monthWord(ym) + ' is already open.'); return; }
+    bulkSave(btn, errorEl, days.map(function (date) { return { date: date, open: true, slots: usual }; }),
+      fmt.plural(days.length, 'weekday') + ' opened in ' + monthWord(ym) + '.');
+  }
+
+  function blockAll(btn, errorEl) {
+    var ym = month, today = App.today(), booked = 0;
+    var days = daysOf(ym).filter(function (date) { var cur = App.dayOf(date); return date >= today && !!cur && cur.open; });
+    if (!days.length) { App.toast('No open days are left in ' + monthWord(ym) + '.'); return; }
+    days.forEach(function (date) { booked += scheduledOn(date).length; });
+    App.confirm({
+      title: 'Block all of ' + monthWord(ym) + '?',
+      text: 'Reps will not be able to book ' + (days.length === 1 ? 'the 1 open day' : 'any of the ' + days.length + ' open days') + ' left in ' + monthWord(ym) + '.' +
+        (booked ? ' The ' + fmt.plural(booked, 'appointment') + ' already booked ' + (booked === 1 ? 'stays' : 'stay') + ' on the schedule.' : ''),
+      yes: 'Block all', no: 'Keep them', danger: true
+    }).then(function (yes) {
+      if (!yes) return;
+      bulkSave(btn, errorEl, days.map(function (date) { return { date: date, open: false }; }),
+        fmt.plural(days.length, 'day') + ' blocked in ' + monthWord(ym) + '.');
+    });
+  }
+
+  /* ---------- owner: the Day sheet ---------- */
+
+  function openDay(date) {
+    var cur = App.dayOf(date);
+    var was = { open: !!(cur && cur.open), slots: ((cur && cur.slots) || []).slice().sort() };
+    var open = was.open, adding = false;
+    var slots = was.slots.length ? was.slots.slice() : usualSlots();
+
+    var blockedNote = h('div');
+    var timesLabel = ui.label('Times');
+    var timesEl = h('div', { class: 'stack-md' });
+    var bookedLabel = ui.label('Booked this day');
+    var bookedEl = h('div', { class: 'stack-md' });
+    var timeField = ui.field({ name: 'new-time', type: 'time' });
+    timeField.input.setAttribute('aria-label', 'New time');
+    var toggle = ui.toggle({ label: 'Open for appointments', checked: open, onChange: function (on) {
+      open = on;
+      adding = false;
+      sheet.error('');
+      draw();
+    } });
+
+    function addTime() {
+      var m = /^(\d{1,2}):(\d{2})/.exec(timeField.input.value || '');
+      var time = m ? pad2(+m[1]) + ':' + m[2] : '';
+      if (!D.isHM(time)) { timeField.setError('Pick a time first.'); return; }
+      if (slots.indexOf(time) >= 0) { timeField.setError(fmt.time(time) + ' is already on the list.'); return; }
+      if (slots.length >= LIMITS.slotsPerDay) { timeField.setError('A day can have ' + LIMITS.slotsPerDay + ' times at most.'); return; }
+      slots.push(time);
+      slots.sort();
+      timeField.input.value = '';
+      adding = false;
+      sheet.error('');
+      drawTimes();
+    }
+
+    function drawTimes() {
+      clear(timesEl);
+      if (slots.length) {
+        var chips = h('div', { class: 'chips', role: 'group', 'aria-label': 'Times' });
+        slots.forEach(function (time) {
+          chips.appendChild(h('button', { type: 'button', class: 'chip chip-x', 'aria-label': 'Remove ' + fmt.time(time), onclick: function () {
+            slots.splice(slots.indexOf(time), 1);
+            drawTimes();
+          } }, fmt.time(time), App.icon('close', 16)));
+        });
+        timesEl.appendChild(chips);
+        timesEl.appendChild(h('p', { class: 'hint' }, 'Tap a time to remove it.'));
+      } else {
+        timesEl.appendChild(h('p', { class: 'muted' }, 'No times on this day yet. Add one, or use your usual times.'));
+      }
+      timesEl.appendChild(h('div', { class: 'btn-row' },
+        ui.button('Add a time', { icon: 'plus', small: true, onTap: function () {
+          adding = !adding;
+          timeField.setError('');
+          drawTimes();
+          if (adding) { try { timeField.input.focus(); } catch (e) { /* fine */ } }
+        } }),
+        ui.button('Use my usual times', { small: true, onTap: function () {
+          slots = usualSlots();
+          adding = false;
+          sheet.error('');
+          drawTimes();
+        } })));
+      if (adding) timesEl.appendChild(h('div', { class: 'cols-2' }, timeField, ui.button('Add', { onTap: addTime })));
+    }
+
+    function drawBooked() {
+      var jobs = App.jobsOn(date), waiting = jobs.filter(function (j) { return j.status === 'scheduled'; }).length;
+
+      clear(blockedNote);
+      blockedNote.hidden = open;
+      if (!open && waiting) {
+        blockedNote.appendChild(h('div', { class: 'callout callout-warn' },
+          h('p', { class: 'callout-title' }, waiting === 1 ? '1 appointment is already booked on this day' : waiting + ' appointments are already booked on this day'),
+          h('p', { class: 'small' }, waiting === 1
+            ? 'Blocking the day does not cancel it. It stays on the schedule until you move or cancel it.'
+            : 'Blocking the day does not cancel them. They stay on the schedule until you move or cancel them.')));
+      } else if (!open) {
+        blockedNote.appendChild(h('p', { class: 'muted' }, 'This day is blocked. Reps cannot book it.'));
+      }
+
+      clear(bookedEl);
+      bookedLabel.hidden = bookedEl.hidden = !jobs.length;
+      if (!jobs.length) return;
+      var list = h('div', { class: 'list' });
+      jobs.forEach(function (job) {
+        /* Who sold it is on the sale; a visit booked later with no sale goes by the client's own rep. */
+        var sale = job.saleId ? App.sale(job.saleId) : null, c = App.client(job.clientId);
+        var seller = App.nameOf(sale ? sale.repId : c ? c.repId : null, '');
+        list.appendChild(ui.jobRow(job, { sub: seller ? 'Sold by ' + seller : job.what }));
+      });
+      bookedEl.appendChild(list);
+      if (open) bookedEl.appendChild(h('p', { class: 'hint' }, 'Blocking this day does not cancel ' + (jobs.length === 1 ? 'this appointment.' : 'these appointments.')));
+    }
+
+    function draw() {
+      timesLabel.hidden = timesEl.hidden = !open;
+      if (open) drawTimes();
+      drawBooked();
+    }
+
+    var sheet = App.sheet.open({
+      title: fmt.dayLong(date),
+      body: function (el) {
+        el.appendChild(toggle);
+        el.appendChild(blockedNote);
+        el.appendChild(timesLabel);
+        el.appendChild(timesEl);
+        el.appendChild(bookedLabel);
+        el.appendChild(bookedEl);
+      },
+      update: function () { drawBooked(); },       /* someone just booked or moved a job on this day */
+      footer: { label: 'Save', onTap: function (sh) {
+        if (open && !slots.length) { sh.error('Add at least one time, or switch the day off.'); return; }
+        var same = open === was.open && (!open || slots.join() === was.slots.join());
+        if (same) { sh.close(); return; }
+        var fields = { days: [{ date: date, open: open, slots: slots.slice() }] };
+        var booked = scheduledOn(date).length;
+        freshSave(sh.button, fields);
+        sh.send('setDays', fields).then(function (res) {
+          if (!res.ok) return;
+          sh.close();
+          if (open) App.toast(fmt.day(date) + ' is open with ' + fmt.plural(slots.length, 'time') + '.');
+          else App.toast(fmt.day(date) + ' is blocked.' + (booked ? ' The ' + fmt.plural(booked, 'appointment') + ' already booked ' + (booked === 1 ? 'stays' : 'stay') + '.' : ''));
+        });
+      } }
+    });
+    draw();
+    return sheet;
+  }
+
+  /* ---------- owner: the screen ---------- */
+
+  function comingUp() {
+    var today = App.today(), last = D.addDays(today, 14);
+    return App.data.jobs.filter(function (j) { return j.status === 'scheduled' && j.date > today && j.date <= last; })
+      .sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : a.time < b.time ? -1 : a.time > b.time ? 1 : 0; });
+  }
+
+  function renderOwner(root) {
+    root.appendChild(ui.title('Availability', 'Tap a day to open it, block it or change its times.'));
+
+    var error = h('p', { class: 'form-error', role: 'alert', hidden: !bulkError }, bulkError);
+    root.appendChild(h('div', { class: 'btn-row' },
+      ui.button('Open weekdays', { small: true, onTap: function (e, btn) { openWeekdays(btn, error); } }),
+      ui.button('Block all', { small: true, onTap: function (e, btn) { blockAll(btn, error); } })));
+    root.appendChild(error);
+
+    root.appendChild(monthGrid({ day: dayState, onPick: openDay, onMonth: function () { bulkError = ''; error.hidden = true; } }));
+    root.appendChild(legend());
+
+    if (!App.freeDays().length) {
+      root.appendChild(ui.empty({ title: 'No days are open for booking.',
+        text: 'Your reps cannot book an appointment until you open some. Tap a day, or tap Open weekdays for the rest of the month.' }));
+    }
+
+    var jobs = comingUp();
+    root.appendChild(ui.label('Coming up', { count: jobs.length || null }));
+    if (!jobs.length) { root.appendChild(h('p', { class: 'muted' }, 'Nothing is booked for the next 14 days.')); return; }
+    var list = h('div', { class: 'list' });
+    jobs.forEach(function (job) {
+      list.appendChild(ui.jobRow(job, { showDate: true, pill: false,
+        sub: job.assignedTo ? App.nameOf(job.assignedTo, 'Someone') : h('span', { class: 'warn strong' }, 'Unassigned') }));
+    });
+    root.appendChild(list);
+  }
+
+  /* ---------- sales rep: read only ---------- */
+
+  function openRepDay(date) {
+    return App.sheet.open({
+      title: fmt.dayLong(date), small: true,
+      update: function (sh) { sh.rebuild(); },
+      footer: { label: 'New sale on this day', onTap: function () { App.act('newSale', { date: date }); } },
+      body: function (el, sh) {
+        var day = App.dayOf(date), isOpen = !!day && day.open && date >= App.today();
+        var free = App.freeSlots(date), mine = App.jobsOn(date);
+
+        if (!isOpen) el.appendChild(h('p', { class: 'muted' }, 'This day is not open for booking any more.'));
+        else {
+          el.appendChild(ui.label('Free times', { count: free.length || null }));
+          if (free.length) {
+            var tags = h('div', { class: 'time-tags' });
+            free.forEach(function (time) { tags.appendChild(h('span', { class: 'time-tag' }, fmt.time(time))); });
+            el.appendChild(tags);
+          } else el.appendChild(h('p', { class: 'muted' }, 'No times are left on this day.'));
+        }
+
+        if (mine.length) {
+          var list = h('div', { class: 'list' });
+          mine.forEach(function (job) { list.appendChild(ui.jobRow(job)); });
+          el.appendChild(ui.label('Your appointments'));
+          el.appendChild(list);
+        }
+        sh.setButton(free.length ? 'New sale on this day' : null);
+      }
+    });
+  }
+
+  function renderRep(root) {
+    root.appendChild(ui.title('Open days', 'Tap an open day to see the times you can book.'));
+    root.appendChild(monthGrid({
+      day: function (date) {
+        var s = dayState(date);
+        s.disabled = s.state !== 'open' && s.state !== 'full';
+        return s;
+      },
+      onPick: openRepDay
+    }));
+    root.appendChild(legend());
+    if (!App.freeDays().length) {
+      root.appendChild(ui.empty({ title: 'No open days yet.', text: 'You can still save a sale now and book it once Grayson opens some days.' }));
+    }
+  }
+
+  /* ---------- register ---------- */
+
+  App.screen('calendar', {
+    roles: ['owner', 'rep'], title: 'Calendar',
+    render: function (root) {
+      var me = App.me();
+      if (viewer !== me.id) { viewer = me.id; month = null; bulkError = ''; }
+      if (me.role === 'owner') renderOwner(root); else renderRep(root);
+    }
+  });
+
+  /* Each visit to the Calendar starts on the current month. */
+  App.on('route', function () { if (App.route !== 'calendar') { month = null; bulkError = ''; } });
+})();
+
+;
+/* ---- screens-clients.js ---- */
+/*
+ * Ridgeline Wash Co. team app: the Clients screen (#clients) and everything that opens from it.
+ *
+ * The list: search (name, phone, address), status filters with counts, one row per client.
+ * The Client sheet: quick actions, details, payment (status and link), notes, jobs and "Book a
+ *   visit"; for the owner also "Edit details" (which is also where a client is handed to another
+ *   rep), "Status" and "Delete client"; for a rep "Edit contact details". A rep only ever holds
+ *   their own clients, so that is all they see.
+ *
+ * Entry points for other screens:
+ *   App.actions.openClient(id)         open the Client sheet
+ *   App.actions.bookVisit(clientId)    open "Book a visit" for a client
+ */
+(function () {
+  'use strict';
+
+  var h = App.h, ui = App.ui, fmt = App.fmt;
+  var Core = RidgelineCore, D = Core.dates, LIMITS = Core.LIMITS;
+
+  var PAY = [{ value: 'unpaid', label: 'Not paid yet' }, { value: 'paid', label: 'Paid' }, { value: 'late', label: 'Late' }];
+  var PAY_SAVED = { unpaid: 'Marked as not paid yet.', paid: 'Marked as paid.', late: 'Marked as late.' };
+  var OTHER = '__other__';
+  var LINK_OK = /^https:\/\/[^\s<>"'`]+$/i;      /* the same rule the system saves by */
+
+  /* View state. It lives here because render runs again every time the data changes. */
+  var query = '', filter = '', viewer = null;
+
+  /* ---------- small helpers ---------- */
+
+  function clear(el) { el.textContent = ''; return el; }
+  function idOf(arg) { return arg && typeof arg === 'object' ? (arg.clientId || arg.id) : arg; }
+  function gone() { App.toast('That client is no longer here.'); return null; }
+
+  /* "Window cleaning, $150.00 a month" or "House wash, $300.00 one-time". The price stays in one piece when the line wraps. */
+  function serviceLine(c) {
+    var price = fmt.money(c.priceCents) + (c.billing === 'monthly' ? ' a month' : ' one-time');
+    return h('span', null, c.service ? c.service + ', ' : null, h('span', { class: 'client-price' }, price));
+  }
+  function byName(a, b) {
+    var x = String(a.name || '').toLowerCase(), y = String(b.name || '').toLowerCase();
+    return x < y ? -1 : x > y ? 1 : 0;
+  }
+  function newestFirst(a, b) { return a.date > b.date ? -1 : a.date < b.date ? 1 : a.time > b.time ? -1 : a.time < b.time ? 1 : 0; }
+  /* One visit in a client's own list: the same row as App.ui.jobRow, but led by what was done, not the client's name again. */
+  function visitRow(job) {
+    return ui.row({
+      lead: h('span', { class: 'row-time' }, h('small', null, fmt.day(job.date)), fmt.time(job.time)),
+      title: job.what || 'Visit', right: ui.jobPill(job), chevron: false,
+      onTap: function () { ui.openJob(job.id); }
+    });
+  }
+  /* A rep's name. For the rep a client belongs to now, it also says when they have left the team. */
+  function repName(memberId, current) {
+    var m = App.member(memberId);
+    if (!m) return 'Someone who has left';
+    return m.name + (current && !m.active ? ' (no longer on the team)' : '');
+  }
+  /* Is a monthly plan still paying for this client? (Only the owner holds every sale.) */
+  function hasMonthlyPlan(id) {
+    return App.data.sales.some(function (s) { return s.clientId === id && s.billing === 'monthly' && !s.endDay; });
+  }
+  function jobsOf(id) { return App.data.jobs.filter(function (j) { return j.clientId === id; }).sort(newestFirst); }
+  /* A sale for this client that still has no appointment (the oldest one first). */
+  function waitingSale(id) {
+    var list = App.data.sales.filter(function (s) { return s.clientId === id && !s.jobId; })
+      .sort(function (a, b) { return (a.soldAt || 0) - (b.soldAt || 0); });
+    return list[0] || null;
+  }
+
+  /* A retry after a failed save re-uses its id so nothing is saved twice. That is only right while
+     the thing being saved is the same, so a changed save starts fresh. */
+  function freshSave(btn, fields) {
+    var key = JSON.stringify(fields);
+    if (btn && btn._sent !== key) { btn._sent = key; btn._ops = null; }
+  }
+
+  function matches(c, q) {
+    if (!q) return true;
+    if ([c.name, c.contact, c.phone, c.address].join(' ').toLowerCase().indexOf(q) >= 0) return true;
+    var digits = q.replace(/\D/g, '');      /* "6155550112" finds "615-555-0112" */
+    return digits.length >= 3 && !/[^\d\s().+-]/.test(q) && String(c.phone || '').replace(/\D/g, '').indexOf(digits) >= 0;
+  }
+
+  function copyText(text) {
+    function oldWay() {
+      var box = h('textarea', { readonly: true, 'aria-hidden': 'true', tabindex: '-1' }), ok = false;
+      box.value = text;
+      box.style.cssText = 'position:fixed;left:0;top:0;width:1px;height:1px;opacity:0;';
+      document.body.appendChild(box);
+      try { box.select(); box.setSelectionRange(0, text.length); ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(box);
+      return ok;
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return oldWay(); });
+      }
+    } catch (e) { /* fall through */ }
+    return Promise.resolve(oldWay());
+  }
+
+  /* ---------- the list ---------- */
+
+  function render(root) {
+    var me = App.me(), all = App.data.clients || [];
+    if (viewer !== me.id) { viewer = me.id; query = ''; filter = ''; }
+    root.appendChild(ui.title('Clients'));
+
+    if (!all.length) {
+      root.appendChild(ui.empty({ title: 'No clients yet.',
+        text: me.role === 'owner' ? 'A client is added here each time a sale is entered.' : 'Your clients show up here after your first sale.',
+        button: { label: 'New sale', kind: 'primary', onTap: function () { App.act('newSale', {}); } } }));
+      return;
+    }
+
+    var input = h('input', { class: 'input', type: 'text', name: 'client-search', inputmode: 'search', enterkeyhint: 'search',
+      placeholder: 'Search name, phone or address', autocomplete: 'off', autocapitalize: 'none', autocorrect: 'off', spellcheck: 'false',
+      'aria-label': 'Search clients' });
+    input.value = query;
+    input.addEventListener('input', function () { query = input.value; draw(); });
+    root.appendChild(h('div', { class: 'search' }, App.icon('search', 20), input));
+
+    var chips = ui.chips({ options: [], value: filter, scroll: true, label: 'Show', onChange: function (v) { filter = v || ''; draw(); } });
+    root.appendChild(chips);
+    var listEl = h('div', { class: 'stack' });
+    root.appendChild(listEl);
+
+    /* The filter row slides sideways and is redrawn on every change: keep the chosen filter in view. */
+    function showChosen() {
+      var on = chips.querySelector('.chip.is-on');
+      if (!on) return;
+      var box = chips.getBoundingClientRect(), b = on.getBoundingClientRect();
+      if (b.right > box.right - 16) chips.scrollLeft += b.right - box.right + 16;
+      else if (b.left < box.left + 16) chips.scrollLeft -= box.left + 16 - b.left;
+    }
+
+    function draw() {
+      var q = query.trim().toLowerCase();
+      var found = all.filter(function (c) { return matches(c, q); });
+      var counts = {};
+      found.forEach(function (c) { counts[c.status] = (counts[c.status] || 0) + 1; });
+      chips.setOptions([{ value: '', label: 'All', count: found.length }].concat(Core.CLIENT_STATUSES.map(function (s) {
+        return { value: s, label: s, count: counts[s] || 0 };
+      })));
+
+      showChosen();
+
+      var shown = found.filter(function (c) { return !filter || c.status === filter; }).sort(byName);
+      clear(listEl);
+      if (!shown.length) {
+        listEl.appendChild(ui.empty({
+          title: q ? 'No clients match that search.' : 'No ' + filter.toLowerCase() + ' clients.',
+          text: q ? 'Check the spelling, or try a phone number or a street name.' : null,
+          button: { label: 'Show all clients', onTap: function () {
+            query = ''; filter = '';
+            input.value = '';
+            chips.set('');
+            draw();
+          } }
+        }));
+        return;
+      }
+      var list = h('div', { class: 'list' });
+      shown.forEach(function (c) {
+        list.appendChild(ui.row({
+          title: c.name, sub: serviceLine(c), chevron: false,
+          right: [c.payStatus === 'late' ? ui.pill('Late', 'bad') : null, ui.clientPill(c.status)],
+          onTap: function () { openClient(c.id); }
+        }));
+      });
+      listEl.appendChild(list);
+    }
+    draw();
+  }
+
+  /* ---------- the Client sheet ---------- */
+
+  function openClient(arg) {
+    var id = idOf(arg), first = App.client(id);
+    if (!first) return gone();
+    var owner = App.role() === 'owner', sheet = null, deleting = false;
+
+    /* The parts that are redrawn when the data changes. The note box is never touched, so nothing typed is lost. */
+    var top = h('div', { class: 'stack-md' }), details = h('div', { class: 'kvs' }), pay = h('div', { class: 'stack-md' });
+    var notesEl = h('div'), jobsEl = h('div', { class: 'stack-md' }), manage = h('div', { class: 'stack' });
+
+    var noteBox = ui.field({ name: 'client-note', type: 'textarea', rows: 3, maxlength: LIMITS.text, placeholder: 'What should the team know about this client?' });
+    noteBox.input.setAttribute('aria-label', 'New note');
+    var noteErr = h('p', { class: 'form-error', role: 'alert', hidden: true });
+    var noteBtn = ui.button('Add note', { icon: 'note', small: true, onTap: function () {
+      var text = noteBox.val();
+      if (!text) { noteBox.setError('Write the note first.'); return; }
+      var fields = { kind: 'client', id: id, text: text };
+      freshSave(noteBtn, fields);
+      ui.save(noteBtn, 'addNote', fields, { errorEl: noteErr }).then(function (res) {
+        if (!res.ok) return;
+        noteBox.input.value = '';
+        App.toast('Note saved.');
+      });
+    } });
+
+    var delErr = h('p', { class: 'form-error', role: 'alert', hidden: true });
+    var delBtn = ui.button('Delete client', { kind: 'danger', block: true, onTap: removeClient });
+
+    /* One tap: the control flips at once, and goes back with a red message if the save fails. */
+    function quick(patch, savedText, opId) {
+      App.api.send('updateClient', { clientId: id, patch: patch }, { opId: opId }).then(function (res) {
+        if (res.ok) { App.toast(savedText); return; }
+        if (App.client(id)) draw();
+        App.toast(res.error.message, { bad: true, retry: res.error.code === 'network' ? function () { quick(patch, savedText, res.opId); } : null });
+      });
+    }
+
+    /* Cancelling ends a monthly plan for good (unless it is taken back the same day), so that one asks first. */
+    function setStatus(status, monthly) {
+      var saved = 'Status changed to ' + status + '.';
+      if (status !== 'Cancelled' || !monthly) { quick({ status: status }, saved); return; }
+      App.confirm({
+        title: 'Cancel this client?',
+        text: 'Their monthly plan ends today, and so does the monthly commission on it. Set them back to Active today and nothing is lost. After today the plan does not start again.',
+        yes: 'Cancel client', no: 'Keep them', danger: true
+      }).then(function (yes) {
+        if (yes) quick({ status: status }, saved);
+        else draw();
+      });
+    }
+
+    function removeClient() {
+      var c = App.client(id);
+      if (!c) return;
+      var sales = App.data.sales.filter(function (s) { return s.clientId === id; }).length;
+      var jobs = App.data.jobs.filter(function (j) { return j.clientId === id; }).length, parts = [];
+      if (sales) parts.push(fmt.plural(sales, 'sale'));
+      if (jobs) parts.push(fmt.plural(jobs, 'job'));
+      App.confirm({
+        title: 'Delete this client?',
+        text: c.name + ' will be removed for good. ' +
+          (parts.length ? 'This also removes their ' + parts.join(' and ') + '.' : 'Their sales and jobs are removed too.'),
+        yes: 'Delete client', no: 'Keep client', danger: true
+      }).then(function (yes) {
+        if (!yes) return;
+        deleting = true;
+        ui.save(delBtn, 'deleteClient', { clientId: id }, { errorEl: delErr }).then(function (res) {
+          if (res.skipped) return;
+          if (res.ok) { sheet.close(); App.toast('Client deleted.'); return; }
+          deleting = false;
+          if (!App.client(id)) sheet.close();
+        });
+      });
+    }
+
+    function drawTop(c) {
+      var tel = fmt.tel(c.phone);
+      clear(top);
+      top.appendChild(h('div', { class: 'cluster' }, ui.clientPill(c.status), c.payStatus === 'late' ? ui.pill('Late', 'bad') : null));
+      if (tel || c.address) {
+        top.appendChild(h('div', { class: 'btn-row' },
+          tel ? ui.button('Call', { icon: 'phone', small: true, href: tel }) : null,
+          c.address ? ui.button('Directions', { icon: 'directions', small: true, href: fmt.maps(c.address), newTab: true }) : null));
+      }
+    }
+
+    function drawDetails(c) {
+      /* Who sold it is on the first sale; the client's own rep can be someone else once the owner hands them over. */
+      var first = App.data.sales.filter(function (s) { return s.clientId === id; })
+        .sort(function (a, b) { return (a.soldAt || 0) - (b.soldAt || 0); })[0];
+      var sellerId = first ? first.repId : owner ? c.repId : null;
+      var seller = sellerId ? repName(sellerId, sellerId === c.repId) : '';
+      clear(details);
+      if (c.contact) details.appendChild(ui.kv('Contact', c.contact));
+      if (c.phone) details.appendChild(ui.kv('Phone', c.phone));
+      if (c.email) details.appendChild(ui.kv('Email', c.email));
+      if (c.address) details.appendChild(ui.kv('Address', c.address));
+      details.appendChild(ui.kv('Service and price', serviceLine(c)));
+      if (c.startDate) details.appendChild(ui.kv('Start date', fmt.day(c.startDate)));
+      if (seller) details.appendChild(ui.kv('Sold by', seller));
+      if (c.repId && c.repId !== sellerId) details.appendChild(ui.kv('Looked after by', repName(c.repId, true)));
+    }
+
+    function drawPay(c) {
+      var link = c.stripeLink || '', safe = LINK_OK.test(link);
+      clear(pay);
+      if (owner) {
+        pay.appendChild(ui.segmented({ label: 'Payment status', options: PAY, value: c.payStatus || 'unpaid',
+          onChange: function (v) { quick({ payStatus: v }, PAY_SAVED[v]); } }));
+      } else {
+        pay.appendChild(h('div', { class: 'kvs' }, ui.kv('Status', ui.payPill(c.payStatus))));
+      }
+      if (!link) {
+        pay.appendChild(h('p', { class: 'muted' }, 'No payment link yet.'));
+        if (owner) pay.appendChild(ui.button('Add payment link', { icon: 'plus', small: true, onTap: function () { openLink(id); } }));
+        return;
+      }
+      /* Only ever a real link when it starts with https://. Anything else is shown as plain words. */
+      pay.appendChild(h('div', { class: 'callout' }, h('p', { class: 'small' }, link)));
+      if (!safe) pay.appendChild(h('p', { class: 'hint' }, 'This link does not start with https://, so it cannot be opened from here.'));
+      pay.appendChild(h('div', { class: 'btn-row' },
+        safe ? ui.button('Open', { icon: 'external', small: true, href: link, newTab: true }) : null,
+        ui.button('Copy', { icon: 'copy', small: true, onTap: function () {
+          copyText(link).then(function (ok) {
+            if (ok) App.toast('Payment link copied.');
+            else App.toast('Could not copy it. Press and hold the link to copy it yourself.', { bad: true });
+          });
+        } }),
+        owner ? ui.button('Edit', { icon: 'edit', small: true, onTap: function () { openLink(id); } }) : null));
+    }
+
+    function drawNotes(c) {
+      clear(notesEl);
+      notesEl.appendChild((c.notes || []).length ? ui.notes(c.notes) : h('p', { class: 'muted' }, 'No notes yet.'));
+    }
+
+    function drawJobs() {
+      var jobs = jobsOf(id), waiting = waitingSale(id);
+      clear(jobsEl);
+      if (jobs.length) {
+        var list = h('div', { class: 'list' });
+        jobs.forEach(function (job) { list.appendChild(visitRow(job)); });
+        jobsEl.appendChild(list);
+      } else {
+        jobsEl.appendChild(h('p', { class: 'muted' }, 'No visits yet.'));
+      }
+      if (waiting) jobsEl.appendChild(h('p', { class: 'warn small strong' }, 'The sale from ' + fmt.day(waiting.day) + ' has no appointment yet.'));
+      jobsEl.appendChild(ui.button('Book a visit', { icon: 'calendar', block: true, kind: waiting ? 'primary' : 'quiet', onTap: function () { bookVisit(id); } }));
+    }
+
+    function drawManage(c) {
+      clear(manage);
+      manage.appendChild(h('div', { class: 'list' },
+        ui.row({ icon: 'edit', title: owner ? 'Edit details' : 'Edit contact details', onTap: function () { openEdit(id); } })));
+      if (!owner) return;
+      var monthly = hasMonthlyPlan(id);
+      manage.appendChild(h('div', { class: 'field' },
+        h('span', { class: 'field-label' }, 'Status'),
+        ui.segmented({ label: 'Client status', value: c.status,
+          options: Core.CLIENT_STATUSES.map(function (s) { return { value: s, label: s }; }),
+          onChange: function (v) { setStatus(v, monthly); } }),
+        monthly ? h('p', { class: 'field-hint' }, 'Paused holds the monthly commission until they are active again. Cancelled ends the monthly plan.') : null));
+      manage.appendChild(delBtn);
+      manage.appendChild(delErr);
+    }
+
+    function draw() {
+      var c = App.client(id);
+      if (!c) return;
+      drawTop(c); drawDetails(c); drawPay(c); drawNotes(c); drawJobs(); drawManage(c);
+    }
+
+    sheet = App.sheet.open({
+      title: first.name,
+      body: function (el) {
+        [top, ui.label('Details'), details, ui.label('Payment'), pay, ui.label('Notes'), noteBox, noteBtn, noteErr, notesEl,
+          ui.label('Jobs'), jobsEl, ui.label(owner ? 'Manage this client' : 'Change this client'), manage
+        ].forEach(function (part) { el.appendChild(part); });
+        draw();
+      },
+      update: function (sh) {
+        if (deleting) return;
+        var now = App.client(id);
+        if (!now) { sh.close(); App.toast('That client is no longer on your list.'); return; }
+        sh.setTitle(now.name);
+        draw();
+      }
+    });
+    return sheet;
+  }
+
+  /* ---------- the payment link (owner) ---------- */
+
+  function linkProblem(link) {
+    if (!link) return '';
+    if (!/^https:\/\//i.test(link)) return 'A payment link must start with https://';
+    if (link.length > 300) return 'That payment link is too long.';
+    if (!LINK_OK.test(link)) return 'That does not look like a whole link. Copy it again and paste it here.';
+    return '';
+  }
+
+  function openLink(id) {
+    var c = App.client(id);
+    if (!c) return gone();
+    var had = c.stripeLink || '';
+    var box = ui.field({ label: 'Payment link', name: 'pay-link', value: had, placeholder: 'https://', inputmode: 'url', autocapitalize: 'none',
+      hint: had ? 'To remove the link, clear the box and save. A link has to start with https://' : 'Paste the link this client pays with. It has to start with https://' });
+    return App.sheet.open({
+      title: had ? 'Edit payment link' : 'Add payment link', small: true,
+      body: function (el) { el.appendChild(box); },
+      footer: { label: 'Save link', onTap: function (sh) {
+        var link = box.val(), problem = linkProblem(link);
+        if (problem) { box.setError(problem); return; }
+        if (link === had) { sh.close(); return; }
+        var fields = { clientId: id, patch: { stripeLink: link } };
+        freshSave(sh.button, fields);
+        sh.send('updateClient', fields).then(function (res) {
+          if (!res.ok) return;
+          sh.close();
+          App.toast(link ? 'Payment link saved.' : 'Payment link removed.');
+        });
+      } }
+    });
+  }
+
+  /* ---------- edit details (owner: everything; rep: contact details) ---------- */
+
+  function openEdit(id) {
+    var c = App.client(id);
+    if (!c) return gone();
+    var owner = App.role() === 'owner';
+
+    var name = ui.field({ label: 'Customer or business name', name: 'c-name', value: c.name, maxlength: LIMITS.name, autocapitalize: 'words' });
+    var contact = ui.field({ label: 'Contact name', name: 'c-contact', value: c.contact, optional: true, maxlength: LIMITS.name, autocapitalize: 'words' });
+    var phone = ui.field({ label: 'Phone', name: 'c-phone', type: 'tel', value: c.phone, maxlength: 30 });
+    var email = ui.field({ label: 'Email', name: 'c-email', type: 'email', value: c.email, optional: true, maxlength: 120 });
+    var address = ui.field({ label: 'Address', name: 'c-address', value: c.address, maxlength: LIMITS.line, autocapitalize: 'words' });
+    var service, other, price, often, start, rep;
+
+    if (owner) {
+      var names = (App.data.settings.services || []).map(function (s) { return s.name; });
+      var options = names.map(function (n) { return { value: n, label: n }; });
+      if (c.service && names.indexOf(c.service) < 0) options.unshift({ value: c.service, label: c.service });
+      options.push({ value: OTHER, label: 'Other' });
+      other = ui.field({ label: 'Service name', name: 'c-service-other', maxlength: 60 });
+      other.hidden = true;
+      service = ui.field({ label: 'Service', name: 'c-service', type: 'select', options: options, value: c.service || options[0].value,
+        onInput: function (v) { other.hidden = v !== OTHER; } });
+      price = ui.field({ label: 'Price', name: 'c-price', inputmode: 'decimal', prefix: '$', value: ((c.priceCents || 0) / 100).toFixed(2), maxlength: 12 });
+      often = ui.segmented({ label: 'How often', value: c.billing === 'monthly' ? 'monthly' : 'once',
+        options: [{ value: 'once', label: 'One-time' }, { value: 'monthly', label: 'Monthly' }] });
+      start = ui.field({ label: 'Start date', name: 'c-start', type: 'date', value: c.startDate || '' });
+
+      var me = App.me(), people = [{ value: me.id, label: me.name + ' (you)' }].concat(App.people(['rep']).sort(byName).map(function (m) {
+        return { value: m.id, label: m.name };
+      }));
+      if (c.repId && !people.some(function (o) { return o.value === c.repId; })) people.unshift({ value: c.repId, label: repName(c.repId, true) });
+      rep = ui.field({ label: 'Looked after by', name: 'c-rep', type: 'select', options: people, value: c.repId || me.id,
+        hint: 'This person sees the client and books their visits. Sales already made stay with whoever made them.' });
+    }
+
+    return App.sheet.open({
+      title: owner ? 'Edit details' : 'Edit contact details',
+      body: function (el) {
+        var parts = [name, contact, phone, email, address];
+        if (owner) {
+          parts = [ui.label('Contact details')].concat(parts, [ui.label('What they buy'), service, other, price,
+            h('div', { class: 'field' }, h('span', { class: 'field-label' }, 'How often'), often), start, ui.label('Their rep'), rep]);
+        }
+        parts.forEach(function (part) { el.appendChild(part); });
+      },
+      footer: { label: 'Save', onTap: function (sh) {
+        var bad = [];
+        function fail(field, message) { field.setError(message); bad.push(field); }
+        var patch = { name: name.val(), contact: contact.val(), phone: phone.val(), email: email.val(), address: address.val() };
+        if (!patch.name) fail(name, 'Add the customer or business name.');
+        if (patch.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(patch.email)) fail(email, 'That email address does not look right.');
+        if (owner) {
+          patch.service = service.input.value === OTHER ? other.val() : service.input.value;
+          if (!patch.service) fail(service.input.value === OTHER ? other : service, 'Type the name of the service.');
+          patch.priceCents = fmt.toCents(price.val());
+          if (patch.priceCents == null) fail(price, 'Enter the price, like 150 or 150.00.');
+          else if (patch.priceCents > LIMITS.maxCents) fail(price, 'That price is too high.');
+          patch.billing = often.get();
+          patch.startDate = start.val();
+          if (!D.isDay(patch.startDate)) fail(start, 'Pick the start date.');
+          if (rep.input.value && rep.input.value !== c.repId) patch.repId = rep.input.value;     /* only when it is handed to someone new */
+        }
+        if (bad.length) { sh.reveal(bad[0]); return; }
+
+        var now = App.client(id) || c, changed = false, k;
+        for (k in patch) if (patch[k] !== (now[k] == null ? '' : now[k])) changed = true;
+        if (!changed) { sh.close(); return; }
+
+        var fields = { clientId: id, patch: patch };
+        freshSave(sh.button, fields);
+        sh.send('updateClient', fields).then(function (res) {
+          if (!res.ok) return;
+          sh.close();
+          App.toast(patch.repId ? 'Saved. ' + App.nameOf(patch.repId, 'Their new rep') + ' looks after this client now.' : 'Saved.');
+        });
+      } }
+    });
+  }
+
+  /* ---------- book a visit ---------- */
+
+  function bookVisit(arg) {
+    var id = idOf(arg), c = App.client(id), picker = null;
+    if (!c) return gone();
+    var last = jobsOf(id)[0];
+    var what = ui.field({ label: 'What needs to be done', name: 'visit-what', value: (last && last.what) || c.service || '', maxlength: LIMITS.line });
+
+    function label(v) { return v ? 'Book ' + fmt.when(v.date, v.time) : 'Pick a day and a time'; }
+
+    var sheet = App.sheet.open({
+      title: 'Book a visit',
+      body: function (el, sh) {
+        el.appendChild(h('p', { class: 'muted' }, 'A new visit for ', h('b', { class: 'strong' }, c.name), '.'));
+        el.appendChild(what);
+        el.appendChild(ui.label('When'));
+        picker = ui.slotPicker({
+          emptyText: App.role() === 'owner' ? 'No open days yet. Open some in Calendar first.' : null,
+          onChange: function (v) { sh.setButton(label(v), !v); }
+        });
+        el.appendChild(picker);
+      },
+      footer: { label: label(null), onTap: function (sh) {
+        var v = picker.get(), waiting = waitingSale(id);
+        if (!v) return;
+        var fields = { clientId: id, date: v.date, time: v.time, what: what.val() };
+        if (waiting) fields.saleId = waiting.id;
+        freshSave(sh.button, fields);
+        sh.send('bookJob', fields).then(function (res) {
+          if (res.ok) {
+            sh.close();
+            App.toast('Booked ' + fmt.when(v.date, v.time) + '.');
+          } else if (res.error.code === 'slot_taken' || res.error.code === 'slot_closed') {
+            sh.error('');
+            picker.set(null);
+            picker.setError(res.error.message);
+            sh.setButton(label(null), true);
+          }
+        });
+      } }
+    });
+    sheet.setButton(label(null), true);
+    return sheet;
+  }
+
+  /* ---------- register ---------- */
+
+  App.screen('clients', { roles: ['owner', 'rep'], title: 'Clients', render: render });
+  App.actions.openClient = openClient;
+  App.actions.bookVisit = bookVisit;
+})();
+
+;
+/* ---- screens-sales.js ---- */
+/*
+ * Ridgeline Wash Co. team app: Sales, the New sale sheet, the sale sheet and the Leaderboard.
+ *
+ * ============================ WHAT OTHER FILES MAY USE ============================
+ * SCREENS    #sales (owner and reps) and #leaders (reps).
+ *
+ * App.actions.newSale({ date, clientId })      open the New sale sheet. Both are optional.
+ *     date ('YYYY-MM-DD') shows that day's open times first; clientId starts on that existing client.
+ *     App.act('newSale', { date: '2026-11-19' });        App.act('newSale', { clientId: c.id });
+ * App.actions.openSale(saleId)                 open one sale: its details, its commission by date, booking its
+ *     appointment if it has none yet, and "Remove sale" for the owner.
+ *
+ * App.ui.leaderboard(container, { showCommission }) -> container
+ *     Draws the period toggle (This week / This month / All time) and the ranked rows into `container`.
+ *     Call it from your render with a container of your own; calling it again on the same container replaces
+ *     what it drew last time. It keeps its own chosen period (across re-renders and across screens) and
+ *     redraws by itself when new data arrives.
+ *     showCommission: true adds each person's commission for the chosen period under their dollars. Only the
+ *     owner's data holds everyone's sales, so only pass it on an owner screen.
+ *     var box = App.h('div'); root.appendChild(box); App.ui.leaderboard(box, { showCommission: true });
+ * ===================================================================================
+ *
+ * Commission is never worked out here. Every sale arrives with its dated `events`; this file only adds
+ * them up. The one forecast ("You earn $45.00 on this sale") asks RidgelineCore.calc for the figure.
+ */
+(function () {
+  'use strict';
+
+  var Core = RidgelineCore, D = Core.dates, calc = Core.calc;
+  var h = App.h, ui = App.ui, fmt = App.fmt, icon = App.icon;
+
+  var OTHER = '__other';                     /* the "Other" service chip */
+  var PAGE = 40;                             /* sales shown before "Show older sales" */
+  var MATCHES = 6;                           /* clients shown in the "Existing client" pick */
+  /* How long an unsaved New sale is kept on this phone: never longer than the system remembers a save by its id. */
+  var DRAFT_MS = Math.min(12 * 3600, +Core.LIMITS.retrySeconds || 3600) * 1000;
+  var LINK_OK = /^https:\/\/[^\s<>"'`]+$/i;  /* the same test the system applies to a payment link */
+  var EMAIL_OK = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var PERIODS = [{ value: 'week', label: 'This week' }, { value: 'month', label: 'This month' }, { value: 'all', label: 'All time' }];
+
+  /* View state. A screen is drawn again on every data change, so what the person chose lives here. */
+  var repFilter = '';        /* Sales, owner: '' = everyone, or one seller's id */
+  var shown = PAGE;          /* Sales: how many rows of the list are showing */
+  var chipScroll = 0;        /* Sales, owner: how far the row of sellers is scrolled */
+  var period = 'month';      /* the leaderboard's period, shared by Leaders and the Dashboard */
+  var memDraft = {};         /* each person's unsaved New sale (by their id), also kept in localStorage */
+  var formOpen = null;       /* the New sale sheet while it is open */
+
+  /* ================= small helpers ================= */
+
+  function clear(el) { el.textContent = ''; return el; }
+  function byName(a, b) {
+    var x = String(a.name || '').toLowerCase(), y = String(b.name || '').toLowerCase();
+    return x < y ? -1 : x > y ? 1 : 0;
+  }
+  function newestFirst(a, b) { return ((b.soldAt || 0) - (a.soldAt || 0)) || (a.day < b.day ? 1 : a.day > b.day ? -1 : 0); }
+  function pct(n) { return String(+n || 0) + '%'; }
+  function owned(name) { return name + (/s$/i.test(name) ? "'" : "'s"); }
+  function shortDay(day) {
+    var s = fmt.dayShort(day);
+    return day.slice(0, 4) === App.today().slice(0, 4) ? s : s + ', ' + day.slice(0, 4);
+  }
+  function priceWords(sale) { return fmt.money(sale.priceCents) + (sale.billing === 'monthly' ? ' a month' : ' one-time'); }
+  function errLine() { return h('p', { class: 'field-error', role: 'alert', hidden: true }); }
+  function uid() {
+    try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID(); } catch (e) { /* fall through */ }
+    var s = '';
+    while (s.length < 32) s += Math.floor(Math.random() * 16).toString(16);
+    return s + Date.now().toString(16);
+  }
+
+  /* What a sale's events add up to: from..to inclusive (either may be left out), one kind or both. */
+  function earned(sale, from, to, kind) {
+    var total = 0;
+    (sale.events || []).forEach(function (e) {
+      if ((from && e.day < from) || (to && e.day > to) || (kind && e.kind !== kind)) return;
+      total += e.cents;
+    });
+    return total;
+  }
+
+  /* The cut of a price at a rate, in cents, straight from the core's own commission maths. */
+  function share(cents, rate) {
+    var day = App.today();
+    return calc.commissionEvents({ day: day, priceCents: cents, firstPct: rate, monthlyPct: 0, billing: 'once' }, null, day)[0].cents;
+  }
+
+  /* ================= the numbers card (Sales and Leaders share its look) ================= */
+
+  function moneyLine(label, cents) {
+    return h('div', { class: 'between' }, h('span', { class: 'muted' }, label), h('span', { class: 'num' }, fmt.money(cents)));
+  }
+
+  /* cells: [{ cents, words }] across the top (may be empty). Then a label, one big ice number and small lines. */
+  function numbersCard(cells, label, bigCents, lines) {
+    var top = null;
+    if (cells && cells.length) {
+      top = h('div', { class: 'nums-top' });
+      cells.forEach(function (c) {
+        top.appendChild(h('div', { class: 'nums-cell' },
+          h('span', { class: 'stat-num' }, fmt.moneyShort(c.cents)),
+          h('span', { class: 'stat-label' }, c.words)));
+      });
+    }
+    var linesEl = h('div', { class: 'nums-lines' });
+    lines.forEach(function (l) { linesEl.appendChild(moneyLine(l[0], l[1])); });
+    return h('div', { class: 'card card-flush' }, top,
+      h('div', { class: 'nums-main' },
+        h('p', { class: 'nums-label' }, label),
+        h('p', { class: 'big-num ice' }, fmt.moneyShort(bigCents)),
+        linesEl));
+  }
+
+  /* ================= Sales ================= */
+
+  function saleRow(sale, showRep) {
+    var row = ui.row({
+      title: sale.clientName || 'Client',
+      sub: [
+        sale.service + ', ' + shortDay(sale.day),
+        showRep ? 'Sold by ' + App.nameOf(sale.repId, 'someone who has left') : null,
+        sale.jobId ? null : h('span', { class: 'warn' }, 'No appointment yet')
+      ],
+      right: [
+        h('span', { class: 'amt' }, fmt.money(sale.priceCents) + (sale.billing === 'monthly' ? '/mo' : '')),
+        h('span', { class: 'small' }, '+' + fmt.money(earned(sale)))
+      ],
+      chevron: false,
+      onTap: function () { openSale(sale.id); }
+    });
+    row.querySelector('.row-right').classList.add('row-right-col');
+    return row;
+  }
+
+  function renderSales(root) {
+    var d = App.data, me = d.me, owner = me.role === 'owner', today = d.today;
+    var wk = D.weekStart(today), mo = D.monthStart(today);
+    var all = (d.sales || []).slice().sort(newestFirst), list = all, who = '';
+
+    root.appendChild(ui.title('Sales'));
+    root.appendChild(ui.button('New sale', { kind: 'primary', block: true, onTap: function () { openNewSale({}); } }));
+
+    if (owner) {
+      var seen = {}, sellers = [];
+      all.forEach(function (s) { seen[s.repId] = 1; });
+      App.people(['rep']).forEach(function (m) { seen[m.id] = 1; });
+      Object.keys(seen).forEach(function (id) { sellers.push({ id: id, name: App.nameOf(id, 'Someone who has left') }); });
+      sellers.sort(byName);
+      if (repFilter && !seen[repFilter]) repFilter = '';
+      if (sellers.length > 1) {
+        var chips = ui.chips({
+          label: 'Sold by', scroll: true, value: repFilter,
+          options: [{ value: '', label: 'Everyone' }].concat(sellers.map(function (s) { return { value: s.id, label: s.name }; })),
+          onChange: function (v) {
+            chipScroll = chips.scrollLeft;
+            repFilter = v || '';
+            shown = PAGE;
+            App.refresh();
+          }
+        });
+        root.appendChild(chips);
+        chips.scrollLeft = chipScroll;
+      } else repFilter = '';
+      if (repFilter) {
+        list = all.filter(function (s) { return s.repId === repFilter; });
+        who = App.nameOf(repFilter, 'Someone who has left');
+      }
+    }
+
+    var week = { count: 0, cents: 0 }, month = { count: 0, cents: 0 }, fromNew = 0, fromMonthly = 0;
+    list.forEach(function (s) {
+      if (s.day >= wk) { week.count++; week.cents += s.priceCents; }
+      if (s.day >= mo) { month.count++; month.cents += s.priceCents; }
+      fromNew += earned(s, mo, null, 'first');
+      fromMonthly += earned(s, mo, null, 'monthly');
+    });
+    root.appendChild(ui.label(!owner ? 'My numbers' : who ? owned(who) + ' numbers' : 'Business numbers'));
+    root.appendChild(numbersCard(
+      [{ cents: week.cents, words: fmt.plural(week.count, 'sale') + ' this week' },
+       { cents: month.cents, words: fmt.plural(month.count, 'sale') + ' this month' }],
+      owner ? 'Commission owed this month' : 'Commission this month',
+      fromNew + fromMonthly,
+      [['From new sales', fromNew], ['From monthly clients', fromMonthly]]));
+
+    root.appendChild(ui.label(!owner ? 'My sales' : who ? owned(who) + ' sales' : 'All sales', { count: list.length || null }));
+    if (!list.length) {
+      root.appendChild(ui.empty(who
+        ? { title: who + ' has no sales yet.' }
+        : { title: 'No sales yet.', text: 'Every sale shows up here as soon as it is saved, with what it earned.' }));
+      return;
+    }
+    var rows = h('div', { class: 'list' });
+    list.slice(0, shown).forEach(function (s) { rows.appendChild(saleRow(s, owner && !repFilter)); });
+    root.appendChild(rows);
+    if (list.length > shown) {
+      root.appendChild(ui.button('Show older sales', { block: true, onTap: function () { shown += PAGE; App.refresh(); } }));
+    }
+  }
+
+  /* ================= one sale: details, commission by date, Remove sale ================= */
+
+  /* The next day a monthly sale pays again: the same day of the month, the first one after today. */
+  function nextDue(day, today) {
+    for (var k = 1; k <= 600; k++) {
+      var due = D.addMonths(day, k);
+      if (due > today) return due;
+    }
+    return '';
+  }
+
+  function removeSale(saleId, btn, errorEl, sh, st) {
+    var sale = App.sale(saleId);
+    if (!sale) return;
+    var job = sale.jobId ? App.job(sale.jobId) : null;
+    var text = (sale.clientName || 'This client') + ', ' + sale.service + ', ' + priceWords(sale) + '.';
+    if (job && job.status === 'scheduled') text += ' The visit on ' + fmt.when(job.date, job.time) + ' has not happened yet, so it is removed too.';
+    else if (job && job.status === 'done') text += ' The visit is already done, so it stays on the schedule.';
+    text += ' The commission on this sale goes with it. The client stays in Clients.';
+    App.confirm({ title: 'Remove this sale?', text: text, yes: 'Remove sale', no: 'Keep it', danger: true }).then(function (yes) {
+      if (!yes) return;
+      st.removing = true;
+      ui.save(btn, 'deleteSale', { saleId: saleId }, { errorEl: errorEl }).then(function (res) {
+        if (res.skipped) return;
+        if (!res.ok) { st.removing = false; return; }
+        sh.close();
+        App.toast('Sale removed.');
+      });
+    });
+  }
+
+  function drawSale(el, sh, saleId, st) {
+    var sale = App.sale(saleId), me = App.me();
+    if (!sale || !me) return;
+    var owner = me.role === 'owner', today = App.today();
+    var job = sale.jobId ? App.job(sale.jobId) : null, client = App.client(sale.clientId);
+
+    var kvs = h('div', { class: 'kvs' });
+    kvs.appendChild(ui.kv('Sold', fmt.day(sale.day)));
+    kvs.appendChild(ui.kv('Service', sale.service));
+    kvs.appendChild(ui.kv('Price', priceWords(sale)));
+    if (owner) kvs.appendChild(ui.kv('Sold by', App.nameOf(sale.repId, 'Someone who has left')));
+    kvs.appendChild(ui.kv('Earned so far', h('span', { class: 'strong num' }, fmt.money(earned(sale)))));
+    el.appendChild(kvs);
+
+    el.appendChild(ui.label('Appointment'));
+    if (job) el.appendChild(h('div', { class: 'list' }, ui.jobRow(job, { showDate: true })));
+    else if (sale.jobId) el.appendChild(h('p', { class: 'muted' }, 'Booked.'));
+    else {
+      el.appendChild(h('p', { class: 'warn strong' }, 'No appointment yet.'));
+      el.appendChild(ui.button('Book the appointment', { kind: 'primary', block: true, onTap: function () { openBook(saleId); } }));
+    }
+
+    el.appendChild(ui.label('Commission'));
+    var list = h('div', { class: 'list' });
+    (sale.events || []).slice().sort(function (a, b) { return a.day < b.day ? 1 : a.day > b.day ? -1 : 0; }).forEach(function (e) {
+      list.appendChild(ui.row({
+        title: fmt.day(e.day),
+        sub: e.kind === 'monthly' ? 'Monthly client, ' + pct(sale.monthlyPct) + ' of the price' : 'New sale, ' + pct(sale.firstPct) + ' of the price',
+        right: h('span', { class: 'amt' }, fmt.money(e.cents))
+      }));
+    });
+    el.appendChild(list);
+    if (sale.billing === 'monthly') {
+      var hint = '', due = nextDue(sale.day, today);
+      if (sale.endDay) {
+        hint = 'Monthly commission on this sale ended ' + fmt.day(sale.endDay) + (sale.endedBy ? ', when a new monthly plan took its place.' : ', when the client cancelled.');
+      } else if (client && (client.status === 'New' || client.status === 'Active')) {
+        if (due) hint = 'Next: ' + fmt.money(share(sale.priceCents, sale.monthlyPct)) + ' on ' + fmt.day(due) + ', if they are still a client.';
+      } else if (client) {
+        hint = 'Monthly commission is on hold while this client is ' + String(client.status).toLowerCase() + '.';
+      }
+      if (hint) el.appendChild(h('p', { class: 'hint' }, hint));
+    }
+
+    if (sale.notes) {
+      el.appendChild(ui.label('Notes'));
+      el.appendChild(h('p', { class: 'note-text' }, sale.notes));
+    }
+
+    if (owner) {
+      var err = h('p', { class: 'form-error', role: 'alert', hidden: true });
+      el.appendChild(ui.button('Remove sale', { kind: 'danger', block: true, onTap: function (e, btn) { removeSale(saleId, btn, err, sh, st); } }));
+      el.appendChild(err);
+    }
+  }
+
+  function openSale(saleId) {
+    var sale = App.sale(saleId), st = { removing: false };
+    if (!sale) { App.toast('That sale is no longer here.'); return null; }
+    return App.sheet.open({
+      title: sale.clientName || 'Sale', small: true,
+      body: function (el, sh) { drawSale(el, sh, saleId, st); },
+      update: function (sh) {
+        if (st.removing) return;       /* its own save is on the way: leave the button and its message alone */
+        var now = App.sale(saleId);
+        if (!now) { sh.close(); App.toast('That sale is no longer here.'); return; }
+        sh.setTitle(now.clientName || 'Sale');
+        sh.rebuild();
+      }
+    });
+  }
+
+  /* Book the visit for a sale that was saved with "Book later". */
+  function openBook(saleId) {
+    var sale = App.sale(saleId), picker;
+    if (!sale) return;
+    var idle = 'Pick a time';
+    var sh = App.sheet.open({
+      title: 'Book the appointment',
+      body: function (el, sheet) {
+        el.appendChild(h('p', { class: 'muted' }, (sale.clientName || 'This client') + ', ' + sale.service + '.'));
+        picker = ui.slotPicker({ onChange: function (v) { sheet.setButton(v ? 'Book ' + fmt.when(v.date, v.time) : idle, !v); } });
+        el.appendChild(picker);
+      },
+      footer: { label: idle, onTap: function (sheet) {
+        var v = picker.get();
+        if (!v) return;
+        sheet.send('bookJob', { clientId: sale.clientId, saleId: sale.id, date: v.date, time: v.time, what: sale.service }).then(function (res) {
+          if (res.ok) {
+            sheet.close();
+            App.toast('Booked for ' + fmt.when(v.date, v.time) + '.');
+          } else if (res.error.code === 'slot_taken' || res.error.code === 'slot_closed') {
+            sheet.error('');
+            picker.set(null);
+            picker.setError(res.error.message);
+            sheet.setButton(idle, true);
+          }
+        });
+      } }
+    });
+    sh.setButton(idle, true);
+  }
+
+  /* ================= New sale: the draft that is never lost ================= */
+  /*
+   * Everything typed into New sale is kept as a draft: in memory and in localStorage, per person, for a
+   * few hours. A back swipe, a closed tab or a dead battery does not lose it; opening New sale again
+   * brings it back. A saved sale clears the draft.
+   *
+   * The draft is also what stops a sale being saved twice:
+   *   - it carries the opId of the save it tried, so every retry (even after the sheet was closed, or the
+   *     page was loaded again) is the same save to the system, which answers it only once;
+   *   - it remembers each try whose answer never came back (`tries`). Such a save may have gone through.
+   *     If a sale just like it turns up in the data afterwards, the sheet shows it as saved instead of
+   *     sending it again.
+   */
+
+  function draftKey(id) { return 'ridgeline.' + App.mode + '.saleDraft.' + (id || ''); }
+
+  function blankDraft(me) {
+    return {
+      v: 1, by: me.id, at: 0, mode: 'new',
+      name: '', contact: '', phone: '', email: '', address: '',
+      clientId: '', find: '', repId: me.id,
+      service: '', other: '', price: '', priceAuto: false, billing: 'once', notes: '', link: '',
+      appt: null, day: '', later: false,
+      opId: '', tries: [], lastSold: 0
+    };
+  }
+
+  /* Is there anything here worth keeping? A client the sheet was simply opened on (given) does not count. */
+  function hasContent(d, given) {
+    return !!(d.name || d.contact || d.phone || d.email || d.address || (d.clientId && d.clientId !== given) ||
+      d.service || d.other || d.price || d.notes || d.link || d.appt);
+  }
+
+  function fresh(raw) { return !!raw && typeof raw === 'object' && raw.v === 1 && Date.now() - raw.at < DRAFT_MS; }
+
+  /* Keep this person's draft, or (with null) forget it. Each person has their own, so a shared phone never mixes them up. */
+  function storeDraft(me, d) {
+    var keepIt = !!d && hasContent(d);
+    if (keepIt) memDraft[me.id] = JSON.parse(JSON.stringify(d)); else delete memDraft[me.id];
+    try {
+      if (keepIt) window.localStorage.setItem(draftKey(me.id), JSON.stringify(memDraft[me.id]));
+      else window.localStorage.removeItem(draftKey(me.id));
+    } catch (e) { /* no storage on this phone: the copy in memory still covers a closed sheet */ }
+  }
+
+  /* Drafts nobody came back for are thrown away when their time is up, whoever they belonged to. */
+  function sweepDrafts() {
+    try {
+      var ls = window.localStorage, prefix = draftKey(''), old = [], i, k;
+      for (i = 0; i < ls.length; i++) {
+        k = ls.key(i);
+        if (k && k.indexOf(prefix) === 0) {
+          var raw = null;
+          try { raw = JSON.parse(ls.getItem(k)); } catch (e) { raw = null; }
+          if (!fresh(raw)) old.push(k);
+        }
+      }
+      old.forEach(function (key) { ls.removeItem(key); });
+    } catch (e2) { /* nothing to tidy */ }
+    Object.keys(memDraft).forEach(function (id) { if (!fresh(memDraft[id])) delete memDraft[id]; });
+  }
+
+  function loadDraft(me) {
+    sweepDrafts();
+    var raw = memDraft[me.id] || null;
+    if (!raw) {
+      try { raw = JSON.parse(window.localStorage.getItem(draftKey(me.id)) || 'null'); } catch (e) { raw = null; }
+    }
+    if (!fresh(raw) || raw.by !== me.id) return null;
+    var d = blankDraft(me), k;
+    for (k in d) {
+      if (k !== 'appt' && k !== 'tries' && Object.prototype.hasOwnProperty.call(raw, k) && typeof raw[k] === typeof d[k]) d[k] = raw[k];
+    }
+    if (raw.appt && D.isDay(raw.appt.date) && D.isHM(raw.appt.time)) d.appt = { date: raw.appt.date, time: raw.appt.time };
+    if (Array.isArray(raw.tries)) d.tries = raw.tries.filter(function (t) { return !!t && typeof t === 'object' && typeof t.priceCents === 'number'; }).slice(-6);
+    if (d.mode !== 'existing') d.mode = 'new';
+    if (d.billing !== 'monthly') d.billing = 'once';
+    if (!D.isDay(d.day)) d.day = '';
+    return hasContent(d) ? d : null;
+  }
+
+  /* ================= New sale: the sheet ================= */
+
+  function openNewSale(arg) {
+    var me = App.me();
+    if (!me || (me.role !== 'owner' && me.role !== 'rep')) return null;
+    if (formOpen) return formOpen;
+    arg = arg && typeof arg === 'object' ? { date: D.isDay(arg.date) ? arg.date : '', clientId: arg.clientId ? String(arg.clientId) : '' } : { date: '', clientId: '' };
+
+    var owner = me.role === 'owner';
+    var d = loadDraft(me), restored = !!d;
+    if (!d) d = blankDraft(me);
+    var view = 'form', saving = false, closed = false, done = null, timer = null, f = null, sheet = null;
+
+    /* What the caller asked for goes on top of whatever was kept. */
+    function applyArg() {
+      if (arg.clientId && App.client(arg.clientId)) { d.mode = 'existing'; d.clientId = arg.clientId; }
+      if (arg.date && arg.date >= App.today()) {
+        if (d.appt && d.appt.date !== arg.date) d.appt = null;
+        d.day = arg.date;
+        d.later = false;
+      }
+    }
+    applyArg();
+
+    /* ----- reading the data ----- */
+    function services() { return (App.data.settings.services || []); }
+    function serviceById(id) {
+      var list = services();
+      for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+      return null;
+    }
+    function serviceOptions() {
+      return services().map(function (s) { return { value: s.id, label: s.name }; }).concat([{ value: OTHER, label: 'Other' }]);
+    }
+    function repOptions() {
+      return [{ value: me.id, label: me.name + ' (you)' }].concat(App.people(['rep']).sort(byName).map(function (m) { return { value: m.id, label: m.name }; }));
+    }
+    function sig(options) { return options.map(function (o) { return o.value + '\u0001' + o.label; }).join('\u0002'); }
+    function sellerId() { return owner && f && f.rep ? (f.rep.input.value || me.id) : me.id; }
+    function anyFreeDay() { return App.freeDays().length > 0; }
+    function isFree(v) { return !!v && App.freeSlots(v.date).indexOf(v.time) >= 0; }
+    function apptValue() { return d.later || !f ? null : f.picker.get(); }
+    function norm(text) { return String(text == null ? '' : text).replace(/\s+/g, ' ').trim().toLowerCase(); }
+    function newestSold() {
+      var at = 0;
+      (App.data.sales || []).forEach(function (s) { if (s.soldAt > at) at = s.soldAt; });
+      return at;
+    }
+    /* The client's monthly plan that is still running, if this phone can see one. */
+    function currentPlan(clientId) {
+      return (App.data.sales || []).filter(function (s) { return s.clientId === clientId && s.billing === 'monthly' && !s.endDay; })[0] || null;
+    }
+
+    /* ----- keeping what was typed ----- */
+    function collect() {
+      if (!f || view !== 'form') return;
+      d.name = f.name.val(); d.contact = f.contact.val(); d.phone = f.phone.val(); d.email = f.email.val(); d.address = f.address.val();
+      d.find = f.find.val();
+      d.repId = sellerId();
+      d.other = f.other.val(); d.price = f.price.val(); d.billing = f.billing.get();
+      d.notes = f.notes.val(); d.link = f.link.val();
+      d.appt = f.picker.get();
+      if (d.appt) d.day = d.appt.date;
+    }
+    function keep() {
+      clearTimeout(timer);
+      timer = null;
+      if (view !== 'form') return;
+      collect();
+      d.at = Date.now();
+      storeDraft(me, hasContent(d, arg.clientId) ? d : null);
+    }
+    function touch() {
+      clearTimeout(timer);
+      timer = setTimeout(keep, 300);
+    }
+
+    /* ----- the lines that follow what is typed ----- */
+    function earnLine() {
+      var s = App.data.settings, cents = fmt.toCents(f.price.val()), monthly = f.billing.get() === 'monthly';
+      var who = sellerId() === me.id ? 'You earn' : App.nameOf(sellerId(), 'The rep') + ' earns';
+      var real = cents != null && cents > 0 && cents <= Core.LIMITS.maxCents;
+      var first = real ? fmt.money(share(cents, s.firstPct)) + ' on this sale' : pct(s.firstPct) + ' of this sale';
+      var each = real ? fmt.money(share(cents, s.monthlyPct)) : pct(s.monthlyPct);
+      sheet.note(who + ' ' + first + (monthly ? ', then ' + each + ' every month they stay.' : '.'));
+    }
+    function paintButton() {
+      if (view !== 'form' || saving) return;
+      var v = apptValue();
+      /* On a narrow phone the label breaks before the day, never in the middle of "9:30 AM". */
+      sheet.setButton(v ? 'Save sale and book ' + fmt.when(v.date, v.time).replace(/ /g, '\u00a0') : 'Save sale', false);
+    }
+
+    /* A field of this form: remembers what is typed, and the keyboard's Enter moves to the next field. */
+    function fld(o) {
+      var own = o.onInput;
+      o.onInput = function (value, el) { if (own) own(value, el); touch(); };
+      var el = ui.field(o);
+      if (o.type !== 'textarea' && o.type !== 'select') {
+        el.input.setAttribute('enterkeyhint', 'next');
+        el.input.addEventListener('keydown', function (e) {
+          if (e.key !== 'Enter') return;
+          e.preventDefault();
+          var all = Array.prototype.filter.call(sheet.body.querySelectorAll('input, textarea, select'), function (x) { return x.offsetParent !== null; });
+          var next = all[all.indexOf(el.input) + 1];
+          if (next) next.focus(); else el.input.blur();
+        });
+      }
+      return el;
+    }
+
+    /* ----- the form ----- */
+    function drawForm(el) {
+      f = {};
+      if (d.service && d.service !== OTHER && !serviceById(d.service)) d.service = '';
+      if (owner && !repOptions().some(function (o) { return o.value === d.repId; })) d.repId = me.id;
+      if (d.appt && !isFree(d.appt)) d.appt = null;
+
+      if (restored) {
+        el.appendChild(h('div', { class: 'callout callout-ice' }, h('div', { class: 'between' },
+          h('span', { class: 'strong' }, 'We kept what you typed.'),
+          ui.button('Start over', { kind: 'text', small: true, onTap: startOver }))));
+      }
+
+      /* 1. Customer */
+      f.swap = ui.button('Existing client', { kind: 'text', onTap: function () { setMode(d.mode === 'new' ? 'existing' : 'new'); } });
+      f.custLabel = ui.label('Customer');
+      el.appendChild(h('div', { class: 'sale-sec' }, f.custLabel, f.swap));
+
+      f.name = fld({ label: 'Customer or business name', name: 'sale-name', value: d.name, autocapitalize: 'words', maxlength: Core.LIMITS.name });
+      f.contact = fld({ label: 'Contact name', optional: true, name: 'sale-contact', value: d.contact, autocapitalize: 'words', maxlength: Core.LIMITS.name });
+      f.phone = fld({ label: 'Phone', name: 'sale-phone', type: 'tel', value: d.phone, maxlength: 30 });
+      f.email = fld({ label: 'Email', optional: true, name: 'sale-email', type: 'email', value: d.email, maxlength: 120, autocapitalize: 'none' });
+      f.address = fld({ label: 'Address', name: 'sale-address', value: d.address, autocapitalize: 'words', maxlength: Core.LIMITS.line });
+      f.newBox = h('div', { class: 'stack' }, f.name, f.contact, f.phone, f.email, f.address);
+      el.appendChild(f.newBox);
+
+      f.find = fld({ name: 'sale-find', value: d.find, placeholder: 'Search name, phone or address', onInput: drawMatches });
+      f.find.input.setAttribute('aria-label', 'Search your clients');
+      f.find.input.setAttribute('enterkeyhint', 'search');
+      f.findWrap = h('div', { class: 'search' }, icon('search', 20), f.find);
+      f.picked = h('div', { class: 'card' });
+      f.matches = h('div', { class: 'stack-sm' });
+      f.oldBox = h('div', { class: 'stack-md' }, f.picked, f.findWrap, f.matches);
+      el.appendChild(f.oldBox);
+
+      if (owner) {
+        f.rep = ui.field({ label: 'Sold by', name: 'sale-rep', type: 'select', options: repOptions(), value: d.repId, onInput: function () { earnLine(); touch(); } });
+        el.appendChild(f.rep);
+      }
+
+      /* 2. What they bought */
+      f.serviceLabel = ui.label('What they bought');
+      el.appendChild(f.serviceLabel);
+      f.service = ui.chips({ label: 'What they bought', options: serviceOptions(), value: d.service || null, onChange: pickService });
+      f.serviceErr = errLine();
+      f.serviceBox = h('div', { class: 'field' }, f.service, f.serviceErr);
+      el.appendChild(f.serviceBox);
+      f.other = fld({ label: 'What was sold', name: 'sale-other', value: d.other, maxlength: 60, autocapitalize: 'sentences' });
+      f.other.hidden = d.service !== OTHER;
+      el.appendChild(f.other);
+      f.price = fld({ label: 'Price', name: 'sale-price', value: d.price, inputmode: 'decimal', prefix: '$', maxlength: 12,
+        onInput: function () { d.priceAuto = false; earnLine(); } });
+      el.appendChild(f.price);
+      f.billing = ui.segmented({ label: 'How often', value: d.billing,
+        options: [{ value: 'once', label: 'One-time' }, { value: 'monthly', label: 'Monthly' }],
+        onChange: function () { earnLine(); planLine(); touch(); } });
+      f.planHint = h('p', { class: 'field-hint', hidden: true });
+      el.appendChild(h('div', { class: 'field' }, h('span', { class: 'field-label' }, 'How often'), f.billing, f.planHint));
+      f.notes = fld({ label: 'Notes', optional: true, name: 'sale-notes', type: 'textarea', rows: 3, value: d.notes, maxlength: Core.LIMITS.text,
+        placeholder: 'Anything the team should know' });
+      el.appendChild(f.notes);
+      f.link = fld({ label: 'Payment link', optional: true, name: 'sale-link', type: 'url', inputmode: 'url', value: d.link, maxlength: 300,
+        autocapitalize: 'none', placeholder: 'https://' });
+      el.appendChild(f.link);
+
+      /* 3. Appointment */
+      f.apptLabel = ui.label('Appointment');
+      el.appendChild(f.apptLabel);
+      f.picker = ui.slotPicker({
+        value: d.appt, date: d.day || null,
+        emptyText: owner ? 'No open days yet. Save the sale now and book once you open some in Calendar.'
+          : 'No open days yet. Save the sale now and book once Grayson opens some.',
+        onChange: function (v) {
+          d.appt = v;
+          if (v) d.day = v.date;
+          paintButton();
+          touch();
+        }
+      });
+      f.laterBtn = ui.button('Book later', { kind: 'text', onTap: function () { setLater(true); } });
+      f.laterBtn.classList.add('btn-start');
+      f.pickBox = h('div', { class: 'stack-sm' }, f.picker, f.laterBtn);
+      var nowBtn = ui.button('Pick a time now', { kind: 'text', onTap: function () { setLater(false); } });
+      nowBtn.classList.add('btn-start');
+      f.laterBox = h('div', { class: 'callout' },
+        h('p', { class: 'callout-title' }, 'Booking later'),
+        h('p', { class: 'muted small' }, 'Save the sale now. When you know the day, open this sale in Sales and book it there.'),
+        nowBtn);
+      el.appendChild(f.pickBox);
+      el.appendChild(f.laterBox);
+
+      setMode(d.mode, true);
+      setLater(d.later, true);
+      earnLine();
+      paintButton();
+    }
+
+    /* One monthly plan pays at a time: say so before a new one takes the place of the old. */
+    function planLine() {
+      var plan = d.mode === 'existing' && d.clientId && f.billing.get() === 'monthly' ? currentPlan(d.clientId) : null;
+      f.planHint.textContent = plan ? 'This takes the place of their monthly plan now (' + plan.service + ', ' + fmt.money(plan.priceCents) + ' a month).' : '';
+      f.planHint.hidden = !plan;
+    }
+
+    function setMode(mode, quiet) {
+      var none = !(App.data.clients || []).length;
+      if (mode === 'existing' && none && !d.clientId) mode = 'new';
+      d.mode = mode;
+      f.newBox.hidden = mode !== 'new';
+      f.oldBox.hidden = mode !== 'existing';
+      f.link.hidden = mode !== 'new';            /* a payment link is saved with a new customer only */
+      f.swap.querySelector('.btn-label').textContent = mode === 'new' ? 'Existing client' : 'New customer';
+      f.swap.hidden = mode === 'new' && none;
+      if (mode === 'existing') drawPicked();
+      planLine();
+      if (!quiet) touch();
+    }
+
+    function drawPicked() {
+      var c = d.clientId ? App.client(d.clientId) : null;
+      if (d.clientId && !c) d.clientId = '';
+      f.picked.hidden = !c;
+      f.findWrap.hidden = !!c;
+      f.matches.hidden = !!c;
+      clear(f.picked);
+      planLine();
+      if (!c) { drawMatches(); return; }
+      f.picked.appendChild(h('div', { class: 'between' },
+        h('div', { class: 'stack-xs grow' },
+          h('p', { class: 'strong' }, c.name),
+          c.address ? h('p', { class: 'muted small' }, c.address) : null,
+          c.phone ? h('p', { class: 'muted small num' }, c.phone) : null),
+        ui.button('Change', { small: true, onTap: function () {
+          d.clientId = '';
+          drawPicked();
+          touch();
+        } })));
+    }
+
+    function drawMatches() {
+      if (!f || d.mode !== 'existing' || d.clientId) return;
+      clear(f.matches);
+      var all = (App.data.clients || []).slice().sort(byName);
+      var q = f.find.val().toLowerCase(), digits = q.replace(/\D/g, '');
+      if (!all.length) { f.matches.appendChild(h('p', { class: 'muted' }, 'You have no clients yet. Add this one as a new customer.')); return; }
+      var hits = !q ? all : all.filter(function (c) {
+        if ([c.name, c.contact, c.address, c.phone].join(' ').toLowerCase().indexOf(q) >= 0) return true;
+        return digits.length >= 3 && String(c.phone || '').replace(/\D/g, '').indexOf(digits) >= 0;
+      });
+      if (!hits.length) { f.matches.appendChild(h('p', { class: 'muted' }, 'No client matches that.')); return; }
+      var list = h('div', { class: 'list' });
+      hits.slice(0, MATCHES).forEach(function (c) {
+        list.appendChild(ui.row({ title: c.name, sub: c.address || c.phone || '', cls: 'row-clip', chevron: false, onTap: function () {
+          d.clientId = c.id;
+          f.find.setError('');
+          drawPicked();
+          touch();
+        } }));
+      });
+      f.matches.appendChild(list);
+      if (hits.length > MATCHES) f.matches.appendChild(h('p', { class: 'hint' }, 'Showing ' + MATCHES + ' of ' + hits.length + '. Type a few letters to find the rest.'));
+    }
+
+    function pickService(v) {
+      d.service = v || '';
+      f.serviceErr.hidden = true;
+      f.other.hidden = v !== OTHER;
+      var svc = serviceById(v);
+      if (!f.price.val() || d.priceAuto) {             /* never write over a price someone typed */
+        if (svc && svc.priceCents > 0) {
+          f.price.input.value = svc.priceCents % 100 ? (svc.priceCents / 100).toFixed(2) : String(svc.priceCents / 100);
+          f.price.setError('');
+          d.priceAuto = true;
+        } else if (d.priceAuto) {
+          f.price.input.value = '';
+          d.priceAuto = false;
+        }
+      }
+      if (v === OTHER) { try { f.other.input.focus(); } catch (e) { /* fine */ } }
+      earnLine();
+      touch();
+    }
+
+    function setLater(on, quiet) {
+      d.later = !!on && anyFreeDay();
+      f.pickBox.hidden = d.later;
+      f.laterBox.hidden = !d.later;
+      f.laterBtn.hidden = !anyFreeDay();        /* with no open days there is nothing to skip */
+      if (!d.later && !quiet) f.picker.setError('');
+      paintButton();
+      if (!quiet) touch();
+    }
+
+    function startOver() {
+      collect();
+      var old = JSON.parse(JSON.stringify(d));
+      d = blankDraft(me);
+      applyArg();
+      restored = false;
+      storeDraft(me, null);
+      sheet.error('');
+      sheet.rebuild();
+      sheet.body.scrollTop = 0;
+      App.toast('Cleared.', { action: { label: 'Undo', onTap: function () {
+        if (view === 'form' && !closed && !saving) {
+          d = old;
+          restored = true;
+          storeDraft(me, d);
+          sheet.rebuild();
+          sheet.body.scrollTop = 0;
+        } else if (closed && !memDraft[me.id]) storeDraft(me, old);
+      } } });
+    }
+
+    /* ----- checking and saving ----- */
+
+    /* Marks every problem and returns the first one, top to bottom: { el to scroll to, input to put the cursor in }. */
+    function check() {
+      var first = null, cents = fmt.toCents(d.price);
+      function flag(field, message, target) {
+        field.setError(message);
+        if (!first) first = { el: target || field, input: target ? null : field.input };
+      }
+      [f.name, f.contact, f.phone, f.email, f.address, f.find, f.other, f.price, f.link].forEach(function (x) { x.setError(''); });
+      f.serviceErr.hidden = true;
+
+      if (d.mode === 'new') {
+        if (!d.name) flag(f.name, 'Add the customer or business name.');
+        if (!d.phone) flag(f.phone, 'Add a phone number.');
+        else if (d.phone.replace(/\D/g, '').length < 7) flag(f.phone, 'That phone number looks too short.');
+        if (d.email && !EMAIL_OK.test(d.email)) flag(f.email, 'That email address does not look right.');
+        if (!d.address) flag(f.address, 'Add the address.');
+      } else if (!App.client(d.clientId)) {
+        d.clientId = '';
+        drawPicked();
+        flag(f.find, 'Pick the client.');
+      }
+
+      if (!d.service || (d.service !== OTHER && !serviceById(d.service))) {
+        f.serviceErr.textContent = 'Pick what was sold.';
+        f.serviceErr.hidden = false;
+        if (!first) first = { el: f.serviceLabel, input: null };
+      } else if (d.service === OTHER && !d.other) flag(f.other, 'Say what was sold.');
+
+      if (!d.price) flag(f.price, 'Enter the price.');
+      else if (cents == null) flag(f.price, 'Enter the price in dollars, like 150 or 150.50.');
+      else if (cents <= 0) flag(f.price, 'Enter the price.');
+      else if (cents > Core.LIMITS.maxCents) flag(f.price, 'That price is too high. Check it.');
+
+      if (d.mode === 'new' && d.link) {
+        if (!LINK_OK.test(d.link)) flag(f.link, 'A payment link must start with https://');
+        else if (d.link.length > 300) flag(f.link, 'That payment link is too long.');
+      }
+
+      if (!d.later && !d.appt && anyFreeDay()) {
+        f.picker.setError('Pick a time, or tap Book later.');
+        if (!first) first = { el: f.apptLabel, input: null };
+      }
+      return first;
+    }
+
+    function request() {
+      var svc = serviceById(d.service), v = apptValue();
+      var req = {
+        service: d.service === OTHER ? d.other : svc.name,
+        priceCents: fmt.toCents(d.price), billing: d.billing, notes: d.notes,
+        appointment: v ? { date: v.date, time: v.time } : null
+      };
+      if (d.mode === 'new') {
+        req.client = { name: d.name, contact: d.contact, phone: d.phone, email: d.email, address: d.address };
+        req.stripeLink = d.link;
+      } else req.clientId = d.clientId;
+      if (owner && d.repId !== me.id) req.repId = d.repId;
+      return req;
+    }
+
+    /* Has a try whose answer never came back turned up as a sale after all? Then it is saved: show it, send nothing. */
+    function adoptSaved() {
+      if (view !== 'form' || saving || !d.tries.length) return false;
+      var hit = null;
+      (App.data.sales || []).forEach(function (s) {
+        if (hit || !(s.soldAt > d.lastSold)) return;
+        d.tries.forEach(function (t) {
+          if (hit || s.repId !== t.repId || s.priceCents !== t.priceCents || s.billing !== t.billing || norm(s.service) !== t.service) return;
+          if (t.clientId ? s.clientId === t.clientId : norm(s.clientName) === t.name) hit = s;
+        });
+      });
+      if (!hit) return false;
+      saved({ saleId: hit.id, clientId: hit.clientId, jobId: hit.jobId },
+        { service: hit.service, priceCents: hit.priceCents, billing: hit.billing, clientId: hit.clientId, appointment: null }, hit.repId);
+      return true;
+    }
+
+    function submit() {
+      if (saving || view !== 'form') return;        /* a second tap while it is saving does nothing */
+      if (adoptSaved()) return;
+      collect();
+      var bad = check();
+      if (bad) {
+        sheet.error('');
+        sheet.reveal(bad.el);
+        if (bad.input) { try { bad.input.focus({ preventScroll: true }); } catch (e) { /* fine */ } }
+        return;
+      }
+      var req = request(), seller = sellerId(), known = newestSold();
+      var tried = { name: norm(req.client ? req.client.name : ''), clientId: req.clientId || '', service: norm(req.service),
+        priceCents: req.priceCents, billing: req.billing, repId: seller };
+      if (!d.opId) d.opId = uid();                  /* one id for this sale, however many times it is sent */
+      keep();
+      saving = true;
+      sheet.error('');
+      sheet.setButton('Saving...', true);
+      App.api.send('createSale', req, { opId: d.opId }).then(function (res) {
+        saving = false;
+        if (res.ok) { saved(res.result || {}, req, seller); return; }
+        if (res.error.code === 'auth') return;      /* signed out: the sign-in screen says why, the draft waits */
+        if (res.error.code === 'network') {         /* no answer: it may have saved all the same, so remember what was sent */
+          if (!d.tries.length) d.lastSold = known;
+          if (!d.tries.some(function (t) { return JSON.stringify(t) === JSON.stringify(tried); })) d.tries = d.tries.concat([tried]).slice(-6);
+          if (!closed || !formOpen) keep();
+        }
+        if (closed) {
+          App.toast(res.error.message + ' What you typed is kept.', { bad: true, action: { label: 'Open', onTap: function () { openNewSale({}); } } });
+          return;
+        }
+        paintButton();
+        if (res.error.code === 'slot_taken' || res.error.code === 'slot_closed') {
+          sheet.error('');
+          f.picker.set(null);                       /* the times shown are already the fresh ones */
+          d.appt = null;
+          f.picker.setError(res.error.message);
+          setLater(false, true);
+          sheet.reveal(f.apptLabel);
+          keep();
+        } else sheet.error(res.error.message);
+      });
+    }
+
+    function saved(result, req, seller) {
+      var sale = result.saleId ? App.sale(result.saleId) : null;
+      var job = result.jobId ? App.job(result.jobId) : null;
+      var price = sale ? sale.priceCents : req.priceCents, monthly = (sale ? sale.billing : req.billing) === 'monthly';
+      var s = App.data.settings;
+      done = {
+        name: sale && sale.clientName ? sale.clientName : (req.client ? req.client.name : (App.client(req.clientId) || {}).name) || 'Client',
+        sold: (sale ? sale.service : req.service) + ', ' + fmt.money(price) + (monthly ? ' a month' : ' one-time'),
+        when: job ? fmt.when(job.date, job.time) : (req.appointment && result.jobId ? fmt.when(req.appointment.date, req.appointment.time) : ''),
+        who: seller === me.id ? 'You earned' : App.nameOf(seller, 'The rep') + ' earned',
+        cents: sale && sale.events && sale.events.length ? sale.events[0].cents : (result.commissionCents || 0),
+        each: monthly ? share(price, sale ? sale.monthlyPct : s.monthlyPct) : 0
+      };
+      clearTimeout(timer);
+      timer = null;
+      d = blankDraft(me);
+      restored = false;
+      storeDraft(me, null);
+      if (closed) { App.toast('Sale saved.'); return; }
+      view = 'done';
+      sheet.note('');
+      sheet.error('');
+      sheet.setButton(null);
+      sheet.rebuild();
+      sheet.body.scrollTop = 0;
+    }
+
+    /* ----- the success view ----- */
+    function drawDone(el) {
+      el.appendChild(h('div', { class: 'sold-head' }, icon('check-circle', 40), h('h3', { class: 'sold-title' }, 'Sale saved')));
+      var kvs = h('div', { class: 'kvs' });
+      kvs.appendChild(ui.kv('Customer', done.name));
+      kvs.appendChild(ui.kv('Sold', done.sold));
+      kvs.appendChild(ui.kv('Appointment', done.when || h('span', { class: 'warn strong' }, 'Not booked yet')));
+      el.appendChild(kvs);
+      if (!done.when) el.appendChild(h('p', { class: 'hint' }, 'When you know the day, open this sale in Sales and book it there.'));
+      el.appendChild(h('div', { class: 'callout callout-ice' },
+        h('p', { class: 'muted small' }, done.who),
+        h('p', { class: 'big-num ice' }, fmt.money(done.cents)),
+        done.each ? h('p', { class: 'small' }, 'Then ' + fmt.money(done.each) + ' every month they stay.') : null));
+      el.appendChild(h('div', { class: 'cols-2' },
+        ui.button('New sale', { onTap: function () {
+          view = 'form';
+          done = null;
+          arg = { date: '', clientId: '' };
+          sheet.setButton('Save sale', false);
+          sheet.rebuild();
+          sheet.body.scrollTop = 0;
+        } }),
+        ui.button('Done', { kind: 'primary', onTap: function () { sheet.close(); } })));
+    }
+
+    /* ----- new data while the sheet is open: change only what depends on it, never a typed field ----- */
+    function refresh() {
+      if (view !== 'form' || !f || adoptSaved()) return;
+      if (sig(serviceOptions()) !== f.serviceSig) {
+        f.serviceSig = sig(serviceOptions());
+        f.service.setOptions(serviceOptions());
+        if (d.service && d.service !== OTHER && !serviceById(d.service)) { d.service = ''; f.service.set(null); }
+      }
+      if (f.rep && sig(repOptions()) !== f.repSig) {
+        var cur = f.rep.input.value, list = repOptions();
+        f.repSig = sig(list);
+        clear(f.rep.input);
+        list.forEach(function (o) { f.rep.input.appendChild(h('option', { value: o.value }, o.label)); });
+        f.rep.input.value = list.some(function (o) { return o.value === cur; }) ? cur : me.id;
+      }
+      setMode(d.mode, true);
+      setLater(d.later, true);
+      earnLine();
+    }
+
+    App.sheet.open({
+      title: 'New sale',
+      body: function (el, sh) {
+        sheet = sh;
+        if (view === 'done') { drawDone(el); return; }
+        drawForm(el);
+        f.serviceSig = sig(serviceOptions());
+        if (f.rep) f.repSig = sig(repOptions());
+        if (!restored && d.mode === 'new' && !hasContent(d)) { try { f.name.input.focus({ preventScroll: true }); } catch (e) { /* fine */ } }
+      },
+      footer: { label: 'Save sale', onTap: submit },
+      update: refresh,
+      onClose: function () {
+        closed = true;
+        formOpen = null;
+        if (view === 'form') keep();
+        clearTimeout(timer);
+      }
+    });
+    formOpen = sheet;
+    if (restored) adoptSaved();
+    return sheet;
+  }
+
+  /* ================= the leaderboard ================= */
+
+  ui.leaderboard = function (container, o) {
+    o = o || {};
+    if (!container) return null;
+    if (container._board && container._board.parentNode === container) container.removeChild(container._board);
+
+    var rows = h('div');
+    var seg = ui.segmented({ label: 'Period', options: PERIODS, value: period, onChange: function (v) { period = v; draw(); } });
+    var box = h('div', { class: 'stack' }, seg, rows);
+
+    function commissionOf(id, from) {
+      var total = 0;
+      (App.data.sales || []).forEach(function (s) { if (s.repId === id) total += earned(s, from); });
+      return total;
+    }
+    function draw() {
+      var d = App.data, me = d.me;
+      var from = period === 'week' ? D.weekStart(d.today) : period === 'month' ? D.monthStart(d.today) : null;
+      var board = (d.board || []).map(function (r) { return { r: r, p: r[period] || { count: 0, cents: 0 } }; })
+        .filter(function (x) { return x.p.count > 0 || (x.r.active && x.r.role === 'rep'); })   /* reps always show, even with nothing sold */
+        .sort(function (a, b) { return (b.p.cents - a.p.cents) || (b.p.count - a.p.count) || byName(a.r, b.r); });
+      clear(rows);
+      if (!board.length) {
+        rows.appendChild(ui.empty({ title: 'Nobody is on the board yet.', text: me.role === 'owner' ? 'Add your sales reps in Team and they show up here.' : null }));
+        return;
+      }
+      var list = h('div', { class: 'list' });
+      board.forEach(function (x, i) {
+        var mine = x.r.id === me.id;
+        var right = [h('span', { class: 'amt' }, fmt.money(x.p.cents))];
+        if (o.showCommission) right.push(h('span', { class: 'small' }, fmt.money(commissionOf(x.r.id, from)) + ' commission'));
+        var row = ui.row({
+          lead: h('span', { class: 'rank' + (i === 0 && x.p.cents > 0 ? ' is-top' : '') }, String(i + 1)),
+          title: mine ? h('span', { class: 'cluster' }, x.r.name, ui.pill('You', 'ice')) : x.r.name,
+          sub: fmt.plural(x.p.count, 'sale'),
+          right: right,
+          cls: mine ? 'is-you' : null
+        });
+        if (right.length > 1) row.querySelector('.row-right').classList.add('row-right-col');
+        list.appendChild(row);
+      });
+      rows.appendChild(list);
+    }
+
+    container._board = box;
+    container.appendChild(box);
+    draw();
+    App.live(box, function () { seg.set(period); draw(); });
+    return container;
+  };
+
+  /* ================= Leaders ================= */
+
+  function renderLeaders(root) {
+    var d = App.data, me = d.me, s = d.settings, mo = D.monthStart(d.today);
+    var lastFrom = D.addMonths(mo, -1), lastTo = D.addDays(mo, -1);
+    var thisMonth = 0, lastMonth = 0, allTime = 0;
+    (d.sales || []).forEach(function (sale) {
+      if (sale.repId !== me.id) return;
+      thisMonth += earned(sale, mo);
+      lastMonth += earned(sale, lastFrom, lastTo);
+      allTime += earned(sale);
+    });
+
+    root.appendChild(ui.title('Leaderboard'));
+    var box = h('div');
+    root.appendChild(box);
+    ui.leaderboard(box, { showCommission: false });
+
+    root.appendChild(ui.label('My commission'));
+    root.appendChild(numbersCard(null, 'This month', thisMonth, [['Last month', lastMonth], ['All time', allTime]]));
+    root.appendChild(h('p', { class: 'muted' }, 'You earn ' + pct(s.firstPct) + ' of each sale, then ' + pct(s.monthlyPct) + ' every month a monthly client stays.'));
+  }
+
+  /* ================= registering ================= */
+
+  App.screen('sales', { roles: ['owner', 'rep'], title: 'Sales', render: renderSales });
+  App.screen('leaders', { roles: ['rep'], title: 'Leaderboard', render: renderLeaders });
+  App.actions.newSale = openNewSale;
+  App.actions.openSale = openSale;
 })();
 </script>
 </body>

@@ -125,6 +125,15 @@
     var listEl = h('div', { class: 'stack' });
     root.appendChild(listEl);
 
+    /* The filter row slides sideways and is redrawn on every change: keep the chosen filter in view. */
+    function showChosen() {
+      var on = chips.querySelector('.chip.is-on');
+      if (!on) return;
+      var box = chips.getBoundingClientRect(), b = on.getBoundingClientRect();
+      if (b.right > box.right - 16) chips.scrollLeft += b.right - box.right + 16;
+      else if (b.left < box.left + 16) chips.scrollLeft -= box.left + 16 - b.left;
+    }
+
     function draw() {
       var q = query.trim().toLowerCase();
       var found = all.filter(function (c) { return matches(c, q); });
@@ -133,6 +142,8 @@
       chips.setOptions([{ value: '', label: 'All', count: found.length }].concat(Core.CLIENT_STATUSES.map(function (s) {
         return { value: s, label: s, count: counts[s] || 0 };
       })));
+
+      showChosen();
 
       var shown = found.filter(function (c) { return !filter || c.status === filter; }).sort(byName);
       clear(listEl);
