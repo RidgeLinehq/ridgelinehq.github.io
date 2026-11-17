@@ -3,4 +3,5 @@ Disallow: /office/
 Disallow: /data/results/
 Disallow: /results.html
 Disallow: /p/
+Disallow: /team/
 Allow: /

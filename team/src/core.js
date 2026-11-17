@@ -1,0 +1,964 @@
+/*
+ * Ridgeline Wash Co. team system: shared core.
+ *
+ * One file of plain JavaScript that runs unchanged in two places:
+ *   1. the Google Apps Script backend (team/backend/Code.gs), where it is the real server;
+ *   2. the page itself, in sample mode, so the app works before a backend is connected.
+ * No DOM, no network and no Google APIs in here. The host passes in a `store` and an `env`.
+ *
+ * store: list(coll) -> array of plain objects, each with a string `id` (fresh copies)
+ *        put(coll, doc)            upsert by doc.id
+ *        del(coll, id)
+ *        getRev() -> number        setRev(n)
+ *        cacheGet(key) -> string|null     cachePut(key, string, ttlSeconds)     cacheDel(key)
+ * env:   now() -> ms since epoch
+ *        dayKey(ms) -> 'YYYY-MM-DD' in the business time zone
+ *        hm(ms) -> 'HH:MM' (24 hour) in the business time zone
+ *        uuid() -> random string
+ *        notify({subject, body})   sends the owner an email; may throw
+ *
+ * Every request is { action, token?, since?, day?, opId?, ... } and every answer is
+ * { ok: true, result, sync } or { ok: false, error: { code, message }, sync? }.
+ * Money is always whole cents. Days are 'YYYY-MM-DD' strings, times are 'HH:MM' strings.
+ */
+var RidgelineCore = (function () {
+  'use strict';
+
+  var VERSION = '1.0.0';
+  var ROLES = ['owner', 'rep', 'tech'];
+  var CLIENT_STATUSES = ['New', 'Active', 'Paused', 'Cancelled'];
+  var PAY_STATUSES = ['unpaid', 'paid', 'late'];
+  var BILLING = ['once', 'monthly'];
+  var COLLECTIONS = ['team', 'sessions', 'settings', 'days', 'clients', 'sales', 'jobs', 'notices', 'problems'];
+  var LIMITS = {
+    name: 60, line: 160, text: 500, notesKept: 50, noticesKept: 60, problemsKept: 30,
+    maxCents: 100000000, sessionDays: 90, loginTries: 5, lockSeconds: 900, globalTries: 40,
+    daysPerCall: 62, slotsPerDay: 24, services: 20
+  };
+  var DEFAULT_SETTINGS = {
+    id: 'main',
+    businessName: 'Ridgeline Wash Co.',
+    services: [
+      { id: 'windows', name: 'Window cleaning', priceCents: 0 },
+      { id: 'house', name: 'House wash', priceCents: 0 },
+      { id: 'pressure', name: 'Pressure wash', priceCents: 0 }
+    ],
+    firstPct: 30,
+    monthlyPct: 10,
+    defaultSlots: ['08:00', '09:30', '12:00', '14:00'],
+    defaultTechId: null,
+    notifyEmail: '',
+    emailOnBooking: true
+  };
+
+  /* ---------- small helpers ---------- */
+
+  function AppError(code, message) { this.appCode = code; this.message = message; }
+
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+
+  function rotr(x, n) { return (x >>> n) | (x << (32 - n)); }
+  var SHA_K = [
+    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+    0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+    0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+    0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+    0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+    0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+    0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+    0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+  ];
+
+  /* SHA-256 of a string (UTF-8), as lowercase hex. Pure JavaScript so both hosts agree. */
+  function sha256(str) {
+    str = String(str);
+    var bytes = [], i, c;
+    for (i = 0; i < str.length; i++) {
+      c = str.charCodeAt(i);
+      if (c < 0x80) bytes.push(c);
+      else if (c < 0x800) bytes.push(0xc0 | (c >> 6), 0x80 | (c & 63));
+      else if (c >= 0xd800 && c < 0xdc00 && i + 1 < str.length) {
+        var cp = 0x10000 + ((c & 0x3ff) << 10) + (str.charCodeAt(++i) & 0x3ff);
+        bytes.push(0xf0 | (cp >> 18), 0x80 | ((cp >> 12) & 63), 0x80 | ((cp >> 6) & 63), 0x80 | (cp & 63));
+      } else bytes.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+    }
+    var H = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
+    var bits = bytes.length * 8;
+    bytes.push(0x80);
+    while (bytes.length % 64 !== 56) bytes.push(0);
+    var hi = Math.floor(bits / 0x100000000), lo = bits >>> 0;
+    bytes.push((hi >>> 24) & 255, (hi >>> 16) & 255, (hi >>> 8) & 255, hi & 255,
+               (lo >>> 24) & 255, (lo >>> 16) & 255, (lo >>> 8) & 255, lo & 255);
+    var w = new Array(64), t;
+    for (var off = 0; off < bytes.length; off += 64) {
+      for (t = 0; t < 16; t++) {
+        w[t] = (bytes[off + t * 4] << 24) | (bytes[off + t * 4 + 1] << 16) | (bytes[off + t * 4 + 2] << 8) | bytes[off + t * 4 + 3];
+      }
+      for (t = 16; t < 64; t++) {
+        var s0 = rotr(w[t - 15], 7) ^ rotr(w[t - 15], 18) ^ (w[t - 15] >>> 3);
+        var s1 = rotr(w[t - 2], 17) ^ rotr(w[t - 2], 19) ^ (w[t - 2] >>> 10);
+        w[t] = (w[t - 16] + s0 + w[t - 7] + s1) | 0;
+      }
+      var a = H[0], b = H[1], cc = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+      for (t = 0; t < 64; t++) {
+        var S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+        var ch = (e & f) ^ (~e & g);
+        var t1 = (h + S1 + ch + SHA_K[t] + w[t]) | 0;
+        var S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+        var maj = (a & b) ^ (a & cc) ^ (b & cc);
+        var t2 = (S0 + maj) | 0;
+        h = g; g = f; f = e; e = (d + t1) | 0; d = cc; cc = b; b = a; a = (t1 + t2) | 0;
+      }
+      H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + cc) | 0; H[3] = (H[3] + d) | 0;
+      H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+    }
+    var out = '';
+    for (i = 0; i < 8; i++) out += ('00000000' + (H[i] >>> 0).toString(16)).slice(-8);
+    return out;
+  }
+
+  /* ---------- days and times ---------- */
+
+  function daysInMonth(y, m) { return new Date(Date.UTC(y, m, 0)).getUTCDate(); }
+
+  function isDay(s) {
+    if (typeof s !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+    var y = +s.slice(0, 4), m = +s.slice(5, 7), d = +s.slice(8, 10);
+    return y >= 2000 && y <= 2200 && m >= 1 && m <= 12 && d >= 1 && d <= daysInMonth(y, m);
+  }
+
+  function isHM(s) {
+    return typeof s === 'string' && /^\d{2}:\d{2}$/.test(s) && +s.slice(0, 2) < 24 && +s.slice(3, 5) < 60;
+  }
+
+  function dayOf(y, m, d) { return y + '-' + pad2(m) + '-' + pad2(d); }
+
+  function addDays(day, n) {
+    var t = Date.UTC(+day.slice(0, 4), +day.slice(5, 7) - 1, +day.slice(8, 10)) + n * 86400000;
+    var dt = new Date(t);
+    return dayOf(dt.getUTCFullYear(), dt.getUTCMonth() + 1, dt.getUTCDate());
+  }
+
+  /* Same day of the month k months later, clamped to the month's last day (Jan 31 -> Feb 28). */
+  function addMonths(day, k) {
+    var y = +day.slice(0, 4), m0 = +day.slice(5, 7) - 1 + k, d = +day.slice(8, 10);
+    y += Math.floor(m0 / 12);
+    var m = ((m0 % 12) + 12) % 12 + 1;
+    return dayOf(y, m, Math.min(d, daysInMonth(y, m)));
+  }
+
+  /* 0 = Sunday ... 6 = Saturday */
+  function weekday(day) {
+    return new Date(Date.UTC(+day.slice(0, 4), +day.slice(5, 7) - 1, +day.slice(8, 10))).getUTCDay();
+  }
+
+  /* Weeks run Monday to Sunday. */
+  function weekStart(day) { return addDays(day, -((weekday(day) + 6) % 7)); }
+  function monthStart(day) { return day.slice(0, 8) + '01'; }
+
+  /* ---------- commission ---------- */
+
+  /* The client's status on a given day, from its status log (oldest first). */
+  function statusOn(client, day) {
+    var log = (client && client.statusLog) || [], status = 'New';
+    for (var i = 0; i < log.length; i++) if (log[i].day <= day) status = log[i].status;
+    return status;
+  }
+
+  /*
+   * What one sale has earned its rep so far, as dated events.
+   * The sale pays firstPct of the price on the day it was sold. A monthly sale also pays
+   * monthlyPct of the price on the same day of every following month, for as long as the
+   * client is still New or Active on that day (paused and cancelled months pay nothing).
+   * The percentages are the ones saved on the sale, so later rate changes never rewrite history.
+   */
+  function commissionEvents(sale, client, today) {
+    var events = [{ day: sale.day, cents: Math.round(sale.priceCents * (sale.firstPct || 0) / 100), kind: 'first' }];
+    if (sale.billing === 'monthly' && client) {
+      var each = Math.round(sale.priceCents * (sale.monthlyPct || 0) / 100);
+      for (var k = 1; k <= 600; k++) {
+        var due = addMonths(sale.day, k);
+        if (due > today) break;
+        var st = statusOn(client, due);
+        if (st === 'New' || st === 'Active') events.push({ day: due, cents: each, kind: 'monthly' });
+      }
+    }
+    return events;
+  }
+
+  /* Total cents of the events dated from..to inclusive (either bound may be omitted). */
+  function sumEvents(events, from, to) {
+    var total = 0;
+    for (var i = 0; i < events.length; i++) {
+      var e = events[i];
+      if ((!from || e.day >= from) && (!to || e.day <= to)) total += e.cents;
+    }
+    return total;
+  }
+
+  /* ---------- input checks ---------- */
+
+  function line(v, max, required, msg) {
+    var s = v == null ? '' : String(v).replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim();
+    if (s.length > max) s = s.slice(0, max);
+    if (required && !s) throw new AppError('invalid', msg || 'Something is missing.');
+    return s;
+  }
+
+  function para(v, max, required, msg) {
+    var s = v == null ? '' : String(v).replace(/[\u0000-\u0008\u000b-\u001f\u007f]/g, '').replace(/\r\n?/g, '\n').trim();
+    if (s.length > max) s = s.slice(0, max);
+    if (required && !s) throw new AppError('invalid', msg || 'Something is missing.');
+    return s;
+  }
+
+  function cents(v, msg) {
+    if (typeof v !== 'number' || !isFinite(v) || v < 0 || v > LIMITS.maxCents || Math.floor(v) !== v) {
+      throw new AppError('invalid', msg || 'Enter a price.');
+    }
+    return v;
+  }
+
+  function pct(v) {
+    if (typeof v !== 'number' || !isFinite(v) || v < 0 || v > 100) throw new AppError('invalid', 'A percentage must be between 0 and 100.');
+    return Math.round(v * 100) / 100;
+  }
+
+  function payLink(v) {
+    var s = line(v, 300);
+    if (s && !/^https:\/\/[^\s<>"'`]+$/i.test(s)) throw new AppError('invalid', 'A payment link must start with https://');
+    return s;
+  }
+
+  function pinOk(v) { return typeof v === 'string' && /^\d{4,6}$/.test(v); }
+
+  function cleanSlots(list) {
+    var seen = {}, out = [];
+    (Array.isArray(list) ? list : []).forEach(function (s) {
+      if (isHM(s) && !seen[s]) { seen[s] = 1; out.push(s); }
+    });
+    out.sort();
+    return out.slice(0, LIMITS.slotsPerDay);
+  }
+
+  function normName(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim().toLowerCase(); }
+
+  /* ---------- the core ---------- */
+
+  function create(store, env) {
+    var mem = {};
+
+    function all(coll) { return mem[coll] || (mem[coll] = store.list(coll)); }
+
+    function find(coll, id) {
+      var list = all(coll);
+      for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+      return null;
+    }
+
+    function put(coll, doc) {
+      var list = all(coll), hit = false;
+      for (var i = 0; i < list.length; i++) if (list[i].id === doc.id) { list[i] = doc; hit = true; break; }
+      if (!hit) list.push(doc);
+      store.put(coll, doc);
+    }
+
+    function del(coll, id) {
+      var list = all(coll);
+      for (var i = 0; i < list.length; i++) if (list[i].id === id) { list.splice(i, 1); break; }
+      store.del(coll, id);
+    }
+
+    function newId(prefix) { return prefix + '_' + String(env.uuid()).replace(/[^a-zA-Z0-9]/g, '').slice(0, 14); }
+    function today() { return env.dayKey(env.now()); }
+
+    function getSettings() {
+      var s = find('settings', 'main'), out = clone(DEFAULT_SETTINGS), k;
+      if (s) for (k in s) if (Object.prototype.hasOwnProperty.call(s, k)) out[k] = s[k];
+      return out;
+    }
+
+    function hashPin(salt, pin) { return sha256(salt + ':' + pin); }
+    function randomPin() {
+      var n = parseInt(sha256(env.uuid() + ':' + env.now()).slice(0, 8), 16) % 10000;
+      return ('0000' + n).slice(-4);
+    }
+
+    function trimOldest(coll, keep, field) {
+      var list = all(coll).slice().sort(function (a, b) { return a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0; });
+      for (var i = 0; i < list.length - keep; i++) del(coll, list[i].id);
+    }
+
+    function recordProblem(where, message) {
+      try {
+        put('problems', { id: newId('p'), at: env.now(), where: String(where).slice(0, 60), message: String(message).slice(0, 300) });
+        trimOldest('problems', LIMITS.problemsKept, 'at');
+        store.setRev(store.getRev() + 1);
+      } catch (e) { /* the store itself is down; the caller still gets the error answer */ }
+    }
+
+    function tellOwner(type, text, emailSubject, emailBody) {
+      put('notices', { id: newId('n'), at: env.now(), type: type, text: text });
+      trimOldest('notices', LIMITS.noticesKept, 'at');
+      var s = getSettings();
+      if (emailSubject && s.emailOnBooking) {
+        try { env.notify({ subject: emailSubject, body: emailBody || text, to: s.notifyEmail || '' }); }
+        catch (e) { recordProblem('email', 'An email alert could not be sent: ' + (e && e.message ? e.message : e)); }
+      }
+    }
+
+    function sessionsOf(memberId) { return all('sessions').filter(function (s) { return s.memberId === memberId; }); }
+
+    function dropSessions(memberId, exceptHash) {
+      sessionsOf(memberId).forEach(function (s) {
+        if (s.id === exceptHash) return;
+        store.cacheDel('sess:' + s.id);
+        del('sessions', s.id);
+      });
+    }
+
+    function refreshSessions(m) {
+      sessionsOf(m.id).forEach(function (s) {
+        store.cachePut('sess:' + s.id, JSON.stringify({ id: m.id, name: m.name, role: m.role }), 21600);
+      });
+    }
+
+    function auth(token) {
+      if (typeof token !== 'string' || token.length < 16 || token.length > 200) return null;
+      var hash = sha256(token);
+      var cached = store.cacheGet('sess:' + hash);
+      if (cached) { try { var c = JSON.parse(cached); c.sess = hash; return c; } catch (e) { /* fall through */ } }
+      var sess = find('sessions', hash);
+      if (!sess || env.now() - sess.createdAt > LIMITS.sessionDays * 86400000) return null;
+      var m = find('team', sess.memberId);
+      if (!m || !m.active) return null;
+      store.cachePut('sess:' + hash, JSON.stringify({ id: m.id, name: m.name, role: m.role }), 21600);
+      return { id: m.id, name: m.name, role: m.role, sess: hash };
+    }
+
+    function bumpFail(key) {
+      var n = (parseInt(store.cacheGet(key), 10) || 0) + 1;
+      store.cachePut(key, String(n), LIMITS.lockSeconds);
+      return n;
+    }
+
+    function login(req) {
+      var name = normName(req.name), pin = String(req.pin == null ? '' : req.pin);
+      var wrong = new AppError('auth', 'That name and PIN do not match. Check both and try again.');
+      if ((parseInt(store.cacheGet('fail:all'), 10) || 0) >= LIMITS.globalTries) {
+        throw new AppError('locked', 'Sign-in is paused for a few minutes. Try again shortly.');
+      }
+      if (!name || !pinOk(pin)) { bumpFail('fail:all'); throw wrong; }
+      var active = all('team').filter(function (m) { return m.active; });
+      var hits = active.filter(function (m) { return normName(m.name) === name; });
+      if (!hits.length) hits = active.filter(function (m) { return normName(m.name).split(' ')[0] === name; });
+      if (hits.length !== 1) { bumpFail('fail:all'); throw wrong; }
+      var m = hits[0], key = 'fail:' + m.id;
+      if ((parseInt(store.cacheGet(key), 10) || 0) >= LIMITS.loginTries) {
+        throw new AppError('locked', 'Too many wrong tries. Wait 15 minutes, or ask the owner to reset your PIN.');
+      }
+      if (hashPin(m.salt, pin) !== m.pinHash) { bumpFail(key); bumpFail('fail:all'); throw wrong; }
+      store.cacheDel(key);
+      var token = String(env.uuid()) + String(env.uuid());
+      var hash = sha256(token);
+      put('sessions', { id: hash, memberId: m.id, createdAt: env.now() });
+      store.cachePut('sess:' + hash, JSON.stringify({ id: m.id, name: m.name, role: m.role }), 21600);
+      return { token: token, me: { id: m.id, name: m.name, role: m.role, sess: hash } };
+    }
+
+    /* ---------- what each person is allowed to see ---------- */
+
+    function buildSync(me, req) {
+      var rev = store.getRev(), day = today();
+      if (req && req.since === rev && req.day === day) return { rev: rev, today: day, same: true };
+      var owner = me.role === 'owner', rep = me.role === 'rep';
+      var settings = getSettings();
+      var team = all('team'), clients = all('clients'), sales = all('sales'), jobs = all('jobs');
+      var clientById = {}, mine = {};
+      clients.forEach(function (c) { clientById[c.id] = c; });
+
+      var myClients = owner ? clients : rep ? clients.filter(function (c) { return c.repId === me.id; }) : [];
+      myClients.forEach(function (c) { mine[c.id] = 1; });
+      var mySales = owner ? sales : rep ? sales.filter(function (s) { return s.repId === me.id; }) : [];
+      var myJobs = owner ? jobs
+        : rep ? jobs.filter(function (j) { return mine[j.clientId]; })
+        : jobs.filter(function (j) { return j.assignedTo === me.id && j.status !== 'cancelled'; });
+
+      var meDoc = find('team', me.id) || {};
+      var out = {
+        rev: rev, today: day, same: false,
+        me: { id: me.id, name: me.name, role: me.role, noticesSeenAt: meDoc.noticesSeenAt || 0 },
+        team: team.map(function (m) {
+          var v = { id: m.id, name: m.name, role: m.role, active: !!m.active };
+          if (owner) v.createdAt = m.createdAt;
+          return v;
+        }),
+        settings: owner ? settings : {
+          businessName: settings.businessName, services: settings.services,
+          firstPct: settings.firstPct, monthlyPct: settings.monthlyPct
+        },
+        days: me.role === 'tech' ? [] : all('days')
+          .filter(function (d) { return d.id >= addDays(day, -45); })
+          .map(function (d) { return { date: d.id, open: !!d.open, slots: d.slots || [] }; }),
+        taken: me.role === 'tech' ? [] : jobs
+          .filter(function (j) { return j.status !== 'cancelled' && j.date >= day; })
+          .map(function (j) { return { date: j.date, time: j.time }; }),
+        clients: myClients,
+        sales: mySales.map(function (s) {
+          var v = clone(s), c = clientById[s.clientId];
+          v.clientName = c ? c.name : '';
+          v.events = commissionEvents(s, c, day);
+          return v;
+        }),
+        jobs: myJobs.map(function (j) {
+          var v = clone(j), c = clientById[j.clientId] || {};
+          v.client = { name: c.name || '', contact: c.contact || '', phone: c.phone || '', address: c.address || '' };
+          return v;
+        }),
+        board: [],
+        notices: owner ? all('notices') : [],
+        problems: owner ? all('problems') : []
+      };
+
+      if (me.role !== 'tech') {
+        var rows = {}, wk = weekStart(day), mo = monthStart(day);
+        team.forEach(function (m) {
+          if (m.role === 'tech') return;
+          rows[m.id] = { id: m.id, name: m.name, role: m.role, active: !!m.active,
+            week: { count: 0, cents: 0 }, month: { count: 0, cents: 0 }, all: { count: 0, cents: 0 } };
+        });
+        sales.forEach(function (s) {
+          var r = rows[s.repId];
+          if (!r) return;
+          r.all.count++; r.all.cents += s.priceCents;
+          if (s.day >= mo) { r.month.count++; r.month.cents += s.priceCents; }
+          if (s.day >= wk) { r.week.count++; r.week.cents += s.priceCents; }
+        });
+        Object.keys(rows).forEach(function (id) {
+          var r = rows[id];
+          if (r.all.count > 0 || (r.active && r.role === 'rep')) out.board.push(r);
+        });
+      }
+      return out;
+    }
+
+    /* ---------- booking ---------- */
+
+    function assertSlotFree(date, time, ignoreJobId) {
+      if (!isDay(date) || !isHM(time)) throw new AppError('invalid', 'Pick a day and a time.');
+      var day = today();
+      if (date < day) throw new AppError('slot_closed', 'That day has passed. Pick another day.');
+      var d = find('days', date);
+      if (!d || !d.open || (d.slots || []).indexOf(time) < 0) {
+        throw new AppError('slot_closed', 'That time is not open. Pick another.');
+      }
+      if (date === day && time <= env.hm(env.now())) {
+        throw new AppError('slot_closed', 'That time has already passed today. Pick another.');
+      }
+      var clash = all('jobs').some(function (j) {
+        return j.id !== ignoreJobId && j.status !== 'cancelled' && j.date === date && j.time === time;
+      });
+      if (clash) throw new AppError('slot_taken', 'That time was just taken. Pick another.');
+    }
+
+    function defaultTech() {
+      var id = getSettings().defaultTechId, m = id ? find('team', id) : null;
+      return m && m.active ? m.id : null;
+    }
+
+    function whenText(date, time) {
+      var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      var h = +time.slice(0, 2), ampm = h < 12 ? 'AM' : 'PM';
+      return days[weekday(date)] + ' ' + months[+date.slice(5, 7) - 1] + ' ' + (+date.slice(8, 10)) + ', ' +
+        ((h % 12) || 12) + ':' + time.slice(3, 5) + ' ' + ampm;
+    }
+
+    function money(c) { return '$' + (c / 100).toFixed(2); }
+
+    function canTouchClient(me, client) { return me.role === 'owner' || (me.role === 'rep' && client.repId === me.id); }
+
+    function needClient(id) {
+      var c = find('clients', id);
+      if (!c) throw new AppError('not_found', 'That client is no longer here.');
+      return c;
+    }
+
+    function needJob(id) {
+      var j = find('jobs', id);
+      if (!j) throw new AppError('not_found', 'That job is no longer here.');
+      return j;
+    }
+
+    function pushNote(doc, me, text) {
+      doc.notes = (doc.notes || []).concat([{ at: env.now(), by: me.id, text: text }]).slice(-LIMITS.notesKept);
+    }
+
+    function setStatus(client, status) {
+      if (client.status === status) return;
+      client.status = status;
+      client.statusLog = (client.statusLog || []).concat([{ day: today(), status: status }]).slice(-200);
+    }
+
+    /* ---------- actions (who may call each, and what it does) ---------- */
+
+    var ACTIONS = {
+
+      saveMember: { roles: ['owner'], run: function (me, req) {
+        var m = req.member || {};
+        var name = line(m.name, 40, true, 'Add a name.');
+        if (ROLES.indexOf(m.role) < 0) throw new AppError('invalid', 'Pick a role.');
+        var clash = all('team').some(function (t) { return t.active && t.id !== m.id && normName(t.name) === normName(name); });
+        if (clash) throw new AppError('invalid', 'Someone on the team already has that name. Add a last initial.');
+        if (m.id) {
+          var cur = find('team', m.id);
+          if (!cur || !cur.active) throw new AppError('not_found', 'That person is no longer on the team.');
+          if (cur.role === 'owner' && m.role !== 'owner') {
+            var owners = all('team').filter(function (t) { return t.active && t.role === 'owner'; }).length;
+            if (owners < 2) throw new AppError('invalid', 'There has to be at least one owner.');
+          }
+          var roleChanged = cur.role !== m.role;
+          cur.name = name; cur.role = m.role;
+          put('team', cur);
+          if (roleChanged && cur.id !== me.id) dropSessions(cur.id); else refreshSessions(cur);
+          return { id: cur.id };
+        }
+        if (m.pin != null && m.pin !== '' && !pinOk(String(m.pin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
+        var pin = m.pin ? String(m.pin) : randomPin(), salt = String(env.uuid());
+        var doc = { id: newId('m'), name: name, role: m.role, salt: salt, pinHash: hashPin(salt, pin), active: true, createdAt: env.now() };
+        put('team', doc);
+        return { id: doc.id, pin: pin };
+      } },
+
+      removeMember: { roles: ['owner'], run: function (me, req) {
+        var m = find('team', req.id);
+        if (!m || !m.active) throw new AppError('not_found', 'That person is no longer on the team.');
+        if (m.id === me.id) throw new AppError('invalid', 'You cannot remove yourself.');
+        m.active = false; m.removedAt = env.now();
+        put('team', m);
+        dropSessions(m.id);
+        all('jobs').filter(function (j) { return j.assignedTo === m.id && j.status === 'scheduled'; })
+          .forEach(function (j) { j.assignedTo = null; put('jobs', j); });
+        var s = find('settings', 'main');
+        if (s && s.defaultTechId === m.id) { s.defaultTechId = null; put('settings', s); }
+        return { id: m.id };
+      } },
+
+      resetPin: { roles: ['owner'], run: function (me, req) {
+        var m = find('team', req.id);
+        if (!m || !m.active) throw new AppError('not_found', 'That person is no longer on the team.');
+        if (m.id === me.id) throw new AppError('invalid', 'Use Change PIN for your own PIN.');
+        if (req.pin != null && req.pin !== '' && !pinOk(String(req.pin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
+        var pin = req.pin ? String(req.pin) : randomPin();
+        m.salt = String(env.uuid()); m.pinHash = hashPin(m.salt, pin);
+        put('team', m);
+        dropSessions(m.id);
+        store.cacheDel('fail:' + m.id);
+        return { id: m.id, pin: pin };
+      } },
+
+      changePin: { roles: ROLES, run: function (me, req) {
+        var m = find('team', me.id);
+        if (!m) throw new AppError('auth', 'Please sign in again.');
+        if (hashPin(m.salt, String(req.oldPin == null ? '' : req.oldPin)) !== m.pinHash) throw new AppError('invalid', 'Your current PIN is not right.');
+        if (!pinOk(String(req.newPin == null ? '' : req.newPin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
+        m.salt = String(env.uuid()); m.pinHash = hashPin(m.salt, String(req.newPin));
+        put('team', m);
+        dropSessions(m.id, me.sess);
+        return {};
+      } },
+
+      saveSettings: { roles: ['owner'], run: function (me, req) {
+        var p = req.settings || {}, s = getSettings();
+        if (p.services !== undefined) {
+          if (!Array.isArray(p.services) || !p.services.length || p.services.length > LIMITS.services) {
+            throw new AppError('invalid', 'Keep at least one service on the list.');
+          }
+          var seen = {};
+          s.services = p.services.map(function (x) {
+            var name = line(x && x.name, 40, true, 'Every service needs a name.');
+            if (seen[normName(name)]) throw new AppError('invalid', 'Two services have the same name.');
+            seen[normName(name)] = 1;
+            return { id: line(x.id, 30) || newId('s'), name: name, priceCents: cents(x.priceCents == null ? 0 : x.priceCents, 'Check the service prices.') };
+          });
+        }
+        if (p.firstPct !== undefined) s.firstPct = pct(p.firstPct);
+        if (p.monthlyPct !== undefined) s.monthlyPct = pct(p.monthlyPct);
+        if (p.defaultSlots !== undefined) {
+          s.defaultSlots = cleanSlots(p.defaultSlots);
+          if (!s.defaultSlots.length) throw new AppError('invalid', 'Keep at least one time slot.');
+        }
+        if (p.defaultTechId !== undefined) {
+          var t = p.defaultTechId ? find('team', p.defaultTechId) : null;
+          if (p.defaultTechId && (!t || !t.active)) throw new AppError('invalid', 'Pick someone who is on the team.');
+          s.defaultTechId = t ? t.id : null;
+        }
+        if (p.notifyEmail !== undefined) {
+          var em = line(p.notifyEmail, 120);
+          if (em && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) throw new AppError('invalid', 'That email address does not look right.');
+          s.notifyEmail = em;
+        }
+        if (p.emailOnBooking !== undefined) s.emailOnBooking = !!p.emailOnBooking;
+        s.id = 'main';
+        put('settings', s);
+        return {};
+      } },
+
+      /* Open or block days and set each day's time slots. Existing bookings are never removed. */
+      setDays: { roles: ['owner'], run: function (me, req) {
+        var list = Array.isArray(req.days) ? req.days : [];
+        if (!list.length || list.length > LIMITS.daysPerCall) throw new AppError('invalid', 'Pick at least one day.');
+        var defaults = getSettings().defaultSlots;
+        var docs = list.map(function (d) {
+          if (!d || !isDay(d.date)) throw new AppError('invalid', 'One of those days is not a real date.');
+          var cur = find('days', d.date);
+          var slots = d.slots !== undefined ? cleanSlots(d.slots) : (cur && cur.slots && cur.slots.length ? cur.slots : defaults.slice());
+          if (d.open && !slots.length) slots = defaults.slice();
+          return { id: d.date, open: !!d.open, slots: slots };
+        });
+        docs.forEach(function (doc) { put('days', doc); });
+        return { count: docs.length };
+      } },
+
+      /* A sale, and (normally) its appointment, saved together or not at all. */
+      createSale: { roles: ['owner', 'rep'], run: function (me, req) {
+        var day = today(), now = env.now(), settings = getSettings();
+        var service = line(req.service, 60, true, 'Pick what was sold.');
+        var price = cents(req.priceCents, 'Enter the price.');
+        var billing = BILLING.indexOf(req.billing) >= 0 ? req.billing : 'once';
+        var notes = para(req.notes, LIMITS.text);
+        var repId = me.id;
+        if (me.role === 'owner' && req.repId) {
+          var r = find('team', req.repId);
+          if (!r || !r.active || r.role === 'tech') throw new AppError('invalid', 'Pick a sales rep who is on the team.');
+          repId = r.id;
+        }
+        var client, isNew = !req.clientId;
+        if (isNew) {
+          var c = req.client || {};
+          client = {
+            id: newId('c'), name: line(c.name, LIMITS.name, true, 'Add the customer or business name.'),
+            contact: line(c.contact, LIMITS.name), phone: line(c.phone, 30), email: line(c.email, 120),
+            address: line(c.address, LIMITS.line), status: 'New', statusLog: [{ day: day, status: 'New' }],
+            service: service, priceCents: price, billing: billing, startDate: day, repId: repId,
+            stripeLink: payLink(req.stripeLink), payStatus: 'unpaid', notes: [], createdAt: now
+          };
+        } else {
+          client = needClient(req.clientId);
+          if (!canTouchClient(me, client)) throw new AppError('forbidden', 'That client belongs to another rep.');
+        }
+        var appt = req.appointment || null;
+        if (appt) assertSlotFree(appt.date, appt.time);
+        var what = line(req.what, LIMITS.line) || service;
+
+        var sale = {
+          id: newId('s'), clientId: client.id, repId: repId, service: service, priceCents: price, billing: billing,
+          notes: notes, soldAt: now, day: day, firstPct: settings.firstPct, monthlyPct: settings.monthlyPct, jobId: null
+        };
+        var job = null;
+        if (appt) {
+          job = {
+            id: newId('j'), clientId: client.id, saleId: sale.id, date: appt.date, time: appt.time, what: what,
+            assignedTo: defaultTech(), status: 'scheduled', doneAt: null, doneBy: null, notes: [], createdBy: me.id, createdAt: now
+          };
+          sale.jobId = job.id;
+        }
+        if (!isNew) {
+          client.service = service; client.priceCents = price; client.billing = billing;
+          if (client.status === 'Cancelled' || client.status === 'Paused') setStatus(client, 'Active');
+        }
+        if (notes) pushNote(client, me, notes);
+        put('clients', client);
+        put('sales', sale);
+        if (job) put('jobs', job);
+
+        if (me.role !== 'owner') {
+          var head = me.name + ' sold ' + service + ' to ' + client.name + ' for ' + money(price) + (billing === 'monthly' ? ' a month' : '');
+          var text = job ? head + '. Booked ' + whenText(job.date, job.time) + '.' : head + '. No appointment booked yet.';
+          tellOwner(job ? 'booking' : 'sale', text,
+            job ? 'Appointment booked: ' + client.name + ', ' + whenText(job.date, job.time) : 'New sale, no appointment yet: ' + client.name,
+            text + '\n\n' + (client.address ? 'Address: ' + client.address + '\n' : '') + (client.phone ? 'Phone: ' + client.phone + '\n' : '') +
+              (job && !job.assignedTo ? '\nNobody is assigned to this job yet.' : ''));
+        }
+        return { clientId: client.id, saleId: sale.id, jobId: job ? job.id : null,
+          commissionCents: Math.round(price * settings.firstPct / 100) };
+      } },
+
+      /* Book a visit for a client who is already in the system. */
+      bookJob: { roles: ['owner', 'rep'], run: function (me, req) {
+        var client = needClient(req.clientId);
+        if (!canTouchClient(me, client)) throw new AppError('forbidden', 'That client belongs to another rep.');
+        assertSlotFree(req.date, req.time);
+        var sale = req.saleId ? find('sales', req.saleId) : null;
+        if (sale && (sale.clientId !== client.id || sale.jobId)) sale = null;
+        var job = {
+          id: newId('j'), clientId: client.id, saleId: sale ? sale.id : null, date: req.date, time: req.time,
+          what: line(req.what, LIMITS.line) || client.service || 'Visit', assignedTo: defaultTech(), status: 'scheduled',
+          doneAt: null, doneBy: null, notes: [], createdBy: me.id, createdAt: env.now()
+        };
+        put('jobs', job);
+        if (sale) { sale.jobId = job.id; put('sales', sale); }
+        if (me.role !== 'owner') {
+          var text = me.name + ' booked ' + client.name + ' for ' + whenText(job.date, job.time) + '.';
+          tellOwner('booking', text, 'Appointment booked: ' + client.name + ', ' + whenText(job.date, job.time), text);
+        }
+        return { jobId: job.id };
+      } },
+
+      moveJob: { roles: ['owner', 'rep'], run: function (me, req) {
+        var job = needJob(req.jobId), client = find('clients', job.clientId);
+        if (me.role !== 'owner' && !(client && client.repId === me.id)) throw new AppError('forbidden', 'That job belongs to another rep.');
+        if (job.status !== 'scheduled') throw new AppError('invalid', 'Only a job that is still scheduled can be moved.');
+        assertSlotFree(req.date, req.time, job.id);
+        job.date = req.date; job.time = req.time;
+        put('jobs', job);
+        if (me.role !== 'owner') {
+          tellOwner('booking', me.name + ' moved ' + (client ? client.name : 'a job') + ' to ' + whenText(job.date, job.time) + '.',
+            'Appointment moved: ' + (client ? client.name : 'a job') + ', ' + whenText(job.date, job.time));
+        }
+        return { jobId: job.id };
+      } },
+
+      /* Assign a job, change what needs doing, cancel it or bring it back. */
+      updateJob: { roles: ['owner'], run: function (me, req) {
+        var job = needJob(req.jobId), p = req.patch || {};
+        if (p.assignedTo !== undefined) {
+          var m = p.assignedTo ? find('team', p.assignedTo) : null;
+          if (p.assignedTo && (!m || !m.active)) throw new AppError('invalid', 'Pick someone who is on the team.');
+          job.assignedTo = m ? m.id : null;
+        }
+        if (p.what !== undefined) job.what = line(p.what, LIMITS.line, true, 'Say what needs to be done.');
+        if (p.status !== undefined) {
+          if (p.status === 'cancelled') job.status = 'cancelled';
+          else if (p.status === 'scheduled') {
+            var clash = all('jobs').some(function (j) {
+              return j.id !== job.id && j.status !== 'cancelled' && j.date === job.date && j.time === job.time;
+            });
+            if (clash) throw new AppError('slot_taken', 'That time has since been taken. Move the job to a new time instead.');
+            job.status = 'scheduled'; job.doneAt = null; job.doneBy = null;
+          } else throw new AppError('invalid', 'That is not a job status.');
+        }
+        put('jobs', job);
+        return { jobId: job.id };
+      } },
+
+      setJobDone: { roles: ['owner', 'tech'], run: function (me, req) {
+        var job = needJob(req.jobId);
+        if (me.role !== 'owner' && job.assignedTo !== me.id) throw new AppError('forbidden', 'That job is assigned to someone else.');
+        if (job.status === 'cancelled') throw new AppError('invalid', 'That job was cancelled.');
+        var done = req.done !== false;
+        job.status = done ? 'done' : 'scheduled';
+        job.doneAt = done ? env.now() : null;
+        job.doneBy = done ? me.id : null;
+        put('jobs', job);
+        var client = find('clients', job.clientId);
+        if (done && client && client.status === 'New') { setStatus(client, 'Active'); put('clients', client); }
+        if (done && me.role !== 'owner') tellOwner('done', me.name + ' finished ' + (client ? client.name : 'a job') + ' (' + job.what + ').');
+        return { jobId: job.id, status: job.status };
+      } },
+
+      addNote: { roles: ROLES, run: function (me, req) {
+        var text = para(req.text, LIMITS.text, true, 'Write the note first.');
+        if (req.kind === 'job') {
+          var job = needJob(req.id), jc = find('clients', job.clientId);
+          var ok = me.role === 'owner' || (me.role === 'tech' && job.assignedTo === me.id) || (me.role === 'rep' && jc && jc.repId === me.id);
+          if (!ok) throw new AppError('forbidden', 'That job belongs to someone else.');
+          pushNote(job, me, text);
+          put('jobs', job);
+        } else if (req.kind === 'client') {
+          var client = needClient(req.id);
+          if (!canTouchClient(me, client)) throw new AppError('forbidden', 'That client belongs to another rep.');
+          pushNote(client, me, text);
+          put('clients', client);
+        } else throw new AppError('invalid', 'Bad request.');
+        return {};
+      } },
+
+      /* The owner can change anything; a rep can fix the contact details of their own clients. */
+      updateClient: { roles: ['owner', 'rep'], run: function (me, req) {
+        var client = needClient(req.clientId), p = req.patch || {}, owner = me.role === 'owner';
+        if (!canTouchClient(me, client)) throw new AppError('forbidden', 'That client belongs to another rep.');
+        var next = clone(client);
+        if (p.name !== undefined) next.name = line(p.name, LIMITS.name, true, 'Add the customer or business name.');
+        if (p.contact !== undefined) next.contact = line(p.contact, LIMITS.name);
+        if (p.phone !== undefined) next.phone = line(p.phone, 30);
+        if (p.email !== undefined) next.email = line(p.email, 120);
+        if (p.address !== undefined) next.address = line(p.address, LIMITS.line);
+        if (owner) {
+          if (p.service !== undefined) next.service = line(p.service, 60, true, 'Pick a service.');
+          if (p.priceCents !== undefined) next.priceCents = cents(p.priceCents, 'Enter the price.');
+          if (p.billing !== undefined) {
+            if (BILLING.indexOf(p.billing) < 0) throw new AppError('invalid', 'Pick one-time or monthly.');
+            next.billing = p.billing;
+          }
+          if (p.startDate !== undefined) {
+            if (!isDay(p.startDate)) throw new AppError('invalid', 'That start date is not a real date.');
+            next.startDate = p.startDate;
+          }
+          if (p.stripeLink !== undefined) next.stripeLink = payLink(p.stripeLink);
+          if (p.payStatus !== undefined) {
+            if (PAY_STATUSES.indexOf(p.payStatus) < 0) throw new AppError('invalid', 'That is not a payment status.');
+            next.payStatus = p.payStatus;
+          }
+          if (p.status !== undefined) {
+            if (CLIENT_STATUSES.indexOf(p.status) < 0) throw new AppError('invalid', 'That is not a client status.');
+            setStatus(next, p.status);
+          }
+        }
+        put('clients', next);
+        return { clientId: next.id };
+      } },
+
+      deleteClient: { roles: ['owner'], run: function (me, req) {
+        var client = needClient(req.clientId);
+        all('sales').filter(function (s) { return s.clientId === client.id; }).forEach(function (s) { del('sales', s.id); });
+        all('jobs').filter(function (j) { return j.clientId === client.id; }).forEach(function (j) { del('jobs', j.id); });
+        del('clients', client.id);
+        return {};
+      } },
+
+      /* Removes a sale entered by mistake. A visit that has not happened yet goes with it. */
+      deleteSale: { roles: ['owner'], run: function (me, req) {
+        var sale = find('sales', req.saleId);
+        if (!sale) throw new AppError('not_found', 'That sale is no longer here.');
+        var job = sale.jobId ? find('jobs', sale.jobId) : null;
+        if (job && job.status === 'scheduled') del('jobs', job.id);
+        else if (job) { job.saleId = null; put('jobs', job); }
+        del('sales', sale.id);
+        return {};
+      } },
+
+      readNotices: { roles: ['owner'], run: function (me) {
+        var m = find('team', me.id);
+        if (m) { m.noticesSeenAt = env.now(); put('team', m); }
+        return {};
+      } },
+
+      clearProblems: { roles: ['owner'], run: function () {
+        all('problems').slice().forEach(function (p) { del('problems', p.id); });
+        return {};
+      } },
+
+      logout: { roles: ROLES, run: function (me) {
+        store.cacheDel('sess:' + me.sess);
+        del('sessions', me.sess);
+        return {};
+      } }
+    };
+
+    function fail(code, message, me, req) {
+      var out = { ok: false, error: { code: code, message: message } };
+      mem = {};   /* drop anything a failed action changed in memory but never saved */
+      if (me) { try { out.sync = buildSync(me, req); } catch (e) { /* answer without it */ } }
+      return out;
+    }
+
+    function handle(req) {
+      mem = {};
+      var me = null;
+      try {
+        if (!req || typeof req.action !== 'string') return fail('invalid', 'Bad request.');
+        if (req.action === 'ping') return { ok: true, result: { version: VERSION } };
+        if (req.action === 'login') {
+          var li = login(req);
+          return { ok: true, result: { token: li.token }, sync: buildSync(li.me, null) };
+        }
+        me = auth(req.token);
+        if (!me) return fail('auth', 'Please sign in again.');
+        if (req.action === 'sync') return { ok: true, result: {}, sync: buildSync(me, req) };
+        var a = Object.prototype.hasOwnProperty.call(ACTIONS, req.action) ? ACTIONS[req.action] : null;
+        if (!a) return fail('invalid', 'Bad request.');
+        if (a.roles.indexOf(me.role) < 0) return fail('forbidden', 'You do not have access to that.', me, req);
+        var opKey = typeof req.opId === 'string' && req.opId.length >= 8 && req.opId.length <= 80 ? 'op:' + me.id + ':' + req.opId : null;
+        if (opKey) {
+          var prev = store.cacheGet(opKey);
+          if (prev) return { ok: true, result: JSON.parse(prev), sync: buildSync(me, req), replay: true };
+        }
+        var result = a.run(me, req);
+        store.setRev(store.getRev() + 1);
+        if (opKey) store.cachePut(opKey, JSON.stringify(result), 3600);
+        return { ok: true, result: result, sync: req.action === 'logout' ? null : buildSync(me, req) };
+      } catch (e) {
+        if (e && e.appCode) return fail(e.appCode, e.message, me, req);
+        recordProblem(req && req.action ? req.action : 'request', e && e.message ? e.message : String(e));
+        return fail('server', 'Something went wrong on our side. Nothing was saved. Try again.');
+      }
+    }
+
+    /* First run: make the owner (and the default settings) if there is no owner yet. */
+    function bootstrap(opts) {
+      mem = {};
+      opts = opts || {};
+      var owner = all('team').filter(function (m) { return m.active && m.role === 'owner'; })[0];
+      if (!find('settings', 'main')) put('settings', clone(DEFAULT_SETTINGS));
+      if (owner) return { created: false, name: owner.name };
+      var pin = pinOk(String(opts.pin || '')) ? String(opts.pin) : randomPin(), salt = String(env.uuid());
+      var name = line(opts.name, 40) || 'Owner';
+      put('team', { id: newId('m'), name: name, role: 'owner', salt: salt, pinHash: hashPin(salt, pin), active: true, createdAt: env.now() });
+      store.setRev(store.getRev() + 1);
+      return { created: true, name: name, pin: pin };
+    }
+
+    /* Recovery for a forgotten owner PIN; only the host (never a request) can call this. */
+    function resetOwnerPin() {
+      mem = {};
+      var owner = all('team').filter(function (m) { return m.active && m.role === 'owner'; })[0];
+      if (!owner) return null;
+      var pin = randomPin();
+      owner.salt = String(env.uuid()); owner.pinHash = hashPin(owner.salt, pin);
+      put('team', owner);
+      dropSessions(owner.id);
+      store.cacheDel('fail:' + owner.id);
+      store.cacheDel('fail:all');
+      store.setRev(store.getRev() + 1);
+      return { name: owner.name, pin: pin };
+    }
+
+    return { handle: handle, bootstrap: bootstrap, resetOwnerPin: resetOwnerPin };
+  }
+
+  /* A store that lives in memory: used by sample mode in the page and by the tests. */
+  function memoryStore(initial) {
+    var data = {}, cache = {}, rev = 0, clock = function () { return Date.now(); };
+    COLLECTIONS.forEach(function (c) { data[c] = {}; });
+    if (initial && initial.data) {
+      Object.keys(initial.data).forEach(function (c) {
+        data[c] = {};
+        (initial.data[c] || []).forEach(function (doc) { data[c][doc.id] = clone(doc); });
+      });
+      rev = initial.rev || 0;
+    }
+    return {
+      list: function (coll) { return Object.keys(data[coll] || {}).map(function (id) { return clone(data[coll][id]); }); },
+      put: function (coll, doc) { (data[coll] || (data[coll] = {}))[doc.id] = clone(doc); },
+      del: function (coll, id) { if (data[coll]) delete data[coll][id]; },
+      getRev: function () { return rev; },
+      setRev: function (n) { rev = n; },
+      cacheGet: function (key) {
+        var e = cache[key];
+        if (!e) return null;
+        if (e.until < clock()) { delete cache[key]; return null; }
+        return e.value;
+      },
+      cachePut: function (key, value, ttl) { cache[key] = { value: String(value), until: clock() + ttl * 1000 }; },
+      cacheDel: function (key) { delete cache[key]; },
+      setClock: function (fn) { clock = fn; },
+      dump: function () {
+        var out = { rev: rev, data: {} };
+        Object.keys(data).forEach(function (c) { out.data[c] = Object.keys(data[c]).map(function (id) { return clone(data[c][id]); }); });
+        return out;
+      }
+    };
+  }
+
+  return {
+    VERSION: VERSION, ROLES: ROLES, CLIENT_STATUSES: CLIENT_STATUSES, PAY_STATUSES: PAY_STATUSES, BILLING: BILLING,
+    COLLECTIONS: COLLECTIONS, LIMITS: LIMITS, DEFAULT_SETTINGS: DEFAULT_SETTINGS,
+    create: create, memoryStore: memoryStore, sha256: sha256,
+    calc: { commissionEvents: commissionEvents, sumEvents: sumEvents, statusOn: statusOn },
+    dates: { isDay: isDay, isHM: isHM, addDays: addDays, addMonths: addMonths, weekday: weekday, weekStart: weekStart, monthStart: monthStart, daysInMonth: daysInMonth }
+  };
+})();
+
+if (typeof module !== 'undefined' && module.exports) module.exports = RidgelineCore;
