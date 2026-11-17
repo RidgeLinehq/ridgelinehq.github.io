@@ -18,11 +18,12 @@
 var RidgelineSample = (function () {
   'use strict';
 
+  /* Every PIN is exactly 6 digits, and none is one the system would refuse as easy to guess (000000, 123456, 121212). */
   var PEOPLE = [
-    { name: 'Grayson', role: 'owner', pin: '1234' },
-    { name: 'Mason', role: 'rep', pin: '2222' },
-    { name: 'Avery', role: 'rep', pin: '3333' },
-    { name: 'Cole', role: 'tech', pin: '4444' }
+    { name: 'Grayson', role: 'owner', pin: '482913' },
+    { name: 'Mason', role: 'rep', pin: '271845' },
+    { name: 'Avery', role: 'rep', pin: '730526' },
+    { name: 'Cole', role: 'tech', pin: '906132' }
   ];
   var TOWN = ', Smithville, TN 37166';
 

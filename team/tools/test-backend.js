@@ -510,7 +510,7 @@ const fails = (r, code) => {
   return r.res;
 };
 const pinIn = (text, label) => {
-  const m = new RegExp('^' + label + ': (\\d{4,6})$', 'm').exec(text);
+  const m = new RegExp('^' + label + ': (\\d{6})$', 'm').exec(text);
   assert(m, 'no "' + label + ': 1234" line in:\n' + text);
   return m[1];
 };
@@ -533,13 +533,13 @@ function ready() {
   const first = login('Grayson', pin);
   const owner = first.result.token, today = first.sync.today;
   const add = (name, role, p) => must(w.post({ action: 'saveMember', token: owner, opId: uid(), member: { name: name, role: role, pin: p } })).result.id;
-  const ids = { mason: add('Mason', 'rep', '2222'), riley: add('Riley', 'rep', '4444'), cole: add('Cole', 'tech', '3333') };
+  const ids = { mason: add('Mason', 'rep', '271845'), riley: add('Riley', 'rep', '604417'), cole: add('Cole', 'tech', '906132') };
   const days = [];
   for (let i = 1; i <= 10; i++) days.push(core.dates.addDays(today, i));
   must(w.post({ action: 'setDays', token: owner, opId: uid(), days: days.map((d) => ({ date: d, open: true, slots: ['08:00', '09:30', '12:00', '14:00'] })) }));
   const x = {
     w: w, G: w.G, pin: pin, owner: owner, ids: ids, today: today, days: days, login: login,
-    mason: login('Mason', '2222').result.token, riley: login('Riley', '4444').result.token, cole: login('Cole', '3333').result.token
+    mason: login('Mason', '271845').result.token, riley: login('Riley', '604417').result.token, cole: login('Cole', '906132').result.token
   };
   x.sale = (token, name, date, time, extra) => w.post(saleBody(token, name, date, time, extra));
   x.view = (token) => must(w.post({ action: 'sync', token: token })).sync;
@@ -609,7 +609,7 @@ test('the stand-ins are as strict as the real Google services', () => {
 test('before setup has been run, the web app still answers JSON', () => {
   const w = world();
   assert.deepStrictEqual(w.get(), { ok: true, service: 'ridgeline-wash-team', version: core.VERSION });
-  const r = w.post({ action: 'login', name: 'Grayson', pin: '1234' });
+  const r = w.post({ action: 'login', name: 'Grayson', pin: '482913' });
   fails(r, 'server');
   assert.strictEqual(r.res.error.message, SERVER_MESSAGE);
   const ping = w.post({ action: 'ping' });
@@ -701,7 +701,7 @@ test('setup never starts a second sheet when the first cannot be opened', () => 
 test('signing in: a wrong PIN is refused, a right one gives a token that lasts across requests', () => {
   const w = world(), G = w.G;
   w.byHand('setup');
-  const pin = pinIn(G.mail[0].body, 'PIN'), wrong = pin === '0000' ? '1111' : '0000';
+  const pin = pinIn(G.mail[0].body, 'PIN'), wrong = '000000';   /* never a real PIN: the system refuses to make or take it */
   const bad = w.post({ action: 'login', name: 'Grayson', pin: wrong });
   fails(bad, 'auth');
   assert.strictEqual(w.docs('sessions').length, 0);
@@ -808,15 +808,15 @@ test('owner, reps and tech work a whole job through the web app', () => {
   fails(w.post({ action: 'addNote', token: x.owner, opId: uid(), kind: 'client', id: s1.clientId, text: 'Gone' }), 'not_found');
 
   /* PINs and people. */
-  must(w.post({ action: 'changePin', token: x.mason, opId: uid(), oldPin: '2222', newPin: '5151' }));
-  fails(w.post({ action: 'login', name: 'Mason', pin: '2222' }), 'auth');
-  x.login('Mason', '5151');
+  must(w.post({ action: 'changePin', token: x.mason, opId: uid(), oldPin: '271845', newPin: '517293' }));
+  fails(w.post({ action: 'login', name: 'Mason', pin: '271845' }), 'auth');
+  x.login('Mason', '517293');
   const reset = must(w.post({ action: 'resetPin', token: x.owner, opId: uid(), id: x.ids.cole })).result;
   fails(w.post({ action: 'sync', token: x.cole }), 'auth');
   x.login('Cole', reset.pin);
   must(w.post({ action: 'removeMember', token: x.owner, opId: uid(), id: x.ids.riley }));
   fails(w.post({ action: 'sync', token: x.riley }), 'auth');
-  fails(w.post({ action: 'login', name: 'Riley', pin: '4444' }), 'auth');
+  fails(w.post({ action: 'login', name: 'Riley', pin: '604417' }), 'auth');
   must(w.post({ action: 'logout', token: x.mason, opId: uid() }));
   fails(w.post({ action: 'sync', token: x.mason }), 'auth');
 });
@@ -1007,7 +1007,7 @@ test('a held lock gives "busy" as JSON and saves nothing', () => {
   assert.deepStrictEqual(r.res, { ok: false, error: { code: 'busy', message: BUSY_MESSAGE } });
   assert(r.calls.indexOf('lock.try:15000') >= 0, 'it waits up to 15 seconds for its turn');
   assert(!r.calls.some((c) => /^(sheet|ss)\./.test(c)), 'nothing is read or written without the lock');
-  fails(w.post({ action: 'login', name: 'Mason', pin: '2222' }), 'busy');
+  fails(w.post({ action: 'login', name: 'Mason', pin: '271845' }), 'busy');
   fails(w.post({ action: 'sync', token: x.mason }), 'busy');
   assert.deepStrictEqual(w.post({ action: 'ping' }).res, { ok: true, result: { version: core.VERSION } });
   assert.strictEqual(w.snapshot(), before);
@@ -1379,7 +1379,7 @@ test('an email that cannot be sent after the save does not fail the sale, and th
 test('fifty "anything new?" checks in a row cost at most one property read, and a save is seen by the very next check', () => {
   const x = ready(), w = x.w, G = x.G;
   const phones = [x.owner, x.mason, x.riley, x.cole];
-  for (let i = 0; i < 6; i++) phones.push(x.login(i % 2 ? 'Mason' : 'Riley', i % 2 ? '2222' : '4444').result.token);
+  for (let i = 0; i < 6; i++) phones.push(x.login(i % 2 ? 'Mason' : 'Riley', i % 2 ? '271845' : '604417').result.token);
   const view = x.view(x.owner);
   const ask = (token, rev) => w.post({ action: 'sync', token: token, since: rev, day: view.today });
   const propertyReads = (r) => r.calls.filter((c) => c.indexOf('props.get:') === 0);
@@ -1469,7 +1469,7 @@ test('twenty wrong PINs, four at a time, pause that sign-in and leave the owner 
   let last = null;
   for (let batch = 0; batch < 5; batch++) {
     if (batch) G.cacheNow += 16 * 60;   // long enough for the 15 minute lock to forget
-    for (let i = 0; i < 4; i++) { last = w.post({ action: 'login', name: 'Mason', pin: '0000' }); fails(last, 'auth'); }
+    for (let i = 0; i < 4; i++) { last = w.post({ action: 'login', name: 'Mason', pin: '000000' }); fails(last, 'auth'); }
   }
   assert(last.calls.indexOf('sheet.write:notices') >= 0 && last.calls.indexOf('props.set:REV') >= 0, 'the 20th wrong try is the one that saves the note');
   const notes = w.docs('notices');
@@ -1478,7 +1478,7 @@ test('twenty wrong PINs, four at a time, pause that sign-in and leave the owner 
   assert.strictEqual(notes[0].text, 'Someone tried the wrong PIN for Mason 20 times. Their sign-in is paused for a few hours. Reset their PIN if that was not them.');
   assert.strictEqual(+G.props.REV, rev + 1);
   G.cacheNow += 16 * 60;
-  const paused = w.post({ action: 'login', name: 'Mason', pin: '2222' });
+  const paused = w.post({ action: 'login', name: 'Mason', pin: '271845' });
   fails(paused, 'locked');
   assert(/paused for a few hours/.test(paused.res.error.message));
   assert(!paused.calls.some((c) => /^sheet\.write:/.test(c)), 'a paused try saves nothing more');
@@ -1486,23 +1486,23 @@ test('twenty wrong PINs, four at a time, pause that sign-in and leave the owner 
   assert.strictEqual(x.view(x.owner).notices.length, 1);
 
   /* A wrong "current PIN" counts the same way, through the same web address. */
-  for (let i = 0; i < 5; i++) fails(w.post({ action: 'changePin', token: x.riley, opId: uid(), oldPin: '0000', newPin: '5151' }), 'invalid');
-  fails(w.post({ action: 'changePin', token: x.riley, opId: uid(), oldPin: '4444', newPin: '5151' }), 'locked');
-  fails(w.post({ action: 'login', name: 'Riley', pin: '4444' }), 'locked');
+  for (let i = 0; i < 5; i++) fails(w.post({ action: 'changePin', token: x.riley, opId: uid(), oldPin: '000000', newPin: '517293' }), 'invalid');
+  fails(w.post({ action: 'changePin', token: x.riley, opId: uid(), oldPin: '604417', newPin: '517293' }), 'locked');
+  fails(w.post({ action: 'login', name: 'Riley', pin: '604417' }), 'locked');
   G.cacheNow += 16 * 60;
-  must(w.post({ action: 'changePin', token: x.riley, opId: uid(), oldPin: '4444', newPin: '5151' }));
+  must(w.post({ action: 'changePin', token: x.riley, opId: uid(), oldPin: '604417', newPin: '517293' }));
 
   /* The owner resets the PIN: the pause is lifted. Otherwise it lifts by itself when the 6 hours are up. */
-  const reset = must(w.post({ action: 'resetPin', token: x.owner, opId: uid(), id: x.ids.mason, pin: '7373' })).result;
+  const reset = must(w.post({ action: 'resetPin', token: x.owner, opId: uid(), id: x.ids.mason, pin: '730526' })).result;
   assert.strictEqual(x.login('Mason', reset.pin).sync.me.name, 'Mason');
   for (let batch = 0; batch < 5; batch++) {
     G.cacheNow += 16 * 60;
-    for (let i = 0; i < 4; i++) fails(w.post({ action: 'login', name: 'Cole', pin: '0000' }), 'auth');
+    for (let i = 0; i < 4; i++) fails(w.post({ action: 'login', name: 'Cole', pin: '000000' }), 'auth');
   }
   G.cacheNow += 16 * 60;
-  fails(w.post({ action: 'login', name: 'Cole', pin: '3333' }), 'locked');
+  fails(w.post({ action: 'login', name: 'Cole', pin: '906132' }), 'locked');
   G.cacheNow += 21600;
-  x.login('Cole', '3333');
+  x.login('Cole', '906132');
   assert.strictEqual(w.docs('notices').length, 2);
 });
 
@@ -1515,10 +1515,10 @@ test('sign-ins older than 90 days leave the sheet when somebody signs in, and a 
     { id: 'c'.repeat(64), memberId: x.ids.riley, createdAt: now - 89 * day }];
   old.forEach((doc, i) => { setCell(sh, before + 2 + i, 1, doc.id); setCell(sh, before + 2 + i, 2, JSON.stringify(doc)); });
   assert.strictEqual(w.docs('sessions').length, before + 3);
-  fails(w.post({ action: 'login', name: 'Mason', pin: '0000' }), 'auth');
+  fails(w.post({ action: 'login', name: 'Mason', pin: '000000' }), 'auth');
   must(w.post({ action: 'sync', token: x.mason }));
   assert.strictEqual(w.docs('sessions').length, before + 3, 'only a sign-in that works clears them away');
-  x.login('Riley', '4444');
+  x.login('Riley', '604417');
   const ids = w.docs('sessions').map((d) => d.id);
   assert.strictEqual(ids.length, before + 2, 'the two expired rows are gone and the new sign-in is there');
   assert(ids.indexOf(old[0].id) < 0 && ids.indexOf(old[1].id) < 0 && ids.indexOf(old[2].id) >= 0);

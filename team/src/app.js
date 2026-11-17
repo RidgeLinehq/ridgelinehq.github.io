@@ -23,7 +23,11 @@
  *
  * THE DATA (always the latest answer from the system; never keep your own copy)
  *   App.data                      the snapshot from brief-product.md: me, team, settings, days, taken, clients, sales, jobs, board, notices, problems.
+ *                                 A tech's settings hold only businessName, standards and standardsUpdatedAt (no rates, no services).
  *   App.mode                      'sample' or 'live'.                               if (App.mode === 'sample') ...
+ *                                 Sample mode is ONLY for config.js saying "" (empty). If config.js did not load, or holds
+ *                                 something that is not an https:// address, the page shows a plain message instead and no
+ *                                 screen ever runs (App.mode is then 'off').
  *   App.me()                      who is signed in: { id, name, role, ... }.        App.me().name
  *   App.role()                    'owner' | 'rep' | 'tech'.                         if (App.role() === 'owner') ...
  *   App.today()                   the business day, 'YYYY-MM-DD' (from the system, not the phone).
@@ -62,7 +66,12 @@
  * RE-RENDERING WHEN DATA CHANGES
  *   App.refresh()                 re-render the current screen and tell open sheets and live pieces. Call it after
  *                                 you change your own view state.                   filter = 'Active'; App.refresh();
- *   App.on(event, fn) -> off()    'data' (new data applied), 'route' (screen changed), 'tick' (every 20 seconds).
+ *   App.on(event, fn) -> off()    'data' (new data applied), 'route' (screen changed), 'tick' (every 20 seconds),
+ *                                 'signout' (this person is leaving this phone: they tapped Sign out, the system ended their
+ *                                 sign-in, or the sample data is being reset). It runs BEFORE anything is cleared, so App.me()
+ *                                 and App.data still answer: clear what you keep on the phone for this person here.
+ *                                 fn gets { chosen: true } for a tap on Sign out or a sample reset, { chosen: false } otherwise.
+ *       App.on('signout', function () { forgetDraftOf(App.me().id); });
  *   App.live(el, fn)              call fn on every data change and tick for as long as el is on the page.
  *       App.live(listEl, function () { drawList(listEl); });
  *
@@ -84,9 +93,10 @@
  *     sheet.rebuild()                        run `body` again, keeping the scroll position
  *     sheet.reveal(el)                       scroll the body to an element (the first missing field)
  *     sheet.close()                          close it (and anything opened on top of it)
- *   App.toast(text, opts)         a short message. opts: { bad: true, retry: fn, action: { label, onTap }, ms }.
- *       It sits just above the tab bar; with a sheet open, above a short sheet or just above the footer of a
- *       tall one, never on top of the footer's button.
+ *   App.toast(text, opts) -> remove()    a short message. opts: { bad: true, retry: fn, action: { label, onTap }, ms }.
+ *       It sits just above the tab bar. While a sheet is open it appears at the top instead, just under the
+ *       sheet's header (just above a short sheet when there is room), so it never covers the sheet's button,
+ *       the words by it, or the thing it confirms. Do not toast what the screen already shows in the same spot.
  *       App.toast('Sale saved.');     App.toast(res.error.message, { bad: true, retry: tryAgain });
  *   App.confirm({ title, text, yes, no, danger }) -> Promise of true or false. In-page, never the browser's own.
  *       App.confirm({ title: 'Delete this client?', text: 'Their sales and jobs go too.', yes: 'Delete client', danger: true }).then(function (ok) { ... });
@@ -97,7 +107,7 @@
  *   Inside a sheet (which is slate already) a .card turns into a darker well by itself.
  *   App.h(tag, attrs, ...children) -> element. attrs: class, text, on<event>, anything else is an attribute.
  *       App.h('p', { class: 'muted' }, 'Sold by ', App.h('b', null, name))
- *   App.icon(name, size) -> <svg> Names: today sales calendar clients dashboard leaders schedule standards bell close
+ *   App.icon(name, size) -> <svg> Names: today (a clipboard with a check) sales calendar clients dashboard leaders schedule standards bell close
  *       chevron-left chevron-right chevron-down phone directions note edit check check-circle plus minus search user
  *       team settings key shirt signout reset clock pin alert info copy external trash mail repeat dollar
  *
@@ -130,10 +140,34 @@
  *   App.ui.stats([{ value, unit, label, tone }])     the slim summary card of numbers side by side.
  *   App.ui.empty({ title, text, button: { label, onTap, kind } })     an empty state with one next step.
  *   App.ui.notes(list)            note history, newest first (who, when, text).
- *   App.ui.addNote(kind, id)      open the small "Add note" sheet. kind: 'job' | 'client'.
- *   App.ui.jobCard(job, { showDate })       the full job card with its actions (Call, Directions, Add note, Mark done).
- *   App.ui.jobRow(job, { showDate, sub, pill })   a compact row (time, client, what, address) that opens the Job sheet. pill: false hides the status.
+ *   App.ui.jobCard(job, { showDate, primary })    the full job card with its actions (Call, Directions, Add note, Mark done).
+ *       Its "Mark done" is the quiet style unless primary: true. A screen has ONE ice button: Today gives it to the first job still to do.
  *   App.ui.openJob(jobId)         open the Job sheet (details, notes, and for the owner assign, move, change, cancel).
+ *
+ * REPEATED PIECES: each is built ONE way, here. Use these, do not build a look-alike in your own file.
+ *   A list row                    App.ui.row (above), inside App.h('div', { class: 'list' }).
+ *   A compact job row             App.ui.jobRow(job, { showDate, title, sub, pill }) -> a row (time, client, what, address) that opens the Job sheet.
+ *       showDate: the day above the time. title: replaces the client's name (inside that client's own sheet, pass what is being done).
+ *       sub: replaces the lines under the title (text, an element, or a list of them). pill: false hides the status pill
+ *       (pass it in a list whose label already says the status, like "Recently done"). Nothing in the row is ever cut off:
+ *       long text wraps and the pill stays top right.
+ *       list.appendChild(App.ui.jobRow(job, { showDate: true }));
+ *   A "Coming up" list            App.ui.comingUp(jobs, { empty, who }) -> a .list of job rows with their day, or the `empty` words when there are none.
+ *       You choose and sort the jobs. who: true adds who each job is given to (an amber "Unassigned" when nobody is); it is on for
+ *       the owner and off for everyone else unless you say.
+ *       root.appendChild(App.ui.label('Coming up', { count: jobs.length || null }));
+ *       root.appendChild(App.ui.comingUp(jobs, { empty: 'Nothing is booked for the next 14 days.' }));
+ *   Choosing a person, or nobody  App.ui.nobodyRow({ sub, selected, onTap(e, rowEl) }) -> the "Nobody" row. Always the FIRST row of the list.
+ *                                 App.ui.personRow(member, { sub, selected, onTap(e, rowEl) }) -> initials, name, role in words, a check when selected.
+ *       list.appendChild(App.ui.nobodyRow({ sub: 'You assign each job yourself', selected: !cur, onTap: function (e, rowEl) { pick(null, '', rowEl); } }));
+ *       people.forEach(function (m) { list.appendChild(App.ui.personRow(m, { selected: cur === m.id, onTap: function (e, rowEl) { pick(m.id, m.name, rowEl); } })); });
+ *   Pick one of a few             App.ui.chips (above); two to four fixed choices: App.ui.segmented.
+ *   Adding a note                 App.ui.addNote(kind, id) -> opens the small "Add note" sheet and saves it. kind: 'job' | 'client'.
+ *       The only way a note is added anywhere: a button that calls it, never a text box of your own.
+ *       App.ui.button('Add note', { icon: 'note', small: true, onTap: function () { App.ui.addNote('client', c.id); } })
+ *   Saving                        sheet.send / App.ui.save (above): "Saving...", the message by the button, a safe retry.
+ *   Asking first                  App.confirm (above).
+ *   Not here yet: the "saved: do another or finish" view and "Add a time" have no shared helper in this file.
  *   App.ui.monthGrid({ month, min, max, day(date), onPick(date), onMonth(ym) }) -> el with el.refresh(), el.setMonth(ym), el.getMonth()
  *       A month of days, Sunday first, with arrows. For each day your `day(date)` returns
  *       { state: 'open' | 'full' | 'blocked' | 'past', label: '3 left', disabled: bool, selected: bool }.
@@ -146,6 +180,7 @@
  * FORMATTERS (App.fmt)
  *   money(cents) '$150.00'      moneyShort(cents) '$150'        toCents('150.50') 15050 (null when it is not a price)
  *   day(date) 'Thu, Nov 19'     dayLong(date) 'Thursday, November 19'     dayShort(date) 'Nov 19'     month('2026-11') 'November 2026'
+ *   dayHead(date) 'Thursday, Nov 19' (a screen title: the full weekday with the short month always fits on one line)
  *   time('09:30') '9:30 AM'     when(date, time) 'Thu, Nov 19 at 9:30 AM'
  *   clock(ms) '2:14 PM'         date(ms) 'Nov 17'               stamp(ms) 'Nov 17, 2:14 PM'           ago(ms) '5 min ago'
  *   plural(2, 'sale') '2 sales' initials('Grayson Jones') 'GJ'  first('Grayson Jones') 'Grayson'
@@ -159,9 +194,11 @@ var App = (function () {
   var App = { mode: 'sample', backend: '', data: null, route: '', actions: {}, ui: {}, fmt: {}, api: {}, sheet: {} };
   var ui = App.ui, fmt = App.fmt;
 
-  var state = { token: null, inApp: false, okAt: 0, fails: 0, syncing: false, signingIn: false };
+  /* fails: background refreshes that failed in a row. failKind: 'offline' (no answer at all) or 'error' (the system answered, but not with our data). */
+  var state = { token: null, inApp: false, okAt: 0, fails: 0, failKind: '', syncing: false, signingIn: false };
   var els = {};
-  var screens = {};
+  var screens = Object.create(null);      /* no built-in names: #constructor or #toString is never a screen */
+  var own = Object.prototype.hasOwnProperty;
 
   var TABS = {
     owner: ['today', 'sales', 'calendar', 'clients', 'dashboard'],
@@ -180,6 +217,8 @@ var App = (function () {
   };
   var ROLE_WORDS = { owner: 'Owner', rep: 'Sales rep', tech: 'Tech' };
   var NO_SIGNAL = 'Could not save. Check your signal and try again.';
+  var CANNOT_REACH = 'Cannot reach the team system. Check your signal and try again. If your signal is fine, tell Grayson.';
+  var PIN_RE = /^\d{6}$/;                 /* every PIN is exactly 6 digits */
 
   /* ================= small helpers ================= */
 
@@ -227,7 +266,7 @@ var App = (function () {
   /* ================= icons: one small set of line icons (24px box, stroke 1.75, round caps) ================= */
 
   var ICONS = {
-    today: '<rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/><circle cx="12" cy="15.5" r="1.6" fill="currentColor" stroke="none"/>',
+    today: '<rect x="5" y="4.5" width="14" height="17" rx="2.2"/><path d="M9 4.5v-1.2a.8.8 0 0 1 .8-.8h4.4a.8.8 0 0 1 .8.8v1.2"/><path d="M8.8 13.3l2.3 2.3 4.1-4.4"/>',
     sales: '<circle cx="12" cy="12" r="9"/><path d="M12 6.5v11M14.7 9.2c-.5-.8-1.5-1.2-2.7-1.2-1.7 0-2.9.8-2.9 2s1 1.7 2.9 2 2.9.8 2.9 2-1.2 2-2.9 2c-1.3 0-2.3-.5-2.8-1.3"/>',
     calendar: '<rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/>',
     clients: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1.5a4.5 4.5 0 0 1 4.5-4.5h4a4.5 4.5 0 0 1 4.5 4.5V20M16 4.7a3.5 3.5 0 0 1 0 6.6M18.5 14.3a4.5 4.5 0 0 1 3 4.2V20"/>',
@@ -312,6 +351,11 @@ var App = (function () {
     if (!D.isDay(date)) return '';
     return MONTHS[+date.slice(5, 7) - 1].slice(0, 3) + ' ' + (+date.slice(8, 10));
   };
+  /* A screen title: the full weekday with the short month ("Wednesday, Nov 18") fits one line on the narrowest phone. */
+  fmt.dayHead = function (date) {
+    if (!D.isDay(date)) return '';
+    return DAYS[D.weekday(date)] + ', ' + fmt.dayShort(date);
+  };
   fmt.month = function (ym) { return MONTHS[+String(ym).slice(5, 7) - 1] + ' ' + String(ym).slice(0, 4); };
   fmt.time = function (hm) {
     if (!D.isHM(hm)) return '';
@@ -364,20 +408,51 @@ var App = (function () {
 
   /* ================= sample or real ================= */
 
+  /* What config.js says decides the mode, and nothing else does:
+       ""                      sample mode: made-up data on this phone
+       an https:// address     the real thing
+       nothing at all          config.js did not load. Say so and offer Reload.
+       anything else           it is not connected properly. Say so.
+     The last two never fall back to sample data: on the real site that would show the team a made-up
+     system that lets anyone in as the owner. */
+  var stopped = '';      /* '' (running), 'load' (config.js did not load) or 'config' (not an https:// address) */
+
+  function backendUrl(raw, dev) {
+    if (typeof raw !== 'string') return '';
+    var s = raw.trim(), u = null;
+    if (!s || /\s/.test(s)) return '';
+    try { u = new URL(s); } catch (e) { return ''; }
+    if (!u.hostname || !(u.protocol === 'https:' || (dev && u.protocol === 'http:'))) return '';
+    return s;
+  }
+
   function pickMode() {
-    var url = typeof window.RIDGELINE_BACKEND === 'string' ? window.RIDGELINE_BACKEND.trim() : '';
+    var raw = window.RIDGELINE_BACKEND;
     var host = location.hostname;
     var dev = location.protocol === 'file:' || host === 'localhost' || host === '127.0.0.1';
     if (dev) {   /* test overrides, honored nowhere else */
       var q = null;
       try { q = new URLSearchParams(location.search); } catch (e) { /* no query support */ }
-      if (q && q.get('sample') === '1') url = '';
-      else if (q && q.get('backend')) url = q.get('backend');
+      if (q && q.get('sample') === '1') raw = '';
+      else if (q && q.get('backend')) raw = q.get('backend');
     }
-    if (url && !(/^https:\/\//i.test(url) || (dev && /^http:\/\//i.test(url)))) url = '';
+    var url = raw === '' || raw === undefined ? '' : backendUrl(raw, dev);
+    stopped = raw === '' || url ? '' : raw === undefined ? 'load' : 'config';
     App.backend = url;
-    App.mode = url ? 'live' : 'sample';
+    App.mode = stopped ? 'off' : url ? 'live' : 'sample';
     storage.prefix = 'ridgeline.' + App.mode + '.';
+  }
+
+  /* The page cannot start: one plain message where sign-in would be. Nothing is read, saved or sent. */
+  function showStopped() {
+    els.app.hidden = true;
+    els.signin.hidden = false;
+    var load = stopped === 'load';
+    clear(els.signinBody).appendChild(h('div', { class: 'stop' },
+      h('p', { class: 'stop-text', role: 'alert' }, load
+        ? 'This page did not load all the way. Check your signal, then reload.'
+        : 'The team system is not connected yet. Tell Grayson.'),
+      ui.button('Reload', { kind: load ? 'primary' : 'quiet', block: true, onTap: function () { location.reload(); } })));
   }
 
   /* ----- sample mode: RidgelineCore running in the page, saved on this phone ----- */
@@ -405,10 +480,14 @@ var App = (function () {
 
   function saveSample() { storage.set('db', JSON.stringify({ day: sample.day, dump: sample.store.dump() })); }
 
+  /* A call ends one of three ways: our answer; NOT_OURS (something answered, but not with our data: an
+     error page, a crash); or null (nothing answered at all: no signal, or it took too long). */
+  var NOT_OURS = { notOurs: true };
+
   function callSample(req) {
     return new Promise(function (resolve) {
       setTimeout(function () {
-        var res = null;
+        var res = NOT_OURS;
         try {
           res = JSON.parse(JSON.stringify(sample.core.handle(req)));
           if (req.action !== 'sync') saveSample();
@@ -444,7 +523,7 @@ var App = (function () {
         }).then(function (r) { return r.text(); }).then(function (text) {
           var res = null;
           try { res = JSON.parse(text); } catch (e) { res = null; }   /* an error page, not our JSON */
-          finish(res);
+          finish(isAnswer(res) ? res : NOT_OURS);
         }).catch(function () { finish(null); });
       } catch (e3) { finish(null); }
     });
@@ -497,12 +576,15 @@ var App = (function () {
   }
 
   function settle(req, res) {
-    if (!isAnswer(res)) return { ok: false, error: { code: 'network', message: NO_SIGNAL }, opId: req.opId };
+    /* `reached` tells "the system answered with something else" from "nothing answered": the strip words differ. */
+    if (!isAnswer(res)) return { ok: false, error: { code: 'network', message: NO_SIGNAL, reached: res === NOT_OURS }, opId: req.opId };
     var mine = req.action === 'login' || (!!state.token && req.token === state.token);
     if (mine) {
       if (res.ok || res.sync) state.okAt = Date.now();
       /* An answer from a working system means the connection is back (a "server" answer is not that). */
       if (state.fails && (res.ok || res.error.code !== 'server')) { state.fails = 0; drawStrip(); }
+      /* A new sign-in: the saved copy of the data belongs to this person from here on. */
+      if (req.action === 'login' && res.ok && res.sync && res.sync.me) storage.set('who', String(res.sync.me.id));
       if (res.sync) applySync(res.sync);
       if (!res.ok && res.error.code === 'auth' && req.action !== 'login') signOut(res.error.message || 'Please sign in again.');
     }
@@ -516,14 +598,30 @@ var App = (function () {
 
   function applySync(sync) {
     if (!sync || typeof sync !== 'object') return;
-    if (sync.same) { storage.set('at', String(state.okAt)); return; }
+    if (sync.same) {
+      if (App.data && storage.get('who') === String(App.data.me.id)) storage.set('at', String(state.okAt));
+      return;
+    }
     if (!sync.me || !Array.isArray(sync.jobs) || !sync.settings) return;   /* not a snapshot we understand */
     var cur = App.data;
     if (cur && cur.me.id === sync.me.id && cur.today === sync.today && sync.rev < cur.rev) return;   /* an older answer that arrived late */
     App.data = sync;
+    keepSnapshot(sync);
+    changed();
+  }
+
+  /* The copy of the data kept on the phone belongs to one person: the one who signed in last ('who').
+     Another tab still running as someone else never writes over it, and at start-up a copy that is not
+     that person's is ignored (see start). */
+  function keepSnapshot(sync) {
+    var who = storage.get('who');
+    if (!who && state.token && storage.get('token') === state.token) {   /* signed in before 'who' was kept */
+      who = String(sync.me.id);
+      storage.set('who', who);
+    }
+    if (who !== String(sync.me.id)) return;
     storage.set('snap', JSON.stringify(sync));
     storage.set('at', String(state.okAt));
-    changed();
   }
 
   /* ================= events and re-rendering ================= */
@@ -537,8 +635,8 @@ var App = (function () {
       if (i >= 0) list.splice(i, 1);
     };
   };
-  function emit(name) {
-    (listeners[name] || []).slice().forEach(function (fn) { try { fn(); } catch (e) { report(e); } });
+  function emit(name, detail) {
+    (listeners[name] || []).slice().forEach(function (fn) { try { fn(detail); } catch (e) { report(e); } });
   }
   function onPage(el) { return el.isConnected !== undefined ? el.isConnected : doc.documentElement.contains(el); }
 
@@ -645,7 +743,7 @@ var App = (function () {
   /* ================= cross-screen actions ================= */
 
   App.act = function (name, arg) {
-    var fn = App.actions[name];
+    var fn = own.call(App.actions, name) ? App.actions[name] : null;
     try {
       if (typeof fn !== 'function') throw new Error('No action called ' + name);
       fn(arg);
@@ -670,20 +768,22 @@ var App = (function () {
     placeToasts();
   }
 
-  /* Toasts sit just above the tab bar. While a sheet is on top they keep clear of it: above a short
-     sheet when there is room there, otherwise just above the sheet's footer, so a message never covers
-     the footer's button or the line above it. */
+  /* Toasts sit just above the tab bar. While a sheet is open they go to the top instead: just under the
+     sheet's header, or just above a short sheet when there is room there. So a message never covers the
+     sheet's button, the words by it, or the thing lower down that it confirms. */
   function placeToasts() {
     if (!els.toasts) return;
-    var top = layers.length ? layers[layers.length - 1] : null, px = '';
-    if (top && top.kind === 'sheet') {
-      var sheet = top.el, foot = top.foot, room = 0;
-      var below = window.innerHeight - top.wrap.getBoundingClientRect().bottom + top.wrap.clientHeight - sheet.offsetTop - sheet.offsetHeight;   /* from the sheet's bottom edge to the bottom of the screen */
-      if (sheet.classList.contains('sheet-small') && window.innerHeight - below - sheet.offsetHeight > 200) room = below + sheet.offsetHeight;
-      else if (Array.prototype.some.call(foot.children, function (x) { return !x.hidden; })) room = below + foot.offsetHeight;
-      if (room > 0) px = Math.round(room + 8) + 'px';
+    var st = els.toasts.style, sh = null, i;
+    for (i = layers.length - 1; i >= 0 && !sh; i--) if (layers[i].kind === 'sheet') sh = layers[i];
+    if (!sh) { st.top = ''; st.bottom = ''; return; }
+    var edge = sh.wrap.getBoundingClientRect().top + sh.el.offsetTop;   /* the sheet's top edge (where it rests, not where its slide-up is) */
+    if (sh.el.classList.contains('sheet-small') && edge >= 72) {
+      st.top = 'auto';
+      st.bottom = Math.round(window.innerHeight - edge + 8) + 'px';
+    } else {
+      st.top = Math.round(edge + sh.head.offsetHeight + 8) + 'px';
+      st.bottom = 'auto';
     }
-    els.toasts.style.bottom = px;
   }
 
   /* Close layers until `depth` are left. Returns true when a history step back is on its way. */
@@ -758,8 +858,9 @@ var App = (function () {
     var foot = h('div', { class: 'sheet-foot' + (sh.button ? '' : ' is-bare') }, noteEl, errorEl, sh.button);
     var footWatch = null;
     sh.foot = foot;
+    sh.head = h('div', { class: 'sheet-head' }, title, closeBtn);
     sh.el = h('section', { class: 'sheet' + (o.small ? ' sheet-small' : ''), role: 'dialog', 'aria-modal': 'true', 'aria-label': o.title || 'Details', tabindex: '-1' },
-      h('div', { class: 'sheet-head' }, title, closeBtn), sh.body, foot);
+      sh.head, sh.body, foot);
     sh.wrap = h('div', { class: 'layer' }, sh.el);
     if (o.small) sh.wrap.addEventListener('click', function (e) { if (e.target === sh.wrap) sh.close(); });
 
@@ -810,10 +911,10 @@ var App = (function () {
 
     els.layers.appendChild(sh.wrap);
     pushLayer(sh);
-    /* The footer grows and shrinks (a note, an error, a longer label) and so does a short sheet: toasts follow. */
+    /* A short sheet grows and shrinks (a note, an error, a longer title) and its top edge moves: toasts follow. */
     try {
       footWatch = new ResizeObserver(placeToasts);
-      footWatch.observe(foot);
+      footWatch.observe(sh.head);
       footWatch.observe(sh.el);
     } catch (e) { footWatch = null; }
     try { if (o.body) o.body(sh.body, sh); } catch (e) { report(e); }
@@ -1273,7 +1374,9 @@ var App = (function () {
     return h('div', { class: 'meta-row' + (cls ? ' ' + cls : '') }, icon(iconName, 18), h('span', null, content));
   }
 
-  /* One-tap: flips at once, saves behind, rolls back with a red toast and Retry if the save fails. */
+  /* One-tap: flips at once, saves behind, rolls back with a red toast and Retry if the save fails.
+     Marking done always answers "Marked done." with Undo: a job from an earlier day leaves the screen
+     when it is done, and that message is how it is brought back. */
   function setDone(jobId, done, opId) {
     var job = App.job(jobId), me = App.me();
     if (!job || !me) return;
@@ -1282,9 +1385,11 @@ var App = (function () {
     job.doneAt = stamp;
     job.doneBy = done ? me.id : null;
     changed();
+    var said = done ? App.toast('Marked done.', { ms: 6000, action: { label: 'Undo', onTap: function () { setDone(jobId, false); } } }) : null;
     opId = opId || newId();
     send('setJobDone', { jobId: jobId, done: done }, { opId: opId }).then(function (res) {
       if (res.ok) return;
+      if (said) said();          /* it was not saved: take the "Marked done." back before saying so */
       var now = App.job(jobId);
       if (now && now.status === (done ? 'done' : 'scheduled') && now.doneAt === stamp) {
         now.status = before.status; now.doneAt = before.doneAt; now.doneBy = before.doneBy;
@@ -1334,16 +1439,50 @@ var App = (function () {
     if (note) meta.appendChild(metaRow('note', note.text, 'is-note'));
     if (meta.firstChild) card.appendChild(meta);
     card.appendChild(jobActions(job));
-    if (canMark(job)) card.appendChild(ui.button('Mark done', { kind: 'primary', block: true, onTap: function () { setDone(job.id, true); } }));
+    /* One ice button per screen: only the card the screen marks as `primary` gets it. The rest are the same size, quiet. */
+    if (canMark(job)) card.appendChild(ui.button('Mark done', { kind: o.primary ? 'primary' : 'quiet', block: true, onTap: function () { setDone(job.id, true); } }));
     return card;
   };
 
+  /* The compact job row. Nothing is cut off: the name wraps beside the pill (which stays top right), and
+     the lines under it run the full width below the pill. */
   ui.jobRow = function (job, o) {
     o = o || {};
     var c = job.client || {};
     var lead = h('span', { class: 'row-time' }, o.showDate ? h('small', null, fmt.day(job.date)) : null, fmt.time(job.time));
     var sub = o.sub != null ? o.sub : [job.what, c.address];
-    return ui.row({ lead: lead, title: c.name || 'Client', sub: sub, cls: 'row-clip', right: o.pill === false ? null : ui.jobPill(job), chevron: false, onTap: function () { ui.openJob(job.id); } });
+    var name = o.title != null ? o.title : (c.name || 'Client');
+    var pill = o.pill === false ? null : ui.jobPill(job);
+    return ui.row({ lead: lead, title: pill ? h('span', { class: 'row-head' }, h('span', { class: 'row-head-text' }, name), pill) : name,
+      sub: sub, cls: 'row-job', chevron: false, onTap: function () { ui.openJob(job.id); } });
+  };
+
+  /* A "Coming up" list: job rows with their day and no status pill. The caller chooses and sorts the jobs. */
+  ui.comingUp = function (jobs, o) {
+    o = o || {};
+    jobs = jobs || [];
+    if (!jobs.length) return h('p', { class: 'muted' }, o.empty || 'Nothing is booked yet.');
+    var who = o.who == null ? App.role() === 'owner' : !!o.who;
+    var list = h('div', { class: 'list' });
+    jobs.forEach(function (job) {
+      var sub = [job.what];
+      if (who) sub.push(job.assignedTo ? App.nameOf(job.assignedTo, 'Someone') : h('span', { class: 'warn strong' }, 'Unassigned'));
+      list.appendChild(ui.jobRow(job, { showDate: true, pill: false, sub: sub }));
+    });
+    return list;
+  };
+
+  /* Choosing a person, or nobody: the two rows every such list is made of. "Nobody" is always first. */
+  function pickedMark(on) { return on ? h('span', { class: 'ice' }, icon('check', 22)) : null; }
+  ui.personRow = function (m, o) {
+    o = o || {};
+    return ui.row({ lead: h('span', { class: 'avatar' }, fmt.initials(m.name)), title: m.name, sub: o.sub != null ? o.sub : (ROLE_WORDS[m.role] || ''),
+      right: pickedMark(o.selected), chevron: false, onTap: o.onTap });
+  };
+  ui.nobodyRow = function (o) {
+    o = o || {};
+    return ui.row({ lead: h('span', { class: 'avatar avatar-none' }, icon('minus', 18)), title: 'Nobody', sub: o.sub,
+      right: pickedMark(o.selected), chevron: false, onTap: o.onTap });
   };
 
   ui.addNote = function (kind, id) {
@@ -1386,21 +1525,16 @@ var App = (function () {
             App.toast(id ? 'Assigned to ' + name + '.' : 'Nobody is assigned now.');
           });
         }
+        list.appendChild(ui.nobodyRow({ sub: 'Leave this job unassigned', selected: !job.assignedTo, onTap: function (e, rowEl) { pick(null, '', rowEl); } }));
         people.forEach(function (m) {
-          var on = job.assignedTo === m.id;
-          list.appendChild(ui.row({
-            lead: h('span', { class: 'avatar' }, fmt.initials(m.name)), title: m.name, sub: ROLE_WORDS[m.role] || '',
-            right: on ? h('span', { class: 'ice' }, icon('check', 22)) : null, chevron: false,
-            onTap: function (e, rowEl) { pick(m.id, m.name, rowEl); }
-          }));
+          list.appendChild(ui.personRow(m, { selected: job.assignedTo === m.id, onTap: function (e, rowEl) { pick(m.id, m.name, rowEl); } }));
         });
-        if (job.assignedTo) {
-          list.appendChild(ui.row({ title: 'Nobody yet', sub: 'Leave this job unassigned', chevron: false, onTap: function (e, rowEl) { pick(null, '', rowEl); } }));
-        }
         el.appendChild(list);
       }
     });
   }
+
+  var PICK_TIME = 'Pick a day and a time';      /* the footer button of a slot picker sheet before a time is chosen */
 
   function openMove(jobId) {
     var job = App.job(jobId), picker;
@@ -1409,10 +1543,10 @@ var App = (function () {
       title: 'Move to another time',
       body: function (el, sheet) {
         el.appendChild(h('p', { class: 'muted' }, ((job.client || {}).name || 'This job') + ' is booked for ' + fmt.when(job.date, job.time) + '.'));
-        picker = ui.slotPicker({ onChange: function (v) { sheet.setButton(v ? 'Move to ' + fmt.when(v.date, v.time) : 'Pick a new time', !v); } });
+        picker = ui.slotPicker({ onChange: function (v) { sheet.setButton(v ? 'Move to ' + fmt.when(v.date, v.time) : PICK_TIME, !v); } });
         el.appendChild(picker);
       },
-      footer: { label: 'Pick a new time', onTap: function (sheet) {
+      footer: { label: PICK_TIME, onTap: function (sheet) {
         var v = picker.get();
         if (!v) return;
         sheet.send('moveJob', { jobId: jobId, date: v.date, time: v.time }).then(function (res) {
@@ -1423,12 +1557,12 @@ var App = (function () {
             sheet.error('');
             picker.set(null);
             picker.setError(res.error.message);
-            sheet.setButton('Pick a new time', true);
+            sheet.setButton(PICK_TIME, true);
           }
         });
       } }
     });
-    sh.setButton('Pick a new time', true);
+    sh.setButton(PICK_TIME, true);
   }
 
   function openWhat(jobId) {
@@ -1461,7 +1595,7 @@ var App = (function () {
     var c = job.client || {};
     App.confirm({
       title: 'Cancel this job?',
-      text: (c.name || 'This job') + ', ' + fmt.when(job.date, job.time) + '. The time opens up again for booking.',
+      text: (c.name || 'This job') + ', ' + fmt.when(job.date, job.time) + '. That time can be booked again.',
       yes: 'Cancel job', no: 'Keep it', danger: true
     }).then(function (yes) {
       if (!yes) return;
@@ -1505,7 +1639,7 @@ var App = (function () {
         owner ? h('p', { class: 'muted small' }, 'You can put it back on the schedule if its time is still free.') : null));
       if (owner) {
         var backErr = h('p', { class: 'form-error', role: 'alert', hidden: true });
-        el.appendChild(ui.button('Put it back on the schedule', { block: true, onTap: function (e, btn) {
+        el.appendChild(ui.button('Put it back on the schedule', { block: true, small: true, onTap: function (e, btn) {
           ui.save(btn, 'updateJob', { jobId: job.id, patch: { status: 'scheduled' } }, { errorEl: backErr }).then(function (res) {
             if (res.ok) App.toast('The job is back on the schedule.');
           });
@@ -1518,7 +1652,7 @@ var App = (function () {
     el.appendChild((job.notes || []).length ? ui.notes(job.notes) : h('p', { class: 'muted' }, 'No notes yet.'));
 
     if (cancelled || !(owner || (me.role === 'rep' && scheduled))) return;
-    el.appendChild(ui.label(owner ? 'Manage this job' : 'Change this job'));
+    el.appendChild(ui.label(owner ? 'Manage this job' : 'Change this appointment'));   /* a rep can only move the booked time */
     var list = h('div', { class: 'list' });
     if (owner) {
       list.appendChild(ui.row({ icon: 'user', title: 'Assign to',
@@ -1552,17 +1686,26 @@ var App = (function () {
 
   /* ================= the shell: top bar, strip, tab bar, router ================= */
 
-  var tabsKey = '';
+  var tabsKey = '', meLine = null;
 
+  /* When this phone last heard from the system: "2:14 PM", or "Nov 16, 2:14 PM" when that was not today. */
+  function savedAt() {
+    if (!state.okAt) return '';
+    return localDay(state.okAt) === localDay(Date.now()) ? fmt.clock(state.okAt) : fmt.stamp(state.okAt);
+  }
+
+  /* The one status line under the top bar. After two failed refreshes in a row it says which kind of
+     trouble it is: nothing answered (no connection), or the system answered with an error. */
   function drawStrip() {
     if (!els.strip) return;
     var text = '';
     if (state.fails >= 2) {
-      var at = state.okAt ? (localDay(state.okAt) === localDay(Date.now()) ? fmt.clock(state.okAt) : fmt.stamp(state.okAt)) : '';
-      text = 'No connection. ' + (at ? 'Showing what was saved at ' + at + '. ' : '') + 'Trying again.';
+      var at = savedAt();
+      text = (state.failKind === 'error' ? 'The system is not answering. ' : 'No connection. ') + (at ? 'Showing what was saved at ' + at + '. ' : '') + 'Trying again.';
     } else if (App.mode === 'sample') text = 'Sample data. Nothing here is real yet.';
     els.strip.hidden = !text;
     els.stripText.textContent = text;
+    if (meLine && onPage(meLine)) meLine.textContent = upToDateText();   /* the account sheet never says "Up to date" under this strip */
   }
 
   function drawChrome() {
@@ -1620,7 +1763,7 @@ var App = (function () {
   }
 
   function drawScreen(keep) {
-    var root = els.screen, def = screens[App.route];
+    var root = els.screen, def = screens[App.route] || {};
     var y = window.pageYOffset || doc.documentElement.scrollTop || 0;
     var typed = keep ? keepTyped(root) : [];
     clear(root);
@@ -1636,9 +1779,10 @@ var App = (function () {
     else window.scrollTo(0, 0);
   }
 
+  /* Only a screen that was registered, and that this role may open. Anything else in the address goes to Today. */
   function allowed(route) {
-    var def = screens[route];
-    return !!def && (!def.roles || def.roles.indexOf(App.role()) >= 0);
+    var def = typeof route === 'string' ? screens[route] : null;
+    return !!def && typeof def.render === 'function' && (!def.roles || def.roles.indexOf(App.role()) >= 0);
   }
   function readHash() { return String(location.hash || '').replace(/^#\/?/, '').split(/[?&/]/)[0]; }
   function writeHash(route) {
@@ -1657,7 +1801,7 @@ var App = (function () {
     emit('route');
   }
 
-  App.screen = function (route, def) { screens[route] = def || {}; };
+  App.screen = function (route, def) { screens[String(route)] = def || {}; };
   App.go = function (route) { closeAll(function () { show(route); }); };
 
   /* ================= staying live ================= */
@@ -1672,6 +1816,7 @@ var App = (function () {
       /* "Busy" only means several phones asked at the same moment: the next round will do. */
       if (res.ok || res.error.code === 'auth' || res.error.code === 'busy') return;
       state.fails++;            /* two in a row and the strip says so, until one works */
+      state.failKind = res.error.code === 'network' && !res.error.reached ? 'offline' : 'error';
       drawStrip();
     });
   }
@@ -1699,7 +1844,8 @@ var App = (function () {
     state.inApp = false;
     stopLive();
     dropTo(0, false);
-    clear(els.toasts);        /* nothing left over from whoever was signed in */
+    clear(els.toasts);        /* nothing left over from whoever was signed in: no message... */
+    clear(els.screen);        /* ...and not their last screen either, sitting in the hidden page */
     els.app.hidden = true;
     els.signin.hidden = false;
     window.scrollTo(0, 0);
@@ -1708,18 +1854,30 @@ var App = (function () {
   function forget() {
     state.token = null;
     state.fails = 0;
+    state.failKind = '';
     App.data = null;
     storage.del('token');
+    storage.del('who');
     storage.del('snap');
     storage.del('at');
   }
 
-  /* Sign out (or be signed out): forget this phone's token and saved data, show sign-in with the reason. */
+  /* Sign out (or be signed out): forget this phone's token and saved data, show sign-in with the reason.
+     Other files hear 'signout' first, while App.me() still answers, and clear what they keep for this person. */
   function signOut(message) {
     var token = state.token;
+    if (App.data) emit('signout', { chosen: !message });
     if (token && !message) transport({ action: 'logout', token: token });   /* best effort; nothing waits on it */
     forget();
     showSignIn(message);
+  }
+
+  function askSignOut() {
+    App.confirm({
+      title: 'Sign out of this phone?',
+      text: 'You will need your name and PIN to sign in again.',
+      yes: 'Sign out', no: 'Stay signed in'
+    }).then(function (yes) { if (yes) signOut(); });
   }
 
   function logIn(name, pin, btn, errorEl) {
@@ -1731,7 +1889,10 @@ var App = (function () {
       state.signingIn = false;
       setBusy(btn, false);
       if (!res.ok || !res.result || !res.result.token || !App.data) {
-        var msg = !res.ok && res.error.code !== 'network' ? res.error.message : 'Could not sign in. Check your signal and try again.';
+        /* The system's own words when it answered ("That name and PIN do not match."). No answer at all, or one
+           that is not ours: in real mode say what to do about it; the sample cannot be out of reach. */
+        var msg = !res.ok && res.error.code !== 'network' ? res.error.message
+          : App.mode === 'live' ? CANNOT_REACH : 'Could not sign in. Try again.';
         if (errorEl) { errorEl.textContent = msg; errorEl.hidden = false; }
         else App.toast(msg, { bad: true });
         return;
@@ -1760,7 +1921,8 @@ var App = (function () {
           h('p', { class: 'strong' }, 'Sample mode'),
           h('p', { class: 'muted small' }, 'This is made-up data so you can try everything.' + (quick.firstChild ? ' Sign straight in as:' : ''))),
         quick.firstChild ? quick : null,
-        missing ? ui.button('Reset sample data', { kind: 'text', small: true, icon: 'reset', onTap: resetSample }) : null));
+        missing ? ui.button('Reset sample data', { kind: 'text', small: true, icon: 'reset', onTap: resetSample }) : null,
+        h('p', { class: 'muted small sample-next' }, 'Grayson: this becomes your real team app once the setup steps are done.')));
     }
 
     var name = ui.field({ label: 'Name', name: 'name', autocomplete: 'username', autocapitalize: 'words' });
@@ -1774,7 +1936,7 @@ var App = (function () {
       e.preventDefault();
       var n = name.val(), p = pin.val();
       if (!n) { name.setError('Type your name.'); name.input.focus(); return; }
-      if (!/^\d{4,6}$/.test(p)) { pin.setError('Your PIN is 4 to 6 digits.'); pin.input.focus(); return; }
+      if (!PIN_RE.test(p)) { pin.setError('Your PIN is 6 digits.'); pin.input.focus(); return; }
       logIn(n, p, btn, error);
     } },
       h('h1', { class: 'signin-title' }, 'Team sign in'), name, pin, btn, error,
@@ -1798,8 +1960,10 @@ var App = (function () {
       if (state.inApp || !state.token) return;
       if (res.ok && App.data) { enterApp(); return; }
       clear(body);
+      var why = !res.ok && res.error.code !== 'network' ? res.error.message
+        : App.mode === 'live' ? CANNOT_REACH : 'Could not load. Try again.';
       body.appendChild(h('div', { class: 'stack' },
-        h('p', { class: 'form-error', role: 'alert' }, 'Could not load. Check your signal and try again.'),
+        h('p', { class: 'form-error', role: 'alert' }, why),
         ui.button('Try again', { kind: 'primary', block: true, onTap: showLoading }),
         ui.button('Sign in as someone else', { kind: 'text', onTap: function () { signOut(); } })));
     });
@@ -1819,10 +1983,13 @@ var App = (function () {
     var doneCount = todays.filter(function (j) { return j.status === 'done'; }).length;
     var next = todays.filter(function (j) { return j.status === 'scheduled'; })[0];
     var nextTime = next ? fmt.time(next.time).split(' ') : null;
+    /* The one ice button on this screen: "Mark done" on the first job still to do, an overdue one before today's. */
+    var first = overdue[0] || next || null;
+    function card(job) { return ui.jobCard(job, { primary: !!first && job.id === first.id }); }
 
     root.appendChild(h('header', { class: 'head' },
       h('p', { class: 'lead' }, greeting() + ', ' + fmt.first(me.name)),
-      h('h1', { class: 'title' }, fmt.dayLong(today))));
+      h('h1', { class: 'title' }, fmt.dayHead(today))));
 
     root.appendChild(ui.stats([
       { value: todays.length, label: 'Jobs today' },
@@ -1830,29 +1997,32 @@ var App = (function () {
       nextTime ? { value: nextTime[0], unit: nextTime[1], label: 'Next job' } : { value: '–', label: 'Next job', tone: 'mute' }
     ]));
 
+    /* Overdue jobs come first, in red. The standards reminder sits under them, above today's jobs. */
+    if (overdue.length) {
+      root.appendChild(ui.label('Overdue', { tone: 'bad', count: overdue.length }));
+      overdue.forEach(function (job) { root.appendChild(card(job)); });
+    }
     if (App.needsStandards()) {
       root.appendChild(h('div', { class: 'card remind' },
         h('img', { class: 'remind-photo', src: 'photo-standard.jpg', alt: '', onerror: function () { this.style.visibility = 'hidden'; } }),
         h('div', { class: 'remind-text' },
           h('p', { class: 'remind-title' }, 'Company standards'),
-          h('p', { class: 'remind-sub' }, 'Read these before your next job.')),
-        ui.button('Read', { kind: 'primary', small: true, onTap: function () { App.go('standards'); } })));
+          h('p', { class: 'remind-sub' }, me.role === 'rep' ? 'Read before your next sale.' : 'Read before your next job.')),
+        ui.button('Read', { small: true, onTap: function () { App.go('standards'); } })));
     }
-
-    if (overdue.length) {
-      root.appendChild(ui.label('Overdue', { tone: 'bad', count: overdue.length }));
-      overdue.forEach(function (job) { root.appendChild(ui.jobCard(job)); });
-      root.appendChild(ui.label('Today'));
-    }
-    todays.forEach(function (job) { root.appendChild(ui.jobCard(job)); });
+    if (overdue.length) root.appendChild(ui.label('Today'));
+    todays.forEach(function (job) { root.appendChild(card(job)); });
 
     if (!todays.length) {
       if (me.role === 'rep') {
         root.appendChild(ui.empty({ title: 'Nothing scheduled today.', text: 'Made a sale? Enter it and book the appointment before you leave.',
           button: { label: 'New sale', kind: 'primary', onTap: function () { App.act('newSale', {}); } } }));
-      } else if (me.role === 'owner') {
+      } else if (me.role === 'owner' && !App.freeDays().length) {
+        /* Only when nothing from today on can be booked: with days already open there is nothing to tell him to do. */
         root.appendChild(ui.empty({ title: 'Nothing scheduled today.', text: 'Open days in Calendar so your reps can book.',
           button: { label: 'Go to Calendar', onTap: function () { App.go('calendar'); } } }));
+      } else if (me.role === 'owner') {
+        root.appendChild(ui.empty({ title: 'Nothing scheduled today.', text: 'Appointments booked for today show up here.' }));
       } else {
         root.appendChild(ui.empty({ title: 'Nothing scheduled today.', text: 'New jobs show up here as soon as they are given to you.' }));
       }
@@ -1870,6 +2040,16 @@ var App = (function () {
     root.appendChild(frame);
     root.appendChild(ui.title('Company standards', 'This is how we work on every job.'));
 
+    /* The owner's own part sits right under the title, not below the whole page: who has read them, and the way in to edit. */
+    if (me.role === 'owner') {
+      var crew = App.people(['rep', 'tech']), read = crew.filter(App.hasRead).length;
+      root.appendChild(h('div', { class: 'std-owner' },
+        h('p', { class: 'muted' }, crew.length
+          ? read + ' of ' + crew.length + ' have read these.'
+          : 'Nobody else is on the team yet. Tap your initials at the top left, then Team.'),
+        ui.button('Edit standards', { icon: 'edit', small: true, onTap: function () { App.act('editStandards'); } })));
+    }
+
     if (!sections.length) root.appendChild(ui.empty({ title: 'No standards have been written yet.' }));
     sections.forEach(function (sec) {
       var list = h(sec.ordered ? 'ol' : 'ul', { class: 'std-list' });
@@ -1881,20 +2061,16 @@ var App = (function () {
       root.appendChild(h('section', { class: 'std-sec' }, ui.label(sec.title), list));
     });
 
+    if (me.role === 'owner') return;
     var foot = h('div', { class: 'std-foot' });
-    if (me.role === 'owner') {
-      var crew = App.people(['rep', 'tech']), read = crew.filter(App.hasRead).length;
-      foot.appendChild(h('p', { class: 'muted' }, crew.length
-        ? read + ' of ' + crew.length + ' have read these.'
-        : 'Nobody else is on the team yet. Add your people from the menu at the top left.'));
-      foot.appendChild(ui.button('Edit standards', { icon: 'edit', block: true, onTap: function () { App.act('editStandards'); } }));
-    } else if (App.needsStandards()) {
+    if (App.needsStandards()) {
       var error = h('p', { class: 'form-error', role: 'alert', hidden: true });
       if (me.standardsAckAt > 0 && s.standardsUpdatedAt) {
         foot.appendChild(h('p', { class: 'warn strong' }, 'Updated ' + fmt.date(s.standardsUpdatedAt) + '. Read them again and confirm.'));
       }
+      /* No toast on success: the button turns into the green "You confirmed these" line in the same spot, and a toast would sit on it. */
       foot.appendChild(ui.button('I have read these', { kind: 'primary', block: true, onTap: function (e, btn) {
-        ui.save(btn, 'ackStandards', {}, { errorEl: error }).then(function (res) { if (res.ok) App.toast('Thanks. That is saved.'); });
+        ui.save(btn, 'ackStandards', {}, { errorEl: error });
       } }));
       foot.appendChild(error);
     } else {
@@ -1905,14 +2081,18 @@ var App = (function () {
 
   /* ================= the Me sheet and Change PIN ================= */
 
+  /* The line at the foot of the account sheet. It only says "Up to date" while refreshes are working:
+     under the no-connection strip it says when the data is from instead. */
   function upToDateText() {
     if (App.mode === 'sample') return 'Sample data, saved on this phone only.';
-    return state.okAt ? 'Up to date as of ' + fmt.clock(state.okAt) + '.' : 'Waiting for a connection.';
+    var at = savedAt();
+    if (!at) return 'Waiting for a connection.';
+    return state.fails >= 2 ? 'Last updated ' + at + '.' : 'Up to date as of ' + at + '.';
   }
 
   function openChangePin() {
     var cur = ui.field({ label: 'Current PIN', name: 'pin-now', type: 'password', inputmode: 'numeric', maxlength: 6 });
-    var next = ui.field({ label: 'New PIN', name: 'pin-new', type: 'password', inputmode: 'numeric', maxlength: 6, hint: '4 to 6 digits. Pick one only you know.' });
+    var next = ui.field({ label: 'New PIN', name: 'pin-new', type: 'password', inputmode: 'numeric', maxlength: 6, hint: '6 digits. Pick one only you know.' });
     var again = ui.field({ label: 'New PIN again', name: 'pin-again', type: 'password', inputmode: 'numeric', maxlength: 6 });
     App.sheet.open({
       title: 'Change PIN',
@@ -1920,12 +2100,13 @@ var App = (function () {
       footer: { label: 'Save new PIN', onTap: function (sh) {
         var a = cur.val(), b = next.val(), c = again.val();
         if (!a) { cur.setError('Type the PIN you use now.'); sh.reveal(cur); return; }
-        if (!/^\d{4,6}$/.test(b)) { next.setError('A PIN is 4 to 6 digits.'); sh.reveal(next); return; }
+        if (!PIN_RE.test(b)) { next.setError('A PIN is 6 digits.'); sh.reveal(next); return; }
         if (b !== c) { again.setError('The two new PINs do not match.'); sh.reveal(again); return; }
+        /* A PIN that is too easy to guess is refused by the system, in its own words, by the button. */
         sh.send('changePin', { oldPin: a, newPin: b }).then(function (res) {
           if (!res.ok) return;
           sh.close();
-          App.toast('Your PIN is changed.');
+          App.toast('Your PIN is changed. Your other phones were signed out.');
         });
       } }
     });
@@ -1940,6 +2121,7 @@ var App = (function () {
       if (!yes) return;
       var me = App.me(), person = null;
       RidgelineSample.PEOPLE.forEach(function (p) { if (me && p.name === me.name && p.role === me.role) person = p; });
+      if (App.data) emit('signout', { chosen: true });      /* whoever is signed in is about to stop existing */
       forget();
       startSample(true);
       if (!person) {
@@ -1961,6 +2143,7 @@ var App = (function () {
 
   function openMe() {
     var liveLine = h('p', null, upToDateText());
+    meLine = liveLine;          /* drawStrip keeps it in step with the strip */
     App.live(liveLine, function () { liveLine.textContent = upToDateText(); });
     App.sheet.open({
       title: 'Your account',
@@ -1984,7 +2167,7 @@ var App = (function () {
         }
         list.appendChild(ui.row({ icon: 'shirt', title: 'Uniforms', right: ui.pill('Coming soon', 'mute'), cls: 'is-off' }));
         if (App.mode === 'sample') list.appendChild(ui.row({ icon: 'reset', title: 'Reset sample data', chevron: false, onTap: resetSample }));
-        list.appendChild(ui.row({ icon: 'signout', title: 'Sign out', chevron: false, onTap: function () { signOut(); } }));
+        list.appendChild(ui.row({ icon: 'signout', title: 'Sign out', chevron: false, onTap: askSignOut }));
         el.appendChild(list);
 
         el.appendChild(h('div', { class: 'me-foot' }, h('p', null, 'Ridgeline Wash Co. A higher standard of clean.'), liveLine));
@@ -1993,6 +2176,15 @@ var App = (function () {
   }
 
   /* ================= start ================= */
+
+  /* Another tab on this phone signed out, or someone else signed in there. This tab follows at once (it
+     starts again and picks up whoever is signed in now), so it can never go on showing one person's data,
+     or save it over the next person's. */
+  function onOtherTab(e) {
+    if (e.key !== null && e.key !== storage.prefix + 'token') return;
+    if (state.signingIn || storage.get('token') === state.token) return;
+    try { location.reload(); } catch (err) { /* stays as it is */ }
+  }
 
   /* The logo is on the page twice and each copy carries the same gradient id: give each its own. */
   function fixLogoIds() {
@@ -2019,6 +2211,7 @@ var App = (function () {
     els.bell.addEventListener('click', function () { App.act('openNotices'); });
 
     pickMode();
+    if (stopped) { showStopped(); return; }      /* config.js missing or wrong: say so, and never fall back to sample data */
     var fresh = App.mode === 'sample' ? startSample(false) : false;
 
     if (window.visualViewport) {
@@ -2026,6 +2219,8 @@ var App = (function () {
       window.visualViewport.addEventListener('scroll', fitLayers);
       fitLayers();
     }
+    window.addEventListener('resize', placeToasts);
+    window.addEventListener('storage', onOtherTab);
     window.addEventListener('popstate', onPopState);
     window.addEventListener('hashchange', function () { if (state.inApp && readHash() !== App.route) show(readHash()); });
     window.addEventListener('online', syncNow);
@@ -2038,11 +2233,17 @@ var App = (function () {
     });
 
     state.token = storage.get('token');
-    var snap = storage.json('snap');
+    var snap = storage.json('snap'), who = storage.get('who');
     if (state.token && fresh) {
       /* The sample starts over each day (or after its saved copy is lost), so yesterday's sign-in no longer exists. */
       forget();
       snap = null;
+    }
+    /* The saved copy is only used when it belongs to the person who signed in last on this phone. Anyone
+       else's (or one kept before that was recorded) is dropped, and the app loads fresh instead. */
+    if (snap && (!snap.me || !who || String(snap.me.id) !== who)) {
+      snap = null;
+      storage.del('snap');
     }
     if (state.token && snap && snap.me && Array.isArray(snap.jobs) && snap.settings) {
       App.data = snap;

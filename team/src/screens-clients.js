@@ -2,14 +2,18 @@
  * Ridgeline Wash Co. team app: the Clients screen (#clients) and everything that opens from it.
  *
  * The list: search (name, phone, address), status filters with counts, one row per client.
- * The Client sheet: quick actions, details, payment (status and link), notes, jobs and "Book a
- *   visit"; for the owner also "Edit details" (which is also where a client is handed to another
- *   rep), "Status" and "Delete client"; for a rep "Edit contact details". A rep only ever holds
- *   their own clients, so that is all they see.
+ * The Client sheet: quick actions, details with "Edit details" beside them (for a rep "Edit
+ *   contact details"; for the owner it is also where a client is handed to another rep), payment
+ *   (status and link, with where the link really goes), notes, jobs and "Book an appointment";
+ *   for the owner also "Status" and "Remove client". A rep only ever holds their own clients, so
+ *   that is all they see.
  *
  * Entry points for other screens:
- *   App.actions.openClient(id)         open the Client sheet
- *   App.actions.bookVisit(clientId)    open "Book a visit" for a client
+ *   App.actions.openClient(id)         open the Client sheet. openClient({ id: id, show: 'jobs' })
+ *                                      opens it at its Jobs, where "Book an appointment" is.
+ *   App.actions.bookVisit(clientId)    open "Book an appointment" for a client
+ *   App.needsAppointment(client)       true for a New or Active monthly client with no job booked
+ *                                      from today on (the Dashboard lists them; so does the sheet)
  */
 (function () {
   'use strict';
@@ -20,7 +24,10 @@
   var PAY = [{ value: 'unpaid', label: 'Not paid yet' }, { value: 'paid', label: 'Paid' }, { value: 'late', label: 'Late' }];
   var PAY_SAVED = { unpaid: 'Marked as not paid yet.', paid: 'Marked as paid.', late: 'Marked as late.' };
   var OTHER = '__other__';
-  var LINK_OK = /^https:\/\/[^\s<>"'`]+$/i;      /* the same rule the system saves by */
+  /* What this page checks before it sends a link or shows one as a link. The system has the last word on a
+     link it is asked to save (it also refuses look-alikes), and its own words are shown when it says no. */
+  var LINK_OK = /^https:\/\/[^\s<>"'`]+$/i;
+  var PRICE_HELP = 'Enter the price in dollars, like 150 or 150.50.';
 
   /* View state. It lives here because render runs again every time the data changes. */
   var query = '', filter = '', viewer = null;
@@ -41,14 +48,6 @@
     return x < y ? -1 : x > y ? 1 : 0;
   }
   function newestFirst(a, b) { return a.date > b.date ? -1 : a.date < b.date ? 1 : a.time > b.time ? -1 : a.time < b.time ? 1 : 0; }
-  /* One visit in a client's own list: the same row as App.ui.jobRow, but led by what was done, not the client's name again. */
-  function visitRow(job) {
-    return ui.row({
-      lead: h('span', { class: 'row-time' }, h('small', null, fmt.day(job.date)), fmt.time(job.time)),
-      title: job.what || 'Visit', right: ui.jobPill(job), chevron: false,
-      onTap: function () { ui.openJob(job.id); }
-    });
-  }
   /* A rep's name. For the rep a client belongs to now, it also says when they have left the team. */
   function repName(memberId, current) {
     var m = App.member(memberId);
@@ -65,6 +64,25 @@
     var list = App.data.sales.filter(function (s) { return s.clientId === id && !s.jobId; })
       .sort(function (a, b) { return (a.soldAt || 0) - (b.soldAt || 0); });
     return list[0] || null;
+  }
+  /* The newest sale to this client: the one their service and price come from. */
+  function newestSale(id) {
+    var list = App.data.sales.filter(function (s) { return s.clientId === id; })
+      .sort(function (a, b) { return ((b.soldAt || 0) - (a.soldAt || 0)) || (a.day < b.day ? 1 : a.day > b.day ? -1 : 0); });
+    return list[0] || null;
+  }
+  /* A monthly client who is still with us (New or Active) and has nothing booked from today on. */
+  function needsAppointment(c) {
+    if (!c || !App.data || c.billing !== 'monthly' || (c.status !== 'New' && c.status !== 'Active')) return false;
+    var today = App.today();
+    return !App.data.jobs.some(function (j) { return j.clientId === c.id && j.status === 'scheduled' && j.date >= today; });
+  }
+  /* Where a link really goes: the host the phone would open, whatever the words in front of it say. '' when it is not a link. */
+  function hostOf(link) {
+    try {
+      var u = new URL(String(link || ''));
+      return u.protocol === 'https:' && u.hostname ? u.hostname : '';
+    } catch (e) { return ''; }
   }
 
   function matches(c, q) {
@@ -171,28 +189,24 @@
   function openClient(arg) {
     var id = idOf(arg), first = App.client(id);
     if (!first) return gone();
+    var show = arg && typeof arg === 'object' ? arg.show : null;
     var owner = App.role() === 'owner', sheet = null, deleting = false;
 
-    /* The parts that are redrawn when the data changes. The note box is never touched, so nothing typed is lost. */
+    /* The parts that are redrawn when the data changes. */
     var top = h('div', { class: 'stack-md' }), details = h('div', { class: 'kvs' }), pay = h('div', { class: 'stack-md' });
     var notesEl = h('div'), jobsEl = h('div', { class: 'stack-md' }), manage = h('div', { class: 'stack' });
 
-    var noteBox = ui.field({ name: 'client-note', type: 'textarea', rows: 3, maxlength: LIMITS.text, placeholder: 'What should the team know about this client?' });
-    noteBox.input.setAttribute('aria-label', 'New note');
-    var noteErr = h('p', { class: 'form-error', role: 'alert', hidden: true });
-    var noteBtn = ui.button('Add note', { icon: 'note', small: true, onTap: function () {
-      var text = noteBox.val();
-      if (!text) { noteBox.setError('Write the note first.'); return; }
-      var fields = { kind: 'client', id: id, text: text };
-      ui.save(noteBtn, 'addNote', fields, { errorEl: noteErr }).then(function (res) {
-        if (!res.ok) return;
-        noteBox.input.value = '';
-        App.toast('Note saved.');
-      });
-    } });
+    /* "Edit details" sits with the details it changes, on the line of their label. */
+    var detailsHead = h('div', { class: 'sec-head' }, ui.label('Details'),
+      ui.button(owner ? 'Edit details' : 'Edit contact details', { kind: 'text', small: true, onTap: function () {
+        openEdit(id, function () { if (sheet) sheet.reveal(detailsHead); });
+      } }));
+    var jobsLabel = ui.label('Jobs');
+    /* Notes are added the same way everywhere: the small Add note sheet. */
+    var noteBtn = ui.button('Add note', { icon: 'note', small: true, block: true, onTap: function () { ui.addNote('client', id); } });
 
     var delErr = h('p', { class: 'form-error', role: 'alert', hidden: true });
-    var delBtn = ui.button('Delete client', { kind: 'danger', block: true, onTap: removeClient });
+    var delBtn = ui.button('Remove client', { kind: 'danger', block: true, onTap: removeClient });
 
     /* One tap: the control flips at once, and goes back with a red message if the save fails. */
     function quick(patch, savedText, opId) {
@@ -225,16 +239,16 @@
       if (sales) parts.push(fmt.plural(sales, 'sale'));
       if (jobs) parts.push(fmt.plural(jobs, 'job'));
       App.confirm({
-        title: 'Delete this client?',
+        title: 'Remove this client?',
         text: c.name + ' will be removed for good. ' +
           (parts.length ? 'This also removes their ' + parts.join(' and ') + '.' : 'Their sales and jobs are removed too.'),
-        yes: 'Delete client', no: 'Keep client', danger: true
+        yes: 'Remove client', no: 'Keep client', danger: true
       }).then(function (yes) {
         if (!yes) return;
         deleting = true;
         ui.save(delBtn, 'deleteClient', { clientId: id }, { errorEl: delErr }).then(function (res) {
           if (res.skipped) return;
-          if (res.ok) { sheet.close(); App.toast('Client deleted.'); return; }
+          if (res.ok) { sheet.close(); App.toast('Client removed.'); return; }
           deleting = false;
           if (!App.client(id)) sheet.close();
         });
@@ -266,11 +280,11 @@
       details.appendChild(ui.kv('Service and price', serviceLine(c)));
       if (c.startDate) details.appendChild(ui.kv('Start date', fmt.day(c.startDate)));
       if (seller) details.appendChild(ui.kv('Sold by', seller));
-      if (c.repId && c.repId !== sellerId) details.appendChild(ui.kv('Looked after by', repName(c.repId, true)));
+      if (c.repId && c.repId !== sellerId) details.appendChild(ui.kv('Their rep', repName(c.repId, true)));
     }
 
     function drawPay(c) {
-      var link = c.stripeLink || '', safe = LINK_OK.test(link);
+      var link = c.stripeLink || '', host = LINK_OK.test(link) ? hostOf(link) : '';
       clear(pay);
       if (owner) {
         pay.appendChild(ui.segmented({ label: 'Payment status', options: PAY, value: c.payStatus || 'unpaid',
@@ -283,11 +297,18 @@
         if (owner) pay.appendChild(ui.button('Add payment link', { icon: 'plus', small: true, onTap: function () { openLink(id); } }));
         return;
       }
-      /* Only ever a real link when it starts with https://. Anything else is shown as plain words. */
+      /* Only ever a real link when it starts with https:// and the phone can tell where it goes. Anything else is plain words. */
       pay.appendChild(h('div', { class: 'callout' }, h('p', { class: 'small' }, link)));
-      if (!safe) pay.appendChild(h('p', { class: 'hint' }, 'This link does not start with https://, so it cannot be opened from here.'));
+      if (host) {
+        /* The words of a link can be dressed up to look like another site. This is where it really goes. */
+        pay.appendChild(h('p', { class: 'pay-goes' }, 'Opens ', h('b', { class: 'pay-host' }, host)));
+      } else {
+        pay.appendChild(h('p', { class: 'hint' }, /^https:\/\//i.test(link)
+          ? 'This does not look like a whole link, so it cannot be opened from here.'
+          : 'This link does not start with https://, so it cannot be opened from here.'));
+      }
       pay.appendChild(h('div', { class: 'btn-row' },
-        safe ? ui.button('Open', { icon: 'external', small: true, href: link, newTab: true }) : null,
+        host ? ui.button('Open', { icon: 'external', small: true, href: link, newTab: true }) : null,
         ui.button('Copy', { icon: 'copy', small: true, onTap: function () {
           copyText(link).then(function (ok) {
             if (ok) App.toast('Payment link copied.');
@@ -302,24 +323,26 @@
       notesEl.appendChild((c.notes || []).length ? ui.notes(c.notes) : h('p', { class: 'muted' }, 'No notes yet.'));
     }
 
-    function drawJobs() {
-      var jobs = jobsOf(id), waiting = waitingSale(id);
+    /* What to do next comes first (the reason, then the button), the history under it. */
+    function drawJobs(c) {
+      var jobs = jobsOf(id), waiting = waitingSale(id), due = !waiting && needsAppointment(c);
       clear(jobsEl);
+      if (waiting) jobsEl.appendChild(h('p', { class: 'warn small strong' }, 'The sale from ' + fmt.day(waiting.day) + ' has no appointment yet.'));
+      else if (due) jobsEl.appendChild(h('p', { class: 'warn small strong' }, 'This monthly client has no next appointment.'));
+      jobsEl.appendChild(ui.button('Book an appointment', { icon: 'calendar', block: true, small: !(waiting || due),
+        kind: waiting || due ? 'primary' : 'quiet', onTap: function () { bookVisit(id); } }));
       if (jobs.length) {
         var list = h('div', { class: 'list' });
-        jobs.forEach(function (job) { list.appendChild(visitRow(job)); });
+        /* The shared job row, led by what was done: the client's name is already the title of this sheet. */
+        jobs.forEach(function (job) { list.appendChild(ui.jobRow(job, { showDate: true, title: job.what || 'Job', sub: [] })); });
         jobsEl.appendChild(list);
       } else {
-        jobsEl.appendChild(h('p', { class: 'muted' }, 'No visits yet.'));
+        jobsEl.appendChild(h('p', { class: 'muted' }, 'No jobs yet.'));
       }
-      if (waiting) jobsEl.appendChild(h('p', { class: 'warn small strong' }, 'The sale from ' + fmt.day(waiting.day) + ' has no appointment yet.'));
-      jobsEl.appendChild(ui.button('Book a visit', { icon: 'calendar', block: true, kind: waiting ? 'primary' : 'quiet', onTap: function () { bookVisit(id); } }));
     }
 
     function drawManage(c) {
       clear(manage);
-      manage.appendChild(h('div', { class: 'list' },
-        ui.row({ icon: 'edit', title: owner ? 'Edit details' : 'Edit contact details', onTap: function () { openEdit(id); } })));
       if (!owner) return;
       var monthly = hasMonthlyPlan(id);
       manage.appendChild(h('div', { class: 'field' },
@@ -335,15 +358,15 @@
     function draw() {
       var c = App.client(id);
       if (!c) return;
-      drawTop(c); drawDetails(c); drawPay(c); drawNotes(c); drawJobs(); drawManage(c);
+      drawTop(c); drawDetails(c); drawPay(c); drawNotes(c); drawJobs(c); drawManage(c);
     }
 
     sheet = App.sheet.open({
       title: first.name,
       body: function (el) {
-        [top, ui.label('Details'), details, ui.label('Payment'), pay, ui.label('Notes'), noteBox, noteBtn, noteErr, notesEl,
-          ui.label('Jobs'), jobsEl, ui.label(owner ? 'Manage this client' : 'Change this client'), manage
-        ].forEach(function (part) { el.appendChild(part); });
+        var parts = [top, detailsHead, details, ui.label('Payment'), pay, ui.label('Notes'), noteBtn, notesEl, jobsLabel, jobsEl];
+        if (owner) parts.push(ui.label('Manage this client'), manage);
+        parts.forEach(function (part) { el.appendChild(part); });
         draw();
       },
       update: function (sh) {
@@ -354,6 +377,7 @@
         draw();
       }
     });
+    if (show === 'jobs') sheet.reveal(jobsLabel);
     return sheet;
   }
 
@@ -392,39 +416,67 @@
 
   /* ---------- edit details (owner: everything; rep: contact details) ---------- */
 
-  function openEdit(id) {
+  function openEdit(id, onSaved) {
     var c = App.client(id);
     if (!c) return gone();
     var owner = App.role() === 'owner';
 
-    var name = ui.field({ label: 'Customer or business name', name: 'c-name', value: c.name, maxlength: LIMITS.name, autocapitalize: 'words' });
+    var name = ui.field({ label: 'Name (person or business)', name: 'c-name', value: c.name, maxlength: LIMITS.name, autocapitalize: 'words' });
     var contact = ui.field({ label: 'Contact name', name: 'c-contact', value: c.contact, optional: true, maxlength: LIMITS.name, autocapitalize: 'words' });
     var phone = ui.field({ label: 'Phone', name: 'c-phone', type: 'tel', value: c.phone, maxlength: 30 });
     var email = ui.field({ label: 'Email', name: 'c-email', type: 'email', value: c.email, optional: true, maxlength: 120 });
     var address = ui.field({ label: 'Address', name: 'c-address', value: c.address, maxlength: LIMITS.line, autocapitalize: 'words' });
-    var service, other, price, often, start, rep;
+    var service, other, price, often, start, rep, saleNote;
+
+    /* What the form opened with. Only what the person changed is sent, so a change someone else
+       saved in the meantime (a rep fixing the phone number, a sale being fixed) is never put back. */
+    var was = { name: c.name || '', contact: c.contact || '', phone: c.phone || '', email: c.email || '', address: c.address || '' };
 
     if (owner) {
+      was.service = c.service || '';
+      was.priceCents = c.priceCents || 0;
+      was.billing = c.billing === 'monthly' ? 'monthly' : 'once';
+      was.startDate = c.startDate || '';
+
       var names = (App.data.settings.services || []).map(function (s) { return s.name; });
       var options = names.map(function (n) { return { value: n, label: n }; });
       if (c.service && names.indexOf(c.service) < 0) options.unshift({ value: c.service, label: c.service });
       options.push({ value: OTHER, label: 'Other' });
-      other = ui.field({ label: 'Service name', name: 'c-service-other', maxlength: 60 });
+      other = ui.field({ label: 'Service name', name: 'c-service-other', maxlength: 60, onInput: paintSaleNote });
       other.hidden = true;
       service = ui.field({ label: 'Service', name: 'c-service', type: 'select', options: options, value: c.service || options[0].value,
-        onInput: function (v) { other.hidden = v !== OTHER; } });
-      price = ui.field({ label: 'Price', name: 'c-price', inputmode: 'decimal', prefix: '$', value: ((c.priceCents || 0) / 100).toFixed(2), maxlength: 12 });
-      often = ui.segmented({ label: 'How often', value: c.billing === 'monthly' ? 'monthly' : 'once',
+        onInput: function (v) { other.hidden = v !== OTHER; paintSaleNote(); } });
+      price = ui.field({ label: 'Price', name: 'c-price', inputmode: 'decimal', prefix: '$', value: ((c.priceCents || 0) / 100).toFixed(2), maxlength: 12,
+        onInput: paintSaleNote });
+      often = ui.segmented({ label: 'How often', value: was.billing, onChange: paintSaleNote,
         options: [{ value: 'once', label: 'One-time' }, { value: 'monthly', label: 'Monthly' }] });
       start = ui.field({ label: 'Start date', name: 'c-start', type: 'date', value: c.startDate || '' });
+
+      /* Changing these here changes the client, not a sale. Say so the moment one of them is changed, and
+         offer the way to the sale itself (the newest one: it is where this service and price came from). */
+      var sale = newestSale(id), toSale = null;
+      if (sale && App.actions.openSale) {
+        toSale = ui.button('Open the sale', { kind: 'text', small: true, onTap: function () { App.act('openSale', sale.id); } });
+        toSale.classList.add('callout-btn');
+      }
+      saleNote = h('div', { class: 'callout', hidden: true },
+        h('p', { class: 'small' }, 'This changes what the client pays from now on. To fix a sale that was entered wrong, open the sale.'),
+        toSale);
 
       /* A client can be looked after by any sales rep or owner who is on the team. */
       var me = App.me(), people = [{ value: me.id, label: me.name + ' (you)' }].concat(App.people(['rep', 'owner']).filter(function (m) {
         return m.id !== me.id;
       }).sort(byName).map(function (m) { return { value: m.id, label: m.name }; }));
       if (c.repId && !people.some(function (o) { return o.value === c.repId; })) people.unshift({ value: c.repId, label: repName(c.repId, true) });
-      rep = ui.field({ label: 'Looked after by', name: 'c-rep', type: 'select', options: people, value: c.repId || me.id,
-        hint: 'This person sees the client and books their visits. Sales already made stay with whoever made them.' });
+      rep = ui.field({ name: 'c-rep', type: 'select', options: people, value: c.repId || me.id,
+        hint: 'This person sees the client and books their appointments. Sales already made stay with whoever made them.' });
+      rep.input.setAttribute('aria-label', 'Their rep');
+    }
+
+    function typedService() { return service.input.value === OTHER ? other.val() : service.input.value; }
+    function paintSaleNote() {
+      if (!saleNote) return;
+      saleNote.hidden = typedService() === was.service && fmt.toCents(price.val()) === was.priceCents && often.get() === was.billing;
     }
 
     return App.sheet.open({
@@ -433,44 +485,45 @@
         var parts = [name, contact, phone, email, address];
         if (owner) {
           parts = [ui.label('Contact details')].concat(parts, [ui.label('What they buy'), service, other, price,
-            h('div', { class: 'field' }, h('span', { class: 'field-label' }, 'How often'), often), start, ui.label('Their rep'), rep]);
+            h('div', { class: 'field' }, h('span', { class: 'field-label' }, 'How often'), often), saleNote, start, ui.label('Their rep'), rep]);
         }
         parts.forEach(function (part) { el.appendChild(part); });
       },
       footer: { label: 'Save', onTap: function (sh) {
         var bad = [];
         function fail(field, message) { field.setError(message); bad.push(field); }
-        var patch = { name: name.val(), contact: contact.val(), phone: phone.val(), email: email.val(), address: address.val() };
-        if (!patch.name) fail(name, 'Add the customer or business name.');
-        if (patch.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(patch.email)) fail(email, 'That email address does not look right.');
+        var typed = { name: name.val(), contact: contact.val(), phone: phone.val(), email: email.val(), address: address.val() };
+        if (!typed.name) fail(name, 'Add the name.');
+        if (typed.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(typed.email)) fail(email, 'That email address does not look right.');
         if (owner) {
-          patch.service = service.input.value === OTHER ? other.val() : service.input.value;
-          if (!patch.service) fail(service.input.value === OTHER ? other : service, 'Type the name of the service.');
-          patch.priceCents = fmt.toCents(price.val());
-          if (patch.priceCents == null) fail(price, 'Enter the price, like 150 or 150.00.');
-          else if (patch.priceCents > LIMITS.maxCents) fail(price, 'That price is too high.');
-          patch.billing = often.get();
-          patch.startDate = start.val();
-          if (!D.isDay(patch.startDate)) fail(start, 'Pick the start date.');
-          if (rep.input.value && rep.input.value !== c.repId) patch.repId = rep.input.value;     /* only when it is handed to someone new */
+          typed.service = typedService();
+          if (!typed.service) fail(service.input.value === OTHER ? other : service, 'Type the name of the service.');
+          typed.priceCents = fmt.toCents(price.val());
+          if (typed.priceCents == null) fail(price, PRICE_HELP);
+          else if (typed.priceCents > LIMITS.maxCents) fail(price, 'That price is too high.');
+          typed.billing = often.get();
+          typed.startDate = start.val();
+          if (!D.isDay(typed.startDate)) fail(start, 'Pick the start date.');
         }
         if (bad.length) { sh.reveal(bad[0]); return; }
 
-        var now = App.client(id) || c, changed = false, k;
-        for (k in patch) if (patch[k] !== (now[k] == null ? '' : now[k])) changed = true;
-        if (!changed) { sh.close(); return; }
+        var patch = {}, any = false, k;
+        for (k in typed) if (typed[k] !== was[k]) { patch[k] = typed[k]; any = true; }
+        if (owner && rep.input.value && rep.input.value !== c.repId) { patch.repId = rep.input.value; any = true; }   /* only when it is handed to someone new */
+        if (!any) { sh.close(); return; }
 
         var fields = { clientId: id, patch: patch };
         sh.send('updateClient', fields).then(function (res) {
           if (!res.ok) return;
           sh.close();
           App.toast(patch.repId ? 'Saved. ' + App.nameOf(patch.repId, 'Their new rep') + ' looks after this client now.' : 'Saved.');
+          if (onSaved) onSaved();
         });
       } }
     });
   }
 
-  /* ---------- book a visit ---------- */
+  /* ---------- book an appointment ---------- */
 
   function bookVisit(arg) {
     var id = idOf(arg), c = App.client(id), picker = null;
@@ -481,9 +534,9 @@
     function label(v) { return v ? 'Book ' + fmt.when(v.date, v.time) : 'Pick a day and a time'; }
 
     var sheet = App.sheet.open({
-      title: 'Book a visit',
+      title: 'Book an appointment',
       body: function (el, sh) {
-        el.appendChild(h('p', { class: 'muted' }, 'A new visit for ', h('b', { class: 'strong' }, c.name), '.'));
+        el.appendChild(h('p', { class: 'muted' }, 'A new appointment for ', h('b', { class: 'strong' }, c.name), '.'));
         el.appendChild(what);
         el.appendChild(ui.label('When'));
         picker = ui.slotPicker({
@@ -500,7 +553,7 @@
         sh.send('bookJob', fields).then(function (res) {
           if (res.ok) {
             sh.close();
-            App.toast('Booked ' + fmt.when(v.date, v.time) + '.');
+            App.toast('Booked for ' + fmt.when(v.date, v.time) + '.');
           } else if (res.error.code === 'slot_taken' || res.error.code === 'slot_closed') {
             sh.error('');
             picker.set(null);
@@ -519,4 +572,7 @@
   App.screen('clients', { roles: ['owner', 'rep'], title: 'Clients', render: render });
   App.actions.openClient = openClient;
   App.actions.bookVisit = bookVisit;
+  App.needsAppointment = needsAppointment;
+  /* Signing out: the next person on this phone starts with an empty search. */
+  App.on('signout', function () { query = ''; filter = ''; viewer = null; });
 })();

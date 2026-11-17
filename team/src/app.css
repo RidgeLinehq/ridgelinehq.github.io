@@ -8,6 +8,10 @@
  *   CARDS, LISTS AND ROWS, LABEL-VALUE ROWS, STAT BLOCKS, PILLS, BUTTONS, FIELDS, CHIPS,
  *   SEGMENTED, SWITCH, CALLOUT, EMPTY STATE, SHEETS, DIALOG, TOASTS, MONTH GRID, SLOT PICKER,
  *   JOB CARD, NOTES, COMPANY STANDARDS, ME SHEET
+ *
+ * Text colors: --ink for what people read, --ink-2 for everything quieter that still has to be read
+ * (hints, placeholders, the small print on a sheet). --ink-3 is only for things that are off: a blocked
+ * day, a disabled control, a decorative mark. It is too faint to read outdoors on slate or inside an input.
  */
 
 /* ---------- TOKENS ---------- */
@@ -19,7 +23,7 @@
   --line: #2E4152;                    /* hairlines, borders */
   --ink: #F5F8FA;                     /* Off White: text */
   --ink-2: #A9B8C6;                   /* secondary text */
-  --ink-3: #7C8D9C;                   /* hints, disabled, blocked days */
+  --ink-3: #7C8D9C;                   /* disabled, blocked days, faint marks (hints that must be read use --ink-2) */
   --ice: #67D4F5;                     /* Ice Blue: THE accent. Primary buttons, active tab, links, labels */
   --ice-ink: #0C1822;                 /* text on an ice button */
   --ice-wash: rgba(103, 212, 245, .12);
@@ -89,6 +93,8 @@ img, svg { display: block; max-width: 100%; }
   font: 700 14px/1 var(--display); letter-spacing: .02em; flex: none;
 }
 .avatar-lg { width: 56px; height: 56px; font-size: 18px; }
+/* .avatar-none: the empty circle on the "Nobody" row, so it lines up with the names (App.ui.nobodyRow). */
+.avatar-none { background: none; border-style: dashed; color: var(--ink-2); }
 button.avatar:active { opacity: .7; }
 
 /* .iconbtn: a round 44px button that holds one icon (bell, close, month arrows). */
@@ -134,6 +140,11 @@ button.avatar:active { opacity: .7; }
 .signin-body { display: flex; flex-direction: column; gap: 24px; }
 .signin-form { display: flex; flex-direction: column; gap: 16px; }
 .signin-title { font: 800 22px/1.15 var(--display); }
+/* .sample-next: the one line for the owner at the foot of the sample card on sign-in. */
+.sample-next { padding-top: 12px; border-top: 1px solid var(--line); }
+/* .stop: the plain message shown instead of sign-in when the page cannot start (config.js missing or wrong). */
+.stop { display: flex; flex-direction: column; gap: 20px; }
+.stop-text { font: 600 18px/1.4 var(--body); }
 
 /* ---------- TYPE ---------- */
 /* .title: the screen title. .lead: the quiet line that goes with it. .head wraps the two. */
@@ -149,6 +160,8 @@ button.avatar:active { opacity: .7; }
 .card-title { font: 700 18px/1.25 var(--display); overflow-wrap: anywhere; }
 /* Small text helpers. */
 .muted { color: var(--ink-2); } .hint { color: var(--ink-3); font-size: 14px; } .small { font-size: 14px; }
+/* On a sheet (slate) the small print is --ink-2: the fainter color is too hard to read there outdoors. */
+.sheet .hint, .sheet .field-opt, .sheet .month-dow span, .sheet .label-mute { color: var(--ink-2); }
 .good { color: var(--good); } .warn { color: var(--warn); } .bad { color: var(--bad); } .ice { color: var(--ice); }
 .strong { font-weight: 600; }
 /* .num: numbers that line up (money, times, counts). .big-num: a big stat number. */
@@ -190,8 +203,14 @@ button.row:active { opacity: .7; }
 .row-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .row-title { font-weight: 600; overflow-wrap: anywhere; }
 .row-sub { font-size: 14px; color: var(--ink-2); overflow-wrap: anywhere; }
-/* .row-clip: keep each line of the row to one line, cut with an ellipsis (compact job rows). */
+/* .row-clip: keep each line of the row to one line, cut with an ellipsis (a settings row with a long value). Never on a job row. */
 .row-clip .row-title, .row-clip .row-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* .row-job: the compact job row (App.ui.jobRow). Nothing is cut off: the time sits level with the name, the name
+   wraps beside the status pill (.row-head keeps the pill top right), and the lines under it run the full width. */
+.row-job { align-items: flex-start; padding: 12px 0; }
+.row-job .row-time { padding-top: 2px; }
+.row-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.row-head-text { min-width: 0; overflow-wrap: anywhere; }
 .row-right { flex: none; display: flex; align-items: center; gap: 8px; color: var(--ink-2); text-align: right; font-variant-numeric: tabular-nums; }
 .row-right-col { flex-direction: column; align-items: flex-end; gap: 2px; }
 .row-chev { flex: none; color: var(--ink-3); }
@@ -225,9 +244,10 @@ button.row:active { opacity: .7; }
   .stats .stat:first-child { padding-left: 14px; }
   .stats .stat-num { font-size: 20px; }
 }
-/* .stat-grid: plain stat blocks in two columns, no boxes (the Dashboard numbers). */
-.stat-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 16px; }
-.stat-grid .stat { padding: 0 0 0 12px; border-left: 2px solid var(--line); }
+/* .stat-grid: plain stat blocks in two columns, no boxes and no rails (the Dashboard numbers). Every row is the
+   same height, so a label that wraps does not make its row taller than the others. */
+.stat-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-auto-rows: 1fr; gap: 20px 16px; }
+.stat-grid .stat { padding: 0; border-left: 0; }
 
 /* ---------- PILLS ---------- */
 /* .pill: a state, always with a word. Tones: -good (done, paid, active), -warn (scheduled, not paid, paused),
@@ -280,13 +300,13 @@ button.pill:active { opacity: .7; }
   background: var(--raised); color: var(--ink); border: 1px solid var(--line); border-radius: var(--r-ctl);
   font: 400 16px/1.3 var(--body); -webkit-appearance: none; appearance: none; outline: none; min-width: 0;
 }
-.input::placeholder { color: var(--ink-3); opacity: 1; }
+.input::placeholder { color: var(--ink-2); opacity: 1; }
 .input:focus { border-color: var(--ice); box-shadow: 0 0 0 1px var(--ice); }
-textarea.input { height: auto; min-height: 104px; padding: 12px 14px; line-height: 1.45; resize: vertical; }
+textarea.input { height: auto; min-height: 104px; padding: 12px 14px; line-height: 1.45; resize: none; }
 select.input { padding-right: 40px; text-overflow: ellipsis; }
 .field.has-error .input { border-color: var(--bad); box-shadow: 0 0 0 1px var(--bad); }
 .field-error { color: var(--bad); font-size: 14px; }
-.field-hint { color: var(--ink-3); font-size: 14px; }
+.field-hint { color: var(--ink-2); font-size: 14px; }
 /* .input-wrap: a control with something inside it: a "$" in front (.input-prefix) or a select arrow (.input-arrow). */
 .input-wrap { position: relative; display: block; }
 .input-prefix { position: absolute; left: 14px; top: 0; height: var(--tap); display: flex; align-items: center; color: var(--ink-2); pointer-events: none; }
@@ -294,7 +314,7 @@ select.input { padding-right: 40px; text-overflow: ellipsis; }
 .input-arrow { position: absolute; right: 12px; top: 0; height: var(--tap); display: flex; align-items: center; color: var(--ink-2); pointer-events: none; }
 /* .search: a search box with the icon inside. */
 .search { position: relative; }
-.search .ico { position: absolute; left: 14px; top: 16px; color: var(--ink-3); pointer-events: none; }
+.search .ico { position: absolute; left: 14px; top: 16px; color: var(--ink-2); pointer-events: none; }
 .search .input { padding-left: 44px; }
 
 /* ---------- CHIPS ---------- */
@@ -387,15 +407,17 @@ select.input { padding-right: 40px; text-overflow: ellipsis; }
 .dialog-title { font: 700 18px/1.25 var(--display); }
 .dialog-text { color: var(--ink-2); }
 .dialog .cols-2 { margin-top: 10px; }
+.dialog .cols-2 .btn { padding-left: 8px; padding-right: 8px; }   /* two answers side by side: room for "Stay signed in" on the narrowest phone */
 
 /* ---------- TOASTS ---------- */
 /* .toast: a short message just above the tab bar (App.toast). .toast-bad is the red one, usually with Retry.
-   While a sheet is open, app.js lifts .toasts clear of it: above a short sheet, or just above a tall sheet's footer. */
+   While a sheet is open, app.js moves .toasts to the top: just under the sheet's header, or just above a short sheet.
+   .toast-btn (Undo, Retry) is a full 44px tap target. */
 .toasts { position: fixed; z-index: 80; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 0 12px; pointer-events: none; }
-.toast { pointer-events: auto; max-width: 100%; width: max-content; min-height: 48px; display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; background: var(--ink); color: var(--ice-ink); border-radius: var(--r-ctl); font-weight: 600; font-size: 14px; line-height: 1.35; }
-.toast-text { padding: 6px 8px 6px 0; overflow-wrap: anywhere; }
+.toast { pointer-events: auto; max-width: 100%; width: max-content; min-height: 48px; display: flex; align-items: center; gap: 8px; padding: 2px 2px 2px 16px; background: var(--ink); color: var(--ice-ink); border-radius: var(--r-ctl); font-weight: 600; font-size: 14px; line-height: 1.35; }
+.toast-text { padding: 10px 14px 10px 0; overflow-wrap: anywhere; }
 .toast-bad { background: var(--bad); }
-.toast-btn { flex: none; height: 36px; padding: 0 12px; border-radius: 8px; background: var(--ice-ink); color: var(--ink); font-weight: 700; font-size: 14px; }
+.toast-btn { flex: none; height: 44px; padding: 0 14px; border-radius: 10px; background: var(--ice-ink); color: var(--ink); font-weight: 700; font-size: 14px; }
 .toast-btn:active { opacity: .7; }
 
 /* ---------- MONTH GRID ---------- */
@@ -439,7 +461,7 @@ button.day:not([disabled]):active { opacity: .7; }
 .slotpick-day { font-weight: 600; }
 
 /* ---------- JOB CARD ---------- */
-/* .job: one visit (App.ui.jobCard). .is-overdue tints it red, .is-done makes it quiet. */
+/* .job: one job (App.ui.jobCard). .is-overdue tints it red, .is-done makes it quiet. */
 .job { gap: 10px; }
 .job-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .job-time { font: 700 18px/1.2 var(--display); font-variant-numeric: tabular-nums; }
@@ -497,13 +519,15 @@ button.day:not([disabled]):active { opacity: .7; }
 .std-item > span:last-child { min-width: 0; overflow-wrap: anywhere; }
 .std-mark { flex: none; width: 24px; display: flex; justify-content: center; color: var(--ice); padding-top: 3px; }
 .std-num { flex: none; width: 24px; text-align: center; font: 800 16px/1.55 var(--display); color: var(--ice); font-variant-numeric: tabular-nums; }
+/* .std-owner: the owner's part under the title: how many have read them, and the way in to edit. */
+.std-owner { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
 .std-foot { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; padding-top: 20px; border-top: 1px solid var(--line); }
 .std-ok { display: flex; align-items: center; gap: 8px; color: var(--good); font-weight: 600; }
 
 /* ---------- ME SHEET ---------- */
 .me-head { display: flex; align-items: center; gap: 14px; }
 .me-name { font: 700 20px/1.2 var(--display); overflow-wrap: anywhere; }
-.me-foot { display: flex; flex-direction: column; gap: 2px; color: var(--ink-3); font-size: 14px; }
+.me-foot { display: flex; flex-direction: column; gap: 2px; color: var(--ink-2); font-size: 14px; }
 
 /* ---------- MOTION ---------- */
 @media (prefers-reduced-motion: reduce) {

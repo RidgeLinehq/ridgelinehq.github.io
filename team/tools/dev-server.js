@@ -7,7 +7,7 @@
  *   node tools/dev-server.js [port]          default port 8787
  *
  * It starts with three people and the next 14 days open:
- *   Grayson (owner) PIN 1234     Mason (sales rep) PIN 2222     Cole (tech) PIN 3333
+ *   Grayson (owner) PIN 482913     Mason (sales rep) PIN 271845     Cole (tech) PIN 906132
  *
  * POST /   body: the request as JSON text (the page sends it as text/plain)  ->  the core's answer as JSON
  * GET  /   -> { ok: true, service: 'ridgeline-wash-team', version }   (same as opening the real link)
@@ -31,9 +31,9 @@ const DEFAULT_PORT = 8787;
 const MAX_BODY = 5 * 1024 * 1024;
 const MAX_DELAY = 60000;
 const PEOPLE = [
-  { name: 'Grayson', role: 'owner', pin: '1234' },
-  { name: 'Mason', role: 'rep', pin: '2222' },
-  { name: 'Cole', role: 'tech', pin: '3333' }
+  { name: 'Grayson', role: 'owner', pin: '482913' },
+  { name: 'Mason', role: 'rep', pin: '271845' },
+  { name: 'Cole', role: 'tech', pin: '906132' }
 ];
 const OPEN_DAYS = 14;
 

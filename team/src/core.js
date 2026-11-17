@@ -33,7 +33,7 @@ var RidgelineCore = (function () {
   var COLLECTIONS = ['team', 'sessions', 'settings', 'days', 'clients', 'sales', 'jobs', 'notices', 'problems'];
   var LIMITS = {
     name: 60, line: 160, text: 500, notesKept: 50, noticesKept: 60, problemsKept: 30,
-    maxCents: 100000000, sessionDays: 90, loginTries: 5, lockSeconds: 900, globalTries: 40,
+    maxCents: 100000000, sessionDays: 90, loginTries: 5, lockSeconds: 900,
     longTries: 20, longSeconds: 21600,   /* 20 wrong PINs inside 6 hours (the longest the cache remembers) pause that person */
     retrySeconds: 21600,                 /* how long a saved action is remembered by its opId */
     docChars: 45000,                     /* the most one record may take as JSON; a cell of the sheet holds 50,000 */
@@ -291,7 +291,36 @@ var RidgelineCore = (function () {
     return s;
   }
 
-  function pinOk(v) { return typeof v === 'string' && /^\d{4,6}$/.test(v); }
+  /* A PIN is exactly 6 digits. */
+  function pinOk(v) { return typeof v === 'string' && /^\d{6}$/.test(v); }
+
+  /* The PINs a stranger would try first: one digit six times (000000), a straight run up or
+     down (123456, 654321, and the ones that pass through 0 such as 567890), and the same pair or
+     the same three digits repeated (121212, 123123). */
+  function pinWeak(pin) {
+    if (/^(\d\d)\1\1$/.test(pin) || /^(\d{3})\1$/.test(pin)) return true;
+    var up = true, down = true;
+    for (var i = 1; i < pin.length; i++) {
+      var step = (pin.charCodeAt(i) - pin.charCodeAt(i - 1) + 10) % 10;
+      if (step !== 1) up = false;
+      if (step !== 9) down = false;
+    }
+    return up || down;
+  }
+
+  /* What is wrong with a PIN somebody wants to use, in words for them; '' when it is fine. */
+  function pinProblem(v) {
+    if (!pinOk(v)) return 'A PIN is 6 digits.';
+    if (pinWeak(v)) return 'Pick a PIN that is harder to guess.';
+    return '';
+  }
+
+  /* A PIN somebody picked, checked. */
+  function chosenPin(v) {
+    var pin = str(v), problem = pinProblem(pin);
+    if (problem) throw new AppError('invalid', problem);
+    return pin;
+  }
 
   /* One record is one cell of the Google Sheet, and a cell holds 50,000 characters. Whatever can
      make a record longer checks it here first, before anything is saved, and says what to shorten. */
@@ -346,9 +375,13 @@ var RidgelineCore = (function () {
     }
 
     function hashPin(salt, pin) { return sha256(salt + ':' + pin); }
+    /* A PIN the system makes: 6 digits, never one of the weak ones. */
     function randomPin() {
-      var n = parseInt(sha256(env.uuid() + ':' + env.now()).slice(0, 8), 16) % 10000;
-      return ('0000' + n).slice(-4);
+      for (var i = 0; ; i++) {
+        var n = parseInt(sha256(env.uuid() + ':' + env.now() + ':' + i).slice(0, 12), 16) % 1000000;
+        var pin = ('000000' + n).slice(-6);
+        if (!pinWeak(pin)) return pin;
+      }
     }
 
     function trimOldest(coll, keep, field) {
@@ -411,21 +444,30 @@ var RidgelineCore = (function () {
     }
 
     /*
-     * Wrong PINs are counted per person in two ways, whether they are typed at sign-in or as the
+     * Wrong PINs are counted per person, and only per person. There is no count for the whole
+     * team: a stranger must never be able to lock everybody out by guessing. And nothing at all is
+     * counted or stored for a name that is not on the team, or for a PIN that is not 6 digits.
+     *
+     * A person's wrong PINs are counted in two ways, whether they are typed at sign-in or as the
      * "current PIN" when changing a PIN:
      *   fail:<id>    5 quick ones lock that person for 15 minutes (the count lapses 15 minutes
      *                after the last wrong try, and a right PIN clears it);
      *   fail6h:<id>  "count:when the first one was", kept for 6 hours from the first wrong try.
      *                20 inside that window pause the person until the window runs out, and the
      *                owner is told once. This is what stops four quiet guesses every 15 minutes.
-     *                A right PIN does not clear it; only time or the owner resetting the PIN does.
+     *                A right PIN at sign-in does not clear it; only time, the owner resetting
+     *                the PIN, or the person changing their own PIN does.
      */
     function pinLocked(m) {
+      /* An owner cannot ask the owner. What works for them is the wait, or the reset in the setup guide. */
+      var owner = m.role === 'owner';
       if ((parseInt(store.cacheGet('fail6h:' + m.id), 10) || 0) >= LIMITS.longTries) {
-        throw new AppError('locked', 'Too many wrong tries. This sign-in is paused for a few hours. Ask the owner to reset your PIN.');
+        throw new AppError('locked', 'Too many wrong tries. This sign-in is paused for a few hours. ' +
+          (owner ? 'To get in sooner, follow "Forgot your PIN?" in the setup guide.' : 'Ask the owner to reset your PIN.'));
       }
       if ((parseInt(store.cacheGet('fail:' + m.id), 10) || 0) >= LIMITS.loginTries) {
-        throw new AppError('locked', 'Too many wrong tries. Wait 15 minutes, or ask the owner to reset your PIN.');
+        throw new AppError('locked', 'Too many wrong tries. Wait 15 minutes' +
+          (owner ? ' and try again.' : ', or ask the owner to reset your PIN.'));
       }
     }
 
@@ -437,7 +479,9 @@ var RidgelineCore = (function () {
       if (left < 1) { n = 1; since = env.now(); left = LIMITS.longSeconds; }
       store.cachePut(key, n + ':' + since, left);
       if (n === LIMITS.longTries) {
-        tellOwner('signin', 'Someone tried the wrong PIN for ' + m.name + ' ' + n + ' times. Their sign-in is paused for a few hours. Reset their PIN if that was not them.');
+        tellOwner('signin', 'Someone tried the wrong PIN for ' + m.name + ' ' + n + ' times. ' + (m.role === 'owner'
+          ? 'Sign-in under that name is paused for a few hours. Phones that are already signed in keep working. To sign in sooner, follow "Forgot your PIN?" in the setup guide.'
+          : 'Their sign-in is paused for a few hours. Reset their PIN if that was not them.'));
         store.setRev(store.getRev() + 1);
       }
     }
@@ -450,17 +494,14 @@ var RidgelineCore = (function () {
     function login(req) {
       var name = normName(req.name), pin = str(req.pin);
       var wrong = new AppError('auth', 'That name and PIN do not match. Check both and try again.');
-      if ((parseInt(store.cacheGet('fail:all'), 10) || 0) >= LIMITS.globalTries) {
-        throw new AppError('locked', 'Sign-in is paused for a few minutes. Try again shortly.');
-      }
-      if (!name || !pinOk(pin)) { bumpFail('fail:all'); throw wrong; }
+      if (!name || !pinOk(pin)) throw wrong;
       var active = all('team').filter(function (m) { return m.active; });
       var hits = active.filter(function (m) { return normName(m.name) === name; });
       if (!hits.length) hits = active.filter(function (m) { return normName(m.name).split(' ')[0] === name; });
-      if (hits.length !== 1) { bumpFail('fail:all'); throw wrong; }
+      if (hits.length !== 1) throw wrong;   /* nobody by that name (or a removed person): nothing is counted */
       var m = hits[0];
       pinLocked(m);
-      if (hashPin(m.salt, pin) !== m.pinHash) { wrongPin(m); bumpFail('fail:all'); throw wrong; }
+      if (hashPin(m.salt, pin) !== m.pinHash) { wrongPin(m); throw wrong; }
       store.cacheDel('fail:' + m.id);
       /* A sign-in older than 90 days is already refused; this is where it is cleared away. */
       all('sessions').filter(function (s) { return env.now() - s.createdAt > LIMITS.sessionDays * 86400000; })
@@ -647,6 +688,28 @@ var RidgelineCore = (function () {
       });
     }
 
+    /* Who a sale can belong to: a sales rep or an owner who is on the team. */
+    function needSeller(id) {
+      var m = find('team', id);
+      if (!m || !m.active || m.role === 'tech') throw new AppError('invalid', 'Pick a sales rep or an owner who is on the team.');
+      return m;
+    }
+
+    /* The commission rates a sale is saved with. An owner's own sales earn no commission; a
+       rep's sale takes the rates in Settings on the day it is saved. */
+    function ratesFor(seller, settings) {
+      return seller.role === 'owner' ? { firstPct: 0, monthlyPct: 0 } : { firstPct: settings.firstPct, monthlyPct: settings.monthlyPct };
+    }
+
+    /* The client's newest sale (the last one entered wins a tie), or null when they have none. */
+    function newestSale(clientId) {
+      var newest = null;
+      all('sales').forEach(function (s) {
+        if (s.clientId === clientId && (!newest || s.soldAt >= newest.soldAt)) newest = s;
+      });
+      return newest;
+    }
+
     /* ---------- actions (who may call each, and what it does) ---------- */
 
     var ACTIONS = {
@@ -672,8 +735,7 @@ var RidgelineCore = (function () {
           if (roleChanged && !canDoJobs(cur)) takeOffJobs(cur.id);   /* now a sales rep: the same as leaving, as far as jobs go */
           return { id: cur.id };
         }
-        if (m.pin != null && m.pin !== '' && !pinOk(str(m.pin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
-        var pin = m.pin ? str(m.pin) : randomPin(), salt = String(env.uuid());
+        var pin = m.pin != null && m.pin !== '' ? chosenPin(m.pin) : randomPin(), salt = String(env.uuid());
         var doc = { id: newId('m'), name: name, role: m.role, salt: salt, pinHash: hashPin(salt, pin), active: true, createdAt: env.now() };
         fits(doc, 'That name is too long to save. Shorten it and try again.');
         put('team', doc);
@@ -695,8 +757,7 @@ var RidgelineCore = (function () {
         var m = find('team', req.id);
         if (!m || !m.active) throw new AppError('not_found', 'That person is no longer on the team.');
         if (m.id === me.id) throw new AppError('invalid', 'Use Change PIN for your own PIN.');
-        if (req.pin != null && req.pin !== '' && !pinOk(str(req.pin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
-        var pin = req.pin ? str(req.pin) : randomPin();
+        var pin = req.pin != null && req.pin !== '' ? chosenPin(req.pin) : randomPin();
         m.salt = String(env.uuid()); m.pinHash = hashPin(m.salt, pin);
         put('team', m);
         dropSessions(m.id);
@@ -711,11 +772,11 @@ var RidgelineCore = (function () {
         if (!m) throw new AppError('auth', 'Please sign in again.');
         pinLocked(m);
         if (hashPin(m.salt, str(req.oldPin)) !== m.pinHash) { wrongPin(m); throw new AppError('invalid', 'Your current PIN is not right.'); }
-        if (!pinOk(str(req.newPin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
-        m.salt = String(env.uuid()); m.pinHash = hashPin(m.salt, str(req.newPin));
+        var newPin = chosenPin(req.newPin);
+        m.salt = String(env.uuid()); m.pinHash = hashPin(m.salt, newPin);
         put('team', m);
         dropSessions(m.id, me.sess);
-        store.cacheDel('fail:' + m.id);
+        clearPinFails(m.id);   /* a new PIN starts with a clean count, like one the owner reset */
         return {};
       } },
 
@@ -802,12 +863,8 @@ var RidgelineCore = (function () {
           billing = req.billing;
         }
         var notes = para(req.notes, LIMITS.text);
-        var repId = me.id;
-        if (me.role === 'owner' && req.repId) {
-          var r = find('team', req.repId);
-          if (!r || !r.active || r.role === 'tech') throw new AppError('invalid', 'Pick a sales rep who is on the team.');
-          repId = r.id;
-        }
+        var seller = me.role === 'owner' && req.repId ? needSeller(req.repId) : me, repId = seller.id;
+        var rates = ratesFor(seller, settings);
         var client, isNew = !req.clientId;
         if (isNew) {
           var c = req.client || {};
@@ -828,7 +885,7 @@ var RidgelineCore = (function () {
 
         var sale = {
           id: newId('s'), clientId: client.id, repId: repId, service: service, priceCents: price, billing: billing,
-          notes: notes, soldAt: now, day: day, firstPct: settings.firstPct, monthlyPct: settings.monthlyPct, jobId: null
+          notes: notes, soldAt: now, day: day, firstPct: rates.firstPct, monthlyPct: rates.monthlyPct, jobId: null
         };
         var job = null;
         if (appt) {
@@ -858,7 +915,43 @@ var RidgelineCore = (function () {
               (job && !job.assignedTo ? '\nNobody is assigned to this job yet.' : ''));
         }
         return { clientId: client.id, saleId: sale.id, jobId: job ? job.id : null,
-          commissionCents: share(price, settings.firstPct) };
+          commissionCents: share(price, rates.firstPct) };
+      } },
+
+      /*
+       * Fixes a sale that was entered wrong: the price, the name of the service, or who made it.
+       * Commission, totals and the leaderboard follow by themselves, because they are worked out
+       * from the sale every time. patch may hold any of: priceCents, service, repId.
+       *   - A new seller has to be a sales rep or an owner who is on the team. The sale then takes
+       *     the rates that seller would get today: none for an owner, the ones in Settings for a
+       *     rep. A patch that names the seller the sale already has changes nothing.
+       *   - If this is the client's newest sale, the client's service and price follow the fix.
+       *   - One-time or monthly cannot be changed here. For that, remove the sale and enter it again.
+       */
+      updateSale: { roles: ['owner'], run: function (me, req) {
+        var sale = find('sales', req.saleId), p = req.patch && typeof req.patch === 'object' ? req.patch : {};
+        if (!sale) throw new AppError('not_found', 'That sale is no longer here.');
+        if (p.billing !== undefined && p.billing !== sale.billing) {
+          throw new AppError('invalid', 'One-time or monthly cannot be changed on a sale. Remove the sale and enter it again.');
+        }
+        var client = find('clients', sale.clientId), newest = newestSale(sale.clientId);
+        var follows = !!client && !!newest && newest.id === sale.id, clientChanged = false;
+        if (p.priceCents !== undefined) {
+          sale.priceCents = cents(p.priceCents, 'Enter the price.');
+          if (follows && client.priceCents !== sale.priceCents) { client.priceCents = sale.priceCents; clientChanged = true; }
+        }
+        if (p.service !== undefined) {
+          sale.service = line(p.service, 60, true, 'Pick what was sold.');
+          if (follows && client.service !== sale.service) { client.service = sale.service; clientChanged = true; }
+        }
+        if (p.repId !== undefined && p.repId !== sale.repId) {
+          var seller = needSeller(p.repId), rates = ratesFor(seller, getSettings());
+          sale.repId = seller.id; sale.firstPct = rates.firstPct; sale.monthlyPct = rates.monthlyPct;
+        }
+        fits(sale, 'There is no room to save more on this sale. Shorten the service name, then try again.');
+        if (clientChanged) { fits(client, CLIENT_FULL); put('clients', client); }
+        put('sales', sale);
+        return { saleId: sale.id, clientId: sale.clientId };
       } },
 
       /* Book a visit for a client who is already in the system. */
@@ -985,11 +1078,7 @@ var RidgelineCore = (function () {
             if (CLIENT_STATUSES.indexOf(p.status) < 0) throw new AppError('invalid', 'That is not a client status.');
             setStatus(next, p.status);
           }
-          if (p.repId !== undefined) {
-            var rep = find('team', p.repId);
-            if (!rep || !rep.active || rep.role === 'tech') throw new AppError('invalid', 'Pick a sales rep who is on the team.');
-            next.repId = rep.id;
-          }
+          if (p.repId !== undefined) next.repId = needSeller(p.repId).id;
         }
         fits(next, CLIENT_FULL);
         put('clients', next);
@@ -1110,7 +1199,9 @@ var RidgelineCore = (function () {
       var owner = all('team').filter(function (m) { return m.active && m.role === 'owner'; })[0];
       if (!find('settings', 'main')) put('settings', clone(DEFAULT_SETTINGS));
       if (owner) return { created: false, name: owner.name };
-      var pin = pinOk(String(opts.pin || '')) ? String(opts.pin) : randomPin(), salt = String(env.uuid());
+      /* The host may name the first PIN (the sample data and the dev server do). One that is not
+         6 digits, or is easy to guess, is not used: the owner gets one made for them instead. */
+      var pin = pinProblem(str(opts.pin)) ? randomPin() : str(opts.pin), salt = String(env.uuid());
       var name = line(opts.name, 40) || 'Owner';
       put('team', { id: newId('m'), name: name, role: 'owner', salt: salt, pinHash: hashPin(salt, pin), active: true, createdAt: env.now() });
       store.setRev(store.getRev() + 1);
@@ -1127,7 +1218,6 @@ var RidgelineCore = (function () {
       put('team', owner);
       dropSessions(owner.id);
       clearPinFails(owner.id);
-      store.cacheDel('fail:all');
       store.setRev(store.getRev() + 1);
       return { name: owner.name, pin: pin };
     }
@@ -1181,6 +1271,9 @@ var RidgelineCore = (function () {
     COLLECTIONS: COLLECTIONS, LIMITS: LIMITS, DEFAULT_SETTINGS: DEFAULT_SETTINGS,
     create: create, memoryStore: memoryStore, sha256: sha256,
     calc: { commissionEvents: commissionEvents, sumEvents: sumEvents, statusOn: statusOn },
+    /* The same checks the actions make, for a form that wants to say so before it sends.
+       Each gives '' when the value is fine, or the words to show. */
+    check: { pin: pinProblem },
     dates: { isDay: isDay, isHM: isHM, addDays: addDays, addMonths: addMonths, weekday: weekday, weekStart: weekStart, monthStart: monthStart, daysInMonth: daysInMonth }
   };
 })();

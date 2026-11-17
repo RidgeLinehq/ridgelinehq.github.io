@@ -77,7 +77,7 @@ const MIN = 60000, HOUR = 3600000, DAY = 86400000;
 const CODES = ['auth', 'locked', 'forbidden', 'invalid', 'not_found', 'slot_taken', 'slot_closed', 'busy', 'server'];
 const SLOTS = ['08:00', '09:30', '12:00', '14:00'];
 const ACTIONS = ['sync', 'logout', 'changePin', 'ackStandards', 'addNote', 'createSale', 'bookJob', 'moveJob', 'updateClient',
-  'setJobDone', 'updateJob', 'deleteClient', 'deleteSale', 'saveMember', 'removeMember', 'resetPin', 'saveSettings',
+  'setJobDone', 'updateJob', 'deleteClient', 'deleteSale', 'updateSale', 'saveMember', 'removeMember', 'resetPin', 'saveSettings',
   'setDays', 'readNotices', 'clearProblems'];
 
 /* ---------- a world: one store, one core, a clock we control, and a cast of people ---------- */
@@ -159,11 +159,11 @@ function world(opts) {
   };
   if (opts.bare) return w;
 
-  const boot = w.core.bootstrap({ name: 'Grayson', pin: '1234' });
-  ok(boot.created && boot.pin === '1234', 'bootstrap did not make the owner');
-  w.login('owner', 'Grayson', '1234');
+  const boot = w.core.bootstrap({ name: 'Grayson', pin: '482913' });
+  ok(boot.created && boot.pin === '482913', 'bootstrap did not make the owner');
+  w.login('owner', 'Grayson', '482913');
   w.ids.owner = w.full('owner').me.id;
-  [['mason', 'Mason Reed', 'rep', '2222'], ['jake', 'Jake Miller', 'rep', '4444'], ['cole', 'Cole', 'tech', '3333'], ['tess', 'Tess Hart', 'tech', '5555']]
+  [['mason', 'Mason Reed', 'rep', '271845'], ['jake', 'Jake Miller', 'rep', '604417'], ['cole', 'Cole', 'tech', '906132'], ['tess', 'Tess Hart', 'tech', '358206']]
     .forEach((p) => {
       const r = w.must('owner', 'saveMember', { member: { name: p[1], role: p[2], pin: p[3] } });
       ok(r.result.pin === p[3], 'saveMember did not hand back the PIN');
@@ -197,6 +197,9 @@ function seeded(opts) {
   w.must('tess', 'addNote', { kind: 'job', id: b.jobId, text: 'bravo-secret-job-note' });
   return w;
 }
+
+/* The name and PIN each of the cast signs in with. */
+const PINS = { owner: ['Grayson', '482913'], mason: ['Mason Reed', '271845'], jake: ['Jake Miller', '604417'], cole: ['Cole', '906132'], tess: ['Tess Hart', '358206'] };
 
 function byId(list, id) { return list.filter((x) => x.id === id)[0] || null; }
 function liveAt(w, date, time) { return w.db().jobs.filter((j) => j.status !== 'cancelled' && j.date === date && j.time === time).length; }
@@ -386,7 +389,7 @@ section('sign-in');
 
 test('signing in answers with a token and that person\'s first full snapshot', () => {
   const w = world();
-  const r = w.tryLogin('Mason Reed', '2222');
+  const r = w.tryLogin('Mason Reed', '271845');
   eq([Object.keys(r).sort().join(), Object.keys(r.result).join(), typeof r.result.token], ['ok,result,sync', 'token', 'string']);
   ok(r.result.token.length >= 32 && r.result.token.length <= 200 && r.result.token !== w.tokens.mason, 'each sign-in gets its own long token');
   eq([r.sync.same, r.sync.me.id, r.sync.me.role, r.sync.today, r.sync.rev], [false, w.ids.mason, 'rep', '2026-11-17', w.rev()]);
@@ -395,16 +398,16 @@ test('signing in answers with a token and that person\'s first full snapshot', (
 
 test('name matching ignores case and extra spaces, and a first name is enough when it is unique', () => {
   const w = world();
-  ['Grayson', 'grayson', 'GRAYSON', '  Grayson  ', '\tgrayson\n'].forEach((n) => ok(w.tryLogin(n, '1234').ok, 'could not sign in as ' + JSON.stringify(n)));
-  ['Mason Reed', 'mason reed', 'MASON   REED', ' mason  reed ', 'mason', 'Mason'].forEach((n) => ok(w.tryLogin(n, '2222').ok, 'could not sign in as ' + JSON.stringify(n)));
-  ok(w.tryLogin('tess', '5555').ok && w.tryLogin('Cole', '3333').ok);
-  ok(w.tryLogin('grayson', 1234).ok, 'a PIN sent as a number still works');
+  ['Grayson', 'grayson', 'GRAYSON', '  Grayson  ', '\tgrayson\n'].forEach((n) => ok(w.tryLogin(n, '482913').ok, 'could not sign in as ' + JSON.stringify(n)));
+  ['Mason Reed', 'mason reed', 'MASON   REED', ' mason  reed ', 'mason', 'Mason'].forEach((n) => ok(w.tryLogin(n, '271845').ok, 'could not sign in as ' + JSON.stringify(n)));
+  ok(w.tryLogin('tess', '358206').ok && w.tryLogin('Cole', '906132').ok);
+  ok(w.tryLogin('grayson', 482913).ok, 'a PIN sent as a number still works');
 });
 
 test('a wrong name, a last name alone or part of a name does not sign in', () => {
   const w = world();
   ['Reed', 'Mas', 'Mason R', 'Mason Reed Jr', 'masonreed', '', '   ', null, undefined, 'nobody'].forEach((n) => {
-    const r = w.tryLogin(n, '2222');
+    const r = w.tryLogin(n, '271845');
     ok(!r.ok && r.error.code === 'auth', JSON.stringify(n) + ' should not sign in');
     ok(!r.sync && !r.result, 'a failed sign-in must not carry data');
   });
@@ -412,25 +415,25 @@ test('a wrong name, a last name alone or part of a name does not sign in', () =>
 
 test('two people with the same first name must use their full names', () => {
   const w = world();
-  w.must('owner', 'saveMember', { member: { name: 'Jake Smith', role: 'rep', pin: '7777' } });
-  eq(w.tryLogin('jake', '4444').error.code, 'auth'); eq(w.tryLogin('jake', '7777').error.code, 'auth');
-  ok(w.tryLogin('jake miller', '4444').ok && w.tryLogin('Jake Smith', '7777').ok);
-  eq(w.tryLogin('jake miller', '7777').error.code, 'auth', 'the other Jake\'s PIN must not open this one');
+  w.must('owner', 'saveMember', { member: { name: 'Jake Smith', role: 'rep', pin: '774169' } });
+  eq(w.tryLogin('jake', '604417').error.code, 'auth'); eq(w.tryLogin('jake', '774169').error.code, 'auth');
+  ok(w.tryLogin('jake miller', '604417').ok && w.tryLogin('Jake Smith', '774169').ok);
+  eq(w.tryLogin('jake miller', '774169').error.code, 'auth', 'the other Jake\'s PIN must not open this one');
 });
 
 test('someone whose whole name is one word wins over someone it is the first name of', () => {
   const w = world();
-  w.must('owner', 'saveMember', { member: { name: 'Cole Younger', role: 'tech', pin: '8888' } });
-  const r = w.tryLogin('cole', '3333');
+  w.must('owner', 'saveMember', { member: { name: 'Cole Younger', role: 'tech', pin: '885203' } });
+  const r = w.tryLogin('cole', '906132');
   ok(r.ok && r.sync.me.id === w.ids.cole);
-  eq(w.tryLogin('cole', '8888').error.code, 'auth');
-  ok(w.tryLogin('cole younger', '8888').ok);
+  eq(w.tryLogin('cole', '885203').error.code, 'auth');
+  ok(w.tryLogin('cole younger', '885203').ok);
 });
 
 test('a wrong PIN or a PIN of the wrong shape is refused with the same words', () => {
   const w = world();
-  const words = w.tryLogin('nobody', '1234').error.message;
-  ['0000', '123', '1234567', '12a4', '', ' 1234', '1234 ', null, undefined, [], {}, true, 12345678].forEach((p) => {
+  const words = w.tryLogin('nobody', '482913').error.message;
+  ['000000', '0000', '1234', '4829', '48291', '4829133', '48291a', '', ' 482913', '482913 ', '482 913', null, undefined, [], {}, true, 12345678].forEach((p) => {
     const r = w.tryLogin('Grayson', p);
     ok(!r.ok && r.error.code === 'auth', 'PIN ' + JSON.stringify(p) + ' should be refused');
     eq(r.error.message, words, 'a wrong PIN and an unknown name must read the same');
@@ -439,38 +442,104 @@ test('a wrong PIN or a PIN of the wrong shape is refused with the same words', (
 
 test('five wrong PINs lock that person, even for the right PIN, and 15 minutes later it lets go', () => {
   const w = world();
-  for (let i = 1; i <= 5; i++) eq(w.tryLogin(i % 2 ? 'mason' : 'Mason Reed', '0000').error.code, 'auth', 'try ' + i);
-  eq(w.tryLogin('mason', '2222').error.code, 'locked', 'right PIN while locked');
-  eq(w.tryLogin('mason', '0000').error.code, 'locked');
-  ok(w.tryLogin('jake miller', '4444').ok, 'other people are not locked');
+  for (let i = 1; i <= 5; i++) eq(w.tryLogin(i % 2 ? 'mason' : 'Mason Reed', '000000').error.code, 'auth', 'try ' + i);
+  eq(w.tryLogin('mason', '271845').error.code, 'locked', 'right PIN while locked');
+  eq(w.tryLogin('mason', '000000').error.code, 'locked');
+  ok(w.tryLogin('jake miller', '604417').ok, 'other people are not locked');
   w.wait(14 * MIN);
-  eq(w.tryLogin('Mason Reed', '2222').error.code, 'locked', 'still locked after 14 minutes');
+  eq(w.tryLogin('Mason Reed', '271845').error.code, 'locked', 'still locked after 14 minutes');
   w.wait(MIN + 1000);
-  ok(w.tryLogin('mason', '2222').ok, 'free again after 15 minutes');
+  ok(w.tryLogin('mason', '271845').ok, 'free again after 15 minutes');
 });
 
 test('four wrong PINs then the right one clears the count', () => {
   const w = world();
-  for (let i = 0; i < 4; i++) w.tryLogin('mason', '0000');
-  ok(w.tryLogin('mason', '2222').ok);
-  for (let i = 0; i < 4; i++) eq(w.tryLogin('mason', '0000').error.code, 'auth');
-  ok(w.tryLogin('mason', '2222').ok, 'the earlier four must not count any more');
+  for (let i = 0; i < 4; i++) w.tryLogin('mason', '000000');
+  ok(w.tryLogin('mason', '271845').ok);
+  for (let i = 0; i < 4; i++) eq(w.tryLogin('mason', '000000').error.code, 'auth');
+  ok(w.tryLogin('mason', '271845').ok, 'the earlier four must not count any more');
 });
 
 test('a lock does not sign anyone out who is already in', () => {
   const w = world();
-  for (let i = 0; i < 6; i++) w.tryLogin('mason', '0000');
+  for (let i = 0; i < 6; i++) w.tryLogin('mason', '000000');
   ok(w.call('mason', 'sync').ok);
 });
 
-test('forty wrong tries pause sign-in for everybody, then it lets go after 15 minutes', () => {
+const PAUSED_NOTICE = 'Someone tried the wrong PIN for Mason Reed 20 times. Their sign-in is paused for a few hours. Reset their PIN if that was not them.';
+
+/* Counts every write a request makes to the store's cache and to its data, so a test can say "this stored nothing". */
+function watchStore(w) {
+  const seen = { cache: [], data: 0 }, s = w.store, real = { cachePut: s.cachePut, cacheDel: s.cacheDel, put: s.put, del: s.del, setRev: s.setRev };
+  s.cachePut = (k, v, ttl) => { seen.cache.push(k); real.cachePut(k, v, ttl); };
+  s.cacheDel = (k) => { seen.cache.push(k); real.cacheDel(k); };
+  s.put = (c, d) => { seen.data++; real.put(c, d); };
+  s.del = (c, id) => { seen.data++; real.del(c, id); };
+  s.setRev = (n) => { seen.data++; real.setRev(n); };
+  seen.stop = () => Object.assign(s, real);
+  return seen;
+}
+
+test('there is no lock for the whole team: hundreds of wrong tries by strangers pause nobody', () => {
   const w = world();
-  for (let i = 1; i <= 40; i++) eq(w.tryLogin('stranger ' + i, '1111').error.code, 'auth', 'try ' + i);
-  eq(w.tryLogin('Grayson', '1234').error.code, 'locked', 'the 41st try, with the right PIN');
-  eq(w.tryLogin('stranger', '1111').error.code, 'locked');
-  ok(w.call('owner', 'sync').ok, 'people already signed in keep working');
-  w.wait(15 * MIN + 1000);
-  ok(w.tryLogin('Grayson', '1234').ok);
+  for (let i = 1; i <= 300; i++) {
+    eq(w.tryLogin('stranger ' + i, '135790').error.code, 'auth', 'made-up name, try ' + i);
+    eq(w.tryLogin(i % 2 ? 'Grayson' : 'mason', String(1000 + i)).error.code, 'auth', 'a real name with a PIN of the wrong shape, try ' + i);
+  }
+  /* Four wrong PINs each for three real people on top: 612 wrong tries in all, well past the old limit of 40. */
+  ['Grayson', 'mason', 'cole'].forEach((n) => { for (let i = 0; i < 4; i++) eq(w.tryLogin(n, '000000').error.code, 'auth'); });
+  Object.keys(PINS).forEach((k) => ok(w.tryLogin(PINS[k][0], PINS[k][1]).ok, PINS[k][0] + ' could not sign in with the right PIN'));
+  eq(w.db().notices, []);
+});
+
+test('a wrong name, or a PIN that is not 6 digits, stores nothing at all: no counter is made or bumped', () => {
+  const w = world();
+  w.must('owner', 'saveMember', { member: { name: 'Jake Smith', role: 'rep', pin: '774169' } });
+  w.must('owner', 'removeMember', { id: w.ids.tess });
+  const before = JSON.stringify(w.store.dump()), seen = watchStore(w);
+  /* nobody by that name; a last name alone; a first name two people share; someone who was removed; no name at all */
+  ['nobody', 'stranger', 'Reed', 'jake', 'Tess Hart', 'tess', '', '   ', null, undefined, 'Grayson Wash', '__proto__', 'constructor'].forEach((n) => {
+    for (let i = 0; i < 30; i++) eq(w.tryLogin(n, i % 2 ? '358206' : '000000').error.code, 'auth', 'name ' + JSON.stringify(n));
+  });
+  ['Grayson', 'mason', 'cole'].forEach((n) => ['1234', '0000', '48291', '4829133', '', 'abcdef', null].forEach((p) => {
+    for (let i = 0; i < 10; i++) eq(w.tryLogin(n, p).error.code, 'auth');
+  }));
+  eq(seen.cache, [], 'a counter was stored for a wrong name or a malformed PIN');
+  eq(seen.data, 0);
+  eq(JSON.stringify(w.store.dump()), before);
+  /* The watch itself works: one wrong 6 digit PIN for a real person is counted, for that person only. */
+  eq(w.tryLogin('mason', '000000').error.code, 'auth');
+  eq(seen.cache.sort(), ['fail6h:' + w.ids.mason, 'fail:' + w.ids.mason]);
+  seen.stop();
+  ok(w.tryLogin('Grayson', '482913').ok && w.tryLogin('cole', '906132').ok && w.tryLogin('jake miller', '604417').ok, 'and nobody was locked by any of it');
+});
+
+test('the lock says what that person can do about it: an owner is not told to ask the owner', () => {
+  const w = world();
+  for (let i = 0; i < 5; i++) { w.tryLogin('mason', '000000'); w.tryLogin('Grayson', '000000'); }
+  eq(w.tryLogin('mason', '271845').error.message, 'Too many wrong tries. Wait 15 minutes, or ask the owner to reset your PIN.');
+  eq(w.tryLogin('Grayson', '482913').error.message, 'Too many wrong tries. Wait 15 minutes and try again.');
+  slowGuesses(w, 5, () => { w.tryLogin('mason', '000000'); w.tryLogin('Grayson', '000000'); });
+  eq(w.tryLogin('mason', '271845').error.message, 'Too many wrong tries. This sign-in is paused for a few hours. Ask the owner to reset your PIN.');
+  eq(w.tryLogin('Grayson', '482913').error.message, 'Too many wrong tries. This sign-in is paused for a few hours. To get in sooner, follow "Forgot your PIN?" in the setup guide.');
+  eq(w.db().notices.map((n) => n.text).sort(), [
+    'Someone tried the wrong PIN for Grayson 20 times. Sign-in under that name is paused for a few hours. Phones that are already signed in keep working. To sign in sooner, follow "Forgot your PIN?" in the setup guide.',
+    PAUSED_NOTICE]);
+  ok(w.call('owner', 'sync').ok && w.call('mason', 'sync').ok, 'phones that are already signed in keep working');
+  /* What the setup guide tells the owner to do does work. */
+  const fresh = w.core.resetOwnerPin();
+  ok(w.tryLogin('Grayson', fresh.pin).ok);
+});
+
+test('changing your own PIN starts the count of wrong tries again, like a reset by the owner', () => {
+  const w = world();
+  slowGuesses(w, 5, (n) => { if (n < 20) w.tryLogin('mason', '000000'); });   /* 19 of the 20 */
+  w.wait(16 * MIN);
+  w.must('mason', 'changePin', { oldPin: '271845', newPin: '517293' });
+  slowGuesses(w, 5, (n) => { if (n < 20) eq(w.tryLogin('mason', '000000').error.code, 'auth', 'wrong try ' + n + ' against the new PIN'); });
+  w.wait(16 * MIN);
+  ok(w.tryLogin('mason', '517293').ok, '19 more wrong tries against the new PIN do not add up with the 19 against the old one');
+  eq(w.db().notices, []);
 });
 
 test('a removed person cannot sign in and their phone is signed out at once', () => {
@@ -479,32 +548,31 @@ test('a removed person cannot sign in and their phone is signed out at once', ()
   w.must('owner', 'removeMember', { id: w.ids.mason });
   eq(w.call('mason', 'sync').error.code, 'auth');
   eq(w.call('mason', 'createSale', { client: { name: 'Ghost' }, service: 'House wash', priceCents: 100 }).error.code, 'auth');
-  eq(w.tryLogin('Mason Reed', '2222').error.code, 'auth'); eq(w.tryLogin('mason', '2222').error.code, 'auth');
+  eq(w.tryLogin('Mason Reed', '271845').error.code, 'auth'); eq(w.tryLogin('mason', '271845').error.code, 'auth');
   eq(w.db().sessions.filter((s) => s.memberId === w.ids.mason).length, 0, 'their sessions are gone from the data');
 });
 
 test('resetting a PIN signs that person out everywhere and only the new PIN works', () => {
   const w = world();
-  const second = w.tryLogin('mason', '2222').result.token;
+  const second = w.tryLogin('mason', '271845').result.token;
   const r = w.must('owner', 'resetPin', { id: w.ids.mason });
-  ok(/^\d{4}$/.test(r.result.pin), 'a fresh four digit PIN comes back');
+  ok(/^\d{6}$/.test(r.result.pin), 'a fresh six digit PIN comes back');
   eq(w.call('mason', 'sync').error.code, 'auth');
   eq(w.raw({ action: 'sync', token: second }).error.code, 'auth');
-  if (r.result.pin !== '2222') eq(w.tryLogin('mason', '2222').error.code, 'auth');
+  if (r.result.pin !== '271845') eq(w.tryLogin('mason', '271845').error.code, 'auth');
   ok(w.tryLogin('mason', r.result.pin).ok);
-  eq(w.must('owner', 'resetPin', { id: w.ids.jake, pin: '654321' }).result.pin, '654321');
-  ok(w.tryLogin('jake miller', '654321').ok);
+  eq(w.must('owner', 'resetPin', { id: w.ids.jake, pin: '653421' }).result.pin, '653421');
+  ok(w.tryLogin('jake miller', '653421').ok);
 });
 
 test('resetting a PIN also lifts a lock', () => {
   const w = world();
-  for (let i = 0; i < 6; i++) w.tryLogin('mason', '0000');
-  eq(w.tryLogin('mason', '2222').error.code, 'locked');
-  w.must('owner', 'resetPin', { id: w.ids.mason, pin: '9090' });
-  ok(w.tryLogin('mason', '9090').ok);
+  for (let i = 0; i < 6; i++) w.tryLogin('mason', '000000');
+  eq(w.tryLogin('mason', '271845').error.code, 'locked');
+  w.must('owner', 'resetPin', { id: w.ids.mason, pin: '905172' });
+  ok(w.tryLogin('mason', '905172').ok);
 });
 
-const PAUSED_NOTICE = 'Someone tried the wrong PIN for Mason Reed 20 times. Their sign-in is paused for a few hours. Reset their PIN if that was not them.';
 /* Four wrong PINs, then a wait long enough for the 15 minute lock to forget them: the slow way to guess. */
 function slowGuesses(w, batches, guess) {
   for (let b = 0; b < batches; b++) {
@@ -515,8 +583,8 @@ function slowGuesses(w, batches, guess) {
 
 test('four wrong PINs every 15 minutes: the 20th inside 6 hours pauses that person and the owner is told once', () => {
   const w = world(), start = w.t, rev = w.rev();
-  slowGuesses(w, 5, (n) => eq(w.tryLogin('mason', '0000').error.code, 'auth', 'wrong try ' + n + ' is just a wrong PIN'));
-  const paused = w.tryLogin('mason', '2222');
+  slowGuesses(w, 5, (n) => eq(w.tryLogin('mason', '000000').error.code, 'auth', 'wrong try ' + n + ' is just a wrong PIN'));
+  const paused = w.tryLogin('mason', '271845');
   eq(paused.error.code, 'locked', 'the right PIN after 20 wrong ones');
   has(paused.error.message, 'paused for a few hours');
   eq(w.db().notices.map((n) => [n.type, n.text]), [['signin', PAUSED_NOTICE]]);
@@ -524,94 +592,94 @@ test('four wrong PINs every 15 minutes: the 20th inside 6 hours pauses that pers
   eq(w.must('owner', 'sync', { since: rev, day: w.today() }).sync.notices.length, 1);
   eq(w.emails.length, 0, 'in the app, not by email');
   ok(w.call('mason', 'sync').ok, 'a phone that is already signed in keeps working');
-  ok(w.tryLogin('jake miller', '4444').ok, 'nobody else is paused');
+  ok(w.tryLogin('jake miller', '604417').ok, 'nobody else is paused');
   /* It outlasts the 15 minute lock, and more tries neither extend it nor tell the owner again. */
   w.wait(20 * MIN);
-  for (let i = 0; i < 7; i++) eq(w.tryLogin('mason', i % 2 ? '2222' : '0000').error.code, 'locked');
+  for (let i = 0; i < 7; i++) eq(w.tryLogin('mason', i % 2 ? '271845' : '000000').error.code, 'locked');
   w.t = start + 6 * HOUR - MIN;
-  eq(w.tryLogin('mason', '2222').error.code, 'locked', 'one minute before the 6 hours are up');
+  eq(w.tryLogin('mason', '271845').error.code, 'locked', 'one minute before the 6 hours are up');
   eq(w.db().notices.length, 1, 'the owner is told once');
   w.t = start + 6 * HOUR + 1000;
-  ok(w.tryLogin('mason', '2222').ok, 'free again once the 6 hours from the first wrong try are up');
+  ok(w.tryLogin('mason', '271845').ok, 'free again once the 6 hours from the first wrong try are up');
   /* A new window starts from nothing. */
-  slowGuesses(w, 4, () => w.tryLogin('mason', '0000'));
+  slowGuesses(w, 4, () => w.tryLogin('mason', '000000'));
   w.wait(16 * MIN);
-  ok(w.tryLogin('mason', '2222').ok, '16 wrong tries in the new window do not pause anyone');
+  ok(w.tryLogin('mason', '271845').ok, '16 wrong tries in the new window do not pause anyone');
   eq(w.db().notices.length, 1);
 });
 
 test('nineteen wrong PINs in 6 hours pause nobody, and the count does not carry into the next 6 hours', () => {
   const w = world(), start = w.t;
-  slowGuesses(w, 5, (n) => { if (n < 20) w.tryLogin('mason', '0000'); });
+  slowGuesses(w, 5, (n) => { if (n < 20) w.tryLogin('mason', '000000'); });
   w.wait(16 * MIN);
-  ok(w.tryLogin('mason', '2222').ok, 'a right PIN after 19 wrong ones');
+  ok(w.tryLogin('mason', '271845').ok, 'a right PIN after 19 wrong ones');
   w.t = start + 6 * HOUR + 1000;
-  eq(w.tryLogin('mason', '0000').error.code, 'auth');
+  eq(w.tryLogin('mason', '000000').error.code, 'auth');
   w.wait(16 * MIN);
-  ok(w.tryLogin('mason', '2222').ok, 'the 19 from before are forgotten, so this was the first of a new count');
+  ok(w.tryLogin('mason', '271845').ok, 'the 19 from before are forgotten, so this was the first of a new count');
   eq(w.db().notices, []);
 });
 
 test('the owner resetting the PIN lifts the 6 hour pause', () => {
   const w = world();
-  slowGuesses(w, 5, () => w.tryLogin('mason', '0000'));
+  slowGuesses(w, 5, () => w.tryLogin('mason', '000000'));
   w.wait(16 * MIN);
-  eq(w.tryLogin('mason', '2222').error.code, 'locked');
-  w.must('owner', 'resetPin', { id: w.ids.mason, pin: '9090' });
-  ok(w.tryLogin('mason', '9090').ok);
-  slowGuesses(w, 4, () => w.tryLogin('mason', '0000'));
+  eq(w.tryLogin('mason', '271845').error.code, 'locked');
+  w.must('owner', 'resetPin', { id: w.ids.mason, pin: '905172' });
+  ok(w.tryLogin('mason', '905172').ok);
+  slowGuesses(w, 4, () => w.tryLogin('mason', '000000'));
   w.wait(16 * MIN);
-  ok(w.tryLogin('mason', '9090').ok, 'and the count started again from nothing');
+  ok(w.tryLogin('mason', '905172').ok, 'and the count started again from nothing');
 });
 
 test('a wrong current PIN in changePin counts like a wrong sign-in: five quick ones lock for 15 minutes', () => {
   const w = world();
-  for (let i = 1; i <= 5; i++) eq(w.refuse('mason', 'changePin', { oldPin: '000' + i, newPin: '5151' }, 'invalid').error.message, 'Your current PIN is not right.', 'guess ' + i);
-  const locked = w.refuse('mason', 'changePin', { oldPin: '2222', newPin: '5151' }, 'locked');
+  for (let i = 1; i <= 5; i++) eq(w.refuse('mason', 'changePin', { oldPin: '00000' + i, newPin: '517293' }, 'invalid').error.message, 'Your current PIN is not right.', 'guess ' + i);
+  const locked = w.refuse('mason', 'changePin', { oldPin: '271845', newPin: '517293' }, 'locked');
   has(locked.error.message, 'Wait 15 minutes');
   ok(locked.sync && locked.sync.me.id === w.ids.mason, 'the phone stays signed in and is told where things stand');
-  eq(w.tryLogin('mason', '2222').error.code, 'locked', 'it is the same count as sign-in, so signing in is locked too');
-  ok(w.call('mason', 'sync').ok && w.call('jake', 'changePin', { oldPin: '4444', newPin: '4545' }).ok, 'nobody is signed out and nobody else is locked');
+  eq(w.tryLogin('mason', '271845').error.code, 'locked', 'it is the same count as sign-in, so signing in is locked too');
+  ok(w.call('mason', 'sync').ok && w.call('jake', 'changePin', { oldPin: '604417', newPin: '454817' }).ok, 'nobody is signed out and nobody else is locked');
   w.wait(14 * MIN);
-  w.refuse('mason', 'changePin', { oldPin: '2222', newPin: '5151' }, 'locked');
+  w.refuse('mason', 'changePin', { oldPin: '271845', newPin: '517293' }, 'locked');
   w.wait(MIN + 1000);
-  w.must('mason', 'changePin', { oldPin: '2222', newPin: '5151' });
-  ok(w.tryLogin('mason', '5151').ok);
+  w.must('mason', 'changePin', { oldPin: '271845', newPin: '517293' });
+  ok(w.tryLogin('mason', '517293').ok);
   /* Wrong sign-ins and wrong current PINs add up, and a right current PIN clears the short count. */
-  for (let i = 0; i < 3; i++) w.tryLogin('jake miller', '0000');
-  for (let i = 0; i < 2; i++) w.refuse('jake', 'changePin', { oldPin: '0000', newPin: '6161' }, 'invalid');
-  w.refuse('jake', 'changePin', { oldPin: '4545', newPin: '6161' }, 'locked');
-  for (let i = 0; i < 4; i++) w.refuse('cole', 'changePin', { oldPin: '0000', newPin: '6161' }, 'invalid');
-  w.must('cole', 'changePin', { oldPin: '3333', newPin: '6161' });
-  for (let i = 0; i < 4; i++) w.refuse('cole', 'changePin', { oldPin: '0000', newPin: '7171' }, 'invalid');
-  w.must('cole', 'changePin', { oldPin: '6161', newPin: '7171' });
+  for (let i = 0; i < 3; i++) w.tryLogin('jake miller', '000000');
+  for (let i = 0; i < 2; i++) w.refuse('jake', 'changePin', { oldPin: '000000', newPin: '618294' }, 'invalid');
+  w.refuse('jake', 'changePin', { oldPin: '454817', newPin: '618294' }, 'locked');
+  for (let i = 0; i < 4; i++) w.refuse('cole', 'changePin', { oldPin: '000000', newPin: '618294' }, 'invalid');
+  w.must('cole', 'changePin', { oldPin: '906132', newPin: '618294' });
+  for (let i = 0; i < 4; i++) w.refuse('cole', 'changePin', { oldPin: '000000', newPin: '719305' }, 'invalid');
+  w.must('cole', 'changePin', { oldPin: '618294', newPin: '719305' });
 });
 
 test('a borrowed phone cannot guess slowly either: 20 wrong current PINs in 6 hours pause changePin and tell the owner', () => {
   const w = world();
-  slowGuesses(w, 5, (n) => eq(w.call('mason', 'changePin', { oldPin: String(1000 + n), newPin: '5151' }).error.code, 'invalid'));
+  slowGuesses(w, 5, (n) => eq(w.call('mason', 'changePin', { oldPin: String(100000 + n), newPin: '517293' }).error.code, 'invalid'));
   w.wait(16 * MIN);
-  const r = w.refuse('mason', 'changePin', { oldPin: '2222', newPin: '5151' }, 'locked');
+  const r = w.refuse('mason', 'changePin', { oldPin: '271845', newPin: '517293' }, 'locked');
   has(r.error.message, 'paused for a few hours');
   eq(w.full('owner').notices.map((n) => n.text), [PAUSED_NOTICE]);
-  ok(w.tryLogin('mason', '5151').error.code === 'locked' && w.tryLogin('mason', '2222').error.code === 'locked', 'and the PIN was never changed');
-  w.must('owner', 'resetPin', { id: w.ids.mason, pin: '8080' });
-  w.login('mason', 'Mason Reed', '8080');
-  w.must('mason', 'changePin', { oldPin: '8080', newPin: '5151' });
+  ok(w.tryLogin('mason', '517293').error.code === 'locked' && w.tryLogin('mason', '271845').error.code === 'locked', 'and the PIN was never changed');
+  w.must('owner', 'resetPin', { id: w.ids.mason, pin: '806193' });
+  w.login('mason', 'Mason Reed', '806193');
+  w.must('mason', 'changePin', { oldPin: '806193', newPin: '517293' });
 });
 
 test('sign-ins older than 90 days are deleted from the data the next time anyone signs in', () => {
   const w = world();
   eq(w.db().sessions.length, 5);
   w.wait(50 * DAY);
-  w.login('tess', 'Tess Hart', '5555');            /* a second, newer sign-in for Tess */
+  w.login('tess', 'Tess Hart', '358206');            /* a second, newer sign-in for Tess */
   eq(w.db().sessions.length, 6, 'nothing has expired yet, so nothing is deleted');
   w.wait(41 * DAY);                                /* day 91: the first five are past 90 days */
   eq(w.call('mason', 'sync').error.code, 'auth');
   eq(w.db().sessions.length, 6, 'refusing an old sign-in does not delete it');
-  eq(w.tryLogin('jake miller', '0000').error.code, 'auth');
+  eq(w.tryLogin('jake miller', '000000').error.code, 'auth');
   eq(w.db().sessions.length, 6, 'a failed sign-in deletes nothing');
-  w.login('jake', 'Jake Miller', '4444');
+  w.login('jake', 'Jake Miller', '604417');
   const left = w.db().sessions;
   eq(left.map((s) => s.memberId).sort(), [w.ids.jake, w.ids.tess].sort(), 'only Tess\'s newer sign-in and the one just made are left');
   ok(left.every((s) => w.t - s.createdAt <= 90 * DAY));
@@ -622,8 +690,8 @@ test('sign-ins older than 90 days are deleted from the data the next time anyone
 
 test('resetPin refuses bad PINs, yourself and people who are gone', () => {
   const w = world();
-  ['12', '1234567', 'abcd', '12 34', 12, -1234, 1.5].forEach((p) => w.refuse('owner', 'resetPin', { id: w.ids.mason, pin: p }, 'invalid'));
-  w.refuse('owner', 'resetPin', { id: w.ids.owner, pin: '4321' }, 'invalid');
+  ['12', '1234', '48291', '1234567', 'abcdef', '482 91', 12, -123456, 1.5, '123456', '000000'].forEach((p) => w.refuse('owner', 'resetPin', { id: w.ids.mason, pin: p }, 'invalid'));
+  w.refuse('owner', 'resetPin', { id: w.ids.owner, pin: '432187' }, 'invalid');
   w.refuse('owner', 'resetPin', { id: 'm_nobody' }, 'not_found');
   w.refuse('owner', 'resetPin', {}, 'not_found');
   w.must('owner', 'removeMember', { id: w.ids.jake });
@@ -639,14 +707,14 @@ test('a session lasts 90 days and no longer', () => {
   eq(w.call('mason', 'sync').error.code, 'auth', 'signed out 6 hours past 90 days at the latest');
   w.wait(30 * DAY);
   eq(w.call('mason', 'createSale', { client: { name: 'Late' }, service: 'House wash', priceCents: 100 }).error.code, 'auth');
-  ok(w.tryLogin('mason', '2222').ok, 'signing in again works');
+  ok(w.tryLogin('mason', '271845').ok, 'signing in again works');
 });
 
 test('an expired session stays dead when the owner edits that person', () => {
   const w = world();
   w.wait(91 * DAY);
   eq(w.call('mason', 'sync').error.code, 'auth');
-  w.login('owner', 'Grayson', '1234');
+  w.login('owner', 'Grayson', '482913');
   w.must('owner', 'saveMember', { member: { id: w.ids.mason, name: 'Mason Reed', role: 'rep' } });
   eq(w.call('mason', 'sync').error.code, 'auth', 'an edit by the owner must not bring an expired sign-in back to life');
   w.must('owner', 'saveMember', { member: { id: w.ids.mason, name: 'Mason T Reed', role: 'rep' } });
@@ -655,7 +723,7 @@ test('an expired session stays dead when the owner edits that person', () => {
 
 test('logout ends that phone only', () => {
   const w = world();
-  const other = w.tryLogin('mason', '2222').result.token;
+  const other = w.tryLogin('mason', '271845').result.token;
   const r = w.must('mason', 'logout');
   ok(r.sync === null || r.sync === undefined, 'logout must not carry data');
   eq(w.call('mason', 'sync').error.code, 'auth');
@@ -665,15 +733,15 @@ test('logout ends that phone only', () => {
 
 test('changePin: this phone stays in, every other phone is signed out, the old PIN stops working', () => {
   const w = world();
-  const other = w.tryLogin('mason', '2222').result.token;
-  w.refuse('mason', 'changePin', { oldPin: '0000', newPin: '5151' }, 'invalid');
-  ['12', '1234567', 'abcd', '', null, undefined].forEach((p) => w.refuse('mason', 'changePin', { oldPin: '2222', newPin: p }, 'invalid'));
+  const other = w.tryLogin('mason', '271845').result.token;
+  w.refuse('mason', 'changePin', { oldPin: '000000', newPin: '517293' }, 'invalid');
+  ['12', '1234', '48291', '1234567', 'abcdef', '', null, undefined, '654321', '111111'].forEach((p) => w.refuse('mason', 'changePin', { oldPin: '271845', newPin: p }, 'invalid'));
   ok(w.raw({ action: 'sync', token: other }).ok, 'a refused change signs nobody out');
-  w.must('mason', 'changePin', { oldPin: '2222', newPin: '515151' });
+  w.must('mason', 'changePin', { oldPin: '271845', newPin: '515927' });
   ok(w.call('mason', 'sync').ok, 'this phone stays signed in');
   eq(w.raw({ action: 'sync', token: other }).error.code, 'auth', 'the other phone is signed out');
-  eq(w.tryLogin('mason', '2222').error.code, 'auth');
-  ok(w.tryLogin('mason', '515151').ok);
+  eq(w.tryLogin('mason', '271845').error.code, 'auth');
+  ok(w.tryLogin('mason', '515927').ok);
   ok(w.call('jake', 'sync').ok && w.call('owner', 'sync').ok, 'nobody else is touched');
 });
 
@@ -681,11 +749,11 @@ test('a renamed person signs in under the new name; a role change signs them out
   const w = world();
   w.must('owner', 'saveMember', { member: { id: w.ids.mason, name: 'Mason Q Reed', role: 'rep' } });
   eq(w.must('mason', 'sync').sync.me.name, 'Mason Q Reed', 'still signed in, with the new name');
-  eq(w.tryLogin('mason reed', '2222').error.code, 'auth');
-  ok(w.tryLogin('mason q reed', '2222').ok);
+  eq(w.tryLogin('mason reed', '271845').error.code, 'auth');
+  ok(w.tryLogin('mason q reed', '271845').ok);
   w.must('owner', 'saveMember', { member: { id: w.ids.mason, name: 'Mason Q Reed', role: 'tech' } });
   eq(w.call('mason', 'sync').error.code, 'auth', 'a changed role means sign in again');
-  eq(w.tryLogin('mason', '2222').sync.me.role, 'tech');
+  eq(w.tryLogin('mason', '271845').sync.me.role, 'tech');
 });
 
 test('no token, a made-up token or the stored session id is never accepted', () => {
@@ -703,7 +771,7 @@ test('no token, a made-up token or the stored session id is never accepted', () 
 
 test('the PIN is never stored: only a salted hash, different for people with the same PIN', () => {
   const w = world();
-  w.must('owner', 'saveMember', { member: { name: 'Twin One', role: 'rep', pin: '2222' } });
+  w.must('owner', 'saveMember', { member: { name: 'Twin One', role: 'rep', pin: '271845' } });
   const team = w.db().team;
   team.forEach((m) => { ok(!('pin' in m), 'a PIN is stored in the clear'); ok(/^[0-9a-f]{64}$/.test(m.pinHash) && m.salt, 'no salted hash'); });
   const a = byId(team, w.ids.mason), b = team.filter((m) => m.name === 'Twin One')[0];
@@ -713,12 +781,106 @@ test('the PIN is never stored: only a salted hash, different for people with the
 
 test('bootstrap makes one owner once, and resetOwnerPin gives a new PIN and signs the owner out', () => {
   const w = world();
-  eq(w.core.bootstrap({ name: 'Someone Else', pin: '9999' }), { created: false, name: 'Grayson' });
+  eq(w.core.bootstrap({ name: 'Someone Else', pin: '999147' }), { created: false, name: 'Grayson' });
   eq(w.db().team.filter((m) => m.role === 'owner').length, 1);
   const r = w.core.resetOwnerPin();
-  ok(r.name === 'Grayson' && /^\d{4}$/.test(r.pin));
+  ok(r.name === 'Grayson' && /^\d{6}$/.test(r.pin));
   eq(w.call('owner', 'sync').error.code, 'auth');
   ok(w.tryLogin('grayson', r.pin).ok);
+});
+
+/* The PINs anyone would try first, written out a second way so the core's own rule is checked against something. */
+function easyPin(p) {
+  return /^(\d)\1{5}$/.test(p) || /^(\d\d)\1{2}$/.test(p) || /^(\d{3})\1$/.test(p) ||
+    '01234567890123456789'.indexOf(p) >= 0 || '98765432109876543210'.indexOf(p) >= 0;
+}
+const EASY_PINS = ['000000', '111111', '999999', '123456', '234567', '456789', '012345', '567890', '890123', '654321', '987654', '543210', '210987', '098765',
+  '121212', '909090', '474747', '123123', '482482', '900900', '007007'];
+const FINE_PINS = ['482913', '271845', '730526', '906132', '112233', '123321', '123457', '121213', '100000', '000001', '135790', '246802', '122222', '654322', '123124'];
+
+test('a PIN is exactly 6 digits wherever one is picked: 4 and 5 digit PINs are refused in plain words', () => {
+  const w = world(), words = 'A PIN is 6 digits.';
+  ['1234', '0000', '48291', '4829', '4829133', '48291a', 'abcdef', ' 482913', '48 2913', '', null, undefined, 4829, 1.5, true, ['482913'], { pin: '482913' }].forEach((p) => {
+    const tag = ' for ' + JSON.stringify(p);
+    if (p !== '' && p != null) {   /* for these two actions an empty PIN means "make one for them" */
+      eq(w.refuse('owner', 'saveMember', { member: { name: 'New Hire', role: 'rep', pin: p } }, 'invalid').error.message, words, 'saveMember' + tag);
+      eq(w.refuse('owner', 'resetPin', { id: w.ids.mason, pin: p }, 'invalid').error.message, words, 'resetPin' + tag);
+    }
+    eq(w.refuse('mason', 'changePin', { oldPin: '271845', newPin: p }, 'invalid').error.message, words, 'changePin' + tag);
+  });
+  /* The old 4 to 6 digit rule is gone: nobody can sign in with fewer than 6 digits, even if such a PIN were somehow stored. */
+  ['2718', '27184', '2718450'].forEach((p) => eq(w.tryLogin('mason', p).error.code, 'auth'));
+  ok(w.tryLogin('mason', '271845').ok, 'and those tries did not lock him');
+  eq(w.must('owner', 'saveMember', { member: { name: 'New Hire', role: 'rep', pin: '730526' } }).result.pin, '730526');
+  eq(w.must('owner', 'resetPin', { id: w.ids.mason, pin: 730526 }).result.pin, '730526', 'six digits sent as a number are still that PIN');
+  w.must('jake', 'changePin', { oldPin: '604417', newPin: '730526' });
+  ok(w.tryLogin('new hire', '730526').ok && w.tryLogin('mason', '730526').ok && w.tryLogin('jake miller', '730526').ok);
+});
+
+test('a PIN that is easy to guess is refused wherever one is picked, and one that only looks close is fine', () => {
+  const w = world(), words = 'Pick a PIN that is harder to guess.';
+  EASY_PINS.forEach((p) => {
+    ok(easyPin(p), p + ' is on the easy list by mistake');
+    eq(w.refuse('owner', 'saveMember', { member: { name: 'New Hire', role: 'tech', pin: p } }, 'invalid').error.message, words, 'saveMember with ' + p);
+    eq(w.refuse('owner', 'resetPin', { id: w.ids.mason, pin: p }, 'invalid').error.message, words, 'resetPin with ' + p);
+    eq(w.refuse('mason', 'changePin', { oldPin: '271845', newPin: p }, 'invalid').error.message, words, 'changePin with ' + p);
+    eq(C.check.pin(p), words);
+  });
+  ok(w.tryLogin('mason', '271845').ok && w.call('mason', 'sync').ok, 'refused PINs changed nothing and signed nobody out');
+  FINE_PINS.forEach((p, i) => {
+    ok(!easyPin(p), p + ' is on the fine list by mistake');
+    eq(C.check.pin(p), '', p + ' should be allowed');
+    eq(w.must('owner', 'resetPin', { id: w.ids.jake, pin: p }).result.pin, p);
+    w.must('owner', 'saveMember', { member: { name: 'Fine Pin ' + i, role: 'tech', pin: p } });
+    ok(w.tryLogin('fine pin ' + i, p).ok && w.tryLogin('jake miller', p).ok);
+  });
+});
+
+test('of the million possible PINs, exactly the 1,110 easy ones are refused', () => {
+  let refused = 0;
+  for (let n = 0; n < 1000000; n++) {
+    const p = ('00000' + n).slice(-6), says = C.check.pin(p);
+    if (says) refused++;
+    if ((says !== '') !== easyPin(p)) throw new Error(p + (says ? ' is refused but is not easy to guess' : ' is easy to guess but is allowed'));
+    if (says && says !== 'Pick a PIN that is harder to guess.') throw new Error(p + ' is refused with the wrong words: ' + says);
+  }
+  eq(refused, 1110);
+  ['1234', '12345', '1234567', '', 'abcdef', null, undefined, 482913, ['482913']].forEach((p) => eq(C.check.pin(p), 'A PIN is 6 digits.', 'check.pin(' + JSON.stringify(p) + ')'));
+});
+
+test('a PIN the system makes is always 6 digits and never an easy one, whatever the dice say', () => {
+  const w = world(), realUuid = w.env.uuid, seen = new Set();
+  /* 5000 different rolls of the dice. With no guard, about five of them would come up as an easy PIN. */
+  for (let k = 0; k < 5000; k++) {
+    w.env.uuid = () => 'dice-' + k;
+    const pin = w.must('owner', 'resetPin', { id: w.ids.mason }).result.pin;
+    if (!/^\d{6}$/.test(pin)) throw new Error('the system made the PIN ' + JSON.stringify(pin));
+    if (easyPin(pin)) throw new Error('the system made the easy PIN ' + pin + ' (roll ' + k + ')');
+    seen.add(pin);
+  }
+  w.env.uuid = realUuid;
+  ok(seen.size > 4950, 'the PINs it makes are spread out: ' + seen.size + ' different ones in 5000');
+  ok(Array.from(seen).some((p) => p[0] === '0'), 'a PIN may start with 0 and still has 6 digits');
+  for (let i = 0; i < 40; i++) {
+    const r = w.must('owner', 'saveMember', { member: { name: 'Auto ' + i, role: 'tech' } }).result;
+    ok(/^\d{6}$/.test(r.pin) && !easyPin(r.pin), 'saveMember made the PIN ' + r.pin);
+    ok(w.tryLogin('auto ' + i, r.pin).ok, 'the PIN that was handed back signs that person in');
+  }
+  const o = w.core.resetOwnerPin();
+  ok(/^\d{6}$/.test(o.pin) && !easyPin(o.pin) && w.tryLogin('grayson', o.pin).ok, 'resetOwnerPin made the PIN ' + o.pin);
+});
+
+test('first-time setup never starts the owner on a short or easy PIN, even when the host asks for one', () => {
+  ['1234', '12345', '123456', '000000', '121212', '', null, undefined, 1234].forEach((given) => {
+    const w = world({ bare: true });
+    const boot = w.core.bootstrap({ name: 'Grayson', pin: given });
+    ok(boot.created && /^\d{6}$/.test(boot.pin) && !easyPin(boot.pin), 'bootstrap with ' + JSON.stringify(given) + ' made the PIN ' + boot.pin);
+    ok(boot.pin !== String(given), 'the PIN that was asked for was used');
+    ok(w.tryLogin('grayson', boot.pin).ok);
+    if (typeof given === 'string' && given) eq(w.tryLogin('grayson', given).error.code, 'auth', 'the PIN that was asked for must not sign the owner in');
+  });
+  const w = world({ bare: true });
+  eq(w.core.bootstrap({ name: 'Grayson', pin: '482913' }), { created: true, name: 'Grayson', pin: '482913' }, 'a good PIN the host names is used as it is');
 });
 
 /* ================================================================== */
@@ -736,16 +898,17 @@ function sampleRequests(w) {
     updateJob: { jobId: w.ids.jobA, patch: { what: 'Changed by the matrix' } },
     deleteClient: { clientId: w.ids.clientA },
     deleteSale: { saleId: w.ids.saleA },
-    saveMember: { member: { name: 'Matrix Person', role: 'owner', pin: '1212' } },
+    updateSale: { saleId: w.ids.saleA, patch: { priceCents: 1, service: 'Changed by the matrix', repId: w.ids.jake } },
+    saveMember: { member: { name: 'Matrix Person', role: 'owner', pin: '121347' } },
     removeMember: { id: w.ids.jake },
-    resetPin: { id: w.ids.jake, pin: '1212' },
+    resetPin: { id: w.ids.jake, pin: '121347' },
     saveSettings: { settings: { firstPct: 99, notifyEmail: 'thief@evil.example', standards: [] } },
     setDays: { days: [{ date: '2026-11-25', open: false }, { date: '2026-12-25', open: true, slots: ['03:00'] }] },
     readNotices: {},
     clearProblems: {}
   };
 }
-const OWNER_ONLY = ['updateJob', 'deleteClient', 'deleteSale', 'saveMember', 'removeMember', 'resetPin', 'saveSettings', 'setDays', 'readNotices', 'clearProblems'];
+const OWNER_ONLY = ['updateJob', 'deleteClient', 'deleteSale', 'updateSale', 'saveMember', 'removeMember', 'resetPin', 'saveSettings', 'setDays', 'readNotices', 'clearProblems'];
 const NOT_FOR = {
   rep: OWNER_ONLY.concat(['setJobDone']),
   tech: OWNER_ONLY.concat(['createSale', 'bookJob', 'moveJob', 'updateClient'])
@@ -773,14 +936,14 @@ test('a rep or tech cannot make themselves the owner, reset the owner\'s PIN or 
   const w = seeded();
   ['mason', 'cole'].forEach((who) => {
     w.refuse(who, 'saveMember', { member: { id: w.ids[who], name: 'Sneaky', role: 'owner' } }, 'forbidden');
-    w.refuse(who, 'saveMember', { member: { name: 'Sneaky Two', role: 'owner', pin: '1111' } }, 'forbidden');
-    w.refuse(who, 'resetPin', { id: w.ids.owner, pin: '1111' }, 'forbidden');
-    w.refuse(who, 'resetPin', { id: w.ids[who], pin: '1111' }, 'forbidden');
+    w.refuse(who, 'saveMember', { member: { name: 'Sneaky Two', role: 'owner', pin: '135790' } }, 'forbidden');
+    w.refuse(who, 'resetPin', { id: w.ids.owner, pin: '135790' }, 'forbidden');
+    w.refuse(who, 'resetPin', { id: w.ids[who], pin: '135790' }, 'forbidden');
     w.refuse(who, 'removeMember', { id: w.ids.owner }, 'forbidden');
     w.refuse(who, 'saveSettings', { settings: { defaultTechId: w.ids[who] } }, 'forbidden');
   });
-  eq(w.tryLogin('grayson', '1111').error.code, 'auth');
-  ok(w.tryLogin('grayson', '1234').ok);
+  eq(w.tryLogin('grayson', '135790').error.code, 'auth');
+  ok(w.tryLogin('grayson', '482913').ok);
 });
 
 test('each role can do its own work', () => {
@@ -788,7 +951,7 @@ test('each role can do its own work', () => {
   ['createSale', 'bookJob', 'moveJob', 'updateClient', 'addNote'].forEach((a) => { base.fork().must('mason', a, reqs[a]); });
   base.fork().must('cole', 'setJobDone', reqs.setJobDone);
   base.fork().must('cole', 'addNote', { kind: 'job', id: base.ids.jobA, text: 'gate code 4411' });
-  ['mason', 'cole', 'owner'].forEach((who) => { const w = base.fork(); w.must(who, 'ackStandards'); w.must(who, 'changePin', { oldPin: who === 'mason' ? '2222' : who === 'cole' ? '3333' : '1234', newPin: '808080' }); w.must(who, 'logout'); });
+  ['mason', 'cole', 'owner'].forEach((who) => { const w = base.fork(); w.must(who, 'ackStandards'); w.must(who, 'changePin', { oldPin: who === 'mason' ? '271845' : who === 'cole' ? '906132' : '482913', newPin: '808197' }); w.must(who, 'logout'); });
 });
 
 test('a rep cannot touch another rep\'s client or job in any way', () => {
@@ -897,7 +1060,7 @@ test('the owner can hand a client to another rep: the new rep sees and books for
   /* Only to an active rep or owner, and only by the owner. */
   [w.ids.cole, 'm_nobody', '', null, 5, {}, [w.ids.mason], 'constructor'].forEach((id) => {
     const res = w.refuse('owner', 'updateClient', { clientId: w.ids.clientA, patch: { phone: 'should not save', repId: id } }, 'invalid');
-    eq(res.error.message, 'Pick a sales rep who is on the team.');
+    eq(res.error.message, 'Pick a sales rep or an owner who is on the team.');
   });
   w.must('jake', 'updateClient', { clientId: w.ids.clientA, patch: { repId: w.ids.mason } });
   eq(byId(w.db().clients, w.ids.clientA).repId, w.ids.jake, 'a rep cannot hand a client on');
@@ -1010,7 +1173,7 @@ test('a tech stops seeing a job that is cancelled or given to someone else', () 
 
 test('nothing leaks in any kind of answer: sign-in, saves, refusals, replays, fast answers', () => {
   const w = leaky();
-  const pins = { mason: ['Mason Reed', '2222'], jake: ['Jake Miller', '4444'], cole: ['Cole', '3333'], tess: ['Tess Hart', '5555'], owner: ['Grayson', '1234'] };
+  const pins = { mason: ['Mason Reed', '271845'], jake: ['Jake Miller', '604417'], cole: ['Cole', '906132'], tess: ['Tess Hart', '358206'], owner: ['Grayson', '482913'] };
   Object.keys(pins).forEach((who) => {
     const own = who === 'mason' ? 'A' : 'B', other = who === 'mason' || who === 'cole' ? 'B' : 'A', rep = who === 'mason' || who === 'jake', tech = who === 'cole' || who === 'tess';
     const answers = {
@@ -1027,7 +1190,7 @@ test('nothing leaks in any kind of answer: sign-in, saves, refusals, replays, fa
         : w.call(who, 'readNotices', { opId: 'leak-op-' + who }),
       'replay': w.call(who, rep ? 'addNote' : tech ? 'addNote' : 'readNotices', { kind: rep ? 'client' : 'job', id: rep ? w.ids['client' + own] : w.ids['job' + (who === 'cole' ? 'A' : 'B')], text: 'fine', opId: 'leak-op-' + who }),
       'ack': w.call(who, 'ackStandards'),
-      'change PIN refused': w.call(who, 'changePin', { oldPin: '0000', newPin: '1111' })
+      'change PIN refused': w.call(who, 'changePin', { oldPin: '000000', newPin: '135790' })
     };
     ok(answers.replay.replay === true, 'the replay was not a replay for ' + who);
     Object.keys(answers).forEach((label) => assertNoLeak(w, who, answers[label], label));
@@ -1415,7 +1578,6 @@ test('an opId that is not a real id is ignored, never trusted and never a crash'
 /* ================================================================== */
 section('commission');
 
-const PINS = { owner: ['Grayson', '1234'], mason: ['Mason Reed', '2222'], jake: ['Jake Miller', '4444'], cole: ['Cole', '3333'], tess: ['Tess Hart', '5555'] };
 function relog(w, list) { (list || Object.keys(PINS)).forEach((k) => w.login(k, PINS[k][0], PINS[k][1])); }
 function eventsOf(w, who, saleId) { return byId(w.full(who).sales, saleId).events; }
 function plain(w, who, name, priceCents, billing, extra) {
@@ -1594,6 +1756,200 @@ test('the price must be whole cents from $0 to $1,000,000', () => {
   eq(plain(w, 'mason', 'Free', 0).commissionCents, 0);
   eq(plain(w, 'mason', 'Big', 100000000).commissionCents, 30000000);
   w.db().sales.forEach((s) => ok(Number.isInteger(s.priceCents) && s.priceCents >= 0));
+});
+
+test('the owner\'s own sales earn no commission, whoever the owner is, and still count as sales', () => {
+  const w = world({ day: '2027-01-10' });
+  const second = w.must('owner', 'saveMember', { member: { name: 'Second Owner', role: 'owner', pin: '606147' } }).result.id;
+  const own = plain(w, 'owner', 'Owner Sold This', 100000, 'monthly');
+  eq(own.commissionCents, 0, 'the answer to the save says nothing was earned');
+  const forOther = plain(w, 'owner', 'Sold By The Other Owner', 50000, 'once', { repId: second });
+  eq(forOther.commissionCents, 0);
+  const db = w.db();
+  eq([byId(db.sales, own.saleId).repId, byId(db.sales, own.saleId).firstPct, byId(db.sales, own.saleId).monthlyPct], [w.ids.owner, 0, 0]);
+  eq([byId(db.sales, forOther.saleId).repId, byId(db.sales, forOther.saleId).firstPct, byId(db.sales, forOther.saleId).monthlyPct], [second, 0, 0]);
+  /* Every payment is still listed with its date (the page adds up revenue from these); each is worth nothing to anybody. */
+  w.at('2027-03-10', '09:00'); relog(w, ['owner']);
+  eq(eventsOf(w, 'owner', own.saleId), [{ day: '2027-01-10', cents: 0, kind: 'first' }, { day: '2027-02-10', cents: 0, kind: 'monthly' }, { day: '2027-03-10', cents: 0, kind: 'monthly' }]);
+  eq(eventsOf(w, 'owner', forOther.saleId), [{ day: '2027-01-10', cents: 0, kind: 'first' }]);
+  eq(C.calc.sumEvents(eventsOf(w, 'owner', own.saleId)) + C.calc.sumEvents(eventsOf(w, 'owner', forOther.saleId)), 0);
+  eq(row(w, 'owner', w.ids.owner), [0, 0, 0, 0, 1, 100000], 'the sale still counts on the board as a sale made');
+  /* The settings were never touched, and they do not bring the commission back. */
+  eq([w.full('owner').settings.firstPct, w.full('owner').settings.monthlyPct], [30, 10]);
+  w.must('owner', 'saveSettings', { settings: { firstPct: 50, monthlyPct: 20 } });
+  eq(C.calc.sumEvents(eventsOf(w, 'owner', own.saleId)), 0);
+  checkData(w);
+});
+
+test('a sale the owner enters for a rep, and a rep\'s own sale, earn the rep the usual commission', () => {
+  const w = world({ day: '2027-01-10' });
+  const forMason = plain(w, 'owner', 'Entered For Mason', 100000, 'monthly', { repId: w.ids.mason });
+  eq(forMason.commissionCents, 30000);
+  const masons = plain(w, 'mason', 'Mason Sold This', 20000, 'once');
+  eq(masons.commissionCents, 6000);
+  const db = w.db();
+  eq([byId(db.sales, forMason.saleId).repId, byId(db.sales, forMason.saleId).firstPct, byId(db.sales, forMason.saleId).monthlyPct], [w.ids.mason, 30, 10]);
+  eq([byId(db.sales, masons.saleId).firstPct, byId(db.sales, masons.saleId).monthlyPct], [30, 10]);
+  w.at('2027-02-10', '09:00'); relog(w, ['mason']);
+  eq(eventsOf(w, 'mason', forMason.saleId).map((e) => e.cents), [30000, 10000]);
+  /* A rep cannot dodge it or gain from it by naming the owner as the seller: a rep's sale is always the rep's. */
+  const sneaky = plain(w, 'mason', 'Named The Owner', 10000, 'once', { repId: w.ids.owner });
+  eq([sneaky.commissionCents, byId(w.db().sales, sneaky.saleId).repId, byId(w.db().sales, sneaky.saleId).firstPct], [3000, w.ids.mason, 30]);
+});
+
+/* ================================================================== */
+section('fixing a sale');
+
+function saleRow(w, id) { const x = byId(w.db().sales, id); return x ? [x.service, x.priceCents, x.repId, x.firstPct, x.monthlyPct, x.billing] : null; }
+function clientRow(w, id) { const c = byId(w.db().clients, id); return c ? [c.service, c.priceCents, c.billing, c.repId] : null; }
+
+test('the owner fixes a wrong price: the sale, its commission, the board and the client all follow', () => {
+  const w = world({ day: '2027-01-10' });
+  const typo = plain(w, 'mason', 'Typed 1500 For 150', 150000, 'monthly');
+  eq([typo.commissionCents, row(w, 'owner', w.ids.mason)[5], clientRow(w, typo.clientId)[1]], [45000, 150000, 150000]);
+  w.at('2027-02-12', '09:00'); relog(w);
+  eq(eventsOf(w, 'mason', typo.saleId).map((e) => e.cents), [45000, 15000]);
+  const before = byId(w.db().sales, typo.saleId), rev = w.rev();
+  const r = w.must('owner', 'updateSale', { saleId: typo.saleId, patch: { priceCents: 15000 } });
+  eq(r.result, { saleId: typo.saleId, clientId: typo.clientId });
+  ok(w.rev() > rev && r.sync.same === false, 'every phone hears about the fix');
+  eq(byId(w.db().sales, typo.saleId), Object.assign({}, before, { priceCents: 15000 }), 'only the price changed on the stored sale');
+  eq(eventsOf(w, 'mason', typo.saleId), [{ day: '2027-01-10', cents: 4500, kind: 'first' }, { day: '2027-02-10', cents: 1500, kind: 'monthly' }], 'the rep now sees what the sale really earned');
+  eq(eventsOf(w, 'owner', typo.saleId), eventsOf(w, 'mason', typo.saleId));
+  eq(row(w, 'jake', w.ids.mason), [0, 0, 0, 0, 1, 15000], 'the leaderboard follows');
+  eq(clientRow(w, typo.clientId), ['Window cleaning', 15000, 'monthly', w.ids.mason], 'and so does what the client pays');
+  w.at('2027-03-10', '09:00'); relog(w, ['mason']);
+  eq(eventsOf(w, 'mason', typo.saleId).map((e) => e.cents), [4500, 1500, 1500], 'later months are paid on the fixed price');
+  checkData(w);
+});
+
+test('the owner fixes the name of the service; the price and everything else stay', () => {
+  const w = seeded();
+  const before = byId(w.db().sales, w.ids.saleA), job = byId(w.db().jobs, w.ids.jobA);
+  w.must('owner', 'updateSale', { saleId: w.ids.saleA, patch: { service: '  House   wash ' } });
+  eq(byId(w.db().sales, w.ids.saleA), Object.assign({}, before, { service: 'House wash' }));
+  eq(clientRow(w, w.ids.clientA), ['House wash', 15000, 'monthly', w.ids.mason]);
+  eq(byId(w.db().jobs, w.ids.jobA), job, 'the booked job is not touched');
+  eq(byId(w.full('mason').sales, w.ids.saleA).service, 'House wash');
+  eq(saleRow(w, w.ids.saleB), ['House wash', 30000, w.ids.jake, 30, 10, 'once'], 'nobody else\'s sale moved');
+});
+
+test('only a fix to the client\'s newest sale changes what the client buys, and only the part that was fixed', () => {
+  const w = world({ day: '2027-01-10' });
+  const first = plain(w, 'mason', 'Two Sales', 10000, 'monthly');
+  w.at('2027-02-15', '10:00'); relog(w);
+  const second = w.must('mason', 'createSale', { clientId: first.clientId, service: 'Pressure wash', priceCents: 40000, billing: 'once' }).result;
+  eq(clientRow(w, first.clientId), ['Pressure wash', 40000, 'once', w.ids.mason]);
+  w.must('owner', 'updateSale', { saleId: first.saleId, patch: { priceCents: 12000, service: 'Windows, inside and out' } });
+  eq(saleRow(w, first.saleId), ['Windows, inside and out', 12000, w.ids.mason, 30, 10, 'monthly']);
+  eq(clientRow(w, first.clientId), ['Pressure wash', 40000, 'once', w.ids.mason], 'fixing the older sale leaves the client as the newest sale set them');
+  w.must('owner', 'updateSale', { saleId: second.saleId, patch: { priceCents: 45000 } });
+  eq(clientRow(w, first.clientId), ['Pressure wash', 45000, 'once', w.ids.mason]);
+  /* The owner then sets what the client pays from now on by hand. Fixing only the service name of the sale keeps that price. */
+  w.must('owner', 'updateClient', { clientId: first.clientId, patch: { priceCents: 50000 } });
+  w.must('owner', 'updateSale', { saleId: second.saleId, patch: { service: 'Driveway wash' } });
+  eq(clientRow(w, first.clientId), ['Driveway wash', 50000, 'once', w.ids.mason]);
+  eq(saleRow(w, second.saleId), ['Driveway wash', 45000, w.ids.mason, 30, 10, 'once']);
+  /* Once the newest sale is removed, the one before it is the newest and its fixes reach the client again. */
+  w.must('owner', 'deleteSale', { saleId: second.saleId });
+  w.must('owner', 'updateSale', { saleId: first.saleId, patch: { priceCents: 11000 } });
+  eq(clientRow(w, first.clientId)[1], 11000);
+  checkData(w);
+});
+
+test('the owner fixes who made the sale: it moves to that person, with the commission they would get today', () => {
+  const w = world({ day: '2027-01-10' });
+  const s = plain(w, 'mason', 'Really Jake\'s Sale', 20000, 'monthly');
+  w.at('2027-02-10', '09:00'); relog(w);
+  w.must('owner', 'saveSettings', { settings: { firstPct: 25, monthlyPct: 8 } });
+  eq(saleRow(w, s.saleId), ['Window cleaning', 20000, w.ids.mason, 30, 10, 'monthly'], 'a rate change alone never touches a sale');
+
+  w.must('owner', 'updateSale', { saleId: s.saleId, patch: { repId: w.ids.jake } });
+  eq(saleRow(w, s.saleId), ['Window cleaning', 20000, w.ids.jake, 25, 8, 'monthly'], 'moved to a rep: the rates in Settings today');
+  eq(w.full('mason').sales, [], 'the rep it was taken from no longer has it');
+  eq(eventsOf(w, 'jake', s.saleId).map((e) => e.cents), [5000, 1600], 'the rep it went to earns from it, from the day it was sold');
+  eq([row(w, 'owner', w.ids.mason), row(w, 'owner', w.ids.jake)], [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 20000]], 'the board moves with it');
+  eq(clientRow(w, s.clientId), ['Window cleaning', 20000, 'monthly', w.ids.mason], 'who looks after the client is a separate thing and does not move');
+
+  w.must('owner', 'updateSale', { saleId: s.saleId, patch: { repId: w.ids.owner } });
+  eq(saleRow(w, s.saleId), ['Window cleaning', 20000, w.ids.owner, 0, 0, 'monthly'], 'moved to the owner: no commission');
+  eq(eventsOf(w, 'owner', s.saleId), [{ day: '2027-01-10', cents: 0, kind: 'first' }, { day: '2027-02-10', cents: 0, kind: 'monthly' }]);
+  eq(w.full('jake').sales, []);
+
+  w.must('owner', 'saveSettings', { settings: { firstPct: 40, monthlyPct: 15 } });
+  w.must('owner', 'updateSale', { saleId: s.saleId, patch: { repId: w.ids.mason } });
+  eq(saleRow(w, s.saleId), ['Window cleaning', 20000, w.ids.mason, 40, 15, 'monthly'], 'moved back to a rep: the rates in Settings on the day of the fix');
+  eq(eventsOf(w, 'mason', s.saleId).map((e) => e.cents), [8000, 3000]);
+
+  /* Naming the seller the sale already has changes nothing, so a price fix that sends every field keeps the rates it was sold under. */
+  w.must('owner', 'saveSettings', { settings: { firstPct: 30, monthlyPct: 10 } });
+  w.must('owner', 'updateSale', { saleId: s.saleId, patch: { repId: w.ids.mason, priceCents: 21000, service: 'Window cleaning' } });
+  eq(saleRow(w, s.saleId), ['Window cleaning', 21000, w.ids.mason, 40, 15, 'monthly']);
+  checkData(w);
+});
+
+test('a sale can only be given to a sales rep or an owner who is on the team', () => {
+  const w = seeded();
+  const second = w.must('owner', 'saveMember', { member: { name: 'Second Owner', role: 'owner', pin: '606147' } }).result.id;
+  w.must('owner', 'removeMember', { id: w.ids.jake });
+  [w.ids.cole, w.ids.tess, w.ids.jake, 'm_nobody', '', null, 0, 7, {}, [w.ids.owner], '__proto__', 'constructor'].forEach((id) => {
+    const r = w.refuse('owner', 'updateSale', { saleId: w.ids.saleA, patch: { repId: id, priceCents: 99 } }, 'invalid');
+    eq(r.error.message, 'Pick a sales rep or an owner who is on the team.', 'repId ' + JSON.stringify(id));
+  });
+  eq(saleRow(w, w.ids.saleA), ['Window cleaning', 15000, w.ids.mason, 30, 10, 'monthly'], 'and the price sent along with a bad seller was not saved either');
+  w.must('owner', 'updateSale', { saleId: w.ids.saleA, patch: { repId: second } });
+  eq(saleRow(w, w.ids.saleA), ['Window cleaning', 15000, second, 0, 0, 'monthly'], 'any owner will do, and earns nothing');
+  /* Jake has left. His sale can still have its price fixed, and stays his, with the rates it was sold under. */
+  w.must('owner', 'updateSale', { saleId: w.ids.saleB, patch: { priceCents: 28000, repId: w.ids.jake } });
+  eq(saleRow(w, w.ids.saleB), ['House wash', 28000, w.ids.jake, 30, 10, 'once']);
+  eq(byId(w.full('owner').sales, w.ids.saleB).events, [{ day: '2026-11-17', cents: 8400, kind: 'first' }]);
+});
+
+test('one-time or monthly cannot be changed by a fix: the owner is told to remove the sale and enter it again', () => {
+  const w = seeded();
+  const r = w.refuse('owner', 'updateSale', { saleId: w.ids.saleA, patch: { billing: 'once', priceCents: 1 } }, 'invalid');
+  eq(r.error.message, 'One-time or monthly cannot be changed on a sale. Remove the sale and enter it again.');
+  w.refuse('owner', 'updateSale', { saleId: w.ids.saleB, patch: { billing: 'monthly' } }, 'invalid');
+  w.refuse('owner', 'updateSale', { saleId: w.ids.saleB, patch: { billing: 'weekly' } }, 'invalid');
+  w.must('owner', 'updateSale', { saleId: w.ids.saleA, patch: { billing: 'monthly', priceCents: 16000 } });
+  eq(saleRow(w, w.ids.saleA), ['Window cleaning', 16000, w.ids.mason, 30, 10, 'monthly'], 'saying what it already is is fine');
+  eq(clientRow(w, w.ids.clientA)[2], 'monthly');
+});
+
+test('a fix is checked like any other save: one bad value refuses all of it, and nothing else on the sale can be rewritten', () => {
+  const w = seeded();
+  [{ priceCents: -1 }, { priceCents: 1.5 }, { priceCents: '100' }, { priceCents: null }, { priceCents: NaN }, { priceCents: 100000001 }, { priceCents: [100] },
+    { service: '' }, { service: '   ' }, { service: null }, { service: ['House wash'] }, { service: {} },
+    { priceCents: 5000, service: '' }, { service: 'Fine', priceCents: -5 }].forEach((patch) => w.refuse('owner', 'updateSale', { saleId: w.ids.saleA, patch: patch }, 'invalid'));
+  ['s_nobody', '', null, undefined, 5, {}, w.ids.clientA, w.ids.jobA, '__proto__'].forEach((id) => w.refuse('owner', 'updateSale', { saleId: id, patch: { priceCents: 100 } }, 'not_found'));
+  w.refuse('owner', 'updateSale', { patch: { priceCents: 100 } }, 'not_found');
+  eq(w.refuse('owner', 'updateSale', { saleId: 's_nobody', patch: { priceCents: 100 } }, 'not_found').error.message, 'That sale is no longer here.');
+  const before = byId(w.db().sales, w.ids.saleA), client = byId(w.db().clients, w.ids.clientA);
+  /* Fields that are not part of a fix are ignored, and a patch that is not a list of fields fixes nothing. */
+  w.must('owner', 'updateSale', { saleId: w.ids.saleA, patch: { id: 's_other', clientId: w.ids.clientB, day: '2020-01-01', soldAt: 1, firstPct: 99, monthlyPct: 99, jobId: w.ids.jobB,
+    endDay: '2026-11-17', endedBy: w.ids.saleB, notes: 'rewritten', events: [], clientName: 'x' } });
+  w.must('owner', 'updateSale', { saleId: w.ids.saleA, patch: JSON.parse('{"__proto__":{"priceCents":1},"constructor":{"priceCents":1},"prototype":{"service":"x"}}') });
+  [undefined, null, 'priceCents', 5, [], [{ priceCents: 1 }], true].forEach((patch) => w.must('owner', 'updateSale', { saleId: w.ids.saleA, patch: patch }));
+  eq(byId(w.db().sales, w.ids.saleA), before);
+  eq(byId(w.db().clients, w.ids.clientA), client);
+  /* A long service name is cut to 60 like everywhere else, and the price limit is the same $1,000,000. */
+  w.must('owner', 'updateSale', { saleId: w.ids.saleA, patch: { service: 'S'.repeat(500), priceCents: 100000000 } });
+  eq(saleRow(w, w.ids.saleA), ['S'.repeat(60), 100000000, w.ids.mason, 30, 10, 'monthly']);
+  eq(byId(w.full('mason').sales, w.ids.saleA).events[0].cents, 30000000);
+  checkData(w);
+});
+
+test('a fix sent twice with the same opId is made once, and only the owner can make one', () => {
+  const w = seeded();
+  const a = w.must('owner', 'updateSale', { saleId: w.ids.saleA, patch: { priceCents: 12000 }, opId: 'fix-sale-0001' });
+  const rev = w.rev();
+  w.must('owner', 'updateSale', { saleId: w.ids.saleA, patch: { priceCents: 9000 } });
+  const again = w.must('owner', 'updateSale', { saleId: w.ids.saleA, patch: { priceCents: 12000 }, opId: 'fix-sale-0001' });
+  eq([again.replay, again.result], [true, a.result]);
+  eq(saleRow(w, w.ids.saleA)[1], 9000, 'the retry did not put the older fix back on top of the newer one');
+  ok(w.rev() === rev + 1);
+  ['mason', 'jake', 'cole'].forEach((who) => w.refuse(who, 'updateSale', { saleId: w.ids.saleA, patch: { priceCents: 1, repId: w.ids[who] } }, 'forbidden'));
+  eq(w.raw({ action: 'updateSale', saleId: w.ids.saleA, patch: { priceCents: 1 } }).error.code, 'auth');
 });
 
 /* ================================================================== */
@@ -1958,44 +2314,45 @@ test('the last owner cannot be demoted or removed', () => {
   w.refuse('owner', 'saveMember', { member: { id: w.ids.owner, name: 'Grayson', role: 'rep' } }, 'invalid');
   w.refuse('owner', 'saveMember', { member: { id: w.ids.owner, name: 'Grayson', role: 'tech' } }, 'invalid');
   w.refuse('owner', 'removeMember', { id: w.ids.owner }, 'invalid');
-  const second = w.must('owner', 'saveMember', { member: { name: 'Second Owner', role: 'owner', pin: '6060' } }).result.id;
-  w.login('second', 'Second Owner', '6060');
+  const second = w.must('owner', 'saveMember', { member: { name: 'Second Owner', role: 'owner', pin: '606147' } }).result.id;
+  w.login('second', 'Second Owner', '606147');
   w.refuse('second', 'removeMember', { id: second }, 'invalid');
   w.must('second', 'saveMember', { member: { id: w.ids.owner, name: 'Grayson', role: 'rep' } });   /* fine while there are two */
   w.refuse('second', 'saveMember', { member: { id: second, name: 'Second Owner', role: 'rep' } }, 'invalid');
   eq(w.db().team.filter((m) => m.active && m.role === 'owner').map((m) => m.id), [second]);
   eq(w.call('owner', 'sync').error.code, 'auth', 'the demoted owner is signed out');
-  eq(w.tryLogin('grayson', '1234').sync.me.role, 'rep');
-  eq(w.tryLogin('grayson', '1234').sync.notices, [], 'and no longer receives owner data');
+  eq(w.tryLogin('grayson', '482913').sync.me.role, 'rep');
+  eq(w.tryLogin('grayson', '482913').sync.notices, [], 'and no longer receives owner data');
 });
 
 test('two people cannot share a name; a removed person\'s name can be used again', () => {
   const w = world();
-  ['Mason Reed', 'mason reed', '  MASON   REED ', 'Cole', 'grayson'].forEach((n) => w.refuse('owner', 'saveMember', { member: { name: n, role: 'rep', pin: '1010' } }, 'invalid'));
+  ['Mason Reed', 'mason reed', '  MASON   REED ', 'Cole', 'grayson'].forEach((n) => w.refuse('owner', 'saveMember', { member: { name: n, role: 'rep', pin: '101347' } }, 'invalid'));
   w.refuse('owner', 'saveMember', { member: { id: w.ids.jake, name: 'Mason Reed', role: 'rep' } }, 'invalid');
   w.must('owner', 'saveMember', { member: { id: w.ids.jake, name: 'JAKE MILLER', role: 'rep' } });   /* your own name, re-cased */
   w.must('owner', 'removeMember', { id: w.ids.mason });
-  const again = w.must('owner', 'saveMember', { member: { name: 'Mason Reed', role: 'tech', pin: '1010' } }).result;
+  const again = w.must('owner', 'saveMember', { member: { name: 'Mason Reed', role: 'tech', pin: '101347' } }).result;
   ok(again.id !== w.ids.mason);
-  const li = w.tryLogin('mason reed', '1010');
+  const li = w.tryLogin('mason reed', '101347');
   ok(li.ok && li.sync.me.id === again.id && li.sync.me.role === 'tech');
-  eq(w.tryLogin('mason reed', '2222').error.code, 'auth', 'the removed person\'s PIN does not open the new one');
+  eq(w.tryLogin('mason reed', '271845').error.code, 'auth', 'the removed person\'s PIN does not open the new one');
 });
 
 test('saveMember checks the name, the role and the PIN, and ignores everything else', () => {
   const w = world();
   [{ role: 'rep' }, { name: '', role: 'rep' }, { name: '   ', role: 'rep' }, { name: 'No Role' }, { name: 'Bad Role', role: 'admin' }, { name: 'Bad Role', role: 'Owner' }, { name: 'Bad Role', role: ['rep'] },
-    { name: 'Bad Pin', role: 'rep', pin: '12' }, { name: 'Bad Pin', role: 'rep', pin: '1234567' }, { name: 'Bad Pin', role: 'rep', pin: 'abcd' }, { name: 'Bad Pin', role: 'rep', pin: 0 }, { name: 'Bad Pin', role: 'rep', pin: -1234 },
+    { name: 'Bad Pin', role: 'rep', pin: '12' }, { name: 'Bad Pin', role: 'rep', pin: '1234' }, { name: 'Bad Pin', role: 'rep', pin: '48291' }, { name: 'Bad Pin', role: 'rep', pin: '1234567' }, { name: 'Bad Pin', role: 'rep', pin: 'abcdef' }, { name: 'Bad Pin', role: 'rep', pin: 0 }, { name: 'Bad Pin', role: 'rep', pin: -123456 },
+    { name: 'Bad Pin', role: 'rep', pin: false }, { name: 'Bad Pin', role: 'rep', pin: ['482913'] }, { name: 'Bad Pin', role: 'rep', pin: '123456' }, { name: 'Bad Pin', role: 'rep', pin: '777777' },
     'Just A Name', null, 5, ['x']].forEach((m) => w.refuse('owner', 'saveMember', { member: m }, 'invalid'));
   w.refuse('owner', 'saveMember', {}, 'invalid');
   w.refuse('owner', 'saveMember', { member: { id: 'm_nobody', name: 'Ghost', role: 'rep' } }, 'not_found');
   const r = w.must('owner', 'saveMember', { member: { name: 'Auto Pin', role: 'tech', active: false, pinHash: 'x', salt: 'y', createdAt: 5, standardsAckAt: 99, noticesSeenAt: 99, removedAt: 1 } }).result;
-  ok(/^\d{4}$/.test(r.pin), 'a PIN is made when none is given');
+  ok(/^\d{6}$/.test(r.pin), 'a six digit PIN is made when none is given');
   const m = byId(w.db().team, r.id);
   eq([m.active, m.createdAt, m.standardsAckAt, m.noticesSeenAt, m.removedAt], [true, w.t, undefined, undefined, undefined]);
   ok(w.tryLogin('auto pin', r.pin).ok);
   const before = byId(w.db().team, w.ids.mason);
-  const e = w.must('owner', 'saveMember', { member: { id: w.ids.mason, name: 'Mason Reed', role: 'rep', pin: '0000', active: false, pinHash: 'x' } }).result;
+  const e = w.must('owner', 'saveMember', { member: { id: w.ids.mason, name: 'Mason Reed', role: 'rep', pin: '000000', active: false, pinHash: 'x' } }).result;
   eq(e, { id: w.ids.mason }, 'an edit never hands back a PIN');
   eq(byId(w.db().team, w.ids.mason), before, 'an edit cannot change the PIN or switch someone off');
 });
@@ -2081,7 +2438,7 @@ test('everyone receives the same standards, and at first nobody but the owner is
     eq(s.settings.standards, C.DEFAULT_SETTINGS.standards, who); eq(s.settings.standardsUpdatedAt, 0); eq(s.me.standardsAckAt, 0);
     eq(needsToConfirm(s), who !== 'owner', who);
   });
-  eq(w.tryLogin('cole', '3333').sync.settings.standards.length, 5, 'they arrive with the sign-in answer too');
+  eq(w.tryLogin('cole', '906132').sync.settings.standards.length, 5, 'they arrive with the sign-in answer too');
 });
 
 test('only the owner can change the standards', () => {
@@ -2201,7 +2558,7 @@ test('action names borrowed from JavaScript itself do nothing', () => {
     'roles', 'run', 'handle', 'bootstrap', 'resetOwnerPin', 'Sync', 'LOGIN', 'sync ', ' sync', 'createSale\u0000', 'deleteEverything', ''];
   names.forEach((a) => {
     eq(w.raw({ action: a }).error.code, 'auth', 'without a token: ' + JSON.stringify(a));
-    ['owner', 'mason', 'cole'].forEach((who) => w.refuse(who, a, { id: w.ids.owner, clientId: w.ids.clientA, jobId: w.ids.jobA, pin: '1111', member: { name: 'X', role: 'owner' } }, 'invalid'));
+    ['owner', 'mason', 'cole'].forEach((who) => w.refuse(who, a, { id: w.ids.owner, clientId: w.ids.clientA, jobId: w.ids.jobA, pin: '135790', member: { name: 'X', role: 'owner' } }, 'invalid'));
   });
   ok(({}).polluted === undefined);
 });
@@ -2234,8 +2591,8 @@ test('a service, a person or a customer may be called "constructor", "__proto__"
   eq(w.full('mason').settings.services.map((s) => s.name), odd);
   w.refuse('owner', 'saveSettings', { settings: { services: [{ name: 'toString' }, { name: ' TOSTRING ' }] } }, 'invalid');
   odd.forEach((n, i) => {
-    const m = w.must('owner', 'saveMember', { member: { name: n, role: 'rep', pin: '70' + (10 + i) } }).result;
-    const li = w.tryLogin(n.toUpperCase(), '70' + (10 + i));
+    const m = w.must('owner', 'saveMember', { member: { name: n, role: 'rep', pin: '7049' + (10 + i) } }).result;
+    const li = w.tryLogin(n.toUpperCase(), '7049' + (10 + i));
     ok(li.ok && li.sync.me.id === m.id && li.sync.me.name === n, 'could not sign in as ' + n);
     const s = w.raw({ action: 'createSale', token: li.result.token, client: { name: n, address: n }, service: n, priceCents: 1000, what: n, notes: n });
     ok(s.ok && s.sync.clients[0].name === n && s.sync.sales[0].service === n && byId(s.sync.board, m.id).all.cents === 1000, 'sale as ' + n);
@@ -2294,9 +2651,9 @@ test('HTML, script and other odd text in every text field is stored exactly as t
   NASTY.forEach((x, i) => {
     const w = world();
     const cut = (n) => x.slice(0, n);
-    const m = w.must('owner', 'saveMember', { member: { name: x, role: 'rep', pin: '9191' } }).result;
+    const m = w.must('owner', 'saveMember', { member: { name: x, role: 'rep', pin: '919347' } }).result;
     eq(byId(w.full('cole').team, m.id).name, cut(40), 'member name');
-    const li = w.tryLogin(x, '9191'); ok(li.ok, 'the person named ' + x + ' can sign in');
+    const li = w.tryLogin(x, '919347'); ok(li.ok, 'the person named ' + x + ' can sign in');
     const r = w.raw({ action: 'createSale', token: li.result.token, client: { name: x, contact: x, phone: x, email: x, address: x }, service: x, priceCents: 12345, billing: 'monthly', notes: x, what: x,
       appointment: { date: '2026-11-18', time: '09:30' } });
     ok(r.ok, 'sale refused: ' + JSON.stringify(r.error));
@@ -2337,9 +2694,9 @@ function describe(v) { try { const s = JSON.stringify(v); return typeof v === 'n
 function hostileCases(w) {
   const std = [{ id: 'job', title: 'On every job', ordered: true, items: ['Arrive on time.', 'Take photos.'] }];
   return [
-    ['login', null, { name: 'Grayson', pin: '1234' }],
+    ['login', null, { name: 'Grayson', pin: '482913' }],
     ['sync', 'mason', { since: w.rev(), day: w.today() }],
-    ['changePin', 'mason', { oldPin: '2222', newPin: '4321' }],
+    ['changePin', 'mason', { oldPin: '271845', newPin: '432187' }],
     ['ackStandards', 'cole', {}],
     ['logout', 'tess', {}],
     ['addNote', 'mason', { kind: 'client', id: w.ids.clientA, text: 'a note' }],
@@ -2356,10 +2713,11 @@ function hostileCases(w) {
     ['updateJob', 'owner', { jobId: w.ids.jobA, patch: { assignedTo: w.ids.tess, what: 'w', status: 'cancelled' } }],
     ['deleteClient', 'owner', { clientId: w.ids.clientB }],
     ['deleteSale', 'owner', { saleId: w.ids.saleB }],
-    ['saveMember', 'owner', { member: { name: 'New Person', role: 'tech', pin: '5656' } }],
+    ['updateSale', 'owner', { saleId: w.ids.saleA, patch: { priceCents: 12000, service: 'House wash', repId: w.ids.jake, billing: 'monthly' } }],
+    ['saveMember', 'owner', { member: { name: 'New Person', role: 'tech', pin: '565247' } }],
     ['saveMember', 'owner', { member: { id: w.ids.jake, name: 'Jake M', role: 'tech' } }],
     ['removeMember', 'owner', { id: w.ids.jake }],
-    ['resetPin', 'owner', { id: w.ids.jake, pin: '5656' }],
+    ['resetPin', 'owner', { id: w.ids.jake, pin: '565247' }],
     ['saveSettings', 'owner', { settings: { services: [{ id: 'windows', name: 'Window cleaning', priceCents: 100 }], firstPct: 30, monthlyPct: 10, defaultSlots: ['08:00', '10:00'],
       defaultTechId: w.ids.cole, notifyEmail: 'g@ridgeline.example', emailOnBooking: true, standards: std } }],
     ['setDays', 'owner', { days: [{ date: '2026-12-01', open: true, slots: ['08:00', '10:00'] }, { date: '2026-12-02', open: false }] }],
@@ -2485,7 +2843,7 @@ test('junk of every type in every field of every action: never a crash, never a 
 test('a stranger sending junk to sign-in cannot write to the owner\'s problem list or stir the data', () => {
   const w = world(), before = JSON.stringify(w.store.dump());
   JUNK.forEach((j) => {
-    [w.raw({ action: 'login', name: j, pin: '1234' }), w.raw({ action: 'login', name: 'Grayson', pin: j }), w.raw({ action: 'login', name: j, pin: j })].forEach((r) => {
+    [w.raw({ action: 'login', name: j, pin: '482913' }), w.raw({ action: 'login', name: 'Grayson', pin: j }), w.raw({ action: 'login', name: j, pin: j })].forEach((r) => {
       ok(!r.ok && (r.error.code === 'auth' || r.error.code === 'locked'), 'sign-in with ' + describe(j) + ' answered ' + r.error.code);
     });
   });
@@ -2686,7 +3044,7 @@ test('every save moves the rev by one or more and answers with the full snapshot
     eq(w.must('mason', 'sync', { since: rev, day: w.today() }).sync.same, false, 'other people get the news after ' + a);
   });
   const w = base.fork(), rev = w.rev(), same = { since: rev, day: w.today() };
-  w.tryLogin('mason', '2222'); w.tryLogin('mason', '0000'); w.tryLogin('nobody', '0000');
+  w.tryLogin('mason', '271845'); w.tryLogin('mason', '000000'); w.tryLogin('nobody', '000000');
   w.call('mason', 'sync', same); w.call('mason', 'dumpEverything', same);
   eq(w.refuse('mason', 'saveSettings', Object.assign({ settings: { firstPct: 1 } }, same), 'forbidden').sync, { rev: rev, today: w.today(), same: true }, 'a refusal with nothing new says so');
   eq(w.refuse('jake', 'addNote', Object.assign({ kind: 'client', id: w.ids.clientA, text: 'x' }, same), 'forbidden').sync.same, true);
@@ -2763,13 +3121,13 @@ function playRandomly(seed, steps) {
     deleteClient: () => ({ clientId: anyId('clients') }),
     deleteSale: () => ({ saleId: anyId('sales') }),
     removeMember: () => ({ id: pick(people).id }),
-    resetPin: () => ({ id: pick(people).id, pin: '6' + (100 + Math.floor(r() * 899)) }),
-    saveMember: () => chance(0.5) ? { member: { name: pick(['Rep ', 'Tech ', 'Sam ']) + Math.floor(r() * 30), role: pick(['rep', 'tech', 'boss']), pin: '7' + (100 + Math.floor(r() * 899)) } }
+    resetPin: () => ({ id: pick(people).id, pin: '6' + (10000 + Math.floor(r() * 89999)) }),
+    saveMember: () => chance(0.5) ? { member: { name: pick(['Rep ', 'Tech ', 'Sam ']) + Math.floor(r() * 30), role: pick(['rep', 'tech', 'boss']), pin: '7' + (10000 + Math.floor(r() * 89999)) } }
       : { member: { id: pick(people).id, name: pick(people).name, role: pick(['rep', 'tech', 'rep', 'tech', 'owner']) } },
     saveSettings: () => ({ settings: pick([{ firstPct: pick([30, 25.5, 0, 100, 101]), monthlyPct: pick([10, 7.25, -1]) }, { defaultTechId: pick(people).id }, { defaultTechId: null },
       { standards: draft().slice(0, 1 + Math.floor(r() * 5)) }, { defaultSlots: pick([SLOTS, SLOTS, []]) }, { emailOnBooking: chance(0.5) }, { services: [{ name: 'Window cleaning' }, { name: 'House wash', priceCents: price() }] }]) }),
     setDays: () => ({ days: [{ date: anyDay(), open: chance(0.7), slots: chance(0.3) ? [anyTime(), anyTime()] : undefined }] }),
-    changePin: () => ({ oldPin: chance(0.8) ? 'CURRENT' : '0000', newPin: '8' + (100 + Math.floor(r() * 899)) }),
+    changePin: () => ({ oldPin: chance(0.8) ? 'CURRENT' : '000000', newPin: '8' + (10000 + Math.floor(r() * 89999)) }),
     logout: () => ({})
   };
   const names = Object.keys(make);
@@ -2785,7 +3143,7 @@ function playRandomly(seed, steps) {
       if (action === 'changePin' && fields.oldPin === 'CURRENT') fields.oldPin = p.pin;
       if (action === 'saveMember' && fields.member.role === 'owner' && fields.member.id !== people[0].id) fields.member.role = 'rep';   /* one owner only, so the play can always go on */
       if (chance(0.25)) fields.opId = 'play-' + seed + '-' + Math.floor(r() * 40);
-      if (!w.tokens[p.key] || chance(0.03)) { const li = w.tryLogin(chance(0.97) ? p.name : p.name + 'x', chance(0.97) ? p.pin : '0000'); if (li.ok) w.tokens[p.key] = li.result.token; }
+      if (!w.tokens[p.key] || chance(0.03)) { const li = w.tryLogin(chance(0.97) ? p.name : p.name + 'x', chance(0.97) ? p.pin : '000000'); if (li.ok) w.tokens[p.key] = li.result.token; }
       const res = w.call(p.key, action, fields);
       tally[res.ok ? 'ok' : res.error.code] = (tally[res.ok ? 'ok' : res.error.code] || 0) + 1;
       ok(res.ok || res.error.code !== 'server', action + ' gave a server error');
@@ -2852,7 +3210,7 @@ test('a store that is completely down still gets a plain answer, for every actio
   w.store.cacheGet = () => null;
   const reqs = sampleRequests(w);
   Object.keys(reqs).concat(['sync', 'login', 'logout', 'ackStandards']).forEach((a) => {
-    const r = w.raw(Object.assign({ action: a, token: w.tokens.owner, name: 'Grayson', pin: '1234' }, reqs[a] || {}));
+    const r = w.raw(Object.assign({ action: a, token: w.tokens.owner, name: 'Grayson', pin: '482913' }, reqs[a] || {}));
     eq([r.ok, r.error.code, r.sync], [false, 'server', undefined], a);
   });
 });
