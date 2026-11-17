@@ -372,6 +372,11 @@ select.input { padding-right: 40px; text-overflow: ellipsis; }
 .empty-text { color: var(--ink-2); }
 .empty .btn { margin-top: 10px; }
 
+/* .sold-head: the check and the heading at the top of a "saved" view (App.ui.savedHead: "Sale saved", "Person added"). */
+.sold-head { display: flex; align-items: center; gap: 12px; }
+.sold-head .ico { color: var(--good); }
+.sold-title { font: 800 22px/1.15 var(--display); }
+
 /* ---------- SHEETS ---------- */
 /* .layer: the dimmed backdrop that holds one sheet or dialog. */
 /* --vv-top / --vv-h are set by app.js while the on-screen keyboard is up, so a sheet's footer button stays in view. */

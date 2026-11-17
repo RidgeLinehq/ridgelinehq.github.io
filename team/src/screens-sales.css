@@ -23,7 +23,3 @@
 .btn-start { align-self: flex-start; margin-left: -6px; }
 .callout .btn-start { margin-top: 2px; margin-bottom: -10px; }
 
-/* .sold-head: the check and "Sale saved" at the top of the success view. */
-.sold-head { display: flex; align-items: center; gap: 12px; }
-.sold-head .ico { color: var(--good); }
-.sold-title { font: 800 22px/1.15 var(--display); }

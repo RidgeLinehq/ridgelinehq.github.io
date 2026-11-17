@@ -85,6 +85,12 @@
     } catch (e) { return ''; }
   }
 
+  /* Does the client read the way a change was sent? (How a try that got no answer is recognised as saved.) */
+  function holds(id, patch) {
+    var c = App.client(id);
+    return !!c && Object.keys(patch).every(function (k) { return (c[k] == null ? '' : c[k]) === patch[k]; });
+  }
+
   function matches(c, q) {
     if (!q) return true;
     if ([c.name, c.contact, c.phone, c.address].join(' ').toLowerCase().indexOf(q) >= 0) return true;
@@ -228,8 +234,10 @@
        and new data does not redraw it. If it cannot be saved, the control goes back to what the system holds
        and a red message says so until it is tapped, with Retry. */
     function quick(patch, savedText) {
-      ui.save(null, 'updateClient', { clientId: id, patch: patch }, { sheet: sheet, saved: savedText }).then(function (res) {
-        if (res.skipped) return;
+      ui.save(null, 'updateClient', { clientId: id, patch: patch }, { sheet: sheet, saved: savedText,
+        /* No answer came, and then the client reads the way it was tapped: it was saved. */
+        landed: function () { return holds(id, patch); }, onLanded: function () { App.toast(savedText); }
+      }).then(function (res) {
         if (res.ok) App.toast(savedText);
         else if (App.client(id)) draw();
       });
@@ -265,7 +273,9 @@
         if (!yes) return;
         function removed() { sheet.close(); App.toast('Client removed.'); }
         deleting = true;
-        ui.save(delBtn, 'deleteClient', { clientId: id }, { errorEl: delErr, saved: removed }).then(function (res) {
+        ui.save(delBtn, 'deleteClient', { clientId: id }, { errorEl: delErr, saved: removed,
+          landed: function () { return !App.client(id); }, onLanded: removed
+        }).then(function (res) {
           if (res.skipped) return;
           if (res.ok) { removed(); return; }
           deleting = false;
@@ -427,7 +437,7 @@
            this goes out too (under the same id) and the system says which it was. */
         if (link === had && !sh.unanswered('updateClient', fields, 'link')) { sh.close(); return; }
         var said = link ? 'Payment link saved.' : 'Payment link removed.';
-        sh.send('updateClient', fields, { attempt: 'link', saved: said }).then(function (res) {
+        sh.send('updateClient', fields, { attempt: 'link', saved: said, landed: function () { return link !== had && holds(id, fields.patch); } }).then(function (res) {
           if (!res.ok) return;
           sh.close();
           App.toast(said);
@@ -536,7 +546,7 @@
         /* Nothing was changed: close. Unless an earlier try from here got no answer (see the payment link above). */
         if (!any && !sh.unanswered('updateClient', fields)) { sh.close(); return; }
         var said = patch.repId ? 'Saved. ' + App.nameOf(patch.repId, 'Their new rep') + ' looks after this client now.' : 'Saved.';
-        sh.send('updateClient', fields, { saved: said }).then(function (res) {
+        sh.send('updateClient', fields, { saved: said, landed: function () { return any && holds(id, patch); } }).then(function (res) {
           if (!res.ok) return;
           sh.close();
           App.toast(said);

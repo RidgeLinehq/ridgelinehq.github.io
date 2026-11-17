@@ -8,12 +8,15 @@
  * the app itself starts on DOMContentLoaded, after every file has registered.
  *
  * SCREENS AND ROUTES
- *   App.screen(route, { roles, title, render(root) })   register a screen. `roles` omitted = everyone.
+ *   App.screen(route, { roles, title, render(root), update(root) })   register a screen. `roles` omitted = everyone.
  *       App.screen('sales', { roles: ['owner', 'rep'], title: 'Sales', render: function (root) { root.appendChild(App.ui.title('Sales')); } });
  *       `root` is emptied before every render and stacks its children with a 16px gap. Keep your own
  *       view state (filters, the month shown) in variables in your file and render from them: render
  *       runs again whenever the data changes. Scroll position is kept, and so is any text typed
  *       into an input that has a `name` (give App.ui.field a name: App.ui.field({ name: 'find' })).
+ *       A screen with a box people type in while data arrives (Clients and its search) also gives `update`:
+ *       it is called instead of render when new data arrives, redraws only what is under the box (the box
+ *       never leaves the page, so the keyboard stays up), and answers false when the whole screen must be built again.
  *   App.go(route)                 switch screen (closes any open sheet first).      App.go('calendar');
  *   App.route                     the current route name, for example 'today'.
  *   App.actions                   cross-screen entry points. Register yours:        App.actions.openClient = function (id) { ... };
@@ -40,28 +43,51 @@
  *   App.isOverdue(job)            still scheduled and its day has passed.
  *   App.dayOf(date)               the owner's setting for a day: { date, open, slots } or null (not listed = blocked).
  *   App.freeSlots(date)           the times still free that day.                    App.freeSlots('2026-11-19') -> ['09:30', '14:00']
+ *                                 Which of today's times have passed goes by the system's clock (it comes with every answer), not the phone's.
  *   App.freeDays()                every day from today on that still has a free time, in order.
  *   App.needsStandards()          true while I still have to confirm the company standards.
  *   App.hasRead(member)           has this person confirmed the current standards (owner's view of the team).
  *
  * TALKING TO THE SYSTEM
+ *   Three rules hold for every save: nothing fails silently, nothing is saved twice, and nothing is shown as saved
+ *   that is not. sheet.send and App.ui.save keep all three for you; use them, not App.api.send, for anything a
+ *   person saves.
+ *   sheet.send(action, fields, opts) -> Promise of the answer. A save from a sheet (see SHEETS):
+ *       - the button says "Saving...", the sheet's body is inert, and new data does not redraw the sheet until
+ *         the answer is in. A second tap does nothing (it answers { ok: false, skipped: true });
+ *       - a failure is said in red by the button. If the sheet was closed meanwhile, it is a red toast that stays
+ *         until it is tapped, with Retry (the same action, fields and id);
+ *       - no answer at all (error.code 'network') may still have saved. So the id of that try is kept, and every
+ *         later try from that sheet goes out under it, WHATEVER was changed since, until the system answers. The
+ *         system answers the same fields from memory (ok, replay: true) and refuses changed ones with
+ *         'already_saved': the sheet then closes and the system's words stay on screen until tapped ("Your first
+ *         try was saved. Check it, then make the change again if you still need to."). So never skip a save
+ *         because "nothing was changed" while sheet.unanswered(action, fields, attempt) is true: send it.
+ *       opts: { button, busyText, attempt, saved, landed, onLanded, stays }
+ *         attempt   names what is being attempted when one sheet could save different things with the same action
+ *                   ('link', 'commission'). The footer button's default is 'form'. A row of a pick-list (opts.button)
+ *                   always sends the same fields, so it has none: its id goes with its fields.
+ *         saved     the words for "it is saved" (or a function(res)): used when the save succeeds later, from Retry.
+ *         landed    function -> true when the data shows this very save (the job is at that time, the note is there).
+ *                   A try that got no answer and then lands is finished as saved: the sheet closes with `saved`
+ *                   (or opts.onLanded() runs instead), and its id is done with.
+ *         stays     the sheet handles 'already_saved' itself (Add person).
+ *       sh.send('addNote', { kind: kind, id: id, text: text }, { saved: 'Note saved.' }).then(function (res) { if (res.ok) ... });
+ *   App.ui.save(button, action, fields, opts) -> the same for a button that is not a sheet's footer (on a screen, or
+ *       in a sheet's body). The screen (or sheet) under it is not redrawn while it saves. The message goes to
+ *       opts.errorEl; if a redraw takes that line away, or there is none, it is the red toast that stays.
+ *       button may be null for a one-tap control that has already flipped (pass opts.sheet): after 0.6 s a
+ *       "Saving..." line shows, and on failure you put the control back.
+ *       opts: { errorEl, sheet, busyText, attempt, saved, landed, onLanded, keeps (you keep the message across redraws) }
+ *       App.ui.save(btn, 'updateJob', { jobId: id, patch: { status: 'cancelled' } }, { errorEl: err, saved: 'Job cancelled.' });
  *   App.api.send(action, fields, opts) -> Promise of the answer { ok, result, error: { code, message }, opId, replay }.
- *       Adds token, since, day and a fresh opId; applies the returned data (which re-renders); never rejects.
- *       A failed call (no signal, time-out, not our JSON) answers { ok: false, error: { code: 'network', message } }.
- *       Pass opts.opId (the opId of the answer that failed) to retry the same action without saving twice.
- *       An id is only re-used for the very same fields; if they changed, send() takes a new one, because
- *       the system answers a repeated id with the first save (replay: true) and the change would be lost.
- *       App.api.send('addNote', { kind: 'client', id: c.id, text: text }).then(function (res) { if (res.ok) ... });
+ *       The bare call: adds token, since, day and an opId (opts.opId, or a fresh one); applies the returned data
+ *       (which re-renders); never rejects. A failed call (no signal, time-out, not our JSON) answers
+ *       { ok: false, error: { code: 'network', message } }. opts.onAnswer(res) runs when the system answers, before
+ *       its data is applied. Use it for reading ('sync') and for a flow that keeps its own id (New sale).
  *       error.message is already plain words for the team: show it as it is. The codes worth a branch are
- *       'slot_taken' / 'slot_closed' (the time is gone: picker.setError(res.error.message)) and 'network'.
- *       An 'auth' answer signs the phone out and shows sign-in by itself.
- *   App.ui.save(button, action, fields, opts) -> Promise of the answer. The whole save pattern for any button:
- *       disables it and shows "Saving...", sends, and shows the message in opts.errorEl (or a red toast).
- *       Tapped again after a failure it re-uses the opId while the fields are the same, and takes a new one
- *       as soon as anything in them changed. opts: { errorEl, quiet, busyText }.
- *       App.ui.save(btn, 'updateClient', { clientId: id, patch: { payStatus: 'paid' } }, { errorEl: err });
- *   Inside a sheet use sheet.send(action, fields) instead (see SHEETS): same thing on the footer button.
- *       Both answer { ok: false, skipped: true } when the button is already busy saving, so a double tap does nothing.
+ *       'slot_taken' / 'slot_closed' (the time is gone: picker.setError(res.error.message)), 'already_saved' and
+ *       'network'. An 'auth' answer signs the phone out and shows sign-in by itself.
  *
  * RE-RENDERING WHEN DATA CHANGES
  *   App.refresh()                 re-render the current screen and tell open sheets and live pieces. Call it after
@@ -70,8 +96,10 @@
  *                                 'signout' (this person is leaving this phone: they tapped Sign out, the system ended their
  *                                 sign-in, or the sample data is being reset). It runs BEFORE anything is cleared, so App.me()
  *                                 and App.data still answer: clear what you keep on the phone for this person here.
- *                                 fn gets { chosen: true } for a tap on Sign out or a sample reset, { chosen: false } otherwise.
- *       App.on('signout', function () { forgetDraftOf(App.me().id); });
+ *                                 fn gets { chosen, removed }: chosen is true for a tap on Sign out or a sample reset;
+ *                                 removed is true when the system said this person is no longer on the team. With both
+ *                                 false the same person can sign back in (their PIN was reset, the sign-in ran out).
+ *       App.on('signout', function (why) { if (why.chosen || why.removed) forgetDraftOf(App.me().id); });
  *   App.live(el, fn)              call fn on every data change and tick for as long as el is on the page.
  *       App.live(listEl, function () { drawList(listEl); });
  *
@@ -87,17 +115,22 @@
  *     sheet.setTitle(text)                   sheet.setButton(label, disabled)     (setButton(null) hides the footer button)
  *     sheet.note(text)                       a quiet line just above the footer button ("You earn $45.00 on this sale.")
  *     sheet.error(message)                   red words just above the footer button ('' clears them)
- *     sheet.send(action, fields, opts)       save from the footer button: "Saving...", same opId on a retry of the same
- *                                            fields, shows the message on failure, resolves with the answer.
- *                                            opts: { button, quiet, busyText }
+ *     sheet.send(action, fields, opts)       save from the footer button (see TALKING TO THE SYSTEM): "Saving...", an inert
+ *                                            body, the message by the button, one id per attempt, resolves with the answer.
+ *     sheet.unanswered(action, fields, attempt)   true while an earlier try of that save from here has had no answer
+ *     sheet.isOpen()                         false once it has been closed (an answer can arrive after that)
+ *     sheet.hold() -> release()              for a sheet that saves through App.api.send itself: until release() is
+ *                                            called the body is inert and new data does not redraw the sheet
  *     sheet.rebuild()                        run `body` again, keeping the scroll position
  *     sheet.reveal(el)                       scroll the body to an element (the first missing field)
  *     sheet.close()                          close it (and anything opened on top of it)
- *   App.toast(text, opts) -> remove()    a short message. opts: { bad: true, retry: fn, action: { label, onTap }, ms }.
+ *   App.toast(text, opts) -> remove()    a short message. opts: { bad: true, retry: fn, action: { label, onTap }, ms, sticky, hold }.
  *       It sits just above the tab bar. While a sheet is open it appears at the top instead, just under the
  *       sheet's header (just above a short sheet when there is room), so it never covers the sheet's button,
  *       the words by it, or the thing it confirms. Do not toast what the screen already shows in the same spot.
- *       App.toast('Sale saved.');     App.toast(res.error.message, { bad: true, retry: tryAgain });
+ *       sticky: it stays until its button is tapped (Retry, your action, or OK): for a failure that has nowhere
+ *       else to be said. hold: it stays, with no button, until you call remove() ("Saving...").
+ *       App.toast('Sale saved.');     App.toast(res.error.message, { bad: true, sticky: true });
  *   App.confirm({ title, text, yes, no, danger }) -> Promise of true or false. In-page, never the browser's own.
  *       App.confirm({ title: 'Delete this client?', text: 'Their sales and jobs go too.', yes: 'Delete client', danger: true }).then(function (ok) { ... });
  *
@@ -166,8 +199,14 @@
  *       The only way a note is added anywhere: a button that calls it, never a text box of your own.
  *       App.ui.button('Add note', { icon: 'note', small: true, onTap: function () { App.ui.addNote('client', c.id); } })
  *   Saving                        sheet.send / App.ui.save (above): "Saving...", the message by the button, a safe retry.
+ *   Mark done and Undo            only through the job card and the Job sheet (App.ui.jobCard, App.ui.openJob): the card says
+ *                                 "Saving..." until the system has it, and carries a red line that stays if it could not be saved.
  *   Asking first                  App.confirm (above).
- *   Not here yet: the "saved: do another or finish" view and "Add a time" have no shared helper in this file.
+ *   The saved moment              App.ui.savedHead(text) -> the big check and the heading ("Sale saved", "Person added") that
+ *                                 open a "saved: do another or finish" view. Under it: what was saved, one quiet button for
+ *                                 "do another", and Done as the sheet's footer button.
+ *       el.appendChild(App.ui.savedHead('Sale saved'));
+ *   Not here yet: "Add a time" (a day's sheet and Settings each build it, the same way) has no shared helper in this file.
  *   App.ui.monthGrid({ month, min, max, day(date), onPick(date), onMonth(ym) }) -> el with el.refresh(), el.setMonth(ym), el.getMonth()
  *       A month of days, Sunday first, with arrows. For each day your `day(date)` returns
  *       { state: 'open' | 'full' | 'blocked' | 'past', label: '3 left', disabled: bool, selected: bool }.
@@ -619,6 +658,7 @@ var App = (function () {
     if (cur && cur.me.id === sync.me.id && cur.today === sync.today && sync.rev < cur.rev) return;   /* an older answer that arrived late */
     App.data = sync;
     keepSnapshot(sync);        /* what the system said, before any unsaved one-tap change is laid over it */
+    staleTries();
     layMarks();
     changed();
   }
@@ -721,6 +761,7 @@ var App = (function () {
       if (scope === SCREEN) drawScreen(true);
       else if (layers.indexOf(scope) >= 0 && scope.update) { try { scope.update(); } catch (e) { report(e); } }
       runLive();
+      sweepStanding();
     };
   }
 
@@ -736,6 +777,7 @@ var App = (function () {
       try { layer.update(); } catch (e) { report(e); }
     });
     runLive();
+    sweepStanding();
     emit('data');
   }
   App.refresh = changed;
@@ -1002,8 +1044,11 @@ var App = (function () {
       opts = opts || {};
       /* The footer button saves a form: one id for the whole attempt, whatever is changed between tries. A row of
          a pick-list (opts.button) always sends the same fields, so its id goes with those. */
+      /* opts.landed with the words that say it is saved (opts.saved): a try that got no answer and then shows in
+         the data closes the sheet with those words, unless opts.onLanded says what to do instead. */
+      var onLanded = opts.onLanded || (opts.landed && typeof opts.saved === 'string' ? function () { sh.close(); App.toast(opts.saved); } : null);
       return save(opts.button || sh.button, action, fields, { error: sh.error, busyText: opts.busyText, sheet: sh, closes: true,
-        attempt: opts.attempt || (opts.button ? null : 'form'), saved: opts.saved, landed: opts.landed, onLanded: opts.onLanded, stays: opts.stays });
+        attempt: opts.attempt || (opts.button ? null : 'form'), saved: opts.saved, landed: opts.landed, onLanded: onLanded, stays: opts.stays });
     };
     sh.unanswered = function (action, fields, attempt) { return !!tries[slotOf(action, fields, attempt || 'form')]; };
     sh.isOpen = function () { return layers.indexOf(sh) >= 0; };
@@ -1108,9 +1153,10 @@ var App = (function () {
    *   - a try that got no answer and then turns up in the data (opts.landed) is finished as saved.
    */
 
-  var tries = {};        /* slot (or slot and fields) -> the id of a save that was sent and never answered */
+  var tries = {};        /* slot (or slot and fields) -> the id of a save that was sent and has not been answered */
   var failToasts = {};   /* slot -> removes the red toast (or the "Saving..." of its Retry) about that slot */
   var landings = {};     /* slot -> [{ test, done }]: unanswered tries that can be recognised in the data */
+  var standing = {};     /* slot -> { el, c, res }: a failure that is being said on a line by its button */
   var SKIPPED = { ok: false, skipped: true, error: { code: 'busy', message: '' } };
 
   /* What a save is about: the action, the thing it changes, and which part of it. Two saves with the same slot
@@ -1126,11 +1172,16 @@ var App = (function () {
   function forgetTries(slot) {
     Object.keys(tries).forEach(function (key) { if (key === slot || key.indexOf(slot + '=') === 0) delete tries[key]; });
   }
-  /* The system answered this try (saved, or refused): nothing is left hanging. After 'already_saved' the try
-     may still be recognised in the data that came with the answer, so that is left to checkLanded. */
-  function answered(c, res) {
+  /* The system answered this try (saved, or refused): nothing is left hanging. */
+  function answered(c) {
     delete tries[c.key];
-    if (res.ok || res.error.code !== 'already_saved') delete landings[c.slot];
+    delete landings[c.slot];
+  }
+  /* New data is on screen. The id of a one-tap save that got no answer is only good for trying that same tap
+     again straight away: from here on the person is looking at what the system holds, and the same tap is a
+     new decision (a form's id is different: it stays until the system answers, see save). */
+  function staleTries() {
+    Object.keys(tries).forEach(function (key) { if (key.indexOf('=') > 0) delete tries[key]; });
   }
   function checkLanded() {
     Object.keys(landings).forEach(function (slot) {
@@ -1143,6 +1194,7 @@ var App = (function () {
       delete landings[slot];
       forgetTries(slot);
       dropFailToast(slot);
+      if (standing[slot]) { standing[slot].el.hidden = true; delete standing[slot]; }      /* "Could not save" is no longer true */
       try { hit.done(); } catch (e2) { report(e2); }
     });
   }
@@ -1159,6 +1211,17 @@ var App = (function () {
   }
   function canRetry(code) { return code === 'network' || code === 'busy' || code === 'server'; }
 
+  /* A failure said on a line by its button stays said. If a redraw takes that line away while the person is
+     still looking at the same sheet or screen, the message moves to a red toast that stays until it is tapped. */
+  function sweepStanding() {
+    Object.keys(standing).forEach(function (slot) {
+      var st = standing[slot];
+      if (onPage(st.el) && !st.el.hidden) return;                /* still there to be read */
+      delete standing[slot];
+      if (st.c.sh ? st.c.sh.isOpen() : st.c.route === App.route) failToast(st.c, st.res);
+    });
+  }
+
   /* A failure with nowhere left to show it: a red toast that stays until it is tapped. Retry sends the very
      same thing again under the same id. */
   function failToast(c, res) {
@@ -1166,7 +1229,8 @@ var App = (function () {
     failToasts[c.slot] = App.toast(res.error.message, { bad: true, sticky: true, retry: canRetry(res.error.code) ? function () {
       var gen = state.gen, saving = App.toast('Saving...', { hold: true });
       failToasts[c.slot] = saving;
-      send(c.action, c.fields, { opId: c.id, onAnswer: function (r) { answered(c, r); } }).then(function (r) {
+      tries[c.key] = c.id;
+      send(c.action, c.fields, { opId: c.id, onAnswer: function () { answered(c); } }).then(function (r) {
         saving();
         if (failToasts[c.slot] === saving) delete failToasts[c.slot];
         if (gen !== state.gen) return;
@@ -1204,16 +1268,18 @@ var App = (function () {
     var sh = o.sheet || sheetOf(btn);
     if (!btn && sh && sh.holds) return Promise.resolve(SKIPPED);      /* that sheet is already saving something */
     var slot = slotOf(action, fields, o.attempt);
-    var c = { action: action, fields: fields, o: o, slot: slot, key: o.attempt ? slot : slot + '=' + JSON.stringify(fields || {}) };
+    var c = { action: action, fields: fields, o: o, slot: slot, key: o.attempt ? slot : slot + '=' + JSON.stringify(fields || {}), sh: sh, route: App.route };
     var gen = state.gen;
     c.id = tries[c.key] || newId();
+    tries[c.key] = c.id;             /* from the moment it is sent until the system answers: a second try at the same thing, even from a sheet opened again meanwhile, is the same save */
     dropFailToast(slot);             /* a new try at the same thing: the old failure is being dealt with */
+    delete standing[slot];
     setBusy(btn, true, o.busyText);
     if (o.error) o.error('');
     var release = hold(sh || (btn && els.screen && els.screen.contains(btn) ? SCREEN : null));
     /* A one-tap control has no button to say "Saving..." on: when the answer is slow in coming, a line says it. */
     var wait = null, waitTimer = btn ? null : setTimeout(function () { wait = App.toast('Saving...', { hold: true }); }, 600);
-    return send(action, fields, { opId: c.id, onAnswer: function (res) { answered(c, res); } }).then(function (res) {
+    return send(action, fields, { opId: c.id, onAnswer: function () { answered(c); } }).then(function (res) {
       clearTimeout(waitTimer);
       if (wait) wait();
       setBusy(btn, false);
@@ -1222,7 +1288,6 @@ var App = (function () {
       if (res.error.code === 'network') unanswered(c);
       if (res.error.code === 'already_saved') {
         /* The first try was saved and this one was not run. Say so in the system's words; they stay until tapped. */
-        delete landings[slot];
         if (o.stays) return res;       /* the sheet says it in its own place (Add person) */
         if (o.closes && sh && sh.isOpen()) sh.close();
         App.toast(res.error.message, { bad: true, sticky: true });
@@ -1230,8 +1295,10 @@ var App = (function () {
       }
       /* By the button if that place is still there; otherwise where it cannot be missed. */
       var there = o.closes ? !!sh && sh.isOpen() : !!o.errorEl && onPage(o.errorEl);
-      if (there && o.error) o.error(res.error.message);
-      else failToast(c, res);
+      if (there && o.error) {
+        o.error(res.error.message);
+        if (!o.closes && !o.keeps) standing[slot] = { el: o.errorEl, c: c, res: res };     /* a line in something that gets redrawn: watched */
+      } else failToast(c, res);
       return res;
     });
   }
@@ -1240,7 +1307,7 @@ var App = (function () {
     o = o || {};
     var errorEl = o.errorEl;
     return save(btn, action, fields, {
-      busyText: o.busyText, sheet: o.sheet, attempt: o.attempt, saved: o.saved, landed: o.landed, onLanded: o.onLanded, errorEl: errorEl,
+      busyText: o.busyText, sheet: o.sheet, attempt: o.attempt, saved: o.saved, landed: o.landed, onLanded: o.onLanded, errorEl: errorEl, keeps: o.keeps,
       error: errorEl ? function (message) { errorEl.textContent = message || ''; errorEl.hidden = !message; } : null
     });
   };
@@ -1395,6 +1462,8 @@ var App = (function () {
   };
   ui.pill = function (text, tone) { return h('span', { class: 'pill pill-' + (tone || 'mute') }, text); };
   ui.jobPill = function (job) {
+    var m = markOf(job);
+    if (m && m.state === 'saving') return ui.pill('Saving', 'mute');      /* not Done (or Scheduled again) until the system has it */
     if (job.status === 'done') return ui.pill('Done', 'good');
     if (job.status === 'cancelled') return ui.pill('Cancelled', 'mute');
     return App.isOverdue(job) ? ui.pill('Overdue', 'bad') : ui.pill('Scheduled', 'warn');
@@ -1441,6 +1510,10 @@ var App = (function () {
       h('p', { class: 'empty-title' }, o.title || 'Nothing here yet.'),
       o.text ? h('p', { class: 'empty-text' }, o.text) : null,
       o.button ? ui.button(o.button.label, { kind: o.button.kind || 'quiet', small: true, onTap: o.button.onTap }) : null);
+  };
+  /* The top of a "saved" view: the same check and heading wherever something has just been saved for good. */
+  ui.savedHead = function (text) {
+    return h('div', { class: 'sold-head' }, icon('check-circle', 40), h('h3', { class: 'sold-title' }, text));
   };
   ui.notes = function (list) {
     var el = h('div', { class: 'notes' });
@@ -1834,10 +1907,13 @@ var App = (function () {
         var list = h('div', { class: 'list' });
         function pick(id, name, rowEl) {
           if (id === (job.assignedTo || null)) { sh.close(); return; }
-          sh.send('updateJob', { jobId: jobId, patch: { assignedTo: id } }, { button: rowEl }).then(function (res) {
+          var said = id ? 'Assigned to ' + name + '.' : 'Nobody is assigned now.';
+          sh.send('updateJob', { jobId: jobId, patch: { assignedTo: id } }, { button: rowEl, saved: said,
+            landed: function () { var now = App.job(jobId); return !!now && (now.assignedTo || null) === id; }
+          }).then(function (res) {
             if (!res.ok) return;
             sh.close();
-            App.toast(id ? 'Assigned to ' + name + '.' : 'Nobody is assigned now.');
+            App.toast(said);
           });
         }
         list.appendChild(ui.nobodyRow({ sub: 'Leave this job unassigned', selected: !job.assignedTo, onTap: function (e, rowEl) { pick(null, '', rowEl); } }));
@@ -1892,7 +1968,9 @@ var App = (function () {
       footer: { label: 'Save', onTap: function (sh) {
         var text = box.val();
         if (!text) { box.setError('Say what needs to be done.'); return; }
-        sh.send('updateJob', { jobId: jobId, patch: { what: text } }, { attempt: 'what' }).then(function (res) {
+        sh.send('updateJob', { jobId: jobId, patch: { what: text } }, { attempt: 'what', saved: 'Saved.',
+          landed: function () { var now = App.job(jobId); return !!now && now.what === text; }
+        }).then(function (res) {
           if (!res.ok) return;
           sh.close();
           App.toast('Saved.');
@@ -1903,7 +1981,9 @@ var App = (function () {
 
   function bringBack(jobId) {
     var said = 'The job is back on the schedule.';
-    save(null, 'updateJob', { jobId: jobId, patch: { status: 'scheduled' } }, { saved: said }).then(function (res) {
+    save(null, 'updateJob', { jobId: jobId, patch: { status: 'scheduled' } }, { saved: said,
+      landed: function () { var now = App.job(jobId); return !!now && now.status === 'scheduled'; }, onLanded: function () { App.toast(said); }
+    }).then(function (res) {
       if (res.ok) App.toast(said);
     });
   }
@@ -1920,7 +2000,9 @@ var App = (function () {
         sh.close();
         App.toast('Job cancelled.', { action: { label: 'Undo', onTap: function () { bringBack(job.id); } } });
       }
-      ui.save(btn, 'updateJob', { jobId: job.id, patch: { status: 'cancelled' } }, { errorEl: errorEl, saved: cancelled }).then(function (res) {
+      ui.save(btn, 'updateJob', { jobId: job.id, patch: { status: 'cancelled' } }, { errorEl: errorEl, saved: cancelled,
+        landed: function () { var now = App.job(job.id); return !!now && now.status === 'cancelled'; }, onLanded: cancelled
+      }).then(function (res) {
         if (res.ok) cancelled();
       });
     });
@@ -1962,7 +2044,10 @@ var App = (function () {
       if (owner) {
         var backErr = h('p', { class: 'form-error', role: 'alert', hidden: true });
         el.appendChild(ui.button('Put it back on the schedule', { block: true, small: true, onTap: function (e, btn) {
-          ui.save(btn, 'updateJob', { jobId: job.id, patch: { status: 'scheduled' } }, { errorEl: backErr, saved: 'The job is back on the schedule.' }).then(function (res) {
+          ui.save(btn, 'updateJob', { jobId: job.id, patch: { status: 'scheduled' } }, { errorEl: backErr, saved: 'The job is back on the schedule.',
+            landed: function () { var now = App.job(job.id); return !!now && now.status === 'scheduled'; },
+            onLanded: function () { App.toast('The job is back on the schedule.'); }
+          }).then(function (res) {
             if (res.ok) App.toast('The job is back on the schedule.');
           });
         } }));
@@ -2203,6 +2288,7 @@ var App = (function () {
     tries = {};
     landings = {};
     failToasts = {};
+    standing = {};
     marks = {};
     App.data = null;
     storage.del('token');
@@ -2420,7 +2506,8 @@ var App = (function () {
       }
       /* No toast on success: the button turns into the green "You confirmed these" line in the same spot, and a toast would sit on it. */
       foot.appendChild(ui.button('I have read these', { kind: 'primary', block: true, onTap: function (e, btn) {
-        ui.save(btn, 'ackStandards', {}, { errorEl: error });
+        /* A try that got no answer and did get through shows by itself: new data turns the button into the green line. */
+        ui.save(btn, 'ackStandards', {}, { errorEl: error, landed: function () { return !App.needsStandards(); }, onLanded: function () {} });
       } }));
       foot.appendChild(error);
     } else {

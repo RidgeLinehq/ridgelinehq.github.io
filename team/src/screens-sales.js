@@ -262,7 +262,9 @@
       /* While it is being removed the sheet is not redrawn, so the button and its message stay where they are. */
       function removed() { sh.close(); App.toast('Sale removed.'); }
       st.removing = true;
-      ui.save(btn, 'deleteSale', { saleId: saleId }, { errorEl: errorEl, saved: removed }).then(function (res) {
+      ui.save(btn, 'deleteSale', { saleId: saleId }, { errorEl: errorEl, saved: removed,
+        landed: function () { return !App.sale(saleId); }, onLanded: removed
+      }).then(function (res) {
         if (res.skipped) return;
         if (res.ok) { removed(); return; }
         st.removing = false;
@@ -381,8 +383,10 @@
     function sayRep() {
       var id = rep.input.value, text = '';
       if (id !== sale.repId || noCommission(sale)) {
+        /* Moved from one rep to another, a sale keeps the rates it was sold at. One an owner made had none, so it takes today's. */
         text = isOwner(id) ? 'No commission on the owner\'s own sales.'
-          : id !== sale.repId ? App.nameOf(id, 'This rep') + ' gets the commission on this sale, at the rates in Settings today.' : '';
+          : id !== sale.repId ? App.nameOf(id, 'This rep') + ' gets the commission on this sale, ' +
+            (isOwner(sale.repId) || noCommission(sale) ? 'at the rates in Settings today.' : 'at the rates it was sold at.') : '';
       }
       repHint.textContent = text;
       repHint.hidden = !text;
@@ -420,7 +424,13 @@
         /* Nothing was changed: close. Unless an earlier try from here got no answer: that one may have saved, so
            this goes out too (under the same id) and the system says which it was. */
         if (!Object.keys(patch).length && !sh.unanswered('updateSale', { saleId: saleId })) { sh.close(); return; }
-        sh.send('updateSale', { saleId: saleId, patch: patch }, { saved: 'Sale fixed.' }).then(function (res) {
+        sh.send('updateSale', { saleId: saleId, patch: patch }, { saved: 'Sale fixed.',
+          /* A try that got no answer, and then the sale reads the way it was sent: it was fixed. */
+          landed: function () {
+            var s = App.sale(saleId), keys = Object.keys(patch);
+            return !!s && keys.length > 0 && keys.every(function (k) { return s[k] === patch[k]; });
+          }
+        }).then(function (res) {
           if (!res.ok) return;
           sh.close();
           App.toast('Sale fixed.');
@@ -1033,15 +1043,19 @@
            so look first: if it did, show it as saved and send nothing. */
         busy(true);
         App.api.send('sync').then(function (res) {
+          /* Look for the earlier try in what came back BEFORE the sheet is let go: letting it go draws the new
+             data, and that must not find the sale first and then have this send it again. */
+          saving = false;
+          var early = res.ok && !gone && adoptSaved(true);
           busy(false);
-          if (gone || (!res.ok && res.error.code === 'auth')) return;      /* signed out: the sign-in screen says why */
-          if (closed) return;
+          if (early || gone || (!res.ok && res.error.code === 'auth')) return;      /* shown as saved; or signed out, and the sign-in screen says why */
+          if (closed || view !== 'form') return;
           if (!res.ok) {
             paintButton();
             sheet.error(res.error.message);
             return;
           }
-          if (!adoptSaved(true)) sendSale(req, sent);
+          sendSale(req, sent);
         });
         return;
       }
@@ -1060,18 +1074,22 @@
       busy(true);
       App.api.send('createSale', req, { opId: d.opId }).then(function (res) {
         var code = res.ok ? '' : res.error.code;
-        if (res.ok) d.tries = [];                   /* answered: the refresh that follows has nothing left to look for */
+        saving = false;
+        if (res.ok) d.tries = [];                   /* answered: the redraw that follows has nothing left to look for */
+        /* 'already_saved': the first try was saved and this one was not run. The data that came with the answer
+           holds that sale. It is looked for before the sheet is let go, so it is shown with the note that says so. */
+        var early = code === 'already_saved' && !gone && adoptSaved(true);
         busy(false);
         if (res.ok) { saved(res.result || {}, req, seller); return; }
-        if (gone || code === 'auth') return;        /* signed out: the sign-in screen says why */
+        if (early || gone || code === 'auth') return;        /* shown as saved; or signed out, and the sign-in screen says why */
+        if (view !== 'form') return;                /* new data that arrived meanwhile already showed an earlier try as saved */
         if (code === 'network') {                   /* no answer: it may have saved all the same, so remember what was sent */
           if (!d.tries.length) d.lastSold = known;
           if (!d.tries.some(function (t) { return JSON.stringify(t) === JSON.stringify(tried); })) d.tries = d.tries.concat([tried]).slice(-6);
           if (!closed || !formOpen) keep();
+          setTimeout(function () { App.api.send('sync'); }, 0);      /* look straight away: if it did save, the sheet shows it as saved */
         } else if (code === 'already_saved') {
-          /* The first try was saved and this one was not run. The data that came with the answer holds that
-             sale: show it as saved. (If it cannot be picked out, say so in the system's words and start clean.) */
-          if (adoptSaved(true)) return;
+          /* The saved sale could not be picked out of the data: say so in the system's words and start clean. */
           d = blankDraft(me);
           storeDraft(me, null);
           if (!closed) sheet.close();
@@ -1141,7 +1159,7 @@
 
     /* ----- the success view: saved, then do another (a quiet button) or finish (the footer's Done) ----- */
     function drawDone(el) {
-      el.appendChild(h('div', { class: 'sold-head' }, icon('check-circle', 40), h('h3', { class: 'sold-title' }, 'Sale saved')));
+      el.appendChild(ui.savedHead('Sale saved'));
       if (done.early) {
         el.appendChild(h('div', { class: 'callout callout-warn' },
           h('p', { class: 'callout-title' }, 'This went through on your first try'),

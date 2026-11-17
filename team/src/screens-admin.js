@@ -27,7 +27,7 @@
   var NAME_TAKEN = 'Someone on the team already has that name. Add a last initial.';
   var PRICE_HELP = 'Enter the price in dollars, like 150 or 150.50.';
   var PIN_HELP = 'A PIN is 6 digits.';
-  var OWED_LABEL = 'Commission owed';        /* this month's, like the other numbers; short enough to stay on one line */
+  var OWED_LABEL = 'Commission owed this month';   /* the same number has the same name on the owner's Sales screen */
 
   /* ================= small helpers ================= */
 
@@ -172,7 +172,9 @@
     });
     if (more > 0) lines.appendChild(h('span', { class: 'hint' }, 'And ' + fmt.plural(more, 'older one') + '.'));
     var clearBtn = ui.button('Clear', { kind: 'text', small: true, onTap: function (e, btn) {
-      ui.save(btn, 'clearProblems', {}, { busyText: 'Clearing...' }).then(function (res) { if (res.ok) App.toast('Cleared.'); });
+      ui.save(btn, 'clearProblems', {}, { busyText: 'Clearing...', saved: 'Cleared.',
+        landed: function () { return !(App.data.problems || []).length; }, onLanded: function () { App.toast('Cleared.'); }
+      }).then(function (res) { if (res.ok) App.toast('Cleared.'); });
     } });
     return ui.row({ lead: count(problems.length, 'bad'), title: problems.length === 1 ? 'System problem' : 'System problems',
       sub: lines, right: clearBtn, chevron: false, cls: 'row-top' });
@@ -462,6 +464,71 @@
     });
   };
 
+  /* Add person, and the answer that got lost.
+     A try that got no answer may have added the person all the same, with a PIN nobody has seen. So the next
+     try goes out under the same id (the foundation sees to that) and the page's own "that name is taken" check
+     stands aside for a name that was already tried: the system then answers from memory, and the PIN comes
+     back. If it cannot (what was typed has changed, or the system no longer remembers that try), the person
+     who was added is found on the team and the sheet says so, with Reset PIN right there. */
+  var addTries = { names: [], before: {} };      /* what was sent in tries that got no answer, and who was on the team before them */
+
+  function triedName(n) { return addTries.names.some(function (t) { return norm(t.name) === norm(n); }); }
+  /* Someone who is on the team now, was not before those tries, and has one of the names that were tried. */
+  function landedPerson() {
+    return App.people().filter(function (m) { return !addTries.before[m.id] && triedName(m.name); })[0] || null;
+  }
+  /* The PIN that was typed for a name, when every try with that name carried the same one ('' when it was left to the system). */
+  function typedPin(n) {
+    var pins = addTries.names.filter(function (t) { return norm(t.name) === norm(n); }).map(function (t) { return t.pin; });
+    return pins.length && pins.every(function (p) { return p && p === pins[0]; }) ? pins[0] : '';
+  }
+
+  /* "Person added" for a sheet that is no longer open (it was closed while it was saving): the PIN is still shown once. */
+  function openAdded(name, pin) {
+    App.sheet.open({
+      title: 'Add person', small: true,
+      body: function (el) {
+        el.appendChild(ui.savedHead('Person added'));
+        el.appendChild(h('p', { class: 'muted' }, name + ' is on the team. They sign in with the name ' + name + ' and this PIN.'));
+        el.appendChild(pinBox(name, pin));
+      },
+      footer: { label: 'Done', onTap: function (sh) { sh.close(); } }
+    });
+  }
+
+  /* The person is on the team and nobody has their PIN. Say so, with the way out in the same place: Reset PIN,
+     and the new PIN is then shown right here. Drawn into whichever sheet is in front of the person. */
+  function drawPinLost(el, sh, m, note) {
+    var error = h('p', { class: 'form-error', role: 'alert', hidden: true });
+    function show(res) {
+      if (!res.result || !res.result.pin) return;
+      if (!sh.isOpen()) { openPin(m.name, String(res.result.pin)); return; }
+      clear(el);
+      el.appendChild(h('p', { class: 'muted' }, m.name + ' signs in with the name ' + m.name + ' and this PIN.'));
+      el.appendChild(pinBox(m.name, String(res.result.pin)));
+      sh.setTitle('New PIN');
+      sh.setButton('Done');
+    }
+    clear(el);
+    el.appendChild(h('div', { class: 'callout callout-warn' },
+      h('p', { class: 'callout-title' }, m.name + ' was added, but the PIN did not come through.'),
+      h('p', { class: 'small' }, 'Reset the PIN to get a new one to give them.')));
+    el.appendChild(ui.button('Reset PIN', { kind: 'primary', block: true, onTap: function (e, btn) {
+      ui.save(btn, 'resetPin', { id: m.id }, { errorEl: error, saved: show }).then(function (res) { if (res.ok) show(res); });
+    } }));
+    el.appendChild(error);
+    if (note) el.appendChild(h('p', { class: 'muted small' }, note));
+    sh.setButton(null);          /* one thing to do here: Reset PIN. "Done" comes back with the new PIN. */
+    sh.body.scrollTop = 0;
+  }
+  function openPinLost(m, note) {
+    var sheet = App.sheet.open({
+      title: 'Add person', small: true,
+      footer: { label: 'Done', onTap: function (sh) { sh.close(); } }
+    });
+    drawPinLost(sheet.body, sheet, m, note);
+  }
+
   function openAddPerson() {
     var name, pin, role, roleHint, added = null;
 
@@ -482,12 +549,11 @@
       sh.setButton('Add person');
     }
 
-    /* Saved: the same view as "Sale saved", built from the same pieces (.sold-head and .sold-title are that
-       view's own classes). A big check and what was saved, the one more thing to do as a quiet button, and
-       Done as the sheet's button. */
+    /* Saved: the same view as "Sale saved", opened by the same shared piece (App.ui.savedHead). A big check and
+       what was saved, the one more thing to do as a quiet button, and Done as the sheet's button. */
     function done(el, sh) {
       clear(el);
-      el.appendChild(h('div', { class: 'sold-head' }, App.icon('check-circle', 40), h('h3', { class: 'sold-title' }, 'Person added')));
+      el.appendChild(ui.savedHead('Person added'));
       el.appendChild(h('p', { class: 'muted' }, added.name + ' is on the team. They sign in with the name ' + added.name + ' and this PIN.'));
       el.appendChild(pinBox(added.name, added.pin));
       el.appendChild(ui.button('Add another person', { block: true, icon: 'plus', onTap: function () { added = null; form(el, sh); } }));
@@ -501,13 +567,60 @@
       footer: { label: 'Add person', onTap: function (sh) {
         if (added) { sh.close(); return; }
         var n = oneLine(name.val()), p = pin.val();
+        var again = sh.unanswered('saveMember', { member: {} });        /* an earlier try got no answer */
         var problem = nameProblem(n, null);
-        if (problem) { name.setError(problem); sh.reveal(name); return; }
+        if (problem && !(again && problem === NAME_TAKEN && triedName(n))) { name.setError(problem); sh.reveal(name); return; }
         if (p && !/^\d{6}$/.test(p)) { pin.setError(PIN_HELP); sh.reveal(pin); return; }
-        sh.send('saveMember', { member: { name: n, role: role, pin: p } }).then(function (res) {
-          if (!res.ok) return;
-          added = { name: n, pin: String((res.result && res.result.pin) || p) };
+        if (!again) {
+          addTries = { names: [], before: {} };
+          App.data.team.forEach(function (m) { addTries.before[m.id] = true; });
+        }
+
+        /* Someone was added and their PIN is not known: said in this sheet if it is still open, in one of its own if not. */
+        function lost(who, note, words) {
+          if (!who) {
+            if (sh.isOpen()) sh.close();
+            App.toast(words, { bad: true, sticky: true });
+          } else if (sh.isOpen()) {
+            sh.error('');
+            added = { name: who.name, pin: '' };         /* the form is done with: the button now reads Done */
+            drawPinLost(sh.body, sh, who, note);
+          } else openPinLost(who, note);
+        }
+
+        /* The answer, whenever it comes and wherever the person is by then. */
+        function saved(res) {
+          var got = String((res.result && res.result.pin) || p || typedPin(n));
+          var who = got ? null : (res.result && res.result.id ? App.member(res.result.id) : null) || landedPerson();
+          addTries = { names: [], before: {} };
+          if (!got) {                                    /* saved, and the system could not say the PIN again */
+            lost(who, '', n + ' was added. Reset their PIN in Team to get one to give them.');
+            return;
+          }
+          if (!sh.isOpen()) { openAdded(n, got); return; }
+          added = { name: n, pin: got };
           done(sh.body, sh);
+        }
+
+        sh.send('saveMember', { member: { name: n, role: role, pin: p } }, { stays: true, saved: saved }).then(function (res) {
+          if (res.ok) { saved(res); return; }
+          if (res.skipped) return;
+          var code = res.error.code;
+          if (code === 'network') { addTries.names.push({ name: n, pin: p }); return; }      /* no answer: it may have gone through */
+          if (code === 'auth') return;
+          /* The system answered, and did not add anyone this time. Did an earlier try get through? */
+          var who = again ? landedPerson() : null, known = who ? typedPin(who.name) : '';
+          var mine = !!who && norm(who.name) === norm(n);
+          addTries = { names: [], before: {} };
+          var note = mine ? '' : n + ' was not added. Add them again if you still need to.';
+          if (who && known && (code === 'already_saved' || mine)) {      /* the PIN is the one that was typed for them */
+            sh.error('');
+            if (!sh.isOpen()) { openAdded(who.name, known); return; }
+            added = { name: who.name, pin: known };
+            done(sh.body, sh);
+            if (note) sh.body.appendChild(h('p', { class: 'muted small' }, note));
+          } else if (who && (code === 'already_saved' || mine)) lost(who, note, '');
+          else if (code === 'already_saved') lost(null, '', res.error.message);     /* nobody to point to: the system's own words, and the team list behind */
         });
       } }
     });
@@ -531,8 +644,10 @@
       yes: 'Reset PIN'
     }).then(function (yes) {
       if (!yes) return;
-      ui.save(rowEl, 'resetPin', { id: m.id }, { errorEl: errorEl }).then(function (res) {
-        if (res.ok && res.result && res.result.pin) openPin(m.name, String(res.result.pin));
+      /* The new PIN is shown once, whenever its answer comes: now, or from Retry after a try that got none. */
+      function show(res) { if (res.result && res.result.pin) openPin(m.name, String(res.result.pin)); }
+      ui.save(rowEl, 'resetPin', { id: m.id }, { errorEl: errorEl, saved: show }).then(function (res) {
+        if (res.ok) show(res);
       });
     });
   }
@@ -547,10 +662,19 @@
       yes: 'Remove', danger: true
     }).then(function (yes) {
       if (!yes) return;
-      ui.save(btn, 'removeMember', { id: m.id }, { errorEl: errorEl }).then(function (res) {
-        if (!res.ok) return;
+      function removed() {
         sh.close();
         App.toast(m.name + ' is no longer on the team.' + (open ? ' ' + fmt.plural(open, 'job') + (open === 1 ? ' needs' : ' need') + ' someone new.' : ''));
+      }
+      sh.removing = true;          /* the sheet is removing this person itself: it says so when that is done */
+      ui.save(btn, 'removeMember', { id: m.id }, { errorEl: errorEl, saved: removed,
+        landed: function () { var now = App.member(m.id); return !now || !now.active; }, onLanded: removed
+      }).then(function (res) {
+        if (res.skipped) return;
+        if (res.ok) { removed(); return; }
+        sh.removing = false;
+        var now = App.member(m.id);
+        if (!now || !now.active) sh.close();
       });
     });
   }
@@ -569,8 +693,13 @@
         if (!now || !now.active) { sh.close(); return; }
         var problem = nameProblem(n, id);
         if (problem) { box.setError(problem); return; }
-        if (n === now.name) { sh.close(); return; }
-        sh.send('saveMember', { member: { id: id, name: n, role: now.role } }).then(function (res) {
+        var fields = { member: { id: id, name: n, role: now.role } };
+        /* Nothing was changed: close. Unless an earlier try from here got no answer: that one may have saved, so
+           this goes out too (under the same id) and the system says which it was. */
+        if (n === now.name && !sh.unanswered('saveMember', fields)) { sh.close(); return; }
+        sh.send('saveMember', fields, { saved: 'Name changed.',
+          landed: function () { var who = App.member(id); return n !== now.name && !!who && who.name === n; }
+        }).then(function (res) {
           if (!res.ok) return;
           sh.close();
           App.toast('Name changed.');
@@ -596,11 +725,14 @@
               /* A sales rep is never given jobs, so the ones this person still has go back to nobody. Say so first. */
               var open = r === 'rep' ? App.data.jobs.filter(function (j) { return j.assignedTo === id && j.status === 'scheduled'; }).length : 0;
               function change() {
-                sh.send('saveMember', { member: { id: id, name: m.name, role: r } }, { button: rowEl }).then(function (res) {
+                var said = m.name + ' is now ' + (r === 'owner' ? 'an owner' : r === 'rep' ? 'a sales rep' : 'a tech') + '. ' +
+                  (open ? fmt.plural(open, 'job') + (open === 1 ? ' needs' : ' need') + ' someone new.' : 'They need to sign in again.');
+                sh.send('saveMember', { member: { id: id, name: m.name, role: r } }, { button: rowEl, saved: said,
+                  landed: function () { var who = App.member(id); return !!who && who.role === r; }
+                }).then(function (res) {
                   if (!res.ok) return;
                   sh.close();
-                  App.toast(m.name + ' is now ' + (r === 'owner' ? 'an owner' : r === 'rep' ? 'a sales rep' : 'a tech') + '. ' +
-                    (open ? fmt.plural(open, 'job') + (open === 1 ? ' needs' : ' need') + ' someone new.' : 'They need to sign in again.'));
+                  App.toast(said);
                 });
               }
               if (!open) { change(); return; }
@@ -624,8 +756,9 @@
     App.sheet.open({
       title: first.name,
       update: function (sh) {
+        if (sh.removing) return;
         var now = App.member(id);
-        if (!now || !now.active) { sh.close(); return; }
+        if (!now || !now.active) { sh.close(); App.toast('That person is no longer on the team.'); return; }
         sh.setTitle(now.name);
         sh.rebuild();
       },
@@ -769,7 +902,13 @@
           out.push(item);
         });
         if (bad) { sh.reveal(bad); return; }
-        sh.send('saveSettings', { settings: { services: out } }).then(function (res) {
+        sh.send('saveSettings', { settings: { services: out } }, { attempt: 'services', saved: 'Services saved.',
+          /* No answer came, and then the list reads the way it was sent: it was saved. */
+          landed: function () {
+            var list = App.data.settings.services || [];
+            return list.length === out.length && out.every(function (x, i) { return list[i].name === x.name && (list[i].priceCents || 0) === x.priceCents; });
+          }
+        }).then(function (res) {
           if (!res.ok) return;
           sh.close();
           App.toast('Services saved.');
@@ -814,7 +953,9 @@
         var a = parsePct(first.val()), b = parsePct(monthly.val());
         if (a == null) { first.setError(PCT_HELP); sh.reveal(first); return; }
         if (b == null) { monthly.setError(PCT_HELP); sh.reveal(monthly); return; }
-        sh.send('saveSettings', { settings: { firstPct: a, monthlyPct: b } }).then(function (res) {
+        sh.send('saveSettings', { settings: { firstPct: a, monthlyPct: b } }, { attempt: 'commission', saved: 'Commission saved.',
+          landed: function () { var now = App.data.settings; return (a !== s.firstPct || b !== s.monthlyPct) && now.firstPct === a && now.monthlyPct === b; }
+        }).then(function (res) {
           if (!res.ok) return;
           sh.close();
           App.toast('Commission saved.');
@@ -896,7 +1037,10 @@
       footer: { label: 'Save', onTap: function (sh) {
         if (!add(true)) return;                     /* a time still in the box goes in too */
         if (!draft.length) { say('Keep at least one time.'); return; }
-        sh.send('saveSettings', { settings: { defaultSlots: draft.slice() } }).then(function (res) {
+        var sent = draft.slice();
+        sh.send('saveSettings', { settings: { defaultSlots: sent } }, { attempt: 'times', saved: 'Usual times saved.',
+          landed: function () { return (App.data.settings.defaultSlots || []).slice().sort().join() === sent.join(); }
+        }).then(function (res) {
           if (!res.ok) return;
           sh.close();
           App.toast('Usual times saved.');
@@ -919,10 +1063,13 @@
         var list = h('div', { class: 'list' });
         function pick(id, name, rowEl) {
           if (id === cur) { sh.close(); return; }
-          sh.send('saveSettings', { settings: { defaultTechId: id } }, { button: rowEl }).then(function (res) {
+          var said = id ? 'New jobs go to ' + name + '.' : 'New jobs start with nobody assigned.';
+          sh.send('saveSettings', { settings: { defaultTechId: id } }, { button: rowEl, saved: said,
+            landed: function () { return (App.data.settings.defaultTechId || null) === id; }
+          }).then(function (res) {
             if (!res.ok) return;
             sh.close();
-            App.toast(id ? 'New jobs go to ' + name + '.' : 'New jobs start with nobody assigned.');
+            App.toast(said);
           });
         }
         /* The same two rows as "Assign to" on a job: Nobody first, then the people. */
@@ -956,10 +1103,14 @@
       footer: { label: 'Save', onTap: function (sh) {
         var to = email.val();
         if (to && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) { email.setError('That email address does not look right.'); sh.reveal(email); return; }
-        sh.send('saveSettings', { settings: { emailOnBooking: toggle.get(), notifyEmail: to } }).then(function (res) {
+        var said = toggle.get() ? 'Email alerts are on.' : 'Email alerts are off.';
+        var on = toggle.get();
+        sh.send('saveSettings', { settings: { emailOnBooking: on, notifyEmail: to } }, { attempt: 'email', saved: said,
+          landed: function () { var now = App.data.settings; return !!now.emailOnBooking === on && (now.notifyEmail || '') === to; }
+        }).then(function (res) {
           if (!res.ok) return;
           sh.close();
-          App.toast(toggle.get() ? 'Email alerts are on.' : 'Email alerts are off.');
+          App.toast(said);
         });
       } }
     });
@@ -988,7 +1139,7 @@
     var draft = start || (App.data.settings.standards || []).map(function (s) {
       return { id: s.id, title: s.title, ordered: !!s.ordered, items: (s.items || []).slice() };
     });
-    var blocks = [], saved = false, listEl = h('div', { class: 'stack' });
+    var blocks = [], saved = false, saving = false, listEl = h('div', { class: 'stack' });
 
     function read() {
       blocks.forEach(function (b) {
@@ -1121,7 +1272,7 @@
         draw();
       },
       onClose: function () {
-        if (saved) return;
+        if (saved || saving) return;       /* closed while it was saving: how that went is said when the answer comes */
         read();
         if (!changed()) return;
         App.toast('Your changes were not saved.', { action: { label: 'Keep editing', onTap: function () { openStandardsEditor(draft); } } });
@@ -1144,12 +1295,24 @@
           });
         });
         if (bad) { sh.reveal(bad); return; }
-        if (!changed()) { saved = true; sh.close(); App.toast('Nothing was changed.'); return; }
-        sh.send('saveSettings', { settings: { standards: cleaned() } }).then(function (res) {
-          if (!res.ok) return;
+        var fields = { settings: { standards: cleaned() } };
+        /* Nothing was changed: close. Unless an earlier try from here got no answer: that one may have saved, so
+           this goes out too (under the same id) and the system says which it was. */
+        if (!changed() && !sh.unanswered('saveSettings', fields, 'standards')) { saved = true; sh.close(); App.toast('Nothing was changed.'); return; }
+        var said = App.people(['rep', 'tech']).length ? 'Standards saved. Your team will be asked to read them again.' : 'Standards saved.';
+        var differs = changed();
+        saving = true;
+        sh.send('saveSettings', fields, { attempt: 'standards', saved: said,
+          /* No answer came, and then the standards read the way they were sent: it was saved. */
+          landed: function () { return differs && !changed(); }, onLanded: function () { saved = true; sh.close(); App.toast(said); }
+        }).then(function (res) {
+          saving = false;
+          if (res.skipped) return;
+          /* 'already_saved': the first try is what was saved, the sheet is closed and the system's words say so. */
+          if (!res.ok) { if (res.error.code === 'already_saved') saved = true; return; }
           saved = true;
           sh.close();
-          App.toast(App.people(['rep', 'tech']).length ? 'Standards saved. Your team will be asked to read them again.' : 'Standards saved.');
+          App.toast(said);
         });
       } }
     });

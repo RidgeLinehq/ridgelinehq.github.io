@@ -38,6 +38,12 @@
     var list = (App.data.settings.defaultSlots || []).slice().sort();
     return list.length ? list : RidgelineCore.DEFAULT_SETTINGS.defaultSlots.slice();
   }
+  /* Is a day set the way it was sent: open (with those times, when given) or blocked? */
+  function isSet(date, open, slots) {
+    var cur = App.dayOf(date), isOpen = !!cur && !!cur.open;
+    if (!open) return !isOpen;
+    return isOpen && (!slots || (cur.slots || []).slice().sort().join() === slots.slice().sort().join());
+  }
   function scheduledOn(date) { return App.jobsOn(date).filter(function (j) { return j.status === 'scheduled'; }); }
 
   function byWhen(a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : a.time < b.time ? -1 : a.time > b.time ? 1 : 0; }
@@ -77,13 +83,19 @@
 
   /* ---------- owner: open weekdays, block all ---------- */
 
+  /* While it is being saved the screen is not redrawn under the button, so "Saving..." and the message that
+     may follow stay where they are. The message is also kept here, for the redraws after that. */
   function bulkSave(btn, errorEl, days, doneText) {
     var fields = { days: days };
     bulkError = '';
-    ui.save(btn, 'setDays', fields, { errorEl: errorEl }).then(function (res) {
+    ui.save(btn, 'setDays', fields, { errorEl: errorEl, saved: doneText, keeps: true,
+      /* No answer came, and then the days read the way they were sent: it was saved. */
+      landed: function () { return days.every(function (d) { return isSet(d.date, d.open); }); },
+      onLanded: function () { bulkError = ''; App.toast(doneText); }
+    }).then(function (res) {
       if (res.skipped) return;
       if (res.ok) App.toast(doneText);
-      else bulkError = res.error.message;
+      else bulkError = errorEl.isConnected === false || res.error.code === 'already_saved' ? '' : res.error.message;
     });
   }
 
@@ -271,15 +283,19 @@
         /* A time still sitting in the box is added first: picking it and tapping Save must not lose it. */
         if (open && !addTime(true)) { sh.error(''); sh.reveal(timesLabel); return; }
         if (open && !slots.length) { sh.error('Add at least one time, or switch the day off.'); return; }
+        var fields = { days: [{ date: date, open: open, slots: slots.slice() }] }, attempt = 'day ' + date;
+        /* Nothing was changed: close. Unless an earlier try from here got no answer: that one may have saved, so
+           this goes out too (under the same id) and the system says which it was. */
         var same = open === was.open && (!open || slots.join() === was.slots.join());
-        if (same) { sh.close(); return; }
-        var fields = { days: [{ date: date, open: open, slots: slots.slice() }] };
+        if (same && !sh.unanswered('setDays', fields, attempt)) { sh.close(); return; }
         var booked = scheduledOn(date).length;
-        sh.send('setDays', fields).then(function (res) {
+        var said = open ? fmt.day(date) + ' is open with ' + fmt.plural(slots.length, 'time') + '.'
+          : fmt.day(date) + ' is blocked.' + (booked ? ' The ' + fmt.plural(booked, 'appointment') + ' already booked ' + (booked === 1 ? 'stays' : 'stay') + '.' : '');
+        var sent = slots.slice();
+        sh.send('setDays', fields, { attempt: attempt, saved: said, landed: function () { return !same && isSet(date, open, sent); } }).then(function (res) {
           if (!res.ok) return;
           sh.close();
-          if (open) App.toast(fmt.day(date) + ' is open with ' + fmt.plural(slots.length, 'time') + '.');
-          else App.toast(fmt.day(date) + ' is blocked.' + (booked ? ' The ' + fmt.plural(booked, 'appointment') + ' already booked ' + (booked === 1 ? 'stays' : 'stay') + '.' : ''));
+          App.toast(said);
         });
       } }
     });
