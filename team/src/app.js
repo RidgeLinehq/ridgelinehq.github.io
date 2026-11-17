@@ -194,8 +194,11 @@ var App = (function () {
   var App = { mode: 'sample', backend: '', data: null, route: '', actions: {}, ui: {}, fmt: {}, api: {}, sheet: {} };
   var ui = App.ui, fmt = App.fmt;
 
-  /* fails: background refreshes that failed in a row. failKind: 'offline' (no answer at all) or 'error' (the system answered, but not with our data). */
-  var state = { token: null, inApp: false, okAt: 0, fails: 0, failKind: '', syncing: false, signingIn: false };
+  /* fails: background refreshes that failed in a row. failKind: 'offline' (no answer at all) or 'error' (the system answered, but not with our data).
+     heard: the system has answered since this page was opened. stale: the page opened on a saved copy from another day.
+     clock: the system's own clock as of its last answer (see businessHM). gen: goes up each time the phone forgets who was signed in. */
+  var state = { token: null, inApp: false, okAt: 0, fails: 0, failKind: '', syncing: false, signingIn: false,
+    heard: false, stale: false, clock: null, gen: 0, cantKeep: false, toldKeep: false };
   var els = {};
   var screens = Object.create(null);      /* no built-in names: #constructor or #toString is never a screen */
   var own = Object.prototype.hasOwnProperty;
@@ -217,6 +220,8 @@ var App = (function () {
   };
   var ROLE_WORDS = { owner: 'Owner', rep: 'Sales rep', tech: 'Tech' };
   var NO_SIGNAL = 'Could not save. Check your signal and try again.';
+  var REMOVED_RE = /no longer on the team/i;      /* the system's words to a phone whose person was removed (see core.js, "Signed out") */
+  var CANNOT_KEEP = 'This phone cannot save your sign-in. You will need to sign in again next time.';
   var CANNOT_REACH = 'Cannot reach the team system. Check your signal and try again. If your signal is fine, tell Grayson.';
   var PIN_RE = /^\d{6}$/;                 /* every PIN is exactly 6 digits */
 
@@ -478,7 +483,9 @@ var App = (function () {
     return fresh;
   }
 
-  function saveSample() { storage.set('db', JSON.stringify({ day: sample.day, dump: sample.store.dump() })); }
+  function saveSample() {
+    if (!storage.set('db', JSON.stringify({ day: sample.day, dump: sample.store.dump() }))) cannotKeep();
+  }
 
   /* A call ends one of three ways: our answer; NOT_OURS (something answered, but not with our data: an
      error page, a crash); or null (nothing answered at all: no signal, or it took too long). */
@@ -550,19 +557,11 @@ var App = (function () {
 
   /* ================= App.api.send ================= */
 
-  /* A caller may pass the id of an earlier try, so the system saves that action only once. The id is
-     only kept for the very same action and fields: under a repeated id the system answers with the
-     first save again (replay: true) and never looks at what was sent this time, so anything changed
-     since would be lost without a word. Changed fields get a new id. */
-  var sentAs = {};
-  function retryId(action, fields, given) {
-    if (!given) return newId();
-    var what = action + ' ' + JSON.stringify(fields || {});
-    if (sentAs[given] && sentAs[given] !== what) return newId();
-    sentAs[given] = what;
-    return given;
-  }
-
+  /* Every save carries an id (opId). The system remembers a saved id together with what was sent: the same
+     id with the same fields again is answered from memory and saves nothing more; the same id with different
+     fields is refused with 'already_saved', because the first try did save. So a caller that got NO answer
+     (code 'network') passes the same id on every later try of that thing, whatever was changed since, until
+     the system answers. See save() below, which does this for every sheet and button. */
   function send(action, fields, opts) {
     opts = opts || {};
     var req = { action: action }, k;
@@ -570,30 +569,37 @@ var App = (function () {
     if (action !== 'login') {
       req.token = state.token;
       if (App.data) { req.since = App.data.rev; req.day = App.data.today; }
-      if (action !== 'sync' && action !== 'logout') req.opId = retryId(action, fields, opts.opId);
+      if (action !== 'sync' && action !== 'logout') req.opId = opts.opId || newId();
     }
-    return attempt(req, 0).then(function (res) { return settle(req, res); });
+    return attempt(req, 0).then(function (res) { return settle(req, res, opts); });
   }
 
-  function settle(req, res) {
+  function settle(req, res, opts) {
     /* `reached` tells "the system answered with something else" from "nothing answered": the strip words differ. */
     if (!isAnswer(res)) return { ok: false, error: { code: 'network', message: NO_SIGNAL, reached: res === NOT_OURS }, opId: req.opId };
+    /* The caller hears that the system answered BEFORE the data that came with the answer is applied, so what
+       it was keeping for an unanswered try (see save and setDone) is out of the way when the screen is drawn. */
+    if (opts && opts.onAnswer) { try { opts.onAnswer(res); } catch (e) { report(e); } }
     var mine = req.action === 'login' || (!!state.token && req.token === state.token);
     if (mine) {
       if (res.ok || res.sync) state.okAt = Date.now();
       /* An answer from a working system means the connection is back (a "server" answer is not that). */
-      if (state.fails && (res.ok || res.error.code !== 'server')) { state.fails = 0; drawStrip(); }
+      if (res.ok || res.error.code !== 'server') {
+        var was = state.fails || !state.heard;
+        state.fails = 0;
+        state.heard = true;
+        if (was) drawStrip();
+      }
       /* A new sign-in: this phone is that person's from here on, and so is the copy of the data kept on it. */
       if (req.action === 'login' && res.ok && res.result && res.result.token && res.sync && res.sync.me) {
         state.token = String(res.result.token);
-        storage.set('who', String(res.sync.me.id));
-        storage.set('token', state.token);
+        var kept = storage.set('who', String(res.sync.me.id));
+        if (!storage.set('token', state.token) || !kept) cannotKeep();
       }
       if (res.sync) applySync(res.sync);
       if (!res.ok && res.error.code === 'auth' && req.action !== 'login') signOut(res.error.message || 'Please sign in again.');
     }
     res.opId = req.opId;
-    if (res.ok) delete sentAs[req.opId];        /* saved: that id is finished with */
     if (!res.ok && !res.error.message) res.error.message = NO_SIGNAL;
     return res;
   }
@@ -602,6 +608,8 @@ var App = (function () {
 
   function applySync(sync) {
     if (!sync || typeof sync !== 'object') return;
+    /* The system's clock comes with every answer. What is kept is how far this phone's clock is from it. */
+    if (typeof sync.nowMs === 'number' && Core.dates.isHM(sync.nowHM)) state.clock = { hm: sync.nowHM, ms: sync.nowMs, off: sync.nowMs - Date.now() };
     if (sync.same) {
       if (holdsSignIn()) storage.set('at', String(state.okAt));
       return;
@@ -610,7 +618,8 @@ var App = (function () {
     var cur = App.data;
     if (cur && cur.me.id === sync.me.id && cur.today === sync.today && sync.rev < cur.rev) return;   /* an older answer that arrived late */
     App.data = sync;
-    keepSnapshot(sync);
+    keepSnapshot(sync);        /* what the system said, before any unsaved one-tap change is laid over it */
+    layMarks();
     changed();
   }
 
@@ -622,8 +631,20 @@ var App = (function () {
   function keepSnapshot(sync) {
     if (!holdsSignIn()) return;
     storage.set('who', String(sync.me.id));
-    storage.set('snap', JSON.stringify(sync));
+    /* A copy that cannot be saved (the phone is full) takes the old one with it: an old copy is never shown as the latest. */
+    if (!storage.set('snap', JSON.stringify(sync))) { storage.del('snap'); storage.del('at'); return; }
     storage.set('at', String(state.okAt));
+  }
+
+  /* The phone cannot keep the sign-in (its storage is full or blocked). Said once, when the person is in the app. */
+  function cannotKeep() {
+    state.cantKeep = true;
+    if (state.inApp) tellCannotKeep();
+  }
+  function tellCannotKeep() {
+    if (!state.cantKeep || state.toldKeep || !els.toasts) return;
+    state.toldKeep = true;
+    App.toast(CANNOT_KEEP + (App.mode === 'sample' ? ' The sample data will start over too.' : ''), { sticky: true });
   }
 
   /* ================= events and re-rendering ================= */
@@ -647,18 +668,71 @@ var App = (function () {
     liveItems = liveItems.filter(function (item) {
       if (!onPage(item.el)) return ++item.misses < 6;   /* gone from the page for a while: forget it */
       item.misses = 0;
+      var scope = heldScope(item.el);
+      if (scope) { scope.dirty = true; return true; }   /* its sheet or screen is saving: it is drawn when that is over */
       try { item.fn(); } catch (e) { report(e); }
       return true;
     });
   }
 
+  /* ----- nothing is redrawn under a save -----
+     While a save is on its way, the sheet it was sent from (or the screen, for a button on the screen) is
+     held: new data does not redraw it, so the button that says "Saving..." and the line its message goes to
+     are still there when the answer comes. A held sheet's body is also inert: nothing in it can be typed
+     or tapped. What was missed is drawn once, when the save is over. */
+  var SCREEN = { holds: 0, dirty: false };
+
+  function heldScope(el) {
+    if (SCREEN.holds && els.screen && els.screen.contains(el)) return SCREEN;
+    for (var i = 0; i < layers.length; i++) if (layers[i].holds && layers[i].wrap.contains(el)) return layers[i];
+    return null;
+  }
+  function sheetOf(el) {
+    if (!el) return null;
+    for (var i = 0; i < layers.length; i++) if (layers[i].kind === 'sheet' && layers[i].el.contains(el)) return layers[i];
+    return null;
+  }
+  function setInert(sh, on) {
+    sh.body.classList.toggle('is-saving', on);
+    if (on) {
+      sh.body.setAttribute('inert', '');
+      sh.body.setAttribute('aria-busy', 'true');
+      if (sh.body.contains(doc.activeElement)) { try { doc.activeElement.blur(); } catch (e) { /* fine */ } }
+    } else {
+      sh.body.removeAttribute('inert');
+      sh.body.removeAttribute('aria-busy');
+    }
+  }
+  /* Hold a sheet (or SCREEN) until the function this returns is called. */
+  function hold(scope) {
+    if (!scope) return function () {};
+    var over = false;
+    scope.holds = (scope.holds || 0) + 1;
+    if (scope.body) setInert(scope, true);
+    return function () {
+      if (over) return;
+      over = true;
+      scope.holds--;
+      if (scope.holds > 0) return;
+      if (scope.body) setInert(scope, false);
+      if (!scope.dirty) return;
+      scope.dirty = false;
+      if (!state.inApp || !App.data) return;
+      if (scope === SCREEN) drawScreen(true);
+      else if (layers.indexOf(scope) >= 0 && scope.update) { try { scope.update(); } catch (e) { report(e); } }
+      runLive();
+    };
+  }
+
   /* New data (or a view change): redraw the chrome and the screen, then tell open sheets and live pieces. */
   function changed() {
     if (!state.inApp || !App.data) return;
+    checkLanded();
     drawChrome();
-    drawScreen(true);
+    if (SCREEN.holds) SCREEN.dirty = true; else drawScreen(true);
     layers.slice().forEach(function (layer) {
       if (layers.indexOf(layer) < 0 || !layer.update) return;
+      if (layer.holds) { layer.dirty = true; return; }
       try { layer.update(); } catch (e) { report(e); }
     });
     runLive();
@@ -705,9 +779,19 @@ var App = (function () {
     return null;
   };
 
-  /* The time right now in the business's zone, 'HH:MM' (sample mode simply uses this phone's clock). */
-  var zoneClock = null;
+  /* The time right now in the business's zone, 'HH:MM'. It is the system's clock, not the phone's: every
+     answer says what time the system makes it (nowHM, nowMs), and the phone only counts on from there. A
+     phone whose clock is hours out still shows the right times as passed. Until the system has answered
+     once (the page just opened with no signal) it is this phone's own clock, read in the business's zone. */
+  var zoneClock = null, zoneDay = null;
   function businessHM() {
+    var c = state.clock;
+    if (c) {
+      var gone = (Date.now() + c.off) - c.ms;             /* how long ago the system said so, by its own clock */
+      var mins = (+c.hm.slice(0, 2)) * 60 + (+c.hm.slice(3, 5)) + Math.floor(((c.ms % 60000) + gone) / 60000);
+      mins = ((mins % 1440) + 1440) % 1440;
+      return pad2(Math.floor(mins / 60)) + ':' + pad2(mins % 60);
+    }
     if (App.mode === 'sample') return localHM(Date.now());
     try {
       zoneClock = zoneClock || new Intl.DateTimeFormat('en-GB', { timeZone: 'America/Chicago', hour: '2-digit', minute: '2-digit', hour12: false });
@@ -715,6 +799,17 @@ var App = (function () {
       if (/^\d{2}:\d{2}$/.test(s)) return s === '24:00' ? '00:00' : s;
     } catch (e) { /* fall through to the phone's clock */ }
     return localHM(Date.now());
+  }
+
+  /* The business day by this phone's clock: only used when the page opens, to tell that the saved copy is from another day. */
+  function businessDay() {
+    if (App.mode === 'sample') return localDay(Date.now());
+    try {
+      zoneDay = zoneDay || new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit' });
+      var s = zoneDay.format(new Date());
+      if (D.isDay(s)) return s;
+    } catch (e) { /* fall through to the phone's own day */ }
+    return localDay(Date.now());
   }
 
   App.freeSlots = function (date) {
@@ -905,8 +1000,14 @@ var App = (function () {
     };
     sh.send = function (action, fields, opts) {
       opts = opts || {};
-      return save(opts.button || sh.button, action, fields, { error: sh.error, quiet: opts.quiet, busyText: opts.busyText, key: sh });
+      /* The footer button saves a form: one id for the whole attempt, whatever is changed between tries. A row of
+         a pick-list (opts.button) always sends the same fields, so its id goes with those. */
+      return save(opts.button || sh.button, action, fields, { error: sh.error, busyText: opts.busyText, sheet: sh, closes: true,
+        attempt: opts.attempt || (opts.button ? null : 'form'), saved: opts.saved, landed: opts.landed, onLanded: opts.onLanded, stays: opts.stays });
     };
+    sh.unanswered = function (action, fields, attempt) { return !!tries[slotOf(action, fields, attempt || 'form')]; };
+    sh.isOpen = function () { return layers.indexOf(sh) >= 0; };
+    sh.hold = function () { return hold(sh); };
     sh.rebuild = function () {
       var y = sh.body.scrollTop;
       clear(sh.body);
@@ -970,28 +1071,116 @@ var App = (function () {
 
   /* ----- toasts ----- */
 
+  /* Timed toasts come and go, at most two at a time. A sticky one is a message that must not be missed (a save
+     that failed after its sheet was closed): it stays until its button is tapped, and nothing pushes it out. */
   App.toast = function (text, o) {
     o = o || {};
-    var gone = false, timer;
-    var el = h('div', { class: 'toast' + (o.bad ? ' toast-bad' : ''), role: o.bad ? 'alert' : null }, h('span', { class: 'toast-text' }, text));
+    var gone = false, timer = null, stays = !!(o.sticky || o.hold);
+    var el = h('div', { class: 'toast' + (o.bad ? ' toast-bad' : '') + (stays ? ' is-sticky' : ''), role: o.bad ? 'alert' : null }, h('span', { class: 'toast-text' }, text));
     function remove() {
       if (gone) return;
       gone = true;
       clearTimeout(timer);
       if (el.parentNode) el.parentNode.removeChild(el);
     }
-    var action = o.retry ? { label: 'Retry', onTap: o.retry } : o.action;
-    if (action) {
+    var action = o.retry ? { label: 'Retry', onTap: o.retry } : o.action || (o.sticky ? { label: 'OK', onTap: function () {} } : null);
+    if (action && !o.hold) {
       el.appendChild(h('button', { type: 'button', class: 'toast-btn', onclick: function () { remove(); action.onTap(); } }, action.label));
     }
-    while (els.toasts.children.length >= 2) els.toasts.removeChild(els.toasts.firstChild);
+    var timed = Array.prototype.filter.call(els.toasts.children, function (t) { return !t.classList.contains('is-sticky'); });
+    while (!stays && timed.length >= 2) els.toasts.removeChild(timed.shift());
     placeToasts();
     els.toasts.appendChild(el);
-    timer = setTimeout(remove, o.ms || (action ? 8000 : o.bad ? 5000 : 2600));
+    if (!stays) timer = setTimeout(remove, o.ms || (action ? 8000 : o.bad ? 5000 : 2600));
     return remove;
   };
 
-  /* ================= saving: "Saving...", same opId on a retry, the message by the button ================= */
+  /* ================= saving: one way, for every sheet and button ================= */
+  /*
+   * Nothing fails silently, nothing is saved twice, and nothing is shown as saved that is not:
+   *   - the button says "Saving...", the sheet's body is inert and nothing under the save is redrawn (hold);
+   *   - a failure is said in words by the button. If the button or its sheet is gone by then (the sheet was
+   *     closed, the person moved on), it is a red toast that stays until it is tapped, with Retry;
+   *   - a save that got NO answer may have gone through, so its id is kept (`tries`) and every later try of
+   *     the same thing goes out under that id, whatever was changed, until the system answers. The system then
+   *     answers the same fields from memory, and refuses changed ones with 'already_saved': its words are
+   *     shown, the data it sent with them is on screen, and the sheet closes so the person sees what was saved;
+   *   - a try that got no answer and then turns up in the data (opts.landed) is finished as saved.
+   */
+
+  var tries = {};        /* slot (or slot and fields) -> the id of a save that was sent and never answered */
+  var failToasts = {};   /* slot -> removes the red toast (or the "Saving..." of its Retry) about that slot */
+  var landings = {};     /* slot -> [{ test, done }]: unanswered tries that can be recognised in the data */
+  var SKIPPED = { ok: false, skipped: true, error: { code: 'busy', message: '' } };
+
+  /* What a save is about: the action, the thing it changes, and which part of it. Two saves with the same slot
+     are two tries at the same thing. */
+  function slotOf(action, fields, attempt) {
+    var f = fields || {}, part = f.patch || f.settings;
+    var target = f.jobId || f.clientId || f.saleId || f.id || (f.member && f.member.id) || '';
+    return action + ':' + target + ':' + (attempt || (part && typeof part === 'object' ? Object.keys(part).sort().join(',') : ''));
+  }
+  function dropFailToast(slot) {
+    if (failToasts[slot]) { failToasts[slot](); delete failToasts[slot]; }
+  }
+  function forgetTries(slot) {
+    Object.keys(tries).forEach(function (key) { if (key === slot || key.indexOf(slot + '=') === 0) delete tries[key]; });
+  }
+  /* The system answered this try (saved, or refused): nothing is left hanging. After 'already_saved' the try
+     may still be recognised in the data that came with the answer, so that is left to checkLanded. */
+  function answered(c, res) {
+    delete tries[c.key];
+    if (res.ok || res.error.code !== 'already_saved') delete landings[c.slot];
+  }
+  function checkLanded() {
+    Object.keys(landings).forEach(function (slot) {
+      var hit = null;
+      (landings[slot] || []).forEach(function (w) {
+        if (hit) return;
+        try { if (w.test()) hit = w; } catch (e) { report(e); }
+      });
+      if (!hit) return;
+      delete landings[slot];
+      forgetTries(slot);
+      dropFailToast(slot);
+      try { hit.done(); } catch (e2) { report(e2); }
+    });
+  }
+  /* No answer came back. The save may have gone through all the same: keep its id, watch for it in the data,
+     and ask for the latest straight away, so the truth is on screen in a moment if the connection is back. */
+  function unanswered(c) {
+    tries[c.key] = c.id;
+    if (c.o.landed && c.o.onLanded) {
+      var list = landings[c.slot] || (landings[c.slot] = []);
+      list.push({ test: c.o.landed, done: c.o.onLanded });
+      if (list.length > 6) list.shift();
+    }
+    setTimeout(syncNow, 0);
+  }
+  function canRetry(code) { return code === 'network' || code === 'busy' || code === 'server'; }
+
+  /* A failure with nowhere left to show it: a red toast that stays until it is tapped. Retry sends the very
+     same thing again under the same id. */
+  function failToast(c, res) {
+    dropFailToast(c.slot);
+    failToasts[c.slot] = App.toast(res.error.message, { bad: true, sticky: true, retry: canRetry(res.error.code) ? function () {
+      var gen = state.gen, saving = App.toast('Saving...', { hold: true });
+      failToasts[c.slot] = saving;
+      send(c.action, c.fields, { opId: c.id, onAnswer: function (r) { answered(c, r); } }).then(function (r) {
+        saving();
+        if (failToasts[c.slot] === saving) delete failToasts[c.slot];
+        if (gen !== state.gen) return;
+        if (r.ok) {
+          if (typeof c.o.saved === 'function') c.o.saved(r); else App.toast(c.o.saved || 'Saved.');
+          return;
+        }
+        if (r.error.code === 'auth') return;
+        if (r.error.code === 'network') unanswered(c);
+        if (r.error.code === 'already_saved') App.toast(r.error.message, { bad: true, sticky: true });
+        else failToast(c, r);
+      });
+    } : null });
+  }
 
   function setBusy(btn, on, text) {
     if (!btn) return;
@@ -1007,25 +1196,42 @@ var App = (function () {
     }
   }
 
+  /* btn may be null (a one-tap control that has already flipped). o: { sheet, closes, error(message), errorEl,
+     busyText, attempt, saved, landed, onLanded }. */
   function save(btn, action, fields, o) {
     o = o || {};
-    if (btn && btn.classList.contains('is-busy')) return Promise.resolve({ ok: false, skipped: true, error: { code: 'busy', message: '' } });
-    var holder = btn || o.key || {};
-    var ops = holder._ops || (holder._ops = {});
-    /* A retry of the same save keeps its id, so a save that did get through is never made twice. Change
-       anything and it is a new save with a new id: the system answers a repeated id with the first save
-       again (replay), and the change would be lost without a word. */
-    var sent = JSON.stringify(fields || {}), op = ops[action];
-    if (!op || op.sent !== sent) op = ops[action] = { id: newId(), sent: sent };
+    if (btn && btn.classList.contains('is-busy')) return Promise.resolve(SKIPPED);
+    var sh = o.sheet || sheetOf(btn);
+    if (!btn && sh && sh.holds) return Promise.resolve(SKIPPED);      /* that sheet is already saving something */
+    var slot = slotOf(action, fields, o.attempt);
+    var c = { action: action, fields: fields, o: o, slot: slot, key: o.attempt ? slot : slot + '=' + JSON.stringify(fields || {}) };
+    var gen = state.gen;
+    c.id = tries[c.key] || newId();
+    dropFailToast(slot);             /* a new try at the same thing: the old failure is being dealt with */
     setBusy(btn, true, o.busyText);
     if (o.error) o.error('');
-    return send(action, fields, { opId: op.id }).then(function (res) {
+    var release = hold(sh || (btn && els.screen && els.screen.contains(btn) ? SCREEN : null));
+    /* A one-tap control has no button to say "Saving..." on: when the answer is slow in coming, a line says it. */
+    var wait = null, waitTimer = btn ? null : setTimeout(function () { wait = App.toast('Saving...', { hold: true }); }, 600);
+    return send(action, fields, { opId: c.id, onAnswer: function (res) { answered(c, res); } }).then(function (res) {
+      clearTimeout(waitTimer);
+      if (wait) wait();
       setBusy(btn, false);
-      if (res.ok) { if (ops[action] === op) ops[action] = null; }
-      else if (!o.quiet) {
-        if (o.error) o.error(res.error.message);
-        else App.toast(res.error.message, { bad: true });
+      release();                     /* whatever new data arrived meanwhile is drawn now, before the outcome is told */
+      if (res.ok || gen !== state.gen || res.error.code === 'auth') return res;      /* signed out: the sign-in screen says why */
+      if (res.error.code === 'network') unanswered(c);
+      if (res.error.code === 'already_saved') {
+        /* The first try was saved and this one was not run. Say so in the system's words; they stay until tapped. */
+        delete landings[slot];
+        if (o.stays) return res;       /* the sheet says it in its own place (Add person) */
+        if (o.closes && sh && sh.isOpen()) sh.close();
+        App.toast(res.error.message, { bad: true, sticky: true });
+        return res;
       }
+      /* By the button if that place is still there; otherwise where it cannot be missed. */
+      var there = o.closes ? !!sh && sh.isOpen() : !!o.errorEl && onPage(o.errorEl);
+      if (there && o.error) o.error(res.error.message);
+      else failToast(c, res);
       return res;
     });
   }
@@ -1034,7 +1240,7 @@ var App = (function () {
     o = o || {};
     var errorEl = o.errorEl;
     return save(btn, action, fields, {
-      quiet: o.quiet, busyText: o.busyText,
+      busyText: o.busyText, sheet: o.sheet, attempt: o.attempt, saved: o.saved, landed: o.landed, onLanded: o.onLanded, errorEl: errorEl,
       error: errorEl ? function (message) { errorEl.textContent = message || ''; errorEl.hidden = !message; } : null
     });
   };
@@ -1147,7 +1353,20 @@ var App = (function () {
     }
     el.get = function () { return value; };
     el.set = function (v) { value = v; draw(); };
-    el.setOptions = function (list) { options = list || []; draw(); };
+    el.setOptions = function (list) {
+      list = list || [];
+      var same = list.length === options.length && el.children.length === list.length &&
+        list.every(function (op, i) { return op.value === options[i].value && op.label === options[i].label; });
+      options = list;
+      if (!same) { draw(); return; }
+      /* The same choices with new counts: only the numbers change. The row is not rebuilt, so it keeps its place. */
+      list.forEach(function (op, i) {
+        var chip = el.children[i], count = chip.querySelector('.chip-count');
+        if (op.count == null) { if (count) chip.removeChild(count); }
+        else if (count) count.textContent = String(op.count);
+        else chip.appendChild(h('span', { class: 'chip-count' }, String(op.count)));
+      });
+    };
     draw();
     return el;
   };
@@ -1393,28 +1612,77 @@ var App = (function () {
     return h('div', { class: 'meta-row' + (cls ? ' ' + cls : '') }, icon(iconName, 18), h('span', null, content));
   }
 
-  /* One-tap: flips at once, saves behind, rolls back with a red toast and Retry if the save fails.
-     Marking done always answers "Marked done." with Undo: a job from an earlier day leaves the screen
-     when it is done, and that message is how it is brought back. */
-  function setDone(jobId, done, opId) {
-    var job = App.job(jobId), me = App.me();
-    if (!job || !me) return;
-    var before = { status: job.status, doneAt: job.doneAt, doneBy: job.doneBy }, stamp = done ? Date.now() : null;
-    job.status = done ? 'done' : 'scheduled';
-    job.doneAt = stamp;
-    job.doneBy = done ? me.id : null;
+  /* ----- Mark done and Undo: one tap, and the card tells the truth all the way -----
+     The card changes at once and says "Saving..." where the done line goes. Until the system answers, the
+     change is laid back over any newer data that arrives (layMarks), and a second tap does nothing. If no
+     answer comes, the job goes back to what the system last said, the card carries a red line that stays
+     ("Not saved. Tap to try again.") and a red toast says why; both send the same thing again under the same
+     id, so a save that did get through is never made twice. "Marked done." with Undo is only said once the
+     system has it: a job from an earlier day leaves the screen then, and that message is how it comes back. */
+  var marks = {};      /* jobId -> { done, opId, state: 'saving' | 'failed', stamp, truth, unsay } */
+
+  function markOf(job) { return job && own.call(marks, job.id) ? marks[job.id] : null; }
+  function dropMark(jobId) {
+    var m = own.call(marks, jobId) ? marks[jobId] : null;
+    if (!m) return;
+    if (m.unsay) m.unsay();
+    delete marks[jobId];
+  }
+  function wear(job, m) {
+    var me = App.me();
+    m.truth = { status: job.status, doneAt: job.doneAt, doneBy: job.doneBy };      /* what the system last said */
+    job.status = m.done ? 'done' : 'scheduled';
+    job.doneAt = m.done ? m.stamp : null;
+    job.doneBy = m.done && me ? me.id : null;
+  }
+  /* New data arrived. A change still on its way is laid over it again; one that failed is finished with if
+     the data now shows what was asked for (the answer was lost, the save was not). */
+  function layMarks() {
+    Object.keys(marks).forEach(function (jobId) {
+      var m = marks[jobId], job = App.job(jobId);
+      if (m.state === 'saving') { if (job) wear(job, m); return; }
+      if (!job || (job.status === 'done') === m.done) dropMark(jobId);
+    });
+  }
+
+  function setDone(jobId, done) {
+    var job = App.job(jobId), me = App.me(), old = markOf(job);
+    if (!job || !me) {
+      dropMark(jobId);
+      if (me) App.toast('That job is no longer on your list.');
+      return;
+    }
+    if (old && old.state === 'saving') return;                    /* one at a time: a second tap does nothing */
+    var m = { done: !!done, state: 'saving', stamp: done ? Date.now() : null, opId: old && old.done === !!done ? old.opId : newId() };
+    dropMark(jobId);
+    marks[jobId] = m;
+    wear(job, m);
     changed();
-    var said = done ? App.toast('Marked done.', { ms: 6000, action: { label: 'Undo', onTap: function () { setDone(jobId, false); } } }) : null;
-    opId = opId || newId();
-    send('setJobDone', { jobId: jobId, done: done }, { opId: opId }).then(function (res) {
-      if (res.ok) return;
-      if (said) said();          /* it was not saved: take the "Marked done." back before saying so */
+    var gen = state.gen;
+    send('setJobDone', { jobId: jobId, done: m.done }, { opId: m.opId, onAnswer: function () { if (marks[jobId] === m) delete marks[jobId]; } }).then(function (res) {
+      if (gen !== state.gen) return;
       var now = App.job(jobId);
-      if (now && now.status === (done ? 'done' : 'scheduled') && now.doneAt === stamp) {
-        now.status = before.status; now.doneAt = before.doneAt; now.doneBy = before.doneBy;
-        changed();
+      if (res.ok) {
+        changed();                                               /* "Saving..." comes off the card */
+        if (m.done && now && now.status === 'done') {
+          App.toast('Marked done.', { ms: 6000, action: { label: 'Undo', onTap: function () { setDone(jobId, false); } } });
+        }
+        return;
       }
-      App.toast(res.error.message, { bad: true, retry: res.error.code === 'network' ? function () { setDone(jobId, done, opId); } : null });
+      if (res.error.code === 'auth') return;
+      /* Not saved, as far as this phone knows: the card goes back to what the system last said. */
+      if (now && m.truth && now.status === (m.done ? 'done' : 'scheduled') && now.doneAt === m.stamp) {
+        now.status = m.truth.status; now.doneAt = m.truth.doneAt; now.doneBy = m.truth.doneBy;
+      }
+      if (canRetry(res.error.code) && now) {
+        m.state = 'failed';
+        marks[jobId] = m;
+        m.unsay = App.toast(res.error.message, { bad: true, sticky: true, retry: function () { m.unsay = null; setDone(jobId, m.done); } });
+        if (res.error.code === 'network') setTimeout(syncNow, 0);  /* it may have got through: look */
+      } else {
+        App.toast(res.error.message, { bad: true, sticky: true });
+      }
+      changed();
     });
   }
 
@@ -1426,9 +1694,26 @@ var App = (function () {
     return row;
   }
 
+  /* The red line a failed Mark done (or Undo) leaves on its job. It stays until it is tapped; tapping tries again. */
+  function unsavedLine(job, m) {
+    return h('button', { type: 'button', class: 'job-unsaved', onclick: function () { setDone(job.id, m.done); } },
+      icon('alert', 20), h('span', null, m.done ? 'Not saved. Tap to try again.' : 'Undo was not saved. Tap to try again.'));
+  }
+
   function doneLine(job) {
+    var m = markOf(job);
+    if (m && m.state === 'saving') return h('div', { class: 'job-done-line', role: 'status' }, h('span', null, 'Saving...'));
     return h('div', { class: 'job-done-line' }, h('span', null, doneText(job)),
-      canMark(job) ? ui.button('Undo', { kind: 'text', small: true, onTap: function () { setDone(job.id, false); } }) : null);
+      canMark(job) && !m ? ui.button('Undo', { kind: 'text', small: true, onTap: function () { setDone(job.id, false); } }) : null);
+  }
+
+  /* What goes where "Mark done" goes on a job that is still to do: the button, "Saving..." while an Undo is
+     on its way, or the red line after a Mark done that was not saved. */
+  function markControl(job, primary) {
+    var m = markOf(job);
+    if (m && m.state === 'saving') return h('div', { class: 'job-done-line', role: 'status' }, h('span', null, 'Saving...'));
+    if (m && m.done) return unsavedLine(job, m);
+    return ui.button('Mark done', { kind: primary ? 'primary' : 'quiet', block: true, onTap: function () { setDone(job.id, true); } });
   }
 
   ui.jobCard = function (job, o) {
@@ -1443,7 +1728,11 @@ var App = (function () {
     card.appendChild(h('button', { type: 'button', class: 'job-name', onclick: function () { ui.openJob(job.id); } },
       h('span', null, c.name || 'Client'), icon('chevron-right', 20)));
     if (job.what) card.appendChild(h('p', { class: 'job-what' }, job.what));
-    if (done) { card.appendChild(doneLine(job)); return card; }
+    if (done) {
+      card.appendChild(doneLine(job));
+      if (markOf(job) && markOf(job).state === 'failed') card.appendChild(unsavedLine(job, markOf(job)));   /* an Undo that was not saved */
+      return card;
+    }
     if (cancelled) return card;
 
     var meta = h('div', { class: 'meta' }), note = lastNote(job);
@@ -1459,7 +1748,7 @@ var App = (function () {
     if (meta.firstChild) card.appendChild(meta);
     card.appendChild(jobActions(job));
     /* One ice button per screen: only the card the screen marks as `primary` gets it. The rest are the same size, quiet. */
-    if (canMark(job)) card.appendChild(ui.button('Mark done', { kind: o.primary ? 'primary' : 'quiet', block: true, onTap: function () { setDone(job.id, true); } }));
+    if (canMark(job)) card.appendChild(markControl(job, o.primary));
     return card;
   };
 
@@ -1516,14 +1805,21 @@ var App = (function () {
       footer: { label: 'Save note', onTap: function (sh) {
         var text = box.val();
         if (!text) { box.setError('Write the note first.'); return; }
-        sh.send('addNote', { kind: kind, id: id, text: text }).then(function (res) {
-          if (!res.ok) return;
-          sh.close();
-          App.toast('Note saved.');
-        });
+        /* A try that got no answer may have saved the note all the same. It has when the notes hold one more
+           like it than before: then the sheet is finished as saved, and nothing is sent again. */
+        var had = sameNotes(kind, id, text);
+        function saved() { sh.close(); App.toast('Note saved.'); }
+        sh.send('addNote', { kind: kind, id: id, text: text }, { saved: 'Note saved.',
+          landed: function () { return sameNotes(kind, id, text) > had; }, onLanded: saved
+        }).then(function (res) { if (res.ok) saved(); });
       } }
     });
   };
+  /* How many of my own notes with these words the job or client holds. */
+  function sameNotes(kind, id, text) {
+    var thing = kind === 'job' ? App.job(id) : App.client(id), me = App.me();
+    return ((thing && thing.notes) || []).filter(function (n) { return !!me && n.by === me.id && n.text === text; }).length;
+  }
 
   function openAssign(jobId) {
     App.sheet.open({
@@ -1568,11 +1864,13 @@ var App = (function () {
       footer: { label: PICK_TIME, onTap: function (sheet) {
         var v = picker.get();
         if (!v) return;
-        sheet.send('moveJob', { jobId: jobId, date: v.date, time: v.time }).then(function (res) {
-          if (res.ok) {
-            sheet.close();
-            App.toast('Moved to ' + fmt.when(v.date, v.time) + '.');
-          } else if (res.error.code === 'slot_taken' || res.error.code === 'slot_closed') {
+        function moved() { sheet.close(); App.toast('Moved to ' + fmt.when(v.date, v.time) + '.'); }
+        sheet.send('moveJob', { jobId: jobId, date: v.date, time: v.time }, { saved: moved,
+          /* No answer, and then the job turns up at that time: it was moved. */
+          landed: function () { var now = App.job(jobId); return !!now && now.date === v.date && now.time === v.time; }, onLanded: moved
+        }).then(function (res) {
+          if (res.ok) moved();
+          else if (res.error.code === 'slot_taken' || res.error.code === 'slot_closed') {
             sheet.error('');
             picker.set(null);
             picker.setError(res.error.message);
@@ -1594,7 +1892,7 @@ var App = (function () {
       footer: { label: 'Save', onTap: function (sh) {
         var text = box.val();
         if (!text) { box.setError('Say what needs to be done.'); return; }
-        sh.send('updateJob', { jobId: jobId, patch: { what: text } }).then(function (res) {
+        sh.send('updateJob', { jobId: jobId, patch: { what: text } }, { attempt: 'what' }).then(function (res) {
           if (!res.ok) return;
           sh.close();
           App.toast('Saved.');
@@ -1604,9 +1902,9 @@ var App = (function () {
   }
 
   function bringBack(jobId) {
-    send('updateJob', { jobId: jobId, patch: { status: 'scheduled' } }).then(function (res) {
-      if (res.ok) App.toast('The job is back on the schedule.');
-      else App.toast(res.error.message, { bad: true });
+    var said = 'The job is back on the schedule.';
+    save(null, 'updateJob', { jobId: jobId, patch: { status: 'scheduled' } }, { saved: said }).then(function (res) {
+      if (res.ok) App.toast(said);
     });
   }
 
@@ -1618,10 +1916,12 @@ var App = (function () {
       yes: 'Cancel job', no: 'Keep it', danger: true
     }).then(function (yes) {
       if (!yes) return;
-      ui.save(btn, 'updateJob', { jobId: job.id, patch: { status: 'cancelled' } }, { errorEl: errorEl }).then(function (res) {
-        if (!res.ok) return;
+      function cancelled() {
         sh.close();
         App.toast('Job cancelled.', { action: { label: 'Undo', onTap: function () { bringBack(job.id); } } });
+      }
+      ui.save(btn, 'updateJob', { jobId: job.id, patch: { status: 'cancelled' } }, { errorEl: errorEl, saved: cancelled }).then(function (res) {
+        if (res.ok) cancelled();
       });
     });
   }
@@ -1645,13 +1945,16 @@ var App = (function () {
     if (kvs.firstChild) el.appendChild(kvs);
 
     if (!cancelled) el.appendChild(jobActions(job));
-    if (scheduled && canMark(job)) {
-      el.appendChild(ui.button('Mark done', { kind: 'primary', block: true, onTap: function () { setDone(job.id, true); } }));
-    }
-    if (done) {
+    /* The same truth as on the card: "Saving..." until the system has it, and a red line if it could not be saved. */
+    var mark = markOf(job);
+    if (scheduled && canMark(job)) el.appendChild(markControl(job, true));
+    if (done && mark && mark.state === 'saving') {
+      el.appendChild(h('div', { class: 'callout', role: 'status' }, h('span', { class: 'strong' }, 'Saving...')));
+    } else if (done) {
       el.appendChild(h('div', { class: 'callout callout-good' }, h('div', { class: 'between' },
         h('span', { class: 'strong' }, doneText(job)),
-        canMark(job) ? ui.button('Undo', { kind: 'text', small: true, onTap: function () { setDone(job.id, false); } }) : null)));
+        canMark(job) && !mark ? ui.button('Undo', { kind: 'text', small: true, onTap: function () { setDone(job.id, false); } }) : null)));
+      if (mark) el.appendChild(unsavedLine(job, mark));
     }
     if (cancelled) {
       el.appendChild(h('div', { class: 'callout' }, h('p', { class: 'callout-title' }, 'This job was cancelled.'),
@@ -1659,7 +1962,7 @@ var App = (function () {
       if (owner) {
         var backErr = h('p', { class: 'form-error', role: 'alert', hidden: true });
         el.appendChild(ui.button('Put it back on the schedule', { block: true, small: true, onTap: function (e, btn) {
-          ui.save(btn, 'updateJob', { jobId: job.id, patch: { status: 'scheduled' } }, { errorEl: backErr }).then(function (res) {
+          ui.save(btn, 'updateJob', { jobId: job.id, patch: { status: 'scheduled' } }, { errorEl: backErr, saved: 'The job is back on the schedule.' }).then(function (res) {
             if (res.ok) App.toast('The job is back on the schedule.');
           });
         } }));
@@ -1707,21 +2010,31 @@ var App = (function () {
 
   var tabsKey = '', meLine = null;
 
-  /* When this phone last heard from the system: "2:14 PM", or "Nov 16, 2:14 PM" when that was not today. */
+  /* When this phone last heard from the system, as the strip says it: "at 2:14 PM", or "Tue, Nov 17 at 10:00 AM"
+     when that was not today. */
+  function savedWhen() {
+    if (!state.okAt) return '';
+    var day = localDay(state.okAt);
+    return day === localDay(Date.now()) ? 'at ' + fmt.clock(state.okAt) : fmt.when(day, localHM(state.okAt));
+  }
+  /* The same moment for the account sheet: "2:14 PM", or "Nov 16, 2:14 PM". */
   function savedAt() {
     if (!state.okAt) return '';
     return localDay(state.okAt) === localDay(Date.now()) ? fmt.clock(state.okAt) : fmt.stamp(state.okAt);
   }
+  /* Is what is on screen older than it looks? After two failed refreshes in a row; or after the very first
+     one when the page has only its saved copy to show (it was opened with no signal). */
+  function behind() { return state.fails >= (state.heard ? 2 : 1); }
 
-  /* The one status line under the top bar. After two failed refreshes in a row it says which kind of
-     trouble it is: nothing answered (no connection), or the system answered with an error. */
+  /* The one status line under the top bar. It says which kind of trouble it is: nothing answered (no
+     connection), or the system answered with an error. A page that opened on a saved copy from another day
+     says so at once, before its first refresh has even come back. */
   function drawStrip() {
     if (!els.strip) return;
-    var text = '';
-    if (state.fails >= 2) {
-      var at = savedAt();
-      text = (state.failKind === 'error' ? 'The system is not answering. ' : 'No connection. ') + (at ? 'Showing what was saved at ' + at + '. ' : '') + 'Trying again.';
-    } else if (App.mode === 'sample') text = 'Sample data. Nothing here is real yet.';
+    var text = '', at = savedWhen(), showing = at ? 'Showing what was saved ' + at + '. ' : '';
+    if (behind()) text = (state.failKind === 'error' ? 'The system is not answering. ' : 'No connection. ') + showing + 'Trying again.';
+    else if (state.stale && !state.heard && showing) text = showing + 'Getting the latest.';
+    else if (App.mode === 'sample') text = 'Sample data. Nothing here is real yet.';
     els.strip.hidden = !text;
     els.stripText.textContent = text;
     if (meLine && onPage(meLine)) meLine.textContent = upToDateText();   /* the account sheet never says "Up to date" under this strip */
@@ -1783,10 +2096,17 @@ var App = (function () {
 
   function drawScreen(keep) {
     var root = els.screen, def = screens[App.route] || {};
+    /* A screen with a box someone types in (Clients and its search) redraws only what is under the box: the
+       box never leaves the page, so the keyboard stays up and nothing typed is lost. Its `update` answers
+       false when it cannot (the screen has to be built again). */
+    if (keep && typeof def.update === 'function' && root._drawn === App.route && root.firstChild) {
+      try { if (def.update(root) !== false) return; } catch (e0) { report(e0); }
+    }
     var y = window.pageYOffset || doc.documentElement.scrollTop || 0;
     var typed = keep ? keepTyped(root) : [];
     clear(root);
     root.className = 'screen screen-' + App.route;
+    root._drawn = App.route;
     try {
       def.render(root);
     } catch (e) {
@@ -1815,6 +2135,7 @@ var App = (function () {
     if (!route || !allowed(route)) route = 'today';
     writeHash(route);
     lockY = 0;                 /* a new screen starts at its top, also once a sheet over it closes */
+    SCREEN.dirty = false;      /* it is about to be drawn from scratch */
     App.route = route;
     drawChrome();
     drawScreen(false);
@@ -1835,7 +2156,7 @@ var App = (function () {
       state.syncing = false;
       /* "Busy" only means several phones asked at the same moment: the next round will do. */
       if (res.ok || res.error.code === 'auth' || res.error.code === 'busy') return;
-      state.fails++;            /* two in a row and the strip says so, until one works */
+      state.fails++;            /* two in a row and the strip says so, until one works (the first one, when the page opened on its saved copy) */
       state.failKind = res.error.code === 'network' && !res.error.reached ? 'offline' : 'error';
       drawStrip();
     });
@@ -1858,6 +2179,7 @@ var App = (function () {
     tabsKey = '';
     show(route || readHash() || 'today');
     startLive();
+    tellCannotKeep();
   }
 
   function leaveApp() {
@@ -1866,6 +2188,7 @@ var App = (function () {
     dropTo(0, false);
     clear(els.toasts);        /* nothing left over from whoever was signed in: no message... */
     clear(els.screen);        /* ...and not their last screen either, sitting in the hidden page */
+    els.screen._drawn = '';
     els.app.hidden = true;
     els.signin.hidden = false;
     window.scrollTo(0, 0);
@@ -1875,6 +2198,12 @@ var App = (function () {
     state.token = null;
     state.fails = 0;
     state.failKind = '';
+    state.stale = false;
+    state.gen++;               /* an answer to anything this person sent is no longer shown to whoever is here next */
+    tries = {};
+    landings = {};
+    failToasts = {};
+    marks = {};
     App.data = null;
     storage.del('token');
     storage.del('who');
@@ -1886,7 +2215,7 @@ var App = (function () {
      Other files hear 'signout' first, while App.me() still answers, and clear what they keep for this person. */
   function signOut(message) {
     var token = state.token;
-    if (App.data) emit('signout', { chosen: !message });
+    if (App.data) emit('signout', { chosen: !message, removed: !!message && REMOVED_RE.test(message) });
     if (token && !message) transport({ action: 'logout', token: token });   /* best effort; nothing waits on it */
     forget();
     showSignIn(message);
@@ -1941,7 +2270,8 @@ var App = (function () {
           h('p', { class: 'muted small' }, 'This is made-up data so you can try everything.' + (quick.firstChild ? ' Sign straight in as:' : ''))),
         quick.firstChild ? quick : null,
         missing ? ui.button('Reset sample data', { kind: 'text', small: true, icon: 'reset', onTap: resetSample }) : null,
-        h('p', { class: 'muted small sample-next' }, 'Grayson: this becomes your real team app once the setup steps are done.')));
+        h('p', { class: 'muted small sample-next' }, 'Sample data starts fresh each day.'),
+        h('p', { class: 'muted small' }, 'Grayson: this becomes your real team app once the setup steps are done.')));
     }
 
     var name = ui.field({ label: 'Name', name: 'name', autocomplete: 'username', autocapitalize: 'words' });
@@ -1998,8 +2328,9 @@ var App = (function () {
   function renderToday(root) {
     var d = App.data, me = d.me, today = d.today;
     var todays = App.jobsOn(today);
-    var overdue = d.jobs.filter(App.isOverdue).sort(byTime);
-    var doneCount = todays.filter(function (j) { return j.status === 'done'; }).length;
+    /* A job from an earlier day stays in its place while its Mark done is still being saved (or could not be). */
+    var overdue = d.jobs.filter(function (j) { return App.isOverdue(j) || (j.date < today && j.status !== 'cancelled' && !!markOf(j)); }).sort(byTime);
+    var doneCount = todays.filter(function (j) { return j.status === 'done' && !(markOf(j) && markOf(j).state === 'saving'); }).length;   /* only what is saved counts */
     var next = todays.filter(function (j) { return j.status === 'scheduled'; })[0];
     var nextTime = next ? fmt.time(next.time).split(' ') : null;
     /* The one ice button on this screen: "Mark done" on the first job still to do, an overdue one before today's. */
@@ -2106,7 +2437,7 @@ var App = (function () {
     if (App.mode === 'sample') return 'Sample data, saved on this phone only.';
     var at = savedAt();
     if (!at) return 'Waiting for a connection.';
-    return state.fails >= 2 ? 'Last updated ' + at + '.' : 'Up to date as of ' + at + '.';
+    return behind() || (state.stale && !state.heard) ? 'Last updated ' + at + '.' : 'Up to date as of ' + at + '.';
   }
 
   function openChangePin() {
@@ -2122,10 +2453,11 @@ var App = (function () {
         if (!PIN_RE.test(b)) { next.setError('A PIN is 6 digits.'); sh.reveal(next); return; }
         if (b !== c) { again.setError('The two new PINs do not match.'); sh.reveal(again); return; }
         /* A PIN that is too easy to guess is refused by the system, in its own words, by the button. */
-        sh.send('changePin', { oldPin: a, newPin: b }).then(function (res) {
+        var said = 'Your PIN is changed. Your other phones were signed out.';
+        sh.send('changePin', { oldPin: a, newPin: b }, { saved: said }).then(function (res) {
           if (!res.ok) return;
           sh.close();
-          App.toast('Your PIN is changed. Your other phones were signed out.');
+          App.toast(said);
         });
       } }
     });
@@ -2269,6 +2601,7 @@ var App = (function () {
     if (state.token && snap && snap.me && Array.isArray(snap.jobs) && snap.settings) {
       App.data = snap;
       state.okAt = +storage.get('at') || 0;
+      state.stale = snap.today !== businessDay();      /* yesterday's copy: the strip says so from the first moment */
       enterApp();        /* open at once on what this phone last knew... */
       syncNow();         /* ...then catch up */
     } else if (state.token) showLoading();

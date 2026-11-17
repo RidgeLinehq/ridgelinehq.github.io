@@ -112,12 +112,18 @@
 
   /* ---------- the list ---------- */
 
+  /* The search box and the filter row are built once and stay on the page for as long as the screen does.
+     When new data arrives only the list under them is drawn again (see `update` where the screen is
+     registered): someone typing in the box keeps the keyboard, the cursor and every letter. */
+  var listUi = null;      /* { who, listEl, draw } while the list is on screen */
+
   function render(root) {
-    var me = App.me(), all = App.data.clients || [];
+    var me = App.me();
     if (viewer !== me.id) { viewer = me.id; query = ''; filter = ''; }
+    listUi = null;
     root.appendChild(ui.title('Clients'));
 
-    if (!all.length) {
+    if (!(App.data.clients || []).length) {
       root.appendChild(ui.empty({ title: 'No clients yet.',
         text: me.role === 'owner' ? 'A client is added here each time a sale is entered.' : 'Your clients show up here after your first sale.',
         button: { label: 'New sale', kind: 'primary', onTap: function () { App.act('newSale', {}); } } }));
@@ -136,7 +142,7 @@
     var listEl = h('div', { class: 'stack' });
     root.appendChild(listEl);
 
-    /* The filter row slides sideways and is redrawn on every change: keep the chosen filter in view. */
+    /* The filter row slides sideways: keep the chosen filter in view. */
     function showChosen() {
       var on = chips.querySelector('.chip.is-on');
       if (!on) return;
@@ -146,10 +152,12 @@
     }
 
     function draw() {
+      var all = App.data.clients || [];
       var q = query.trim().toLowerCase();
       var found = all.filter(function (c) { return matches(c, q); });
       var counts = {};
       found.forEach(function (c) { counts[c.status] = (counts[c.status] || 0) + 1; });
+      /* Only the counts on the chips change; the chips themselves stay as they are. */
       chips.setOptions([{ value: '', label: 'All', count: found.length }].concat(Core.CLIENT_STATUSES.map(function (s) {
         return { value: s, label: s, count: counts[s] || 0 };
       })));
@@ -181,7 +189,17 @@
       });
       listEl.appendChild(list);
     }
+    listUi = { who: me.id, listEl: listEl, draw: draw };
     draw();
+  }
+
+  /* New data while the screen is showing: draw the list again and leave the rest alone. Answers false when
+     the whole screen has to be built again (the first client arrived, the last one went, someone else signed in). */
+  function update(root) {
+    var me = App.me();
+    if (!listUi || !me || listUi.who !== me.id || !root.contains(listUi.listEl) || !(App.data.clients || []).length) return false;
+    listUi.draw();
+    return true;
   }
 
   /* ---------- the Client sheet ---------- */
@@ -206,12 +224,14 @@
     var delErr = h('p', { class: 'form-error', role: 'alert', hidden: true });
     var delBtn = ui.button('Remove client', { kind: 'danger', block: true, onTap: removeClient });
 
-    /* One tap: the control flips at once, and goes back with a red message if the save fails. */
-    function quick(patch, savedText, opId) {
-      App.api.send('updateClient', { clientId: id, patch: patch }, { opId: opId }).then(function (res) {
-        if (res.ok) { App.toast(savedText); return; }
-        if (App.client(id)) draw();
-        App.toast(res.error.message, { bad: true, retry: res.error.code === 'network' ? function () { quick(patch, savedText, res.opId); } : null });
+    /* One tap: the control flips at once. While that is being saved nothing else in the sheet can be tapped
+       and new data does not redraw it. If it cannot be saved, the control goes back to what the system holds
+       and a red message says so until it is tapped, with Retry. */
+    function quick(patch, savedText) {
+      ui.save(null, 'updateClient', { clientId: id, patch: patch }, { sheet: sheet, saved: savedText }).then(function (res) {
+        if (res.skipped) return;
+        if (res.ok) App.toast(savedText);
+        else if (App.client(id)) draw();
       });
     }
 
@@ -243,12 +263,13 @@
         yes: 'Remove client', no: 'Keep client', danger: true
       }).then(function (yes) {
         if (!yes) return;
+        function removed() { sheet.close(); App.toast('Client removed.'); }
         deleting = true;
-        ui.save(delBtn, 'deleteClient', { clientId: id }, { errorEl: delErr }).then(function (res) {
+        ui.save(delBtn, 'deleteClient', { clientId: id }, { errorEl: delErr, saved: removed }).then(function (res) {
           if (res.skipped) return;
-          if (res.ok) { sheet.close(); App.toast('Client removed.'); return; }
+          if (res.ok) { removed(); return; }
           deleting = false;
-          if (!App.client(id)) sheet.close();
+          if (!App.client(id)) sheet.close(); else draw();
         });
       });
     }
@@ -401,12 +422,15 @@
       footer: { label: 'Save link', onTap: function (sh) {
         var link = box.val(), problem = linkProblem(link);
         if (problem) { box.setError(problem); return; }
-        if (link === had) { sh.close(); return; }
         var fields = { clientId: id, patch: { stripeLink: link } };
-        sh.send('updateClient', fields).then(function (res) {
+        /* Nothing was changed: close. Unless an earlier try from here got no answer: that one may have saved, so
+           this goes out too (under the same id) and the system says which it was. */
+        if (link === had && !sh.unanswered('updateClient', fields, 'link')) { sh.close(); return; }
+        var said = link ? 'Payment link saved.' : 'Payment link removed.';
+        sh.send('updateClient', fields, { attempt: 'link', saved: said }).then(function (res) {
           if (!res.ok) return;
           sh.close();
-          App.toast(link ? 'Payment link saved.' : 'Payment link removed.');
+          App.toast(said);
         });
       } }
     });
@@ -508,13 +532,14 @@
         var patch = {}, any = false, k;
         for (k in typed) if (typed[k] !== was[k]) { patch[k] = typed[k]; any = true; }
         if (owner && rep.input.value && rep.input.value !== c.repId) { patch.repId = rep.input.value; any = true; }   /* only when it is handed to someone new */
-        if (!any) { sh.close(); return; }
-
         var fields = { clientId: id, patch: patch };
-        sh.send('updateClient', fields).then(function (res) {
+        /* Nothing was changed: close. Unless an earlier try from here got no answer (see the payment link above). */
+        if (!any && !sh.unanswered('updateClient', fields)) { sh.close(); return; }
+        var said = patch.repId ? 'Saved. ' + App.nameOf(patch.repId, 'Their new rep') + ' looks after this client now.' : 'Saved.';
+        sh.send('updateClient', fields, { saved: said }).then(function (res) {
           if (!res.ok) return;
           sh.close();
-          App.toast(patch.repId ? 'Saved. ' + App.nameOf(patch.repId, 'Their new rep') + ' looks after this client now.' : 'Saved.');
+          App.toast(said);
         });
       } }
     });
@@ -547,11 +572,15 @@
         if (!v) return;
         var fields = { clientId: id, date: v.date, time: v.time, what: what.val() };
         if (waiting) fields.saleId = waiting.id;
-        sh.send('bookJob', fields).then(function (res) {
-          if (res.ok) {
-            sh.close();
-            App.toast('Booked for ' + fmt.when(v.date, v.time) + '.');
-          } else if (res.error.code === 'slot_taken' || res.error.code === 'slot_closed') {
+        function booked() { sh.close(); App.toast('Booked for ' + fmt.when(v.date, v.time) + '.'); }
+        sh.send('bookJob', fields, { saved: booked,
+          /* No answer, and then this client turns up booked at that time: it went through. Finish as booked. */
+          landed: function () {
+            return App.data.jobs.some(function (j) { return j.clientId === id && j.date === v.date && j.time === v.time && j.status === 'scheduled'; });
+          }, onLanded: booked
+        }).then(function (res) {
+          if (res.ok) booked();
+          else if (res.error.code === 'slot_taken' || res.error.code === 'slot_closed') {
             sh.error('');
             picker.set(null);
             picker.setError(res.error.message);
@@ -566,10 +595,10 @@
 
   /* ---------- register ---------- */
 
-  App.screen('clients', { roles: ['owner', 'rep'], title: 'Clients', render: render });
+  App.screen('clients', { roles: ['owner', 'rep'], title: 'Clients', render: render, update: update });
   App.actions.openClient = openClient;
   App.actions.bookVisit = bookVisit;
   App.needsAppointment = needsAppointment;
   /* Signing out: the next person on this phone starts with an empty search. */
-  App.on('signout', function () { query = ''; filter = ''; viewer = null; });
+  App.on('signout', function () { query = ''; filter = ''; viewer = null; listUi = null; });
 })();

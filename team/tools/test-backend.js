@@ -38,7 +38,16 @@ const core = require(path.join(root, 'src', 'core.js'));
 
 const SERVER_MESSAGE = 'Something went wrong on our side. Nothing was saved. Try again.';
 const BUSY_MESSAGE = 'The system is busy. Try again in a moment.';
+const ALREADY_SAVED = 'Your first try was saved. Check it, then make the change again if you still need to.';
 const uid = () => crypto.randomUUID();
+
+/* The business clock, worked out here without the backend's help, to check the clock it sends. */
+const chicago = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+function chicagoAt(ms) {
+  const p = {};
+  chicago.formatToParts(new Date(ms)).forEach((x) => { p[x.type] = x.value; });
+  return { day: p.year + '-' + p.month + '-' + p.day, hm: p.hour + ':' + p.minute };
+}
 
 /* ====================================================================================
  * The fake Google
@@ -54,7 +63,9 @@ function newGoogle() {
     mail: [],              // every email sent
     logs: [],              // every Logger.log
     fail: {},              // point -> how many times to fail there (see failIf)
-    hooks: {},             // beforeLock / afterLock: run once, used to interleave two requests. onMail: run once when an email is about to go out
+    hooks: {},             // beforeLock / afterLock: run once, used to interleave two requests. onMail: run once when an email is about to go out.
+                           // afterRead: { tab: fn }, run once right after that tab has been read (something else happens while a request is half way)
+    tweak: null,           // (ctx) => ...: run on every fresh copy of the script before it is used, to change a limit inside the code under test
     seq: 0,
     ownerEmail: 'grayson@example.com'
   };
@@ -110,6 +121,8 @@ function services(G, run) {
           for (let j = 0; j < numCols; j++) line.push(cell(sh, row + i, col + j));
           out.push(line);
         }
+        const then = G.hooks.afterRead && G.hooks.afterRead[sh.name];
+        if (then) { delete G.hooks.afterRead[sh.name]; then(); }
         return out;
       },
       setValues(values) {
@@ -400,6 +413,10 @@ function checkRun(r, opts) {
     else if (c === 'ss.flush' || c === 'FAILED ss.flush') unsent = false;
     else if (c === 'mail' || c === 'FAILED mail') { if (opts.post) assert(!unsent && revWrites > 0, 'an alert email went out before the save was finished'); }
     else if (c.indexOf('cache.put:rev') === 0) assert(c === 'cache.put:rev' ? held : !held, 'the saved copy of REV is cached under the lock, the looked-up copy without it: ' + c);
+    /* Without the lock a request may look in the cache and at the revision number, and that is all. A sign-in
+       above all is never put in the cache without it: one that was cleared a moment earlier could come back. */
+    else if (c.indexOf('cache.put:') === 0 || c.indexOf('cache.remove:') === 0) assert(held, 'the cache was changed without holding the lock: ' + c);
+    else if (c === 'ss.open' || c.indexOf('sheet.read:') === 0) { assert(held, 'the sheet was read without holding the lock: ' + c); if (c !== 'ss.open') reads[c] = (reads[c] || 0) + 1; }
     else if (c === 'ss.create') assert(held, 'made a spreadsheet without holding the lock');
     else if (/^(sheet\.(write|format|insertRows)|ss\.(insertSheet|deleteSheet)):/.test(c)) {
       assert(held, 'changed the sheet without holding the lock: ' + c);
@@ -408,7 +425,7 @@ function checkRun(r, opts) {
     } else if (c.indexOf('props.set:') === 0) {
       assert(held, 'changed a script property without holding the lock: ' + c);
       if (c === 'props.set:REV') { assert(!unsent, 'REV was written before the new data was sent to the sheet'); revWrites++; }
-    } else if (c.indexOf('sheet.read:') === 0) reads[c] = (reads[c] || 0) + 1;
+    }
   });
   assert(!unsent, 'the run ended with writes that were never sent with SpreadsheetApp.flush()');
   if (!opts.loose) {
@@ -440,6 +457,7 @@ function world() {
     const serviceNames = Object.keys(svc.globals);
     const ctx = vm.createContext(svc.globals);
     script.runInContext(ctx);
+    if (G.tweak) G.tweak(ctx);
     assert.strictEqual(typeof ctx[fn], 'function', fn + ' is not a function in Code.gs');
     const settled = globalState(ctx, serviceNames);
     assert(settled.indexOf('"OWNER_NAME"') > 0, 'the settings at the top of gas.js are there');
@@ -463,11 +481,25 @@ function world() {
     opts = opts || {};
     const event = Object.prototype.hasOwnProperty.call(opts, 'event') ? opts.event
       : { parameter: {}, postData: { type: 'text/plain', contents: typeof body === 'string' ? body : JSON.stringify(body) } };
+    const sent = Date.now();
     const r = run('doPost', event);
     assert(!r.error, 'doPost threw instead of answering JSON: ' + (r.error && r.error.message));
     const res = readJson(r.out);
     checkRun(r, Object.assign({ post: true }, opts));
+    /* Every sync in every answer of every test, the short one too, carries the system's clock. */
+    if (res && res.sync) {
+      const s = res.sync;
+      assert(Number.isInteger(s.nowMs) && s.nowMs >= sent && s.nowMs <= Date.now(), 'sync.nowMs is not the time the request was answered: ' + s.nowMs);
+      assert.deepStrictEqual([s.nowHM, s.today], [chicagoAt(s.nowMs).hm, chicagoAt(s.nowMs).day], 'sync.nowHM and sync.today are not business time at nowMs');
+    }
     return { res: res, calls: r.calls };
+  }
+
+  /* A setting or a limit as the code under test has it (a top-level name in Code.gs). */
+  function peek(name) {
+    const ctx = vm.createContext(services(G, { id: 'peek', calls: [], pending: [] }).globals);
+    script.runInContext(ctx);
+    return ctx[name];
   }
 
   function byHand(fn, opts) {
@@ -499,7 +531,7 @@ function world() {
   }
   const snapshot = (names) => JSON.stringify((names || core.COLLECTIONS).map((n) => [n, sheet(n) ? rows(n) : null]));
 
-  return { G: G, run: run, post: post, byHand: byHand, get: () => readJson(run('doGet').out), file: file, sheet: sheet, rows: rows, docs: docs, snapshot: snapshot };
+  return { G: G, run: run, post: post, peek: peek, byHand: byHand, get: () => readJson(run('doGet').out), file: file, sheet: sheet, rows: rows, docs: docs, snapshot: snapshot };
 }
 
 const must = (r) => { assert.strictEqual(r.res.ok, true, 'expected ok, got ' + JSON.stringify(r.res.error)); return r.res; };
@@ -507,6 +539,13 @@ const fails = (r, code) => {
   assert.strictEqual(r.res.ok, false, 'expected the error "' + code + '" but the call worked');
   assert.strictEqual(r.res.error.code, code, 'expected "' + code + '", got "' + r.res.error.code + '": ' + r.res.error.message);
   assert(typeof r.res.error.message === 'string' && r.res.error.message.length > 0);
+  return r.res;
+};
+/* The short "nothing changed" answer: exactly rev, today, same and the clock (the clock itself is checked on every answer, in post). */
+const nothingNew = (r, rev, today, what) => {
+  assert.deepStrictEqual(Object.keys(r.res.sync || {}).sort(), ['nowHM', 'nowMs', 'rev', 'same', 'today'], what);
+  assert.deepStrictEqual(Object.assign({}, r.res, { sync: Object.assign({}, r.res.sync, { nowMs: 0, nowHM: '' }) }),
+    { ok: true, result: {}, sync: { rev: rev, today: today, same: true, nowMs: 0, nowHM: '' } }, what);
   return r.res;
 };
 const pinIn = (text, label) => {
@@ -961,8 +1000,9 @@ test('"nothing changed" is answered without the lock and without opening the she
     what + ' touched the lock or the sheet: ' + r.calls.join(', '));
 
   const fast = w.post(ask);
-  assert.deepStrictEqual(fast.res, { ok: true, result: {}, sync: { rev: full.rev, today: full.today, same: true } });
+  nothingNew(fast, full.rev, full.today);
   quiet(fast, 'the fast path');
+  assert(fast.calls.every((c) => c.indexOf('cache.get:') === 0), 'the fast path only looks in the cache: ' + fast.calls.join(', '));
 
   /* It works even while another request holds the lock. */
   G.lockHolder = 'another request';
@@ -971,17 +1011,23 @@ test('"nothing changed" is answered without the lock and without opening the she
   quiet(during, 'the fast path');
   G.lockHolder = null;
 
-  /* When the cache has forgotten the session it is read from the sheet: slower, still no lock, no writes. */
+  /* When the cache has forgotten the sign-in, the check does not go and read it from the sheet behind the
+     lock's back. It takes its turn: the sign-in is read and put back in the cache under the lock, nothing is
+     written to the sheet, and the answer is still "nothing changed". The checks after it are fast again. */
+  const relearned = (r, what) => {
+    nothingNew(r, full.rev, full.today, what);
+    const turn = r.calls.indexOf('lock.acquire'), put = r.calls.findIndex((c) => c.indexOf('cache.put:sess:') === 0);
+    assert(turn >= 0 && r.calls.indexOf('sheet.read:sessions') > turn && put > turn && put < r.calls.indexOf('lock.release'), what + ': the sign-in was not read and cached under the lock: ' + r.calls.join(', '));
+    assert(r.calls.slice(0, r.calls.indexOf('lock.try:15000')).every((c) => c.indexOf('cache.get:') === 0 || c === 'props.get:REV' || c === 'cache.put:rev:seen'),
+      what + ': before its turn it did more than look in the cache and at the revision number: ' + r.calls.join(', '));
+    assert(!r.calls.some((c) => /^sheet\.(write|format|insertRows)/.test(c) || c.indexOf('props.set') === 0), what + ': it wrote something');
+  };
   G.cache.clear();
-  const cold = w.post(ask);
-  assert.strictEqual(cold.res.sync.same, true);
-  assert(cold.calls.indexOf('sheet.read:sessions') >= 0);
-  assert(!cold.calls.some((c) => /^lock\./.test(c) || /^sheet\.(write|format|insertRows)/.test(c) || c.indexOf('props.set') === 0));
+  relearned(w.post(ask), 'a cold cache');
   quiet(w.post(ask), 'the fast path, once the cache is warm again,');
   G.cacheNow += 21601;   // six hours later the cache has let go of everything
-  const stale = w.post(ask);
-  assert.strictEqual(stale.res.sync.same, true);
-  assert(stale.calls.indexOf('sheet.read:sessions') >= 0 && stale.calls.indexOf('lock.acquire') < 0);
+  relearned(w.post(ask), 'six hours later');
+  quiet(w.post(ask), 'the fast path, after that,');
 
   /* Something changed: the lock, and the whole picture. */
   must(x.sale(x.mason, 'Alpha', x.days[0], '08:00'));
@@ -1389,7 +1435,7 @@ test('fifty "anything new?" checks in a row cost at most one property read, and 
     let reads = [];
     for (let i = 0; i < 50; i++) {
       const r = ask(phones[i % phones.length], rev);
-      assert.deepStrictEqual(r.res, { ok: true, result: {}, sync: { rev: rev, today: view.today, same: true } }, 'check ' + (i + 1));
+      nothingNew(r, rev, view.today, 'check ' + (i + 1));
       assert(!r.calls.some((c) => /^(lock|sheet|ss)\./.test(c) || c.indexOf('props.set') === 0), 'check ' + (i + 1) + ' touched the lock or the sheet');
       reads = reads.concat(propertyReads(r));
     }
@@ -1594,6 +1640,164 @@ test('someone removed from the team: their phone is told why, from the sheet as 
   must(w.post({ action: 'sync', token: x.mason }));
 });
 
+test('a "nothing changed?" check never puts a sign-in in the cache: one that a sign-out, a PIN reset or a removal cleared a moment earlier cannot come back', () => {
+  const x = ready(), w = x.w, G = x.G;
+  const today = x.today;
+  const ask = (token) => ({ action: 'sync', token: token, since: +G.props.REV, day: today });
+  const cached = (token) => { const e = G.cache.get('sess:' + core.sha256(token)); return !!e && e.until > G.cacheNow; };
+  const sessionPuts = (r) => r.calls.filter((c) => c.indexOf('cache.put:sess:') === 0);
+  [x.mason, x.riley, x.cole].forEach((t) => must(w.post(ask(t))));
+  assert(cached(x.mason) && cached(x.riley) && cached(x.cole));
+
+  /* The plain case first. With the sign-in in the cache the check writes nothing at all. Without it, and with
+     the lock held by someone else, it must wait its turn: it does not read the sign-in from the sheet on the
+     side and cache it. So the phone hears "busy", and the cache still knows nothing about that sign-in. */
+  const warm = w.post(ask(x.mason));
+  assert.strictEqual(warm.res.sync.same, true);
+  assert.deepStrictEqual(warm.calls.filter((c) => c.indexOf('cache.get:') !== 0), [], 'a check answered from the cache did more than read it');
+  G.cache.clear();
+  G.lockHolder = 'another request';
+  const waiting = w.post(ask(x.mason));
+  fails(waiting, 'busy');
+  assert.deepStrictEqual(sessionPuts(waiting), []);
+  assert(!waiting.calls.some((c) => /^(ss|sheet)\./.test(c)), 'it read the sheet without the lock: ' + waiting.calls.join(', '));
+  assert(!cached(x.mason));
+  G.lockHolder = null;
+
+  /* The race itself, three ways. A check is half way through (it has just read the tab named here) when the
+     thing that clears the sign-in arrives. If that is answered "busy", the check held the lock and the app
+     sends it again afterwards. Either way, once it has gone through, the old sign-in must be dead and stay dead. */
+  const out = 'Please sign in again.', gone = 'You are no longer on the team. Ask the owner if that is a mistake.';
+  const races = [
+    ['a sign-out', 'sessions', x.mason, () => ({ action: 'logout', token: x.mason, opId: uid() }), out],
+    ['a PIN reset', 'sessions', x.riley, () => ({ action: 'resetPin', token: x.owner, opId: uid(), id: x.ids.riley, pin: '730526' }), out],
+    ['a removal', 'team', x.cole, () => ({ action: 'removeMember', token: x.owner, opId: uid(), id: x.ids.cole }), gone]
+  ];
+  races.forEach((race) => {
+    const what = race[0], tab = race[1], token = race[2], clear = race[3], words = race[4];
+    G.cache.clear();   // the cache has forgotten everyone, so the next check has to learn the sign-in again
+    let landed = null;
+    G.hooks.afterRead = { [tab]: () => { landed = w.post(clear()); } };
+    const check = w.post(ask(token));
+    assert(landed, what + ': the test did not get in between');
+    if (landed.res.ok) {
+      /* It got in while the check was reading, so the check was reading without the lock. Whatever the check then answers, it must not have cached what it read. */
+      assert.deepStrictEqual(sessionPuts(check), [], what + ' landed during the check, and the check still cached the sign-in it had read before');
+    } else {
+      fails(landed, 'busy');
+      assert.strictEqual(check.res.sync.same, true, what + ': the check itself was fine');
+      must(w.post(clear()));
+    }
+    assert(!cached(token), what + ': the sign-in is back in the cache');
+    for (let i = 0; i < 3; i++) {
+      const after = w.post(ask(token));
+      assert.deepStrictEqual(after.res, { ok: false, error: { code: 'auth', message: words } }, what + ': the cleared sign-in still works');
+      assert(!cached(token), what + ': being refused put the sign-in back');
+    }
+  });
+  /* Everyone else is still signed in, and the new PIN works. */
+  must(w.post(ask(x.owner)));
+  x.login('Riley', '730526');
+});
+
+test('a retry through the web app is the same thing again or nothing: a changed retry is refused as already saved and writes nothing', () => {
+  const x = ready(), w = x.w, G = x.G;
+  const body = saleBody(x.mason, 'Lost Answer', x.days[0], '08:00');
+  const first = must(w.post(body));
+  assert(!first.replay && first.result.saleId);
+  const snap = w.snapshot(), rev = G.props.REV, mails = G.mail.length;
+  const wrote = (r) => r.calls.filter((c) => /^(sheet\.(write|format|insertRows)|props\.set|mail|cache\.put:op:)/.test(c));
+
+  /* The answer was lost; the rep picks another time and taps again. Same opId, different fields. */
+  const changedBody = Object.assign({}, body, { appointment: { date: x.days[0], time: '09:30' }, since: first.sync.rev, day: first.sync.today });
+  const changed = w.post(changedBody);
+  assert.deepStrictEqual(fails(changed, 'already_saved').error, { code: 'already_saved', message: ALREADY_SAVED });
+  assert.deepStrictEqual(Object.keys(changed.res).sort(), ['error', 'ok', 'sync']);
+  assert.strictEqual(changed.res.sync.same, true, 'a phone that already holds the latest is told nothing changed');
+  assert(changed.calls.indexOf('lock.acquire') >= 0, 'it is decided under the lock, from what was really saved');
+  assert.deepStrictEqual(wrote(changed), []);
+  const shown = fails(w.post(Object.assign({}, changedBody, { since: 0 })), 'already_saved').sync;
+  assert.deepStrictEqual([shown.same, shown.sales.length, shown.jobs.map((j) => j.time), shown.taken.map((t) => t.time)], [false, 1, ['08:00'], ['08:00']], 'the sync shows what the first try saved');
+  assert.deepStrictEqual([w.snapshot(), G.props.REV, G.mail.length], [snap, rev, mails], 'nothing was saved, emailed or renumbered');
+
+  /* The very same request again is still answered from memory, in whatever order its fields come. */
+  const turned = {};
+  Object.keys(body).reverse().forEach((k) => { turned[k] = body[k]; });
+  const again = w.post(turned);
+  assert.deepStrictEqual([must(again).replay, again.res.result], [true, first.result]);
+  assert.deepStrictEqual(wrote(again), []);
+
+  /* What the cache holds for it: the answer and a short fingerprint of what was sent, well inside what the cache takes. */
+  const key = Array.from(G.cache.keys()).find((k) => k.indexOf('op:') === 0 && k.indexOf(body.opId) > 0);
+  const kept = JSON.parse(G.cache.get(key).value);
+  assert.deepStrictEqual([Object.keys(kept), kept.r], [['h', 'r'], first.result]);
+  assert(/^[0-9a-f]{16}$/.test(kept.h));
+  const maxValue = w.peek('CACHE_MAX_VALUE'), maxKey = w.peek('CACHE_MAX_KEY'), limits = w.peek('RidgelineCore').LIMITS;
+  assert.deepStrictEqual([maxValue, maxKey], [30000, 250]);
+  assert(limits.retryChars > 1000 && limits.retryChars <= maxValue, 'the core may remember ' + limits.retryChars + ' characters but the cache drops anything over ' + maxValue);
+  assert('op:m_12345678901234:'.length + 80 <= maxKey, 'the longest key for a remembered action fits the cache');
+  assert(key.length <= maxKey && G.cache.get(key).value.length <= limits.retryChars);
+
+  /* A refused try is not remembered: the same opId with the time put right goes through, once. */
+  const taken = saleBody(x.riley, 'Second Choice', x.days[0], '08:00');
+  fails(w.post(taken), 'slot_taken');
+  assert(!Array.from(G.cache.keys()).some((k) => k.indexOf(taken.opId) > 0));
+  const right = Object.assign({}, taken, { appointment: { date: x.days[0], time: '12:00' } });
+  assert(!must(w.post(right)).replay);
+  assert.strictEqual(must(w.post(right)).replay, true);
+  fails(w.post(taken), 'already_saved');
+  assert.strictEqual(w.docs('sales').length, 2);
+
+  /* A person added with a lost answer: the same try again brings the PIN back; a changed one does not add a second person. */
+  const add = { action: 'saveMember', token: x.owner, opId: uid(), member: { name: 'Jake', role: 'rep' } };
+  const made = must(w.post(add)).result, team = w.docs('team').length;
+  assert.deepStrictEqual(must(w.post(add)).result, made);
+  fails(w.post(Object.assign({}, add, { member: { name: 'Jake B', role: 'rep' } })), 'already_saved');
+  assert.strictEqual(w.docs('team').length, team);
+  x.login('Jake', made.pin);
+});
+
+test('an answer too big for the cache is never a silent second save: the retry is told it was saved, a changed retry is refused, the sheet holds it once', () => {
+  const x = ready(), w = x.w, G = x.G;
+  /* No real answer is anywhere near too big, so make it so the only way there is: shrink the two limits inside the code under test. */
+  G.tweak = (ctx) => { ctx.CACHE_MAX_VALUE = 64; ctx.RidgelineCore.LIMITS.retryChars = 64; };
+  const body = saleBody(x.mason, 'Big Answer', null);   /* no appointment, so nothing but the memory of it stands in the way of a second sale */
+  const first = must(w.post(body));
+  assert(JSON.stringify({ h: 'x'.repeat(16), r: first.result }).length > 64, 'the test did make the answer too big to keep whole');
+  const key = Array.from(G.cache.keys()).find((k) => k.indexOf('op:') === 0 && k.indexOf(body.opId) > 0);
+  assert(key, 'nothing at all was remembered, so a retry would save the sale again');
+  const kept = JSON.parse(G.cache.get(key).value);
+  assert.deepStrictEqual([Object.keys(kept), kept.big], [['h', 'big'], true]);
+  assert(G.cache.get(key).value.length <= 64);
+  const snap = w.snapshot(), mails = G.mail.length;
+  const again = must(w.post(body));
+  assert.deepStrictEqual([again.replay, again.result, again.sync.sales.length], [true, {}, 1], 'the same try again is told it was saved and is shown it; only the details of the first answer are gone');
+  fails(w.post(Object.assign({}, body, { priceCents: 17500 })), 'already_saved');
+  assert.deepStrictEqual([w.snapshot(), G.mail.length, w.docs('sales').length, w.docs('clients').length], [snap, mails, 1, 1]);
+  G.tweak = null;
+  assert.strictEqual(must(w.post(body)).replay, true);
+});
+
+test('every sync through the web app carries the system\'s clock, the unlocked "nothing changed" one too', () => {
+  const x = ready(), w = x.w;
+  /* post() already checks nowMs, nowHM and today on every answer of every test. Here: that the fields are there at all, in each kind of answer. */
+  const clocked = (r, what) => { assert(r.res.sync && 'nowMs' in r.res.sync && /^\d\d:\d\d$/.test(r.res.sync.nowHM), what + ' carries no clock'); return r; };
+  const full = clocked(w.post({ action: 'sync', token: x.cole }), 'a full sync').res.sync;
+  assert.strictEqual(full.same, false);
+  const quick = clocked(w.post({ action: 'sync', token: x.cole, since: full.rev, day: full.today }), 'the short sync');
+  nothingNew(quick, full.rev, full.today);
+  assert(quick.calls.indexOf('lock.acquire') < 0, 'the short sync was not the unlocked one');
+  clocked(w.post({ action: 'login', name: 'Cole', pin: '906132' }), 'a sign-in');
+  const note = { action: 'ackStandards', token: x.cole, opId: uid() };
+  clocked(w.post(note), 'a save');
+  assert.strictEqual(clocked(w.post(note), 'a replay').res.replay, true);
+  fails(clocked(w.post(Object.assign({ extra: 1 }, note)), 'a changed retry'), 'already_saved');
+  fails(clocked(w.post({ action: 'saveSettings', token: x.cole, settings: {} }), 'a refusal'), 'forbidden');
+  /* No sync, no clock. */
+  assert.deepStrictEqual(Object.keys(fails(w.post({ action: 'sync', token: 'x'.repeat(40) }), 'auth')).sort(), ['error', 'ok']);
+  assert.deepStrictEqual(w.post('not json').res, { ok: false, error: { code: 'invalid', message: 'Bad request.' } });
+});
+
 test('the local stand-in (tools/dev-server.js) keeps the same rules: 6 digit PINs for its three people, and the same size limit', () => {
   const dev = require(path.join(__dirname, 'dev-server.js'));   /* loaded, not started: it listens on no port */
   assert.deepStrictEqual(dev.PEOPLE.map((p) => [p.name, p.role, p.pin]), [['Grayson', 'owner', '482913'], ['Mason', 'rep', '271845'], ['Cole', 'tech', '906132']]);
@@ -1613,6 +1817,119 @@ test('the local stand-in (tools/dev-server.js) keeps the same rules: 6 digit PIN
   assert.deepStrictEqual(dev.answerPost(padded(100001)), bad, 'one more is not');
   assert.deepStrictEqual(dev.answerPost('z'.repeat(3000000)), bad);
   assert.deepStrictEqual(dev.answerPost('not json'), bad);
+  /* It runs the same core, so it tells a retry from a change and sends its clock the same way. */
+  const ask = (req) => dev.answerPost(JSON.stringify(req));
+  const mason = ask({ action: 'login', name: 'Mason', pin: '271845' });
+  const sent = Date.now(), quiet = ask({ action: 'sync', token: mason.result.token, since: mason.sync.rev, day: mason.sync.today }).sync;
+  assert.deepStrictEqual(Object.keys(quiet).sort(), ['nowHM', 'nowMs', 'rev', 'same', 'today']);
+  assert(quiet.same === true && quiet.nowMs >= sent && quiet.nowMs <= Date.now() && quiet.nowHM === chicagoAt(quiet.nowMs).hm && quiet.today === chicagoAt(quiet.nowMs).day);
+  const sale = { action: 'createSale', token: mason.result.token, opId: uid(), client: { name: 'Stand-in Client' }, service: 'House wash', priceCents: 9000 };
+  const saved = ask(sale);
+  assert.deepStrictEqual([ask(sale).replay, ask(sale).result], [true, saved.result]);
+  const changed = ask(Object.assign({}, sale, { priceCents: 9900 }));
+  assert.deepStrictEqual([changed.ok, changed.error, changed.sync.sales.map((v) => v.priceCents)], [false, { code: 'already_saved', message: ALREADY_SAVED }, [9000]]);
+});
+
+/* The stand-in over real HTTP, on a port of its own. It runs in a second Node so that this file can stay
+   a plain top-to-bottom script: the helper starts the server, makes the calls, prints what came back as JSON. */
+const DEV_PROBE = `
+const http = require('http');
+const dev = require(process.argv[1]);
+function post(port, query, body) {
+  return new Promise((resolve) => {
+    const started = Date.now();
+    const req = http.request({ host: '127.0.0.1', port: port, path: '/' + query, method: 'POST', agent: false, headers: { 'Content-Type': 'text/plain;charset=utf-8' } }, (res) => {
+      let text = '';
+      res.setEncoding('utf8');
+      res.on('data', (c) => { text += c; });
+      res.on('end', () => {
+        let json = null;
+        try { json = JSON.parse(text); } catch (e) { json = null; }
+        resolve({ status: res.statusCode, type: res.headers['content-type'], json: json, html: json ? '' : text.slice(0, 15), ms: Date.now() - started });
+      });
+    });
+    req.on('error', (e) => resolve({ lost: true, why: e.code || e.message, ms: Date.now() - started }));
+    req.end(JSON.stringify(body));
+  });
+}
+/* A phone that stops waiting after giveUp milliseconds. */
+function impatient(port, query, body, giveUp) {
+  return new Promise((resolve) => {
+    const req = http.request({ host: '127.0.0.1', port: port, path: '/' + query, method: 'POST', agent: false }, () => resolve('answered'));
+    req.on('error', () => resolve('gave up'));
+    req.end(JSON.stringify(body));
+    setTimeout(() => req.destroy(), giveUp);
+  });
+}
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+dev.server.listen(0, '127.0.0.1', async () => {
+  const port = dev.server.address().port, out = {};
+  try {
+    const first = await post(port, '', { action: 'login', name: 'Mason', pin: '271845' });
+    const token = first.json.result.token, day = first.json.sync.days[2].date;
+    const sale = (op, price, time) => ({ action: 'createSale', token: token, opId: op, client: { name: 'Lost ' + op }, service: 'House wash', priceCents: price, billing: 'once', appointment: time ? { date: day, time: time } : null });
+    const sales = async () => (await post(port, '', { action: 'sync', token: token })).json.sync.sales.map((s) => s.priceCents).sort();
+    out.plain = { status: first.status, type: first.type, clock: [typeof first.json.sync.nowMs, first.json.sync.nowHM.length] };
+    out.dropped = await post(port, '?drop=1', sale('op-drop-000001', 15000, '08:00'));
+    out.afterDrop = await sales();
+    out.retry = (await post(port, '', sale('op-drop-000001', 15000, '08:00'))).json;
+    out.changed = (await post(port, '', sale('op-drop-000001', 17500, '09:30'))).json;
+    out.afterRetries = await sales();
+    out.failed = await post(port, '?fail=1', sale('op-fail-000001', 22000, '12:00'));
+    out.failedWithDrop = await post(port, '?fail=1&drop=1', sale('op-fail-000002', 23000, '12:00'));
+    out.afterFail = await sales();
+    out.slow = await post(port, '?delay=250', { action: 'sync', token: token });
+    out.slowDrop = await post(port, '?delay=250&drop=1', sale('op-drop-000002', 30000, null));
+    out.afterSlowDrop = await sales();
+    out.gaveUpOnDelay = await impatient(port, '?delay=300', sale('op-gone-000001', 41000, null), 60);
+    out.gaveUpOnDrop = await impatient(port, '?delay=300&drop=1', sale('op-gone-000002', 42000, null), 60);
+    await wait(450);
+    out.afterGivingUp = await sales();
+    out.dropRefused = await post(port, '?drop=1', sale('op-drop-000003', 50000, '08:00'));
+    out.afterDropRefused = await sales();
+    out.stillAnswers = (await post(port, '', { action: 'ping' })).json;
+  } catch (e) { out.crash = String(e && e.stack ? e.stack : e); }
+  process.stdout.write(JSON.stringify(out));
+  dev.server.close();
+  process.exit(0);
+});
+`;
+
+test('the local stand-in over HTTP: ?drop=1 runs and saves the request and then says nothing, and ?delay and ?fail still work', () => {
+  const text = execFileSync(process.execPath, ['-e', DEV_PROBE, path.join(__dirname, 'dev-server.js')], { cwd: root, encoding: 'utf8', timeout: 30000, stdio: ['ignore', 'pipe', 'pipe'] });
+  const out = JSON.parse(text);
+  assert(!out.crash, 'the helper crashed: ' + out.crash);
+  assert.deepStrictEqual(out.plain, { status: 200, type: 'application/json; charset=utf-8', clock: ['number', 5] });
+
+  /* drop=1: the phone gets no answer at all, but the sale is there. */
+  assert.strictEqual(out.dropped.lost, true, 'a dropped answer came back: ' + JSON.stringify(out.dropped));
+  assert.deepStrictEqual(out.afterDrop, [15000], 'the request whose answer was dropped was not saved');
+  /* So the tester can go on from a real lost answer: the same request again is a replay, a changed one is already_saved. */
+  assert.deepStrictEqual([out.retry.ok, out.retry.replay, typeof out.retry.result.saleId], [true, true, 'string']);
+  assert.deepStrictEqual([out.changed.ok, out.changed.error, out.changed.sync.sales.length], [false, { code: 'already_saved', message: ALREADY_SAVED }, 1]);
+  assert.deepStrictEqual(out.afterRetries, [15000]);
+
+  /* fail=1 is as it was: HTTP 500, an HTML page, nothing run. With fail=1, drop=1 changes nothing. */
+  [out.failed, out.failedWithDrop].forEach((r) => assert.deepStrictEqual([r.status, r.type, r.html], [500, 'text/html; charset=utf-8', '<!DOCTYPE html>']));
+  assert.deepStrictEqual(out.afterFail, [15000]);
+
+  /* delay is as it was, and combines with drop: the wait first, then the save, then silence. */
+  assert(out.slow.status === 200 && out.slow.json.ok === true && out.slow.ms >= 240, 'delay=250 answered after ' + out.slow.ms + ' ms');
+  assert(out.slowDrop.lost === true && out.slowDrop.ms >= 240, 'delay=250&drop=1: ' + JSON.stringify(out.slowDrop));
+  assert.deepStrictEqual(out.afterSlowDrop, [15000, 30000]);
+
+  /* A phone that stops waiting during a plain delay: the request is not run (as before). With drop=1 it is run
+     all the same, like a backend that carries on after the app gave up. */
+  assert.deepStrictEqual([out.gaveUpOnDelay, out.gaveUpOnDrop], ['gave up', 'gave up']);
+  assert.deepStrictEqual(out.afterGivingUp, [15000, 30000, 42000]);
+
+  /* A request the core refuses is refused, dropped or not: nothing is saved by it. */
+  assert.strictEqual(out.dropRefused.lost, true);
+  assert.deepStrictEqual(out.afterDropRefused, [15000, 30000, 42000]);
+  assert.strictEqual(out.stillAnswers.ok, true, 'the stand-in stopped answering after a dropped connection');
+
+  const source = fs.readFileSync(path.join(__dirname, 'dev-server.js'), 'utf8');
+  ['?delay=1500', '?fail=1', '?drop=1'].forEach((knob) => assert(source.slice(0, source.indexOf("'use strict'")).indexOf(knob) > 0, 'the note at the top of dev-server.js does not explain ' + knob));
 });
 
 console.log('\n' + (count - failed.length) + ' of ' + count + ' backend tests passed.');

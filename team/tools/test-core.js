@@ -110,6 +110,7 @@ function world(opts) {
       ok(res.error && CODES.indexOf(res.error.code) >= 0, 'unknown error code ' + JSON.stringify(res.error));
       ok(typeof res.error.message === 'string' && res.error.message.length > 3, 'error has no words');
       ok(!/undefined|null|NaN|\[object/.test(res.error.message), 'error words are not plain: ' + res.error.message);
+      ok(!/customer/i.test(res.error.message), 'it is "client", never "customer": ' + res.error.message);
     } else {
       ok(!('error' in res), 'an accepted answer carries an error');
       ok(res.result && typeof res.result === 'object' && !Array.isArray(res.result), 'an accepted answer has no result');
@@ -1465,7 +1466,7 @@ test('blocking a day, or taking a time off its list, keeps what is already booke
   eq(sell(w, 'jake', 'Still Taken', '2026-11-18', '09:30').error.code, 'slot_taken');
 });
 
-test('a sale whose slot is refused saves nothing at all for a new customer', () => {
+test('a sale whose slot is refused saves nothing at all for a new client', () => {
   const w = world();
   sellOk(w, 'jake', 'Holder', '2026-11-18', '09:30');
   const counts = () => { const d = w.db(); return [d.clients.length, d.sales.length, d.jobs.length, d.notices.length, w.emails.length, w.rev()]; };
@@ -1479,7 +1480,7 @@ test('a sale whose slot is refused saves nothing at all for a new customer', () 
   lacks(JSON.stringify(w.store.dump()), 'Never Saved');
 });
 
-test('a sale whose slot is refused changes nothing on an existing customer', () => {
+test('a sale whose slot is refused changes nothing on an existing client', () => {
   const w = seeded();
   w.must('owner', 'updateClient', { clientId: w.ids.clientA, patch: { status: 'Cancelled' } });
   const before = byId(w.db().clients, w.ids.clientA);
@@ -1659,6 +1660,236 @@ test('an opId that is not a real id is ignored, never trusted and never a crash'
     w.must('mason', 'createSale', { opId: op, client: { name: 'Odd Op ' + i }, service: 'House wash', priceCents: 100 });
   });
   eq(w.db().sales.length, 16);
+});
+
+/* ---- a retry is the same thing again, or nothing ---- */
+
+/* What the core put in the store's cache under op: keys, newest last: [{ key, value, ttl }]. */
+function opMemory(w) {
+  const seen = [], real = w.store.cachePut;
+  w.store.cachePut = (k, v, ttl) => { if (String(k).indexOf('op:') === 0) seen.push({ key: k, value: v, ttl: ttl }); real(k, v, ttl); };
+  return seen;
+}
+
+test('the same opId with different fields is not run: the phone is told its first try was saved, and is shown it', () => {
+  const w = seeded(), notices = w.db().notices.length;
+  const note = (text) => ({ kind: 'job', id: w.ids.jobA, text: text, opId: 'op-gate-000001' });
+  const first = w.must('cole', 'addNote', note('Gate code is 1234'));
+  ok(!first.replay);
+  const r = w.refuse('cole', 'addNote', note('Gate code is 4321, not 1234'), 'already_saved');   /* refuse() also proves the stored data did not move */
+  eq(r.error, { code: 'already_saved', message: ALREADY_SAVED });
+  eq(keys(r), 'error,ok,sync', 'no result and no replay flag on a refusal');
+  eq([r.sync.same, r.sync.rev, r.sync.me.id], [false, w.rev(), w.ids.cole], 'it carries the sync');
+  const texts = () => byId(w.db().jobs, w.ids.jobA).notes.map((n) => n.text);
+  eq(byId(r.sync.jobs, w.ids.jobA).notes.map((n) => n.text), texts(), 'and the sync shows what was really saved');
+  eq(texts().filter((t) => t.indexOf('Gate code') === 0), ['Gate code is 1234']);
+  /* A phone that has refreshed since gets the short sync, with the clock, and still the refusal. */
+  const quiet = w.refuse('cole', 'addNote', Object.assign(note('Third wording'), { since: w.rev(), day: w.today() }), 'already_saved');
+  eq(quiet.sync, { rev: w.rev(), today: w.today(), same: true, nowMs: w.t, nowHM: '09:00' });
+  /* The first try again, word for word, is still a replay, however many changed tries came between. */
+  const again = w.must('cole', 'addNote', note('Gate code is 1234'));
+  eq([again.replay, again.result], [true, first.result]);
+  /* The correction goes through as a new action, with an id of its own. */
+  w.must('cole', 'addNote', Object.assign(note('Gate code is 4321, not 1234'), { opId: 'op-gate-000002' }));
+  eq(texts().filter((t) => t.indexOf('Gate code') === 0), ['Gate code is 1234', 'Gate code is 4321, not 1234']);
+  eq(w.db().notices.length, notices);
+});
+
+test('a lost answer, then a different choice under the same opId: move, book, commission, days, a fix, done, a new person and a sale each keep the first and only the first', () => {
+  const w = seeded();
+  const emails = () => w.emails.length, notices = () => w.db().notices.length;
+  const cases = [
+    { who: 'mason', action: 'moveJob', first: { jobId: w.ids.jobA, date: '2026-11-18', time: '14:00' }, then: { jobId: w.ids.jobA, date: '2026-11-20', time: '09:30' },
+      saved: () => { const j = byId(w.db().jobs, w.ids.jobA); return [j.date, j.time, liveAt(w, '2026-11-20', '09:30')]; }, want: ['2026-11-18', '14:00', 0] },
+    { who: 'mason', action: 'bookJob', first: { clientId: w.ids.clientA, date: '2026-11-19', time: '09:30' }, then: { clientId: w.ids.clientA, date: '2026-11-19', time: '12:00' },
+      saved: () => w.db().jobs.filter((j) => j.clientId === w.ids.clientA && j.date === '2026-11-19').map((j) => j.time), want: ['09:30'] },
+    { who: 'owner', action: 'saveSettings', first: { settings: { firstPct: 35 } }, then: { settings: { firstPct: 25 } },
+      saved: () => w.db().settings[0].firstPct, want: 35 },
+    { who: 'owner', action: 'setDays', first: { days: [{ date: '2026-12-01', open: true, slots: ['08:00'] }] }, then: { days: [{ date: '2026-12-01', open: true, slots: ['08:00', '10:00'] }] },
+      saved: () => byId(w.db().days, '2026-12-01').slots, want: ['08:00'] },
+    { who: 'owner', action: 'updateJob', first: { jobId: w.ids.jobB, patch: { assignedTo: w.ids.cole } }, then: { jobId: w.ids.jobB, patch: { assignedTo: null } },
+      saved: () => byId(w.db().jobs, w.ids.jobB).assignedTo, want: w.ids.cole },
+    { who: 'owner', action: 'updateSale', first: { saleId: w.ids.saleB, patch: { priceCents: 28000 } }, then: { saleId: w.ids.saleB, patch: { priceCents: 2800 } },
+      saved: () => byId(w.db().sales, w.ids.saleB).priceCents, want: 28000 },
+    { who: 'jake', action: 'updateClient', first: { clientId: w.ids.clientB, patch: { phone: '615-555-0111' } }, then: { clientId: w.ids.clientB, patch: { phone: '615-555-0222' } },
+      saved: () => byId(w.db().clients, w.ids.clientB).phone, want: '615-555-0111' },
+    { who: 'cole', action: 'setJobDone', first: { jobId: w.ids.jobA, done: true }, then: { jobId: w.ids.jobA, done: false },
+      saved: () => byId(w.db().jobs, w.ids.jobA).status, want: 'done' },
+    { who: 'owner', action: 'saveMember', first: { member: { name: 'Jake', role: 'rep' } }, then: { member: { name: 'Jake B', role: 'rep' } },
+      saved: () => w.db().team.filter((m) => m.active && /^Jake( B)?$/.test(m.name)).map((m) => m.name), want: ['Jake'] },
+    { who: 'jake', action: 'createSale', first: { client: { name: 'One Sale Only' }, service: 'House wash', priceCents: 15000, billing: 'once', appointment: { date: '2026-11-19', time: '14:00' } },
+      then: { client: { name: 'One Sale Only' }, service: 'House wash', priceCents: 17500, billing: 'once', appointment: { date: '2026-11-19', time: '14:00' } },
+      saved: () => w.db().sales.filter((x) => byId(w.db().clients, x.clientId).name === 'One Sale Only').map((x) => x.priceCents), want: [15000] }
+  ];
+  cases.forEach((c, i) => {
+    const op = { opId: 'op-lost-answer-' + i }, label = c.action + ' as ' + c.who;
+    const first = w.must(c.who, c.action, Object.assign({}, c.first, op));
+    ok(!first.replay, label);
+    const rev = w.rev(), mail = emails(), told = notices();
+    const r = w.refuse(c.who, c.action, Object.assign({}, c.then, op), 'already_saved');
+    eq([r.error.message, r.sync.same, r.sync.rev], [ALREADY_SAVED, false, rev], label);
+    eq(c.saved(), c.want, label + ': what is stored is the first try');
+    const again = w.must(c.who, c.action, Object.assign({}, c.first, op));
+    eq([again.replay, again.result, w.rev(), emails(), notices()], [true, first.result, rev, mail, told], label + ': the first try again is a replay that saves, emails and tells nothing more');
+  });
+  /* The person added with a lost answer: the same try again hands back the PIN that was made. */
+  const made = w.must('owner', 'saveMember', { member: { name: 'Jake', role: 'rep' }, opId: 'op-lost-answer-' + cases.findIndex((c) => c.action === 'saveMember') });
+  ok(made.replay === true && /^\d{6}$/.test(made.result.pin) && w.tryLogin('Jake', made.result.pin).ok, 'the replay did not bring the PIN back');
+  checkData(w);
+});
+
+test('a PIN change whose answer was lost: a different new PIN under the same opId changes nothing and counts no wrong try', () => {
+  const w = world();
+  w.must('mason', 'changePin', { oldPin: '271845', newPin: '517293', opId: 'op-pin-000001' });
+  const seen = watchStore(w);
+  const r = w.refuse('mason', 'changePin', { oldPin: '271845', newPin: '730526', opId: 'op-pin-000001' }, 'already_saved');
+  seen.stop();
+  eq([r.error.message, seen.cache, seen.data], [ALREADY_SAVED, [], 0], 'not "Your current PIN is not right", and nothing counted against him');
+  eq([w.tryLogin('Mason Reed', '730526').ok, w.tryLogin('Mason Reed', '271845').ok, w.tryLogin('Mason Reed', '517293').ok], [false, false, true], 'the first new PIN is the PIN');
+  ok(w.must('mason', 'changePin', { oldPin: '271845', newPin: '517293', opId: 'op-pin-000001' }).replay === true);
+});
+
+test('"the same fields" ignores token, since, day and the order of keys, and nothing else', () => {
+  const w = seeded();
+  const base = { opId: 'op-same-000001', client: { name: 'Key Order', phone: '615-555-0142', address: '9 Elm St' }, service: 'House wash', priceCents: 12000, billing: 'monthly',
+    notes: 'Side gate', appointment: { date: '2026-11-19', time: '08:00' } };
+  const first = w.must('mason', 'createSale', base), rev = w.rev();
+  /* The same request with every list of keys turned round, sent by another phone of his (a new token) that has refreshed (since and day). */
+  const flip = (v) => {
+    if (!v || typeof v !== 'object') return v;
+    if (Array.isArray(v)) return v.map(flip);
+    const out = {}; Object.keys(v).reverse().forEach((k) => { out[k] = flip(v[k]); }); return out;
+  };
+  w.login('mason2', 'Mason Reed', '271845');
+  const other = w.must('mason2', 'createSale', Object.assign(flip(base), { since: rev, day: w.today() }));
+  eq([other.replay, other.result, other.sync.same], [true, first.result, true]);
+  eq(w.must('mason', 'createSale', Object.assign({}, base, { since: 0, day: '2020-01-01' })).replay, true);
+  eq(w.must('mason', 'createSale', Object.assign({ extra: undefined }, base)).replay, true, 'a field that is not there and one that is undefined are the same on the wire');
+  /* Any real difference, however small, is a different thing. */
+  const set = (p, v) => { const req = JSON.parse(JSON.stringify(base)); setPath(req, p, v); return req; };
+  const changed = [set(['priceCents'], 12001), set(['priceCents'], '12000'), set(['billing'], 'once'), set(['notes'], 'Side gate '), set(['notes'], ''), set(['client', 'name'], 'Key order'),
+    set(['client', 'phone'], null), set(['appointment', 'time'], '09:30'), set(['appointment'], null), set(['client', 'email'], ''), set(['extra'], false), set(['extra'], 0), set(['extra'], null),
+    set(['client'], ['Key Order']), set(['service'], ['House wash']), set(['priceCents'], true)];
+  changed.forEach((req) => { const r = w.refuse('mason', 'createSale', req, 'already_saved'); eq(r.error.message, ALREADY_SAVED, describe(req)); });
+  /* true and "true", 1 and "1", a list and its only entry: none of them count as the same. */
+  w.must('cole', 'setJobDone', { jobId: w.ids.jobA, done: true, opId: 'op-same-000002' });
+  ['true', 1, [true], { 0: true }, null].forEach((v) => w.refuse('cole', 'setJobDone', { jobId: w.ids.jobA, done: v, opId: 'op-same-000002' }, 'already_saved'));
+  ok(w.must('cole', 'setJobDone', { done: true, opId: 'op-same-000002', jobId: w.ids.jobA }).replay === true);
+  /* The same opId for another action is a different thing too. */
+  eq(w.refuse('mason', 'bookJob', Object.assign({}, base, { clientId: first.result.clientId, date: '2026-11-19', time: '12:00' }), 'already_saved').error.message, ALREADY_SAVED);
+  eq([w.db().sales.length, w.rev()], [3, rev + 1], 'one sale and one finished job were saved in all of that');
+});
+
+test('a refused try is not remembered, whatever the refusal: the same opId with the fields put right is run, once', () => {
+  const w = seeded();
+  const tries = [
+    ['invalid', 'mason', 'addNote', { kind: 'client', id: w.ids.clientA, text: '   ' }, { kind: 'client', id: w.ids.clientA, text: 'Now with words' }],
+    ['not_found', 'mason', 'addNote', { kind: 'client', id: 'c_missing', text: 'x' }, { kind: 'client', id: w.ids.clientA, text: 'Right client' }],
+    ['forbidden', 'mason', 'addNote', { kind: 'client', id: w.ids.clientB, text: 'x' }, { kind: 'client', id: w.ids.clientA, text: 'My own client' }],
+    ['slot_taken', 'jake', 'bookJob', { clientId: w.ids.clientB, date: '2026-11-18', time: '09:30' }, { clientId: w.ids.clientB, date: '2026-11-18', time: '14:00' }],
+    ['slot_closed', 'jake', 'moveJob', { jobId: w.ids.jobB, date: '2026-11-16', time: '09:30' }, { jobId: w.ids.jobB, date: '2026-11-19', time: '09:30' }],
+    ['invalid', 'owner', 'saveMember', { member: { name: 'Pat', role: 'rep', pin: '123456' } }, { member: { name: 'Pat', role: 'rep', pin: '274916' } }],
+    ['invalid', 'cole', 'changePin', { oldPin: '906132', newPin: '111111' }, { oldPin: '906132', newPin: '274916' }]
+  ];
+  tries.forEach((t, i) => {
+    const op = { opId: 'op-refused-' + i + '-0001' }, label = t[2] + ' refused as ' + t[0];
+    w.refuse(t[1], t[2], Object.assign({}, t[3], op), t[0]);
+    w.refuse(t[1], t[2], Object.assign({}, t[3], op), t[0]);                       /* the same refused try again is refused again, for the same reason */
+    const rev = w.rev(), fixed = w.must(t[1], t[2], Object.assign({}, t[4], op));
+    ok(!fixed.replay && w.rev() === rev + 1, label + ': the corrected try did not run');
+    ok(w.must(t[1], t[2], Object.assign({}, t[4], op)).replay === true, label + ': and now it is remembered');
+    eq(w.refuse(t[1], t[2], Object.assign({}, t[3], op), 'already_saved').error.message, ALREADY_SAVED, label + ': so the first, refused wording is now a changed retry');
+    eq(w.rev(), rev + 1, label);
+  });
+  eq(w.tryLogin('Pat', '274916').ok, true);
+});
+
+test('an opId the system has never seen runs normally, and after 6 hours it has forgotten: a changed try then runs as new', () => {
+  const w = seeded();
+  const note = (text, op) => ({ kind: 'client', id: w.ids.clientA, text: text, opId: op });
+  const count = () => byId(w.db().clients, w.ids.clientA).notes.length, start = count();
+  ['op-fresh-000001', 'op-fresh-000002', 'op-fresh-000003'].forEach((op) => ok(!w.must('mason', 'addNote', note('Same words', op)).replay, op));
+  eq(count(), start + 3, 'three ids are three notes, even with the same words');
+  w.wait(5 * HOUR + 59 * MIN);
+  w.refuse('mason', 'addNote', note('Changed words', 'op-fresh-000001'), 'already_saved');
+  w.wait(2 * MIN);
+  ok(!w.must('mason', 'addNote', note('Changed words', 'op-fresh-000001')).replay, 'six hours on, the id is as good as new');
+  eq(count(), start + 4);
+});
+
+test('what is remembered is small, holds no more than the answer and a 16 character fingerprint, and always fits the cache', () => {
+  const base = seeded(), reqs = sampleRequests(base);
+  ok(C.LIMITS.retryChars <= 30000, 'the Google cache drops a value over 30,000 characters (CACHE_MAX_VALUE in gas.js)');
+  Object.keys(reqs).forEach((a, i) => {
+    const w = base.fork(), mem = opMemory(w), op = 'x'.repeat(80 - String(i).length) + i;   /* the longest opId there can be */
+    const res = w.must('owner', a, Object.assign({ opId: op }, reqs[a]));
+    eq(mem.length, 1, a + ' was remembered once');
+    const kept = JSON.parse(mem[0].value);
+    eq([Object.keys(kept), kept.r, mem[0].ttl, mem[0].key], [['h', 'r'], res.result, 21600, 'op:' + w.ids.owner + ':' + op], a);
+    ok(/^[0-9a-f]{16}$/.test(kept.h), a + ': the fingerprint is ' + kept.h);
+    ok(mem[0].key.length <= 250 && mem[0].value.length < 300, a + ': key ' + mem[0].key.length + ', value ' + mem[0].value.length + ' characters');
+    lacks(mem[0].value, w.tokens.owner, 'the memory of ' + a);
+    const again = w.must('owner', a, Object.assign({ opId: op }, reqs[a]));
+    eq([again.replay, again.result, mem.length], [true, res.result, 1], a + ' replays and is not remembered a second time');
+  });
+  /* The fingerprint is the core's own sha256 of the fields in key order, cut to 16. */
+  const w = base.fork(), mem = opMemory(w);
+  w.must('mason', 'addNote', { text: 'b', opId: 'op-print-00001', id: w.ids.clientA, kind: 'client', token: w.tokens.mason, since: 3, day: 'x' });
+  eq(JSON.parse(mem[0].value).h, C.sha256('{"action":"addNote","id":' + JSON.stringify(w.ids.clientA) + ',"kind":"client","text":"b"}').slice(0, 16));
+});
+
+test('an answer too long to remember whole is remembered by its fingerprint alone: never a second save, never a silent one', () => {
+  const real = C.LIMITS.retryChars;
+  try {
+    C.LIMITS.retryChars = 60;   /* as if the answer to a sale were too long to keep */
+    const w = world(), mem = opMemory(w);
+    /* A cache that, like Google's, quietly drops what is too big for it. */
+    const put = w.store.cachePut;
+    w.store.cachePut = (k, v, ttl) => { if (String(v).length <= 60) put(k, v, ttl); };
+    const req = { opId: 'op-too-big-0001', client: { name: 'Big Answer' }, service: 'House wash', priceCents: 12000, appointment: { date: '2026-11-18', time: '09:30' } };
+    const first = w.must('mason', 'createSale', req), rev = w.rev();
+    ok(first.result.saleId && JSON.stringify({ h: 'x'.repeat(16), r: first.result }).length > 60, 'the test did make the answer too long to keep');
+    const kept = JSON.parse(mem[0].value);
+    eq([Object.keys(kept), kept.big, mem[0].value.length <= 60], [['h', 'big'], true, true], 'the fingerprint and a marker, and it fits');
+    const again = w.must('mason', 'createSale', req);
+    eq([again.replay, again.result, again.sync.sales.length, again.sync.rev], [true, {}, 1, rev], 'the same try again: saved, says so, shows it; only the details of the first answer are gone');
+    const r = w.refuse('mason', 'createSale', Object.assign({}, req, { priceCents: 13000 }), 'already_saved');
+    eq(r.error.message, ALREADY_SAVED);
+    eq([w.db().sales.length, w.db().clients.length, w.db().jobs.length, w.db().notices.length, w.emails.length, w.rev()], [1, 1, 1, 1, 1, rev]);
+    /* A short answer is still kept whole under the same small limit. */
+    const note = { kind: 'client', id: first.result.clientId, text: 'short', opId: 'op-too-big-0002' };
+    w.must('mason', 'addNote', note);
+    eq([JSON.parse(mem[1].value).r, w.must('mason', 'addNote', note).result], [{}, {}]);
+  } finally { C.LIMITS.retryChars = real; }
+  eq(C.LIMITS.retryChars, 20000);
+});
+
+test('a memory that cannot be read, or that does not say what was sent, never lets the action run again', () => {
+  const w = seeded();
+  const note = { kind: 'client', id: w.ids.clientA, text: 'kept once', opId: 'op-broken-0001' };
+  w.must('mason', 'addNote', note);
+  const key = 'op:' + w.ids.mason + ':op-broken-0001';
+  ['{}', 'not json', '{"id":"m_x","pin":"123456"}', 'null', '[]', '7', '"h"', '{"h":7,"r":{}}', '{"r":{}}'].forEach((junk) => {
+    w.store.cachePut(key, junk, 600);
+    eq(w.refuse('mason', 'addNote', note, 'already_saved').error.message, ALREADY_SAVED, 'with ' + junk + ' in the cache');
+  });
+  eq(byId(w.db().clients, w.ids.clientA).notes.filter((n) => n.text === 'kept once').length, 1);
+  eq(w.db().problems, []);
+});
+
+test('junk under an opId cannot crash the fingerprint: deep, huge and odd values are just fields', () => {
+  const w = seeded();
+  let deep = 'bottom'; for (let i = 0; i < 20000; i++) deep = [deep];
+  let deeper = 'another bottom'; for (let i = 0; i < 20000; i++) deeper = { k: deeper };
+  const odd = [deep, deeper, 'x'.repeat(200000), NaN, Infinity, -0, () => 1, Symbol('s'), new Date(0), JSON.parse('{"__proto__":{"a":1},"constructor":"c"}')];
+  odd.forEach((v, i) => {
+    const req = { kind: 'client', id: w.ids.clientA, text: 'odd ' + i, extra: v, opId: 'op-odd-' + i + '-00001' };
+    ok(!w.must('mason', 'addNote', req).replay, 'value ' + i);
+    ok(w.must('mason', 'addNote', req).replay === true, 'value ' + i + ' again');
+    eq(w.refuse('mason', 'addNote', Object.assign({}, req, { text: 'changed' }), 'already_saved').error.code, 'already_saved');
+  });
+  eq(w.db().problems, []);
+  ok(({}).a === undefined);
 });
 
 /* ================================================================== */
@@ -1943,7 +2174,7 @@ test('only a fix to the client\'s newest sale changes what the client buys, and 
   checkData(w);
 });
 
-test('the owner fixes who made the sale: it moves to that person, with the commission they would get today', () => {
+test('the owner fixes who made the sale: moved from one rep to another it keeps the rates it was sold under', () => {
   const w = world({ day: '2027-01-10' });
   const s = plain(w, 'mason', 'Really Jake\'s Sale', 20000, 'monthly');
   w.at('2027-02-10', '09:00'); relog(w);
@@ -1951,11 +2182,35 @@ test('the owner fixes who made the sale: it moves to that person, with the commi
   eq(saleRow(w, s.saleId), ['Window cleaning', 20000, w.ids.mason, 30, 10, 'monthly'], 'a rate change alone never touches a sale');
 
   w.must('owner', 'updateSale', { saleId: s.saleId, patch: { repId: w.ids.jake } });
-  eq(saleRow(w, s.saleId), ['Window cleaning', 20000, w.ids.jake, 25, 8, 'monthly'], 'moved to a rep: the rates in Settings today');
+  eq(saleRow(w, s.saleId), ['Window cleaning', 20000, w.ids.jake, 30, 10, 'monthly'], 'moved to another rep: the rates saved on the sale stay, whatever Settings says today');
   eq(w.full('mason').sales, [], 'the rep it was taken from no longer has it');
-  eq(eventsOf(w, 'jake', s.saleId).map((e) => e.cents), [5000, 1600], 'the rep it went to earns from it, from the day it was sold');
+  eq(eventsOf(w, 'jake', s.saleId), [{ day: '2027-01-10', cents: 6000, kind: 'first' }, { day: '2027-02-10', cents: 2000, kind: 'monthly' }], 'the rep it went to earns what the sale always earned, from the day it was sold');
   eq([row(w, 'owner', w.ids.mason), row(w, 'owner', w.ids.jake)], [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 20000]], 'the board moves with it');
   eq(clientRow(w, s.clientId), ['Window cleaning', 20000, 'monthly', w.ids.mason], 'who looks after the client is a separate thing and does not move');
+
+  /* Back again, with a price fix in the same patch, on a day when Settings says something else again: still the sale's own rates. */
+  w.must('owner', 'saveSettings', { settings: { firstPct: 50, monthlyPct: 0 } });
+  w.must('owner', 'updateSale', { saleId: s.saleId, patch: { repId: w.ids.mason, priceCents: 21000 } });
+  eq(saleRow(w, s.saleId), ['Window cleaning', 21000, w.ids.mason, 30, 10, 'monthly']);
+  eq(eventsOf(w, 'mason', s.saleId).map((e) => e.cents), [6300, 2100]);
+  /* A rep who has since left can still be the one a sale is taken from: nothing about the rates changes. */
+  w.must('owner', 'removeMember', { id: w.ids.mason });
+  w.must('owner', 'updateSale', { saleId: s.saleId, patch: { repId: w.ids.jake } });
+  eq(saleRow(w, s.saleId), ['Window cleaning', 21000, w.ids.jake, 30, 10, 'monthly']);
+  /* A sale made after the rates changed carries the new rates, and keeps those when it is moved. */
+  const late = plain(w, 'jake', 'Sold At Fifty', 10000, 'once');
+  w.must('owner', 'saveSettings', { settings: { firstPct: 30, monthlyPct: 10 } });
+  const sam = w.must('owner', 'saveMember', { member: { name: 'Sam New', role: 'rep', pin: '606147' } }).result.id;
+  w.must('owner', 'updateSale', { saleId: late.saleId, patch: { repId: sam } });
+  eq(saleRow(w, late.saleId), ['Window cleaning', 10000, sam, 50, 0, 'once']);
+  checkData(w);
+});
+
+test('a sale moved to an owner earns nothing; moved from an owner to a rep it takes the rates in Settings that day', () => {
+  const w = world({ day: '2027-01-10' });
+  const s = plain(w, 'jake', 'Really The Owner\'s', 20000, 'monthly');
+  w.at('2027-02-10', '09:00'); relog(w);
+  w.must('owner', 'saveSettings', { settings: { firstPct: 25, monthlyPct: 8 } });
 
   w.must('owner', 'updateSale', { saleId: s.saleId, patch: { repId: w.ids.owner } });
   eq(saleRow(w, s.saleId), ['Window cleaning', 20000, w.ids.owner, 0, 0, 'monthly'], 'moved to the owner: no commission');
@@ -1964,13 +2219,35 @@ test('the owner fixes who made the sale: it moves to that person, with the commi
 
   w.must('owner', 'saveSettings', { settings: { firstPct: 40, monthlyPct: 15 } });
   w.must('owner', 'updateSale', { saleId: s.saleId, patch: { repId: w.ids.mason } });
-  eq(saleRow(w, s.saleId), ['Window cleaning', 20000, w.ids.mason, 40, 15, 'monthly'], 'moved back to a rep: the rates in Settings on the day of the fix');
+  eq(saleRow(w, s.saleId), ['Window cleaning', 20000, w.ids.mason, 40, 15, 'monthly'], 'moved from the owner to a rep: the rates in Settings on the day of the fix');
   eq(eventsOf(w, 'mason', s.saleId).map((e) => e.cents), [8000, 3000]);
 
-  /* Naming the seller the sale already has changes nothing, so a price fix that sends every field keeps the rates it was sold under. */
+  /* From then on it is a rep's sale like any other: a later move to another rep keeps the 40 and 15. */
   w.must('owner', 'saveSettings', { settings: { firstPct: 30, monthlyPct: 10 } });
-  w.must('owner', 'updateSale', { saleId: s.saleId, patch: { repId: w.ids.mason, priceCents: 21000, service: 'Window cleaning' } });
-  eq(saleRow(w, s.saleId), ['Window cleaning', 21000, w.ids.mason, 40, 15, 'monthly']);
+  w.must('owner', 'updateSale', { saleId: s.saleId, patch: { repId: w.ids.jake } });
+  eq(saleRow(w, s.saleId), ['Window cleaning', 20000, w.ids.jake, 40, 15, 'monthly']);
+
+  /* Naming the seller the sale already has changes nothing, so a price fix that sends every field keeps the rates. */
+  w.must('owner', 'updateSale', { saleId: s.saleId, patch: { repId: w.ids.jake, priceCents: 21000, service: 'Window cleaning' } });
+  eq(saleRow(w, s.saleId), ['Window cleaning', 21000, w.ids.jake, 40, 15, 'monthly']);
+
+  /* A sale the owner entered as their own has no rates to keep: given to the rep who really made it, it takes today's. */
+  const own = plain(w, 'owner', 'Entered By Grayson', 10000, 'once');
+  eq(saleRow(w, own.saleId), ['Window cleaning', 10000, w.ids.owner, 0, 0, 'once']);
+  w.must('owner', 'updateSale', { saleId: own.saleId, patch: { repId: w.ids.mason } });
+  eq(saleRow(w, own.saleId), ['Window cleaning', 10000, w.ids.mason, 30, 10, 'once']);
+  eq(eventsOf(w, 'mason', own.saleId), [{ day: '2027-02-10', cents: 3000, kind: 'first' }]);
+
+  /* From one owner to another it stays at nothing, and "from an owner" goes by what the seller is now. */
+  const second = w.must('owner', 'saveMember', { member: { name: 'Second Owner', role: 'owner', pin: '606147' } }).result.id;
+  w.must('owner', 'updateSale', { saleId: own.saleId, patch: { repId: w.ids.owner } });
+  w.must('owner', 'updateSale', { saleId: own.saleId, patch: { repId: second } });
+  eq(saleRow(w, own.saleId), ['Window cleaning', 10000, second, 0, 0, 'once']);
+  w.must('owner', 'saveSettings', { settings: { firstPct: 20, monthlyPct: 5 } });
+  w.must('owner', 'saveMember', { member: { id: w.ids.jake, name: 'Jake Miller', role: 'owner' } });   /* Jake is made an owner; his sale keeps its 40 and 15 */
+  eq(saleRow(w, s.saleId), ['Window cleaning', 21000, w.ids.jake, 40, 15, 'monthly']);
+  w.must('owner', 'updateSale', { saleId: s.saleId, patch: { repId: w.ids.mason } });
+  eq(saleRow(w, s.saleId), ['Window cleaning', 21000, w.ids.mason, 20, 5, 'monthly'], 'taken from someone who is an owner now: today\'s rates');
   checkData(w);
 });
 
@@ -2230,7 +2507,7 @@ test('a payment link has to go where it looks like it goes: no "@" trick, no bar
 });
 
 test('a payment link too long to keep whole is refused, never saved cut short', () => {
-  const w = seeded();   /* a cut link still looks like a link, but it takes the customer nowhere */
+  const w = seeded();   /* a cut link still looks like a link, but it takes the client nowhere */
   [301, 420, 5000].forEach((n) => {
     const link = ('https://checkout.pay.example/c/pay/' + 'a1b2c3d4'.repeat(700)).slice(0, n - 4) + '#end';
     const u = w.call('owner', 'updateClient', { clientId: w.ids.clientA, patch: { stripeLink: link } });
@@ -2273,7 +2550,7 @@ test('a new sale to an existing client updates what they buy and wakes a cancell
   w.refuse('mason', 'createSale', { clientId: 'c_missing', service: 'House wash', priceCents: 100 }, 'not_found');
 });
 
-test('a sale needs a customer name and a service', () => {
+test('a sale needs a client name and a service', () => {
   const w = world();
   [{ client: {}, service: 'House wash' }, { client: { name: '  ' }, service: 'House wash' }, { service: 'House wash' }, { client: 'Just A String', service: 'House wash' }, { client: null, service: 'House wash' },
     { client: { name: 'No Service' } }, { client: { name: 'No Service' }, service: '' }, { client: { name: 'No Service' }, service: ' \n ' }]
@@ -2798,7 +3075,7 @@ test('ids borrowed from JavaScript itself are just ids that do not exist', () =>
   });
 });
 
-test('a service, a person or a customer may be called "constructor", "__proto__" or "toString"', () => {
+test('a service, a person or a client may be called "constructor", "__proto__" or "toString"', () => {
   const w = world();
   const odd = ['constructor', '__proto__', 'toString', 'hasOwnProperty', 'valueOf'];
   w.must('owner', 'saveSettings', { settings: { services: odd.map((n) => ({ name: n, priceCents: 100 })) } });
@@ -3234,12 +3511,12 @@ test('a team record somebody padded by hand in the sheet cannot be pushed over b
 /* ================================================================== */
 section('sync fast path');
 
-test('same rev and same day: a three-field answer and nothing else', () => {
+test('same rev and same day: rev, today, same and the system\'s clock, and nothing else', () => {
   const w = seeded();
   Object.keys(PINS).forEach((who) => {
     const full = w.full(who);
     const r = w.must(who, 'sync', { since: full.rev, day: full.today });
-    eq(r, { ok: true, result: {}, sync: { rev: full.rev, today: '2026-11-17', same: true } }, who);
+    eq(r, { ok: true, result: {}, sync: { rev: full.rev, today: '2026-11-17', same: true, nowMs: chi('2026-11-17', '09:00'), nowHM: '09:00' } }, who);
   });
 });
 
@@ -3262,12 +3539,17 @@ test('a new day in Chicago gives the full snapshot even when nothing was saved',
   eq([later.same, later.sales[0].events.length, later.taken], [false, 2, []], 'the new day brings the month\'s commission and drops old slots');
 });
 
-test('within one day and one rev the full snapshot never differs, so "same" is always true', () => {
+test('within one day and one rev the full snapshot never differs except for the clock, so "same" is always true', () => {
   const w = seeded();
   const texts = {};
   ['00:01', '08:00', '09:31', '12:00', '23:59'].forEach((time) => {
     w.at('2026-11-18', time);
-    Object.keys(PINS).forEach((who) => { const t = JSON.stringify(w.full(who)); if (texts[who] === undefined) texts[who] = t; else ok(texts[who] === t, who + ' at ' + time + ' got a different snapshot with the same rev and day'); });
+    Object.keys(PINS).forEach((who) => {
+      const full = w.full(who);
+      eq([full.nowHM, full.nowMs], [time, chi('2026-11-18', time)], who + ' at ' + time);
+      const t = JSON.stringify(Object.assign({}, full, { nowMs: 0, nowHM: '' }));
+      if (texts[who] === undefined) texts[who] = t; else ok(texts[who] === t, who + ' at ' + time + ' got a different snapshot with the same rev and day');
+    });
   });
 });
 
@@ -3282,13 +3564,16 @@ test('every save moves the rev by one or more and answers with the full snapshot
   const w = base.fork(), rev = w.rev(), same = { since: rev, day: w.today() };
   w.tryLogin('mason', '271845'); w.tryLogin('mason', '000000'); w.tryLogin('nobody', '000000');
   w.call('mason', 'sync', same); w.call('mason', 'dumpEverything', same);
-  eq(w.refuse('mason', 'saveSettings', Object.assign({ settings: { firstPct: 1 } }, same), 'forbidden').sync, { rev: rev, today: w.today(), same: true }, 'a refusal with nothing new says so');
+  const short = (n) => ({ rev: n, today: w.today(), same: true, nowMs: w.t, nowHM: '09:00' });
+  eq(w.refuse('mason', 'saveSettings', Object.assign({ settings: { firstPct: 1 } }, same), 'forbidden').sync, short(rev), 'a refusal with nothing new says so');
   eq(w.refuse('jake', 'addNote', Object.assign({ kind: 'client', id: w.ids.clientA, text: 'x' }, same), 'forbidden').sync.same, true);
   eq(w.refuse('mason', 'createSale', Object.assign({ client: { name: 'X' }, service: 'Y', priceCents: 1, appointment: { date: '2026-11-18', time: '09:30' } }, same), 'slot_taken').sync.same, true);
   eq(w.rev(), rev);
   const op = Object.assign({ kind: 'client', id: w.ids.clientA, text: 'once', opId: 'fast-op-0001' }, same);
   const first = w.must('mason', 'addNote', op), again = w.must('mason', 'addNote', Object.assign({}, op, { since: first.sync.rev }));
-  eq([first.sync.same, w.rev(), again.replay, again.sync], [false, rev + 1, true, { rev: rev + 1, today: w.today(), same: true }], 'a replay moves nothing');
+  eq([first.sync.same, w.rev(), again.replay, again.sync], [false, rev + 1, true, short(rev + 1)], 'a replay moves nothing');
+  const changed = w.refuse('mason', 'addNote', Object.assign({}, op, { text: 'twice', since: rev + 1 }), 'already_saved');
+  eq([changed.sync, w.rev()], [short(rev + 1), rev + 1], 'a changed retry moves nothing either');
 });
 
 test('the fast answer is not given to a phone that has been signed out', () => {
@@ -3298,6 +3583,80 @@ test('the fast answer is not given to a phone that has been signed out', () => {
   eq([r.error.code, r.sync], ['auth', undefined]);
   w.must('owner', 'removeMember', { id: w.ids.jake });
   eq(w.call('jake', 'sync', { since: w.rev(), day: w.today() }).error.code, 'auth');
+});
+
+/* ================================================================== */
+section('the system clock');
+
+test('every answer that carries a sync carries the clock: sign-in, refresh, nothing new, a save, a replay, a changed retry and a refusal, for every role', () => {
+  const w = seeded();
+  w.at('2026-11-17', '13:07');
+  const want = [chi('2026-11-17', '13:07'), '13:07'];
+  const clock = (res, label) => { ok(res.sync, label + ' has no sync'); eq([res.sync.nowMs, res.sync.nowHM], want, label); return res; };
+  Object.keys(PINS).forEach((who) => {
+    clock(w.login(who, PINS[who][0], PINS[who][1]), 'sign-in as ' + who);
+    const full = clock(w.must(who, 'sync'), 'a refresh for ' + who).sync;
+    eq(full.same, false);
+    const same = clock(w.must(who, 'sync', { since: full.rev, day: full.today }), 'nothing new for ' + who).sync;
+    eq([keys(same), same.same], ['nowHM,nowMs,rev,same,today', true]);
+    const op = { opId: 'clock-op-' + who };
+    ok(!clock(w.must(who, 'ackStandards', op), 'a save by ' + who).replay);
+    ok(clock(w.must(who, 'ackStandards', op), 'a replay for ' + who).replay === true);
+    eq(clock(w.call(who, 'ackStandards', Object.assign({ changed: 1 }, op)), 'a changed retry by ' + who).error.code, 'already_saved');
+    eq(clock(w.call(who, 'addNote', { kind: 'client', id: 'c_missing', text: 'x' }), 'a refusal for ' + who).error.code, 'not_found');
+    eq(clock(w.call(who, 'addNote', { kind: 'client', id: 'c_missing', text: 'x', since: w.rev(), day: w.today() }), 'a refusal with nothing new for ' + who).sync.same, true);
+  });
+  eq(clock(w.call('cole', 'saveSettings', { settings: { firstPct: 1 } }), 'a role refusal').error.code, 'forbidden');
+  /* An answer with no sync has no clock either: a ping, a sign-out, and anything from a phone that is not signed in. */
+  eq(w.raw({ action: 'ping' }), { ok: true, result: { version: C.VERSION } });
+  eq(w.must('tess', 'logout').sync, null);
+  eq(keys(w.call('tess', 'sync')), 'error,ok');
+  eq(keys(w.tryLogin('Grayson', '000000')), 'error,ok');
+});
+
+test('the clock is the system\'s own, in business time: across midnight, across both daylight-saving changes, whatever the phone says', () => {
+  const w = seeded();
+  [['2026-11-17', '23:59'], ['2026-11-18', '00:00'], ['2027-03-14', '01:59'], ['2027-03-14', '03:00'], ['2027-07-04', '12:00'], ['2027-11-07', '00:30'], ['2027-11-07', '03:15']].forEach((at) => {
+    w.at(at[0], at[1]); relog(w, ['mason', 'cole']);
+    const short = w.must('mason', 'sync', { since: w.rev(), day: at[0], nowMs: 5, nowHM: '99:99', now: 1, today: '2020-01-01' }).sync;   /* what a phone claims is not listened to */
+    eq(short, { rev: w.rev(), today: at[0], same: true, nowMs: chi(at[0], at[1]), nowHM: at[1] }, at.join(' '));
+    const full = w.full('cole');
+    eq([full.same, full.today, full.nowHM, full.nowMs], [false, at[0], at[1], chi(at[0], at[1])], at.join(' '));
+  });
+  ok(chi('2027-03-14', '03:00') - chi('2027-03-14', '01:59') === MIN, 'the test did cross the spring change, where one minute on the clock is an hour and a minute on the wall');
+});
+
+test('nowHM is the clock the booking rule uses: a time today can be booked exactly when it is later than nowHM', () => {
+  const base = world();
+  ['00:00', '07:59', '08:00', '08:01', '09:29', '09:30', '11:59', '12:00', '13:59', '14:00', '23:59'].forEach((time) => {
+    SLOTS.forEach((slot) => {
+      const w = base.fork();
+      w.at('2026-11-17', time);
+      const nowHM = w.full('mason').nowHM, r = sell(w, 'mason', 'Clock ' + slot, '2026-11-17', slot);
+      eq([nowHM, r.ok, r.ok ? '' : r.error.code], [time, slot > nowHM, slot > nowHM ? '' : 'slot_closed'], slot + ' at ' + time);
+    });
+  });
+});
+
+/* ================================================================== */
+section('words');
+
+test('nothing the system can say to a phone says "customer": it is "client" everywhere', () => {
+  const fs = require('fs');
+  /* The company standards the system starts with are Grayson's own words to his team and are left as they are. */
+  const coreText = fs.readFileSync(path.join(__dirname, '..', 'src', 'core.js'), 'utf8');
+  const from = coreText.indexOf('    standards: ['), to = coreText.indexOf('    standardsUpdatedAt: 0');
+  ok(from > 0 && to > from, 'could not find the default standards in core.js');
+  lacks((coreText.slice(0, from) + coreText.slice(to)).toLowerCase(), 'customer', 'core.js, outside the default standards');
+  ['src/gas.js', 'tools/dev-server.js'].forEach((f) => lacks(fs.readFileSync(path.join(__dirname, '..', f), 'utf8').toLowerCase(), 'customer', f));
+  /* And the ones a rep meets first. */
+  const w = seeded();
+  [{}, { name: '' }, { name: '   ' }, { name: null }, { name: ['x'] }].forEach((c) => {
+    eq(w.refuse('mason', 'createSale', { client: c, service: 'House wash', priceCents: 100 }, 'invalid').error.message, 'Add the client\'s name.');
+  });
+  eq(w.refuse('mason', 'updateClient', { clientId: w.ids.clientA, patch: { name: ' ' } }, 'invalid').error.message, 'Add the client\'s name.');
+  eq(w.refuse('mason', 'addNote', { kind: 'client', id: 'c_missing', text: 'x' }, 'not_found').error.message, 'That client is no longer here.');
+  eq(w.refuse('mason', 'bookJob', { clientId: w.ids.clientB, date: '2026-11-19', time: '08:00' }, 'forbidden').error.message, 'That client belongs to another rep.');
 });
 
 /* ================================================================== */
@@ -3382,9 +3741,15 @@ function playRandomly(seed, steps) {
       if (action === 'saveMember' && fields.member.role === 'owner' && fields.member.id !== people[0].id) fields.member.role = 'rep';   /* one owner only, so the play can always go on */
       if (chance(0.25)) fields.opId = 'play-' + seed + '-' + Math.floor(r() * 40);
       if (!w.tokens[p.key] || chance(0.03)) { const li = w.tryLogin(chance(0.97) ? p.name : p.name + 'x', chance(0.97) ? p.pin : '000000'); if (li.ok) w.tokens[p.key] = li.result.token; }
-      const res = w.call(p.key, action, fields);
+      const revBefore = w.rev(), res = w.call(p.key, action, fields);
       tally[res.ok ? 'ok' : res.error.code] = (tally[res.ok ? 'ok' : res.error.code] || 0) + 1;
+      if (res.replay) tally.replay = (tally.replay || 0) + 1;
       ok(res.ok || res.error.code !== 'server', action + ' gave a server error');
+      /* An opId that comes round again is the same thing again (a replay) or a changed retry (already_saved). Neither saves anything. */
+      if (res.replay || (!res.ok && res.error.code === 'already_saved')) {
+        ok(fields.opId && w.rev() === revBefore, action + ' was answered ' + (res.replay ? 'as a replay' : 'already_saved') + ' but something was saved');
+        if (!res.ok) eq([res.error.message, typeof res.sync.rev], [ALREADY_SAVED, 'number'], action);
+      }
       if (res.ok && !res.replay) {
         if (action === 'saveMember' && res.result.pin) people.push({ key: 'p' + people.length, id: res.result.id, name: fields.member.name, pin: res.result.pin });
         if (action === 'saveMember' && fields.member.id) people.forEach((x) => { if (x.id === fields.member.id) x.name = fields.member.name; });
@@ -3393,6 +3758,13 @@ function playRandomly(seed, steps) {
         if (action === 'logout') delete w.tokens[p.key];
       }
       if (!res.ok && res.error.code === 'auth') delete w.tokens[p.key];
+      /* Every save that carried an opId is sent once more, word for word, as a phone does when the answer was lost. */
+      if (res.ok && !res.replay && fields.opId && action !== 'sync' && action !== 'logout') {
+        const saved = JSON.stringify(w.db()), again = w.call(p.key, action, fields);
+        ok(again.ok && again.replay === true && JSON.stringify(again.result) === JSON.stringify(res.result), action + ' sent again was not answered from memory');
+        ok(JSON.stringify(w.db()) === saved && w.rev() === res.sync.rev, action + ' sent again saved something');
+        tally.replay = (tally.replay || 0) + 1;
+      }
       const after = w.db();
       checkData(w, after); checkView(res.sync);
       eq(after.problems, [], 'a problem was recorded');
@@ -3409,7 +3781,7 @@ function playRandomly(seed, steps) {
   test('2500 random actions by everyone (seed ' + seed + ') never break a rule', () => {
     const t = playRandomly(seed, 2500);
     if (process.env.SHOW_ALL) console.log('      ' + JSON.stringify(t));
-    ok(t.ok > 700 && t.forbidden > 100 && t.slot_taken > 5 && t.slot_taken + t.slot_closed > 40 && t.invalid > 50 && t.not_found > 20 && t.auth > 5, 'the play was too tame: ' + JSON.stringify(t));
+    ok(t.ok > 700 && t.forbidden > 100 && t.slot_taken > 5 && t.slot_taken + t.slot_closed > 40 && t.invalid > 50 && t.not_found > 20 && t.auth > 5 && t.already_saved > 2 && t.replay > 100, 'the play was too tame: ' + JSON.stringify(t));
   });
 });
 

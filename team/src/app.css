@@ -390,6 +390,9 @@ select.input { padding-right: 40px; text-overflow: ellipsis; }
 .sheet-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; display: flex; flex-direction: column; gap: 16px; padding-top: 20px; padding-bottom: 28px; }
 .sheet-body > * { flex: none; min-width: 0; }
 .sheet-small .sheet-body { padding-bottom: 20px; }
+/* .is-saving: while the sheet's save is on its way nothing in its body can be typed or tapped (app.js also sets `inert`). */
+.sheet-body.is-saving { pointer-events: none; -webkit-user-select: none; user-select: none; }
+.sheet-body.is-saving > * { opacity: .55; }
 .sheet-foot { flex: none; display: flex; flex-direction: column; gap: 10px; padding-top: 12px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); }
 .sheet-foot.is-bare { border-top: 0; padding-top: 0; }
 .sheet-foot.is-bare:not(.has-error) { padding-bottom: env(safe-area-inset-bottom, 0px); }
@@ -411,6 +414,7 @@ select.input { padding-right: 40px; text-overflow: ellipsis; }
 
 /* ---------- TOASTS ---------- */
 /* .toast: a short message just above the tab bar (App.toast). .toast-bad is the red one, usually with Retry.
+   .is-sticky stays until its button is tapped (a save that failed with nowhere else to say so).
    While a sheet is open, app.js moves .toasts to the top: just under the sheet's header, or just above a short sheet.
    .toast-btn (Undo, Retry) is a full 44px tap target. */
 .toasts { position: fixed; z-index: 80; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 0 12px; pointer-events: none; }
@@ -482,6 +486,9 @@ button.day:not([disabled]):active { opacity: .7; }
 .job-actions .btn { flex: 1 1 auto; padding: 0 8px; gap: 6px; }
 .job-done-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 28px; font-size: 14px; color: var(--ink-2); }
 .job-done-line .btn-text { margin: -8px -6px -8px 0; }
+/* .job-unsaved: the red line a Mark done that could not be saved leaves on its job. It stays; tapping it tries again. */
+.job-unsaved { display: flex; align-items: center; gap: 10px; width: 100%; min-height: var(--tap); padding: 8px 14px; border-radius: var(--r-ctl); border: 1px solid var(--bad); background: var(--bad-wash); color: var(--bad); font-weight: 600; font-size: 16px; line-height: 1.3; text-align: left; }
+.job-unsaved:active { opacity: .7; }
 .job.is-overdue { position: relative; border-color: var(--bad); }
 .job.is-overdue::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: var(--bad-wash); pointer-events: none; }
 .job.is-overdue > * { position: relative; }

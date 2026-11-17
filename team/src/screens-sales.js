@@ -259,12 +259,14 @@
     text += (noCommission(sale) ? '' : ' The commission on this sale goes with it.') + ' The client stays in Clients.';
     App.confirm({ title: 'Remove this sale?', text: text, yes: 'Remove sale', no: 'Keep it', danger: true }).then(function (yes) {
       if (!yes) return;
+      /* While it is being removed the sheet is not redrawn, so the button and its message stay where they are. */
+      function removed() { sh.close(); App.toast('Sale removed.'); }
       st.removing = true;
-      ui.save(btn, 'deleteSale', { saleId: saleId }, { errorEl: errorEl }).then(function (res) {
+      ui.save(btn, 'deleteSale', { saleId: saleId }, { errorEl: errorEl, saved: removed }).then(function (res) {
         if (res.skipped) return;
-        if (!res.ok) { st.removing = false; return; }
-        sh.close();
-        App.toast('Sale removed.');
+        if (res.ok) { removed(); return; }
+        st.removing = false;
+        if (!App.sale(saleId)) sh.close();       /* it is gone all the same (someone else removed it) */
       });
     });
   }
@@ -341,7 +343,7 @@
       title: sale.clientName || 'Sale', small: true,
       body: function (el, sh) { drawSale(el, sh, saleId, st); },
       update: function (sh) {
-        if (st.removing) return;       /* its own save is on the way: leave the button and its message alone */
+        if (st.removing) return;       /* this sheet is removing the sale itself: it says so when that is done */
         var now = App.sale(saleId);
         if (!now) { sh.close(); App.toast('That sale is no longer here.'); return; }
         sh.setTitle(now.clientName || 'Sale');
@@ -415,14 +417,21 @@
         if (what !== now.service) patch.service = what;
         if (cents !== now.priceCents) patch.priceCents = cents;
         if (rep.input.value && rep.input.value !== now.repId) patch.repId = rep.input.value;
-        if (!Object.keys(patch).length) { sh.close(); return; }       /* nothing was changed */
-        sh.send('updateSale', { saleId: saleId, patch: patch }).then(function (res) {
+        /* Nothing was changed: close. Unless an earlier try from here got no answer: that one may have saved, so
+           this goes out too (under the same id) and the system says which it was. */
+        if (!Object.keys(patch).length && !sh.unanswered('updateSale', { saleId: saleId })) { sh.close(); return; }
+        sh.send('updateSale', { saleId: saleId, patch: patch }, { saved: 'Sale fixed.' }).then(function (res) {
           if (!res.ok) return;
           sh.close();
           App.toast('Sale fixed.');
         });
       } }
     });
+  }
+
+  /* Does this client have an appointment at that day and time? */
+  function hasJobAt(clientId, v) {
+    return (App.data.jobs || []).some(function (j) { return j.clientId === clientId && j.date === v.date && j.time === v.time && j.status === 'scheduled'; });
   }
 
   /* Book the appointment for a sale that was saved with "Book later". */
@@ -440,11 +449,13 @@
       footer: { label: idle, onTap: function (sheet) {
         var v = picker.get();
         if (!v) return;
-        sheet.send('bookJob', { clientId: sale.clientId, saleId: sale.id, date: v.date, time: v.time, what: sale.service }).then(function (res) {
-          if (res.ok) {
-            sheet.close();
-            App.toast('Booked for ' + fmt.when(v.date, v.time) + '.');
-          } else if (res.error.code === 'slot_taken' || res.error.code === 'slot_closed') {
+        function booked() { sheet.close(); App.toast('Booked for ' + fmt.when(v.date, v.time) + '.'); }
+        sheet.send('bookJob', { clientId: sale.clientId, saleId: sale.id, date: v.date, time: v.time, what: sale.service }, { saved: booked,
+          /* No answer, and then this client turns up booked at that time: it went through. */
+          landed: function () { return hasJobAt(sale.clientId, v); }, onLanded: booked
+        }).then(function (res) {
+          if (res.ok) booked();
+          else if (res.error.code === 'slot_taken' || res.error.code === 'slot_closed') {
             sheet.error('');
             picker.set(null);
             picker.setError(res.error.message);
@@ -460,14 +471,20 @@
   /*
    * Everything typed into New sale is kept as a draft: in memory and in localStorage, per person, for a
    * few hours. A back swipe, a closed tab or a dead battery does not lose it; opening New sale again
-   * brings it back. A saved sale clears the draft. So does signing out, or being signed out: a draft holds a
-   * client's name, phone and address, and none of that stays on a phone nobody is signed in on.
+   * brings it back. A saved sale clears the draft.
+   *
+   * A draft holds a client's name, phone and address, so it does not outstay its person:
+   *   - signing out on purpose deletes it;
+   *   - so does the phone being told that its person is no longer on the team;
+   *   - being signed out any other way (the owner reset the PIN, the sign-in ran out) keeps it: the same
+   *     person signs in again and finds what they typed. Nobody else ever sees it, and it is deleted the
+   *     moment anyone else signs in on the phone, or when its few hours are up.
    *
    * The draft is also what stops a sale being saved twice:
-   *   - it carries the opId of the save it tried and exactly what that save sent (`sent`), so a retry of
-   *     the same sale (even after the sheet was closed, or the page was loaded again) is the same save to
-   *     the system, which answers it only once. Change anything and it is a new save with a new id: the
-   *     system would answer the old id with the first sale again and the change would be lost;
+   *   - it carries the id (opId) of the save it tried. While that try has had no answer, every later try
+   *     goes out under the same id, whatever was changed since (even after the sheet was closed, or the page
+   *     was loaded again). The system saves an id once: it answers the same sale from memory, and a changed
+   *     one with "your first try was saved". Once the system has answered, the next save takes a new id;
    *   - it remembers each try whose answer never came back (`tries`). Such a save may have gone through.
    *     If a sale just like it turns up in the data afterwards, the sheet shows it as saved instead of
    *     sending it again. Before a changed sale is sent after such a try, the sheet asks the system for
@@ -503,7 +520,6 @@
       if (keepIt) window.localStorage.setItem(draftKey(me.id), JSON.stringify(memDraft[me.id]));
       else window.localStorage.removeItem(draftKey(me.id));
     } catch (e) { /* no storage on this phone: the copy in memory still covers a closed sheet */ }
-    if (keepIt) watchForSignOut();
   }
 
   /* Throw away every draft on this phone, in memory and in storage, except (when given) one person's. */
@@ -518,45 +534,26 @@
       gone.forEach(function (key) { ls.removeItem(key); });
     } catch (e) { /* nothing stored, nothing to remove */ }
   }
-  function hasStored(id) {
-    try { return window.localStorage.getItem(draftKey(id)) != null; } catch (e) { return false; }
-  }
-
-  /* Signing out, or being signed out, clears the unsaved New sale. Three ways of knowing, so that it holds
-     whichever one a sign-out comes by:
-       - the app says so ('signout', just before it forgets who was signed in);
-       - an open New sale sheet finds out for itself (it is closed with nobody signed in, or its save is
-         answered with "sign in again"): see onClose and sendSale;
-       - while a draft is being kept, a look every half second that its owner is still signed in. */
-  var watching = null, draftsOf = '';
-  function signedOut() {
-    if (formOpen && formOpen.forget) formOpen.forget();      /* the open sheet must not keep what it holds as it closes */
-    stopWatching();
+  /* The app says when the person on this phone is leaving it, just before it forgets who they were: `chosen`
+     for a tap on Sign out (or a sample reset), `removed` when the system says they are no longer on the team.
+     Only someone who was signed out and can sign back in keeps their draft. */
+  var draftsOf = '';
+  App.on('signout', function (why) {
+    var me = App.me();
+    var stays = !!me && !!why && !why.chosen && !why.removed;
+    if (formOpen && formOpen.leave) formOpen.leave(stays);      /* the open sheet puts away what it holds (or does not), and keeps nothing after */
+    dropDrafts(stays ? me.id : null);
     draftsOf = '';
-    dropDrafts();
-  }
-  function stopWatching() { if (watching) { clearInterval(watching); watching = null; } }
-  function watchForSignOut() {
-    if (watching) return;
-    watching = setInterval(function () {
-      var me = App.me();
-      if (!me) { signedOut(); return; }
-      tidyDrafts();                                                     /* someone else is on the phone now */
-      if (!memDraft[me.id] && !hasStored(me.id)) stopWatching();        /* saved or cleared: nothing left to look after */
-    }, 500);
-  }
-  App.on('signout', signedOut);
+  });
 
-  /* When the app opens, and when someone else takes over the phone: nobody's old draft is left lying around.
-     With nobody signed in every draft goes; otherwise everyone else's goes, and the ones whose time is up. */
+  /* When the app opens, and when someone signs in: drafts whose time is up go, and so does every draft that
+     is not the signed-in person's. */
   function tidyDrafts() {
     var me = App.me();
-    if (!me) { signedOut(); return; }
-    if (me.id === draftsOf) return;
+    sweepDrafts();
+    if (!me || me.id === draftsOf) return;
     draftsOf = me.id;
     dropDrafts(me.id);
-    sweepDrafts();
-    if (hasStored(me.id)) watchForSignOut();
   }
   function loadStored(id) {
     try { return JSON.parse(window.localStorage.getItem(draftKey(id)) || 'null'); } catch (e) { return null; }
@@ -612,6 +609,22 @@
     if (!d) d = blankDraft(me);
     var view = 'form', saving = false, closed = false, done = null, timer = null, f = null, sheet = null;
     var gone = false;          /* signed out while this sheet was open: nothing more is kept from it */
+    var release = null;        /* lets the sheet go again after a save (see busy) */
+
+    /* While a save is on its way the button says so, nothing in the form can be typed or tapped, and new
+       data does not redraw the sheet. */
+    function busy(on) {
+      saving = on;
+      if (on) {
+        sheet.error('');
+        sheet.setButton('Saving...', true);
+        if (!release) release = sheet.hold();
+      } else if (release) {
+        var go = release;
+        release = null;
+        go();
+      }
+    }
 
     /* What the caller asked for goes on top of whatever was kept. */
     function applyArg() {
@@ -1015,15 +1028,13 @@
         return;
       }
       var req = request(), sent = JSON.stringify(req);
-      saving = true;
-      sheet.error('');
-      sheet.setButton('Saving...', true);
       if (d.opId && d.sent !== sent && d.tries.length) {
         /* Something was changed after a try whose answer never came back. That try may have gone through,
-           so look before sending what would be a second sale. */
+           so look first: if it did, show it as saved and send nothing. */
+        busy(true);
         App.api.send('sync').then(function (res) {
-          saving = false;
-          if (!res.ok && res.error.code === 'auth') { signedOut(); return; }   /* signed out: nothing typed stays on the phone */
+          busy(false);
+          if (gone || (!res.ok && res.error.code === 'auth')) return;      /* signed out: the sign-in screen says why */
           if (closed) return;
           if (!res.ok) {
             paintButton();
@@ -1041,27 +1052,43 @@
       var seller = sellerId(), known = newestSold();
       var tried = { name: norm(req.client ? req.client.name : ''), clientId: req.clientId || '', service: norm(req.service),
         priceCents: req.priceCents, billing: req.billing, repId: seller };
-      if (!d.opId || d.sent !== sent) { d.opId = uid(); d.sent = sent; }   /* one id for this exact sale, however many times it is sent */
+      /* One id for this attempt, kept until the system answers, whatever is changed between tries: a try
+         that got no answer may have saved the sale, and the system will not save the same id twice. */
+      if (!d.opId) d.opId = uid();
+      d.sent = sent;
       keep();
-      saving = true;
-      sheet.error('');
-      sheet.setButton('Saving...', true);
+      busy(true);
       App.api.send('createSale', req, { opId: d.opId }).then(function (res) {
-        saving = false;
+        var code = res.ok ? '' : res.error.code;
+        if (res.ok) d.tries = [];                   /* answered: the refresh that follows has nothing left to look for */
+        busy(false);
         if (res.ok) { saved(res.result || {}, req, seller); return; }
-        if (res.error.code === 'auth') { signedOut(); return; }   /* signed out: the sign-in screen says why, and nothing typed stays on the phone */
-        if (gone) return;
-        if (res.error.code === 'network') {         /* no answer: it may have saved all the same, so remember what was sent */
+        if (gone || code === 'auth') return;        /* signed out: the sign-in screen says why */
+        if (code === 'network') {                   /* no answer: it may have saved all the same, so remember what was sent */
           if (!d.tries.length) d.lastSold = known;
           if (!d.tries.some(function (t) { return JSON.stringify(t) === JSON.stringify(tried); })) d.tries = d.tries.concat([tried]).slice(-6);
           if (!closed || !formOpen) keep();
+        } else if (code === 'already_saved') {
+          /* The first try was saved and this one was not run. The data that came with the answer holds that
+             sale: show it as saved. (If it cannot be picked out, say so in the system's words and start clean.) */
+          if (adoptSaved(true)) return;
+          d = blankDraft(me);
+          storeDraft(me, null);
+          if (!closed) sheet.close();
+          App.toast(res.error.message, { bad: true, sticky: true });
+          return;
+        } else {
+          /* The system answered and saved nothing, so no earlier try got through either: the next one is a new save. */
+          d.opId = ''; d.sent = ''; d.tries = [];
+          if (!closed || !formOpen) keep();
         }
         if (closed) {
-          App.toast(res.error.message + ' What you typed is kept.', { bad: true, action: { label: 'Open', onTap: function () { openNewSale({}); } } });
+          /* The sheet is gone: said where it cannot be missed, until it is tapped. */
+          App.toast(res.error.message + ' What you typed is kept.', { bad: true, sticky: true, action: { label: 'Open', onTap: function () { openNewSale({}); } } });
           return;
         }
         paintButton();
-        if (res.error.code === 'slot_taken' || res.error.code === 'slot_closed') {
+        if (code === 'slot_taken' || code === 'slot_closed') {
           sheet.error('');
           f.picker.set(null);                       /* the times shown are already the fresh ones */
           d.appt = null;
@@ -1099,7 +1126,11 @@
       d = blankDraft(me);
       restored = false;
       storeDraft(me, null);
-      if (closed) { App.toast('Sale saved.'); return; }
+      if (closed) {
+        if (changedSince) App.toast('This sale went through on your first try, before your last changes. Check it in Sales.', { sticky: true });
+        else App.toast('Sale saved.');
+        return;
+      }
       view = 'done';
       sheet.note('');
       sheet.error('');
@@ -1173,12 +1204,15 @@
       onClose: function () {
         closed = true;
         formOpen = null;
-        if (!App.me()) { gone = true; signedOut(); }   /* closed because the phone was signed out: keep nothing */
-        else if (view === 'form') keep();
+        if (view === 'form') keep();       /* (nothing is kept once the person has been signed out: see leave) */
         clearTimeout(timer);
       }
     });
-    sheet.forget = function () { gone = true; clearTimeout(timer); timer = null; };
+    /* The person is being signed out. `stays`: they can sign back in, so what is typed is put away for them. */
+    sheet.leave = function (stays) {
+      if (stays && view === 'form') keep(); else { clearTimeout(timer); timer = null; }
+      gone = true;
+    };
     formOpen = sheet;
     if (restored) adoptSaved();
     return sheet;

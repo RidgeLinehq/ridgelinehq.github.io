@@ -105,16 +105,18 @@ function answerPost_(e) {
  * in the cache. Any other outcome (signed out, a sign-in the cache has forgotten, a new day, an
  * error) is thrown away and the request is run again properly, under the lock.
  *
- * It runs without the lock, so it only looks. Its store (newStore_(true)) reads the cache and
- * nothing else: it never opens the sheet and never writes, not even to the cache. That matters
- * most for sign-ins. If this check could read a sign-in from the sheet and put it in the cache,
- * it could put back one that a removal, a PIN reset or a sign-out had cleared a moment earlier,
- * and that phone would stay signed in for up to six hours. A sign-in only ever goes into the
- * cache under the lock, where nothing else can be clearing it at the same time.
+ * It runs without the lock, so it only looks. Through its store (newStore_(true)) the core can
+ * read the cache and the revision number and nothing else: the sheet is never opened, and
+ * nothing the core asks to save or to cache is saved or cached. That matters most for sign-ins.
+ * If this check could read a sign-in from the sheet and put it in the cache, it could put back
+ * one that a removal, a PIN reset or a sign-out had cleared a moment earlier, and that phone
+ * would stay signed in for up to six hours. A sign-in only ever goes into the cache under the
+ * lock, where nothing else can be clearing it at the same time.
  *
  * This is also the one place that takes the revision number from the cache, so that a phone
  * asking every 20 seconds does not use up Google's daily allowance of property reads. See
- * quickRev in the store for why that copy can be trusted.
+ * quickRev in the store for why that copy can be trusted. (A looked-up copy of that number is
+ * the one thing this check may leave in the cache.)
  */
 function answerIfNothingChanged_(req) {
   var store = newStore_(true), env = newEnv_();
@@ -374,11 +376,6 @@ function newStore_(quick) {
     }
   }
 
-  function hasChanges() {
-    for (var name in tabs) if (Object.prototype.hasOwnProperty.call(tabs, name) && tabs[name].dirty) return true;
-    return rev !== null && rev !== readRev();
-  }
-
   function forgetCache() {
     if (!cacheKeys.length) return;
     var keys = cacheKeys;
@@ -428,10 +425,11 @@ function newStore_(quick) {
   }
 
   /*
-   * The store for the "nothing changed?" check, which holds no lock. It can read the cache and
-   * the revision number. Everything else is only noted: asking for a tab gives an empty list
-   * without opening the sheet, and nothing is written anywhere, the cache included. needsLock()
-   * then says the request wanted more than a look, and it is run again under the lock.
+   * The store for the "nothing changed?" check, which holds no lock. The core can read the cache
+   * and the revision number through it. Everything else is only noted: asking for a tab gives an
+   * empty list without opening the sheet, and whatever the core hands it to save, to cache or to
+   * clear from the cache goes nowhere. needsLock() then says the request wanted more than a
+   * look, and it is run again under the lock.
    */
   function lookOnly() {
     var wanted = false;
@@ -477,7 +475,6 @@ function newStore_(quick) {
       cache.remove(key);
     },
     flush: flush,
-    hasChanges: hasChanges,
     forgetCache: forgetCache,
     keepOnlyProblems: keepOnlyProblems,
     reportUnreadableRows: reportUnreadableRows

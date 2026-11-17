@@ -45,9 +45,21 @@
  *             createSale answers commissionCents 0 for them. Its dated events are still listed.
  *             The owner corrects a sale with updateSale {saleId, patch: {priceCents?, service?,
  *             repId?}}; one-time or monthly cannot be changed (remove the sale and enter it again).
+ *             Moving a sale from one rep to another keeps the rates saved on it. Moving it to an
+ *             owner sets them to 0; moving it from an owner to a rep takes today's Settings rates.
+ *   Retries   A save sent with an opId is remembered for 6 hours, together with what was sent.
+ *             The same opId with the same fields again is answered from memory (replay: true) and
+ *             saves nothing more. The same opId with different fields is not run: the first try
+ *             was saved, so the answer is error.code 'already_saved' with the sync. A try that
+ *             was refused is not remembered, so its opId can be sent again with the fields put
+ *             right. "The same fields" means everything in the request except token, since, day
+ *             and opId, in any order.
  *   Sync      What each role receives is decided in buildSync. A tech receives no clients, sales,
  *             days or board; settings with only businessName, standards and standardsUpdatedAt;
  *             and only their own jobs from 30 days ago onward, plus older ones still to be done.
+ *   Clock     Every sync, the short "nothing changed" one too, carries the system's clock: nowMs
+ *             (ms since epoch) and nowHM ('HH:MM' in the business time zone). A phone works out
+ *             which of today's times have passed from these, not from its own clock.
  *   Notices   Written the way the screens write: "Wed, Nov 18 at 8:00 AM" and "$1,250.00". One
  *             about a client carries that client's id as clientId.
  */
@@ -65,6 +77,7 @@ var RidgelineCore = (function () {
     maxCents: 100000000, sessionDays: 90, loginTries: 5, lockSeconds: 900,
     longTries: 20, longSeconds: 21600,   /* 20 wrong PINs inside 6 hours (the longest the cache remembers) pause that person */
     retrySeconds: 21600,                 /* how long a saved action is remembered by its opId */
+    retryChars: 20000,                   /* the most that memory may take as text; the Google cache drops anything over 30,000 */
     techJobDays: 30,                     /* how far back a tech's phone is sent the jobs they have finished */
     docChars: 45000,                     /* the most one record may take as JSON; a cell of the sheet holds 50,000 */
     daysPerCall: 62, slotsPerDay: 24, services: 20, standardSections: 12, standardItems: 20, standardLine: 240
@@ -391,6 +404,41 @@ var RidgelineCore = (function () {
 
   function normName(s) { return str(s).replace(/\s+/g, ' ').trim().toLowerCase(); }
 
+  /* ---------- telling a retry from a change ---------- */
+
+  var ALREADY_SAVED = 'Your first try was saved. Check it, then make the change again if you still need to.';
+  var NOT_FIELDS = ['token', 'since', 'day', 'opId'];   /* about the phone and the try, not about what is being saved */
+
+  /* A value as one line of text that comes out the same whatever order its keys were listed in.
+     Written out by hand, not with JSON.stringify, so that nothing a phone sends can make it
+     throw. Nothing the app sends is nested anywhere near 20 deep, and no action reads that far
+     down, so whatever is deeper cannot change what is saved and all counts as the same. */
+  function stable(v, depth, skip) {
+    var t = typeof v;
+    if (v === null || v === undefined || t === 'function') return 'null';
+    if (t === 'string') return JSON.stringify(v);
+    if (t === 'number') return isFinite(v) ? String(v) : 'null';
+    if (t === 'boolean') return v ? 'true' : 'false';
+    if (t !== 'object') return JSON.stringify(String(v));
+    if (depth > 20) return '"..."';
+    var out = [], i;
+    if (Array.isArray(v)) {
+      for (i = 0; i < v.length; i++) out.push(stable(v[i], depth + 1));
+      return '[' + out.join(',') + ']';
+    }
+    var keys = Object.keys(v).sort();
+    for (i = 0; i < keys.length; i++) {
+      var x = v[keys[i]];
+      if (x === undefined || typeof x === 'function' || (skip && skip.indexOf(keys[i]) >= 0)) continue;
+      out.push(JSON.stringify(keys[i]) + ':' + stable(x, depth + 1));
+    }
+    return '{' + out.join(',') + '}';
+  }
+
+  /* A short fingerprint of what a request asks for: its action and every field, but not its
+     token, since, day or opId. Two tries with the same fingerprint are the same thing again. */
+  function fieldsHash(req) { return sha256(stable(req, 0, NOT_FIELDS)).slice(0, 16); }
+
   /* ---------- the core ---------- */
 
   function create(store, env) {
@@ -581,8 +629,10 @@ var RidgelineCore = (function () {
     /* ---------- what each person is allowed to see ---------- */
 
     function buildSync(me, req) {
-      var rev = store.getRev(), day = today();
-      if (req && req.since === rev && req.day === day) return { rev: rev, today: day, same: true };
+      /* The system's clock goes out with every answer, so a phone whose own clock is wrong can
+         still tell which of today's times have passed. */
+      var rev = store.getRev(), nowMs = env.now(), day = env.dayKey(nowMs), nowHM = env.hm(nowMs);
+      if (req && req.since === rev && req.day === day) return { rev: rev, today: day, same: true, nowMs: nowMs, nowHM: nowHM };
       var owner = me.role === 'owner', rep = me.role === 'rep';
       var settings = getSettings();
       var team = all('team'), clients = all('clients'), sales = all('sales'), jobs = all('jobs');
@@ -606,7 +656,7 @@ var RidgelineCore = (function () {
 
       var meDoc = find('team', me.id) || {};
       var out = {
-        rev: rev, today: day, same: false,
+        rev: rev, today: day, same: false, nowMs: nowMs, nowHM: nowHM,
         me: { id: me.id, name: me.name, role: me.role, noticesSeenAt: meDoc.noticesSeenAt || 0, standardsAckAt: meDoc.standardsAckAt || 0 },
         team: team.map(function (m) {
           var v = { id: m.id, name: m.name, role: m.role, active: !!m.active };
@@ -1002,9 +1052,12 @@ var RidgelineCore = (function () {
        * Fixes a sale that was entered wrong: the price, the name of the service, or who made it.
        * Commission, totals and the leaderboard follow by themselves, because they are worked out
        * from the sale every time. patch may hold any of: priceCents, service, repId.
-       *   - A new seller has to be a sales rep or an owner who is on the team. The sale then takes
-       *     the rates that seller would get today: none for an owner, the ones in Settings for a
-       *     rep. A patch that names the seller the sale already has changes nothing.
+       *   - A new seller has to be a sales rep or an owner who is on the team. A sale moved from
+       *     one rep to another keeps the rates it was saved with: it was only filed under the
+       *     wrong name. Moved to an owner it earns nothing (0 and 0). Moved from an owner to a
+       *     rep it has no rates of its own to keep, so it takes the ones in Settings today.
+       *     "From an owner" goes by what the seller it is taken from is now. A patch that names
+       *     the seller the sale already has changes nothing.
        *   - If this is the client's newest sale, the client's service and price follow the fix.
        *   - One-time or monthly cannot be changed here. For that, remove the sale and enter it again.
        */
@@ -1025,8 +1078,12 @@ var RidgelineCore = (function () {
           if (follows && client.service !== sale.service) { client.service = sale.service; clientChanged = true; }
         }
         if (p.repId !== undefined && p.repId !== sale.repId) {
-          var seller = needSeller(p.repId), rates = ratesFor(seller, getSettings());
-          sale.repId = seller.id; sale.firstPct = rates.firstPct; sale.monthlyPct = rates.monthlyPct;
+          var seller = needSeller(p.repId), was = find('team', sale.repId);
+          if (seller.role === 'owner' || (was && was.role === 'owner')) {
+            var rates = ratesFor(seller, getSettings());
+            sale.firstPct = rates.firstPct; sale.monthlyPct = rates.monthlyPct;
+          }
+          sale.repId = seller.id;
         }
         fits(sale, 'There is no room to save more on this sale. Shorten the service name, then try again.');
         if (clientChanged) { fits(client, CLIENT_FULL); put('clients', client); }
@@ -1269,14 +1326,40 @@ var RidgelineCore = (function () {
         var a = Object.prototype.hasOwnProperty.call(ACTIONS, req.action) ? ACTIONS[req.action] : null;
         if (!a) return fail('invalid', 'Bad request.');
         if (a.roles.indexOf(me.role) < 0) return fail('forbidden', 'You do not have access to that.', me, req);
+        /*
+         * A retry is the same thing again, or nothing. What is remembered under an opId is the
+         * answer and a fingerprint of what was sent (see fieldsHash):
+         *   never seen                  the action runs;
+         *   seen, the same fields       answered from memory, nothing is saved again;
+         *   seen, different fields      not run. The first try was saved and its answer was lost
+         *                               on the way back, so the phone is told that, with the sync
+         *                               to show what was saved.
+         * A try that was refused never gets as far as being remembered, so the same opId can
+         * come again with the fields put right.
+         */
         var opKey = typeof req.opId === 'string' && req.opId.length >= 8 && req.opId.length <= 80 ? 'op:' + me.id + ':' + req.opId : null;
+        var sent = opKey ? fieldsHash(req) : '';
         if (opKey) {
           var prev = store.cacheGet(opKey);
-          if (prev) return { ok: true, result: JSON.parse(prev), sync: buildSync(me, req), replay: true };
+          if (prev) {
+            var kept = null;
+            try { kept = JSON.parse(prev); } catch (e) { kept = null; }
+            /* Something is remembered, so this opId was saved once. If it cannot be read, or does
+               not say what was sent, the safe answer is the one that saves nothing. */
+            if (!kept || typeof kept !== 'object' || kept.h !== sent) return fail('already_saved', ALREADY_SAVED, me, req);
+            return { ok: true, result: kept.r && typeof kept.r === 'object' ? kept.r : {}, sync: buildSync(me, req), replay: true };
+          }
         }
         var result = a.run(me, req);
         store.setRev(store.getRev() + 1);
-        if (opKey) store.cachePut(opKey, JSON.stringify(result), LIMITS.retrySeconds);
+        if (opKey) {
+          /* A host's cache drops what is too big for it, and a dropped memory would let a retry
+             save twice. So an answer too long to keep is remembered without its details: a
+             changed retry is still refused, and the same try again is told it was saved. */
+          var memo = JSON.stringify({ h: sent, r: result });
+          if (memo.length > LIMITS.retryChars) memo = JSON.stringify({ h: sent, big: true });
+          store.cachePut(opKey, memo, LIMITS.retrySeconds);
+        }
         return { ok: true, result: result, sync: req.action === 'logout' ? null : buildSync(me, req) };
       } catch (e) {
         if (e && e.appCode) return fail(e.appCode, e.message, me, req);
@@ -1477,19 +1560,28 @@ function answerPost_(e) {
 }
 
 /*
- * The only thing this may ever answer is "nothing changed" to someone who is signed in. Any
- * other outcome (signed out, a new day, an error) is thrown away and the request is run again
- * properly, under the lock.
+ * The only thing this may ever answer is "nothing changed" to someone whose sign-in is already
+ * in the cache. Any other outcome (signed out, a sign-in the cache has forgotten, a new day, an
+ * error) is thrown away and the request is run again properly, under the lock.
  *
- * This is the one place that takes the revision number from the cache (newStore_(true)), so
- * that a phone asking every 20 seconds does not use up Google's daily allowance of property
- * reads. See quickRev in the store for why that copy can be trusted.
+ * It runs without the lock, so it only looks. Through its store (newStore_(true)) the core can
+ * read the cache and the revision number and nothing else: the sheet is never opened, and
+ * nothing the core asks to save or to cache is saved or cached. That matters most for sign-ins.
+ * If this check could read a sign-in from the sheet and put it in the cache, it could put back
+ * one that a removal, a PIN reset or a sign-out had cleared a moment earlier, and that phone
+ * would stay signed in for up to six hours. A sign-in only ever goes into the cache under the
+ * lock, where nothing else can be clearing it at the same time.
+ *
+ * This is also the one place that takes the revision number from the cache, so that a phone
+ * asking every 20 seconds does not use up Google's daily allowance of property reads. See
+ * quickRev in the store for why that copy can be trusted. (A looked-up copy of that number is
+ * the one thing this check may leave in the cache.)
  */
 function answerIfNothingChanged_(req) {
   var store = newStore_(true), env = newEnv_();
   if (req.since !== store.getRev() || req.day !== env.dayKey(env.now())) return null;
   var res = RidgelineCore.create(store, env).handle(req);
-  if (res && res.ok === true && res.sync && res.sync.same === true && !store.hasChanges()) return res;
+  if (res && res.ok === true && res.sync && res.sync.same === true && !store.needsLock()) return res;
   return null;
 }
 
@@ -1557,8 +1649,9 @@ function release_(lock) {
  * A tab is read at most once per request and kept in memory. put and del change that memory
  * and mark the tab; flush() then rewrites each marked tab in one go.
  *
- * quick: true only for the "nothing changed?" check, which runs without the lock and may take
- * the revision number from the cache. Every other request holds the lock and reads the property.
+ * quick: true only for the "nothing changed?" check, which runs without the lock. That store may
+ * take the revision number from the cache, and it is look-only: see lookOnly at the end. Every
+ * other request holds the lock, reads the property and gets the full store.
  */
 function newStore_(quick) {
   var props = PropertiesService.getScriptProperties();
@@ -1742,11 +1835,6 @@ function newStore_(quick) {
     }
   }
 
-  function hasChanges() {
-    for (var name in tabs) if (Object.prototype.hasOwnProperty.call(tabs, name) && tabs[name].dirty) return true;
-    return rev !== null && rev !== readRev();
-  }
-
   function forgetCache() {
     if (!cacheKeys.length) return;
     var keys = cacheKeys;
@@ -1788,22 +1876,51 @@ function newStore_(quick) {
     }
   }
 
+  function cacheGet(key) {
+    key = String(key);
+    if (key.length > CACHE_MAX_KEY) return null;
+    var value = cache.get(key);
+    return value === null || value === undefined ? null : String(value);
+  }
+
+  /*
+   * The store for the "nothing changed?" check, which holds no lock. The core can read the cache
+   * and the revision number through it. Everything else is only noted: asking for a tab gives an
+   * empty list without opening the sheet, and whatever the core hands it to save, to cache or to
+   * clear from the cache goes nowhere. needsLock() then says the request wanted more than a
+   * look, and it is run again under the lock.
+   */
+  function lookOnly() {
+    var wanted = false;
+    function note() { wanted = true; }
+    return {
+      list: function () { wanted = true; return []; },
+      put: note,
+      del: note,
+      getRev: readRev,
+      setRev: note,
+      cacheGet: cacheGet,
+      cachePut: note,
+      cacheDel: note,
+      needsLock: function () { return wanted; }
+    };
+  }
+
+  if (quick) return lookOnly();
+
   return {
     list: list,
     put: put,
     del: del,
     getRev: getRev,
     setRev: setRev,
-    cacheGet: function (key) {
-      key = String(key);
-      if (key.length > CACHE_MAX_KEY) return null;
-      var value = cache.get(key);
-      return value === null || value === undefined ? null : String(value);
-    },
+    cacheGet: cacheGet,
     cachePut: function (key, value, ttlSeconds) {
       key = String(key);
       value = String(value);
-      /* The cache only ever saves time. Something too big for it is simply not kept. */
+      /* Something too big for the cache is simply not kept. The core knows that: what it must
+         not lose (the memory of a saved action) it keeps under RidgelineCore.LIMITS.retryChars,
+         which is well inside the limit here. */
       if (key.length > CACHE_MAX_KEY || value.length > CACHE_MAX_VALUE) return;
       var seconds = Math.floor(Number(ttlSeconds));
       if (!(seconds >= 1)) seconds = 1;
@@ -1817,7 +1934,6 @@ function newStore_(quick) {
       cache.remove(key);
     },
     flush: flush,
-    hasChanges: hasChanges,
     forgetCache: forgetCache,
     keepOnlyProblems: keepOnlyProblems,
     reportUnreadableRows: reportUnreadableRows
