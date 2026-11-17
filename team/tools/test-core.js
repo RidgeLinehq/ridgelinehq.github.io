@@ -307,6 +307,25 @@ test('paused and cancelled months pay nothing, and resuming pays again', () => {
   eq(days, ['2026-02-10', '2026-05-10', '2026-06-10', '2026-10-10', '2026-11-10', '2026-12-10']);
 });
 
+test('a sale with an endDay pays nothing dated after that day, whatever the client\'s status says', () => {
+  const days = (endDay, log, today) => C.calc.commissionEvents(Object.assign(sale('2026-01-10', 10000, 'monthly'), endDay ? { endDay: endDay } : {}), clientWith(log || []), today || '2026-12-31')
+    .filter((e) => e.kind === 'monthly').map((e) => e.day);
+  eq(days('2026-04-09'), ['2026-02-10', '2026-03-10'], 'ended the day before a pay day');
+  eq(days('2026-04-10'), ['2026-02-10', '2026-03-10', '2026-04-10'], 'a pay day that is the end day itself still pays');
+  eq(days('2026-04-11'), ['2026-02-10', '2026-03-10', '2026-04-10']);
+  eq(days('2026-01-10'), [], 'ended the day it was sold: the first 30% and nothing more');
+  eq(days('2026-02-09'), []);
+  eq(days('2030-01-01', null, '2026-03-10'), ['2026-02-10', '2026-03-10'], 'an end day still to come changes nothing yet');
+  eq(days(null).length, 11, 'no end day: every month so far');
+  /* Cancelled in April, Active again from August (they bought something else): the months after August stay unpaid. */
+  const log = [{ day: '2026-01-10', status: 'New' }, { day: '2026-04-20', status: 'Cancelled' }, { day: '2026-08-01', status: 'Active' }];
+  eq(days('2026-04-20', log), ['2026-02-10', '2026-03-10', '2026-04-10']);
+  eq(days(null, log), ['2026-02-10', '2026-03-10', '2026-04-10', '2026-08-10', '2026-09-10', '2026-10-10', '2026-11-10', '2026-12-10'], 'without the end day the old sale would start paying again');
+  /* A pause before the end still only pauses. */
+  eq(days('2026-07-01', [{ day: '2026-02-15', status: 'Paused' }, { day: '2026-04-15', status: 'Active' }]), ['2026-02-10', '2026-05-10', '2026-06-10']);
+  eq(C.calc.commissionEvents(Object.assign(sale('2026-01-10', 10000, 'once'), { endDay: '2026-01-01' }), clientWith([]), '2026-12-31'), [{ day: '2026-01-10', cents: 3000, kind: 'first' }], 'the first payment never depends on it');
+});
+
 test('the rates saved on the sale are used, not today\'s', () => {
   const ev = C.calc.commissionEvents(sale('2026-01-10', 10000, 'monthly', 50, 20), clientWith([]), '2026-02-10');
   eq(ev.map((e) => e.cents), [5000, 2000]);
@@ -483,6 +502,122 @@ test('resetting a PIN also lifts a lock', () => {
   eq(w.tryLogin('mason', '2222').error.code, 'locked');
   w.must('owner', 'resetPin', { id: w.ids.mason, pin: '9090' });
   ok(w.tryLogin('mason', '9090').ok);
+});
+
+const PAUSED_NOTICE = 'Someone tried the wrong PIN for Mason Reed 20 times. Their sign-in is paused for a few hours. Reset their PIN if that was not them.';
+/* Four wrong PINs, then a wait long enough for the 15 minute lock to forget them: the slow way to guess. */
+function slowGuesses(w, batches, guess) {
+  for (let b = 0; b < batches; b++) {
+    if (b) w.wait(16 * MIN);
+    for (let i = 0; i < 4; i++) guess(b * 4 + i + 1);
+  }
+}
+
+test('four wrong PINs every 15 minutes: the 20th inside 6 hours pauses that person and the owner is told once', () => {
+  const w = world(), start = w.t, rev = w.rev();
+  slowGuesses(w, 5, (n) => eq(w.tryLogin('mason', '0000').error.code, 'auth', 'wrong try ' + n + ' is just a wrong PIN'));
+  const paused = w.tryLogin('mason', '2222');
+  eq(paused.error.code, 'locked', 'the right PIN after 20 wrong ones');
+  has(paused.error.message, 'paused for a few hours');
+  eq(w.db().notices.map((n) => [n.type, n.text]), [['signin', PAUSED_NOTICE]]);
+  ok(w.rev() > rev, 'the owner\'s phone is told there is something new');
+  eq(w.must('owner', 'sync', { since: rev, day: w.today() }).sync.notices.length, 1);
+  eq(w.emails.length, 0, 'in the app, not by email');
+  ok(w.call('mason', 'sync').ok, 'a phone that is already signed in keeps working');
+  ok(w.tryLogin('jake miller', '4444').ok, 'nobody else is paused');
+  /* It outlasts the 15 minute lock, and more tries neither extend it nor tell the owner again. */
+  w.wait(20 * MIN);
+  for (let i = 0; i < 7; i++) eq(w.tryLogin('mason', i % 2 ? '2222' : '0000').error.code, 'locked');
+  w.t = start + 6 * HOUR - MIN;
+  eq(w.tryLogin('mason', '2222').error.code, 'locked', 'one minute before the 6 hours are up');
+  eq(w.db().notices.length, 1, 'the owner is told once');
+  w.t = start + 6 * HOUR + 1000;
+  ok(w.tryLogin('mason', '2222').ok, 'free again once the 6 hours from the first wrong try are up');
+  /* A new window starts from nothing. */
+  slowGuesses(w, 4, () => w.tryLogin('mason', '0000'));
+  w.wait(16 * MIN);
+  ok(w.tryLogin('mason', '2222').ok, '16 wrong tries in the new window do not pause anyone');
+  eq(w.db().notices.length, 1);
+});
+
+test('nineteen wrong PINs in 6 hours pause nobody, and the count does not carry into the next 6 hours', () => {
+  const w = world(), start = w.t;
+  slowGuesses(w, 5, (n) => { if (n < 20) w.tryLogin('mason', '0000'); });
+  w.wait(16 * MIN);
+  ok(w.tryLogin('mason', '2222').ok, 'a right PIN after 19 wrong ones');
+  w.t = start + 6 * HOUR + 1000;
+  eq(w.tryLogin('mason', '0000').error.code, 'auth');
+  w.wait(16 * MIN);
+  ok(w.tryLogin('mason', '2222').ok, 'the 19 from before are forgotten, so this was the first of a new count');
+  eq(w.db().notices, []);
+});
+
+test('the owner resetting the PIN lifts the 6 hour pause', () => {
+  const w = world();
+  slowGuesses(w, 5, () => w.tryLogin('mason', '0000'));
+  w.wait(16 * MIN);
+  eq(w.tryLogin('mason', '2222').error.code, 'locked');
+  w.must('owner', 'resetPin', { id: w.ids.mason, pin: '9090' });
+  ok(w.tryLogin('mason', '9090').ok);
+  slowGuesses(w, 4, () => w.tryLogin('mason', '0000'));
+  w.wait(16 * MIN);
+  ok(w.tryLogin('mason', '9090').ok, 'and the count started again from nothing');
+});
+
+test('a wrong current PIN in changePin counts like a wrong sign-in: five quick ones lock for 15 minutes', () => {
+  const w = world();
+  for (let i = 1; i <= 5; i++) eq(w.refuse('mason', 'changePin', { oldPin: '000' + i, newPin: '5151' }, 'invalid').error.message, 'Your current PIN is not right.', 'guess ' + i);
+  const locked = w.refuse('mason', 'changePin', { oldPin: '2222', newPin: '5151' }, 'locked');
+  has(locked.error.message, 'Wait 15 minutes');
+  ok(locked.sync && locked.sync.me.id === w.ids.mason, 'the phone stays signed in and is told where things stand');
+  eq(w.tryLogin('mason', '2222').error.code, 'locked', 'it is the same count as sign-in, so signing in is locked too');
+  ok(w.call('mason', 'sync').ok && w.call('jake', 'changePin', { oldPin: '4444', newPin: '4545' }).ok, 'nobody is signed out and nobody else is locked');
+  w.wait(14 * MIN);
+  w.refuse('mason', 'changePin', { oldPin: '2222', newPin: '5151' }, 'locked');
+  w.wait(MIN + 1000);
+  w.must('mason', 'changePin', { oldPin: '2222', newPin: '5151' });
+  ok(w.tryLogin('mason', '5151').ok);
+  /* Wrong sign-ins and wrong current PINs add up, and a right current PIN clears the short count. */
+  for (let i = 0; i < 3; i++) w.tryLogin('jake miller', '0000');
+  for (let i = 0; i < 2; i++) w.refuse('jake', 'changePin', { oldPin: '0000', newPin: '6161' }, 'invalid');
+  w.refuse('jake', 'changePin', { oldPin: '4545', newPin: '6161' }, 'locked');
+  for (let i = 0; i < 4; i++) w.refuse('cole', 'changePin', { oldPin: '0000', newPin: '6161' }, 'invalid');
+  w.must('cole', 'changePin', { oldPin: '3333', newPin: '6161' });
+  for (let i = 0; i < 4; i++) w.refuse('cole', 'changePin', { oldPin: '0000', newPin: '7171' }, 'invalid');
+  w.must('cole', 'changePin', { oldPin: '6161', newPin: '7171' });
+});
+
+test('a borrowed phone cannot guess slowly either: 20 wrong current PINs in 6 hours pause changePin and tell the owner', () => {
+  const w = world();
+  slowGuesses(w, 5, (n) => eq(w.call('mason', 'changePin', { oldPin: String(1000 + n), newPin: '5151' }).error.code, 'invalid'));
+  w.wait(16 * MIN);
+  const r = w.refuse('mason', 'changePin', { oldPin: '2222', newPin: '5151' }, 'locked');
+  has(r.error.message, 'paused for a few hours');
+  eq(w.full('owner').notices.map((n) => n.text), [PAUSED_NOTICE]);
+  ok(w.tryLogin('mason', '5151').error.code === 'locked' && w.tryLogin('mason', '2222').error.code === 'locked', 'and the PIN was never changed');
+  w.must('owner', 'resetPin', { id: w.ids.mason, pin: '8080' });
+  w.login('mason', 'Mason Reed', '8080');
+  w.must('mason', 'changePin', { oldPin: '8080', newPin: '5151' });
+});
+
+test('sign-ins older than 90 days are deleted from the data the next time anyone signs in', () => {
+  const w = world();
+  eq(w.db().sessions.length, 5);
+  w.wait(50 * DAY);
+  w.login('tess', 'Tess Hart', '5555');            /* a second, newer sign-in for Tess */
+  eq(w.db().sessions.length, 6, 'nothing has expired yet, so nothing is deleted');
+  w.wait(41 * DAY);                                /* day 91: the first five are past 90 days */
+  eq(w.call('mason', 'sync').error.code, 'auth');
+  eq(w.db().sessions.length, 6, 'refusing an old sign-in does not delete it');
+  eq(w.tryLogin('jake miller', '0000').error.code, 'auth');
+  eq(w.db().sessions.length, 6, 'a failed sign-in deletes nothing');
+  w.login('jake', 'Jake Miller', '4444');
+  const left = w.db().sessions;
+  eq(left.map((s) => s.memberId).sort(), [w.ids.jake, w.ids.tess].sort(), 'only Tess\'s newer sign-in and the one just made are left');
+  ok(left.every((s) => w.t - s.createdAt <= 90 * DAY));
+  ok(w.call('tess', 'sync').ok && w.call('jake', 'sync').ok, 'the sign-ins that are still good keep working');
+  eq(w.call('mason', 'sync').error.code, 'auth');
+  eq(w.call('owner', 'sync').error.code, 'auth');
 });
 
 test('resetPin refuses bad PINs, yourself and people who are gone', () => {
@@ -718,11 +853,67 @@ test('a rep can fix contact details of their own client but not price, status, p
   eq(w.db().clients.length, 2);
 });
 
-test('nobody, not even the owner, can rewrite a client\'s id, rep, notes or history through updateClient', () => {
+test('nobody, not even the owner, can rewrite a client\'s id, notes or history through updateClient', () => {
   const w = seeded();
   const before = byId(w.db().clients, w.ids.clientA);
-  w.must('owner', 'updateClient', { clientId: w.ids.clientA, patch: { id: 'c_other', repId: w.ids.jake, notes: [], statusLog: [], createdAt: 1 } });
+  w.must('owner', 'updateClient', { clientId: w.ids.clientA, patch: { id: 'c_other', notes: [], statusLog: [], createdAt: 1 } });
   eq(byId(w.db().clients, w.ids.clientA), before);
+});
+
+test('the owner can hand a client to another rep: the new rep sees and books for them, past sales stay where they were', () => {
+  const w = seeded();
+  const saleBefore = byId(w.db().sales, w.ids.saleA), boardBefore = JSON.stringify(w.full('owner').board);
+  const r = w.must('owner', 'updateClient', { clientId: w.ids.clientA, patch: { repId: w.ids.jake } });
+  eq(r.result, { clientId: w.ids.clientA });
+  eq(byId(w.db().clients, w.ids.clientA).repId, w.ids.jake);
+  eq(byId(w.db().sales, w.ids.saleA), saleBefore, 'the sale already made is untouched, rep and all');
+  eq(JSON.stringify(w.full('owner').board), boardBefore, 'and the leaderboard does not move');
+
+  const jake = w.full('jake'), mason = w.full('mason');
+  eq(jake.clients.map((c) => c.id).sort(), [w.ids.clientA, w.ids.clientB].sort(), 'the new rep sees the client');
+  ok(jake.jobs.some((j) => j.id === w.ids.jobA), 'and their visits');
+  eq(jake.sales.map((s) => s.id), [w.ids.saleB], 'but not the sale someone else made');
+  eq([mason.clients, mason.jobs], [[], []], 'the old rep no longer sees the client or the visits');
+  eq(mason.sales.map((s) => [s.id, s.repId, s.clientName, s.events.length]), [[w.ids.saleA, w.ids.mason, 'Alpha Marker House', 1]], 'the old rep keeps the sale and its commission');
+  checkView(jake); checkView(mason);
+
+  w.must('jake', 'addNote', { kind: 'client', id: w.ids.clientA, text: 'Mine to look after now.' });
+  w.must('jake', 'bookJob', { clientId: w.ids.clientA, date: '2026-11-19', time: '08:00' });
+  w.must('jake', 'moveJob', { jobId: w.ids.jobA, date: '2026-11-19', time: '09:30' });
+  w.must('jake', 'updateClient', { clientId: w.ids.clientA, patch: { phone: '615-555-0177' } });
+  const sold = w.must('jake', 'createSale', { clientId: w.ids.clientA, service: 'House wash', priceCents: 20000, billing: 'monthly' }).result;
+  eq(byId(w.db().sales, sold.saleId).repId, w.ids.jake, 'a new sale is the new rep\'s');
+  /* The new rep's monthly plan ends the old rep's. The old rep is told the day and that another plan took its place, but not which sale. */
+  const mine = w.full('mason').sales[0];
+  eq([mine.id, mine.endDay, mine.endedBy], [w.ids.saleA, '2026-11-17', 'other']);
+  lacks(JSON.stringify(w.full('mason')), sold.saleId, 'the old rep is sent the id of a sale that is not theirs');
+  eq(byId(w.full('owner').sales, w.ids.saleA).endedBy, sold.saleId, 'the owner can see which sale took its place');
+  eq(byId(w.db().sales, w.ids.saleA).endedBy, sold.saleId, 'and the stored sale keeps the real id');
+  w.refuse('mason', 'addNote', { kind: 'client', id: w.ids.clientA, text: 'still mine?' }, 'forbidden');
+  w.refuse('mason', 'bookJob', { clientId: w.ids.clientA, date: '2026-11-19', time: '12:00' }, 'forbidden');
+  w.refuse('mason', 'moveJob', { jobId: w.ids.jobA, date: '2026-11-19', time: '12:00' }, 'forbidden');
+  w.refuse('mason', 'createSale', { clientId: w.ids.clientA, service: 'House wash', priceCents: 100 }, 'forbidden');
+
+  /* Only to an active rep or owner, and only by the owner. */
+  [w.ids.cole, 'm_nobody', '', null, 5, {}, [w.ids.mason], 'constructor'].forEach((id) => {
+    const res = w.refuse('owner', 'updateClient', { clientId: w.ids.clientA, patch: { phone: 'should not save', repId: id } }, 'invalid');
+    eq(res.error.message, 'Pick a sales rep who is on the team.');
+  });
+  w.must('jake', 'updateClient', { clientId: w.ids.clientA, patch: { repId: w.ids.mason } });
+  eq(byId(w.db().clients, w.ids.clientA).repId, w.ids.jake, 'a rep cannot hand a client on');
+  w.must('owner', 'updateClient', { clientId: w.ids.clientA, patch: { repId: w.ids.owner } });
+  eq(byId(w.db().clients, w.ids.clientA).repId, w.ids.owner, 'the owner can take a client on');
+  eq(w.full('jake').clients.map((c) => c.id), [w.ids.clientB]);
+
+  /* The case it is for: a rep leaves, and their clients go to someone who is still here. */
+  w.must('owner', 'removeMember', { id: w.ids.jake });
+  w.refuse('owner', 'updateClient', { clientId: w.ids.clientB, patch: { repId: w.ids.jake } }, 'invalid');
+  w.must('owner', 'updateClient', { clientId: w.ids.clientB, patch: { repId: w.ids.mason } });
+  const after = w.full('mason');
+  eq(after.clients.map((c) => c.id), [w.ids.clientB]);
+  ok(after.jobs.some((j) => j.id === w.ids.jobB) && after.sales.every((s) => s.repId === w.ids.mason));
+  eq(byId(w.db().sales, w.ids.saleB).repId, w.ids.jake, 'the rep who left keeps the credit for what they sold');
+  checkData(w);
 });
 
 /* ================================================================== */
@@ -1167,6 +1358,17 @@ test('a retry is still a replay 59 minutes later', () => {
   ok(w.must('mason', 'createSale', req).replay === true); eq(w.db().sales.length, 1);
 });
 
+test('a retry is remembered for 6 hours: still a replay after 5 hours 59 minutes', () => {
+  const w = world();
+  const req = { opId: 'op-sale-0003', client: { name: 'Very Slow Retry' }, service: 'House wash', priceCents: 12000 };
+  const first = w.must('mason', 'createSale', req);
+  w.wait(5 * HOUR + 59 * MIN);
+  const again = w.must('mason', 'createSale', req);
+  ok(again.replay === true, 'a phone that was out of signal all afternoon must not save the sale twice');
+  eq([again.result, w.db().sales.length, w.db().clients.length], [first.result, 1, 1]);
+  eq(C.LIMITS.retrySeconds, 21600, 'the longest the cache can remember');
+});
+
 test('a different person using the same opId is not a replay', () => {
   const w = world();
   const req = (name) => ({ opId: 'op-shared-0001', client: { name: name }, service: 'House wash', priceCents: 12000 });
@@ -1243,19 +1445,104 @@ test('a one-time sale pays once, even years later', () => {
   eq(eventsOf(w, 'mason', s.saleId), [{ day: '2027-01-31', cents: 6000, kind: 'first' }]);
 });
 
-test('paused and cancelled months pay nothing and resuming pays again', () => {
+test('paused months pay nothing and resuming pays again; a cancel ends that sale\'s monthly pay for good', () => {
   const w = world({ day: '2027-01-10' });
   const s = plain(w, 'mason', 'Stop And Start', 10000, 'monthly');
   const set = (day, status) => { w.at(day, '10:00'); relog(w, ['owner']); w.must('owner', 'updateClient', { clientId: s.clientId, patch: { status: status } }); };
   set('2027-02-20', 'Paused');      /* Feb 10 was paid; Mar 10 falls in the pause */
+  eq(byId(w.db().sales, s.saleId).endDay, undefined, 'a pause ends nothing');
   set('2027-03-25', 'Active');      /* Apr 10 is paid */
-  set('2027-04-15', 'Cancelled');   /* May 10 is not */
-  set('2027-06-10', 'Active');      /* resumed on the due day itself: paid */
-  w.at('2027-07-09', '10:00'); relog(w);
+  set('2027-04-15', 'Cancelled');   /* May 10 is not, and nothing after it either */
+  eq(byId(w.db().sales, s.saleId).endDay, '2027-04-15', 'the sale remembers the day its monthly pay ended');
+  set('2027-06-10', 'Active');      /* set back to Active weeks later: the old sale does not start again */
+  w.at('2027-09-09', '10:00'); relog(w);
   eq(eventsOf(w, 'mason', s.saleId), [{ day: '2027-01-10', cents: 3000, kind: 'first' }, { day: '2027-02-10', cents: 1000, kind: 'monthly' },
-    { day: '2027-04-10', cents: 1000, kind: 'monthly' }, { day: '2027-06-10', cents: 1000, kind: 'monthly' }]);
+    { day: '2027-04-10', cents: 1000, kind: 'monthly' }]);
+  eq(byId(w.full('mason').sales, s.saleId).endDay, '2027-04-15', 'and the rep is sent that day with the sale');
   eq(byId(w.db().clients, s.clientId).statusLog.map((x) => x.day + ' ' + x.status),
     ['2027-01-10 New', '2027-02-20 Paused', '2027-03-25 Active', '2027-04-15 Cancelled', '2027-06-10 Active']);
+});
+
+test('a cancelled client who buys again later does not start the old monthly sale paying again', () => {
+  const w = world({ day: '2027-01-10' });
+  const old = plain(w, 'mason', 'Left And Came Back', 10000, 'monthly');
+  w.at('2027-03-15', '10:00'); relog(w, ['owner']);
+  w.must('owner', 'updateClient', { clientId: old.clientId, patch: { status: 'Cancelled' } });
+  w.at('2027-05-20', '10:00'); relog(w);
+  const again = w.must('mason', 'createSale', { clientId: old.clientId, service: 'House wash', priceCents: 20000, billing: 'once' }).result;
+  eq(byId(w.db().clients, old.clientId).status, 'Active', 'buying again makes them a client again');
+  w.at('2027-08-01', '10:00'); relog(w);
+  eq(eventsOf(w, 'mason', old.saleId).map((e) => e.day + ' ' + e.cents), ['2027-01-10 3000', '2027-02-10 1000', '2027-03-10 1000'], 'nothing after the cancel, even though the client is Active again');
+  eq(eventsOf(w, 'mason', again.saleId), [{ day: '2027-05-20', cents: 6000, kind: 'first' }]);
+  eq([byId(w.db().sales, old.saleId).endDay, byId(w.db().sales, again.saleId).endDay], ['2027-03-15', undefined]);
+  /* Cancelling again, or a cancel of someone who was never monthly, moves no end day. */
+  w.must('owner', 'updateClient', { clientId: old.clientId, patch: { status: 'Cancelled' } });
+  eq([byId(w.db().sales, old.saleId).endDay, byId(w.db().sales, again.saleId).endDay], ['2027-03-15', undefined]);
+});
+
+test('a second monthly plan ends the first: only one of them pays each month', () => {
+  const w = world({ day: '2027-01-10' });
+  const first = plain(w, 'mason', 'Upgraded', 10000, 'monthly'), other = plain(w, 'mason', 'Someone Else', 8000, 'monthly');
+  w.at('2027-02-15', '10:00'); relog(w);
+  const extra = w.must('mason', 'createSale', { clientId: first.clientId, service: 'Pressure wash', priceCents: 5000, billing: 'once' }).result;
+  eq(byId(w.db().sales, first.saleId).endDay, undefined, 'a one-time job on top ends nothing');
+  w.at('2027-03-20', '10:00'); relog(w);
+  const second = w.must('mason', 'createSale', { clientId: first.clientId, service: 'Window cleaning', priceCents: 16000, billing: 'monthly' }).result;
+  const db = w.db();
+  eq([byId(db.sales, first.saleId).endDay, byId(db.sales, first.saleId).endedBy], ['2027-03-20', second.saleId]);
+  eq([byId(db.sales, second.saleId).endDay, byId(db.sales, extra.saleId).endDay, byId(db.sales, other.saleId).endDay], [undefined, undefined, undefined], 'nothing else is ended');
+  w.at('2027-06-15', '10:00'); relog(w);
+  eq(eventsOf(w, 'mason', first.saleId).map((e) => e.day), ['2027-01-10', '2027-02-10', '2027-03-10'], 'the old plan stops the day the new one is sold');
+  eq([byId(w.full('mason').sales, first.saleId).endDay, byId(w.full('mason').sales, first.saleId).endedBy], ['2027-03-20', second.saleId], 'the rep is sent both: the day, and their own sale that took its place');
+  eq(eventsOf(w, 'mason', second.saleId).map((e) => e.day + ' ' + e.cents), ['2027-03-20 4800', '2027-04-20 1600', '2027-05-20 1600']);
+  eq(eventsOf(w, 'mason', other.saleId).length, 6, 'another client\'s plan pays on');
+  /* A third plan ends the second and leaves the first as it was. */
+  const third = w.must('owner', 'createSale', { clientId: first.clientId, service: 'Window cleaning', priceCents: 20000, billing: 'monthly' }).result;
+  eq([byId(w.db().sales, first.saleId).endDay, byId(w.db().sales, second.saleId).endDay, byId(w.db().sales, second.saleId).endedBy, byId(w.db().sales, third.saleId).endDay],
+    ['2027-03-20', '2027-06-15', third.saleId, undefined]);
+  checkData(w);
+});
+
+test('mistakes can be taken back: a cancel undone the same day, and a deleted sale that had replaced a plan', () => {
+  const w = world({ day: '2027-01-10' });
+  const a = plain(w, 'mason', 'Wrong Tap', 10000, 'monthly');
+  w.at('2027-02-20', '10:00'); relog(w);
+  w.must('owner', 'updateClient', { clientId: a.clientId, patch: { status: 'Cancelled' } });
+  eq(byId(w.db().sales, a.saleId).endDay, '2027-02-20');
+  w.at('2027-02-20', '16:00');
+  w.must('owner', 'updateClient', { clientId: a.clientId, patch: { status: 'Active' } });
+  eq(byId(w.db().sales, a.saleId).endDay, undefined, 'the same day: as if it never happened');
+  w.at('2027-04-15', '10:00'); relog(w);
+  eq(eventsOf(w, 'mason', a.saleId).map((e) => e.day), ['2027-01-10', '2027-02-10', '2027-03-10', '2027-04-10']);
+
+  /* A second monthly sale entered by mistake, then deleted: the first plan is the plan again. */
+  const dup = w.must('mason', 'createSale', { clientId: a.clientId, service: 'Window cleaning', priceCents: 10000, billing: 'monthly' }).result;
+  eq(byId(w.db().sales, a.saleId).endDay, '2027-04-15');
+  w.must('owner', 'deleteSale', { saleId: dup.saleId });
+  eq([byId(w.db().sales, a.saleId).endDay, byId(w.db().sales, a.saleId).endedBy], [undefined, undefined]);
+  w.at('2027-05-10', '10:00'); relog(w);
+  eq(eventsOf(w, 'mason', a.saleId).length, 5, 'and it pays on May 10');
+
+  /* If the sale that is deleted had itself been ended, the older plan ends when and why it did. */
+  const b = w.must('mason', 'createSale', { clientId: a.clientId, service: 'Window cleaning', priceCents: 12000, billing: 'monthly' }).result;
+  w.at('2027-06-20', '10:00'); relog(w);
+  w.must('owner', 'updateClient', { clientId: a.clientId, patch: { status: 'Cancelled' } });
+  eq([byId(w.db().sales, a.saleId).endDay, byId(w.db().sales, b.saleId).endDay], ['2027-05-10', '2027-06-20']);
+  w.must('owner', 'deleteSale', { saleId: b.saleId });
+  eq([byId(w.db().sales, a.saleId).endDay, byId(w.db().sales, a.saleId).endedBy], ['2027-06-20', undefined], 'the first plan ran until the client cancelled');
+
+  /* A cancel taken back on a later day stays a cancel, and so does one that came before a new plan the same day. */
+  w.at('2027-06-21', '10:00'); relog(w, ['owner']);
+  w.must('owner', 'updateClient', { clientId: a.clientId, patch: { status: 'Active' } });
+  eq(byId(w.db().sales, a.saleId).endDay, '2027-06-20');
+  const c = plain(w, 'jake', 'Busy Day', 10000, 'monthly');
+  w.at('2027-07-05', '09:00'); relog(w);
+  w.must('owner', 'updateClient', { clientId: c.clientId, patch: { status: 'Cancelled' } });
+  const c2 = w.must('jake', 'createSale', { clientId: c.clientId, service: 'Window cleaning', priceCents: 9000, billing: 'monthly' }).result;
+  w.must('owner', 'updateClient', { clientId: c.clientId, patch: { status: 'Cancelled' } });
+  w.must('owner', 'updateClient', { clientId: c.clientId, patch: { status: 'Active' } });
+  eq([byId(w.db().sales, c.saleId).endDay, byId(w.db().sales, c2.saleId).endDay], ['2027-07-05', undefined], 'only the newest plan comes back, so two never pay at once');
+  checkData(w);
 });
 
 test('changing the rates later does not change old sales; new sales use the new rates', () => {
@@ -1512,8 +1799,22 @@ test('a sale needs a customer name and a service', () => {
   [{ client: {}, service: 'House wash' }, { client: { name: '  ' }, service: 'House wash' }, { service: 'House wash' }, { client: 'Just A String', service: 'House wash' }, { client: null, service: 'House wash' },
     { client: { name: 'No Service' } }, { client: { name: 'No Service' }, service: '' }, { client: { name: 'No Service' }, service: ' \n ' }]
     .forEach((f) => w.refuse('mason', 'createSale', Object.assign({ priceCents: 100, appointment: { date: '2026-11-18', time: '09:30' } }, f), 'invalid'));
-  const r = w.must('mason', 'createSale', { client: { name: 'Odd Billing' }, service: 'House wash', priceCents: 100, billing: 'weekly' }).result;
-  eq(byId(w.db().sales, r.saleId).billing, 'once', 'an unknown billing type falls back to one-time, never to monthly');
+});
+
+test('a sale says one-time or monthly; anything else is refused, and saying nothing means one-time', () => {
+  const w = world();
+  ['weekly', 'yearly', 'Monthly', 'ONCE', ' monthly', '', 0, 1, true, false, ['monthly'], { monthly: true }].forEach((b) => {
+    const r = w.refuse('mason', 'createSale', { client: { name: 'Odd Billing' }, service: 'House wash', priceCents: 100, billing: b, appointment: { date: '2026-11-18', time: '09:30' } }, 'invalid');
+    eq(r.error.message, 'Pick one-time or monthly.', 'billing ' + JSON.stringify(b));
+  });
+  eq([w.db().clients.length, w.db().sales.length, w.db().jobs.length], [0, 0, 0], 'a guess is never saved as one-time or as monthly');
+  [undefined, null].forEach((b, i) => {
+    const r = w.must('mason', 'createSale', { client: { name: 'No Billing ' + i }, service: 'House wash', priceCents: 100, billing: b }).result;
+    eq([byId(w.db().sales, r.saleId).billing, byId(w.db().clients, r.clientId).billing], ['once', 'once']);
+  });
+  const none = w.must('mason', 'createSale', { client: { name: 'No Billing At All' }, service: 'House wash', priceCents: 100 }).result;
+  eq(byId(w.db().sales, none.saleId).billing, 'once');
+  ['once', 'monthly'].forEach((b) => { const said = plain(w, 'mason', 'Says ' + b, 100, b); eq(byId(w.db().sales, said.saleId).billing, b); });
 });
 
 test('deleting a client removes their sales and visits and nobody else\'s', () => {
@@ -1595,6 +1896,61 @@ test('updateJob: assign, describe, cancel and bring back; anything else is refus
   w.must('owner', 'updateJob', { jobId: w.ids.jobA, patch: { date: '2020-01-01', time: '03:00', clientId: w.ids.clientB, id: 'j_x', doneBy: w.ids.owner, saleId: null } });
   const j = byId(w.db().jobs, w.ids.jobA);
   eq([j.date, j.time, j.clientId, j.doneBy, j.saleId], ['2026-11-18', '09:30', w.ids.clientA, null, w.ids.saleA], 'only assignedTo, what and status can be patched');
+});
+
+test('a job can only be given to a tech or the owner, never to a sales rep', () => {
+  const w = seeded();
+  [w.ids.mason, w.ids.jake].forEach((rep) => {
+    const j = w.refuse('owner', 'updateJob', { jobId: w.ids.jobA, patch: { what: 'should not save', assignedTo: rep } }, 'invalid');
+    eq(j.error.message, 'Only a tech or the owner can be given a job. Pick one of them.');
+    const s = w.refuse('owner', 'saveSettings', { settings: { firstPct: 1, defaultTechId: rep } }, 'invalid');
+    eq(s.error.message, 'Only a tech or the owner can be given a job. Pick one of them.');
+  });
+  eq(w.refuse('owner', 'updateJob', { jobId: w.ids.jobA, patch: { assignedTo: 'm_nobody' } }, 'invalid').error.message, 'Pick someone who is on the team.');
+  [w.ids.tess, w.ids.owner, w.ids.cole].forEach((id) => {
+    w.must('owner', 'updateJob', { jobId: w.ids.jobA, patch: { assignedTo: id } });
+    w.must('owner', 'saveSettings', { settings: { defaultTechId: id } });
+    eq([byId(w.db().jobs, w.ids.jobA).assignedTo, w.full('owner').settings.defaultTechId], [id, id]);
+  });
+  w.must('owner', 'updateJob', { jobId: w.ids.jobA, patch: { assignedTo: w.ids.owner } });
+  w.must('owner', 'setJobDone', { jobId: w.ids.jobA });
+  eq(byId(w.db().jobs, w.ids.jobA).doneBy, w.ids.owner, 'the owner can do a job given to the owner');
+  checkData(w);
+});
+
+test('making a tech a sales rep takes them off their scheduled jobs and off "new jobs go to", like removing them', () => {
+  const w = seeded();
+  w.must('owner', 'saveSettings', { settings: { defaultTechId: w.ids.cole } });
+  const extra = sellOk(w, 'mason', 'Second For Cole', '2026-11-19', '08:00');
+  eq(byId(w.db().jobs, extra.jobId).assignedTo, w.ids.cole);
+  w.must('cole', 'setJobDone', { jobId: w.ids.jobA });
+  w.must('owner', 'saveMember', { member: { id: w.ids.cole, name: 'Cole B', role: 'tech' } });   /* a new name only: nothing moves */
+  eq([byId(w.db().jobs, extra.jobId).assignedTo, byId(w.db().settings, 'main').defaultTechId], [w.ids.cole, w.ids.cole]);
+
+  w.must('owner', 'saveMember', { member: { id: w.ids.cole, name: 'Cole B', role: 'rep' } });
+  const db = w.db(), done = byId(db.jobs, w.ids.jobA);
+  eq(byId(db.jobs, extra.jobId).assignedTo, null, 'the job still to do goes back to nobody');
+  eq([done.status, done.assignedTo, done.doneBy], ['done', w.ids.cole, w.ids.cole], 'the finished job still says who did it');
+  eq([byId(db.settings, 'main').defaultTechId, w.full('owner').settings.defaultTechId], [null, null]);
+  eq(byId(db.jobs, w.ids.jobB).assignedTo, w.ids.tess, 'other people\'s jobs are untouched');
+  const next = sellOk(w, 'mason', 'After The Change', '2026-11-19', '09:30');
+  eq(byId(w.db().jobs, next.jobId).assignedTo, null, 'new jobs no longer go to them');
+  w.refuse('owner', 'updateJob', { jobId: extra.jobId, patch: { assignedTo: w.ids.cole } }, 'invalid');
+  w.must('owner', 'setJobDone', { jobId: w.ids.jobA, done: false });
+  eq(byId(w.db().jobs, w.ids.jobA).assignedTo, null, 'a finished job put back on the schedule does not go back to a sales rep');
+  checkData(w);
+
+  /* A tech who becomes an owner, or an owner who becomes a tech, can still do jobs and keeps them. */
+  w.must('owner', 'saveSettings', { settings: { defaultTechId: w.ids.tess } });
+  w.must('owner', 'saveMember', { member: { id: w.ids.tess, name: 'Tess Hart', role: 'owner' } });
+  eq([byId(w.db().jobs, w.ids.jobB).assignedTo, byId(w.db().settings, 'main').defaultTechId], [w.ids.tess, w.ids.tess]);
+  w.must('owner', 'saveMember', { member: { id: w.ids.tess, name: 'Tess Hart', role: 'tech' } });
+  eq([byId(w.db().jobs, w.ids.jobB).assignedTo, byId(w.db().settings, 'main').defaultTechId], [w.ids.tess, w.ids.tess]);
+  /* An owner made a sales rep is taken off the same way. */
+  w.must('owner', 'saveMember', { member: { id: w.ids.tess, name: 'Tess Hart', role: 'owner' } });
+  w.must('owner', 'saveMember', { member: { id: w.ids.tess, name: 'Tess Hart', role: 'rep' } });
+  eq([byId(w.db().jobs, w.ids.jobB).assignedTo, byId(w.db().settings, 'main').defaultTechId], [null, null]);
+  checkData(w);
 });
 
 test('the last owner cannot be demoted or removed', () => {
@@ -1898,6 +2254,29 @@ test('the services list: one to twenty, each with a name and a real price, no do
   w.must('owner', 'saveSettings', { settings: { services: twentyOne.slice(0, 20) } });
 });
 
+test('two services, or two sections of the standards, never end up with the same id', () => {
+  const w = world();
+  const long = 'x'.repeat(30);
+  w.must('owner', 'saveSettings', { settings: {
+    services: [{ id: 'windows', name: 'Windows' }, { id: 'windows', name: 'Doors' }, { id: ' windows ', name: 'Gutters' }, { id: long + 'A', name: 'Long A' }, { id: long + 'B', name: 'Long B' }, { name: 'No Id' }, { id: '__proto__', name: 'Proto One' }, { id: '__proto__', name: 'Proto Two' }],
+    standards: [{ id: 'job', title: 'One', items: ['A rule.'] }, { id: 'job', title: 'Two', items: ['A rule.'] }, { id: 'job', title: 'Three', items: ['A rule.'] }, { id: 'show', title: 'Four' }]
+  } });
+  const st = w.full('cole').settings, unique = (list) => new Set(list.map((x) => x.id)).size === list.length;
+  ok(unique(st.services), 'service ids: ' + st.services.map((s) => s.id).join(', '));
+  ok(unique(st.standards), 'section ids: ' + st.standards.map((s) => s.id).join(', '));
+  eq([st.services[0].id, st.services[3].id, st.services[6].id, st.standards[0].id, st.standards[3].id], ['windows', long, '__proto__', 'job', 'show'], 'the first to use an id keeps it');
+  ok([1, 2, 4, 5, 7].every((i) => /^s_[a-zA-Z0-9]+$/.test(st.services[i].id)) && [1, 2].every((i) => /^st_[a-zA-Z0-9]+$/.test(st.standards[i].id)), 'the others are given fresh ones');
+  eq(st.services.map((s) => s.name), ['Windows', 'Doors', 'Gutters', 'Long A', 'Long B', 'No Id', 'Proto One', 'Proto Two'], 'nothing is dropped or reordered');
+  /* Sent back exactly as received, the ids stay as they are, so nobody is asked to confirm the standards again. */
+  const at = w.full('owner').settings.standardsUpdatedAt;
+  w.wait(HOUR);
+  w.must('owner', 'saveSettings', { settings: { services: st.services, standards: st.standards } });
+  const again = w.full('owner').settings;
+  eq([again.services, again.standards, again.standardsUpdatedAt], [st.services, st.standards, at]);
+  ok(({}).polluted === undefined && Object.keys(Object.prototype).length === 0);
+  checkData(w);
+});
+
 test('the owner email and time slots are checked before they are saved', () => {
   const w = world();
   ['not-an-email', 'a@b', 'a b@c.de', '@c.de', 'a@', 'a@@b.co', '<a@b.co>\nBcc: x@y.z'].forEach((e) => w.refuse('owner', 'saveSettings', { settings: { notifyEmail: e } }, 'invalid'));
@@ -1972,7 +2351,7 @@ function hostileCases(w) {
     ['moveJob', 'mason', { jobId: w.ids.jobA, date: '2026-11-19', time: '14:00' }],
     ['setJobDone', 'cole', { jobId: w.ids.jobA, done: true }],
     ['updateClient', 'owner', { clientId: w.ids.clientA, patch: { name: 'N', contact: 'C', phone: 'P', email: 'E', address: 'A', service: 'S', priceCents: 100, billing: 'once', startDate: '2026-11-20',
-      stripeLink: 'https://pay.example/y', payStatus: 'paid', status: 'Paused' } }],
+      stripeLink: 'https://pay.example/y', payStatus: 'paid', status: 'Paused', repId: w.ids.jake } }],
     ['updateClient', 'mason', { clientId: w.ids.clientA, patch: { name: 'N', phone: 'P' } }],
     ['updateJob', 'owner', { jobId: w.ids.jobA, patch: { assignedTo: w.ids.tess, what: 'w', status: 'cancelled' } }],
     ['deleteClient', 'owner', { clientId: w.ids.clientB }],
@@ -1991,7 +2370,7 @@ function hostileCases(w) {
 
 /* Things that must be true of the stored data after anything at all has happened. */
 function checkData(w, snapshot) {
-  const db = snapshot || w.db(), team = {}, clients = {}, sales = {}, jobs = {}, slot = {};
+  const db = snapshot || w.db(), team = {}, clients = {}, sales = {}, jobs = {}, slot = {}, running = {};
   db.team.forEach((m) => { team[m.id] = m; }); db.clients.forEach((c) => { clients[c.id] = c; });
   db.sales.forEach((s) => { sales[s.id] = s; }); db.jobs.forEach((j) => { jobs[j.id] = j; });
   ok(db.team.some((m) => m.active && m.role === 'owner'), 'no owner is left');
@@ -2010,6 +2389,7 @@ function checkData(w, snapshot) {
     if (j.status === 'scheduled') {
       ok(j.doneAt === null && j.doneBy === null, 'a scheduled job says it was done');
       if (j.assignedTo) ok(team[j.assignedTo].active, 'a scheduled job is assigned to someone who is gone');
+      if (j.assignedTo) ok(team[j.assignedTo].role !== 'rep', 'a scheduled job is assigned to a sales rep, who cannot see or finish it');
     }
     if (j.status === 'done') ok(j.doneAt > 0 && team[j.doneBy], 'a finished job does not say who finished it');
     ok(typeof j.what === 'string' && j.what.length >= 1 && j.what.length <= 160 && Array.isArray(j.notes) && j.notes.length <= 50, 'bad job text');
@@ -2020,6 +2400,13 @@ function checkData(w, snapshot) {
     ok(C.BILLING.indexOf(s.billing) >= 0 && C.dates.isDay(s.day) && s.service.length >= 1 && s.service.length <= 60, 'bad sale fields');
     ok(typeof s.firstPct === 'number' && s.firstPct >= 0 && s.firstPct <= 100 && typeof s.monthlyPct === 'number' && s.monthlyPct >= 0 && s.monthlyPct <= 100, 'bad sale rates');
     if (s.jobId) ok(jobs[s.jobId] && jobs[s.jobId].saleId === s.id, 'a sale points at a job that does not point back');
+    if (s.endDay !== undefined) ok(s.billing === 'monthly' && C.dates.isDay(s.endDay) && s.endDay >= s.day, 'a sale has a bad end day: ' + s.endDay);
+    if (s.endedBy !== undefined) ok(s.endDay !== undefined && sales[s.endedBy] && sales[s.endedBy].clientId === s.clientId && sales[s.endedBy].billing === 'monthly', 'a sale was ended by a sale that is not there');
+    if (s.billing === 'monthly' && s.endDay === undefined) {
+      ok(!running[s.clientId], 'a client has two monthly plans paying at once');
+      ok(clients[s.clientId].status !== 'Cancelled', 'a cancelled client still has a monthly plan paying');
+      running[s.clientId] = 1;
+    }
   });
   db.clients.forEach((c) => {
     ok(C.CLIENT_STATUSES.indexOf(c.status) >= 0 && c.statusLog.length >= 1 && c.statusLog[c.statusLog.length - 1].status === c.status, 'client status and its log disagree');
@@ -2035,11 +2422,14 @@ function checkData(w, snapshot) {
   ok(st.services.length >= 1 && st.services.length <= 20 && st.services.every((s) => s.name && Number.isInteger(s.priceCents) && s.priceCents >= 0), 'bad services');
   ok(st.firstPct >= 0 && st.firstPct <= 100 && st.monthlyPct >= 0 && st.monthlyPct <= 100 && st.defaultSlots.length >= 1 && st.defaultSlots.every(C.dates.isHM), 'bad rates or slots');
   ok(st.defaultTechId === null || (team[st.defaultTechId] && team[st.defaultTechId].active), 'the default tech is gone');
+  ok(st.defaultTechId === null || team[st.defaultTechId].role !== 'rep', 'new jobs are set to go to a sales rep');
+  ok(new Set(st.services.map((x) => x.id)).size === st.services.length && new Set(st.standards.map((x) => x.id)).size === st.standards.length, 'two services or two sections share an id');
   ok(typeof st.emailOnBooking === 'boolean' && typeof st.notifyEmail === 'string' && typeof st.standardsUpdatedAt === 'number', 'bad settings types');
   ok(Array.isArray(st.standards) && st.standards.length <= 12 && st.standards.every((s) => s.id && s.title && s.title.length <= 60 && typeof s.ordered === 'boolean' &&
     s.items.length <= 20 && s.items.every((it) => typeof it === 'string' && it.length >= 1 && it.length <= 240)), 'bad standards');
   ok(db.notices.length <= 60 && db.problems.length <= 30, 'notices or problems were not trimmed');
   db.sessions.forEach((s) => ok(team[s.memberId] && team[s.memberId].active, 'a session belongs to someone who is gone'));
+  Object.keys(db).forEach((coll) => db[coll].forEach((d) => ok(JSON.stringify(d).length < 50000, 'a record in ' + coll + ' is too big for one cell of the sheet')));
 }
 
 /* What a full answer may contain for the person it is for. */
@@ -2115,6 +2505,136 @@ test('everything huge at once is handled and stored cut down', () => {
   eq(w.tryLogin(big, big).error.code, 'auth');
   ok(JSON.stringify(w.store.dump()).length < 60000, 'the stored data ballooned');
   checkData(w);
+});
+
+/* ================================================================== */
+section('records that would outgrow a cell');
+
+/* A record is one cell of the Google Sheet (50,000 characters at most). The core refuses, in plain words, at 45,000. */
+const CEILING = C.LIMITS.docChars;
+const size = (doc) => JSON.stringify(doc).length;
+const QUOTES = '"'.repeat(500);   /* 500 characters to type, 1,000 once it is JSON */
+
+/* Puts a record straight into the store, grown to exactly `chars` characters of JSON: with notes
+   where the record has notes (never more than 50, never longer than 500), or else with a field
+   somebody added by hand in the sheet. */
+function grown(w, coll, id, chars) {
+  const doc = byId(w.db()[coll], id);
+  if (coll === 'team') { doc.memo = ''; doc.memo = 'p'.repeat(chars - size(doc)); }
+  else {
+    const note = (text) => ({ at: w.t, by: w.ids.owner, text: text });
+    doc.notes = [];
+    while (chars - size(doc) > 2200) doc.notes.push(note(QUOTES));
+    while (chars - size(doc) > 540) doc.notes.push(note('p'.repeat(400)));
+    const last = note('');
+    doc.notes.push(last);
+    last.text = 'p'.repeat(chars - size(doc));
+    ok(doc.notes.length < 50 && last.text.length <= 500, 'the test could not build its record');
+  }
+  eq(size(doc), chars);
+  w.store.put(coll, doc);
+  return doc;
+}
+
+test('the limits really could outgrow a cell: this is what the guard is for', () => {
+  const fullStandards = []; for (let s = 0; s < 12; s++) { const items = []; for (let i = 0; i < 20; i++) items.push('L'.repeat(240)); fullStandards.push({ id: 's' + s, title: 'Section ' + s, items: items }); }
+  ok(size(fullStandards) > 50000, 'twelve full sections are ' + size(fullStandards) + ' characters');
+  ok(50 * size({ at: 1795000000000, by: 'm_0123456789abcd', text: QUOTES }) > 50000, 'and so are fifty notes full of quote marks');
+  ok(CEILING === 45000 && CEILING < 50000);
+});
+
+test('company standards too long for one cell are refused in plain words, and nothing is saved', () => {
+  const w = world();
+  const sections = (n, len) => { const out = []; for (let s = 0; s < n; s++) { const items = []; for (let i = 0; i < 20; i++) items.push('L'.repeat(len)); out.push({ id: 's' + s, title: 'Section ' + s, items: items }); } return out; };
+  const r = w.refuse('owner', 'saveSettings', { settings: { firstPct: 12, standards: sections(12, 240) } }, 'invalid');
+  eq(r.error.message, 'The company standards are too long to save. Shorten a few lines or remove a section, then try again.');
+  eq([r.sync.settings.standards, r.sync.settings.firstPct], [C.DEFAULT_SETTINGS.standards, 30], 'the answer shows the standards as they still are');
+  w.refuse('owner', 'saveSettings', { settings: { standards: sections(10, 240) } }, 'invalid');   /* 48,000 and more: under the cell, over the ceiling */
+  w.must('owner', 'saveSettings', { settings: { standards: sections(12, 170) } });
+  const saved = byId(w.db().settings, 'main');
+  ok(size(saved) <= CEILING && saved.standards.length === 12 && w.full('cole').settings.standards[11].items.length === 20, 'a long but reasonable set is saved whole');
+  /* With the standards nearly full, a longer services list is refused too, and a shorter set of standards makes room. */
+  w.must('owner', 'saveSettings', { settings: { standards: sections(9, 240) } });
+  const many = []; for (let i = 0; i < 20; i++) many.push({ name: 'A fairly long service name number ' + i, priceCents: 100 });
+  const nearly = size(byId(w.db().settings, 'main'));
+  ok(nearly <= CEILING && nearly > CEILING - 1500, 'the settings are ' + nearly + ' characters');
+  w.refuse('owner', 'saveSettings', { settings: { services: many } }, 'invalid');
+  w.must('owner', 'saveSettings', { settings: { services: many, standards: sections(9, 200) } });
+  checkData(w);
+});
+
+test('notes full of quote marks stop being accepted before the client would outgrow its cell', () => {
+  const w = seeded();
+  let saved = 0, refused = null;
+  for (let i = 0; i < 50 && !refused; i++) {
+    const r = w.call('mason', 'addNote', { kind: 'client', id: w.ids.clientA, text: QUOTES });
+    if (r.ok) saved++; else refused = r;
+  }
+  ok(refused && saved >= 35 && saved < 49, 'saved ' + saved + ' notes');
+  eq([refused.error.code, refused.error.message], ['invalid', 'There is no room left in this client\'s notes. Shorten the note and try again.']);
+  const before = byId(w.db().clients, w.ids.clientA);
+  ok(size(before) <= CEILING && before.notes.length === saved + 2, 'the record stops at ' + size(before) + ' characters');
+  w.refuse('mason', 'addNote', { kind: 'client', id: w.ids.clientA, text: QUOTES }, 'invalid');
+  eq(byId(w.db().clients, w.ids.clientA), before, 'a refused note changes nothing');
+  ok(w.must('jake', 'addNote', { kind: 'client', id: w.ids.clientB, text: QUOTES }).ok, 'other clients are not affected');
+  /* Exactly the room that is left is still fine; one character more is not. */
+  const b = grown(w, 'clients', w.ids.clientB, CEILING - 100);
+  const room = CEILING - size(b) - size({ at: w.t, by: w.ids.jake, text: '' }) - 1;
+  ok(room >= 1 && room <= 100, 'room for ' + room);
+  w.refuse('jake', 'addNote', { kind: 'client', id: w.ids.clientB, text: 'p'.repeat(room + 1) }, 'invalid');
+  w.must('jake', 'addNote', { kind: 'client', id: w.ids.clientB, text: 'p'.repeat(room) });
+  eq(size(byId(w.db().clients, w.ids.clientB)), CEILING);
+  w.refuse('jake', 'addNote', { kind: 'client', id: w.ids.clientB, text: 'x' }, 'invalid');
+  w.db().clients.concat(w.db().jobs).forEach((d) => ok(size(d) <= CEILING));
+  checkData(w);
+});
+
+test('a sale note, a job note and a job description are refused the same way, and nothing of the request is saved', () => {
+  const w = seeded();
+  grown(w, 'clients', w.ids.clientA, CEILING - 100);
+  const sale = { clientId: w.ids.clientA, service: 'Window cleaning', priceCents: 15000, billing: 'monthly', appointment: { date: '2026-11-19', time: '08:00' } };
+  const r = w.refuse('mason', 'createSale', Object.assign({ notes: 'Wants the back windows done as well this time.' }, sale), 'invalid');
+  eq(r.error.message, 'There is no room left in this client\'s notes. Shorten the note on this sale and try again.');
+  eq([w.db().sales.length, w.db().jobs.length, w.full('jake').taken.some((t) => t.date === '2026-11-19' && t.time === '08:00')], [2, 2, false], 'no sale, no visit, and the time is still free');
+  eq(byId(w.db().sales, w.ids.saleA).endDay, undefined, 'and the plan they already had was not ended');
+  ok(w.must('mason', 'createSale', Object.assign({ notes: 'Short.' }, sale)).result.jobId, 'with a shorter note the sale goes through');
+
+  grown(w, 'jobs', w.ids.jobA, CEILING - 30);
+  const n = w.refuse('cole', 'addNote', { kind: 'job', id: w.ids.jobA, text: 'The gate was locked so I could not reach the back.' }, 'invalid');
+  eq(n.error.message, 'There is no room left in this job\'s notes. Shorten the note and try again.');
+  const u = w.refuse('owner', 'updateJob', { jobId: w.ids.jobA, patch: { assignedTo: w.ids.tess, what: 'Windows inside and out, plus the two skylights over the kitchen' } }, 'invalid');
+  eq(u.error.message, 'This job\'s record is full. Shorten what needs to be done, then try again.');
+  w.must('owner', 'updateJob', { jobId: w.ids.jobA, patch: { assignedTo: w.ids.tess, what: 'Windows' } });
+  w.must('tess', 'setJobDone', { jobId: w.ids.jobA });
+  w.db().clients.concat(w.db().jobs).forEach((d) => ok(size(d) < 50000, 'a record got past the cell limit'));
+});
+
+test('an edit that would push a full client record over is refused whole; shortening something makes room', () => {
+  const w = seeded();
+  const full = grown(w, 'clients', w.ids.clientA, CEILING);
+  w.must('owner', 'updateClient', { clientId: w.ids.clientA, patch: { phone: '615-555-0009' } });   /* the same length: still fits */
+  eq(size(byId(w.db().clients, w.ids.clientA)), CEILING);
+  [[{ address: full.address + ', Apt 2' }, 'owner'], [{ name: full.name + 's' }, 'mason'], [{ status: 'Cancelled' }, 'owner'], [{ status: 'Paused', phone: '1' }, 'owner'], [{ repId: w.ids.jake, email: 'a-much-longer-address@alpha.example' }, 'owner']]
+    .forEach((x) => {
+      const r = w.refuse(x[1], 'updateClient', { clientId: w.ids.clientA, patch: x[0] }, 'invalid');
+      eq(r.error.message, 'This client\'s record is full. Shorten the name, the address or another detail, then try again.');
+    });
+  eq(byId(w.db().sales, w.ids.saleA).endDay, undefined, 'a refused cancel ends no monthly pay');
+  w.refuse('mason', 'createSale', { clientId: w.ids.clientA, service: 'Window cleaning and screens', priceCents: 15000 }, 'invalid');
+  w.must('owner', 'updateClient', { clientId: w.ids.clientA, patch: { contact: '', email: '', address: '', status: 'Cancelled' } });   /* 49 characters shorter makes room for the 48 a cancel adds */
+  const now = byId(w.db().clients, w.ids.clientA);
+  ok(now.status === 'Cancelled' && size(now) === CEILING - 1, 'the record is now ' + size(now) + ' characters');
+  eq(byId(w.db().sales, w.ids.saleA).endDay, '2026-11-17');
+});
+
+test('a team record somebody padded by hand in the sheet cannot be pushed over by a longer name', () => {
+  const w = world();
+  grown(w, 'team', w.ids.mason, CEILING);
+  const r = w.refuse('owner', 'saveMember', { member: { id: w.ids.mason, name: 'Mason Reed Junior', role: 'rep' } }, 'invalid');
+  eq(r.error.message, 'That name is too long to save. Shorten it and try again.');
+  w.must('owner', 'saveMember', { member: { id: w.ids.mason, name: 'Mason Rees', role: 'rep' } });
+  eq(byId(w.db().team, w.ids.mason).name, 'Mason Rees');
+  ok(w.must('owner', 'saveMember', { member: { name: 'N'.repeat(40), role: 'tech' } }).result.pin, 'an ordinary new person is nowhere near the limit');
 });
 
 /* ================================================================== */
@@ -2310,6 +2830,19 @@ test('a store that breaks in the middle of a save gives a plain refusal and leav
   const again = w.must('mason', 'createSale', { client: { name: 'Bad Luck' }, service: 'House wash', priceCents: 100, appointment: { date: '2026-11-18', time: '09:30' }, opId: 'store-op-0001' });
   ok(!again.replay && again.result.jobId, 'the retry with the same opId really saves');
   eq([w.db().sales.length, w.db().jobs.length], [1, 1]);
+});
+
+test('the host can add to the owner\'s problems list after a save, and a broken store does not make that throw', () => {
+  const w = world(), rev = w.rev();
+  w.core.recordProblem('email', 'An email alert could not be sent: Service invoked too many times for one day: email.');
+  eq(w.full('owner').problems.map((p) => [p.where, p.message, p.at]), [['email', 'An email alert could not be sent: Service invoked too many times for one day: email.', w.t]]);
+  eq(w.rev(), rev + 1, 'the owner\'s phone is told there is something new');
+  eq(w.full('mason').problems, [], 'only the owner sees it');
+  for (let i = 0; i < 35; i++) { w.wait(1000); w.core.recordProblem('w'.repeat(100), 'm'.repeat(1000)); }
+  const p = w.full('owner').problems;
+  eq([p.length, p[0].where.length, p[0].message.length], [30, 60, 300], 'kept short, and kept to the latest 30');
+  w.store.put = () => { throw new Error('the sheet is unreachable'); };
+  w.core.recordProblem('email', 'not saved, but not a crash either');
 });
 
 test('a store that is completely down still gets a plain answer, for every action', () => {

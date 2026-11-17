@@ -1,0 +1,3 @@
+/* ---------- CLIENTS ---------- */
+/* .client-price: "$150.00 a month" stays in one piece when its line wraps. */
+.client-price { white-space: nowrap; font-variant-numeric: tabular-nums; }

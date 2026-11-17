@@ -12,7 +12,8 @@
  *
  * Everything is placed relative to today, so today always has four jobs (8:00 done, 9:30,
  * 12:00, 2:00 with nobody assigned), yesterday has one job that was never marked done, one
- * client is late paying, and the next three weeks have open days with a few times taken.
+ * client is late paying, one is paused and one has cancelled, and the next three weeks have
+ * open days with a few times taken.
  */
 var RidgelineSample = (function () {
   'use strict';
@@ -118,6 +119,20 @@ var RidgelineSample = (function () {
     at(-60, '08:50'); finish(main.jobId);
     at(-59, '09:00'); paid(main.clientId);
 
+    at(-55, '14:30');
+    var pine = sell('Avery', { name: 'Pine Ridge Lake House', contact: 'Hank Sutton', phone: '615-555-0118', email: '', address: '9 Pine Ridge Rd' },
+      'Window cleaning', 14000, 'monthly', 'Lake-side windows and the sunroom', [day(-52), '09:30']);
+    assign(pine.jobId);
+    at(-52, '10:50'); finish(pine.jobId);
+    at(-51, '09:00'); paid(pine.clientId);
+
+    at(-47, '13:10');
+    var maple = sell('Mason', { name: 'Maple Court Rental', contact: 'Gail Norris', phone: '615-555-0176', email: '', address: '31 Maple Ct' },
+      'Pressure wash', 9000, 'monthly', 'Walkways and the shared patio', [day(-45), '12:00']);
+    assign(maple.jobId);
+    at(-45, '13:25'); finish(maple.jobId);
+    at(-44, '09:00'); paid(maple.clientId);
+
     at(-41, '11:05');
     var cafe = sell('Mason', { name: 'Hilltop Cafe', contact: 'Luis Ortega', phone: '615-555-0127', email: '', address: '36 Hilltop Ave' },
       'Window cleaning', 12000, 'monthly', 'Front windows and the patio doors', [day(-38), '08:00']);
@@ -134,12 +149,21 @@ var RidgelineSample = (function () {
     at(-31, '13:35'); finish(feed.jobId);
     at(-30, '08:55'); finish(mainSecond); paid(feed.clientId);
 
+    /* One client on hold and one who has left, both before their second month came due. */
+    at(-28, '10:20');
+    call(owner, 'updateClient', { clientId: pine.clientId, patch: { status: 'Paused' } });
+    call(owner, 'addNote', { kind: 'client', id: pine.clientId, text: 'Away for a few months. Paused until they call us to start again.' });
+
     at(-27, '13:20');
     var miller = sell('Avery', { name: 'Miller Family Home', contact: 'Beth Miller', phone: '615-555-0139', email: 'beth@example.com', address: '905 Miller Rd' },
       'House wash', 32500, 'once', 'Whole house wash, vinyl siding', [day(-24), '09:30'], 'Asked us to skip the back deck. It was just stained.');
     assign(miller.jobId);
     at(-24, '11:10'); finish(miller.jobId);
     at(-23, '09:00'); paid(miller.clientId);
+
+    at(-21, '15:00');
+    call(owner, 'updateClient', { clientId: maple.clientId, patch: { status: 'Cancelled' } });
+    call(owner, 'addNote', { kind: 'client', id: maple.clientId, text: 'The owner sold the property, so the monthly service ended.' });
 
     at(-20, '08:05'); call(tokens.Avery, 'ackStandards', {});
 

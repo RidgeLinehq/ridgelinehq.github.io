@@ -54,7 +54,7 @@ function newGoogle() {
     mail: [],              // every email sent
     logs: [],              // every Logger.log
     fail: {},              // point -> how many times to fail there (see failIf)
-    hooks: {},             // beforeLock / afterLock: run once, used to interleave two requests
+    hooks: {},             // beforeLock / afterLock: run once, used to interleave two requests. onMail: run once when an email is about to go out
     seq: 0,
     ownerEmail: 'grayson@example.com'
   };
@@ -289,6 +289,7 @@ function services(G, run) {
             if (seconds === undefined) seconds = 600;
             if (!int(seconds) || seconds < 1 || seconds > 21600) throw new Error('Cache expiration must be a whole number of seconds from 1 to 21600 (got ' + seconds + ').');
             failIf('cache.put');
+            failIf('cache.put:' + key);
             log('cache.put:' + key);
             G.cache.set(key, { value: value, until: G.cacheNow + seconds });
           },
@@ -351,6 +352,8 @@ function services(G, run) {
           throw new Error('This fake needs sendEmail(to, subject, body), all strings.');
         }
         if (!/^[^\s@]+@[^\s@]+$/.test(to)) throw new Error('Failed to send email: no recipient');
+        const onMail = G.hooks.onMail;
+        if (onMail) { G.hooks.onMail = null; onMail(); }
         if (G.fail.mail > 0) { G.fail.mail--; log('FAILED mail'); throw new Error('Service invoked too many times for one day: email.'); }
         log('mail');
         G.mail.push({ to: to, subject: subject, body: body });
@@ -395,6 +398,8 @@ function checkRun(r, opts) {
     if (c === 'lock.acquire') held = true;
     else if (c === 'lock.release') { assert(!unsent, 'the lock was released before the writes were sent with SpreadsheetApp.flush()'); held = false; }
     else if (c === 'ss.flush' || c === 'FAILED ss.flush') unsent = false;
+    else if (c === 'mail' || c === 'FAILED mail') { if (opts.post) assert(!unsent && revWrites > 0, 'an alert email went out before the save was finished'); }
+    else if (c.indexOf('cache.put:rev') === 0) assert(c === 'cache.put:rev' ? held : !held, 'the saved copy of REV is cached under the lock, the looked-up copy without it: ' + c);
     else if (c === 'ss.create') assert(held, 'made a spreadsheet without holding the lock');
     else if (/^(sheet\.(write|format|insertRows)|ss\.(insertSheet|deleteSheet)):/.test(c)) {
       assert(held, 'changed the sheet without holding the lock: ' + c);
@@ -407,7 +412,9 @@ function checkRun(r, opts) {
   });
   assert(!unsent, 'the run ended with writes that were never sent with SpreadsheetApp.flush()');
   if (!opts.loose) {
-    assert(revWrites <= 1, 'REV was written ' + revWrites + ' times in one request');
+    /* One write of REV per request. The one exception: an alert email failed after the save, and saying so on the problems list is a second small save. */
+    const allowed = r.calls.indexOf('FAILED mail') >= 0 ? 2 : 1;
+    assert(revWrites <= allowed, 'REV was written ' + revWrites + ' times in one request');
     Object.keys(reads).forEach((k) => assert.strictEqual(reads[k], 1, k + ' happened ' + reads[k] + ' times in one request'));
     Object.keys(writes).forEach((k) => assert.strictEqual(writes[k], 1, k + ' happened ' + writes[k] + ' times in one request'));
   }
@@ -459,7 +466,7 @@ function world() {
     const r = run('doPost', event);
     assert(!r.error, 'doPost threw instead of answering JSON: ' + (r.error && r.error.message));
     const res = readJson(r.out);
-    checkRun(r, opts);
+    checkRun(r, Object.assign({ post: true }, opts));
     return { res: res, calls: r.calls };
   }
 
@@ -1191,23 +1198,54 @@ test('a save that fails once is tried again; a save that keeps failing is report
   must(w.post({ action: 'sync', token: x.owner }));
 });
 
-test('a record too big for one cell is refused, reported, and the old record is left as it was', () => {
+test('notes that would outgrow a cell are refused in plain words before anything is saved', () => {
   const x = ready(), w = x.w;
   const c = must(x.sale(x.mason, 'Alpha', x.days[0], '08:00')).result;
   const big = '"'.repeat(500);   // every quote mark takes two characters once it is JSON
   let saved = 0, refused = null;
   for (let i = 0; i < 50 && !refused; i++) {
     const r = w.post({ action: 'addNote', token: x.owner, opId: uid(), kind: 'client', id: c.clientId, text: big });
-    if (r.res.ok) saved++; else refused = r.res;
+    if (r.res.ok) saved++; else refused = r;
   }
   assert(refused, 'fifty such notes cannot fit in one cell');
-  assert.strictEqual(refused.error.code, 'server');
-  assert(saved >= 40 && saved < 50, 'saved ' + saved);
+  assert.deepStrictEqual(refused.res.error, { code: 'invalid', message: 'There is no room left in this client\'s notes. Shorten the note and try again.' });
+  assert(saved >= 35 && saved < 49, 'saved ' + saved);
+  assert(!refused.calls.some((k) => /^sheet\.write:/.test(k) || k === 'props.set:REV'), 'a refused note writes nothing');
   assert.strictEqual(w.docs('clients')[0].notes.length, saved);
-  w.rows('clients').forEach((line) => assert(line[1].length <= 50000));
-  const problems = x.view(x.owner).problems;
-  assert(problems.some((p) => p.where === 'addNote' && /"clients" tab/.test(p.message) && /too big/.test(p.message)), JSON.stringify(problems));
+  assert.strictEqual(refused.res.sync.clients[0].notes.length, saved, 'and the answer shows the notes as they still are');
+  w.rows('clients').forEach((line) => assert(line[1].length <= core.LIMITS.docChars, 'a row is ' + line[1].length + ' characters'));
+  assert.deepStrictEqual(x.view(x.owner).problems, [], 'it is the person\'s to fix, not a problem for the owner');
   must(w.post({ action: 'updateClient', token: x.owner, opId: uid(), clientId: c.clientId, patch: { phone: '615-555-0142' } }));
+
+  /* The same for the company standards: twelve full sections do not fit, and say so. */
+  const sections = [];
+  for (let i = 0; i < 12; i++) { const items = []; for (let k = 0; k < 20; k++) items.push('L'.repeat(240)); sections.push({ id: 's' + i, title: 'Section ' + i, items: items }); }
+  const before = w.snapshot(['settings']);
+  const std = w.post({ action: 'saveSettings', token: x.owner, opId: uid(), settings: { standards: sections } });
+  assert.deepStrictEqual(std.res.error, { code: 'invalid', message: 'The company standards are too long to save. Shorten a few lines or remove a section, then try again.' });
+  assert.strictEqual(w.snapshot(['settings']), before);
+  must(w.post({ action: 'saveSettings', token: x.owner, opId: uid(), settings: { standards: sections.slice(0, 8) } }));
+  assert.strictEqual(w.docs('settings')[0].standards.length, 8);
+  core.COLLECTIONS.forEach((name) => w.rows(name).forEach((line) => assert(line[1].length <= core.LIMITS.docChars)));
+});
+
+test('the sheet itself still refuses a record over 50,000 characters (a row padded by hand), and the owner is told', () => {
+  const x = ready(), w = x.w;
+  const c = must(x.sale(x.mason, 'Alpha', x.days[0], '08:00')).result;
+  must(w.post({ action: 'updateJob', token: x.owner, opId: uid(), jobId: c.jobId, patch: { assignedTo: x.ids.cole } }));
+  /* Somebody pastes a long text into the job's row. Marking the job done makes the record a few characters longer. */
+  const sh = w.sheet('jobs'), job = JSON.parse(cell(sh, 2, 2));
+  job.pasted = '';
+  job.pasted = 'p'.repeat(49995 - JSON.stringify(job).length);
+  const padded = JSON.stringify(job);
+  setCell(sh, 2, 2, padded);
+  const r = w.post({ action: 'setJobDone', token: x.cole, opId: uid(), jobId: c.jobId, done: true }, { loose: true });
+  fails(r, 'server');
+  assert.strictEqual(r.res.error.message, SERVER_MESSAGE);
+  assert.strictEqual(cell(sh, 2, 2), padded, 'the row is left exactly as it was');
+  assert.strictEqual(w.docs('clients')[0].status, 'New', 'and nothing else of the action was saved');
+  const problems = x.view(x.owner).problems;
+  assert(problems.some((p) => p.where === 'setJobDone' && /"jobs" tab/.test(p.message) && /too big/.test(p.message)), JSON.stringify(problems));
 });
 
 test('when the alert email cannot be sent, the sale is still saved and the owner is told', () => {
@@ -1260,6 +1298,240 @@ test('resetOwnerPin gives the owner a new PIN and signs the owner out everywhere
   const none = empty.byHand('resetOwnerPin', { mayFail: true });
   assert(none.error, 'before setup there is nothing to reset, and it says so');
   assert.strictEqual(empty.G.mail.length, 0);
+});
+
+test('alert emails go out only after the save: a save that fails sends nothing, and its retry sends one', () => {
+  const x = ready(), w = x.w, G = x.G, mails = G.mail.length;
+
+  /* A sale that saves: the email is the last thing that happens, after the sheet and REV are written. */
+  const good = x.sale(x.mason, 'Alpha', x.days[0], '08:00');
+  must(good);
+  const sent = good.calls.indexOf('mail');
+  assert(sent > good.calls.lastIndexOf('ss.flush') && sent > good.calls.indexOf('props.set:REV') && sent > good.calls.lastIndexOf('sheet.write:notices'),
+    'the email was sent before the save had finished: ' + good.calls.join(', '));
+  assert(sent < good.calls.indexOf('lock.release'), 'and before the request lets go of its turn');
+  assert.strictEqual(G.mail.length, mails + 1);
+
+  /* The save fails (three tries, all refused by Google): the owner must not get an email about a sale that is not there. */
+  const body = saleBody(x.mason, 'Bravo', x.days[0], '09:30');
+  G.fail['ss.flush'] = 3;
+  const bad = w.post(body, { loose: true });
+  fails(bad, 'server');
+  assert.strictEqual(G.fail['ss.flush'], 0, 'the test did make the save fail');
+  assert(bad.calls.indexOf('mail') < 0 && bad.calls.indexOf('FAILED mail') < 0, 'nothing was emailed for a save that failed');
+  assert.strictEqual(G.mail.length, mails + 1);
+  assert.deepStrictEqual(w.docs('clients').map((c) => c.name), ['Alpha']);
+
+  /* The rep taps Save again: saved once, emailed once. A third tap is answered from memory and emails nobody. */
+  const again = must(w.post(body));
+  assert(!again.replay);
+  assert.strictEqual(G.mail.length, mails + 2);
+  assert(/^Ridgeline Wash Co\.: Appointment booked: Bravo/.test(G.mail[mails + 1].subject));
+  assert.strictEqual(must(w.post(body)).replay, true);
+  assert.strictEqual(G.mail.length, mails + 2);
+  assert.deepStrictEqual(w.docs('clients').map((c) => c.name), ['Alpha', 'Bravo']);
+
+  /* An action that is refused, or that fails half way, emails nobody either. */
+  fails(x.sale(x.riley, 'Taken', x.days[0], '08:00'), 'slot_taken');
+  G.fail['sheet.read:team'] = 2;
+  fails(w.post(saleBody(x.riley, 'Half Way', x.days[0], '12:00'), { loose: true }), 'server');
+  assert.strictEqual(G.mail.length, mails + 2);
+});
+
+test('an email that cannot be sent after the save does not fail the sale, and the owner finds out in the app', () => {
+  const x = ready(), w = x.w, G = x.G, mails = G.mail.length;
+  const seen = x.view(x.owner);
+  G.fail.mail = 1;
+  const r = x.sale(x.mason, 'Alpha', x.days[0], '08:00');
+  const res = must(r);
+  assert(res.result.saleId && res.result.jobId, 'the rep gets the normal answer');
+  assert(r.calls.indexOf('FAILED mail') > r.calls.indexOf('props.set:REV'), 'the email was tried after the save');
+  assert.strictEqual(G.mail.length, mails);
+  assert.deepStrictEqual([w.docs('clients').length, w.docs('sales').length, w.docs('jobs').length, w.docs('notices').length], [1, 1, 1, 1]);
+  const problems = w.docs('problems');
+  assert.strictEqual(problems.length, 1);
+  assert.strictEqual(problems[0].where, 'email');
+  assert.strictEqual(problems[0].message, 'An email alert could not be sent: Service invoked too many times for one day: email.');
+  assert.strictEqual(+G.props.REV, res.sync.rev + 1, 'the problem moved the revision number on, so the owner\'s phone picks it up');
+  assert(G.logs.some((l) => /email alert could not be sent/.test(l)), 'and it is in the script log too');
+  const owner = w.post({ action: 'sync', token: x.owner, since: seen.rev, day: seen.today });
+  assert.strictEqual(must(owner).sync.problems.length, 1);
+  assert.deepStrictEqual(x.view(x.mason).problems, [], 'the rep is not shown it');
+  /* The same tap again is a replay: no second sale, no second try at the email, no second problem. */
+  assert.strictEqual(G.mail.length, mails);
+  must(x.sale(x.mason, 'Bravo', x.days[0], '09:30'));
+  assert.strictEqual(G.mail.length, mails + 1, 'the next alert goes out as usual');
+  assert.strictEqual(w.docs('problems').length, 1);
+
+  /* If even the problems list cannot be saved, the sale still stands and the rep still gets a normal answer. */
+  G.fail.mail = 1;
+  G.hooks.onMail = () => { G.fail['ss.flush'] = 3; };   // the sale is saved by now; every later save fails
+  const body = saleBody(x.mason, 'Charlie', x.days[0], '12:00');
+  const worst = w.post(body, { loose: true });
+  assert(must(worst).result.saleId);
+  assert.strictEqual(G.fail['ss.flush'], 0, 'the test did make the second save fail');
+  assert.deepStrictEqual(w.docs('clients').map((c) => c.name), ['Alpha', 'Bravo', 'Charlie']);
+  assert.strictEqual(w.docs('problems').length, 1);
+  assert(G.logs.some((l) => /could not be added to the problems list/.test(l)), 'it is at least in the script log');
+  assert.strictEqual(must(w.post(body)).replay, true, 'the sale counts as saved, so the same tap again saves nothing more');
+});
+
+test('fifty "anything new?" checks in a row cost at most one property read, and a save is seen by the very next check', () => {
+  const x = ready(), w = x.w, G = x.G;
+  const phones = [x.owner, x.mason, x.riley, x.cole];
+  for (let i = 0; i < 6; i++) phones.push(x.login(i % 2 ? 'Mason' : 'Riley', i % 2 ? '2222' : '4444').result.token);
+  const view = x.view(x.owner);
+  const ask = (token, rev) => w.post({ action: 'sync', token: token, since: rev, day: view.today });
+  const propertyReads = (r) => r.calls.filter((c) => c.indexOf('props.get:') === 0);
+  const fifty = (rev) => {
+    let reads = [];
+    for (let i = 0; i < 50; i++) {
+      const r = ask(phones[i % phones.length], rev);
+      assert.deepStrictEqual(r.res, { ok: true, result: {}, sync: { rev: rev, today: view.today, same: true } }, 'check ' + (i + 1));
+      assert(!r.calls.some((c) => /^(lock|sheet|ss)\./.test(c) || c.indexOf('props.set') === 0), 'check ' + (i + 1) + ' touched the lock or the sheet');
+      reads = reads.concat(propertyReads(r));
+    }
+    return reads;
+  };
+
+  /* Soon after a save the number is in the cache already (the save put it there). */
+  assert.deepStrictEqual(fifty(view.rev), [], 'no property read at all');
+
+  /* A quiet spell later the cache has let go of the save's copy (150 seconds). The first check reads REV once and the other 49 do not. */
+  G.cacheNow += 151;
+  assert.deepStrictEqual(fifty(view.rev), ['props.get:REV']);
+  assert.strictEqual(G.cache.get('rev:seen').value, String(view.rev));
+  G.cacheNow += 119;
+  assert.deepStrictEqual(fifty(view.rev), [], 'the looked-up copy is good for two minutes');
+  G.cacheNow += 2;
+  assert.deepStrictEqual(fifty(view.rev), ['props.get:REV'], 'and then REV is read once more');
+
+  /* A save: the very next check from a phone that holds the old number gets the new picture. */
+  const sale = x.sale(x.mason, 'Alpha', x.days[0], '08:00');
+  must(sale);
+  assert(sale.calls.indexOf('cache.put:rev') > sale.calls.indexOf('props.set:REV'), 'the save updates the property, then the cache');
+  assert(sale.calls.indexOf('cache.put:rev') < sale.calls.indexOf('lock.release'), 'while it still holds the lock');
+  assert(!G.cache.has('rev:seen') && G.cache.get('rev').value === G.props.REV, 'after a save the cache holds the new number and no copy of the old one');
+  const next = ask(x.riley, view.rev);
+  assert.strictEqual(next.res.sync.same, false, 'a stale "nothing changed" was answered after a save');
+  assert.strictEqual(next.res.sync.rev, +G.props.REV);
+  assert(next.res.sync.taken.some((t) => t.date === x.days[0] && t.time === '08:00'));
+  assert(next.calls.indexOf('lock.acquire') >= 0 && next.calls.indexOf('props.get:REV') > next.calls.indexOf('lock.acquire'), 'and what it was told came from the property, read under the lock');
+  const rev2 = next.res.sync.rev;
+  phones.forEach((p) => assert.strictEqual(ask(p, view.rev).res.sync.same, false, 'every phone with the old number is told'));
+  assert.deepStrictEqual(fifty(rev2), [], 'and the new number is answered from the cache from then on');
+
+  /* A check that read REV just before a save and put its copy in the cache just after it: the save's copy still wins. */
+  G.cacheNow += 151;
+  assert.strictEqual(must(ask(x.owner, rev2)).sync.same, true);                  // this check's copy: rev:seen = rev2
+  must(x.sale(x.riley, 'Bravo', x.days[0], '09:30'));                             // the save: REV and rev = rev2 + 1
+  const rev3 = +G.props.REV;
+  assert.strictEqual(rev3, rev2 + 1);
+  G.cache.set('rev:seen', { value: String(rev2), until: G.cacheNow + 120 });      // the late copy of the old number
+  assert.strictEqual(ask(x.mason, rev2).res.sync.same, false);
+  assert.deepStrictEqual(fifty(rev3), []);
+  G.cacheNow += 121;                                                              // the late copy runs out first ...
+  assert(G.cache.get('rev').value === String(rev3) && G.cache.get('rev').until > G.cacheNow, 'the save\'s copy has to outlast it');
+  assert.strictEqual(ask(x.cole, rev2).res.sync.same, false);
+  assert.deepStrictEqual(fifty(rev3), []);
+
+  /* Under the lock the property decides, whatever the cache says. */
+  G.cache.set('rev', { value: '9000', until: G.cacheNow + 150 });
+  G.cache.set('rev:seen', { value: '9000', until: G.cacheNow + 120 });
+  const c = w.docs('clients')[0];
+  const note = must(w.post({ action: 'addNote', token: x.owner, opId: uid(), kind: 'client', id: c.id, text: 'From the property' }));
+  assert.strictEqual(note.sync.rev, rev3 + 1);
+  assert.strictEqual(G.props.REV, String(rev3 + 1));
+  assert.strictEqual(G.cache.get('rev').value, String(rev3 + 1), 'and the save put the right number back in the cache');
+  assert.strictEqual(must(w.post({ action: 'sync', token: x.mason, since: 9000, day: view.today })).sync.rev, rev3 + 1);
+
+  /* If the cache will not take the new number, no number is left in it at all. */
+  G.cache.set('rev:seen', { value: String(rev3 + 1), until: G.cacheNow + 120 });
+  G.fail['cache.put:rev'] = 1;
+  must(w.post({ action: 'addNote', token: x.owner, opId: uid(), kind: 'client', id: c.id, text: 'Cache hiccup' }));
+  assert.strictEqual(G.props.REV, String(rev3 + 2));
+  assert(!G.cache.has('rev') && !G.cache.has('rev:seen'), 'an old number was left in the cache');
+  const cold = ask(x.riley, rev3 + 1);
+  assert.strictEqual(cold.res.sync.same, false, 'so the next check goes to the property and is told the truth');
+  assert.strictEqual(cold.calls.indexOf('props.get:REV') < cold.calls.indexOf('lock.try:15000'), true);
+  assert.deepStrictEqual(fifty(rev3 + 2), []);
+
+  /* A setup run again and a PIN reset from the editor write through the same store, so they keep the cache right too. */
+  w.byHand('resetOwnerPin');
+  assert.strictEqual(G.cache.get('rev').value, G.props.REV);
+  assert.strictEqual(+G.props.REV, rev3 + 3);
+  assert.strictEqual(ask(x.mason, rev3 + 2).res.sync.same, false);
+});
+
+test('twenty wrong PINs, four at a time, pause that sign-in and leave the owner a note in the sheet', () => {
+  const x = ready(), w = x.w, G = x.G;
+  const rev = +G.props.REV;
+  let last = null;
+  for (let batch = 0; batch < 5; batch++) {
+    if (batch) G.cacheNow += 16 * 60;   // long enough for the 15 minute lock to forget
+    for (let i = 0; i < 4; i++) { last = w.post({ action: 'login', name: 'Mason', pin: '0000' }); fails(last, 'auth'); }
+  }
+  assert(last.calls.indexOf('sheet.write:notices') >= 0 && last.calls.indexOf('props.set:REV') >= 0, 'the 20th wrong try is the one that saves the note');
+  const notes = w.docs('notices');
+  assert.strictEqual(notes.length, 1);
+  assert.strictEqual(notes[0].type, 'signin');
+  assert.strictEqual(notes[0].text, 'Someone tried the wrong PIN for Mason 20 times. Their sign-in is paused for a few hours. Reset their PIN if that was not them.');
+  assert.strictEqual(+G.props.REV, rev + 1);
+  G.cacheNow += 16 * 60;
+  const paused = w.post({ action: 'login', name: 'Mason', pin: '2222' });
+  fails(paused, 'locked');
+  assert(/paused for a few hours/.test(paused.res.error.message));
+  assert(!paused.calls.some((c) => /^sheet\.write:/.test(c)), 'a paused try saves nothing more');
+  must(w.post({ action: 'sync', token: x.mason }));   // the phone that was already signed in is not thrown out
+  assert.strictEqual(x.view(x.owner).notices.length, 1);
+
+  /* A wrong "current PIN" counts the same way, through the same web address. */
+  for (let i = 0; i < 5; i++) fails(w.post({ action: 'changePin', token: x.riley, opId: uid(), oldPin: '0000', newPin: '5151' }), 'invalid');
+  fails(w.post({ action: 'changePin', token: x.riley, opId: uid(), oldPin: '4444', newPin: '5151' }), 'locked');
+  fails(w.post({ action: 'login', name: 'Riley', pin: '4444' }), 'locked');
+  G.cacheNow += 16 * 60;
+  must(w.post({ action: 'changePin', token: x.riley, opId: uid(), oldPin: '4444', newPin: '5151' }));
+
+  /* The owner resets the PIN: the pause is lifted. Otherwise it lifts by itself when the 6 hours are up. */
+  const reset = must(w.post({ action: 'resetPin', token: x.owner, opId: uid(), id: x.ids.mason, pin: '7373' })).result;
+  assert.strictEqual(x.login('Mason', reset.pin).sync.me.name, 'Mason');
+  for (let batch = 0; batch < 5; batch++) {
+    G.cacheNow += 16 * 60;
+    for (let i = 0; i < 4; i++) fails(w.post({ action: 'login', name: 'Cole', pin: '0000' }), 'auth');
+  }
+  G.cacheNow += 16 * 60;
+  fails(w.post({ action: 'login', name: 'Cole', pin: '3333' }), 'locked');
+  G.cacheNow += 21600;
+  x.login('Cole', '3333');
+  assert.strictEqual(w.docs('notices').length, 2);
+});
+
+test('sign-ins older than 90 days leave the sheet when somebody signs in, and a saved action is remembered for 6 hours', () => {
+  const x = ready(), w = x.w, G = x.G;
+  const before = w.docs('sessions').length;
+  /* Three old sign-ins, as rows in the sessions tab: two long expired, one a day short of 90 days. */
+  const sh = w.sheet('sessions'), day = 86400000, now = Date.now();
+  const old = [{ id: 'a'.repeat(64), memberId: x.ids.mason, createdAt: now - 91 * day }, { id: 'b'.repeat(64), memberId: x.ids.cole, createdAt: now - 400 * day },
+    { id: 'c'.repeat(64), memberId: x.ids.riley, createdAt: now - 89 * day }];
+  old.forEach((doc, i) => { setCell(sh, before + 2 + i, 1, doc.id); setCell(sh, before + 2 + i, 2, JSON.stringify(doc)); });
+  assert.strictEqual(w.docs('sessions').length, before + 3);
+  fails(w.post({ action: 'login', name: 'Mason', pin: '0000' }), 'auth');
+  must(w.post({ action: 'sync', token: x.mason }));
+  assert.strictEqual(w.docs('sessions').length, before + 3, 'only a sign-in that works clears them away');
+  x.login('Riley', '4444');
+  const ids = w.docs('sessions').map((d) => d.id);
+  assert.strictEqual(ids.length, before + 2, 'the two expired rows are gone and the new sign-in is there');
+  assert(ids.indexOf(old[0].id) < 0 && ids.indexOf(old[1].id) < 0 && ids.indexOf(old[2].id) >= 0);
+  assert.strictEqual(lastRow(sh), before + 3, 'no blank rows left behind');
+  [x.owner, x.mason, x.riley, x.cole].forEach((t) => must(w.post({ action: 'sync', token: t })));
+
+  const body = saleBody(x.mason, 'Alpha', x.days[0], '08:00');
+  must(w.post(body));
+  const key = Array.from(G.cache.keys()).find((k) => k.indexOf('op:') === 0 && k.indexOf(body.opId) > 0);
+  assert.strictEqual(G.cache.get(key).until - G.cacheNow, 21600, 'remembered for 6 hours');
+  G.cacheNow += 21599;
+  assert.strictEqual(must(w.post(body)).replay, true);
+  assert.strictEqual(w.docs('sales').length, 1);
 });
 
 console.log('\n' + (count - failed.length) + ' of ' + count + ' backend tests passed.');

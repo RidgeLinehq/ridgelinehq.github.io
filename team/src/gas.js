@@ -25,6 +25,8 @@ var CELL_MAX_CHARS = 50000;      /* the most text one cell of a Google Sheet can
 var CACHE_MAX_SECONDS = 21600;   /* the longest the cache keeps anything (6 hours) */
 var CACHE_MAX_KEY = 250;
 var CACHE_MAX_VALUE = 30000;     /* characters; Google's limit is 100 KB */
+var REV_SEEN_SECONDS = 120;      /* how long a looked-up copy of the revision number stays in the cache */
+var REV_CACHE_SECONDS = 150;     /* the same for the copy a save leaves there; it has to be the longer of the two */
 var LOCK_WAIT_MS = 15000;
 var SETUP_LOCK_WAIT_MS = 30000;
 var SAVE_TRIES = 3;
@@ -98,9 +100,13 @@ function answerPost_(e) {
  * The only thing this may ever answer is "nothing changed" to someone who is signed in. Any
  * other outcome (signed out, a new day, an error) is thrown away and the request is run again
  * properly, under the lock.
+ *
+ * This is the one place that takes the revision number from the cache (newStore_(true)), so
+ * that a phone asking every 20 seconds does not use up Google's daily allowance of property
+ * reads. See quickRev in the store for why that copy can be trusted.
  */
 function answerIfNothingChanged_(req) {
-  var store = newStore_(), env = newEnv_();
+  var store = newStore_(true), env = newEnv_();
   if (req.since !== store.getRev() || req.day !== env.dayKey(env.now())) return null;
   var res = RidgelineCore.create(store, env).handle(req);
   if (res && res.ok === true && res.sync && res.sync.same === true && !store.hasChanges()) return res;
@@ -108,11 +114,11 @@ function answerIfNothingChanged_(req) {
 }
 
 /* Runs one request while holding the lock. The store is built here, after the lock was taken,
-   so everything it reads (the revision number included) is the latest. */
+   so everything it reads is the latest (the revision number comes from the property itself). */
 function answerLocked_(req) {
-  var store = newStore_(), env = newEnv_(), res;
+  var store = newStore_(), env = newEnv_(), core = RidgelineCore.create(store, env), res;
   try {
-    res = RidgelineCore.create(store, env).handle(req);
+    res = core.handle(req);
     /* "Something went wrong" promises that nothing was saved, so make that true: drop whatever
        the failed action had changed and keep only the note about the problem. */
     if (res && res.ok === false && res.error && res.error.code === 'server') store.keepOnlyProblems();
@@ -124,7 +130,37 @@ function answerLocked_(req) {
     try { store.forgetCache(); } catch (ignore) { /* the cache empties itself in time */ }
     throw err;
   }
+  /* Everything is saved. Only now do the alert emails the action asked for go out. A save that
+     failed never gets this far, so it never emails, and its retry emails once. */
+  var mail = env.takeOutbox();
+  if (res && res.ok === true && mail.length) sendMail_(mail, core, store);
   return res;
+}
+
+/*
+ * Sends the emails an action asked for. The action is already saved, so an email that cannot
+ * be sent must neither undo it nor fail it. The owner still has to find out, so it goes on the
+ * problems list the app shows, which takes one more small save.
+ */
+function sendMail_(mail, core, store) {
+  var failed = [], i;
+  for (i = 0; i < mail.length; i++) {
+    try {
+      MailApp.sendEmail(mail[i].to || ownerEmail_(), EMAIL_PREFIX + mail[i].subject, mail[i].body);
+    } catch (err) {
+      failed.push(errorText_(err));
+    }
+  }
+  if (!failed.length) return;
+  try {
+    for (i = 0; i < failed.length; i++) {
+      log_('An email alert could not be sent: ' + failed[i]);
+      core.recordProblem('email', 'An email alert could not be sent: ' + failed[i]);
+    }
+    store.flush();
+  } catch (err) {
+    log_('That could not be added to the problems list in the app: ' + errorText_(err));
+  }
 }
 
 function release_(lock) {
@@ -140,8 +176,11 @@ function release_(lock) {
  *
  * A tab is read at most once per request and kept in memory. put and del change that memory
  * and mark the tab; flush() then rewrites each marked tab in one go.
+ *
+ * quick: true only for the "nothing changed?" check, which runs without the lock and may take
+ * the revision number from the cache. Every other request holds the lock and reads the property.
  */
-function newStore_() {
+function newStore_(quick) {
   var props = PropertiesService.getScriptProperties();
   var cache = CacheService.getScriptCache();
   var book = null;         /* the spreadsheet, opened the first time a tab is needed */
@@ -212,8 +251,51 @@ function newStore_() {
   }
 
   function readRev() {
-    if (savedRev === null) savedRev = parseInt(props.getProperty('REV'), 10) || 0;
+    if (savedRev === null) savedRev = quick ? quickRev() : propertyRev();
     return savedRev;
+  }
+
+  function propertyRev() { return parseInt(props.getProperty('REV'), 10) || 0; }
+
+  /*
+   * The revision number without the lock, and nearly always without reading the property.
+   * Google allows only so many property reads a day, and every open phone asks "anything
+   * new?" every 20 seconds. So two copies are kept in the cache:
+   *   rev:seen   put there by this function when it found neither and had to read REV (120 seconds)
+   *   rev        put there by whoever writes REV, while still holding the lock (150 seconds)
+   * So in a quiet spell REV is read once every two minutes, however many phones are asking.
+   * A save puts rev and takes rev:seen out, so after a save the cache holds the new number and
+   * nothing else. One thing can still slip in: a check that read REV just before the save and
+   * stores its copy just after it. That is why rev is looked at first and rev:seen only when
+   * rev is gone, and why rev is the longer lived: the save's copy is the one that gets read,
+   * and it outlasts the late one by 30 seconds. (Only a check that stalled longer than that
+   * between its two steps could leave an old number to be read, for two minutes at most.
+   * Nothing is ever decided from it: bookings and saves hold the lock and read the property.)
+   */
+  function quickRev() {
+    var n = cachedRev('rev');
+    if (n === null) n = cachedRev('rev:seen');
+    if (n !== null) return n;
+    n = propertyRev();
+    try { cache.put('rev:seen', String(n), REV_SEEN_SECONDS); } catch (ignore) { /* the next check reads the property again */ }
+    return n;
+  }
+
+  function cachedRev(key) {
+    var value = null;
+    try { value = cache.get(key); } catch (ignore) { /* the same as not being there */ }
+    return typeof value === 'string' && /^\d+$/.test(value) ? parseInt(value, 10) : null;
+  }
+
+  /* Called right after REV is written, under the lock: the new number goes in the cache and a
+     looked-up copy of the old one comes out. If that cannot be done, no copy may stay at all. */
+  function rememberRev(n) {
+    try {
+      cache.put('rev', String(n), REV_CACHE_SECONDS);
+      cache.remove('rev:seen');
+    } catch (err) {
+      try { cache.removeAll(['rev', 'rev:seen']); } catch (ignore) { /* both are gone within three minutes anyway */ }
+    }
   }
 
   function getRev() { return rev === null ? readRev() : rev; }
@@ -253,10 +335,12 @@ function newStore_() {
       written[i].tab.lastRow = written[i].used;
     }
     /* The revision number goes last, so nobody is ever told "there is something new" before
-       the new data is really there. */
+       the new data is really there. Then the cache's copy of it, so the very next "anything
+       new?" check sees the new number. */
     if (rev !== null && rev !== readRev()) {
       props.setProperty('REV', String(rev));
       savedRev = rev;
+      rememberRev(rev);
     }
     rev = null;
   }
@@ -270,7 +354,7 @@ function newStore_() {
         if (tries >= SAVE_TRIES) {
           /* Some tabs may have been written and others not. Make every phone reload what is
              really in the sheet. */
-          if (rev !== null) { try { props.setProperty('REV', String(rev)); } catch (ignore) { /* nothing more to try */ } }
+          if (rev !== null) { try { props.setProperty('REV', String(rev)); rememberRev(rev); } catch (ignore) { /* nothing more to try */ } }
           throw err;
         }
         Utilities.sleep(tries * 500);
@@ -393,14 +477,22 @@ function recordId_(text) {
 /* ---------- the env: clock, ids and email ---------- */
 
 function newEnv_() {
+  var outbox = [];   /* emails the core has asked for during this request, not sent yet */
   return {
     now: function () { return new Date().getTime(); },
     dayKey: function (ms) { return Utilities.formatDate(new Date(ms), TIME_ZONE, 'yyyy-MM-dd'); },
     hm: function (ms) { return Utilities.formatDate(new Date(ms), TIME_ZONE, 'HH:mm'); },
     uuid: function () { return Utilities.getUuid(); },
+    /* The core asks for an email in the middle of an action, before anything is saved. It is
+       only kept here; answerLocked_ sends it after the save. Nothing is ever emailed for a
+       save that failed. */
     notify: function (msg) {
-      var to = (msg && msg.to) || ownerEmail_();
-      MailApp.sendEmail(to, EMAIL_PREFIX + String(msg.subject), String(msg.body));
+      outbox.push({ to: msg && msg.to ? String(msg.to) : '', subject: String(msg && msg.subject), body: String(msg && msg.body) });
+    },
+    takeOutbox: function () {
+      var mail = outbox;
+      outbox = [];
+      return mail;
     }
   };
 }

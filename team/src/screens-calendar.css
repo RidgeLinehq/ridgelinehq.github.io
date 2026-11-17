@@ -1,0 +1,4 @@
+/* ---------- CALENDAR ---------- */
+/* .time-tags > .time-tag: a day's free times for a rep to read (not buttons, so no border). Tinted like an open day. */
+.time-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.time-tag { display: inline-flex; align-items: center; height: 40px; padding: 0 14px; border-radius: 10px; background: var(--ice-wash); color: var(--ink); font: 600 16px/1 var(--body); font-variant-numeric: tabular-nums; white-space: nowrap; }

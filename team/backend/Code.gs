@@ -20,7 +20,8 @@
  *        dayKey(ms) -> 'YYYY-MM-DD' in the business time zone
  *        hm(ms) -> 'HH:MM' (24 hour) in the business time zone
  *        uuid() -> random string
- *        notify({subject, body})   sends the owner an email; may throw
+ *        notify({subject, body, to})   emails the owner; may throw. A host may instead keep the
+ *                                  message and send it once the data is saved (the Google host does).
  *
  * Every request is { action, token?, since?, day?, opId?, ... } and every answer is
  * { ok: true, result, sync } or { ok: false, error: { code, message }, sync? }.
@@ -38,8 +39,12 @@ var RidgelineCore = (function () {
   var LIMITS = {
     name: 60, line: 160, text: 500, notesKept: 50, noticesKept: 60, problemsKept: 30,
     maxCents: 100000000, sessionDays: 90, loginTries: 5, lockSeconds: 900, globalTries: 40,
+    longTries: 20, longSeconds: 21600,   /* 20 wrong PINs inside 6 hours (the longest the cache remembers) pause that person */
+    retrySeconds: 21600,                 /* how long a saved action is remembered by its opId */
+    docChars: 45000,                     /* the most one record may take as JSON; a cell of the sheet holds 50,000 */
     daysPerCall: 62, slotsPerDay: 24, services: 20, standardSections: 12, standardItems: 20, standardLine: 240
   };
+  var CLIENT_FULL = 'This client\'s record is full. Shorten the name, the address or another detail, then try again.';
   var DEFAULT_SETTINGS = {
     id: 'main',
     businessName: 'Ridgeline Wash Co.',
@@ -219,6 +224,14 @@ var RidgelineCore = (function () {
    * monthlyPct of the price on the same day of every following month, for as long as the
    * client is still New or Active on that day (paused and cancelled months pay nothing).
    * The percentages are the ones saved on the sale, so later rate changes never rewrite history.
+   *
+   * The client's status alone is not enough, because one client can have several sales. So a
+   * monthly sale can carry an endDay, and it pays nothing dated after that day, ever:
+   *   - when the client is set to Cancelled, their monthly sales end that day. If they buy again
+   *     later, the new sale pays; the old one does not start again.
+   *   - when the client buys another monthly plan, the older monthly sale ends that day (it
+   *     also remembers which sale replaced it, as endedBy), so only one plan pays each month.
+   * Pausing sets no endDay: the paused months pay nothing and the pay picks up afterwards.
    */
   function commissionEvents(sale, client, today) {
     var events = [{ day: sale.day, cents: share(sale.priceCents, sale.firstPct), kind: 'first' }];
@@ -226,7 +239,7 @@ var RidgelineCore = (function () {
       var each = share(sale.priceCents, sale.monthlyPct);
       for (var k = 1; k <= 600; k++) {
         var due = addMonths(sale.day, k);
-        if (due > today) break;
+        if (due > today || (sale.endDay && due > sale.endDay)) break;
         var st = statusOn(client, due);
         if (st === 'New' || st === 'Active') events.push({ day: due, cents: each, kind: 'monthly' });
       }
@@ -284,6 +297,12 @@ var RidgelineCore = (function () {
   }
 
   function pinOk(v) { return typeof v === 'string' && /^\d{4,6}$/.test(v); }
+
+  /* One record is one cell of the Google Sheet, and a cell holds 50,000 characters. Whatever can
+     make a record longer checks it here first, before anything is saved, and says what to shorten. */
+  function fits(doc, msg) {
+    if (JSON.stringify(doc).length > LIMITS.docChars) throw new AppError('invalid', msg);
+  }
 
   function cleanSlots(list) {
     var seen = {}, out = [];
@@ -396,6 +415,43 @@ var RidgelineCore = (function () {
       return n;
     }
 
+    /*
+     * Wrong PINs are counted per person in two ways, whether they are typed at sign-in or as the
+     * "current PIN" when changing a PIN:
+     *   fail:<id>    5 quick ones lock that person for 15 minutes (the count lapses 15 minutes
+     *                after the last wrong try, and a right PIN clears it);
+     *   fail6h:<id>  "count:when the first one was", kept for 6 hours from the first wrong try.
+     *                20 inside that window pause the person until the window runs out, and the
+     *                owner is told once. This is what stops four quiet guesses every 15 minutes.
+     *                A right PIN does not clear it; only time or the owner resetting the PIN does.
+     */
+    function pinLocked(m) {
+      if ((parseInt(store.cacheGet('fail6h:' + m.id), 10) || 0) >= LIMITS.longTries) {
+        throw new AppError('locked', 'Too many wrong tries. This sign-in is paused for a few hours. Ask the owner to reset your PIN.');
+      }
+      if ((parseInt(store.cacheGet('fail:' + m.id), 10) || 0) >= LIMITS.loginTries) {
+        throw new AppError('locked', 'Too many wrong tries. Wait 15 minutes, or ask the owner to reset your PIN.');
+      }
+    }
+
+    function wrongPin(m) {
+      bumpFail('fail:' + m.id);
+      var key = 'fail6h:' + m.id, was = String(store.cacheGet(key) || '').split(':');
+      var n = (parseInt(was[0], 10) || 0) + 1, since = parseInt(was[1], 10) || env.now();
+      var left = LIMITS.longSeconds - Math.floor((env.now() - since) / 1000);
+      if (left < 1) { n = 1; since = env.now(); left = LIMITS.longSeconds; }
+      store.cachePut(key, n + ':' + since, left);
+      if (n === LIMITS.longTries) {
+        tellOwner('signin', 'Someone tried the wrong PIN for ' + m.name + ' ' + n + ' times. Their sign-in is paused for a few hours. Reset their PIN if that was not them.');
+        store.setRev(store.getRev() + 1);
+      }
+    }
+
+    function clearPinFails(memberId) {
+      store.cacheDel('fail:' + memberId);
+      store.cacheDel('fail6h:' + memberId);
+    }
+
     function login(req) {
       var name = normName(req.name), pin = str(req.pin);
       var wrong = new AppError('auth', 'That name and PIN do not match. Check both and try again.');
@@ -407,12 +463,13 @@ var RidgelineCore = (function () {
       var hits = active.filter(function (m) { return normName(m.name) === name; });
       if (!hits.length) hits = active.filter(function (m) { return normName(m.name).split(' ')[0] === name; });
       if (hits.length !== 1) { bumpFail('fail:all'); throw wrong; }
-      var m = hits[0], key = 'fail:' + m.id;
-      if ((parseInt(store.cacheGet(key), 10) || 0) >= LIMITS.loginTries) {
-        throw new AppError('locked', 'Too many wrong tries. Wait 15 minutes, or ask the owner to reset your PIN.');
-      }
-      if (hashPin(m.salt, pin) !== m.pinHash) { bumpFail(key); bumpFail('fail:all'); throw wrong; }
-      store.cacheDel(key);
+      var m = hits[0];
+      pinLocked(m);
+      if (hashPin(m.salt, pin) !== m.pinHash) { wrongPin(m); bumpFail('fail:all'); throw wrong; }
+      store.cacheDel('fail:' + m.id);
+      /* A sign-in older than 90 days is already refused; this is where it is cleared away. */
+      all('sessions').filter(function (s) { return env.now() - s.createdAt > LIMITS.sessionDays * 86400000; })
+        .forEach(function (s) { store.cacheDel('sess:' + s.id); del('sessions', s.id); });
       var token = String(env.uuid()) + String(env.uuid());
       var hash = sha256(token);
       put('sessions', { id: hash, memberId: m.id, createdAt: env.now() });
@@ -434,6 +491,8 @@ var RidgelineCore = (function () {
       var myClients = owner ? clients : rep ? clients.filter(function (c) { return c.repId === me.id; }) : [];
       myClients.forEach(function (c) { mine[c.id] = 1; });
       var mySales = owner ? sales : rep ? sales.filter(function (s) { return s.repId === me.id; }) : [];
+      var mySaleIds = Object.create(null);
+      mySales.forEach(function (s) { mySaleIds[s.id] = 1; });
       var myJobs = owner ? jobs
         : rep ? jobs.filter(function (j) { return mine[j.clientId]; })
         : jobs.filter(function (j) { return j.assignedTo === me.id && j.status !== 'cancelled'; });
@@ -463,6 +522,9 @@ var RidgelineCore = (function () {
           var v = clone(s), c = clientById[s.clientId];
           v.clientName = c ? c.name : '';
           v.events = commissionEvents(s, c, day);
+          /* endedBy names the newer plan that took this one's place. A rep is told which sale that
+             is only when it is their own; for someone else's it just says 'other'. */
+          if (v.endedBy && !mySaleIds[v.endedBy]) v.endedBy = 'other';
           return v;
         }),
         jobs: myJobs.map(function (j) {
@@ -516,9 +578,28 @@ var RidgelineCore = (function () {
       if (clash) throw new AppError('slot_taken', 'That time was just taken. Pick another.');
     }
 
+    /* A sales rep cannot see or finish a job, so a job only ever goes to a tech or an owner. */
+    function canDoJobs(m) { return !!m && !!m.active && (m.role === 'tech' || m.role === 'owner'); }
+
+    function needJobTaker(id) {
+      var m = find('team', id);
+      if (!m || !m.active) throw new AppError('invalid', 'Pick someone who is on the team.');
+      if (!canDoJobs(m)) throw new AppError('invalid', 'Only a tech or the owner can be given a job. Pick one of them.');
+      return m;
+    }
+
     function defaultTech() {
       var id = getSettings().defaultTechId, m = id ? find('team', id) : null;
-      return m && m.active ? m.id : null;
+      return canDoJobs(m) ? m.id : null;
+    }
+
+    /* Someone who is leaving, or becoming a sales rep, keeps the jobs they finished. The ones
+       still to do go back to nobody, and new jobs stop going to them. */
+    function takeOffJobs(memberId) {
+      all('jobs').filter(function (j) { return j.assignedTo === memberId && j.status === 'scheduled'; })
+        .forEach(function (j) { j.assignedTo = null; put('jobs', j); });
+      var s = find('settings', 'main');
+      if (s && s.defaultTechId === memberId) { s.defaultTechId = null; put('settings', s); }
     }
 
     function whenText(date, time) {
@@ -549,16 +630,26 @@ var RidgelineCore = (function () {
       doc.notes = (doc.notes || []).concat([{ at: env.now(), by: me.id, text: text }]).slice(-LIMITS.notesKept);
     }
 
-    /* A job going back on the schedule cannot stay with someone who has left the team. */
+    /* A job going back on the schedule cannot stay with someone who has left the team or sells now. */
     function dropGoneAssignee(job) {
-      var m = job.assignedTo ? find('team', job.assignedTo) : null;
-      if (!m || !m.active) job.assignedTo = null;
+      if (!canDoJobs(job.assignedTo ? find('team', job.assignedTo) : null)) job.assignedTo = null;
     }
 
     function setStatus(client, status) {
       if (client.status === status) return;
       client.status = status;
       client.statusLog = (client.statusLog || []).concat([{ day: today(), status: status }]).slice(-200);
+    }
+
+    /* Ends the monthly pay of this client's monthly sales that are still running (see
+       commissionEvents). `by` is the newer monthly sale taking their place, when that is why. */
+    function endMonthlySales(clientId, day, by) {
+      all('sales').forEach(function (s) {
+        if (s.clientId !== clientId || s.billing !== 'monthly' || s.endDay || s.id === by) return;
+        s.endDay = day;
+        if (by) s.endedBy = by;
+        put('sales', s);
+      });
     }
 
     /* ---------- actions (who may call each, and what it does) ---------- */
@@ -580,13 +671,16 @@ var RidgelineCore = (function () {
           }
           var roleChanged = cur.role !== m.role;
           cur.name = name; cur.role = m.role;
+          fits(cur, 'That name is too long to save. Shorten it and try again.');
           put('team', cur);
           if (roleChanged && cur.id !== me.id) dropSessions(cur.id); else refreshSessions(cur);
+          if (roleChanged && !canDoJobs(cur)) takeOffJobs(cur.id);   /* now a sales rep: the same as leaving, as far as jobs go */
           return { id: cur.id };
         }
         if (m.pin != null && m.pin !== '' && !pinOk(str(m.pin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
         var pin = m.pin ? str(m.pin) : randomPin(), salt = String(env.uuid());
         var doc = { id: newId('m'), name: name, role: m.role, salt: salt, pinHash: hashPin(salt, pin), active: true, createdAt: env.now() };
+        fits(doc, 'That name is too long to save. Shorten it and try again.');
         put('team', doc);
         return { id: doc.id, pin: pin };
       } },
@@ -598,10 +692,7 @@ var RidgelineCore = (function () {
         m.active = false; m.removedAt = env.now();
         put('team', m);
         dropSessions(m.id);
-        all('jobs').filter(function (j) { return j.assignedTo === m.id && j.status === 'scheduled'; })
-          .forEach(function (j) { j.assignedTo = null; put('jobs', j); });
-        var s = find('settings', 'main');
-        if (s && s.defaultTechId === m.id) { s.defaultTechId = null; put('settings', s); }
+        takeOffJobs(m.id);
         return { id: m.id };
       } },
 
@@ -614,33 +705,45 @@ var RidgelineCore = (function () {
         m.salt = String(env.uuid()); m.pinHash = hashPin(m.salt, pin);
         put('team', m);
         dropSessions(m.id);
-        store.cacheDel('fail:' + m.id);
+        clearPinFails(m.id);
         return { id: m.id, pin: pin };
       } },
 
+      /* A wrong "current PIN" counts exactly like a wrong PIN at sign-in, so a phone that is
+         lying around signed in cannot be used to guess its owner's PIN. */
       changePin: { roles: ROLES, run: function (me, req) {
         var m = find('team', me.id);
         if (!m) throw new AppError('auth', 'Please sign in again.');
-        if (hashPin(m.salt, str(req.oldPin)) !== m.pinHash) throw new AppError('invalid', 'Your current PIN is not right.');
+        pinLocked(m);
+        if (hashPin(m.salt, str(req.oldPin)) !== m.pinHash) { wrongPin(m); throw new AppError('invalid', 'Your current PIN is not right.'); }
         if (!pinOk(str(req.newPin))) throw new AppError('invalid', 'A PIN is 4 to 6 digits.');
         m.salt = String(env.uuid()); m.pinHash = hashPin(m.salt, str(req.newPin));
         put('team', m);
         dropSessions(m.id, me.sess);
+        store.cacheDel('fail:' + m.id);
         return {};
       } },
 
       saveSettings: { roles: ['owner'], run: function (me, req) {
         var p = req.settings || {}, s = getSettings();
+        /* The id a list entry keeps: the one it came with, or a fresh one when it came with none
+           or with one that an earlier entry of the same list already has. */
+        function ownId(taken, given, prefix) {
+          var id = line(given, 30);
+          if (!id || taken[id]) id = newId(prefix);
+          taken[id] = 1;
+          return id;
+        }
         if (p.services !== undefined) {
           if (!Array.isArray(p.services) || !p.services.length || p.services.length > LIMITS.services) {
             throw new AppError('invalid', 'Keep at least one service on the list.');
           }
-          var seen = Object.create(null);   /* not {}: a service may be named "constructor" */
+          var seen = Object.create(null), serviceIds = Object.create(null);   /* not {}: a service may be named "constructor" */
           s.services = p.services.map(function (x) {
             var name = line(x && x.name, 40, true, 'Every service needs a name.');
             if (seen[normName(name)]) throw new AppError('invalid', 'Two services have the same name.');
             seen[normName(name)] = 1;
-            return { id: line(x.id, 30) || newId('s'), name: name, priceCents: cents(x.priceCents == null ? 0 : x.priceCents, 'Check the service prices.') };
+            return { id: ownId(serviceIds, x.id, 's'), name: name, priceCents: cents(x.priceCents == null ? 0 : x.priceCents, 'Check the service prices.') };
           });
         }
         if (p.firstPct !== undefined) s.firstPct = pct(p.firstPct);
@@ -649,11 +752,7 @@ var RidgelineCore = (function () {
           s.defaultSlots = cleanSlots(p.defaultSlots);
           if (!s.defaultSlots.length) throw new AppError('invalid', 'Keep at least one time slot.');
         }
-        if (p.defaultTechId !== undefined) {
-          var t = p.defaultTechId ? find('team', p.defaultTechId) : null;
-          if (p.defaultTechId && (!t || !t.active)) throw new AppError('invalid', 'Pick someone who is on the team.');
-          s.defaultTechId = t ? t.id : null;
-        }
+        if (p.defaultTechId !== undefined) s.defaultTechId = p.defaultTechId ? needJobTaker(p.defaultTechId).id : null;
         if (p.notifyEmail !== undefined) {
           var em = line(p.notifyEmail, 120);
           if (em && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) throw new AppError('invalid', 'That email address does not look right.');
@@ -664,17 +763,19 @@ var RidgelineCore = (function () {
           if (!Array.isArray(p.standards) || p.standards.length > LIMITS.standardSections) {
             throw new AppError('invalid', 'Keep the standards to ' + LIMITS.standardSections + ' sections or fewer.');
           }
+          var sectionIds = Object.create(null);
           var next = p.standards.map(function (sec) {
             var items = (Array.isArray(sec && sec.items) ? sec.items : [])
               .map(function (it) { return line(it, LIMITS.standardLine); })
               .filter(function (it) { return it; })
               .slice(0, LIMITS.standardItems);
-            return { id: line(sec && sec.id, 30) || newId('st'), title: line(sec && sec.title, 60, true, 'Every section needs a title.'),
+            return { id: ownId(sectionIds, sec && sec.id, 'st'), title: line(sec && sec.title, 60, true, 'Every section needs a title.'),
               ordered: !!(sec && sec.ordered), items: items };
           });
           if (JSON.stringify(next) !== JSON.stringify(s.standards)) { s.standards = next; s.standardsUpdatedAt = env.now(); }
         }
         s.id = 'main';
+        fits(s, 'The company standards are too long to save. Shorten a few lines or remove a section, then try again.');
         put('settings', s);
         return {};
       } },
@@ -700,7 +801,11 @@ var RidgelineCore = (function () {
         var day = today(), now = env.now(), settings = getSettings();
         var service = line(req.service, 60, true, 'Pick what was sold.');
         var price = cents(req.priceCents, 'Enter the price.');
-        var billing = BILLING.indexOf(req.billing) >= 0 ? req.billing : 'once';
+        var billing = 'once';   /* what a sale is when the request does not say */
+        if (req.billing != null) {
+          if (BILLING.indexOf(req.billing) < 0) throw new AppError('invalid', 'Pick one-time or monthly.');
+          billing = req.billing;
+        }
         var notes = para(req.notes, LIMITS.text);
         var repId = me.id;
         if (me.role === 'owner' && req.repId) {
@@ -743,9 +848,11 @@ var RidgelineCore = (function () {
           if (client.status === 'Cancelled' || client.status === 'Paused') setStatus(client, 'Active');
         }
         if (notes) pushNote(client, me, notes);
+        fits(client, notes ? 'There is no room left in this client\'s notes. Shorten the note on this sale and try again.' : CLIENT_FULL);
         put('clients', client);
         put('sales', sale);
         if (job) put('jobs', job);
+        if (!isNew && billing === 'monthly') endMonthlySales(client.id, day, sale.id);   /* one monthly plan pays at a time */
 
         if (me.role !== 'owner') {
           var head = me.name + ' sold ' + service + ' to ' + client.name + ' for ' + money(price) + (billing === 'monthly' ? ' a month' : '');
@@ -797,11 +904,7 @@ var RidgelineCore = (function () {
       /* Assign a job, change what needs doing, cancel it or bring it back. */
       updateJob: { roles: ['owner'], run: function (me, req) {
         var job = needJob(req.jobId), p = req.patch || {};
-        if (p.assignedTo !== undefined) {
-          var m = p.assignedTo ? find('team', p.assignedTo) : null;
-          if (p.assignedTo && (!m || !m.active)) throw new AppError('invalid', 'Pick someone who is on the team.');
-          job.assignedTo = m ? m.id : null;
-        }
+        if (p.assignedTo !== undefined) job.assignedTo = p.assignedTo ? needJobTaker(p.assignedTo).id : null;
         if (p.what !== undefined) job.what = line(p.what, LIMITS.line, true, 'Say what needs to be done.');
         if (p.status !== undefined) {
           if (p.status === 'cancelled') job.status = 'cancelled';
@@ -814,6 +917,7 @@ var RidgelineCore = (function () {
             dropGoneAssignee(job);
           } else throw new AppError('invalid', 'That is not a job status.');
         }
+        fits(job, 'This job\'s record is full. Shorten what needs to be done, then try again.');
         put('jobs', job);
         return { jobId: job.id };
       } },
@@ -841,17 +945,22 @@ var RidgelineCore = (function () {
           var ok = me.role === 'owner' || (me.role === 'tech' && job.assignedTo === me.id) || (me.role === 'rep' && jc && jc.repId === me.id);
           if (!ok) throw new AppError('forbidden', 'That job belongs to someone else.');
           pushNote(job, me, text);
+          fits(job, 'There is no room left in this job\'s notes. Shorten the note and try again.');
           put('jobs', job);
         } else if (req.kind === 'client') {
           var client = needClient(req.id);
           if (!canTouchClient(me, client)) throw new AppError('forbidden', 'That client belongs to another rep.');
           pushNote(client, me, text);
+          fits(client, 'There is no room left in this client\'s notes. Shorten the note and try again.');
           put('clients', client);
         } else throw new AppError('invalid', 'Bad request.');
         return {};
       } },
 
-      /* The owner can change anything; a rep can fix the contact details of their own clients. */
+      /* The owner can change anything; a rep can fix the contact details of their own clients.
+         The owner can also hand a client to another rep (patch.repId). That changes who looks
+         after the client from now on, and so who sees them and books for them. Sales already
+         made stay with whoever made them, commission included. */
       updateClient: { roles: ['owner', 'rep'], run: function (me, req) {
         var client = needClient(req.clientId), p = req.patch || {}, owner = me.role === 'owner';
         if (!canTouchClient(me, client)) throw new AppError('forbidden', 'That client belongs to another rep.');
@@ -881,8 +990,27 @@ var RidgelineCore = (function () {
             if (CLIENT_STATUSES.indexOf(p.status) < 0) throw new AppError('invalid', 'That is not a client status.');
             setStatus(next, p.status);
           }
+          if (p.repId !== undefined) {
+            var rep = find('team', p.repId);
+            if (!rep || !rep.active || rep.role === 'tech') throw new AppError('invalid', 'Pick a sales rep who is on the team.');
+            next.repId = rep.id;
+          }
         }
+        fits(next, CLIENT_FULL);
         put('clients', next);
+        if (owner && p.status !== undefined) {
+          var day = today();
+          if (next.status === 'Cancelled') endMonthlySales(next.id, day);
+          else if (client.status === 'Cancelled') {
+            /* A cancel taken back the same day (a slip of the thumb) had not stopped any pay yet,
+               so the plan it ended runs on: the newest one, because only one plan pays at a time. */
+            var back = null;
+            all('sales').forEach(function (s) {
+              if (s.clientId === next.id && s.endDay === day && !s.endedBy && (!back || s.soldAt >= back.soldAt)) back = s;
+            });
+            if (back) { delete back.endDay; put('sales', back); }
+          }
+        }
         return { clientId: next.id };
       } },
 
@@ -901,6 +1029,14 @@ var RidgelineCore = (function () {
         var job = sale.jobId ? find('jobs', sale.jobId) : null;
         if (job && job.status === 'scheduled') del('jobs', job.id);
         else if (job) { job.saleId = null; put('jobs', job); }
+        /* If this sale had taken the place of an older monthly plan, that plan is the client's
+           plan again. It runs on, or ends when and why the removed sale ended. */
+        all('sales').forEach(function (s) {
+          if (s.endedBy !== sale.id) return;
+          delete s.endDay; delete s.endedBy;
+          if (sale.endDay) { s.endDay = sale.endDay; if (sale.endedBy) s.endedBy = sale.endedBy; }
+          put('sales', s);
+        });
         del('sales', sale.id);
         return {};
       } },
@@ -963,7 +1099,7 @@ var RidgelineCore = (function () {
         }
         var result = a.run(me, req);
         store.setRev(store.getRev() + 1);
-        if (opKey) store.cachePut(opKey, JSON.stringify(result), 3600);
+        if (opKey) store.cachePut(opKey, JSON.stringify(result), LIMITS.retrySeconds);
         return { ok: true, result: result, sync: req.action === 'logout' ? null : buildSync(me, req) };
       } catch (e) {
         if (e && e.appCode) return fail(e.appCode, e.message, me, req);
@@ -995,13 +1131,20 @@ var RidgelineCore = (function () {
       owner.salt = String(env.uuid()); owner.pinHash = hashPin(owner.salt, pin);
       put('team', owner);
       dropSessions(owner.id);
-      store.cacheDel('fail:' + owner.id);
+      clearPinFails(owner.id);
       store.cacheDel('fail:all');
       store.setRev(store.getRev() + 1);
       return { name: owner.name, pin: pin };
     }
 
-    return { handle: handle, bootstrap: bootstrap, resetOwnerPin: resetOwnerPin };
+    /* For the host: puts a line on the owner's problems list for something that went wrong
+       outside a request, such as an alert email that could not be sent after the save. */
+    function hostProblem(where, message) {
+      mem = {};
+      recordProblem(where, message);
+    }
+
+    return { handle: handle, bootstrap: bootstrap, resetOwnerPin: resetOwnerPin, recordProblem: hostProblem };
   }
 
   /* A store that lives in memory: used by sample mode in the page and by the tests. */
@@ -1077,6 +1220,8 @@ var CELL_MAX_CHARS = 50000;      /* the most text one cell of a Google Sheet can
 var CACHE_MAX_SECONDS = 21600;   /* the longest the cache keeps anything (6 hours) */
 var CACHE_MAX_KEY = 250;
 var CACHE_MAX_VALUE = 30000;     /* characters; Google's limit is 100 KB */
+var REV_SEEN_SECONDS = 120;      /* how long a looked-up copy of the revision number stays in the cache */
+var REV_CACHE_SECONDS = 150;     /* the same for the copy a save leaves there; it has to be the longer of the two */
 var LOCK_WAIT_MS = 15000;
 var SETUP_LOCK_WAIT_MS = 30000;
 var SAVE_TRIES = 3;
@@ -1150,9 +1295,13 @@ function answerPost_(e) {
  * The only thing this may ever answer is "nothing changed" to someone who is signed in. Any
  * other outcome (signed out, a new day, an error) is thrown away and the request is run again
  * properly, under the lock.
+ *
+ * This is the one place that takes the revision number from the cache (newStore_(true)), so
+ * that a phone asking every 20 seconds does not use up Google's daily allowance of property
+ * reads. See quickRev in the store for why that copy can be trusted.
  */
 function answerIfNothingChanged_(req) {
-  var store = newStore_(), env = newEnv_();
+  var store = newStore_(true), env = newEnv_();
   if (req.since !== store.getRev() || req.day !== env.dayKey(env.now())) return null;
   var res = RidgelineCore.create(store, env).handle(req);
   if (res && res.ok === true && res.sync && res.sync.same === true && !store.hasChanges()) return res;
@@ -1160,11 +1309,11 @@ function answerIfNothingChanged_(req) {
 }
 
 /* Runs one request while holding the lock. The store is built here, after the lock was taken,
-   so everything it reads (the revision number included) is the latest. */
+   so everything it reads is the latest (the revision number comes from the property itself). */
 function answerLocked_(req) {
-  var store = newStore_(), env = newEnv_(), res;
+  var store = newStore_(), env = newEnv_(), core = RidgelineCore.create(store, env), res;
   try {
-    res = RidgelineCore.create(store, env).handle(req);
+    res = core.handle(req);
     /* "Something went wrong" promises that nothing was saved, so make that true: drop whatever
        the failed action had changed and keep only the note about the problem. */
     if (res && res.ok === false && res.error && res.error.code === 'server') store.keepOnlyProblems();
@@ -1176,7 +1325,37 @@ function answerLocked_(req) {
     try { store.forgetCache(); } catch (ignore) { /* the cache empties itself in time */ }
     throw err;
   }
+  /* Everything is saved. Only now do the alert emails the action asked for go out. A save that
+     failed never gets this far, so it never emails, and its retry emails once. */
+  var mail = env.takeOutbox();
+  if (res && res.ok === true && mail.length) sendMail_(mail, core, store);
   return res;
+}
+
+/*
+ * Sends the emails an action asked for. The action is already saved, so an email that cannot
+ * be sent must neither undo it nor fail it. The owner still has to find out, so it goes on the
+ * problems list the app shows, which takes one more small save.
+ */
+function sendMail_(mail, core, store) {
+  var failed = [], i;
+  for (i = 0; i < mail.length; i++) {
+    try {
+      MailApp.sendEmail(mail[i].to || ownerEmail_(), EMAIL_PREFIX + mail[i].subject, mail[i].body);
+    } catch (err) {
+      failed.push(errorText_(err));
+    }
+  }
+  if (!failed.length) return;
+  try {
+    for (i = 0; i < failed.length; i++) {
+      log_('An email alert could not be sent: ' + failed[i]);
+      core.recordProblem('email', 'An email alert could not be sent: ' + failed[i]);
+    }
+    store.flush();
+  } catch (err) {
+    log_('That could not be added to the problems list in the app: ' + errorText_(err));
+  }
 }
 
 function release_(lock) {
@@ -1192,8 +1371,11 @@ function release_(lock) {
  *
  * A tab is read at most once per request and kept in memory. put and del change that memory
  * and mark the tab; flush() then rewrites each marked tab in one go.
+ *
+ * quick: true only for the "nothing changed?" check, which runs without the lock and may take
+ * the revision number from the cache. Every other request holds the lock and reads the property.
  */
-function newStore_() {
+function newStore_(quick) {
   var props = PropertiesService.getScriptProperties();
   var cache = CacheService.getScriptCache();
   var book = null;         /* the spreadsheet, opened the first time a tab is needed */
@@ -1264,8 +1446,51 @@ function newStore_() {
   }
 
   function readRev() {
-    if (savedRev === null) savedRev = parseInt(props.getProperty('REV'), 10) || 0;
+    if (savedRev === null) savedRev = quick ? quickRev() : propertyRev();
     return savedRev;
+  }
+
+  function propertyRev() { return parseInt(props.getProperty('REV'), 10) || 0; }
+
+  /*
+   * The revision number without the lock, and nearly always without reading the property.
+   * Google allows only so many property reads a day, and every open phone asks "anything
+   * new?" every 20 seconds. So two copies are kept in the cache:
+   *   rev:seen   put there by this function when it found neither and had to read REV (120 seconds)
+   *   rev        put there by whoever writes REV, while still holding the lock (150 seconds)
+   * So in a quiet spell REV is read once every two minutes, however many phones are asking.
+   * A save puts rev and takes rev:seen out, so after a save the cache holds the new number and
+   * nothing else. One thing can still slip in: a check that read REV just before the save and
+   * stores its copy just after it. That is why rev is looked at first and rev:seen only when
+   * rev is gone, and why rev is the longer lived: the save's copy is the one that gets read,
+   * and it outlasts the late one by 30 seconds. (Only a check that stalled longer than that
+   * between its two steps could leave an old number to be read, for two minutes at most.
+   * Nothing is ever decided from it: bookings and saves hold the lock and read the property.)
+   */
+  function quickRev() {
+    var n = cachedRev('rev');
+    if (n === null) n = cachedRev('rev:seen');
+    if (n !== null) return n;
+    n = propertyRev();
+    try { cache.put('rev:seen', String(n), REV_SEEN_SECONDS); } catch (ignore) { /* the next check reads the property again */ }
+    return n;
+  }
+
+  function cachedRev(key) {
+    var value = null;
+    try { value = cache.get(key); } catch (ignore) { /* the same as not being there */ }
+    return typeof value === 'string' && /^\d+$/.test(value) ? parseInt(value, 10) : null;
+  }
+
+  /* Called right after REV is written, under the lock: the new number goes in the cache and a
+     looked-up copy of the old one comes out. If that cannot be done, no copy may stay at all. */
+  function rememberRev(n) {
+    try {
+      cache.put('rev', String(n), REV_CACHE_SECONDS);
+      cache.remove('rev:seen');
+    } catch (err) {
+      try { cache.removeAll(['rev', 'rev:seen']); } catch (ignore) { /* both are gone within three minutes anyway */ }
+    }
   }
 
   function getRev() { return rev === null ? readRev() : rev; }
@@ -1305,10 +1530,12 @@ function newStore_() {
       written[i].tab.lastRow = written[i].used;
     }
     /* The revision number goes last, so nobody is ever told "there is something new" before
-       the new data is really there. */
+       the new data is really there. Then the cache's copy of it, so the very next "anything
+       new?" check sees the new number. */
     if (rev !== null && rev !== readRev()) {
       props.setProperty('REV', String(rev));
       savedRev = rev;
+      rememberRev(rev);
     }
     rev = null;
   }
@@ -1322,7 +1549,7 @@ function newStore_() {
         if (tries >= SAVE_TRIES) {
           /* Some tabs may have been written and others not. Make every phone reload what is
              really in the sheet. */
-          if (rev !== null) { try { props.setProperty('REV', String(rev)); } catch (ignore) { /* nothing more to try */ } }
+          if (rev !== null) { try { props.setProperty('REV', String(rev)); rememberRev(rev); } catch (ignore) { /* nothing more to try */ } }
           throw err;
         }
         Utilities.sleep(tries * 500);
@@ -1445,14 +1672,22 @@ function recordId_(text) {
 /* ---------- the env: clock, ids and email ---------- */
 
 function newEnv_() {
+  var outbox = [];   /* emails the core has asked for during this request, not sent yet */
   return {
     now: function () { return new Date().getTime(); },
     dayKey: function (ms) { return Utilities.formatDate(new Date(ms), TIME_ZONE, 'yyyy-MM-dd'); },
     hm: function (ms) { return Utilities.formatDate(new Date(ms), TIME_ZONE, 'HH:mm'); },
     uuid: function () { return Utilities.getUuid(); },
+    /* The core asks for an email in the middle of an action, before anything is saved. It is
+       only kept here; answerLocked_ sends it after the save. Nothing is ever emailed for a
+       save that failed. */
     notify: function (msg) {
-      var to = (msg && msg.to) || ownerEmail_();
-      MailApp.sendEmail(to, EMAIL_PREFIX + String(msg.subject), String(msg.body));
+      outbox.push({ to: msg && msg.to ? String(msg.to) : '', subject: String(msg && msg.subject), body: String(msg && msg.body) });
+    },
+    takeOutbox: function () {
+      var mail = outbox;
+      outbox = [];
+      return mail;
     }
   };
 }

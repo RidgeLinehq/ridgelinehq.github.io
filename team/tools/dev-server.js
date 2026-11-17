@@ -54,13 +54,21 @@ function clockParts(ms) {
   clock.formatToParts(new Date(ms)).forEach((p) => { out[p.type] = p.value; });
   return out;
 }
+/* Like the real backend, an alert email is only kept while the action runs. It "goes out" (here:
+   one line in this window) once the core has answered that the action was saved. */
+let outbox = [];
 const env = {
   now: () => Date.now(),
   dayKey: (ms) => { const p = clockParts(ms); return p.year + '-' + p.month + '-' + p.day; },
   hm: (ms) => { const p = clockParts(ms); return p.hour + ':' + p.minute; },
   uuid: () => crypto.randomUUID(),
-  notify: (m) => { log('email to the owner: ' + m.subject); }
+  notify: (m) => { outbox.push(m); }
 };
+function sendOutbox(saved) {
+  const mail = outbox;
+  outbox = [];
+  if (saved) mail.forEach((m) => log('email to ' + (m.to || 'the owner') + ': ' + m.subject));
+}
 
 function log(text) { console.log(new Date().toTimeString().slice(0, 8) + '  ' + text); }
 
@@ -86,6 +94,7 @@ function seed() {
   for (let i = 0; i < OPEN_DAYS; i++) days.push({ date: RidgelineCore.dates.addDays(today, i), open: true });
   must(core.handle({ action: 'setDays', token: token, days: days }), 'Opening days');
   must(core.handle({ action: 'logout', token: token }), 'Owner sign-out');
+  sendOutbox(false);
   return { first: days[0].date, last: days[days.length - 1].date };
 }
 
@@ -110,8 +119,12 @@ function answerPost(text) {
   if (!req || typeof req !== 'object' || Array.isArray(req) || typeof req.action !== 'string') {
     return { ok: false, error: { code: 'invalid', message: 'Bad request.' } };
   }
-  try { return core.handle(req); }
-  catch (e) {
+  try {
+    const answer = core.handle(req);
+    sendOutbox(!!answer && answer.ok === true);
+    return answer;
+  } catch (e) {
+    sendOutbox(false);
     log('the core threw: ' + (e && e.stack ? e.stack : e));
     return { ok: false, error: { code: 'server', message: 'Something went wrong on our side. Nothing was saved. Try again.' } };
   }
