@@ -8,7 +8,7 @@
  *     date ('YYYY-MM-DD') shows that day's open times first; clientId starts on that existing client.
  *     App.act('newSale', { date: '2026-11-19' });        App.act('newSale', { clientId: c.id });
  * App.actions.openSale(saleId)                 open one sale: its details, its commission by date, booking its
- *     appointment if it has none yet, and "Remove sale" for the owner.
+ *     appointment if it has none yet, and for the owner "Fix this sale" (price, service, sold by) and "Remove sale".
  *
  * App.ui.leaderboard(container, { showCommission }) -> container
  *     Draws the period toggle (This week / This month / All time) and the ranked rows into `container`.
@@ -34,7 +34,7 @@
   var MATCHES = 6;                           /* clients shown in the "Existing client" pick */
   /* How long an unsaved New sale is kept on this phone: never longer than the system remembers a save by its id. */
   var DRAFT_MS = Math.min(12 * 3600, +Core.LIMITS.retrySeconds || 3600) * 1000;
-  var LINK_OK = /^https:\/\/[^\s<>"'`]+$/i;  /* the same test the system applies to a payment link */
+  var LINK_OK = /^https:\/\/[^\s<>"'`]+$/i;  /* a payment link: https, and nothing in it that could break out of a link */
   var EMAIL_OK = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   var PERIODS = [{ value: 'week', label: 'This week' }, { value: 'month', label: 'This month' }, { value: 'all', label: 'All time' }];
 
@@ -79,6 +79,39 @@
     return total;
   }
 
+  /* A sale that pays no commission: both of its rates are nothing. Every sale an owner makes is saved that way. */
+  function noCommission(sale) { return !(+sale.firstPct) && !(+sale.monthlyPct); }
+  function isOwner(id) { var m = App.member(id); return !!m && m.role === 'owner'; }
+
+  /* The money a sale brings in from `from` on: its price once for every payment in that time. Each of its
+     events is one payment (the first, then each month the client stayed), so this is revenue, not just what was sold. */
+  function paidIn(sale, from) {
+    var times = 0;
+    (sale.events || []).forEach(function (e) { if (!from || e.day >= from) times++; });
+    return times * (sale.priceCents || 0);
+  }
+
+  /* A price as it is typed: 150 or 150.50. */
+  function priceText(cents) { return cents % 100 ? (cents / 100).toFixed(2) : String(cents / 100); }
+
+  /* What is wrong with a payment link, in words ('' when it is fine). The system checks the same things:
+     https, a real web address after it (a dot in it, and no "name@" in front), no spaces. */
+  function linkProblem(link) {
+    if (!/^https:\/\//i.test(link)) return 'A payment link must start with https://';
+    if (link.length > 300) return 'That payment link is too long.';
+    var host = link.slice(8).split('/')[0];
+    if (!LINK_OK.test(link) || host.indexOf('@') >= 0 || !/^[^.?#]+(\.[^.?#]+)+([?#:]|$)/.test(host)) {
+      return 'That payment link does not look right. Paste the whole link from your payment page.';
+    }
+    return '';
+  }
+
+  /* Who a sale can belong to, for the owner's "Sold by": themself first, then every sales rep and owner on the team. */
+  function sellerOptions(me) {
+    return [{ value: me.id, label: me.name + ' (you)' }].concat(App.people(['rep', 'owner'])
+      .filter(function (m) { return m.id !== me.id; }).sort(byName).map(function (m) { return { value: m.id, label: m.name }; }));
+  }
+
   /* The cut of a price at a rate, in cents, straight from the core's own commission maths. */
   function share(cents, rate) {
     var day = App.today();
@@ -91,7 +124,8 @@
     return h('div', { class: 'between' }, h('span', { class: 'muted' }, label), h('span', { class: 'num' }, fmt.money(cents)));
   }
 
-  /* cells: [{ cents, words }] across the top (may be empty). Then a label, one big ice number and small lines. */
+  /* cells: [{ cents, words, more }] across the top (may be empty; `more` is a quiet line under the words).
+     Then a label, one big ice number and small lines. */
   function numbersCard(cells, label, bigCents, lines) {
     var top = null;
     if (cells && cells.length) {
@@ -99,7 +133,8 @@
       cells.forEach(function (c) {
         top.appendChild(h('div', { class: 'nums-cell' },
           h('span', { class: 'stat-num' }, fmt.moneyShort(c.cents)),
-          h('span', { class: 'stat-label' }, c.words)));
+          h('span', { class: 'stat-label' }, c.words),
+          c.more ? h('span', { class: 'nums-more' }, c.more) : null));
       });
     }
     var linesEl = h('div', { class: 'nums-lines' });
@@ -124,7 +159,7 @@
       ],
       right: [
         h('span', { class: 'amt' }, fmt.money(sale.priceCents) + (sale.billing === 'monthly' ? '/mo' : '')),
-        h('span', { class: 'small' }, '+' + fmt.money(earned(sale)))
+        h('span', { class: 'small' }, noCommission(sale) ? 'No commission' : 'Earned ' + fmt.money(earned(sale)))
       ],
       chevron: false,
       onTap: function () { openSale(sale.id); }
@@ -168,17 +203,25 @@
       }
     }
 
-    var week = { count: 0, cents: 0 }, month = { count: 0, cents: 0 }, fromNew = 0, fromMonthly = 0;
+    /* A rep's card says what they sold. The owner's says revenue: the money due in that time, which is every
+       payment that fell in it (a new sale's first one, and each monthly client's payment for that month), the
+       same sum as the Dashboard. The count beside it is always the sales made in that time. */
+    var week = { count: 0, cents: 0, due: 0 }, month = { count: 0, cents: 0, due: 0 }, fromNew = 0, fromMonthly = 0;
     list.forEach(function (s) {
       if (s.day >= wk) { week.count++; week.cents += s.priceCents; }
       if (s.day >= mo) { month.count++; month.cents += s.priceCents; }
+      week.due += paidIn(s, wk);
+      month.due += paidIn(s, mo);
       fromNew += earned(s, mo, null, 'first');
       fromMonthly += earned(s, mo, null, 'monthly');
     });
     root.appendChild(ui.label(!owner ? 'My numbers' : who ? owned(who) + ' numbers' : 'Business numbers'));
     root.appendChild(numbersCard(
-      [{ cents: week.cents, words: fmt.plural(week.count, 'sale') + ' this week' },
-       { cents: month.cents, words: fmt.plural(month.count, 'sale') + ' this month' }],
+      owner
+        ? [{ cents: week.due, words: 'Revenue this week', more: fmt.plural(week.count, 'new sale') },
+           { cents: month.due, words: 'Revenue this month', more: fmt.plural(month.count, 'new sale') }]
+        : [{ cents: week.cents, words: fmt.plural(week.count, 'sale') + ' this week' },
+           { cents: month.cents, words: fmt.plural(month.count, 'sale') + ' this month' }],
       owner ? 'Commission owed this month' : 'Commission this month',
       fromNew + fromMonthly,
       [['From new sales', fromNew], ['From monthly clients', fromMonthly]]));
@@ -198,7 +241,7 @@
     }
   }
 
-  /* ================= one sale: details, commission by date, Remove sale ================= */
+  /* ================= one sale: details, commission by date, Fix this sale, Remove sale ================= */
 
   /* The next day a monthly sale pays again: the same day of the month, the first one after today. */
   function nextDue(day, today) {
@@ -214,8 +257,8 @@
     if (!sale) return;
     var job = sale.jobId ? App.job(sale.jobId) : null;
     var text = (sale.clientName || 'This client') + ', ' + sale.service + ', ' + priceWords(sale) + '.';
-    if (job && job.status === 'scheduled') text += ' The visit on ' + fmt.when(job.date, job.time) + ' has not happened yet, so it is removed too.';
-    else if (job && job.status === 'done') text += ' The visit is already done, so it stays on the schedule.';
+    if (job && job.status === 'scheduled') text += ' The appointment on ' + fmt.when(job.date, job.time) + ' has not happened yet, so it is removed too.';
+    else if (job && job.status === 'done') text += ' The job is already done, so it stays on the schedule.';
     text += ' The commission on this sale goes with it. The client stays in Clients.';
     App.confirm({ title: 'Remove this sale?', text: text, yes: 'Remove sale', no: 'Keep it', danger: true }).then(function (yes) {
       if (!yes) return;
@@ -235,17 +278,19 @@
     var owner = me.role === 'owner', today = App.today();
     var job = sale.jobId ? App.job(sale.jobId) : null, client = App.client(sale.clientId);
 
+    var none = noCommission(sale);
     var kvs = h('div', { class: 'kvs' });
-    kvs.appendChild(ui.kv('Sold', fmt.day(sale.day)));
+    kvs.appendChild(ui.kv('Sold on', fmt.day(sale.day)));
     kvs.appendChild(ui.kv('Service', sale.service));
     kvs.appendChild(ui.kv('Price', priceWords(sale)));
     if (sale.endDay) kvs.appendChild(ui.kv('Monthly plan', 'Ended ' + fmt.day(sale.endDay)));
     if (owner) kvs.appendChild(ui.kv('Sold by', App.nameOf(sale.repId, 'Someone who has left')));
-    kvs.appendChild(ui.kv('Earned so far', h('span', { class: 'strong num' }, fmt.money(earned(sale)))));
+    if (!none) kvs.appendChild(ui.kv('Earned so far', h('span', { class: 'strong num' }, fmt.money(earned(sale)))));
     el.appendChild(kvs);
 
     el.appendChild(ui.label('Appointment'));
-    if (job) el.appendChild(h('div', { class: 'list' }, ui.jobRow(job, { showDate: true })));
+    /* The sheet's title is already the client, so the row says what is being done there. */
+    if (job) el.appendChild(h('div', { class: 'list' }, ui.jobRow(job, { showDate: true, title: job.what || sale.service, sub: (job.client || {}).address || null })));
     else if (sale.jobId) el.appendChild(h('p', { class: 'muted' }, 'Booked.'));
     else {
       el.appendChild(h('p', { class: 'warn strong' }, 'No appointment yet.'));
@@ -253,16 +298,20 @@
     }
 
     el.appendChild(ui.label('Commission'));
-    var list = h('div', { class: 'list' });
-    (sale.events || []).slice().sort(function (a, b) { return a.day < b.day ? 1 : a.day > b.day ? -1 : 0; }).forEach(function (e) {
-      list.appendChild(ui.row({
-        title: fmt.day(e.day),
-        sub: e.kind === 'monthly' ? 'Monthly client, ' + pct(sale.monthlyPct) + ' of the price' : 'New sale, ' + pct(sale.firstPct) + ' of the price',
-        right: h('span', { class: 'amt' }, fmt.money(e.cents))
-      }));
-    });
-    el.appendChild(list);
-    if (sale.billing === 'monthly') {
+    if (none) {
+      el.appendChild(h('p', { class: 'muted' }, isOwner(sale.repId) ? 'No commission on the owner\'s own sales.' : 'No commission on this sale.'));
+    } else {
+      var list = h('div', { class: 'list' });
+      (sale.events || []).slice().sort(function (a, b) { return a.day < b.day ? 1 : a.day > b.day ? -1 : 0; }).forEach(function (e) {
+        list.appendChild(ui.row({
+          title: fmt.day(e.day),
+          sub: e.kind === 'monthly' ? 'Monthly client, ' + pct(sale.monthlyPct) + ' of the price' : 'New sale, ' + pct(sale.firstPct) + ' of the price',
+          right: h('span', { class: 'amt' }, fmt.money(e.cents))
+        }));
+      });
+      el.appendChild(list);
+    }
+    if (sale.billing === 'monthly' && !none) {
       var hint = '', due = nextDue(sale.day, today);
       if (sale.endDay) {
         hint = 'Monthly commission on this sale ended ' + fmt.day(sale.endDay) + (sale.endedBy ? ', when a new monthly plan took its place.' : ', when the client cancelled.');
@@ -281,6 +330,8 @@
 
     if (owner) {
       var err = h('p', { class: 'form-error', role: 'alert', hidden: true });
+      el.appendChild(ui.label('Manage this sale'));
+      el.appendChild(ui.button('Fix this sale', { icon: 'edit', block: true, onTap: function () { openFix(saleId); } }));
       el.appendChild(ui.button('Remove sale', { kind: 'danger', block: true, onTap: function (e, btn) { removeSale(saleId, btn, err, sh, st); } }));
       el.appendChild(err);
     }
@@ -302,11 +353,11 @@
     });
   }
 
-  /* Book the visit for a sale that was saved with "Book later". */
+  /* Book the appointment for a sale that was saved with "Book later". */
   function openBook(saleId) {
     var sale = App.sale(saleId), picker;
     if (!sale) return;
-    var idle = 'Pick a time';
+    var idle = 'Pick a day and a time';
     var sh = App.sheet.open({
       title: 'Book the appointment',
       body: function (el, sheet) {
