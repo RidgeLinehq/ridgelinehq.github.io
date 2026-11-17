@@ -3,7 +3,7 @@
  * End-to-end check of the BUILT page (team/index.html), driven the way a person drives it:
  * a phone-sized Chromium (390x844, touch), real taps and real typing, nothing called behind the UI.
  *
- *   node tools/build.js && node tools/e2e.js          both halves (about 5 minutes)
+ *   node tools/build.js && node tools/e2e.js          both halves (about 4 minutes)
  *   node tools/e2e.js sample                          sample mode only  (index.html?sample=1)
  *   node tools/e2e.js real                            real mode only    (index.html?backend=<tools/dev-server.js>)
  *   node tools/e2e.js --shots /some/folder            also save a picture of every phone when a check fails
@@ -15,10 +15,11 @@
  * On every screen and every sheet it also checks: no console errors, no page errors, no sideways scroll,
  * nothing sticking out past the edge of the screen.
  *
- * Where the script looks behind the screen, it only reads: App.today() and the free days to choose which
- * day to tap, and, in real mode, the server's own data to count what was really saved. Two controls have no
- * keys to type with in a headless browser, so they are set directly: a <select> (selectOption) and the
- * native time box (fill).
+ * Where the script looks behind the screen, it only reads: the day and the open days (to choose which day
+ * to tap), what the page has stored on the phone, and, in real mode, the server's own data to count what
+ * was really saved. The one thing it writes is a marker on the page, to prove the page was never reloaded.
+ * Two controls have no keys to type with in a headless browser, so they are set directly: a <select>
+ * (selectOption) and the native time box (fill).
  *
  * Real mode starts tools/dev-server.js on a free port (Grayson 1234, Mason 2222, Cole 3333) and signs in
  * on three separate phones. Failed saves are made three ways: the dev server's own ?fail=1 knob (the
@@ -49,7 +50,7 @@ const args = process.argv.slice(2);
 const BUILT = args.includes('--page') ? path.resolve(args[args.indexOf('--page') + 1]) : path.join(ROOT, 'index.html');
 const PAGE = 'file://' + BUILT;
 const only = args.find((a) => a === 'sample' || a === 'real') || '';
-const SHOTS = args.includes('--shots') ? args[args.indexOf('--shots') + 1] : '';
+const SHOTS = args.includes('--shots') ? (args[args.indexOf('--shots') + 1] || '') : '';
 const HEADED = args.includes('--headed');
 const WAIT = 8000;          /* how long a thing may take to show up */
 const LIVE = 27000;         /* "within about 25 seconds": one 20 second refresh plus the answer */
@@ -1570,7 +1571,11 @@ async function realMode(browser) {
 (async () => {
   if (!fs.existsSync(BUILT)) { console.error(BUILT + ' is missing. Build first: node tools/build.js'); process.exit(1); }
   const started = Date.now();
-  const browser = await chromium.launch({ headless: !HEADED });
+  let browser;
+  try { browser = await chromium.launch({ headless: !HEADED }); } catch (e) {
+    console.error('Chromium could not be started (npx playwright install chromium): ' + (e && e.message ? e.message.split('\n')[0] : e));
+    process.exit(1);
+  }
   try {
     if (only !== 'real') await sampleMode(browser);
     if (only !== 'sample') await realMode(browser);
