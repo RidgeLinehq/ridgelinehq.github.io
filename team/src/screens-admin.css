@@ -8,18 +8,12 @@
 .row-top .rank { line-height: 23px; }
 .row-top .row-right { margin: -10px -6px 0 0; }
 
-/* .board-amt: the dollars sold at the right of a leaderboard row. */
-.board-amt { color: var(--ink); font-weight: 600; }
-
 /* .notice: one line in Notifications. New ones carry an ice dot and heavier words. */
 .notice { align-items: flex-start; }
 .notice .row-title { font-weight: 400; }
 .notice.is-new .row-title { font-weight: 600; }
 .notice-dot { width: 8px; height: 8px; margin-top: 8px; border-radius: 50%; }
 .notice-dot.is-new { background: var(--ice); }
-
-/* A red text button ("Remove section"): the words only, in the problem color. */
-.btn-text.btn-danger { color: var(--bad); }
 
 /* .input-suffix: something inside the right edge of a control (the "%" in Commission). */
 .input-suffix { position: absolute; right: 14px; top: 0; height: var(--tap); display: flex; align-items: center; color: var(--ink-2); pointer-events: none; }

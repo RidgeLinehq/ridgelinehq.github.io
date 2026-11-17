@@ -119,6 +119,7 @@
       sub: [
         sale.service + ', ' + shortDay(sale.day),
         showRep ? 'Sold by ' + App.nameOf(sale.repId, 'someone who has left') : null,
+        sale.endDay ? 'Monthly plan ended ' + shortDay(sale.endDay) : null,
         sale.jobId ? null : h('span', { class: 'warn' }, 'No appointment yet')
       ],
       right: [
@@ -238,6 +239,7 @@
     kvs.appendChild(ui.kv('Sold', fmt.day(sale.day)));
     kvs.appendChild(ui.kv('Service', sale.service));
     kvs.appendChild(ui.kv('Price', priceWords(sale)));
+    if (sale.endDay) kvs.appendChild(ui.kv('Monthly plan', 'Ended ' + fmt.day(sale.endDay)));
     if (owner) kvs.appendChild(ui.kv('Sold by', App.nameOf(sale.repId, 'Someone who has left')));
     kvs.appendChild(ui.kv('Earned so far', h('span', { class: 'strong num' }, fmt.money(earned(sale)))));
     el.appendChild(kvs);
@@ -338,11 +340,14 @@
    * brings it back. A saved sale clears the draft.
    *
    * The draft is also what stops a sale being saved twice:
-   *   - it carries the opId of the save it tried, so every retry (even after the sheet was closed, or the
-   *     page was loaded again) is the same save to the system, which answers it only once;
+   *   - it carries the opId of the save it tried and exactly what that save sent (`sent`), so a retry of
+   *     the same sale (even after the sheet was closed, or the page was loaded again) is the same save to
+   *     the system, which answers it only once. Change anything and it is a new save with a new id: the
+   *     system would answer the old id with the first sale again and the change would be lost;
    *   - it remembers each try whose answer never came back (`tries`). Such a save may have gone through.
    *     If a sale just like it turns up in the data afterwards, the sheet shows it as saved instead of
-   *     sending it again.
+   *     sending it again. Before a changed sale is sent after such a try, the sheet asks the system for
+   *     the latest first, so it finds out.
    */
 
   function draftKey(id) { return 'ridgeline.' + App.mode + '.saleDraft.' + (id || ''); }
@@ -354,7 +359,7 @@
       clientId: '', find: '', repId: me.id,
       service: '', other: '', price: '', priceAuto: false, billing: 'once', notes: '', link: '',
       appt: null, day: '', later: false,
-      opId: '', tries: [], lastSold: 0
+      opId: '', sent: '', tries: [], lastSold: 0
     };
   }
 
@@ -474,7 +479,7 @@
       d.other = f.other.val(); d.price = f.price.val(); d.billing = f.billing.get();
       d.notes = f.notes.val(); d.link = f.link.val();
       d.appt = f.picker.get();
-      if (d.appt) d.day = d.appt.date;
+      d.day = d.appt ? d.appt.date : (f.picker.getDay() || d.day);
     }
     function keep() {
       clearTimeout(timer);
@@ -594,7 +599,7 @@
       f.picker = ui.slotPicker({
         value: d.appt, date: d.day || null,
         emptyText: owner ? 'No open days yet. Save the sale now and book once you open some in Calendar.'
-          : 'No open days yet. Save the sale now and book once Grayson opens some.',
+          : 'No open days yet. Save the sale now and book once ' + App.ownerName() + ' opens some.',
         onChange: function (v) {
           d.appt = v;
           if (v) d.day = v.date;
@@ -800,7 +805,7 @@
     }
 
     /* Has a try whose answer never came back turned up as a sale after all? Then it is saved: show it, send nothing. */
-    function adoptSaved() {
+    function adoptSaved(changedSince) {
       if (view !== 'form' || saving || !d.tries.length) return false;
       var hit = null;
       (App.data.sales || []).forEach(function (s) {
@@ -812,7 +817,7 @@
       });
       if (!hit) return false;
       saved({ saleId: hit.id, clientId: hit.clientId, jobId: hit.jobId },
-        { service: hit.service, priceCents: hit.priceCents, billing: hit.billing, clientId: hit.clientId, appointment: null }, hit.repId);
+        { service: hit.service, priceCents: hit.priceCents, billing: hit.billing, clientId: hit.clientId, appointment: null }, hit.repId, !!changedSince);
       return true;
     }
 
@@ -827,10 +832,33 @@
         if (bad.input) { try { bad.input.focus({ preventScroll: true }); } catch (e) { /* fine */ } }
         return;
       }
-      var req = request(), seller = sellerId(), known = newestSold();
+      var req = request(), sent = JSON.stringify(req);
+      saving = true;
+      sheet.error('');
+      sheet.setButton('Saving...', true);
+      if (d.opId && d.sent !== sent && d.tries.length) {
+        /* Something was changed after a try whose answer never came back. That try may have gone through,
+           so look before sending what would be a second sale. */
+        App.api.send('sync').then(function (res) {
+          saving = false;
+          if (closed) return;
+          if (!res.ok) {
+            paintButton();
+            if (res.error.code !== 'auth') sheet.error(res.error.message);
+            return;
+          }
+          if (!adoptSaved(true)) sendSale(req, sent);
+        });
+        return;
+      }
+      sendSale(req, sent);
+    }
+
+    function sendSale(req, sent) {
+      var seller = sellerId(), known = newestSold();
       var tried = { name: norm(req.client ? req.client.name : ''), clientId: req.clientId || '', service: norm(req.service),
         priceCents: req.priceCents, billing: req.billing, repId: seller };
-      if (!d.opId) d.opId = uid();                  /* one id for this sale, however many times it is sent */
+      if (!d.opId || d.sent !== sent) { d.opId = uid(); d.sent = sent; }   /* one id for this exact sale, however many times it is sent */
       keep();
       saving = true;
       sheet.error('');
@@ -861,7 +889,7 @@
       });
     }
 
-    function saved(result, req, seller) {
+    function saved(result, req, seller, changedSince) {
       var sale = result.saleId ? App.sale(result.saleId) : null;
       var job = result.jobId ? App.job(result.jobId) : null;
       var price = sale ? sale.priceCents : req.priceCents, monthly = (sale ? sale.billing : req.billing) === 'monthly';
@@ -872,7 +900,8 @@
         when: job ? fmt.when(job.date, job.time) : (req.appointment && result.jobId ? fmt.when(req.appointment.date, req.appointment.time) : ''),
         who: seller === me.id ? 'You earned' : App.nameOf(seller, 'The rep') + ' earned',
         cents: sale && sale.events && sale.events.length ? sale.events[0].cents : (result.commissionCents || 0),
-        each: monthly ? share(price, sale ? sale.monthlyPct : s.monthlyPct) : 0
+        each: monthly ? share(price, sale ? sale.monthlyPct : s.monthlyPct) : 0,
+        early: !!changedSince
       };
       clearTimeout(timer);
       timer = null;
@@ -891,6 +920,11 @@
     /* ----- the success view ----- */
     function drawDone(el) {
       el.appendChild(h('div', { class: 'sold-head' }, icon('check-circle', 40), h('h3', { class: 'sold-title' }, 'Sale saved')));
+      if (done.early) {
+        el.appendChild(h('div', { class: 'callout callout-warn' },
+          h('p', { class: 'callout-title' }, 'This went through on your first try'),
+          h('p', { class: 'small' }, 'It was saved before your last changes, so those are not in it. Check the details below.')));
+      }
       var kvs = h('div', { class: 'kvs' });
       kvs.appendChild(ui.kv('Customer', done.name));
       kvs.appendChild(ui.kv('Sold', done.sold));

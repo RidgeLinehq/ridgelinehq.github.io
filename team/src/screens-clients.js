@@ -67,13 +67,6 @@
     return list[0] || null;
   }
 
-  /* A retry after a failed save re-uses its id so nothing is saved twice. That is only right while
-     the thing being saved is the same, so a changed save starts fresh. */
-  function freshSave(btn, fields) {
-    var key = JSON.stringify(fields);
-    if (btn && btn._sent !== key) { btn._sent = key; btn._ops = null; }
-  }
-
   function matches(c, q) {
     if (!q) return true;
     if ([c.name, c.contact, c.phone, c.address].join(' ').toLowerCase().indexOf(q) >= 0) return true;
@@ -191,7 +184,6 @@
       var text = noteBox.val();
       if (!text) { noteBox.setError('Write the note first.'); return; }
       var fields = { kind: 'client', id: id, text: text };
-      freshSave(noteBtn, fields);
       ui.save(noteBtn, 'addNote', fields, { errorEl: noteErr }).then(function (res) {
         if (!res.ok) return;
         noteBox.input.value = '';
@@ -389,7 +381,6 @@
         if (problem) { box.setError(problem); return; }
         if (link === had) { sh.close(); return; }
         var fields = { clientId: id, patch: { stripeLink: link } };
-        freshSave(sh.button, fields);
         sh.send('updateClient', fields).then(function (res) {
           if (!res.ok) return;
           sh.close();
@@ -427,9 +418,10 @@
         options: [{ value: 'once', label: 'One-time' }, { value: 'monthly', label: 'Monthly' }] });
       start = ui.field({ label: 'Start date', name: 'c-start', type: 'date', value: c.startDate || '' });
 
-      var me = App.me(), people = [{ value: me.id, label: me.name + ' (you)' }].concat(App.people(['rep']).sort(byName).map(function (m) {
-        return { value: m.id, label: m.name };
-      }));
+      /* A client can be looked after by any sales rep or owner who is on the team. */
+      var me = App.me(), people = [{ value: me.id, label: me.name + ' (you)' }].concat(App.people(['rep', 'owner']).filter(function (m) {
+        return m.id !== me.id;
+      }).sort(byName).map(function (m) { return { value: m.id, label: m.name }; }));
       if (c.repId && !people.some(function (o) { return o.value === c.repId; })) people.unshift({ value: c.repId, label: repName(c.repId, true) });
       rep = ui.field({ label: 'Looked after by', name: 'c-rep', type: 'select', options: people, value: c.repId || me.id,
         hint: 'This person sees the client and books their visits. Sales already made stay with whoever made them.' });
@@ -469,7 +461,6 @@
         if (!changed) { sh.close(); return; }
 
         var fields = { clientId: id, patch: patch };
-        freshSave(sh.button, fields);
         sh.send('updateClient', fields).then(function (res) {
           if (!res.ok) return;
           sh.close();
@@ -506,7 +497,6 @@
         if (!v) return;
         var fields = { clientId: id, date: v.date, time: v.time, what: what.val() };
         if (waiting) fields.saleId = waiting.id;
-        freshSave(sh.button, fields);
         sh.send('bookJob', fields).then(function (res) {
           if (res.ok) {
             sh.close();

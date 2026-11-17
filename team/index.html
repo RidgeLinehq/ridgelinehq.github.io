@@ -176,10 +176,10 @@ button.avatar:active { opacity: .7; }
 .big-num { font: 800 28px/1.1 var(--display); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
 
 /* ---------- LAYOUT HELPERS ---------- */
-/* .stack: a column with even gaps (.stack-xs 4, .stack-sm 8, .stack-md 12, .stack 16, .stack-lg 24). */
-.stack, .stack-xs, .stack-sm, .stack-md, .stack-lg { display: flex; flex-direction: column; }
-.stack > *, .stack-xs > *, .stack-sm > *, .stack-md > *, .stack-lg > * { min-width: 0; }
-.stack-xs { gap: 4px; } .stack-sm { gap: 8px; } .stack-md { gap: 12px; } .stack { gap: 16px; } .stack-lg { gap: 24px; }
+/* .stack: a column with even gaps (.stack-xs 4, .stack-sm 8, .stack-md 12, .stack 16). */
+.stack, .stack-xs, .stack-sm, .stack-md { display: flex; flex-direction: column; }
+.stack > *, .stack-xs > *, .stack-sm > *, .stack-md > * { min-width: 0; }
+.stack-xs { gap: 4px; } .stack-sm { gap: 8px; } .stack-md { gap: 12px; } .stack { gap: 16px; }
 /* .between: two things on one line, pushed apart. .cluster: things in a line that wrap. */
 .between { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .between > * { min-width: 0; }
@@ -187,7 +187,6 @@ button.avatar:active { opacity: .7; }
 /* .cols-2: two equal columns (buttons side by side, short fields). */
 .cols-2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
 .grow { flex: 1 1 auto; min-width: 0; }
-.divider { height: 1px; background: var(--line); border: 0; margin: 0; }
 
 /* ---------- CARDS ---------- */
 /* .card: slate, hairline border, 16px radius, 16px padding. Not every block needs one. */
@@ -198,13 +197,12 @@ button.avatar:active { opacity: .7; }
 .sheet .card { background: var(--bg); }
 
 /* ---------- LISTS AND ROWS ---------- */
-/* .list: rows with hairlines between them, straight on the page (or inside .card.card-flush with .list-pad). */
+/* .list: rows with hairlines between them, straight on the page. */
 .list { display: flex; flex-direction: column; }
-.list-pad { padding: 0 16px; }
 /* .row: one line of a list. Lead (icon or time), main (title + sub), right (value, pill, chevron). Use a <button> when it is tappable. */
 .row { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 60px; padding: 10px 0; border-bottom: 1px solid var(--line); color: var(--ink); text-align: left; }
 .list > .row:last-child { border-bottom: 0; }
-button.row:active, a.row:active { opacity: .7; }
+button.row:active { opacity: .7; }
 .row.is-busy { opacity: .55; }
 .row-lead { flex: none; display: flex; flex-direction: column; color: var(--ink-2); }
 .row-time { min-width: 84px; font: 700 14px/1.3 var(--display); color: var(--ink); font-variant-numeric: tabular-nums; }
@@ -219,7 +217,6 @@ button.row:active, a.row:active { opacity: .7; }
 .row-chev { flex: none; color: var(--ink-3); }
 .row.is-off { color: var(--ink-3); }
 .row.is-off .row-lead { color: var(--ink-3); }
-.row-danger, .row-danger .row-lead { color: var(--bad); }
 /* .row.is-you: the viewer's own row in a ranking, tinted ice. */
 .row.is-you { background: var(--ice-wash); border-radius: var(--r-ctl); border-bottom-color: transparent; width: auto; margin: 0 -12px; padding-left: 12px; padding-right: 12px; }
 /* .rank: the rank numeral in a leaderboard row. */
@@ -233,8 +230,6 @@ button.row:active, a.row:active { opacity: .7; }
 .kvs > .kv:last-child { border-bottom: 0; }
 .kv-label { flex: none; max-width: 45%; color: var(--ink-2); font-size: 14px; line-height: 1.65; }
 .kv-value { min-width: 0; text-align: right; overflow-wrap: anywhere; }
-button.kv { width: 100%; }
-button.kv .kv-value { color: var(--ice); font-weight: 600; }
 
 /* ---------- STAT BLOCKS ---------- */
 /* .stats: the slim summary card, numbers side by side with hairlines between (App.ui.stats). */
@@ -284,7 +279,7 @@ button.pill:active { opacity: .7; }
 .btn-quiet { background: var(--raised); border-color: var(--line); color: var(--ink); }
 .btn-danger { background: var(--bad-wash); color: var(--bad); }
 .btn-text { height: 44px; padding: 0 6px; color: var(--ice); font-weight: 600; }
-.btn-text.btn-danger { background: none; }
+.btn-text.btn-danger { background: none; color: var(--bad); }
 .btn-sm { height: 44px; padding: 0 14px; font-size: 14px; }
 .btn-block { display: flex; width: 100%; height: auto; min-height: var(--tap); padding-top: 8px; padding-bottom: 8px; white-space: normal; line-height: 1.2; }
 .btn-sm.btn-block { min-height: 44px; }
@@ -323,7 +318,7 @@ select.input { padding-right: 40px; text-overflow: ellipsis; }
 .search .input { padding-left: 44px; }
 
 /* ---------- CHIPS ---------- */
-/* .chips > .chip: pick one or several (App.ui.chips). .chips-big: large chips for times. .chips-scroll: one line that slides sideways. */
+/* .chips > .chip: pick one (App.ui.chips). .chips-big: large chips for times. .chips-scroll: one line that slides sideways. */
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 44px; padding: 0 16px;
@@ -334,7 +329,6 @@ select.input { padding-right: 40px; text-overflow: ellipsis; }
 .chip.is-on { background: var(--ice); border-color: var(--ice); color: var(--ice-ink); }
 .chip-count { font-weight: 500; color: var(--ink-2); }
 .chip.is-on .chip-count { color: var(--ice-ink); }
-.chip[disabled] { color: var(--ink-3); cursor: default; }
 .chips-big { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
 .chips-big .chip { height: var(--tap); padding: 0 8px; border-radius: var(--r-ctl); font-size: 16px; }
 .chips-scroll { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; margin: 0 -16px; padding: 0 16px; }
@@ -363,10 +357,9 @@ select.input { padding-right: 40px; text-overflow: ellipsis; }
 .switch[aria-checked="true"] .switch-track::after { left: 23px; background: var(--ice-ink); }
 
 /* ---------- CALLOUT ---------- */
-/* .callout: a boxed message that must not be missed (a new PIN, a warning). Tones: -warn, -bad, -good, -ice. */
+/* .callout: a boxed message that must not be missed (a new PIN, a warning). Tones: -warn, -good, -ice. */
 .callout { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border-radius: var(--r-ctl); background: var(--raised); border: 1px solid var(--line); }
 .callout-warn { background: var(--warn-wash); border-color: transparent; }
-.callout-bad  { background: var(--bad-wash);  border-color: transparent; }
 .callout-good { background: var(--good-wash); border-color: transparent; }
 .callout-ice  { background: var(--ice-wash);  border-color: transparent; }
 .callout-title { font-weight: 700; }
@@ -416,7 +409,8 @@ select.input { padding-right: 40px; text-overflow: ellipsis; }
 .dialog .cols-2 { margin-top: 10px; }
 
 /* ---------- TOASTS ---------- */
-/* .toast: a short message just above the tab bar (App.toast). .toast-bad is the red one, usually with Retry. */
+/* .toast: a short message just above the tab bar (App.toast). .toast-bad is the red one, usually with Retry.
+   While a sheet is open, app.js lifts .toasts clear of it: above a short sheet, or just above a tall sheet's footer. */
 .toasts { position: fixed; z-index: 80; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 0 12px; pointer-events: none; }
 .toast { pointer-events: auto; max-width: 100%; width: max-content; min-height: 48px; display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; background: var(--ink); color: var(--ice-ink); border-radius: var(--r-ctl); font-weight: 600; font-size: 14px; line-height: 1.35; }
 .toast-text { padding: 6px 8px 6px 0; overflow-wrap: anywhere; }
@@ -456,7 +450,6 @@ button.day:not([disabled]):active { opacity: .7; }
 .swatch { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--line); flex: none; }
 .swatch.is-open { background: var(--ice-wash); border-color: transparent; }
 .swatch.is-full { background: var(--warn-wash); border-color: transparent; }
-.swatch.is-selected { background: var(--ice); border-color: transparent; }
 .swatch.is-today { border: 2px solid var(--ink-2); }
 
 /* ---------- SLOT PICKER ---------- */
@@ -549,18 +542,12 @@ button.day:not([disabled]):active { opacity: .7; }
 .row-top .rank { line-height: 23px; }
 .row-top .row-right { margin: -10px -6px 0 0; }
 
-/* .board-amt: the dollars sold at the right of a leaderboard row. */
-.board-amt { color: var(--ink); font-weight: 600; }
-
 /* .notice: one line in Notifications. New ones carry an ice dot and heavier words. */
 .notice { align-items: flex-start; }
 .notice .row-title { font-weight: 400; }
 .notice.is-new .row-title { font-weight: 600; }
 .notice-dot { width: 8px; height: 8px; margin-top: 8px; border-radius: 50%; }
 .notice-dot.is-new { background: var(--ice); }
-
-/* A red text button ("Remove section"): the words only, in the problem color. */
-.btn-text.btn-danger { color: var(--bad); }
 
 /* .input-suffix: something inside the right edge of a control (the "%" in Commission). */
 .input-suffix { position: absolute; right: 14px; top: 0; height: var(--tap); display: flex; align-items: center; color: var(--ink-2); pointer-events: none; }
@@ -2113,9 +2100,9 @@ var RidgelineSample = (function () {
  *   App.go(route)                 switch screen (closes any open sheet first).      App.go('calendar');
  *   App.route                     the current route name, for example 'today'.
  *   App.actions                   cross-screen entry points. Register yours:        App.actions.openClient = function (id) { ... };
- *       Names in use: newSale({date, clientId}), openClient(id), bookVisit(clientId), openTeam(),
- *       openSettings(), openNotices(), editStandards().
- *   App.act(name, arg)            call one if it exists (says "coming soon" if not). App.act('newSale', { date: '2026-11-19' });
+ *       Names in use: newSale({date, clientId}), openSale(saleId), openClient(id), bookVisit(clientId),
+ *       openTeam(), openSettings(), openNotices(), editStandards().
+ *   App.act(name, arg)            call one by name.                                 App.act('newSale', { date: '2026-11-19' });
  *
  * THE DATA (always the latest answer from the system; never keep your own copy)
  *   App.data                      the snapshot from brief-product.md: me, team, settings, days, taken, clients, sales, jobs, board, notices, problems.
@@ -2126,6 +2113,7 @@ var RidgelineSample = (function () {
  *   App.member(id)                a team member or null.                            App.member(sale.repId)
  *   App.nameOf(id, fallback)      a team member's name.                             App.nameOf(job.assignedTo, 'Unassigned')
  *   App.people(roles)             active team members, optionally only some roles.  App.people(['rep'])
+ *   App.ownerName()               the owner's first name, for words like "Ask Grayson".
  *   App.client(id), App.job(id), App.sale(id)        find one thing in the data, or null.
  *   App.jobsOn(date)              that day's jobs you can see (not cancelled), in time order.
  *   App.isOverdue(job)            still scheduled and its day has passed.
@@ -2136,17 +2124,20 @@ var RidgelineSample = (function () {
  *   App.hasRead(member)           has this person confirmed the current standards (owner's view of the team).
  *
  * TALKING TO THE SYSTEM
- *   App.api.send(action, fields, opts) -> Promise of the answer { ok, result, error: { code, message } }.
+ *   App.api.send(action, fields, opts) -> Promise of the answer { ok, result, error: { code, message }, opId, replay }.
  *       Adds token, since, day and a fresh opId; applies the returned data (which re-renders); never rejects.
  *       A failed call (no signal, time-out, not our JSON) answers { ok: false, error: { code: 'network', message } }.
- *       Pass opts.opId to retry the same action without saving twice.
+ *       Pass opts.opId (the opId of the answer that failed) to retry the same action without saving twice.
+ *       An id is only re-used for the very same fields; if they changed, send() takes a new one, because
+ *       the system answers a repeated id with the first save (replay: true) and the change would be lost.
  *       App.api.send('addNote', { kind: 'client', id: c.id, text: text }).then(function (res) { if (res.ok) ... });
  *       error.message is already plain words for the team: show it as it is. The codes worth a branch are
  *       'slot_taken' / 'slot_closed' (the time is gone: picker.setError(res.error.message)) and 'network'.
  *       An 'auth' answer signs the phone out and shows sign-in by itself.
  *   App.ui.save(button, action, fields, opts) -> Promise of the answer. The whole save pattern for any button:
- *       disables it and shows "Saving...", sends, re-uses the opId when tapped again after a failure, and shows
- *       the message in opts.errorEl (or a red toast). opts: { errorEl, quiet, busyText }.
+ *       disables it and shows "Saving...", sends, and shows the message in opts.errorEl (or a red toast).
+ *       Tapped again after a failure it re-uses the opId while the fields are the same, and takes a new one
+ *       as soon as anything in them changed. opts: { errorEl, quiet, busyText }.
  *       App.ui.save(btn, 'updateClient', { clientId: id, patch: { payStatus: 'paid' } }, { errorEl: err });
  *   Inside a sheet use sheet.send(action, fields) instead (see SHEETS): same thing on the footer button.
  *       Both answer { ok: false, skipped: true } when the button is already busy saving, so a double tap does nothing.
@@ -2170,24 +2161,25 @@ var RidgelineSample = (function () {
  *     sheet.setTitle(text)                   sheet.setButton(label, disabled)     (setButton(null) hides the footer button)
  *     sheet.note(text)                       a quiet line just above the footer button ("You earn $45.00 on this sale.")
  *     sheet.error(message)                   red words just above the footer button ('' clears them)
- *     sheet.send(action, fields, opts)       save from the footer button: "Saving...", same opId on a retry, shows the
- *                                            message on failure, resolves with the answer. opts: { button, quiet, busyText }
+ *     sheet.send(action, fields, opts)       save from the footer button: "Saving...", same opId on a retry of the same
+ *                                            fields, shows the message on failure, resolves with the answer.
+ *                                            opts: { button, quiet, busyText }
  *     sheet.rebuild()                        run `body` again, keeping the scroll position
  *     sheet.reveal(el)                       scroll the body to an element (the first missing field)
  *     sheet.close()                          close it (and anything opened on top of it)
- *   App.sheet.closeAll()
  *   App.toast(text, opts)         a short message. opts: { bad: true, retry: fn, action: { label, onTap }, ms }.
+ *       It sits just above the tab bar; with a sheet open, above a short sheet or just above the footer of a
+ *       tall one, never on top of the footer's button.
  *       App.toast('Sale saved.');     App.toast(res.error.message, { bad: true, retry: tryAgain });
  *   App.confirm({ title, text, yes, no, danger }) -> Promise of true or false. In-page, never the browser's own.
  *       App.confirm({ title: 'Delete this client?', text: 'Their sales and jobs go too.', yes: 'Delete client', danger: true }).then(function (ok) { ... });
  *
- * BUILDING THINGS (text from people is always safe: strings become text nodes, never HTML)
+ * BUILDING THINGS (text from people is always safe: strings become text nodes, never HTML; nothing here builds HTML from text)
  *   Classes for everything (cards, lists, rows, label-value rows, stat blocks, pills, buttons, fields, chips,
  *   callouts, legends) are in app.css, each with a comment naming it; its index is at the top of that file.
  *   Inside a sheet (which is slate already) a .card turns into a darker well by itself.
  *   App.h(tag, attrs, ...children) -> element. attrs: class, text, on<event>, anything else is an attribute.
  *       App.h('p', { class: 'muted' }, 'Sold by ', App.h('b', null, name))
- *   App.esc(text)                 escape &<>"' for the rare case you must build an HTML string.
  *   App.icon(name, size) -> <svg> Names: today sales calendar clients dashboard leaders schedule standards bell close
  *       chevron-left chevron-right chevron-down phone directions note edit check check-circle plus minus search user
  *       team settings key shirt signout reset clock pin alert info copy external trash mail repeat dollar
@@ -2199,11 +2191,10 @@ var RidgelineSample = (function () {
  *       var price = App.ui.field({ label: 'Price', name: 'price', inputmode: 'decimal', prefix: '$' });  price.setError('Enter the price.');
  *   App.ui.segmented({ options: [{ value, label }], value, onChange, label }) -> el with el.get(), el.set(value)
  *       App.ui.segmented({ options: [{ value: 'once', label: 'One-time' }, { value: 'monthly', label: 'Monthly' }], value: 'once', onChange: fn })
- *   App.ui.chips({ options: [{ value, label, count }], value, multi, big, scroll, onChange }) -> el with el.get(), el.set(v), el.setOptions(list)
- *       One choice by default (value), several with multi: true (value is an array). big: large chips (times). scroll: one sliding line.
- *       canClear: true lets a tap on the chosen chip clear it (el.get() is then null).
+ *   App.ui.chips({ options: [{ value, label, count }], value, scroll, onChange }) -> el with el.get(), el.set(v), el.setOptions(list)
+ *       Pick one. scroll: one line that slides sideways.
  *       App.ui.chips({ options: [{ value: '', label: 'All', count: 9 }, { value: 'New', label: 'New', count: 3 }], value: '', scroll: true, onChange: fn })
- *   App.ui.toggle({ label, hint, checked, onChange }) -> el with el.get(), el.set(bool)      (also App.ui['switch'])
+ *   App.ui.toggle({ label, hint, checked, onChange }) -> el with el.get(), el.set(bool)
  *       App.ui.toggle({ label: 'Open for appointments', checked: day.open, onChange: function (on) { ... } })
  *   App.ui.button(label, { kind, icon, small, block, href, newTab, onTap }) -> <button> or <a>
  *       kind: 'primary' | 'quiet' (default) | 'danger' | 'text'.       App.ui.button('New sale', { kind: 'primary', block: true, onTap: fn })
@@ -2216,7 +2207,7 @@ var RidgelineSample = (function () {
  *   App.ui.clientPill(status)     New / Active / Paused / Cancelled.
  *   App.ui.payPill(payStatus)     Not paid yet / Paid / Late.
  *   App.ui.row({ lead, icon, title, sub, right, chevron, onTap, cls }) -> one list row (a button when onTap is given). Put rows in App.h('div', { class: 'list' }).
- *       lead, title, sub, right: text or elements. sub may be a list of lines. cls: 'is-you' (my row in a ranking), 'row-clip' (one line each), 'is-off', 'row-danger'.
+ *       lead, title, sub, right: text or elements. sub may be a list of lines. cls: 'is-you' (my row in a ranking), 'row-clip' (one line each), 'is-off'.
  *       App.ui.row({ title: c.name, sub: 'Window cleaning, $150.00 a month', right: App.ui.clientPill(c.status), onTap: function () { App.act('openClient', c.id); } })
  *   App.ui.kv(label, value)       one label-value row; put them in App.h('div', { class: 'kvs' }). value: text or an element.
  *   App.ui.stats([{ value, unit, label, tone }])     the slim summary card of numbers side by side.
@@ -2230,9 +2221,9 @@ var RidgelineSample = (function () {
  *       A month of days, Sunday first, with arrows. For each day your `day(date)` returns
  *       { state: 'open' | 'full' | 'blocked' | 'past', label: '3 left', disabled: bool, selected: bool }.
  *       Keep the month yourself across renders: pass `month` ('YYYY-MM') and listen to onMonth.
- *   App.ui.slotPicker({ value, date, emptyText, onChange(value) }) -> el with el.get(), el.set({date, time} or null), el.setError(message), el.refresh()
+ *   App.ui.slotPicker({ value, date, emptyText, onChange(value) }) -> el with el.get(), el.set({date, time} or null), el.getDay(), el.setError(message), el.refresh()
  *       Month grid plus the free times of the chosen day. Updates itself when someone else takes a time.
- *       el.get() is { date, time } once a time is chosen, otherwise null.
+ *       el.get() is { date, time } once a time is chosen, otherwise null. el.getDay() is the day on show.
  *       var when = App.ui.slotPicker({ date: '2026-11-19', onChange: function (v) { sheet.setButton(v ? 'Save sale and book ' + App.fmt.when(v.date, v.time) : 'Save sale'); } });
  *
  * FORMATTERS (App.fmt)
@@ -2248,7 +2239,7 @@ var App = (function () {
   'use strict';
 
   var Core = RidgelineCore, D = Core.dates, doc = document;
-  var App = { version: Core.VERSION, mode: 'sample', backend: '', data: null, route: '', actions: {}, ui: {}, fmt: {}, api: {}, sheet: {} };
+  var App = { mode: 'sample', backend: '', data: null, route: '', actions: {}, ui: {}, fmt: {}, api: {}, sheet: {} };
   var ui = App.ui, fmt = App.fmt;
 
   var state = { token: null, inApp: false, okAt: 0, fails: 0, syncing: false, signingIn: false };
@@ -2312,15 +2303,9 @@ var App = (function () {
     else if (kid.nodeType) el.appendChild(kid);
     else el.appendChild(doc.createTextNode(String(kid)));
   }
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
   function clear(el) { el.textContent = ''; return el; }
 
   App.h = h;
-  App.esc = esc;
 
   /* ================= icons: one small set of line icons (24px box, stroke 1.75, round caps) ================= */
 
@@ -2569,6 +2554,19 @@ var App = (function () {
 
   /* ================= App.api.send ================= */
 
+  /* A caller may pass the id of an earlier try, so the system saves that action only once. The id is
+     only kept for the very same action and fields: under a repeated id the system answers with the
+     first save again (replay: true) and never looks at what was sent this time, so anything changed
+     since would be lost without a word. Changed fields get a new id. */
+  var sentAs = {};
+  function retryId(action, fields, given) {
+    if (!given) return newId();
+    var what = action + ' ' + JSON.stringify(fields || {});
+    if (sentAs[given] && sentAs[given] !== what) return newId();
+    sentAs[given] = what;
+    return given;
+  }
+
   function send(action, fields, opts) {
     opts = opts || {};
     var req = { action: action }, k;
@@ -2576,7 +2574,7 @@ var App = (function () {
     if (action !== 'login') {
       req.token = state.token;
       if (App.data) { req.since = App.data.rev; req.day = App.data.today; }
-      if (action !== 'sync' && action !== 'logout') req.opId = opts.opId || newId();
+      if (action !== 'sync' && action !== 'logout') req.opId = retryId(action, fields, opts.opId);
     }
     return attempt(req, 0).then(function (res) { return settle(req, res); });
   }
@@ -2586,11 +2584,13 @@ var App = (function () {
     var mine = req.action === 'login' || (!!state.token && req.token === state.token);
     if (mine) {
       if (res.ok || res.sync) state.okAt = Date.now();
-      if (res.ok && state.fails) { state.fails = 0; drawStrip(); }
+      /* An answer from a working system means the connection is back (a "server" answer is not that). */
+      if (state.fails && (res.ok || res.error.code !== 'server')) { state.fails = 0; drawStrip(); }
       if (res.sync) applySync(res.sync);
       if (!res.ok && res.error.code === 'auth' && req.action !== 'login') signOut(res.error.message || 'Please sign in again.');
     }
     res.opId = req.opId;
+    if (res.ok) delete sentAs[req.opId];        /* saved: that id is finished with */
     if (!res.ok && !res.error.message) res.error.message = NO_SIGNAL;
     return res;
   }
@@ -2670,6 +2670,10 @@ var App = (function () {
     if (!App.data) return [];
     return App.data.team.filter(function (m) { return m.active && (!roles || roles.indexOf(m.role) >= 0); });
   };
+  App.ownerName = function () {
+    var owner = App.people(['owner'])[0];
+    return owner ? fmt.first(owner.name) || 'the owner' : 'the owner';
+  };
   App.client = function (id) { return App.data ? findIn(App.data.clients, id) : null; };
   App.job = function (id) { return App.data ? findIn(App.data.jobs, id) : null; };
   App.sale = function (id) { return App.data ? findIn(App.data.sales, id) : null; };
@@ -2725,8 +2729,14 @@ var App = (function () {
 
   App.act = function (name, arg) {
     var fn = App.actions[name];
-    if (typeof fn !== 'function') { App.toast('That part is coming soon.'); return false; }
-    try { fn(arg); } catch (e) { report(e); App.toast('That could not be opened. Try again.', { bad: true }); }
+    try {
+      if (typeof fn !== 'function') throw new Error('No action called ' + name);
+      fn(arg);
+    } catch (e) {
+      report(e);
+      App.toast('That could not be opened. Try again.', { bad: true });
+      return false;
+    }
     return true;
   };
 
@@ -2740,6 +2750,23 @@ var App = (function () {
     doc.documentElement.classList.add('locked');
     layer.inHistory = false;
     try { history.pushState({ rwLayer: layers.length }, ''); layer.inHistory = true; } catch (e) { /* no history here: the close button still works */ }
+    placeToasts();
+  }
+
+  /* Toasts sit just above the tab bar. While a sheet is on top they keep clear of it: above a short
+     sheet when there is room there, otherwise just above the sheet's footer, so a message never covers
+     the footer's button or the line above it. */
+  function placeToasts() {
+    if (!els.toasts) return;
+    var top = layers.length ? layers[layers.length - 1] : null, px = '';
+    if (top && top.kind === 'sheet') {
+      var sheet = top.el, foot = top.foot, room = 0;
+      var below = window.innerHeight - top.wrap.getBoundingClientRect().bottom + top.wrap.clientHeight - sheet.offsetTop - sheet.offsetHeight;   /* from the sheet's bottom edge to the bottom of the screen */
+      if (sheet.classList.contains('sheet-small') && window.innerHeight - below - sheet.offsetHeight > 200) room = below + sheet.offsetHeight;
+      else if (Array.prototype.some.call(foot.children, function (x) { return !x.hidden; })) room = below + foot.offsetHeight;
+      if (room > 0) px = Math.round(room + 8) + 'px';
+    }
+    els.toasts.style.bottom = px;
   }
 
   /* Close layers until `depth` are left. Returns true when a history step back is on its way. */
@@ -2752,6 +2779,7 @@ var App = (function () {
       try { if (layer.gone) layer.gone(); } catch (e) { report(e); }
     }
     if (!layers.length) doc.documentElement.classList.remove('locked');
+    placeToasts();
     if (layer && layer.opener && layer.opener.focus && onPage(layer.opener)) {
       try { layer.opener.focus({ preventScroll: true }); } catch (e2) { /* focus is a nicety */ }
     }
@@ -2793,6 +2821,7 @@ var App = (function () {
     }
     st.setProperty('--vv-h', Math.round(vv.height) + 'px');
     st.setProperty('--vv-top', Math.round(vv.offsetTop) + 'px');
+    placeToasts();
   }
 
   /* ----- sheets ----- */
@@ -2810,6 +2839,8 @@ var App = (function () {
       onTap: function () { if (o.footer.onTap) o.footer.onTap(sh); }
     }) : null;
     var foot = h('div', { class: 'sheet-foot' + (sh.button ? '' : ' is-bare') }, noteEl, errorEl, sh.button);
+    var footWatch = null;
+    sh.foot = foot;
     sh.el = h('section', { class: 'sheet' + (o.small ? ' sheet-small' : ''), role: 'dialog', 'aria-modal': 'true', 'aria-label': o.title || 'Details', tabindex: '-1' },
       h('div', { class: 'sheet-head' }, title, closeBtn), sh.body, foot);
     sh.wrap = h('div', { class: 'layer' }, sh.el);
@@ -2826,14 +2857,15 @@ var App = (function () {
       else span.textContent = label;
       sh.button._off = !!disabled;
       if (!sh.button.classList.contains('is-busy')) sh.button.disabled = !!disabled;
+      placeToasts();
     };
-    sh.note = function (text) { noteEl.textContent = text || ''; noteEl.hidden = !text; };
+    sh.note = function (text) { noteEl.textContent = text || ''; noteEl.hidden = !text; placeToasts(); };
     sh.error = function (message) {
       errorEl.textContent = message || '';
       errorEl.hidden = !message;
       foot.classList.toggle('has-error', !!message);
+      placeToasts();
     };
-    sh.busy = function (on, text) { setBusy(sh.button, on, text); };
     sh.send = function (action, fields, opts) {
       opts = opts || {};
       return save(opts.button || sh.button, action, fields, { error: sh.error, quiet: opts.quiet, busyText: opts.busyText, key: sh });
@@ -2854,15 +2886,23 @@ var App = (function () {
       if (i >= 0) dropTo(i, false);
     };
     sh.update = o.update ? function () { o.update(sh); } : null;
-    sh.gone = function () { if (o.onClose) o.onClose(sh); };
+    sh.gone = function () {
+      if (footWatch) footWatch.disconnect();
+      if (o.onClose) o.onClose(sh);
+    };
 
     els.layers.appendChild(sh.wrap);
     pushLayer(sh);
+    /* The footer grows and shrinks (a note, an error, a longer label) and so does a short sheet: toasts follow. */
+    try {
+      footWatch = new ResizeObserver(placeToasts);
+      footWatch.observe(foot);
+      footWatch.observe(sh.el);
+    } catch (e) { footWatch = null; }
     try { if (o.body) o.body(sh.body, sh); } catch (e) { report(e); }
     if (!sh.el.contains(doc.activeElement)) { try { sh.el.focus({ preventScroll: true }); } catch (e2) { /* fine */ } }
     return sh;
   };
-  App.sheet.closeAll = function () { closeAll(); };
 
   /* ----- confirm dialog ----- */
 
@@ -2908,6 +2948,7 @@ var App = (function () {
       el.appendChild(h('button', { type: 'button', class: 'toast-btn', onclick: function () { remove(); action.onTap(); } }, action.label));
     }
     while (els.toasts.children.length >= 2) els.toasts.removeChild(els.toasts.firstChild);
+    placeToasts();
     els.toasts.appendChild(el);
     timer = setTimeout(remove, o.ms || (action ? 8000 : o.bad ? 5000 : 2600));
     return remove;
@@ -2934,12 +2975,16 @@ var App = (function () {
     if (btn && btn.classList.contains('is-busy')) return Promise.resolve({ ok: false, skipped: true, error: { code: 'busy', message: '' } });
     var holder = btn || o.key || {};
     var ops = holder._ops || (holder._ops = {});
-    if (!ops[action]) ops[action] = newId();
+    /* A retry of the same save keeps its id, so a save that did get through is never made twice. Change
+       anything and it is a new save with a new id: the system answers a repeated id with the first save
+       again (replay), and the change would be lost without a word. */
+    var sent = JSON.stringify(fields || {}), op = ops[action];
+    if (!op || op.sent !== sent) op = ops[action] = { id: newId(), sent: sent };
     setBusy(btn, true, o.busyText);
     if (o.error) o.error('');
-    return send(action, fields, { opId: ops[action] }).then(function (res) {
+    return send(action, fields, { opId: op.id }).then(function (res) {
       setBusy(btn, false);
-      if (res.ok) ops[action] = null;
+      if (res.ok) { if (ops[action] === op) ops[action] = null; }
       else if (!o.quiet) {
         if (o.error) o.error(res.error.message);
         else App.toast(res.error.message, { bad: true });
@@ -3049,28 +3094,22 @@ var App = (function () {
 
   ui.chips = function (o) {
     o = o || {};
-    var multi = !!o.multi, options = o.options || [];
-    var value = multi ? (o.value || []).slice() : o.value;
-    var el = h('div', { class: 'chips' + (o.big ? ' chips-big' : '') + (o.scroll ? ' chips-scroll' : ''), role: 'group', 'aria-label': o.label || null });
-    function isOn(v) { return multi ? value.indexOf(v) >= 0 : value === v; }
+    var options = o.options || [], value = o.value;
+    var el = h('div', { class: 'chips' + (o.scroll ? ' chips-scroll' : ''), role: 'group', 'aria-label': o.label || null });
     function draw() {
       clear(el);
       options.forEach(function (op) {
-        el.appendChild(h('button', { type: 'button', class: 'chip' + (isOn(op.value) ? ' is-on' : ''), 'aria-pressed': isOn(op.value) ? 'true' : 'false', onclick: function () {
-          if (multi) {
-            var i = value.indexOf(op.value);
-            if (i >= 0) value.splice(i, 1); else value.push(op.value);
-          } else {
-            if (value === op.value && !o.canClear) return;
-            value = value === op.value ? null : op.value;
-          }
+        var on = value === op.value;
+        el.appendChild(h('button', { type: 'button', class: 'chip' + (on ? ' is-on' : ''), 'aria-pressed': on ? 'true' : 'false', onclick: function () {
+          if (value === op.value) return;
+          value = op.value;
           draw();
-          if (o.onChange) o.onChange(multi ? value.slice() : value);
+          if (o.onChange) o.onChange(value);
         } }, op.label, op.count != null ? h('span', { class: 'chip-count' }, String(op.count)) : null));
       });
     }
-    el.get = function () { return multi ? value.slice() : value; };
-    el.set = function (v) { value = multi ? (v || []).slice() : v; draw(); };
+    el.get = function () { return value; };
+    el.set = function (v) { value = v; draw(); };
     el.setOptions = function (list) { options = list || []; draw(); };
     draw();
     return el;
@@ -3090,7 +3129,6 @@ var App = (function () {
     el.set = function (v) { on = !!v; el.setAttribute('aria-checked', on ? 'true' : 'false'); };
     return el;
   };
-  ui['switch'] = ui.toggle;
 
   ui.title = function (text, lead) {
     return h('header', { class: 'head' }, h('h1', { class: 'title' }, text), lead ? h('p', { class: 'lead' }, lead) : null);
@@ -3252,7 +3290,7 @@ var App = (function () {
       clear(times);
       if (problem) times.appendChild(h('p', { class: 'form-error', role: 'alert' }, problem));
       if (!App.freeDays().length) {
-        times.appendChild(h('p', { class: 'muted' }, o.emptyText || 'No open days yet. Ask Grayson to open some.'));
+        times.appendChild(h('p', { class: 'muted' }, o.emptyText || 'No open days yet. Ask ' + App.ownerName() + ' to open some.'));
         return;
       }
       if (!day) { times.appendChild(h('p', { class: 'muted' }, 'Pick a day to see its open times.')); return; }
@@ -3288,6 +3326,7 @@ var App = (function () {
     el.appendChild(grid);
     el.appendChild(times);
     el.get = function () { return value ? { date: value.date, time: value.time } : null; };
+    el.getDay = function () { return day || ''; };
     el.set = function (v) {
       value = v && v.date && v.time ? { date: v.date, time: v.time } : null;
       if (value) { day = value.date; grid.setMonth(day.slice(0, 7)); }
@@ -3418,8 +3457,9 @@ var App = (function () {
       body: function (el, sh) {
         var job = App.job(jobId);
         if (!job) { el.appendChild(h('p', { class: 'muted' }, 'That job is no longer here.')); return; }
-        var order = { tech: 0, owner: 1, rep: 2 };
-        var people = App.people().sort(function (a, b) { return (order[a.role] - order[b.role]) || (a.name < b.name ? -1 : 1); });
+        /* A sales rep cannot see or finish a job, so only techs and owners are offered (the system refuses anyone else). */
+        var order = { tech: 0, owner: 1 };
+        var people = App.people(['tech', 'owner']).sort(function (a, b) { return (order[a.role] - order[b.role]) || (a.name < b.name ? -1 : 1); });
         var list = h('div', { class: 'list' });
         function pick(id, name, rowEl) {
           if (id === (job.assignedTo || null)) { sh.close(); return; }
@@ -3662,12 +3702,6 @@ var App = (function () {
     });
   }
 
-  function placeholder(root, route) {
-    var info = TAB_INFO[route] || { label: 'This screen' };
-    root.appendChild(ui.title(info.label));
-    root.appendChild(ui.empty({ title: 'This screen is on its way.', text: 'Everything else in the app works in the meantime.' }));
-  }
-
   function drawScreen(keep) {
     var root = els.screen, def = screens[App.route];
     var y = window.pageYOffset || doc.documentElement.scrollTop || 0;
@@ -3675,20 +3709,19 @@ var App = (function () {
     clear(root);
     root.className = 'screen screen-' + App.route;
     try {
-      if (def) def.render(root); else placeholder(root, App.route);
+      def.render(root);
     } catch (e) {
       report(e);
       clear(root);
-      root.appendChild(ui.empty({ title: 'This screen could not be shown.', text: 'Close the app and open it again. If it keeps happening, tell Grayson.' }));
+      root.appendChild(ui.empty({ title: 'This screen could not be shown.', text: 'Close the app and open it again. If it keeps happening, tell ' + App.ownerName() + '.' }));
     }
     if (keep) { restoreTyped(root, typed); window.scrollTo(0, y); }
     else window.scrollTo(0, 0);
   }
 
   function allowed(route) {
-    var role = App.role(), def = screens[route];
-    if (def) return !def.roles || def.roles.indexOf(role) >= 0;
-    return (TABS[role] || []).indexOf(route) >= 0;
+    var def = screens[route];
+    return !!def && (!def.roles || def.roles.indexOf(App.role()) >= 0);
   }
   function readHash() { return String(location.hash || '').replace(/^#\/?/, '').split(/[?&/]/)[0]; }
   function writeHash(route) {
@@ -3719,7 +3752,8 @@ var App = (function () {
     state.syncing = true;
     send('sync').then(function (res) {
       state.syncing = false;
-      if (res.ok || res.error.code === 'auth') return;
+      /* "Busy" only means several phones asked at the same moment: the next round will do. */
+      if (res.ok || res.error.code === 'auth' || res.error.code === 'busy') return;
       state.fails++;            /* two in a row and the strip says so, until one works */
       drawStrip();
     });
@@ -3796,17 +3830,20 @@ var App = (function () {
     var body = clear(els.signinBody);
 
     if (App.mode === 'sample') {
-      var quick = h('div', { class: 'btn-row' });
-      RidgelineSample.PEOPLE.filter(function (p, i, all) {
-        return all.map(function (x) { return x.role; }).indexOf(p.role) === i;   /* the first person of each role */
-      }).forEach(function (p) {
-        quick.appendChild(ui.button(ROLE_WORDS[p.role], { small: true, onTap: function (e, btn) { logIn(p.name, p.pin, btn, error); } }));
+      /* One button per role, for the first sample person of that role who can still sign in with their
+         starting PIN. Someone trying the sample may have removed or renamed them, or changed that PIN. */
+      var quick = h('div', { class: 'btn-row' }), missing = false;
+      ['owner', 'rep', 'tech'].forEach(function (role) {
+        var p = RidgelineSample.PEOPLE.filter(function (x) { return x.role === role && sampleKnows(x); })[0];
+        if (!p) { missing = true; return; }
+        quick.appendChild(ui.button(ROLE_WORDS[role], { small: true, onTap: function (e, btn) { logIn(p.name, p.pin, btn, error); } }));
       });
       body.appendChild(h('div', { class: 'card' },
         h('div', { class: 'stack-xs' },
           h('p', { class: 'strong' }, 'Sample mode'),
-          h('p', { class: 'muted small' }, 'This is made-up data so you can try everything. Sign straight in as:')),
-        quick));
+          h('p', { class: 'muted small' }, 'This is made-up data so you can try everything.' + (quick.firstChild ? ' Sign straight in as:' : ''))),
+        quick.firstChild ? quick : null,
+        missing ? ui.button('Reset sample data', { kind: 'text', small: true, icon: 'reset', onTap: resetSample }) : null));
     }
 
     var name = ui.field({ label: 'Name', name: 'name', autocomplete: 'username', autocapitalize: 'words' });
@@ -3825,6 +3862,14 @@ var App = (function () {
     } },
       h('h1', { class: 'signin-title' }, 'Team sign in'), name, pin, btn, error,
       h('p', { class: 'hint' }, 'Forgot your PIN? Ask Grayson to reset it.')));
+  }
+
+  function sampleKnows(p) {
+    try {
+      return sample.store.list('team').some(function (m) {
+        return m.active && m.role === p.role && m.name === p.name && Core.sha256(m.salt + ':' + p.pin) === m.pinHash;
+      });
+    } catch (e) { return false; }
   }
 
   /* A signed-in phone with nothing saved to show yet: load first, with a way out if that fails. */
@@ -3980,7 +4025,11 @@ var App = (function () {
       RidgelineSample.PEOPLE.forEach(function (p) { if (me && p.name === me.name && p.role === me.role) person = p; });
       forget();
       startSample(true);
-      if (!person) { showSignIn(); return; }
+      if (!person) {
+        showSignIn();
+        App.toast('Sample data is back to the start.');
+        return;
+      }
       leaveApp();
       clear(els.signinBody).appendChild(h('p', { class: 'muted' }, 'Loading...'));
       send('login', { name: person.name, pin: person.pin }).then(function (res) {
@@ -3995,10 +4044,11 @@ var App = (function () {
 
   function openMe() {
     var liveLine = h('p', null, upToDateText());
+    App.live(liveLine, function () { liveLine.textContent = upToDateText(); });
     App.sheet.open({
       title: 'Your account',
-      update: function () { liveLine.textContent = upToDateText(); },
-      body: function (el, sh) {
+      update: function (sh) { sh.rebuild(); },      /* no input in here, so the pills on its rows simply stay current */
+      body: function (el) {
         var me = App.me(), owner = me.role === 'owner';
         el.appendChild(h('div', { class: 'me-head' },
           h('span', { class: 'avatar avatar-lg' }, fmt.initials(me.name)),
@@ -4154,10 +4204,9 @@ var App = (function () {
   /* The same sum the system does: pct percent of a price, in whole cents. */
   function share(cents, pct) { return Math.round(cents * Math.round((pct || 0) * 100) / 10000); }
 
-  function openClient(id) {
-    if (typeof App.actions.openClient === 'function') App.act('openClient', id);
-    else App.go('clients');
-  }
+  function openClient(id) { App.act('openClient', id); }
+  /* A sale that is waiting opens as the sale itself: "Book the appointment" is right there. */
+  function openSale(id) { App.act('openSale', id); }
 
   /* A small sheet that lists a few things, each of which opens something. It stays current. */
   function openList(title, build) {
@@ -4221,7 +4270,7 @@ var App = (function () {
     return waitingSales().map(function (s) {
       return ui.row({ title: s.clientName || 'Client',
         sub: [priceLine(s.service, s.priceCents, s.billing), 'Sold ' + fmt.dayShort(s.day) + ' by ' + App.nameOf(s.repId, 'someone')],
-        onTap: function () { openClient(s.clientId); } });
+        onTap: function () { openSale(s.id); } });
     });
   }
 
@@ -4268,7 +4317,7 @@ var App = (function () {
     if (waiting.length) {
       rows.push(ui.row({ lead: count(waiting.length, 'warn'), title: waiting.length === 1 ? 'Sale waiting for an appointment' : 'Sales waiting for an appointment',
         sub: names(waiting.map(function (s) { return s.clientName || 'A client'; })),
-        onTap: function () { if (waiting.length === 1) openClient(waiting[0].clientId); else openList('Waiting for an appointment', waitingRows); } }));
+        onTap: function () { if (waiting.length === 1) openSale(waiting[0].id); else openList('Waiting for an appointment', waitingRows); } }));
     }
 
     var end = D.addDays(today, 6);
@@ -4317,55 +4366,6 @@ var App = (function () {
     ]);
   }
 
-  /* The leaderboard belongs to the Sales screens. If that part is not here, a plain ranked list stands in. */
-  var boardPeriod = 'week';
-  var PERIODS = [{ value: 'week', label: 'This week' }, { value: 'month', label: 'This month' }, { value: 'all', label: 'All time' }];
-
-  function simpleBoard(box) {
-    var d = App.data, me = d.me;
-    var from = boardPeriod === 'week' ? D.weekStart(d.today) : boardPeriod === 'month' ? D.monthStart(d.today) : null;
-    var earned = {};
-    d.sales.forEach(function (s) { earned[s.repId] = (earned[s.repId] || 0) + Core.calc.sumEvents(s.events || [], from, null); });
-
-    box.appendChild(ui.segmented({ label: 'Leaderboard for', options: PERIODS, value: boardPeriod,
-      onChange: function (v) { boardPeriod = v; App.refresh(); } }));
-    var rows = (d.board || []).slice().sort(function (a, b) {
-      var x = a[boardPeriod], y = b[boardPeriod];
-      return (y.cents - x.cents) || (y.count - x.count) || byName(a, b);
-    });
-    if (!rows.length) {
-      box.appendChild(h('p', { class: 'muted' }, 'No sales reps yet. Add your people from the menu at the top left.'));
-      return;
-    }
-    var list = h('div', { class: 'list' });
-    rows.forEach(function (r, i) {
-      var p = r[boardPeriod], you = r.id === me.id;
-      list.appendChild(ui.row({
-        lead: h('span', { class: 'rank' + (i === 0 && p.cents > 0 ? ' is-top' : '') }, String(i + 1)),
-        title: you ? h('span', { class: 'cluster' }, r.name, ui.pill('You', 'ice')) : r.name,
-        sub: fmt.plural(p.count, 'sale') + (r.active ? '' : ', no longer on the team'),
-        right: h('span', { class: 'stack-xs' },
-          h('span', { class: 'board-amt' }, fmt.money(p.cents)),
-          h('span', { class: 'small' }, fmt.money(earned[r.id] || 0) + ' commission')),
-        cls: you ? 'is-you' : ''
-      }));
-    });
-    box.appendChild(list);
-  }
-
-  function drawLeaderboard(box) {
-    if (typeof ui.leaderboard === 'function') {
-      try {
-        var made = ui.leaderboard(box, { showCommission: true });
-        if (!box.firstChild && made && made.nodeType && made !== box) box.appendChild(made);
-      } catch (e) {
-        if (window.console && console.error) console.error(e);
-        clear(box);
-      }
-    }
-    if (!box.firstChild) simpleBoard(box);
-  }
-
   function comingUp() {
     var d = App.data, end = D.addDays(d.today, 7);
     var jobs = d.jobs.filter(function (j) { return j.status === 'scheduled' && j.date > d.today && j.date <= end; }).sort(byWhen);
@@ -4390,9 +4390,9 @@ var App = (function () {
     root.appendChild(numbers());
 
     root.appendChild(ui.label('Leaderboard'));
-    var board = h('div', { class: 'stack' });
+    var board = h('div');
     root.appendChild(board);
-    drawLeaderboard(board);
+    ui.leaderboard(board, { showCommission: true });
 
     root.appendChild(ui.label('Coming up'));
     root.appendChild(comingUp());
@@ -4435,15 +4435,6 @@ var App = (function () {
 
   /* ================= Notifications ================= */
 
-  /* The Me sheet is not redrawn when data changes, so its "4 new" would outlive the reading. */
-  function clearNewPill() {
-    var rows = document.querySelectorAll('.sheet .row');
-    for (var i = 0; i < rows.length; i++) {
-      var title = rows[i].querySelector('.row-title'), pill = rows[i].querySelector('.row-right');
-      if (title && pill && title.textContent === 'Notifications' && pill.parentNode) pill.parentNode.removeChild(pill);
-    }
-  }
-
   App.actions.openNotices = function () {
     var me = App.me();
     if (!me || me.role !== 'owner') return;
@@ -4455,10 +4446,7 @@ var App = (function () {
       var unread = (App.data.notices || []).some(function (n) { return n.at > (now.noticesSeenAt || 0); });
       if (!unread) return;
       marking = true;
-      App.api.send('readNotices', {}).then(function (res) {
-        marking = false;
-        if (res.ok) clearNewPill();
-      });
+      App.api.send('readNotices', {}).then(function () { marking = false; });
     }
 
     var sheet = App.sheet.open({
@@ -5179,13 +5167,6 @@ var App = (function () {
   }
   function scheduledOn(date) { return App.jobsOn(date).filter(function (j) { return j.status === 'scheduled'; }); }
 
-  /* A retry after a failed save re-uses its id so nothing is saved twice. That is only right while
-     the thing being saved is the same, so a changed save starts fresh. */
-  function freshSave(btn, fields) {
-    var key = JSON.stringify(fields);
-    if (btn && btn._sent !== key) { btn._sent = key; btn._ops = null; }
-  }
-
   /* One day of the grid, the same for the owner and for reps: open days say how many times are left. */
   function dayState(date) {
     if (date < App.today()) return { state: 'past', disabled: true };
@@ -5217,7 +5198,6 @@ var App = (function () {
   function bulkSave(btn, errorEl, days, doneText) {
     var fields = { days: days };
     bulkError = '';
-    freshSave(btn, fields);
     ui.save(btn, 'setDays', fields, { errorEl: errorEl }).then(function (res) {
       if (res.skipped) return;
       if (res.ok) App.toast(doneText);
@@ -5374,7 +5354,6 @@ var App = (function () {
         if (same) { sh.close(); return; }
         var fields = { days: [{ date: date, open: open, slots: slots.slice() }] };
         var booked = scheduledOn(date).length;
-        freshSave(sh.button, fields);
         sh.send('setDays', fields).then(function (res) {
           if (!res.ok) return;
           sh.close();
@@ -5467,7 +5446,7 @@ var App = (function () {
     }));
     root.appendChild(legend());
     if (!App.freeDays().length) {
-      root.appendChild(ui.empty({ title: 'No open days yet.', text: 'You can still save a sale now and book it once Grayson opens some days.' }));
+      root.appendChild(ui.empty({ title: 'No open days yet.', text: 'You can still save a sale now and book it once ' + App.ownerName() + ' opens some days.' }));
     }
   }
 
@@ -5555,13 +5534,6 @@ var App = (function () {
     var list = App.data.sales.filter(function (s) { return s.clientId === id && !s.jobId; })
       .sort(function (a, b) { return (a.soldAt || 0) - (b.soldAt || 0); });
     return list[0] || null;
-  }
-
-  /* A retry after a failed save re-uses its id so nothing is saved twice. That is only right while
-     the thing being saved is the same, so a changed save starts fresh. */
-  function freshSave(btn, fields) {
-    var key = JSON.stringify(fields);
-    if (btn && btn._sent !== key) { btn._sent = key; btn._ops = null; }
   }
 
   function matches(c, q) {
@@ -5681,7 +5653,6 @@ var App = (function () {
       var text = noteBox.val();
       if (!text) { noteBox.setError('Write the note first.'); return; }
       var fields = { kind: 'client', id: id, text: text };
-      freshSave(noteBtn, fields);
       ui.save(noteBtn, 'addNote', fields, { errorEl: noteErr }).then(function (res) {
         if (!res.ok) return;
         noteBox.input.value = '';
@@ -5879,7 +5850,6 @@ var App = (function () {
         if (problem) { box.setError(problem); return; }
         if (link === had) { sh.close(); return; }
         var fields = { clientId: id, patch: { stripeLink: link } };
-        freshSave(sh.button, fields);
         sh.send('updateClient', fields).then(function (res) {
           if (!res.ok) return;
           sh.close();
@@ -5917,9 +5887,10 @@ var App = (function () {
         options: [{ value: 'once', label: 'One-time' }, { value: 'monthly', label: 'Monthly' }] });
       start = ui.field({ label: 'Start date', name: 'c-start', type: 'date', value: c.startDate || '' });
 
-      var me = App.me(), people = [{ value: me.id, label: me.name + ' (you)' }].concat(App.people(['rep']).sort(byName).map(function (m) {
-        return { value: m.id, label: m.name };
-      }));
+      /* A client can be looked after by any sales rep or owner who is on the team. */
+      var me = App.me(), people = [{ value: me.id, label: me.name + ' (you)' }].concat(App.people(['rep', 'owner']).filter(function (m) {
+        return m.id !== me.id;
+      }).sort(byName).map(function (m) { return { value: m.id, label: m.name }; }));
       if (c.repId && !people.some(function (o) { return o.value === c.repId; })) people.unshift({ value: c.repId, label: repName(c.repId, true) });
       rep = ui.field({ label: 'Looked after by', name: 'c-rep', type: 'select', options: people, value: c.repId || me.id,
         hint: 'This person sees the client and books their visits. Sales already made stay with whoever made them.' });
@@ -5959,7 +5930,6 @@ var App = (function () {
         if (!changed) { sh.close(); return; }
 
         var fields = { clientId: id, patch: patch };
-        freshSave(sh.button, fields);
         sh.send('updateClient', fields).then(function (res) {
           if (!res.ok) return;
           sh.close();
@@ -5996,7 +5966,6 @@ var App = (function () {
         if (!v) return;
         var fields = { clientId: id, date: v.date, time: v.time, what: what.val() };
         if (waiting) fields.saleId = waiting.id;
-        freshSave(sh.button, fields);
         sh.send('bookJob', fields).then(function (res) {
           if (res.ok) {
             sh.close();
@@ -6144,6 +6113,7 @@ var App = (function () {
       sub: [
         sale.service + ', ' + shortDay(sale.day),
         showRep ? 'Sold by ' + App.nameOf(sale.repId, 'someone who has left') : null,
+        sale.endDay ? 'Monthly plan ended ' + shortDay(sale.endDay) : null,
         sale.jobId ? null : h('span', { class: 'warn' }, 'No appointment yet')
       ],
       right: [
@@ -6263,6 +6233,7 @@ var App = (function () {
     kvs.appendChild(ui.kv('Sold', fmt.day(sale.day)));
     kvs.appendChild(ui.kv('Service', sale.service));
     kvs.appendChild(ui.kv('Price', priceWords(sale)));
+    if (sale.endDay) kvs.appendChild(ui.kv('Monthly plan', 'Ended ' + fmt.day(sale.endDay)));
     if (owner) kvs.appendChild(ui.kv('Sold by', App.nameOf(sale.repId, 'Someone who has left')));
     kvs.appendChild(ui.kv('Earned so far', h('span', { class: 'strong num' }, fmt.money(earned(sale)))));
     el.appendChild(kvs);
@@ -6363,11 +6334,14 @@ var App = (function () {
    * brings it back. A saved sale clears the draft.
    *
    * The draft is also what stops a sale being saved twice:
-   *   - it carries the opId of the save it tried, so every retry (even after the sheet was closed, or the
-   *     page was loaded again) is the same save to the system, which answers it only once;
+   *   - it carries the opId of the save it tried and exactly what that save sent (`sent`), so a retry of
+   *     the same sale (even after the sheet was closed, or the page was loaded again) is the same save to
+   *     the system, which answers it only once. Change anything and it is a new save with a new id: the
+   *     system would answer the old id with the first sale again and the change would be lost;
    *   - it remembers each try whose answer never came back (`tries`). Such a save may have gone through.
    *     If a sale just like it turns up in the data afterwards, the sheet shows it as saved instead of
-   *     sending it again.
+   *     sending it again. Before a changed sale is sent after such a try, the sheet asks the system for
+   *     the latest first, so it finds out.
    */
 
   function draftKey(id) { return 'ridgeline.' + App.mode + '.saleDraft.' + (id || ''); }
@@ -6379,7 +6353,7 @@ var App = (function () {
       clientId: '', find: '', repId: me.id,
       service: '', other: '', price: '', priceAuto: false, billing: 'once', notes: '', link: '',
       appt: null, day: '', later: false,
-      opId: '', tries: [], lastSold: 0
+      opId: '', sent: '', tries: [], lastSold: 0
     };
   }
 
@@ -6499,7 +6473,7 @@ var App = (function () {
       d.other = f.other.val(); d.price = f.price.val(); d.billing = f.billing.get();
       d.notes = f.notes.val(); d.link = f.link.val();
       d.appt = f.picker.get();
-      if (d.appt) d.day = d.appt.date;
+      d.day = d.appt ? d.appt.date : (f.picker.getDay() || d.day);
     }
     function keep() {
       clearTimeout(timer);
@@ -6619,7 +6593,7 @@ var App = (function () {
       f.picker = ui.slotPicker({
         value: d.appt, date: d.day || null,
         emptyText: owner ? 'No open days yet. Save the sale now and book once you open some in Calendar.'
-          : 'No open days yet. Save the sale now and book once Grayson opens some.',
+          : 'No open days yet. Save the sale now and book once ' + App.ownerName() + ' opens some.',
         onChange: function (v) {
           d.appt = v;
           if (v) d.day = v.date;
@@ -6825,7 +6799,7 @@ var App = (function () {
     }
 
     /* Has a try whose answer never came back turned up as a sale after all? Then it is saved: show it, send nothing. */
-    function adoptSaved() {
+    function adoptSaved(changedSince) {
       if (view !== 'form' || saving || !d.tries.length) return false;
       var hit = null;
       (App.data.sales || []).forEach(function (s) {
@@ -6837,7 +6811,7 @@ var App = (function () {
       });
       if (!hit) return false;
       saved({ saleId: hit.id, clientId: hit.clientId, jobId: hit.jobId },
-        { service: hit.service, priceCents: hit.priceCents, billing: hit.billing, clientId: hit.clientId, appointment: null }, hit.repId);
+        { service: hit.service, priceCents: hit.priceCents, billing: hit.billing, clientId: hit.clientId, appointment: null }, hit.repId, !!changedSince);
       return true;
     }
 
@@ -6852,10 +6826,33 @@ var App = (function () {
         if (bad.input) { try { bad.input.focus({ preventScroll: true }); } catch (e) { /* fine */ } }
         return;
       }
-      var req = request(), seller = sellerId(), known = newestSold();
+      var req = request(), sent = JSON.stringify(req);
+      saving = true;
+      sheet.error('');
+      sheet.setButton('Saving...', true);
+      if (d.opId && d.sent !== sent && d.tries.length) {
+        /* Something was changed after a try whose answer never came back. That try may have gone through,
+           so look before sending what would be a second sale. */
+        App.api.send('sync').then(function (res) {
+          saving = false;
+          if (closed) return;
+          if (!res.ok) {
+            paintButton();
+            if (res.error.code !== 'auth') sheet.error(res.error.message);
+            return;
+          }
+          if (!adoptSaved(true)) sendSale(req, sent);
+        });
+        return;
+      }
+      sendSale(req, sent);
+    }
+
+    function sendSale(req, sent) {
+      var seller = sellerId(), known = newestSold();
       var tried = { name: norm(req.client ? req.client.name : ''), clientId: req.clientId || '', service: norm(req.service),
         priceCents: req.priceCents, billing: req.billing, repId: seller };
-      if (!d.opId) d.opId = uid();                  /* one id for this sale, however many times it is sent */
+      if (!d.opId || d.sent !== sent) { d.opId = uid(); d.sent = sent; }   /* one id for this exact sale, however many times it is sent */
       keep();
       saving = true;
       sheet.error('');
@@ -6886,7 +6883,7 @@ var App = (function () {
       });
     }
 
-    function saved(result, req, seller) {
+    function saved(result, req, seller, changedSince) {
       var sale = result.saleId ? App.sale(result.saleId) : null;
       var job = result.jobId ? App.job(result.jobId) : null;
       var price = sale ? sale.priceCents : req.priceCents, monthly = (sale ? sale.billing : req.billing) === 'monthly';
@@ -6897,7 +6894,8 @@ var App = (function () {
         when: job ? fmt.when(job.date, job.time) : (req.appointment && result.jobId ? fmt.when(req.appointment.date, req.appointment.time) : ''),
         who: seller === me.id ? 'You earned' : App.nameOf(seller, 'The rep') + ' earned',
         cents: sale && sale.events && sale.events.length ? sale.events[0].cents : (result.commissionCents || 0),
-        each: monthly ? share(price, sale ? sale.monthlyPct : s.monthlyPct) : 0
+        each: monthly ? share(price, sale ? sale.monthlyPct : s.monthlyPct) : 0,
+        early: !!changedSince
       };
       clearTimeout(timer);
       timer = null;
@@ -6916,6 +6914,11 @@ var App = (function () {
     /* ----- the success view ----- */
     function drawDone(el) {
       el.appendChild(h('div', { class: 'sold-head' }, icon('check-circle', 40), h('h3', { class: 'sold-title' }, 'Sale saved')));
+      if (done.early) {
+        el.appendChild(h('div', { class: 'callout callout-warn' },
+          h('p', { class: 'callout-title' }, 'This went through on your first try'),
+          h('p', { class: 'small' }, 'It was saved before your last changes, so those are not in it. Check the details below.')));
+      }
       var kvs = h('div', { class: 'kvs' });
       kvs.appendChild(ui.kv('Customer', done.name));
       kvs.appendChild(ui.kv('Sold', done.sold));

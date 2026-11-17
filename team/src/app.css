@@ -156,10 +156,10 @@ button.avatar:active { opacity: .7; }
 .big-num { font: 800 28px/1.1 var(--display); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
 
 /* ---------- LAYOUT HELPERS ---------- */
-/* .stack: a column with even gaps (.stack-xs 4, .stack-sm 8, .stack-md 12, .stack 16, .stack-lg 24). */
-.stack, .stack-xs, .stack-sm, .stack-md, .stack-lg { display: flex; flex-direction: column; }
-.stack > *, .stack-xs > *, .stack-sm > *, .stack-md > *, .stack-lg > * { min-width: 0; }
-.stack-xs { gap: 4px; } .stack-sm { gap: 8px; } .stack-md { gap: 12px; } .stack { gap: 16px; } .stack-lg { gap: 24px; }
+/* .stack: a column with even gaps (.stack-xs 4, .stack-sm 8, .stack-md 12, .stack 16). */
+.stack, .stack-xs, .stack-sm, .stack-md { display: flex; flex-direction: column; }
+.stack > *, .stack-xs > *, .stack-sm > *, .stack-md > * { min-width: 0; }
+.stack-xs { gap: 4px; } .stack-sm { gap: 8px; } .stack-md { gap: 12px; } .stack { gap: 16px; }
 /* .between: two things on one line, pushed apart. .cluster: things in a line that wrap. */
 .between { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .between > * { min-width: 0; }
@@ -167,7 +167,6 @@ button.avatar:active { opacity: .7; }
 /* .cols-2: two equal columns (buttons side by side, short fields). */
 .cols-2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
 .grow { flex: 1 1 auto; min-width: 0; }
-.divider { height: 1px; background: var(--line); border: 0; margin: 0; }
 
 /* ---------- CARDS ---------- */
 /* .card: slate, hairline border, 16px radius, 16px padding. Not every block needs one. */
@@ -178,13 +177,12 @@ button.avatar:active { opacity: .7; }
 .sheet .card { background: var(--bg); }
 
 /* ---------- LISTS AND ROWS ---------- */
-/* .list: rows with hairlines between them, straight on the page (or inside .card.card-flush with .list-pad). */
+/* .list: rows with hairlines between them, straight on the page. */
 .list { display: flex; flex-direction: column; }
-.list-pad { padding: 0 16px; }
 /* .row: one line of a list. Lead (icon or time), main (title + sub), right (value, pill, chevron). Use a <button> when it is tappable. */
 .row { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 60px; padding: 10px 0; border-bottom: 1px solid var(--line); color: var(--ink); text-align: left; }
 .list > .row:last-child { border-bottom: 0; }
-button.row:active, a.row:active { opacity: .7; }
+button.row:active { opacity: .7; }
 .row.is-busy { opacity: .55; }
 .row-lead { flex: none; display: flex; flex-direction: column; color: var(--ink-2); }
 .row-time { min-width: 84px; font: 700 14px/1.3 var(--display); color: var(--ink); font-variant-numeric: tabular-nums; }
@@ -199,7 +197,6 @@ button.row:active, a.row:active { opacity: .7; }
 .row-chev { flex: none; color: var(--ink-3); }
 .row.is-off { color: var(--ink-3); }
 .row.is-off .row-lead { color: var(--ink-3); }
-.row-danger, .row-danger .row-lead { color: var(--bad); }
 /* .row.is-you: the viewer's own row in a ranking, tinted ice. */
 .row.is-you { background: var(--ice-wash); border-radius: var(--r-ctl); border-bottom-color: transparent; width: auto; margin: 0 -12px; padding-left: 12px; padding-right: 12px; }
 /* .rank: the rank numeral in a leaderboard row. */
@@ -213,8 +210,6 @@ button.row:active, a.row:active { opacity: .7; }
 .kvs > .kv:last-child { border-bottom: 0; }
 .kv-label { flex: none; max-width: 45%; color: var(--ink-2); font-size: 14px; line-height: 1.65; }
 .kv-value { min-width: 0; text-align: right; overflow-wrap: anywhere; }
-button.kv { width: 100%; }
-button.kv .kv-value { color: var(--ice); font-weight: 600; }
 
 /* ---------- STAT BLOCKS ---------- */
 /* .stats: the slim summary card, numbers side by side with hairlines between (App.ui.stats). */
@@ -264,7 +259,7 @@ button.pill:active { opacity: .7; }
 .btn-quiet { background: var(--raised); border-color: var(--line); color: var(--ink); }
 .btn-danger { background: var(--bad-wash); color: var(--bad); }
 .btn-text { height: 44px; padding: 0 6px; color: var(--ice); font-weight: 600; }
-.btn-text.btn-danger { background: none; }
+.btn-text.btn-danger { background: none; color: var(--bad); }
 .btn-sm { height: 44px; padding: 0 14px; font-size: 14px; }
 .btn-block { display: flex; width: 100%; height: auto; min-height: var(--tap); padding-top: 8px; padding-bottom: 8px; white-space: normal; line-height: 1.2; }
 .btn-sm.btn-block { min-height: 44px; }
@@ -303,7 +298,7 @@ select.input { padding-right: 40px; text-overflow: ellipsis; }
 .search .input { padding-left: 44px; }
 
 /* ---------- CHIPS ---------- */
-/* .chips > .chip: pick one or several (App.ui.chips). .chips-big: large chips for times. .chips-scroll: one line that slides sideways. */
+/* .chips > .chip: pick one (App.ui.chips). .chips-big: large chips for times. .chips-scroll: one line that slides sideways. */
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 44px; padding: 0 16px;
@@ -314,7 +309,6 @@ select.input { padding-right: 40px; text-overflow: ellipsis; }
 .chip.is-on { background: var(--ice); border-color: var(--ice); color: var(--ice-ink); }
 .chip-count { font-weight: 500; color: var(--ink-2); }
 .chip.is-on .chip-count { color: var(--ice-ink); }
-.chip[disabled] { color: var(--ink-3); cursor: default; }
 .chips-big { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
 .chips-big .chip { height: var(--tap); padding: 0 8px; border-radius: var(--r-ctl); font-size: 16px; }
 .chips-scroll { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; margin: 0 -16px; padding: 0 16px; }
@@ -343,10 +337,9 @@ select.input { padding-right: 40px; text-overflow: ellipsis; }
 .switch[aria-checked="true"] .switch-track::after { left: 23px; background: var(--ice-ink); }
 
 /* ---------- CALLOUT ---------- */
-/* .callout: a boxed message that must not be missed (a new PIN, a warning). Tones: -warn, -bad, -good, -ice. */
+/* .callout: a boxed message that must not be missed (a new PIN, a warning). Tones: -warn, -good, -ice. */
 .callout { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border-radius: var(--r-ctl); background: var(--raised); border: 1px solid var(--line); }
 .callout-warn { background: var(--warn-wash); border-color: transparent; }
-.callout-bad  { background: var(--bad-wash);  border-color: transparent; }
 .callout-good { background: var(--good-wash); border-color: transparent; }
 .callout-ice  { background: var(--ice-wash);  border-color: transparent; }
 .callout-title { font-weight: 700; }
@@ -396,7 +389,8 @@ select.input { padding-right: 40px; text-overflow: ellipsis; }
 .dialog .cols-2 { margin-top: 10px; }
 
 /* ---------- TOASTS ---------- */
-/* .toast: a short message just above the tab bar (App.toast). .toast-bad is the red one, usually with Retry. */
+/* .toast: a short message just above the tab bar (App.toast). .toast-bad is the red one, usually with Retry.
+   While a sheet is open, app.js lifts .toasts clear of it: above a short sheet, or just above a tall sheet's footer. */
 .toasts { position: fixed; z-index: 80; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 0 12px; pointer-events: none; }
 .toast { pointer-events: auto; max-width: 100%; width: max-content; min-height: 48px; display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; background: var(--ink); color: var(--ice-ink); border-radius: var(--r-ctl); font-weight: 600; font-size: 14px; line-height: 1.35; }
 .toast-text { padding: 6px 8px 6px 0; overflow-wrap: anywhere; }
@@ -436,7 +430,6 @@ button.day:not([disabled]):active { opacity: .7; }
 .swatch { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--line); flex: none; }
 .swatch.is-open { background: var(--ice-wash); border-color: transparent; }
 .swatch.is-full { background: var(--warn-wash); border-color: transparent; }
-.swatch.is-selected { background: var(--ice); border-color: transparent; }
 .swatch.is-today { border: 2px solid var(--ink-2); }
 
 /* ---------- SLOT PICKER ---------- */

@@ -54,10 +54,9 @@
   /* The same sum the system does: pct percent of a price, in whole cents. */
   function share(cents, pct) { return Math.round(cents * Math.round((pct || 0) * 100) / 10000); }
 
-  function openClient(id) {
-    if (typeof App.actions.openClient === 'function') App.act('openClient', id);
-    else App.go('clients');
-  }
+  function openClient(id) { App.act('openClient', id); }
+  /* A sale that is waiting opens as the sale itself: "Book the appointment" is right there. */
+  function openSale(id) { App.act('openSale', id); }
 
   /* A small sheet that lists a few things, each of which opens something. It stays current. */
   function openList(title, build) {
@@ -121,7 +120,7 @@
     return waitingSales().map(function (s) {
       return ui.row({ title: s.clientName || 'Client',
         sub: [priceLine(s.service, s.priceCents, s.billing), 'Sold ' + fmt.dayShort(s.day) + ' by ' + App.nameOf(s.repId, 'someone')],
-        onTap: function () { openClient(s.clientId); } });
+        onTap: function () { openSale(s.id); } });
     });
   }
 
@@ -168,7 +167,7 @@
     if (waiting.length) {
       rows.push(ui.row({ lead: count(waiting.length, 'warn'), title: waiting.length === 1 ? 'Sale waiting for an appointment' : 'Sales waiting for an appointment',
         sub: names(waiting.map(function (s) { return s.clientName || 'A client'; })),
-        onTap: function () { if (waiting.length === 1) openClient(waiting[0].clientId); else openList('Waiting for an appointment', waitingRows); } }));
+        onTap: function () { if (waiting.length === 1) openSale(waiting[0].id); else openList('Waiting for an appointment', waitingRows); } }));
     }
 
     var end = D.addDays(today, 6);
@@ -217,55 +216,6 @@
     ]);
   }
 
-  /* The leaderboard belongs to the Sales screens. If that part is not here, a plain ranked list stands in. */
-  var boardPeriod = 'week';
-  var PERIODS = [{ value: 'week', label: 'This week' }, { value: 'month', label: 'This month' }, { value: 'all', label: 'All time' }];
-
-  function simpleBoard(box) {
-    var d = App.data, me = d.me;
-    var from = boardPeriod === 'week' ? D.weekStart(d.today) : boardPeriod === 'month' ? D.monthStart(d.today) : null;
-    var earned = {};
-    d.sales.forEach(function (s) { earned[s.repId] = (earned[s.repId] || 0) + Core.calc.sumEvents(s.events || [], from, null); });
-
-    box.appendChild(ui.segmented({ label: 'Leaderboard for', options: PERIODS, value: boardPeriod,
-      onChange: function (v) { boardPeriod = v; App.refresh(); } }));
-    var rows = (d.board || []).slice().sort(function (a, b) {
-      var x = a[boardPeriod], y = b[boardPeriod];
-      return (y.cents - x.cents) || (y.count - x.count) || byName(a, b);
-    });
-    if (!rows.length) {
-      box.appendChild(h('p', { class: 'muted' }, 'No sales reps yet. Add your people from the menu at the top left.'));
-      return;
-    }
-    var list = h('div', { class: 'list' });
-    rows.forEach(function (r, i) {
-      var p = r[boardPeriod], you = r.id === me.id;
-      list.appendChild(ui.row({
-        lead: h('span', { class: 'rank' + (i === 0 && p.cents > 0 ? ' is-top' : '') }, String(i + 1)),
-        title: you ? h('span', { class: 'cluster' }, r.name, ui.pill('You', 'ice')) : r.name,
-        sub: fmt.plural(p.count, 'sale') + (r.active ? '' : ', no longer on the team'),
-        right: h('span', { class: 'stack-xs' },
-          h('span', { class: 'board-amt' }, fmt.money(p.cents)),
-          h('span', { class: 'small' }, fmt.money(earned[r.id] || 0) + ' commission')),
-        cls: you ? 'is-you' : ''
-      }));
-    });
-    box.appendChild(list);
-  }
-
-  function drawLeaderboard(box) {
-    if (typeof ui.leaderboard === 'function') {
-      try {
-        var made = ui.leaderboard(box, { showCommission: true });
-        if (!box.firstChild && made && made.nodeType && made !== box) box.appendChild(made);
-      } catch (e) {
-        if (window.console && console.error) console.error(e);
-        clear(box);
-      }
-    }
-    if (!box.firstChild) simpleBoard(box);
-  }
-
   function comingUp() {
     var d = App.data, end = D.addDays(d.today, 7);
     var jobs = d.jobs.filter(function (j) { return j.status === 'scheduled' && j.date > d.today && j.date <= end; }).sort(byWhen);
@@ -290,9 +240,9 @@
     root.appendChild(numbers());
 
     root.appendChild(ui.label('Leaderboard'));
-    var board = h('div', { class: 'stack' });
+    var board = h('div');
     root.appendChild(board);
-    drawLeaderboard(board);
+    ui.leaderboard(board, { showCommission: true });
 
     root.appendChild(ui.label('Coming up'));
     root.appendChild(comingUp());
@@ -335,15 +285,6 @@
 
   /* ================= Notifications ================= */
 
-  /* The Me sheet is not redrawn when data changes, so its "4 new" would outlive the reading. */
-  function clearNewPill() {
-    var rows = document.querySelectorAll('.sheet .row');
-    for (var i = 0; i < rows.length; i++) {
-      var title = rows[i].querySelector('.row-title'), pill = rows[i].querySelector('.row-right');
-      if (title && pill && title.textContent === 'Notifications' && pill.parentNode) pill.parentNode.removeChild(pill);
-    }
-  }
-
   App.actions.openNotices = function () {
     var me = App.me();
     if (!me || me.role !== 'owner') return;
@@ -355,10 +296,7 @@
       var unread = (App.data.notices || []).some(function (n) { return n.at > (now.noticesSeenAt || 0); });
       if (!unread) return;
       marking = true;
-      App.api.send('readNotices', {}).then(function (res) {
-        marking = false;
-        if (res.ok) clearNewPill();
-      });
+      App.api.send('readNotices', {}).then(function () { marking = false; });
     }
 
     var sheet = App.sheet.open({

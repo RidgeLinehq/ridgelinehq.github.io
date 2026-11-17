@@ -17,9 +17,9 @@
  *   App.go(route)                 switch screen (closes any open sheet first).      App.go('calendar');
  *   App.route                     the current route name, for example 'today'.
  *   App.actions                   cross-screen entry points. Register yours:        App.actions.openClient = function (id) { ... };
- *       Names in use: newSale({date, clientId}), openClient(id), bookVisit(clientId), openTeam(),
- *       openSettings(), openNotices(), editStandards().
- *   App.act(name, arg)            call one if it exists (says "coming soon" if not). App.act('newSale', { date: '2026-11-19' });
+ *       Names in use: newSale({date, clientId}), openSale(saleId), openClient(id), bookVisit(clientId),
+ *       openTeam(), openSettings(), openNotices(), editStandards().
+ *   App.act(name, arg)            call one by name.                                 App.act('newSale', { date: '2026-11-19' });
  *
  * THE DATA (always the latest answer from the system; never keep your own copy)
  *   App.data                      the snapshot from brief-product.md: me, team, settings, days, taken, clients, sales, jobs, board, notices, problems.
@@ -30,6 +30,7 @@
  *   App.member(id)                a team member or null.                            App.member(sale.repId)
  *   App.nameOf(id, fallback)      a team member's name.                             App.nameOf(job.assignedTo, 'Unassigned')
  *   App.people(roles)             active team members, optionally only some roles.  App.people(['rep'])
+ *   App.ownerName()               the owner's first name, for words like "Ask Grayson".
  *   App.client(id), App.job(id), App.sale(id)        find one thing in the data, or null.
  *   App.jobsOn(date)              that day's jobs you can see (not cancelled), in time order.
  *   App.isOverdue(job)            still scheduled and its day has passed.
@@ -40,17 +41,20 @@
  *   App.hasRead(member)           has this person confirmed the current standards (owner's view of the team).
  *
  * TALKING TO THE SYSTEM
- *   App.api.send(action, fields, opts) -> Promise of the answer { ok, result, error: { code, message } }.
+ *   App.api.send(action, fields, opts) -> Promise of the answer { ok, result, error: { code, message }, opId, replay }.
  *       Adds token, since, day and a fresh opId; applies the returned data (which re-renders); never rejects.
  *       A failed call (no signal, time-out, not our JSON) answers { ok: false, error: { code: 'network', message } }.
- *       Pass opts.opId to retry the same action without saving twice.
+ *       Pass opts.opId (the opId of the answer that failed) to retry the same action without saving twice.
+ *       An id is only re-used for the very same fields; if they changed, send() takes a new one, because
+ *       the system answers a repeated id with the first save (replay: true) and the change would be lost.
  *       App.api.send('addNote', { kind: 'client', id: c.id, text: text }).then(function (res) { if (res.ok) ... });
  *       error.message is already plain words for the team: show it as it is. The codes worth a branch are
  *       'slot_taken' / 'slot_closed' (the time is gone: picker.setError(res.error.message)) and 'network'.
  *       An 'auth' answer signs the phone out and shows sign-in by itself.
  *   App.ui.save(button, action, fields, opts) -> Promise of the answer. The whole save pattern for any button:
- *       disables it and shows "Saving...", sends, re-uses the opId when tapped again after a failure, and shows
- *       the message in opts.errorEl (or a red toast). opts: { errorEl, quiet, busyText }.
+ *       disables it and shows "Saving...", sends, and shows the message in opts.errorEl (or a red toast).
+ *       Tapped again after a failure it re-uses the opId while the fields are the same, and takes a new one
+ *       as soon as anything in them changed. opts: { errorEl, quiet, busyText }.
  *       App.ui.save(btn, 'updateClient', { clientId: id, patch: { payStatus: 'paid' } }, { errorEl: err });
  *   Inside a sheet use sheet.send(action, fields) instead (see SHEETS): same thing on the footer button.
  *       Both answer { ok: false, skipped: true } when the button is already busy saving, so a double tap does nothing.
@@ -74,24 +78,25 @@
  *     sheet.setTitle(text)                   sheet.setButton(label, disabled)     (setButton(null) hides the footer button)
  *     sheet.note(text)                       a quiet line just above the footer button ("You earn $45.00 on this sale.")
  *     sheet.error(message)                   red words just above the footer button ('' clears them)
- *     sheet.send(action, fields, opts)       save from the footer button: "Saving...", same opId on a retry, shows the
- *                                            message on failure, resolves with the answer. opts: { button, quiet, busyText }
+ *     sheet.send(action, fields, opts)       save from the footer button: "Saving...", same opId on a retry of the same
+ *                                            fields, shows the message on failure, resolves with the answer.
+ *                                            opts: { button, quiet, busyText }
  *     sheet.rebuild()                        run `body` again, keeping the scroll position
  *     sheet.reveal(el)                       scroll the body to an element (the first missing field)
  *     sheet.close()                          close it (and anything opened on top of it)
- *   App.sheet.closeAll()
  *   App.toast(text, opts)         a short message. opts: { bad: true, retry: fn, action: { label, onTap }, ms }.
+ *       It sits just above the tab bar; with a sheet open, above a short sheet or just above the footer of a
+ *       tall one, never on top of the footer's button.
  *       App.toast('Sale saved.');     App.toast(res.error.message, { bad: true, retry: tryAgain });
  *   App.confirm({ title, text, yes, no, danger }) -> Promise of true or false. In-page, never the browser's own.
  *       App.confirm({ title: 'Delete this client?', text: 'Their sales and jobs go too.', yes: 'Delete client', danger: true }).then(function (ok) { ... });
  *
- * BUILDING THINGS (text from people is always safe: strings become text nodes, never HTML)
+ * BUILDING THINGS (text from people is always safe: strings become text nodes, never HTML; nothing here builds HTML from text)
  *   Classes for everything (cards, lists, rows, label-value rows, stat blocks, pills, buttons, fields, chips,
  *   callouts, legends) are in app.css, each with a comment naming it; its index is at the top of that file.
  *   Inside a sheet (which is slate already) a .card turns into a darker well by itself.
  *   App.h(tag, attrs, ...children) -> element. attrs: class, text, on<event>, anything else is an attribute.
  *       App.h('p', { class: 'muted' }, 'Sold by ', App.h('b', null, name))
- *   App.esc(text)                 escape &<>"' for the rare case you must build an HTML string.
  *   App.icon(name, size) -> <svg> Names: today sales calendar clients dashboard leaders schedule standards bell close
  *       chevron-left chevron-right chevron-down phone directions note edit check check-circle plus minus search user
  *       team settings key shirt signout reset clock pin alert info copy external trash mail repeat dollar
@@ -103,11 +108,10 @@
  *       var price = App.ui.field({ label: 'Price', name: 'price', inputmode: 'decimal', prefix: '$' });  price.setError('Enter the price.');
  *   App.ui.segmented({ options: [{ value, label }], value, onChange, label }) -> el with el.get(), el.set(value)
  *       App.ui.segmented({ options: [{ value: 'once', label: 'One-time' }, { value: 'monthly', label: 'Monthly' }], value: 'once', onChange: fn })
- *   App.ui.chips({ options: [{ value, label, count }], value, multi, big, scroll, onChange }) -> el with el.get(), el.set(v), el.setOptions(list)
- *       One choice by default (value), several with multi: true (value is an array). big: large chips (times). scroll: one sliding line.
- *       canClear: true lets a tap on the chosen chip clear it (el.get() is then null).
+ *   App.ui.chips({ options: [{ value, label, count }], value, scroll, onChange }) -> el with el.get(), el.set(v), el.setOptions(list)
+ *       Pick one. scroll: one line that slides sideways.
  *       App.ui.chips({ options: [{ value: '', label: 'All', count: 9 }, { value: 'New', label: 'New', count: 3 }], value: '', scroll: true, onChange: fn })
- *   App.ui.toggle({ label, hint, checked, onChange }) -> el with el.get(), el.set(bool)      (also App.ui['switch'])
+ *   App.ui.toggle({ label, hint, checked, onChange }) -> el with el.get(), el.set(bool)
  *       App.ui.toggle({ label: 'Open for appointments', checked: day.open, onChange: function (on) { ... } })
  *   App.ui.button(label, { kind, icon, small, block, href, newTab, onTap }) -> <button> or <a>
  *       kind: 'primary' | 'quiet' (default) | 'danger' | 'text'.       App.ui.button('New sale', { kind: 'primary', block: true, onTap: fn })
@@ -120,7 +124,7 @@
  *   App.ui.clientPill(status)     New / Active / Paused / Cancelled.
  *   App.ui.payPill(payStatus)     Not paid yet / Paid / Late.
  *   App.ui.row({ lead, icon, title, sub, right, chevron, onTap, cls }) -> one list row (a button when onTap is given). Put rows in App.h('div', { class: 'list' }).
- *       lead, title, sub, right: text or elements. sub may be a list of lines. cls: 'is-you' (my row in a ranking), 'row-clip' (one line each), 'is-off', 'row-danger'.
+ *       lead, title, sub, right: text or elements. sub may be a list of lines. cls: 'is-you' (my row in a ranking), 'row-clip' (one line each), 'is-off'.
  *       App.ui.row({ title: c.name, sub: 'Window cleaning, $150.00 a month', right: App.ui.clientPill(c.status), onTap: function () { App.act('openClient', c.id); } })
  *   App.ui.kv(label, value)       one label-value row; put them in App.h('div', { class: 'kvs' }). value: text or an element.
  *   App.ui.stats([{ value, unit, label, tone }])     the slim summary card of numbers side by side.
@@ -134,9 +138,9 @@
  *       A month of days, Sunday first, with arrows. For each day your `day(date)` returns
  *       { state: 'open' | 'full' | 'blocked' | 'past', label: '3 left', disabled: bool, selected: bool }.
  *       Keep the month yourself across renders: pass `month` ('YYYY-MM') and listen to onMonth.
- *   App.ui.slotPicker({ value, date, emptyText, onChange(value) }) -> el with el.get(), el.set({date, time} or null), el.setError(message), el.refresh()
+ *   App.ui.slotPicker({ value, date, emptyText, onChange(value) }) -> el with el.get(), el.set({date, time} or null), el.getDay(), el.setError(message), el.refresh()
  *       Month grid plus the free times of the chosen day. Updates itself when someone else takes a time.
- *       el.get() is { date, time } once a time is chosen, otherwise null.
+ *       el.get() is { date, time } once a time is chosen, otherwise null. el.getDay() is the day on show.
  *       var when = App.ui.slotPicker({ date: '2026-11-19', onChange: function (v) { sheet.setButton(v ? 'Save sale and book ' + App.fmt.when(v.date, v.time) : 'Save sale'); } });
  *
  * FORMATTERS (App.fmt)
@@ -152,7 +156,7 @@ var App = (function () {
   'use strict';
 
   var Core = RidgelineCore, D = Core.dates, doc = document;
-  var App = { version: Core.VERSION, mode: 'sample', backend: '', data: null, route: '', actions: {}, ui: {}, fmt: {}, api: {}, sheet: {} };
+  var App = { mode: 'sample', backend: '', data: null, route: '', actions: {}, ui: {}, fmt: {}, api: {}, sheet: {} };
   var ui = App.ui, fmt = App.fmt;
 
   var state = { token: null, inApp: false, okAt: 0, fails: 0, syncing: false, signingIn: false };
@@ -216,15 +220,9 @@ var App = (function () {
     else if (kid.nodeType) el.appendChild(kid);
     else el.appendChild(doc.createTextNode(String(kid)));
   }
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
   function clear(el) { el.textContent = ''; return el; }
 
   App.h = h;
-  App.esc = esc;
 
   /* ================= icons: one small set of line icons (24px box, stroke 1.75, round caps) ================= */
 
@@ -473,6 +471,19 @@ var App = (function () {
 
   /* ================= App.api.send ================= */
 
+  /* A caller may pass the id of an earlier try, so the system saves that action only once. The id is
+     only kept for the very same action and fields: under a repeated id the system answers with the
+     first save again (replay: true) and never looks at what was sent this time, so anything changed
+     since would be lost without a word. Changed fields get a new id. */
+  var sentAs = {};
+  function retryId(action, fields, given) {
+    if (!given) return newId();
+    var what = action + ' ' + JSON.stringify(fields || {});
+    if (sentAs[given] && sentAs[given] !== what) return newId();
+    sentAs[given] = what;
+    return given;
+  }
+
   function send(action, fields, opts) {
     opts = opts || {};
     var req = { action: action }, k;
@@ -480,7 +491,7 @@ var App = (function () {
     if (action !== 'login') {
       req.token = state.token;
       if (App.data) { req.since = App.data.rev; req.day = App.data.today; }
-      if (action !== 'sync' && action !== 'logout') req.opId = opts.opId || newId();
+      if (action !== 'sync' && action !== 'logout') req.opId = retryId(action, fields, opts.opId);
     }
     return attempt(req, 0).then(function (res) { return settle(req, res); });
   }
@@ -490,11 +501,13 @@ var App = (function () {
     var mine = req.action === 'login' || (!!state.token && req.token === state.token);
     if (mine) {
       if (res.ok || res.sync) state.okAt = Date.now();
-      if (res.ok && state.fails) { state.fails = 0; drawStrip(); }
+      /* An answer from a working system means the connection is back (a "server" answer is not that). */
+      if (state.fails && (res.ok || res.error.code !== 'server')) { state.fails = 0; drawStrip(); }
       if (res.sync) applySync(res.sync);
       if (!res.ok && res.error.code === 'auth' && req.action !== 'login') signOut(res.error.message || 'Please sign in again.');
     }
     res.opId = req.opId;
+    if (res.ok) delete sentAs[req.opId];        /* saved: that id is finished with */
     if (!res.ok && !res.error.message) res.error.message = NO_SIGNAL;
     return res;
   }
@@ -574,6 +587,10 @@ var App = (function () {
     if (!App.data) return [];
     return App.data.team.filter(function (m) { return m.active && (!roles || roles.indexOf(m.role) >= 0); });
   };
+  App.ownerName = function () {
+    var owner = App.people(['owner'])[0];
+    return owner ? fmt.first(owner.name) || 'the owner' : 'the owner';
+  };
   App.client = function (id) { return App.data ? findIn(App.data.clients, id) : null; };
   App.job = function (id) { return App.data ? findIn(App.data.jobs, id) : null; };
   App.sale = function (id) { return App.data ? findIn(App.data.sales, id) : null; };
@@ -629,8 +646,14 @@ var App = (function () {
 
   App.act = function (name, arg) {
     var fn = App.actions[name];
-    if (typeof fn !== 'function') { App.toast('That part is coming soon.'); return false; }
-    try { fn(arg); } catch (e) { report(e); App.toast('That could not be opened. Try again.', { bad: true }); }
+    try {
+      if (typeof fn !== 'function') throw new Error('No action called ' + name);
+      fn(arg);
+    } catch (e) {
+      report(e);
+      App.toast('That could not be opened. Try again.', { bad: true });
+      return false;
+    }
     return true;
   };
 
@@ -644,6 +667,23 @@ var App = (function () {
     doc.documentElement.classList.add('locked');
     layer.inHistory = false;
     try { history.pushState({ rwLayer: layers.length }, ''); layer.inHistory = true; } catch (e) { /* no history here: the close button still works */ }
+    placeToasts();
+  }
+
+  /* Toasts sit just above the tab bar. While a sheet is on top they keep clear of it: above a short
+     sheet when there is room there, otherwise just above the sheet's footer, so a message never covers
+     the footer's button or the line above it. */
+  function placeToasts() {
+    if (!els.toasts) return;
+    var top = layers.length ? layers[layers.length - 1] : null, px = '';
+    if (top && top.kind === 'sheet') {
+      var sheet = top.el, foot = top.foot, room = 0;
+      var below = window.innerHeight - top.wrap.getBoundingClientRect().bottom + top.wrap.clientHeight - sheet.offsetTop - sheet.offsetHeight;   /* from the sheet's bottom edge to the bottom of the screen */
+      if (sheet.classList.contains('sheet-small') && window.innerHeight - below - sheet.offsetHeight > 200) room = below + sheet.offsetHeight;
+      else if (Array.prototype.some.call(foot.children, function (x) { return !x.hidden; })) room = below + foot.offsetHeight;
+      if (room > 0) px = Math.round(room + 8) + 'px';
+    }
+    els.toasts.style.bottom = px;
   }
 
   /* Close layers until `depth` are left. Returns true when a history step back is on its way. */
@@ -656,6 +696,7 @@ var App = (function () {
       try { if (layer.gone) layer.gone(); } catch (e) { report(e); }
     }
     if (!layers.length) doc.documentElement.classList.remove('locked');
+    placeToasts();
     if (layer && layer.opener && layer.opener.focus && onPage(layer.opener)) {
       try { layer.opener.focus({ preventScroll: true }); } catch (e2) { /* focus is a nicety */ }
     }
@@ -697,6 +738,7 @@ var App = (function () {
     }
     st.setProperty('--vv-h', Math.round(vv.height) + 'px');
     st.setProperty('--vv-top', Math.round(vv.offsetTop) + 'px');
+    placeToasts();
   }
 
   /* ----- sheets ----- */
@@ -714,6 +756,8 @@ var App = (function () {
       onTap: function () { if (o.footer.onTap) o.footer.onTap(sh); }
     }) : null;
     var foot = h('div', { class: 'sheet-foot' + (sh.button ? '' : ' is-bare') }, noteEl, errorEl, sh.button);
+    var footWatch = null;
+    sh.foot = foot;
     sh.el = h('section', { class: 'sheet' + (o.small ? ' sheet-small' : ''), role: 'dialog', 'aria-modal': 'true', 'aria-label': o.title || 'Details', tabindex: '-1' },
       h('div', { class: 'sheet-head' }, title, closeBtn), sh.body, foot);
     sh.wrap = h('div', { class: 'layer' }, sh.el);
@@ -730,14 +774,15 @@ var App = (function () {
       else span.textContent = label;
       sh.button._off = !!disabled;
       if (!sh.button.classList.contains('is-busy')) sh.button.disabled = !!disabled;
+      placeToasts();
     };
-    sh.note = function (text) { noteEl.textContent = text || ''; noteEl.hidden = !text; };
+    sh.note = function (text) { noteEl.textContent = text || ''; noteEl.hidden = !text; placeToasts(); };
     sh.error = function (message) {
       errorEl.textContent = message || '';
       errorEl.hidden = !message;
       foot.classList.toggle('has-error', !!message);
+      placeToasts();
     };
-    sh.busy = function (on, text) { setBusy(sh.button, on, text); };
     sh.send = function (action, fields, opts) {
       opts = opts || {};
       return save(opts.button || sh.button, action, fields, { error: sh.error, quiet: opts.quiet, busyText: opts.busyText, key: sh });
@@ -758,15 +803,23 @@ var App = (function () {
       if (i >= 0) dropTo(i, false);
     };
     sh.update = o.update ? function () { o.update(sh); } : null;
-    sh.gone = function () { if (o.onClose) o.onClose(sh); };
+    sh.gone = function () {
+      if (footWatch) footWatch.disconnect();
+      if (o.onClose) o.onClose(sh);
+    };
 
     els.layers.appendChild(sh.wrap);
     pushLayer(sh);
+    /* The footer grows and shrinks (a note, an error, a longer label) and so does a short sheet: toasts follow. */
+    try {
+      footWatch = new ResizeObserver(placeToasts);
+      footWatch.observe(foot);
+      footWatch.observe(sh.el);
+    } catch (e) { footWatch = null; }
     try { if (o.body) o.body(sh.body, sh); } catch (e) { report(e); }
     if (!sh.el.contains(doc.activeElement)) { try { sh.el.focus({ preventScroll: true }); } catch (e2) { /* fine */ } }
     return sh;
   };
-  App.sheet.closeAll = function () { closeAll(); };
 
   /* ----- confirm dialog ----- */
 
@@ -812,6 +865,7 @@ var App = (function () {
       el.appendChild(h('button', { type: 'button', class: 'toast-btn', onclick: function () { remove(); action.onTap(); } }, action.label));
     }
     while (els.toasts.children.length >= 2) els.toasts.removeChild(els.toasts.firstChild);
+    placeToasts();
     els.toasts.appendChild(el);
     timer = setTimeout(remove, o.ms || (action ? 8000 : o.bad ? 5000 : 2600));
     return remove;
@@ -838,12 +892,16 @@ var App = (function () {
     if (btn && btn.classList.contains('is-busy')) return Promise.resolve({ ok: false, skipped: true, error: { code: 'busy', message: '' } });
     var holder = btn || o.key || {};
     var ops = holder._ops || (holder._ops = {});
-    if (!ops[action]) ops[action] = newId();
+    /* A retry of the same save keeps its id, so a save that did get through is never made twice. Change
+       anything and it is a new save with a new id: the system answers a repeated id with the first save
+       again (replay), and the change would be lost without a word. */
+    var sent = JSON.stringify(fields || {}), op = ops[action];
+    if (!op || op.sent !== sent) op = ops[action] = { id: newId(), sent: sent };
     setBusy(btn, true, o.busyText);
     if (o.error) o.error('');
-    return send(action, fields, { opId: ops[action] }).then(function (res) {
+    return send(action, fields, { opId: op.id }).then(function (res) {
       setBusy(btn, false);
-      if (res.ok) ops[action] = null;
+      if (res.ok) { if (ops[action] === op) ops[action] = null; }
       else if (!o.quiet) {
         if (o.error) o.error(res.error.message);
         else App.toast(res.error.message, { bad: true });
@@ -953,28 +1011,22 @@ var App = (function () {
 
   ui.chips = function (o) {
     o = o || {};
-    var multi = !!o.multi, options = o.options || [];
-    var value = multi ? (o.value || []).slice() : o.value;
-    var el = h('div', { class: 'chips' + (o.big ? ' chips-big' : '') + (o.scroll ? ' chips-scroll' : ''), role: 'group', 'aria-label': o.label || null });
-    function isOn(v) { return multi ? value.indexOf(v) >= 0 : value === v; }
+    var options = o.options || [], value = o.value;
+    var el = h('div', { class: 'chips' + (o.scroll ? ' chips-scroll' : ''), role: 'group', 'aria-label': o.label || null });
     function draw() {
       clear(el);
       options.forEach(function (op) {
-        el.appendChild(h('button', { type: 'button', class: 'chip' + (isOn(op.value) ? ' is-on' : ''), 'aria-pressed': isOn(op.value) ? 'true' : 'false', onclick: function () {
-          if (multi) {
-            var i = value.indexOf(op.value);
-            if (i >= 0) value.splice(i, 1); else value.push(op.value);
-          } else {
-            if (value === op.value && !o.canClear) return;
-            value = value === op.value ? null : op.value;
-          }
+        var on = value === op.value;
+        el.appendChild(h('button', { type: 'button', class: 'chip' + (on ? ' is-on' : ''), 'aria-pressed': on ? 'true' : 'false', onclick: function () {
+          if (value === op.value) return;
+          value = op.value;
           draw();
-          if (o.onChange) o.onChange(multi ? value.slice() : value);
+          if (o.onChange) o.onChange(value);
         } }, op.label, op.count != null ? h('span', { class: 'chip-count' }, String(op.count)) : null));
       });
     }
-    el.get = function () { return multi ? value.slice() : value; };
-    el.set = function (v) { value = multi ? (v || []).slice() : v; draw(); };
+    el.get = function () { return value; };
+    el.set = function (v) { value = v; draw(); };
     el.setOptions = function (list) { options = list || []; draw(); };
     draw();
     return el;
@@ -994,7 +1046,6 @@ var App = (function () {
     el.set = function (v) { on = !!v; el.setAttribute('aria-checked', on ? 'true' : 'false'); };
     return el;
   };
-  ui['switch'] = ui.toggle;
 
   ui.title = function (text, lead) {
     return h('header', { class: 'head' }, h('h1', { class: 'title' }, text), lead ? h('p', { class: 'lead' }, lead) : null);
@@ -1156,7 +1207,7 @@ var App = (function () {
       clear(times);
       if (problem) times.appendChild(h('p', { class: 'form-error', role: 'alert' }, problem));
       if (!App.freeDays().length) {
-        times.appendChild(h('p', { class: 'muted' }, o.emptyText || 'No open days yet. Ask Grayson to open some.'));
+        times.appendChild(h('p', { class: 'muted' }, o.emptyText || 'No open days yet. Ask ' + App.ownerName() + ' to open some.'));
         return;
       }
       if (!day) { times.appendChild(h('p', { class: 'muted' }, 'Pick a day to see its open times.')); return; }
@@ -1192,6 +1243,7 @@ var App = (function () {
     el.appendChild(grid);
     el.appendChild(times);
     el.get = function () { return value ? { date: value.date, time: value.time } : null; };
+    el.getDay = function () { return day || ''; };
     el.set = function (v) {
       value = v && v.date && v.time ? { date: v.date, time: v.time } : null;
       if (value) { day = value.date; grid.setMonth(day.slice(0, 7)); }
@@ -1322,8 +1374,9 @@ var App = (function () {
       body: function (el, sh) {
         var job = App.job(jobId);
         if (!job) { el.appendChild(h('p', { class: 'muted' }, 'That job is no longer here.')); return; }
-        var order = { tech: 0, owner: 1, rep: 2 };
-        var people = App.people().sort(function (a, b) { return (order[a.role] - order[b.role]) || (a.name < b.name ? -1 : 1); });
+        /* A sales rep cannot see or finish a job, so only techs and owners are offered (the system refuses anyone else). */
+        var order = { tech: 0, owner: 1 };
+        var people = App.people(['tech', 'owner']).sort(function (a, b) { return (order[a.role] - order[b.role]) || (a.name < b.name ? -1 : 1); });
         var list = h('div', { class: 'list' });
         function pick(id, name, rowEl) {
           if (id === (job.assignedTo || null)) { sh.close(); return; }
@@ -1566,12 +1619,6 @@ var App = (function () {
     });
   }
 
-  function placeholder(root, route) {
-    var info = TAB_INFO[route] || { label: 'This screen' };
-    root.appendChild(ui.title(info.label));
-    root.appendChild(ui.empty({ title: 'This screen is on its way.', text: 'Everything else in the app works in the meantime.' }));
-  }
-
   function drawScreen(keep) {
     var root = els.screen, def = screens[App.route];
     var y = window.pageYOffset || doc.documentElement.scrollTop || 0;
@@ -1579,20 +1626,19 @@ var App = (function () {
     clear(root);
     root.className = 'screen screen-' + App.route;
     try {
-      if (def) def.render(root); else placeholder(root, App.route);
+      def.render(root);
     } catch (e) {
       report(e);
       clear(root);
-      root.appendChild(ui.empty({ title: 'This screen could not be shown.', text: 'Close the app and open it again. If it keeps happening, tell Grayson.' }));
+      root.appendChild(ui.empty({ title: 'This screen could not be shown.', text: 'Close the app and open it again. If it keeps happening, tell ' + App.ownerName() + '.' }));
     }
     if (keep) { restoreTyped(root, typed); window.scrollTo(0, y); }
     else window.scrollTo(0, 0);
   }
 
   function allowed(route) {
-    var role = App.role(), def = screens[route];
-    if (def) return !def.roles || def.roles.indexOf(role) >= 0;
-    return (TABS[role] || []).indexOf(route) >= 0;
+    var def = screens[route];
+    return !!def && (!def.roles || def.roles.indexOf(App.role()) >= 0);
   }
   function readHash() { return String(location.hash || '').replace(/^#\/?/, '').split(/[?&/]/)[0]; }
   function writeHash(route) {
@@ -1623,7 +1669,8 @@ var App = (function () {
     state.syncing = true;
     send('sync').then(function (res) {
       state.syncing = false;
-      if (res.ok || res.error.code === 'auth') return;
+      /* "Busy" only means several phones asked at the same moment: the next round will do. */
+      if (res.ok || res.error.code === 'auth' || res.error.code === 'busy') return;
       state.fails++;            /* two in a row and the strip says so, until one works */
       drawStrip();
     });
@@ -1700,17 +1747,20 @@ var App = (function () {
     var body = clear(els.signinBody);
 
     if (App.mode === 'sample') {
-      var quick = h('div', { class: 'btn-row' });
-      RidgelineSample.PEOPLE.filter(function (p, i, all) {
-        return all.map(function (x) { return x.role; }).indexOf(p.role) === i;   /* the first person of each role */
-      }).forEach(function (p) {
-        quick.appendChild(ui.button(ROLE_WORDS[p.role], { small: true, onTap: function (e, btn) { logIn(p.name, p.pin, btn, error); } }));
+      /* One button per role, for the first sample person of that role who can still sign in with their
+         starting PIN. Someone trying the sample may have removed or renamed them, or changed that PIN. */
+      var quick = h('div', { class: 'btn-row' }), missing = false;
+      ['owner', 'rep', 'tech'].forEach(function (role) {
+        var p = RidgelineSample.PEOPLE.filter(function (x) { return x.role === role && sampleKnows(x); })[0];
+        if (!p) { missing = true; return; }
+        quick.appendChild(ui.button(ROLE_WORDS[role], { small: true, onTap: function (e, btn) { logIn(p.name, p.pin, btn, error); } }));
       });
       body.appendChild(h('div', { class: 'card' },
         h('div', { class: 'stack-xs' },
           h('p', { class: 'strong' }, 'Sample mode'),
-          h('p', { class: 'muted small' }, 'This is made-up data so you can try everything. Sign straight in as:')),
-        quick));
+          h('p', { class: 'muted small' }, 'This is made-up data so you can try everything.' + (quick.firstChild ? ' Sign straight in as:' : ''))),
+        quick.firstChild ? quick : null,
+        missing ? ui.button('Reset sample data', { kind: 'text', small: true, icon: 'reset', onTap: resetSample }) : null));
     }
 
     var name = ui.field({ label: 'Name', name: 'name', autocomplete: 'username', autocapitalize: 'words' });
@@ -1729,6 +1779,14 @@ var App = (function () {
     } },
       h('h1', { class: 'signin-title' }, 'Team sign in'), name, pin, btn, error,
       h('p', { class: 'hint' }, 'Forgot your PIN? Ask Grayson to reset it.')));
+  }
+
+  function sampleKnows(p) {
+    try {
+      return sample.store.list('team').some(function (m) {
+        return m.active && m.role === p.role && m.name === p.name && Core.sha256(m.salt + ':' + p.pin) === m.pinHash;
+      });
+    } catch (e) { return false; }
   }
 
   /* A signed-in phone with nothing saved to show yet: load first, with a way out if that fails. */
@@ -1884,7 +1942,11 @@ var App = (function () {
       RidgelineSample.PEOPLE.forEach(function (p) { if (me && p.name === me.name && p.role === me.role) person = p; });
       forget();
       startSample(true);
-      if (!person) { showSignIn(); return; }
+      if (!person) {
+        showSignIn();
+        App.toast('Sample data is back to the start.');
+        return;
+      }
       leaveApp();
       clear(els.signinBody).appendChild(h('p', { class: 'muted' }, 'Loading...'));
       send('login', { name: person.name, pin: person.pin }).then(function (res) {
@@ -1899,10 +1961,11 @@ var App = (function () {
 
   function openMe() {
     var liveLine = h('p', null, upToDateText());
+    App.live(liveLine, function () { liveLine.textContent = upToDateText(); });
     App.sheet.open({
       title: 'Your account',
-      update: function () { liveLine.textContent = upToDateText(); },
-      body: function (el, sh) {
+      update: function (sh) { sh.rebuild(); },      /* no input in here, so the pills on its rows simply stay current */
+      body: function (el) {
         var me = App.me(), owner = me.role === 'owner';
         el.appendChild(h('div', { class: 'me-head' },
           h('span', { class: 'avatar avatar-lg' }, fmt.initials(me.name)),

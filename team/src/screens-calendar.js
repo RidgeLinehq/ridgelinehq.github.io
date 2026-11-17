@@ -39,13 +39,6 @@
   }
   function scheduledOn(date) { return App.jobsOn(date).filter(function (j) { return j.status === 'scheduled'; }); }
 
-  /* A retry after a failed save re-uses its id so nothing is saved twice. That is only right while
-     the thing being saved is the same, so a changed save starts fresh. */
-  function freshSave(btn, fields) {
-    var key = JSON.stringify(fields);
-    if (btn && btn._sent !== key) { btn._sent = key; btn._ops = null; }
-  }
-
   /* One day of the grid, the same for the owner and for reps: open days say how many times are left. */
   function dayState(date) {
     if (date < App.today()) return { state: 'past', disabled: true };
@@ -77,7 +70,6 @@
   function bulkSave(btn, errorEl, days, doneText) {
     var fields = { days: days };
     bulkError = '';
-    freshSave(btn, fields);
     ui.save(btn, 'setDays', fields, { errorEl: errorEl }).then(function (res) {
       if (res.skipped) return;
       if (res.ok) App.toast(doneText);
@@ -234,7 +226,6 @@
         if (same) { sh.close(); return; }
         var fields = { days: [{ date: date, open: open, slots: slots.slice() }] };
         var booked = scheduledOn(date).length;
-        freshSave(sh.button, fields);
         sh.send('setDays', fields).then(function (res) {
           if (!res.ok) return;
           sh.close();
@@ -327,7 +318,7 @@
     }));
     root.appendChild(legend());
     if (!App.freeDays().length) {
-      root.appendChild(ui.empty({ title: 'No open days yet.', text: 'You can still save a sale now and book it once Grayson opens some days.' }));
+      root.appendChild(ui.empty({ title: 'No open days yet.', text: 'You can still save a sale now and book it once ' + App.ownerName() + ' opens some days.' }));
     }
   }
 
