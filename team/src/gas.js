@@ -27,6 +27,7 @@ var CACHE_MAX_KEY = 250;
 var CACHE_MAX_VALUE = 30000;     /* characters; Google's limit is 100 KB */
 var REV_SEEN_SECONDS = 120;      /* how long a looked-up copy of the revision number stays in the cache */
 var REV_CACHE_SECONDS = 150;     /* the same for the copy a save leaves there; it has to be the longer of the two */
+var MAX_BODY_CHARS = 100000;     /* the most text one request may carry; the app never sends anything near it */
 var LOCK_WAIT_MS = 15000;
 var SETUP_LOCK_WAIT_MS = 30000;
 var SAVE_TRIES = 3;
@@ -71,6 +72,9 @@ function badRequest_() {
 function answerPost_(e) {
   /* The page sends its JSON as plain text, so it arrives here as one string. */
   var text = e && e.postData && typeof e.postData.contents === 'string' ? e.postData.contents : '';
+  /* Anyone on the internet can post here. Something far bigger than the app ever sends is turned
+     away before it is even read, so it costs nothing and never gets near the lock or the sheet. */
+  if (text.length > MAX_BODY_CHARS) return badRequest_();
   var req = null;
   try { req = JSON.parse(text); } catch (err) { req = null; }
   if (!req || typeof req !== 'object' || Array.isArray(req) || typeof req.action !== 'string') return badRequest_();
@@ -600,6 +604,7 @@ function setupMessage_(made, sheetUrl) {
     'Your data lives in this Google Sheet:',
     sheetUrl,
     'Look any time, but do not type in it. The app does the writing.',
+    'Keep it to yourself: never share this sheet with anyone. It holds your clients\' details and enough to work out everyone\'s PIN.',
     '',
     'Next step, if you have not done it yet: in the script editor tap Deploy, then New deployment. Pick Web app, set "Execute as" to Me and "Who has access" to Anyone, tap Deploy, and copy the Web app URL (it ends in /exec).');
   return lines.join('\n');

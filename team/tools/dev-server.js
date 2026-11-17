@@ -19,6 +19,10 @@
  *
  * Like the real web app, it does not answer a preflight (OPTIONS). If the page ever sends one,
  * the page is sending something other than a plain text body and would fail against Google too.
+ * And like the real web app, a body over 100,000 characters gets "Bad request." without being read.
+ *
+ * The tests load this file with require() to check it against the real backend's rules. Loaded
+ * that way it makes its starting data but does not listen on any port.
  */
 'use strict';
 const http = require('http');
@@ -28,7 +32,8 @@ const RidgelineCore = require(path.join(__dirname, '..', 'src', 'core.js'));
 
 const TIME_ZONE = 'America/Chicago';
 const DEFAULT_PORT = 8787;
-const MAX_BODY = 5 * 1024 * 1024;
+const MAX_BODY_CHARS = 100000;        /* the same limit as MAX_BODY_CHARS in src/gas.js */
+const MAX_BODY = 4 * MAX_BODY_CHARS;  /* bytes: where this server stops keeping what it is sent (a character is at most 4 bytes) */
 const MAX_DELAY = 60000;
 const PEOPLE = [
   { name: 'Grayson', role: 'owner', pin: '482913' },
@@ -37,7 +42,8 @@ const PEOPLE = [
 ];
 const OPEN_DAYS = 14;
 
-const portArg = process.argv[2];
+const asProgram = require.main === module;
+const portArg = asProgram ? process.argv[2] : undefined;
 const port = portArg === undefined ? DEFAULT_PORT : Number(portArg);
 if (!Number.isInteger(port) || port < 1 || port > 65535) {
   console.error('Usage: node tools/dev-server.js [port]   (the port must be a number from 1 to 65535)');
@@ -70,7 +76,7 @@ function sendOutbox(saved) {
   if (saved) mail.forEach((m) => log('email to ' + (m.to || 'the owner') + ': ' + m.subject));
 }
 
-function log(text) { console.log(new Date().toTimeString().slice(0, 8) + '  ' + text); }
+function log(text) { if (asProgram) console.log(new Date().toTimeString().slice(0, 8) + '  ' + text); }
 
 /* ---------- starting data ---------- */
 
@@ -114,11 +120,11 @@ function send(res, status, type, body, cors) {
 
 /* Mirrors doPost in src/gas.js: whatever arrives, the answer is JSON the phone can read. */
 function answerPost(text) {
+  const bad = { ok: false, error: { code: 'invalid', message: 'Bad request.' } };
+  if (typeof text !== 'string' || text.length > MAX_BODY_CHARS) return bad;   /* too big: refused before it is read */
   let req = null;
   try { req = JSON.parse(text); } catch (e) { req = null; }
-  if (!req || typeof req !== 'object' || Array.isArray(req) || typeof req.action !== 'string') {
-    return { ok: false, error: { code: 'invalid', message: 'Bad request.' } };
-  }
+  if (!req || typeof req !== 'object' || Array.isArray(req) || typeof req.action !== 'string') return bad;
   try {
     const answer = core.handle(req);
     sendOutbox(!!answer && answer.ok === true);
@@ -138,6 +144,7 @@ function outcome(answer) {
 }
 
 function actionOf(text) {
+  if (text.length > MAX_BODY_CHARS) return '(too big)';
   try { const a = JSON.parse(text).action; return typeof a === 'string' ? a.slice(0, 40) : '(no action)'; } catch (e) { return '(not JSON)'; }
 }
 
@@ -162,7 +169,8 @@ const server = http.createServer((req, res) => {
   });
   req.on('error', () => { /* the phone hung up */ });
   req.on('end', () => {
-    const text = tooBig ? '' : Buffer.concat(chunks).toString('utf8');
+    /* Over the limit: what was kept is thrown away and one character too many stands in for it, so it is refused as too big. */
+    const text = tooBig ? ' '.repeat(MAX_BODY_CHARS + 1) : Buffer.concat(chunks).toString('utf8');
     const delay = Math.min(MAX_DELAY, Math.max(0, parseInt(url.searchParams.get('delay'), 10) || 0));
     const fail = url.searchParams.get('fail') === '1';
     const started = Date.now();
@@ -186,9 +194,11 @@ server.on('error', (e) => {
 });
 
 let opened;
-try { opened = seed(); } catch (e) { console.error(e.message); process.exit(1); }
+try { opened = seed(); } catch (e) { if (!asProgram) throw e; console.error(e.message); process.exit(1); }
 
-server.listen(port, () => {
+if (!asProgram) {
+  module.exports = { answerPost: answerPost, PEOPLE: PEOPLE, MAX_BODY_CHARS: MAX_BODY_CHARS, opened: opened };
+} else server.listen(port, () => {
   const at = 'http://localhost:' + port + '/';
   console.log('Ridgeline team backend (local stand-in, core ' + RidgelineCore.VERSION + ') is listening on ' + at);
   console.log('');
@@ -204,5 +214,7 @@ server.listen(port, () => {
 });
 
 function stop() { server.close(() => process.exit(0)); setTimeout(() => process.exit(0), 500).unref(); }
-process.on('SIGINT', stop);
-process.on('SIGTERM', stop);
+if (asProgram) {
+  process.on('SIGINT', stop);
+  process.on('SIGTERM', stop);
+}

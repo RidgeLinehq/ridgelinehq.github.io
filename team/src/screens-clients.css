@@ -2,8 +2,7 @@
 /* .client-price: "$150.00 a month" stays in one piece when its line wraps. */
 .client-price { white-space: nowrap; font-variant-numeric: tabular-nums; }
 
-/* .sec-head: a section label with its one quiet action on the same line ("Details" ... "Edit details").
-   The same line as "Client" ... "Existing client" in New sale. */
+/* .sec-head: a section label with its one quiet action on the same line ("Details" ... "Edit details"). */
 .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; margin: -6px 0 -18px; }
 .sec-head .label { margin: 0; }
 .sec-head .btn-text { margin-right: -6px; }

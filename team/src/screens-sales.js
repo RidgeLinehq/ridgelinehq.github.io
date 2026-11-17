@@ -94,16 +94,13 @@
   /* A price as it is typed: 150 or 150.50. */
   function priceText(cents) { return cents % 100 ? (cents / 100).toFixed(2) : String(cents / 100); }
 
-  /* What is wrong with a payment link, in words ('' when it is fine). The system checks the same things:
-     https, a real web address after it (a dot in it, and no "name@" in front), no spaces. */
+  /* What is wrong with a payment link, in words ('' when it is fine). This is the system's own check, so the
+     form never passes a link the system then refuses: https, a real site name after it (a dot in it, and no
+     "name@" in front), no spaces. */
   function linkProblem(link) {
-    if (!/^https:\/\//i.test(link)) return 'A payment link must start with https://';
-    if (link.length > 300) return 'That payment link is too long.';
-    var host = link.slice(8).split('/')[0];
-    if (!LINK_OK.test(link) || host.indexOf('@') >= 0 || !/^[^.?#]+(\.[^.?#]+)+([?#:]|$)/.test(host)) {
-      return 'That payment link does not look right. Paste the whole link from your payment page.';
-    }
-    return '';
+    var check = Core.check && Core.check.payLink;
+    if (typeof check === 'function') return check(link) || '';
+    return LINK_OK.test(link) ? '' : 'A payment link must start with https://';
   }
 
   /* Who a sale can belong to, for the owner's "Sold by": themself first, then every sales rep and owner on the team. */
@@ -259,7 +256,7 @@
     var text = (sale.clientName || 'This client') + ', ' + sale.service + ', ' + priceWords(sale) + '.';
     if (job && job.status === 'scheduled') text += ' The appointment on ' + fmt.when(job.date, job.time) + ' has not happened yet, so it is removed too.';
     else if (job && job.status === 'done') text += ' The job is already done, so it stays on the schedule.';
-    text += ' The commission on this sale goes with it. The client stays in Clients.';
+    text += (noCommission(sale) ? '' : ' The commission on this sale goes with it.') + ' The client stays in Clients.';
     App.confirm({ title: 'Remove this sale?', text: text, yes: 'Remove sale', no: 'Keep it', danger: true }).then(function (yes) {
       if (!yes) return;
       st.removing = true;
@@ -353,6 +350,81 @@
     });
   }
 
+  /* Fix this sale (owner): a sale that was entered wrong gets the right price, service or seller. Commission,
+     the totals and the leaderboard follow by themselves, because they are worked out from the sale. One-time
+     or monthly is not changed here: for that the sale is removed and entered again. */
+  function openFix(saleId) {
+    var sale = App.sale(saleId), me = App.me();
+    if (!sale || !me || me.role !== 'owner') return null;
+
+    var names = (App.data.settings.services || []).map(function (x) { return x.name; });
+    var options = names.map(function (n) { return { value: n, label: n }; });
+    if (sale.service && names.indexOf(sale.service) < 0) options.unshift({ value: sale.service, label: sale.service });
+    options.push({ value: OTHER, label: 'Other' });
+    var other = ui.field({ label: 'Service name', name: 'fix-other', maxlength: 60, autocapitalize: 'sentences' });
+    other.hidden = true;
+    var service = ui.field({ label: 'Service', name: 'fix-service', type: 'select', options: options, value: sale.service || options[0].value,
+      onInput: function (v) { other.hidden = v !== OTHER; } });
+    var price = ui.field({ label: sale.billing === 'monthly' ? 'Price each month' : 'Price', name: 'fix-price', inputmode: 'decimal', prefix: '$',
+      value: priceText(sale.priceCents || 0), maxlength: 12 });
+
+    var people = sellerOptions(me);
+    if (!people.some(function (o) { return o.value === sale.repId; })) {
+      /* Whoever made it has left (or no longer sells): they stay the answer until someone else is picked. */
+      var gone = App.member(sale.repId);
+      people.unshift({ value: sale.repId, label: !gone ? 'Someone who has left' : gone.name + (gone.active ? '' : ' (no longer on the team)') });
+    }
+    var repHint = h('p', { class: 'field-hint', hidden: true });
+    var rep = ui.field({ label: 'Sold by', name: 'fix-rep', type: 'select', options: people, value: sale.repId, onInput: sayRep });
+    function sayRep() {
+      var id = rep.input.value, text = '';
+      if (id !== sale.repId || noCommission(sale)) {
+        text = isOwner(id) ? 'No commission on the owner\'s own sales.'
+          : id !== sale.repId ? App.nameOf(id, 'This rep') + ' gets the commission on this sale, at the rates in Settings today.' : '';
+      }
+      repHint.textContent = text;
+      repHint.hidden = !text;
+    }
+
+    return App.sheet.open({
+      title: 'Fix this sale', small: true,
+      body: function (el) {
+        el.appendChild(h('p', { class: 'muted' }, (sale.clientName || 'This client') + ', sold on ' + fmt.day(sale.day) + '. Commission and the totals follow what you change here.'));
+        el.appendChild(service);
+        el.appendChild(other);
+        el.appendChild(price);
+        el.appendChild(h('div', { class: 'stack-sm' }, rep, repHint));
+        el.appendChild(h('p', { class: 'hint' }, 'One-time or monthly cannot be changed here. For that, remove the sale and enter it again.'));
+        sayRep();
+      },
+      update: function (sh) {
+        if (!App.sale(saleId)) { sh.close(); App.toast('That sale is no longer here.'); }
+      },
+      footer: { label: 'Save', onTap: function (sh) {
+        var now = App.sale(saleId) || sale, bad = [], patch = {};
+        function fail(field, message) { field.setError(message); bad.push(field); }
+        var what = service.input.value === OTHER ? other.val() : service.input.value;
+        var cents = fmt.toCents(price.val());
+        if (!what) fail(service.input.value === OTHER ? other : service, 'Type the name of the service.');
+        if (!price.val()) fail(price, 'Enter the price.');
+        else if (cents == null) fail(price, 'Enter the price in dollars, like 150 or 150.50.');
+        else if (cents <= 0) fail(price, 'Enter the price.');
+        else if (cents > Core.LIMITS.maxCents) fail(price, 'That price is too high. Check it.');
+        if (bad.length) { sh.error(''); sh.reveal(bad[0]); return; }
+
+        if (what !== now.service) patch.service = what;
+        if (cents !== now.priceCents) patch.priceCents = cents;
+        if (rep.input.value && rep.input.value !== now.repId) patch.repId = rep.input.value;
+        if (!Object.keys(patch).length) { sh.close(); return; }       /* nothing was changed */
+        sh.send('updateSale', { saleId: saleId, patch: patch }).then(function (res) {
+          if (!res.ok) return;
+          sh.close();
+          App.toast('Sale fixed.');
+        });
+      } }
+    });
+  }
+
   /* Book the appointment for a sale that was saved with "Book later". */
   function openBook(saleId) {
     var sale = App.sale(saleId), picker;
@@ -388,7 +460,8 @@
   /*
    * Everything typed into New sale is kept as a draft: in memory and in localStorage, per person, for a
    * few hours. A back swipe, a closed tab or a dead battery does not lose it; opening New sale again
-   * brings it back. A saved sale clears the draft.
+   * brings it back. A saved sale clears the draft. So does signing out, or being signed out: a draft holds a
+   * client's name, phone and address, and none of that stays on a phone nobody is signed in on.
    *
    * The draft is also what stops a sale being saved twice:
    *   - it carries the opId of the save it tried and exactly what that save sent (`sent`), so a retry of
@@ -430,7 +503,67 @@
       if (keepIt) window.localStorage.setItem(draftKey(me.id), JSON.stringify(memDraft[me.id]));
       else window.localStorage.removeItem(draftKey(me.id));
     } catch (e) { /* no storage on this phone: the copy in memory still covers a closed sheet */ }
+    if (keepIt) watchForSignOut();
   }
+
+  /* Throw away every draft on this phone, in memory and in storage, except (when given) one person's. */
+  function dropDrafts(exceptId) {
+    Object.keys(memDraft).forEach(function (id) { if (id !== exceptId) delete memDraft[id]; });
+    try {
+      var ls = window.localStorage, prefix = draftKey(''), keep = exceptId ? draftKey(exceptId) : null, gone = [], i, k;
+      for (i = 0; i < ls.length; i++) {
+        k = ls.key(i);
+        if (k && k.indexOf(prefix) === 0 && k !== keep) gone.push(k);
+      }
+      gone.forEach(function (key) { ls.removeItem(key); });
+    } catch (e) { /* nothing stored, nothing to remove */ }
+  }
+  function hasStored(id) {
+    try { return window.localStorage.getItem(draftKey(id)) != null; } catch (e) { return false; }
+  }
+
+  /* Signing out, or being signed out, clears the unsaved New sale. Three ways of knowing, so that it holds
+     whichever one a sign-out comes by:
+       - the app says so ('signout', just before it forgets who was signed in);
+       - an open New sale sheet finds out for itself (it is closed with nobody signed in, or its save is
+         answered with "sign in again"): see onClose and sendSale;
+       - while a draft is being kept, a look every half second that its owner is still signed in. */
+  var watching = null, draftsOf = '';
+  function signedOut() {
+    if (formOpen && formOpen.forget) formOpen.forget();      /* the open sheet must not keep what it holds as it closes */
+    stopWatching();
+    draftsOf = '';
+    dropDrafts();
+  }
+  function stopWatching() { if (watching) { clearInterval(watching); watching = null; } }
+  function watchForSignOut() {
+    if (watching) return;
+    watching = setInterval(function () {
+      var me = App.me();
+      if (!me) { signedOut(); return; }
+      tidyDrafts();                                                     /* someone else is on the phone now */
+      if (!memDraft[me.id] && !hasStored(me.id)) stopWatching();        /* saved or cleared: nothing left to look after */
+    }, 500);
+  }
+  App.on('signout', signedOut);
+
+  /* When the app opens, and when someone else takes over the phone: nobody's old draft is left lying around.
+     With nobody signed in every draft goes; otherwise everyone else's goes, and the ones whose time is up. */
+  function tidyDrafts() {
+    var me = App.me();
+    if (!me) { signedOut(); return; }
+    if (me.id === draftsOf) return;
+    draftsOf = me.id;
+    dropDrafts(me.id);
+    sweepDrafts();
+    if (hasStored(me.id)) watchForSignOut();
+  }
+  function loadStored(id) {
+    try { return JSON.parse(window.localStorage.getItem(draftKey(id)) || 'null'); } catch (e) { return null; }
+  }
+  App.on('route', tidyDrafts);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(tidyDrafts, 0); });
+  else setTimeout(tidyDrafts, 50);
 
   /* Drafts nobody came back for are thrown away when their time is up, whoever they belonged to. */
   function sweepDrafts() {
@@ -450,11 +583,9 @@
   }
 
   function loadDraft(me) {
+    dropDrafts(me.id);
     sweepDrafts();
-    var raw = memDraft[me.id] || null;
-    if (!raw) {
-      try { raw = JSON.parse(window.localStorage.getItem(draftKey(me.id)) || 'null'); } catch (e) { raw = null; }
-    }
+    var raw = memDraft[me.id] || loadStored(me.id);
     if (!fresh(raw) || raw.by !== me.id) return null;
     var d = blankDraft(me), k;
     for (k in d) {
@@ -480,6 +611,7 @@
     var d = loadDraft(me), restored = !!d;
     if (!d) d = blankDraft(me);
     var view = 'form', saving = false, closed = false, done = null, timer = null, f = null, sheet = null;
+    var gone = false;          /* signed out while this sheet was open: nothing more is kept from it */
 
     /* What the caller asked for goes on top of whatever was kept. */
     function applyArg() {
@@ -502,9 +634,7 @@
     function serviceOptions() {
       return services().map(function (s) { return { value: s.id, label: s.name }; }).concat([{ value: OTHER, label: 'Other' }]);
     }
-    function repOptions() {
-      return [{ value: me.id, label: me.name + ' (you)' }].concat(App.people(['rep']).sort(byName).map(function (m) { return { value: m.id, label: m.name }; }));
-    }
+    function repOptions() { return sellerOptions(me); }
     function sig(options) { return options.map(function (o) { return o.value + '\u0001' + o.label; }).join('\u0002'); }
     function sellerId() { return owner && f && f.rep ? (f.rep.input.value || me.id) : me.id; }
     function anyFreeDay() { return App.freeDays().length > 0; }
@@ -535,7 +665,7 @@
     function keep() {
       clearTimeout(timer);
       timer = null;
-      if (view !== 'form') return;
+      if (view !== 'form' || gone) return;
       collect();
       d.at = Date.now();
       storeDraft(me, hasContent(d, arg.clientId) ? d : null);
@@ -547,6 +677,7 @@
 
     /* ----- the lines that follow what is typed ----- */
     function earnLine() {
+      if (isOwner(sellerId())) { sheet.note('No commission on the owner\'s own sales.'); return; }
       var s = App.data.settings, cents = fmt.toCents(f.price.val()), monthly = f.billing.get() === 'monthly';
       var who = sellerId() === me.id ? 'You earn' : App.nameOf(sellerId(), 'The rep') + ' earns';
       var real = cents != null && cents > 0 && cents <= Core.LIMITS.maxCents;
@@ -592,12 +723,14 @@
           ui.button('Start over', { kind: 'text', small: true, onTap: startOver }))));
       }
 
-      /* 1. Customer */
-      f.swap = ui.button('Existing client', { kind: 'text', onTap: function () { setMode(d.mode === 'new' ? 'existing' : 'new'); } });
-      f.custLabel = ui.label('Customer');
-      el.appendChild(h('div', { class: 'sale-sec' }, f.custLabel, f.swap));
+      /* 1. Client: a new one, or one of the person's own. The lit half of the switch is the one on show. */
+      el.appendChild(ui.label('Client'));
+      f.mode = ui.segmented({ label: 'New or existing client', value: d.mode,
+        options: [{ value: 'new', label: 'New client' }, { value: 'existing', label: 'Existing client' }],
+        onChange: function (v) { setMode(v); } });
+      el.appendChild(f.mode);
 
-      f.name = fld({ label: 'Customer or business name', name: 'sale-name', value: d.name, autocapitalize: 'words', maxlength: Core.LIMITS.name });
+      f.name = fld({ label: 'Name (person or business)', name: 'sale-name', value: d.name, autocapitalize: 'words', maxlength: Core.LIMITS.name });
       f.contact = fld({ label: 'Contact name', optional: true, name: 'sale-contact', value: d.contact, autocapitalize: 'words', maxlength: Core.LIMITS.name });
       f.phone = fld({ label: 'Phone', name: 'sale-phone', type: 'tel', value: d.phone, maxlength: 30 });
       f.email = fld({ label: 'Email', optional: true, name: 'sale-email', type: 'email', value: d.email, maxlength: 120, autocapitalize: 'none' });
@@ -664,7 +797,7 @@
       var nowBtn = ui.button('Pick a time now', { kind: 'text', onTap: function () { setLater(false); } });
       nowBtn.classList.add('btn-start');
       f.laterBox = h('div', { class: 'callout' },
-        h('p', { class: 'callout-title' }, 'Booking later'),
+        h('p', { class: 'callout-title' }, 'No appointment yet'),
         h('p', { class: 'muted small' }, 'Save the sale now. When you know the day, open this sale in Sales and book it there.'),
         nowBtn);
       el.appendChild(f.pickBox);
@@ -679,7 +812,7 @@
     /* One monthly plan pays at a time: say so before a new one takes the place of the old. */
     function planLine() {
       var plan = d.mode === 'existing' && d.clientId && f.billing.get() === 'monthly' ? currentPlan(d.clientId) : null;
-      f.planHint.textContent = plan ? 'This takes the place of their monthly plan now (' + plan.service + ', ' + fmt.money(plan.priceCents) + ' a month).' : '';
+      f.planHint.textContent = plan ? 'This replaces the monthly plan they have now (' + plan.service + ', ' + fmt.money(plan.priceCents) + ' a month).' : '';
       f.planHint.hidden = !plan;
     }
 
@@ -689,9 +822,9 @@
       d.mode = mode;
       f.newBox.hidden = mode !== 'new';
       f.oldBox.hidden = mode !== 'existing';
-      f.link.hidden = mode !== 'new';            /* a payment link is saved with a new customer only */
-      f.swap.querySelector('.btn-label').textContent = mode === 'new' ? 'Existing client' : 'New customer';
-      f.swap.hidden = mode === 'new' && none;
+      f.link.hidden = mode !== 'new';            /* a payment link is saved with a new client only */
+      f.mode.set(mode);
+      f.mode.hidden = mode === 'new' && none;     /* nobody to pick yet: no switch to show */
       if (mode === 'existing') drawPicked();
       planLine();
       if (!quiet) touch();
@@ -723,7 +856,7 @@
       clear(f.matches);
       var all = (App.data.clients || []).slice().sort(byName);
       var q = f.find.val().toLowerCase(), digits = q.replace(/\D/g, '');
-      if (!all.length) { f.matches.appendChild(h('p', { class: 'muted' }, 'You have no clients yet. Add this one as a new customer.')); return; }
+      if (!all.length) { f.matches.appendChild(h('p', { class: 'muted' }, 'You have no clients yet. Add this one as a new client.')); return; }
       var hits = !q ? all : all.filter(function (c) {
         if ([c.name, c.contact, c.address, c.phone].join(' ').toLowerCase().indexOf(q) >= 0) return true;
         return digits.length >= 3 && String(c.phone || '').replace(/\D/g, '').indexOf(digits) >= 0;
@@ -749,7 +882,7 @@
       var svc = serviceById(v);
       if (!f.price.val() || d.priceAuto) {             /* never write over a price someone typed */
         if (svc && svc.priceCents > 0) {
-          f.price.input.value = svc.priceCents % 100 ? (svc.priceCents / 100).toFixed(2) : String(svc.priceCents / 100);
+          f.price.input.value = priceText(svc.priceCents);
           f.price.setError('');
           d.priceAuto = true;
         } else if (d.priceAuto) {
@@ -789,7 +922,7 @@
           storeDraft(me, d);
           sheet.rebuild();
           sheet.body.scrollTop = 0;
-        } else if (closed && !memDraft[me.id]) storeDraft(me, old);
+        } else if (closed && !gone && App.me() && !memDraft[me.id]) storeDraft(me, old);
       } } });
     }
 
@@ -806,7 +939,7 @@
       f.serviceErr.hidden = true;
 
       if (d.mode === 'new') {
-        if (!d.name) flag(f.name, 'Add the customer or business name.');
+        if (!d.name) flag(f.name, 'Add the client\'s name.');
         if (!d.phone) flag(f.phone, 'Add a phone number.');
         else if (d.phone.replace(/\D/g, '').length < 7) flag(f.phone, 'That phone number looks too short.');
         if (d.email && !EMAIL_OK.test(d.email)) flag(f.email, 'That email address does not look right.');
@@ -828,10 +961,7 @@
       else if (cents <= 0) flag(f.price, 'Enter the price.');
       else if (cents > Core.LIMITS.maxCents) flag(f.price, 'That price is too high. Check it.');
 
-      if (d.mode === 'new' && d.link) {
-        if (!LINK_OK.test(d.link)) flag(f.link, 'A payment link must start with https://');
-        else if (d.link.length > 300) flag(f.link, 'That payment link is too long.');
-      }
+      if (d.mode === 'new' && d.link && linkProblem(d.link)) flag(f.link, linkProblem(d.link));
 
       if (!d.later && !d.appt && anyFreeDay()) {
         f.picker.setError('Pick a time, or tap Book later.');
@@ -873,6 +1003,7 @@
     }
 
     function submit() {
+      if (view === 'done') { sheet.close(); return; }   /* the saved view: the button reads Done */
       if (saving || view !== 'form') return;        /* a second tap while it is saving does nothing */
       if (adoptSaved()) return;
       collect();
@@ -892,10 +1023,11 @@
            so look before sending what would be a second sale. */
         App.api.send('sync').then(function (res) {
           saving = false;
+          if (!res.ok && res.error.code === 'auth') { signedOut(); return; }   /* signed out: nothing typed stays on the phone */
           if (closed) return;
           if (!res.ok) {
             paintButton();
-            if (res.error.code !== 'auth') sheet.error(res.error.message);
+            sheet.error(res.error.message);
             return;
           }
           if (!adoptSaved(true)) sendSale(req, sent);
@@ -917,7 +1049,8 @@
       App.api.send('createSale', req, { opId: d.opId }).then(function (res) {
         saving = false;
         if (res.ok) { saved(res.result || {}, req, seller); return; }
-        if (res.error.code === 'auth') return;      /* signed out: the sign-in screen says why, the draft waits */
+        if (res.error.code === 'auth') { signedOut(); return; }   /* signed out: the sign-in screen says why, and nothing typed stays on the phone */
+        if (gone) return;
         if (res.error.code === 'network') {         /* no answer: it may have saved all the same, so remember what was sent */
           if (!d.tries.length) d.lastSold = known;
           if (!d.tries.some(function (t) { return JSON.stringify(t) === JSON.stringify(tried); })) d.tries = d.tries.concat([tried]).slice(-6);
@@ -941,6 +1074,12 @@
     }
 
     function saved(result, req, seller, changedSince) {
+      if (!App.data) {              /* the answer came back after the phone was signed out: it is saved, and there is nothing to show it on */
+        clearTimeout(timer);
+        storeDraft(me, null);
+        App.toast('Sale saved.');
+        return;
+      }
       var sale = result.saleId ? App.sale(result.saleId) : null;
       var job = result.jobId ? App.job(result.jobId) : null;
       var price = sale ? sale.priceCents : req.priceCents, monthly = (sale ? sale.billing : req.billing) === 'monthly';
@@ -950,6 +1089,7 @@
         sold: (sale ? sale.service : req.service) + ', ' + fmt.money(price) + (monthly ? ' a month' : ' one-time'),
         when: job ? fmt.when(job.date, job.time) : (req.appointment && result.jobId ? fmt.when(req.appointment.date, req.appointment.time) : ''),
         who: seller === me.id ? 'You earned' : App.nameOf(seller, 'The rep') + ' earned',
+        none: isOwner(seller) || (!!sale && noCommission(sale)),      /* an owner's own sale: no earned amount to show */
         cents: sale && sale.events && sale.events.length ? sale.events[0].cents : (result.commissionCents || 0),
         each: monthly ? share(price, sale ? sale.monthlyPct : s.monthlyPct) : 0,
         early: !!changedSince
@@ -963,12 +1103,12 @@
       view = 'done';
       sheet.note('');
       sheet.error('');
-      sheet.setButton(null);
+      sheet.setButton('Done', false);
       sheet.rebuild();
       sheet.body.scrollTop = 0;
     }
 
-    /* ----- the success view ----- */
+    /* ----- the success view: saved, then do another (a quiet button) or finish (the footer's Done) ----- */
     function drawDone(el) {
       el.appendChild(h('div', { class: 'sold-head' }, icon('check-circle', 40), h('h3', { class: 'sold-title' }, 'Sale saved')));
       if (done.early) {
@@ -977,25 +1117,25 @@
           h('p', { class: 'small' }, 'It was saved before your last changes, so those are not in it. Check the details below.')));
       }
       var kvs = h('div', { class: 'kvs' });
-      kvs.appendChild(ui.kv('Customer', done.name));
-      kvs.appendChild(ui.kv('Sold', done.sold));
+      kvs.appendChild(ui.kv('Client', done.name));
+      kvs.appendChild(ui.kv('What they bought', done.sold));
       kvs.appendChild(ui.kv('Appointment', done.when || h('span', { class: 'warn strong' }, 'Not booked yet')));
       el.appendChild(kvs);
       if (!done.when) el.appendChild(h('p', { class: 'hint' }, 'When you know the day, open this sale in Sales and book it there.'));
-      el.appendChild(h('div', { class: 'callout callout-ice' },
-        h('p', { class: 'muted small' }, done.who),
-        h('p', { class: 'big-num ice' }, fmt.money(done.cents)),
-        done.each ? h('p', { class: 'small' }, 'Then ' + fmt.money(done.each) + ' every month they stay.') : null));
-      el.appendChild(h('div', { class: 'cols-2' },
-        ui.button('New sale', { onTap: function () {
-          view = 'form';
-          done = null;
-          arg = { date: '', clientId: '' };
-          sheet.setButton('Save sale', false);
-          sheet.rebuild();
-          sheet.body.scrollTop = 0;
-        } }),
-        ui.button('Done', { kind: 'primary', onTap: function () { sheet.close(); } })));
+      if (!done.none) {
+        el.appendChild(h('div', { class: 'callout callout-ice' },
+          h('p', { class: 'muted small' }, done.who),
+          h('p', { class: 'big-num ice' }, fmt.money(done.cents)),
+          done.each ? h('p', { class: 'small' }, 'Then ' + fmt.money(done.each) + ' every month they stay.') : null));
+      }
+      el.appendChild(ui.button('New sale', { icon: 'plus', block: true, onTap: function () {
+        view = 'form';
+        done = null;
+        arg = { date: '', clientId: '' };
+        sheet.setButton('Save sale', false);
+        sheet.rebuild();
+        sheet.body.scrollTop = 0;
+      } }));
     }
 
     /* ----- new data while the sheet is open: change only what depends on it, never a typed field ----- */
@@ -1033,10 +1173,12 @@
       onClose: function () {
         closed = true;
         formOpen = null;
-        if (view === 'form') keep();
+        if (!App.me()) { gone = true; signedOut(); }   /* closed because the phone was signed out: keep nothing */
+        else if (view === 'form') keep();
         clearTimeout(timer);
       }
     });
+    sheet.forget = function () { gone = true; clearTimeout(timer); timer = null; };
     formOpen = sheet;
     if (restored) adoptSaved();
     return sheet;
@@ -1066,14 +1208,20 @@
         .sort(function (a, b) { return (b.p.cents - a.p.cents) || (b.p.count - a.p.count) || byName(a.r, b.r); });
       clear(rows);
       if (!board.length) {
-        rows.appendChild(ui.empty({ title: 'Nobody is on the board yet.', text: me.role === 'owner' ? 'Add your sales reps in Team and they show up here.' : null }));
+        rows.appendChild(ui.empty({ title: 'Nobody is on the board yet.',
+          text: me.role === 'owner' ? 'Add your sales reps in Team and they show up here.' : null,
+          button: me.role === 'owner' ? { label: 'Team', onTap: function () { App.act('openTeam'); } } : null }));
         return;
       }
       var list = h('div', { class: 'list' });
       board.forEach(function (x, i) {
         var mine = x.r.id === me.id;
         var right = [h('span', { class: 'amt' }, fmt.money(x.p.cents))];
-        if (o.showCommission) right.push(h('span', { class: 'small' }, fmt.money(commissionOf(x.r.id, from)) + ' commission'));
+        if (o.showCommission) {
+          /* An owner's own sales earn nothing: say so in words instead of "$0.00 commission". */
+          var got = commissionOf(x.r.id, from);
+          right.push(h('span', { class: 'small' }, got || x.r.role !== 'owner' ? fmt.money(got) + ' commission' : 'No commission'));
+        }
         var row = ui.row({
           lead: h('span', { class: 'rank' + (i === 0 && x.p.cents > 0 ? ' is-top' : '') }, String(i + 1)),
           title: mine ? h('span', { class: 'cluster' }, x.r.name, ui.pill('You', 'ice')) : x.r.name,

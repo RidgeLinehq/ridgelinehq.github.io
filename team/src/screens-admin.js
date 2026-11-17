@@ -220,7 +220,7 @@
       var anyOpen = (d.days || []).some(function (x) { return x.open && x.date >= today && x.date <= end; });
       rows.push(ui.row({ lead: count(0, 'warn'),
         title: anyOpen ? 'Open times in the next 7 days' : 'Open days in the next 7 days',
-        sub: anyOpen ? 'Every open day is full. Open more so your reps can book.' : 'Your reps cannot book until you open some.',
+        sub: anyOpen ? 'No open day has a time left. Open more so your reps can book.' : 'Your reps cannot book until you open some.',
         onTap: function () { App.go('calendar'); } }));
     }
 
@@ -482,14 +482,15 @@
       sh.setButton('Add person');
     }
 
-    /* Saved: the same view as "Sale saved". A big check and what was saved, the one more thing to do as a
-       quiet button, and Done as the sheet's button. */
+    /* Saved: the same view as "Sale saved", built from the same pieces (.sold-head and .sold-title are that
+       view's own classes). A big check and what was saved, the one more thing to do as a quiet button, and
+       Done as the sheet's button. */
     function done(el, sh) {
       clear(el);
-      el.appendChild(h('div', { class: 'saved-head' }, App.icon('check-circle', 40), h('h3', { class: 'saved-title' }, 'Person added')));
+      el.appendChild(h('div', { class: 'sold-head' }, App.icon('check-circle', 40), h('h3', { class: 'sold-title' }, 'Person added')));
       el.appendChild(h('p', { class: 'muted' }, added.name + ' is on the team. They sign in with the name ' + added.name + ' and this PIN.'));
       el.appendChild(pinBox(added.name, added.pin));
-      el.appendChild(ui.button('Add another person', { block: true, small: true, icon: 'plus', onTap: function () { added = null; form(el, sh); } }));
+      el.appendChild(ui.button('Add another person', { block: true, icon: 'plus', onTap: function () { added = null; form(el, sh); } }));
       sh.setButton('Done');
       sh.body.scrollTop = 0;
     }
@@ -824,38 +825,63 @@
 
   /* ----- Usual appointment times ----- */
 
+  /* "Add a time" works the same here as in a day's sheet in Calendar: a time box with Add beside it, and a time
+     that was picked goes on the list as soon as the box is left. */
   function openTimes() {
     var draft = (App.data.settings.defaultSlots || []).slice().sort();
-    var chips = h('div', { class: 'chips', role: 'group', 'aria-label': 'Usual times' });
+    var chips = h('div', { class: 'stack-sm' });
     var error = h('p', { class: 'form-error', role: 'alert', hidden: true });
     var box = ui.field({ label: 'Add a time', name: 'slot-new', type: 'time', onInput: function () { say(''); } });
+    var closed = false, timer = null;
 
     function say(message) { error.textContent = message || ''; error.hidden = !message; }
     function draw() {
       clear(chips);
+      if (!draft.length) { chips.appendChild(h('p', { class: 'muted' }, 'No times yet. Add at least one.')); return; }
+      var list = h('div', { class: 'chips', role: 'group', 'aria-label': 'Usual times' });
       draft.forEach(function (t) {
-        chips.appendChild(h('button', { type: 'button', class: 'chip chip-x', 'aria-label': 'Remove ' + fmt.time(t), onclick: function () {
+        list.appendChild(h('button', { type: 'button', class: 'chip chip-x', 'aria-label': 'Remove ' + fmt.time(t), onclick: function () {
           draft.splice(draft.indexOf(t), 1);
           say('');
           draw();
         } }, fmt.time(t), App.icon('close', 16)));
       });
-      if (!draft.length) chips.appendChild(h('p', { class: 'muted' }, 'No times yet. Add at least one.'));
+      chips.appendChild(list);
+      chips.appendChild(h('p', { class: 'hint' }, 'Tap a time to remove it.'));
     }
-    /* Returns false when what is in the box cannot be added. */
+    /* Puts the time in the box on the list. Answers false when it cannot go on (the words under the box say
+       why). With `quiet`, an empty box, or a time that is already on the list, is nothing to stop for. */
     function add(quiet) {
-      var t = box.val();
-      if (!t) { if (!quiet) say('Pick a time first.'); return !!quiet; }
+      clearTimeout(timer);
+      var input = box.input, m = /^(\d{1,2}):(\d{2})/.exec(input.value || '');
+      var t = m ? (m[1].length < 2 ? '0' : '') + m[1] + ':' + m[2] : '';
+      if (!t) {
+        if (input.validity && input.validity.badInput) { say('That is not a time.'); return false; }   /* half typed */
+        if (!quiet) say('Pick a time first.');
+        return !!quiet;
+      }
       if (!D.isHM(t)) { say('That is not a time.'); return false; }
-      if (draft.indexOf(t) >= 0) { if (!quiet) say(fmt.time(t) + ' is already on the list.'); box.input.value = ''; return !!quiet; }
+      if (draft.indexOf(t) >= 0) {
+        input.value = '';
+        if (!quiet) say(fmt.time(t) + ' is already on the list.');
+        return !!quiet;
+      }
       if (draft.length >= LIMITS.slotsPerDay) { say('That is the most times a day can hold.'); return false; }
       draft.push(t);
       draft.sort();
-      box.input.value = '';
+      input.value = '';
       say('');
       draw();
       return true;
     }
+    /* It waits a moment after the box is left, so the tap that took the finger off it (Add, Save, a time to
+       remove) lands before the list is drawn again. */
+    box.input.addEventListener('blur', function () {
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        if (!closed && document.activeElement !== box.input) add(true);
+      }, 250);
+    });
 
     App.sheet.open({
       title: 'Usual appointment times', small: true,
@@ -866,8 +892,9 @@
         el.appendChild(error);
         draw();
       },
+      onClose: function () { closed = true; clearTimeout(timer); },
       footer: { label: 'Save', onTap: function (sh) {
-        if (!add(true)) return;                     /* a time typed but not added yet goes in too */
+        if (!add(true)) return;                     /* a time still in the box goes in too */
         if (!draft.length) { say('Keep at least one time.'); return; }
         sh.send('saveSettings', { settings: { defaultSlots: draft.slice() } }).then(function (res) {
           if (!res.ok) return;
@@ -994,7 +1021,9 @@
     }
 
     function itemRow(sec, k, i) {
-      var box = ui.field({ name: 'std-item-' + i + '-' + k, type: 'textarea', rows: 1, value: sec.items[k], maxlength: LIMITS.standardLine, autocapitalize: 'sentences' });
+      /* No maxlength here: a list pasted into one box must arrive whole so it can be dealt out, one line to a box.
+         A standard that is too long is caught, in words, on Save. */
+      var box = ui.field({ name: 'std-item-' + i + '-' + k, type: 'textarea', rows: 1, value: sec.items[k], autocapitalize: 'sentences' });
       box.input.classList.add('std-line');
       box.input.setAttribute('aria-label', 'Standard ' + (k + 1));
       box.input.setAttribute('enterkeyhint', 'enter');
@@ -1009,8 +1038,12 @@
           grow(box.input);
           return;
         }
-        var add = parts.slice(1, 1 + room);
-        if (parts.length - 1 > room) add[add.length - 1] = parts.slice(room).join(' ');
+        var add = parts.slice(1);
+        if (add.length > 1) {                         /* a pasted list: its blank lines are not standards */
+          add = add.filter(function (x) { return oneLine(x); });
+          if (!add.length) add = [''];
+        }
+        if (add.length > room) add.splice(room - 1, add.length, add.slice(room - 1).join(' '));   /* no room for more boxes: the rest share the last */
         sec.items.splice.apply(sec.items, [k, 1, parts[0]].concat(add));
         draw();
         focusRow(sec, k + add.length);
@@ -1046,7 +1079,7 @@
         remove.classList.add('btn-danger');
         var block = { sec: sec, title: title, toggle: toggle, rows: rows, el: h('div', { class: 'card' }, title, toggle,
           h('div', { class: 'field', role: 'group', 'aria-label': 'Standards in this section' },
-            h('span', { class: 'field-label' }, 'Standards, one in each box'), h('div', { class: 'stack-sm' }, rows), more),
+            h('span', { class: 'field-label' }, 'Standards, one in each box'), h('div', { class: 'stack-sm' }, rows, more)),
           h('div', { class: 'std-remove' }, remove)) };
         blocks.push(block);
         listEl.appendChild(block.el);

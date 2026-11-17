@@ -583,8 +583,12 @@ var App = (function () {
       if (res.ok || res.sync) state.okAt = Date.now();
       /* An answer from a working system means the connection is back (a "server" answer is not that). */
       if (state.fails && (res.ok || res.error.code !== 'server')) { state.fails = 0; drawStrip(); }
-      /* A new sign-in: the saved copy of the data belongs to this person from here on. */
-      if (req.action === 'login' && res.ok && res.sync && res.sync.me) storage.set('who', String(res.sync.me.id));
+      /* A new sign-in: this phone is that person's from here on, and so is the copy of the data kept on it. */
+      if (req.action === 'login' && res.ok && res.result && res.result.token && res.sync && res.sync.me) {
+        state.token = String(res.result.token);
+        storage.set('who', String(res.sync.me.id));
+        storage.set('token', state.token);
+      }
       if (res.sync) applySync(res.sync);
       if (!res.ok && res.error.code === 'auth' && req.action !== 'login') signOut(res.error.message || 'Please sign in again.');
     }
@@ -599,7 +603,7 @@ var App = (function () {
   function applySync(sync) {
     if (!sync || typeof sync !== 'object') return;
     if (sync.same) {
-      if (App.data && storage.get('who') === String(App.data.me.id)) storage.set('at', String(state.okAt));
+      if (holdsSignIn()) storage.set('at', String(state.okAt));
       return;
     }
     if (!sync.me || !Array.isArray(sync.jobs) || !sync.settings) return;   /* not a snapshot we understand */
@@ -610,16 +614,14 @@ var App = (function () {
     changed();
   }
 
-  /* The copy of the data kept on the phone belongs to one person: the one who signed in last ('who').
-     Another tab still running as someone else never writes over it, and at start-up a copy that is not
-     that person's is ignored (see start). */
+  /* The copy of the data kept on the phone belongs to one person: whoever signed in on it last. It is
+     stored with that person's id ('who'), only by the tab that holds the phone's sign-in (a tab still
+     running as someone else never writes over it), and at start-up a copy that is not that person's is
+     ignored (see start). */
+  function holdsSignIn() { return !!state.token && storage.get('token') === state.token; }
   function keepSnapshot(sync) {
-    var who = storage.get('who');
-    if (!who && state.token && storage.get('token') === state.token) {   /* signed in before 'who' was kept */
-      who = String(sync.me.id);
-      storage.set('who', who);
-    }
-    if (who !== String(sync.me.id)) return;
+    if (!holdsSignIn()) return;
+    storage.set('who', String(sync.me.id));
     storage.set('snap', JSON.stringify(sync));
     storage.set('at', String(state.okAt));
   }
@@ -757,12 +759,29 @@ var App = (function () {
 
   /* ================= layers: sheets and dialogs, closed by the phone's back button ================= */
 
-  var layers = [], afterPop = null;
+  var layers = [], afterPop = null, lockY = 0;
+
+  /* Locking the page behind a sheet puts it at its top (the body stops being taller than the screen).
+     Where it was is remembered here and put back when the last sheet closes. The browser is not left to
+     do that (history.scrollRestoration is 'manual', see start): browsers differ on when they restore the
+     scroll around a step back in history, and it would land on whatever screen is showing by then. */
+  function lockPage() {
+    var root = doc.documentElement;
+    if (root.classList.contains('locked')) return;
+    lockY = window.pageYOffset || root.scrollTop || 0;
+    root.classList.add('locked');
+  }
+  function unlockPage() {
+    var root = doc.documentElement;
+    if (!root.classList.contains('locked')) return;
+    root.classList.remove('locked');
+    window.scrollTo(0, lockY);
+  }
 
   function pushLayer(layer) {
     layer.opener = doc.activeElement;
     layers.push(layer);
-    doc.documentElement.classList.add('locked');
+    lockPage();
     layer.inHistory = false;
     try { history.pushState({ rwLayer: layers.length }, ''); layer.inHistory = true; } catch (e) { /* no history here: the close button still works */ }
     placeToasts();
@@ -795,7 +814,7 @@ var App = (function () {
       if (layer.wrap.parentNode) layer.wrap.parentNode.removeChild(layer.wrap);
       try { if (layer.gone) layer.gone(); } catch (e) { report(e); }
     }
-    if (!layers.length) doc.documentElement.classList.remove('locked');
+    if (!layers.length) unlockPage();
     placeToasts();
     if (layer && layer.opener && layer.opener.focus && onPage(layer.opener)) {
       try { layer.opener.focus({ preventScroll: true }); } catch (e2) { /* focus is a nicety */ }
@@ -1795,6 +1814,7 @@ var App = (function () {
     if (!state.inApp || !App.data) return;
     if (!route || !allowed(route)) route = 'today';
     writeHash(route);
+    lockY = 0;                 /* a new screen starts at its top, also once a sheet over it closes */
     App.route = route;
     drawChrome();
     drawScreen(false);
@@ -1888,18 +1908,17 @@ var App = (function () {
     send('login', { name: name, pin: pin }).then(function (res) {
       state.signingIn = false;
       setBusy(btn, false);
-      if (!res.ok || !res.result || !res.result.token || !App.data) {
+      if (!res.ok || !state.token || !App.data) {
         /* The system's own words when it answered ("That name and PIN do not match."). No answer at all, or one
            that is not ours: in real mode say what to do about it; the sample cannot be out of reach. */
         var msg = !res.ok && res.error.code !== 'network' ? res.error.message
           : App.mode === 'live' ? CANNOT_REACH : 'Could not sign in. Try again.';
+        if (res.ok) forget();        /* an answer we could not use: keep nothing of it */
         if (errorEl) { errorEl.textContent = msg; errorEl.hidden = false; }
         else App.toast(msg, { bad: true });
         return;
       }
-      state.token = res.result.token;
-      storage.set('token', state.token);
-      enterApp('today');
+      enterApp('today');             /* settle() has already kept the token and whose phone this is now */
     });
   }
 
@@ -2007,7 +2026,7 @@ var App = (function () {
         h('img', { class: 'remind-photo', src: 'photo-standard.jpg', alt: '', onerror: function () { this.style.visibility = 'hidden'; } }),
         h('div', { class: 'remind-text' },
           h('p', { class: 'remind-title' }, 'Company standards'),
-          h('p', { class: 'remind-sub' }, me.role === 'rep' ? 'Read before your next sale.' : 'Read before your next job.')),
+          h('p', { class: 'remind-sub' }, 'Read these and confirm.')),      /* one line on the narrowest phone, and true for a rep, who does no jobs */
         ui.button('Read', { small: true, onTap: function () { App.go('standards'); } })));
     }
     if (overdue.length) root.appendChild(ui.label('Today'));
@@ -2132,9 +2151,7 @@ var App = (function () {
       leaveApp();
       clear(els.signinBody).appendChild(h('p', { class: 'muted' }, 'Loading...'));
       send('login', { name: person.name, pin: person.pin }).then(function (res) {
-        if (!res.ok || !App.data) { showSignIn(); return; }
-        state.token = res.result.token;
-        storage.set('token', state.token);
+        if (!res.ok || !state.token || !App.data) { forget(); showSignIn(); return; }
         enterApp('today');
         App.toast('Sample data is back to the start.');
       });
@@ -2219,6 +2236,10 @@ var App = (function () {
       window.visualViewport.addEventListener('scroll', fitLayers);
       fitLayers();
     }
+    /* The app places the scroll itself: the top of a new screen, kept on a redraw, put back when a sheet closes
+       (lockPage / unlockPage). Left to the browser, going to another screen from a sheet lands that screen at
+       the old one's scroll position, because the sheet closes with a step back in history. */
+    try { history.scrollRestoration = 'manual'; } catch (e) { /* an old browser: it restores the scroll itself, as before */ }
     window.addEventListener('resize', placeToasts);
     window.addEventListener('storage', onOtherTab);
     window.addEventListener('popstate', onPopState);

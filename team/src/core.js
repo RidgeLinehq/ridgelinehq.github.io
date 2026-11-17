@@ -21,6 +21,30 @@
  * Every request is { action, token?, since?, day?, opId?, ... } and every answer is
  * { ok: true, result, sync } or { ok: false, error: { code, message }, sync? }.
  * Money is always whole cents. Days are 'YYYY-MM-DD' strings, times are 'HH:MM' strings.
+ *
+ * Rules the page can count on (each is enforced further down, where the action is):
+ *   PINs      Every PIN is exactly 6 digits, whether a person picks it or the system makes it.
+ *             The easy ones are refused: one digit six times, a straight run up or down, and
+ *             the same pair or the same three digits repeated. RidgelineCore.check.pin(pin)
+ *             gives '' or the words to show ("A PIN is 6 digits." / "Pick a PIN that is harder
+ *             to guess."). check.payLink(link) does the same for a payment link.
+ *   Sign-in   Wrong PINs are counted per person only (5 quick ones lock that person for 15
+ *             minutes; 20 inside 6 hours pause them for the rest of the 6 hours and the owner is
+ *             told). Nothing is counted for a wrong name, and nothing can pause the whole team.
+ *   Signed    error.code 'auth' always means: forget the token and show the sign-in screen with
+ *   out       error.message. It is "Please sign in again." except for someone who was removed
+ *             from the team, whose phone is told "You are no longer on the team. Ask the owner
+ *             if that is a mistake."
+ *   Sales     A sale keeps the commission rates it was saved with. A sale whose seller (repId)
+ *             is an owner is saved with 0 and 0: the owner's own sales earn no commission, and
+ *             createSale answers commissionCents 0 for them. Its dated events are still listed.
+ *             The owner corrects a sale with updateSale {saleId, patch: {priceCents?, service?,
+ *             repId?}}; one-time or monthly cannot be changed (remove the sale and enter it again).
+ *   Sync      What each role receives is decided in buildSync. A tech receives no clients, sales,
+ *             days or board; settings with only businessName, standards and standardsUpdatedAt;
+ *             and only their own jobs from 30 days ago onward, plus older ones still to be done.
+ *   Notices   Written the way the screens write: "Wed, Nov 18 at 8:00 AM" and "$1,250.00". One
+ *             about a client carries that client's id as clientId.
  */
 var RidgelineCore = (function () {
   'use strict';
@@ -36,10 +60,11 @@ var RidgelineCore = (function () {
     maxCents: 100000000, sessionDays: 90, loginTries: 5, lockSeconds: 900,
     longTries: 20, longSeconds: 21600,   /* 20 wrong PINs inside 6 hours (the longest the cache remembers) pause that person */
     retrySeconds: 21600,                 /* how long a saved action is remembered by its opId */
+    techJobDays: 30,                     /* how far back a tech's phone is sent the jobs they have finished */
     docChars: 45000,                     /* the most one record may take as JSON; a cell of the sheet holds 50,000 */
     daysPerCall: 62, slotsPerDay: 24, services: 20, standardSections: 12, standardItems: 20, standardLine: 240
   };
-  var CLIENT_FULL = 'This client\'s record is full. Shorten the name, the address or another detail, then try again.';
+  var CLIENT_FULL = 'There is no room to save more on this client. Shorten the name, the address or another detail, then try again.';
   var DEFAULT_SETTINGS = {
     id: 'main',
     businessName: 'Ridgeline Wash Co.',
@@ -284,10 +309,32 @@ var RidgelineCore = (function () {
     return Math.round(v * 100) / 100;
   }
 
+  var LINK_BAD = 'That payment link does not look right. Paste the whole link from your payment page.';
+
+  /*
+   * What is wrong with a payment link, in words; '' when it is fine. No link at all is fine too.
+   * The owner copies this link and sends it to a client, so it has to go where it looks like it
+   * goes. The site it opens is the part between https:// and the first / ? or #. That part must
+   * be a plain site name with a dot in it (letters, digits, hyphens, and a port if it has one):
+   *   - nothing before an "@". In https://buy.stripe.com@evil.example/pay the real site is
+   *     evil.example. An "@" anywhere before the first "/" is refused;
+   *   - not a bare word such as "localhost", and no look-alike letters from other alphabets;
+   *   - no spaces, quotes, angle brackets or backslashes anywhere in the link.
+   */
+  function linkProblem(s) {
+    if (!s) return '';
+    if (s.length > 300) return 'That payment link is too long.';   /* a link cut short is a broken link */
+    if (!/^https:\/\//i.test(s)) return 'A payment link must start with https://';
+    var rest = s.slice(8), site = rest.split(/[\/?#]/)[0];
+    if (/[\s\u0000-\u001f\u007f<>"'`\\]/.test(s) || rest.split('/')[0].indexOf('@') >= 0) return LINK_BAD;
+    if (!/^[a-z0-9-]+(\.[a-z0-9-]+)+(:\d{1,5})?$/i.test(site)) return LINK_BAD;
+    return '';
+  }
+
+  /* A payment link as it is saved: tidied to one line, then checked. */
   function payLink(v) {
-    var s = line(v, 301);
-    if (s.length > 300) throw new AppError('invalid', 'That payment link is too long.');   /* a link cut short is a broken link */
-    if (s && !/^https:\/\/[^\s<>"'`]+$/i.test(s)) throw new AppError('invalid', 'A payment link must start with https://');
+    var s = line(v, 301), problem = linkProblem(s);
+    if (problem) throw new AppError('invalid', problem);
     return s;
   }
 
@@ -397,8 +444,12 @@ var RidgelineCore = (function () {
       } catch (e) { /* the store itself is down; the caller still gets the error answer */ }
     }
 
-    function tellOwner(type, text, emailSubject, emailBody) {
-      put('notices', { id: newId('n'), at: env.now(), type: type, text: text });
+    /* A line for the owner's notifications, and an email when one is asked for. clientId (when
+       the notice is about a client) lets the page open that client from the notice. */
+    function tellOwner(type, text, emailSubject, emailBody, clientId) {
+      var notice = { id: newId('n'), at: env.now(), type: type, text: text };
+      if (clientId) notice.clientId = clientId;
+      put('notices', notice);
       trimOldest('notices', LIMITS.noticesKept, 'at');
       var s = getSettings();
       if (emailSubject && s.emailOnBooking) {
@@ -417,6 +468,13 @@ var RidgelineCore = (function () {
       });
     }
 
+    /* Someone removed from the team keeps their stored sign-ins, so their phone can be told why
+       it no longer works (see auth). Only the quick copies go, so the very next request is
+       checked against the team list. The stored ones are cleared away at 90 days like any other. */
+    function uncacheSessions(memberId) {
+      sessionsOf(memberId).forEach(function (s) { store.cacheDel('sess:' + s.id); });
+    }
+
     function refreshSessions(m) {
       sessionsOf(m.id).forEach(function (s) {
         if (env.now() - s.createdAt > LIMITS.sessionDays * 86400000) return;   /* expired: leave it signed out */
@@ -432,7 +490,9 @@ var RidgelineCore = (function () {
       var sess = find('sessions', hash);
       if (!sess || env.now() - sess.createdAt > LIMITS.sessionDays * 86400000) return null;
       var m = find('team', sess.memberId);
-      if (!m || !m.active) return null;
+      if (!m) return null;
+      /* A phone that was signed in when its person was removed hears the reason, not just "sign in again". */
+      if (!m.active) throw new AppError('auth', 'You are no longer on the team. Ask the owner if that is a mistake.');
       store.cachePut('sess:' + hash, JSON.stringify({ id: m.id, name: m.name, role: m.role }), 21600);
       return { id: m.id, name: m.name, role: m.role, sess: hash };
     }
@@ -529,9 +589,15 @@ var RidgelineCore = (function () {
       var mySales = owner ? sales : rep ? sales.filter(function (s) { return s.repId === me.id; }) : [];
       var mySaleIds = Object.create(null);
       mySales.forEach(function (s) { mySaleIds[s.id] = 1; });
+      /* A tech's phone holds a client's name, phone and address for each job, so it is only sent
+         the jobs it still needs: everything of theirs from 30 days ago onward, and anything older
+         that is still waiting to be done. */
+      var techFrom = addDays(day, -LIMITS.techJobDays);
       var myJobs = owner ? jobs
         : rep ? jobs.filter(function (j) { return mine[j.clientId]; })
-        : jobs.filter(function (j) { return j.assignedTo === me.id && j.status !== 'cancelled'; });
+        : jobs.filter(function (j) {
+          return j.assignedTo === me.id && j.status !== 'cancelled' && (j.date >= techFrom || j.status === 'scheduled');
+        });
 
       var meDoc = find('team', me.id) || {};
       var out = {
@@ -542,10 +608,13 @@ var RidgelineCore = (function () {
           if (owner) { v.createdAt = m.createdAt; v.standardsAckAt = m.standardsAckAt || 0; }
           return v;
         }),
-        settings: owner ? settings : {
+        /* A rep needs the price list and the rates to sell. A tech needs neither. */
+        settings: owner ? settings : rep ? {
           businessName: settings.businessName, services: settings.services,
           firstPct: settings.firstPct, monthlyPct: settings.monthlyPct,
           standards: settings.standards, standardsUpdatedAt: settings.standardsUpdatedAt
+        } : {
+          businessName: settings.businessName, standards: settings.standards, standardsUpdatedAt: settings.standardsUpdatedAt
         },
         days: me.role === 'tech' ? [] : all('days')
           .filter(function (d) { return d.id >= addDays(day, -45); })
@@ -638,15 +707,21 @@ var RidgelineCore = (function () {
       if (s && s.defaultTechId === memberId) { s.defaultTechId = null; put('settings', s); }
     }
 
+    /* A day and time the way every screen writes them: "Wed, Nov 18 at 8:00 AM". The year is
+       added only when it is not this year: "Thu, Jan 7, 2027 at 8:00 AM". */
     function whenText(date, time) {
       var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
       var h = +time.slice(0, 2), ampm = h < 12 ? 'AM' : 'PM';
-      return days[weekday(date)] + ' ' + months[+date.slice(5, 7) - 1] + ' ' + (+date.slice(8, 10)) + ', ' +
-        ((h % 12) || 12) + ':' + time.slice(3, 5) + ' ' + ampm;
+      return days[weekday(date)] + ', ' + months[+date.slice(5, 7) - 1] + ' ' + (+date.slice(8, 10)) +
+        (date.slice(0, 4) === today().slice(0, 4) ? '' : ', ' + date.slice(0, 4)) +
+        ' at ' + ((h % 12) || 12) + ':' + time.slice(3, 5) + ' ' + ampm;
     }
 
-    function money(c) { return '$' + (c / 100).toFixed(2); }
+    /* Money the way every screen writes it: "$1,250.00". */
+    function money(c) {
+      return '$' + String(Math.floor(c / 100)).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '.' + pad2(c % 100);
+    }
 
     function canTouchClient(me, client) { return me.role === 'owner' || (me.role === 'rep' && client.repId === me.id); }
 
@@ -748,7 +823,7 @@ var RidgelineCore = (function () {
         if (m.id === me.id) throw new AppError('invalid', 'You cannot remove yourself.');
         m.active = false; m.removedAt = env.now();
         put('team', m);
-        dropSessions(m.id);
+        uncacheSessions(m.id);
         takeOffJobs(m.id);
         return { id: m.id };
       } },
@@ -806,7 +881,7 @@ var RidgelineCore = (function () {
         if (p.monthlyPct !== undefined) s.monthlyPct = pct(p.monthlyPct);
         if (p.defaultSlots !== undefined) {
           s.defaultSlots = cleanSlots(p.defaultSlots);
-          if (!s.defaultSlots.length) throw new AppError('invalid', 'Keep at least one time slot.');
+          if (!s.defaultSlots.length) throw new AppError('invalid', 'Keep at least one time.');
         }
         if (p.defaultTechId !== undefined) s.defaultTechId = p.defaultTechId ? needJobTaker(p.defaultTechId).id : null;
         if (p.notifyEmail !== undefined) {
@@ -869,7 +944,7 @@ var RidgelineCore = (function () {
         if (isNew) {
           var c = req.client || {};
           client = {
-            id: newId('c'), name: line(c.name, LIMITS.name, true, 'Add the customer or business name.'),
+            id: newId('c'), name: line(c.name, LIMITS.name, true, 'Add the client\'s name.'),
             contact: line(c.contact, LIMITS.name), phone: line(c.phone, 30), email: line(c.email, 120),
             address: line(c.address, LIMITS.line), status: 'New', statusLog: [{ day: day, status: 'New' }],
             service: service, priceCents: price, billing: billing, startDate: day, repId: repId,
@@ -908,11 +983,11 @@ var RidgelineCore = (function () {
 
         if (me.role !== 'owner') {
           var head = me.name + ' sold ' + service + ' to ' + client.name + ' for ' + money(price) + (billing === 'monthly' ? ' a month' : '');
-          var text = job ? head + '. Booked ' + whenText(job.date, job.time) + '.' : head + '. No appointment booked yet.';
+          var text = job ? head + '. Booked for ' + whenText(job.date, job.time) + '.' : head + '. No appointment booked yet.';
           tellOwner(job ? 'booking' : 'sale', text,
             job ? 'Appointment booked: ' + client.name + ', ' + whenText(job.date, job.time) : 'New sale, no appointment yet: ' + client.name,
             text + '\n\n' + (client.address ? 'Address: ' + client.address + '\n' : '') + (client.phone ? 'Phone: ' + client.phone + '\n' : '') +
-              (job && !job.assignedTo ? '\nNobody is assigned to this job yet.' : ''));
+              (job && !job.assignedTo ? '\nNobody is assigned to this job yet.' : ''), client.id);
         }
         return { clientId: client.id, saleId: sale.id, jobId: job ? job.id : null,
           commissionCents: share(price, rates.firstPct) };
@@ -954,7 +1029,7 @@ var RidgelineCore = (function () {
         return { saleId: sale.id, clientId: sale.clientId };
       } },
 
-      /* Book a visit for a client who is already in the system. */
+      /* Book an appointment for a client who is already in the system. */
       bookJob: { roles: ['owner', 'rep'], run: function (me, req) {
         var client = needClient(req.clientId);
         if (!canTouchClient(me, client)) throw new AppError('forbidden', 'That client belongs to another rep.');
@@ -963,14 +1038,14 @@ var RidgelineCore = (function () {
         if (sale && (sale.clientId !== client.id || sale.jobId)) sale = null;
         var job = {
           id: newId('j'), clientId: client.id, saleId: sale ? sale.id : null, date: req.date, time: req.time,
-          what: line(req.what, LIMITS.line) || client.service || 'Visit', assignedTo: defaultTech(), status: 'scheduled',
+          what: line(req.what, LIMITS.line) || client.service || 'Job', assignedTo: defaultTech(), status: 'scheduled',
           doneAt: null, doneBy: null, notes: [], createdBy: me.id, createdAt: env.now()
         };
         put('jobs', job);
         if (sale) { sale.jobId = job.id; put('sales', sale); }
         if (me.role !== 'owner') {
           var text = me.name + ' booked ' + client.name + ' for ' + whenText(job.date, job.time) + '.';
-          tellOwner('booking', text, 'Appointment booked: ' + client.name + ', ' + whenText(job.date, job.time), text);
+          tellOwner('booking', text, 'Appointment booked: ' + client.name + ', ' + whenText(job.date, job.time), text, client.id);
         }
         return { jobId: job.id };
       } },
@@ -983,8 +1058,8 @@ var RidgelineCore = (function () {
         job.date = req.date; job.time = req.time;
         put('jobs', job);
         if (me.role !== 'owner') {
-          tellOwner('booking', me.name + ' moved ' + (client ? client.name : 'a job') + ' to ' + whenText(job.date, job.time) + '.',
-            'Appointment moved: ' + (client ? client.name : 'a job') + ', ' + whenText(job.date, job.time));
+          var moved = me.name + ' moved ' + (client ? client.name : 'an appointment') + ' to ' + whenText(job.date, job.time) + '.';
+          tellOwner('booking', moved, 'Appointment moved: ' + (client ? client.name : 'an appointment') + ', ' + whenText(job.date, job.time), moved, job.clientId);
         }
         return { jobId: job.id };
       } },
@@ -1005,7 +1080,7 @@ var RidgelineCore = (function () {
             dropGoneAssignee(job);
           } else throw new AppError('invalid', 'That is not a job status.');
         }
-        fits(job, 'This job\'s record is full. Shorten what needs to be done, then try again.');
+        fits(job, 'There is no room to save more on this job. Shorten what needs to be done, then try again.');
         put('jobs', job);
         return { jobId: job.id };
       } },
@@ -1022,7 +1097,9 @@ var RidgelineCore = (function () {
         put('jobs', job);
         var client = find('clients', job.clientId);
         if (done && client && client.status === 'New') { setStatus(client, 'Active'); put('clients', client); }
-        if (done && me.role !== 'owner') tellOwner('done', me.name + ' finished ' + (client ? client.name : 'a job') + ' (' + job.what + ').');
+        if (done && me.role !== 'owner') {
+          tellOwner('done', me.name + ' marked ' + (client ? client.name : 'a job') + ' done (' + job.what + ').', null, null, job.clientId);
+        }
         return { jobId: job.id, status: job.status };
       } },
 
@@ -1053,7 +1130,7 @@ var RidgelineCore = (function () {
         var client = needClient(req.clientId), p = req.patch || {}, owner = me.role === 'owner';
         if (!canTouchClient(me, client)) throw new AppError('forbidden', 'That client belongs to another rep.');
         var next = clone(client);
-        if (p.name !== undefined) next.name = line(p.name, LIMITS.name, true, 'Add the customer or business name.');
+        if (p.name !== undefined) next.name = line(p.name, LIMITS.name, true, 'Add the client\'s name.');
         if (p.contact !== undefined) next.contact = line(p.contact, LIMITS.name);
         if (p.phone !== undefined) next.phone = line(p.phone, 30);
         if (p.email !== undefined) next.email = line(p.email, 120);
@@ -1106,10 +1183,14 @@ var RidgelineCore = (function () {
         return {};
       } },
 
-      /* Removes a sale entered by mistake. A visit that has not happened yet goes with it. */
+      /* Removes a sale entered by mistake. Its appointment goes with it if the job has not been
+         done yet. A sale to a client who was already here had rewritten what that client buys
+         (service, price, one-time or monthly); removing it puts those back to what the client's
+         newest remaining sale says. With no sale left, the client is left as they are. */
       deleteSale: { roles: ['owner'], run: function (me, req) {
         var sale = find('sales', req.saleId);
         if (!sale) throw new AppError('not_found', 'That sale is no longer here.');
+        var wasNewest = (newestSale(sale.clientId) || {}).id === sale.id;
         var job = sale.jobId ? find('jobs', sale.jobId) : null;
         if (job && job.status === 'scheduled') del('jobs', job.id);
         else if (job) { job.saleId = null; put('jobs', job); }
@@ -1122,6 +1203,13 @@ var RidgelineCore = (function () {
           put('sales', s);
         });
         del('sales', sale.id);
+        /* Not checked with fits(): by now the sale is gone, so this must not be refused. These three
+           are short, so a client that fitted before still fits its cell after. */
+        var client = find('clients', sale.clientId), last = newestSale(sale.clientId);
+        if (wasNewest && client && last) {
+          client.service = last.service; client.priceCents = last.priceCents; client.billing = last.billing;
+          put('clients', client);
+        }
         return {};
       } },
 
@@ -1273,7 +1361,7 @@ var RidgelineCore = (function () {
     calc: { commissionEvents: commissionEvents, sumEvents: sumEvents, statusOn: statusOn },
     /* The same checks the actions make, for a form that wants to say so before it sends.
        Each gives '' when the value is fine, or the words to show. */
-    check: { pin: pinProblem },
+    check: { pin: pinProblem, payLink: function (v) { return linkProblem(line(v, 301)); } },
     dates: { isDay: isDay, isHM: isHM, addDays: addDays, addMonths: addMonths, weekday: weekday, weekStart: weekStart, monthStart: monthStart, daysInMonth: daysInMonth }
   };
 })();

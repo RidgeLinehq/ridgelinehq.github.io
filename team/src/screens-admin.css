@@ -29,11 +29,6 @@
 /* .pin-shown: a new PIN in its box. Six digits read out more easily as two threes, so the halves sit a little apart. */
 .pin-shown > span + span { margin-left: .3em; }
 
-/* .saved-head: "Person added" at the top of the view that follows a save: the same check and heading as "Sale saved". */
-.saved-head { display: flex; align-items: center; gap: 12px; }
-.saved-head .ico { color: var(--good); }
-.saved-title { font: 800 22px/1.15 var(--display); }
-
 /* .input-suffix: something inside the right edge of a control (the "%" in Commission). */
 .input-suffix { position: absolute; right: 14px; top: 0; height: var(--tap); display: flex; align-items: center; color: var(--ink-2); pointer-events: none; }
 .input-wrap.has-suffix .input { padding-right: 36px; }

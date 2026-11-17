@@ -1,7 +1,7 @@
 # Ridgeline Wash Co. team app: one-time setup (about 10 minutes, all on your phone)
 
-The app is already up at **https://ridgelinehq.github.io/team/**, but until you do this it only
-shows made-up sample data. These steps give it a real home for your data: a Google Sheet in your
+Once the team page is live at **https://ridgelinehq.github.io/team/**, it only shows made-up
+sample data until you do this. These steps give it a real home for your data: a Google Sheet in your
 own Google account. You do this once. Your team never sees any of it.
 
 Do it in Safari or Chrome in **desktop mode** (iPhone: **aA → Request Desktop Website**. Android:
@@ -26,7 +26,7 @@ Do it in Safari or Chrome in **desktop mode** (iPhone: **aA → Request Desktop 
    a script you made yourself. It asks to manage your Google Sheets and to send email as you.
    That is how the app saves your data and emails you when a job is booked.
 3. Done when you get an email **"Ridgeline Wash Co.: your team system is ready"**. It has your
-   **sign-in name** and your **PIN**. Keep that email.
+   **sign-in name** and your **6-digit PIN**. Keep that email.
 
 No email after a minute? The same text is in the **Execution log** at the bottom of the editor.
 
@@ -48,18 +48,26 @@ quotes so the line reads `window.RIDGELINE_BACKEND = "https://script.google.com/
 then tap **Commit changes**. About a minute later the app stops showing sample data and runs on
 the real thing.
 
-## 6. Sign in and add your team
+## 6. Sign in and get it ready for your team
 1. Open **https://ridgelinehq.github.io/team/** on your phone. Sign in with the name and PIN from
    the email.
-2. Tap your initials (top left) → **Team**, and add each rep and tech. Each new person gets a
-   PIN, shown to you once. Give each person their name and PIN.
-3. Tap your initials → **Company standards**. A starting draft is already there. Change anything
-   that is not how you want it done. Every rep and tech is asked to confirm they have read them,
-   and again whenever you change them, and you can see who has.
-4. Tell each person to open the same link, sign in, and then **Share → Add to Home Screen**
+2. **Open your days.** Tap **Calendar**, then tap each day you will take appointments, or tap
+   **Open weekdays** to open the rest of the month at once. Until a day is open, your reps cannot
+   book anything on it.
+3. **Add your team.** Tap your initials (top left) → **Team**, and add each rep and tech. Each
+   new person gets a 6-digit PIN, shown to you once. Give each person their name and PIN.
+4. **Choose who gets new jobs.** Tap your initials → **Settings** → **Give new jobs to** and pick
+   a tech (or yourself). If you leave it on Nobody, every new appointment waits for you to assign
+   it, and the Dashboard reminds you.
+5. **Check your services and prices.** Same place: **Settings** → **Services**.
+6. **Read the company standards.** Tap your initials → **Company standards**. A starting draft
+   is already there. Change anything that is not how you want it done. Every rep and tech is
+   asked to confirm they have read them, and again whenever you change them, and you can see who
+   has.
+7. Tell each person to open the same link, sign in, and then **Share → Add to Home Screen**
    (iPhone) or **⋮ → Add to Home screen** (Android). From then on it opens like any other app.
 
-Done. Sales, bookings and jobs now show up on everyone's phone within about half a minute.
+Done. Sales, appointments and jobs now show up on everyone's phone within about half a minute.
 
 ---
 
@@ -69,9 +77,27 @@ Done. Sales, bookings and jobs now show up on everyone's phone within about half
 Google Drive. The link is in the setup email. Look any time, but do not type in it, and never
 delete it or move it to the trash: that sheet is your data. The app does the writing.
 
+**Keep the sheet to yourself.** Never share that Google Sheet with anyone. It holds your
+clients' details, and someone who can read it could work out your team's PINs.
+
+**A lost or stolen phone.** A phone stays signed in for 90 days. If one goes missing, tap your
+initials → **Team** → that person → **Reset PIN**. That signs them out everywhere at once. Give
+them the new PIN when they have a phone again. If it is your own phone, use "Forgot your PIN?"
+below from any other device.
+
+**Monthly clients.** A monthly plan does not put next month's appointment on the calendar by
+itself. Book each one from the client's page. The Dashboard lists any monthly client who has no
+next appointment, so nobody is forgotten.
+
 **Forgot your PIN?** Open **script.google.com** → **Ridgeline Wash Team** → pick
-**resetOwnerPin** in the function menu → **Run**. A new PIN is emailed to you, and every phone
-that was signed in as you is signed out. For anyone else's PIN, use **Team** in the app.
+**resetOwnerPin** in the function menu → **Run**. A new 6-digit PIN is emailed to you, and every
+phone that was signed in as you is signed out. For anyone else's PIN, use **Team** in the app.
+
+**About PINs.** Every PIN is 6 digits. The app will not take one that is easy to guess, like
+000000, 123456 or 121212. Five wrong tries in a row lock that one person's sign-in for 15
+minutes, and 20 in a few hours pause it for a few hours and put a note in your Notifications.
+Nobody else is affected, and phones that are already signed in keep working. If it is your own
+sign-in that is paused, wait it out or use "Forgot your PIN?" above.
 
 **Updates.** If Claude ever changes the backend:
 1. Paste the new Code.gs over the old code (step 2 above) and save.

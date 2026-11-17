@@ -115,7 +115,7 @@ var RidgelineSample = (function () {
     /* ----- two months of business, oldest first ----- */
     at(-64, '10:15');
     var main = sell('Mason', { name: 'Main Street Storefront', contact: 'Dana Whitfield', phone: '615-555-0112', email: 'dana@example.com', address: '104 W Main St' },
-      'Window cleaning', 15000, 'monthly', 'Storefront windows, inside and out', [day(-60), '08:00'], 'Wants the first slot of the day, before the shop opens.');
+      'Window cleaning', 15000, 'monthly', 'Storefront windows, inside and out', [day(-60), '08:00'], 'Wants the first appointment of the day, before the shop opens.');
     assign(main.jobId);
     at(-60, '08:50'); finish(main.jobId);
     at(-59, '09:00'); paid(main.clientId);

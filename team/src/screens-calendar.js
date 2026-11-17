@@ -308,7 +308,7 @@
     root.appendChild(legend());
 
     if (!App.freeDays().length) {
-      root.appendChild(ui.empty({ title: 'No days are open for booking.',
+      root.appendChild(ui.empty({ title: 'No days are open.',
         text: 'Your reps cannot book an appointment until you open some. Tap a day, or tap Open weekdays for the rest of the month.' }));
     }
 
@@ -328,7 +328,7 @@
         var day = App.dayOf(date), isOpen = !!day && day.open && date >= App.today();
         var free = App.freeSlots(date), mine = App.jobsOn(date);
 
-        if (!isOpen) el.appendChild(h('p', { class: 'muted' }, 'This day is not open for booking any more.'));
+        if (!isOpen) el.appendChild(h('p', { class: 'muted' }, 'This day is not open any more.'));
         else {
           /* Words, not tiles: these are for reading. The times that can be tapped are in New sale. */
           el.appendChild(ui.label('Open times', { count: free.length || null }));
@@ -380,6 +380,6 @@
     }
   });
 
-  /* Each visit to the Calendar starts on the current month. */
+  /* Each time the Calendar is opened it starts on the current month. */
   App.on('route', function () { if (App.route !== 'calendar') { month = null; bulkError = ''; } });
 })();

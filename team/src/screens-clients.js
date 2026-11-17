@@ -198,9 +198,7 @@
 
     /* "Edit details" sits with the details it changes, on the line of their label. */
     var detailsHead = h('div', { class: 'sec-head' }, ui.label('Details'),
-      ui.button(owner ? 'Edit details' : 'Edit contact details', { kind: 'text', small: true, onTap: function () {
-        openEdit(id, function () { if (sheet) sheet.reveal(detailsHead); });
-      } }));
+      ui.button(owner ? 'Edit details' : 'Edit contact details', { kind: 'text', onTap: function () { openEdit(id); } }));
     var jobsLabel = ui.label('Jobs');
     /* Notes are added the same way everywhere: the small Add note sheet. */
     var noteBtn = ui.button('Add note', { icon: 'note', small: true, block: true, onTap: function () { ui.addNote('client', id); } });
@@ -416,7 +414,7 @@
 
   /* ---------- edit details (owner: everything; rep: contact details) ---------- */
 
-  function openEdit(id, onSaved) {
+  function openEdit(id) {
     var c = App.client(id);
     if (!c) return gone();
     var owner = App.role() === 'owner';
@@ -456,7 +454,7 @@
          offer the way to the sale itself (the newest one: it is where this service and price came from). */
       var sale = newestSale(id), toSale = null;
       if (sale && App.actions.openSale) {
-        toSale = ui.button('Open the sale', { kind: 'text', small: true, onTap: function () { App.act('openSale', sale.id); } });
+        toSale = ui.button('Open the sale', { kind: 'text', onTap: function () { App.act('openSale', sale.id); } });
         toSale.classList.add('callout-btn');
       }
       saleNote = h('div', { class: 'callout', hidden: true },
@@ -493,7 +491,7 @@
         var bad = [];
         function fail(field, message) { field.setError(message); bad.push(field); }
         var typed = { name: name.val(), contact: contact.val(), phone: phone.val(), email: email.val(), address: address.val() };
-        if (!typed.name) fail(name, 'Add the name.');
+        if (!typed.name) fail(name, 'Add the client\'s name.');
         if (typed.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(typed.email)) fail(email, 'That email address does not look right.');
         if (owner) {
           typed.service = typedService();
@@ -517,7 +515,6 @@
           if (!res.ok) return;
           sh.close();
           App.toast(patch.repId ? 'Saved. ' + App.nameOf(patch.repId, 'Their new rep') + ' looks after this client now.' : 'Saved.');
-          if (onSaved) onSaved();
         });
       } }
     });

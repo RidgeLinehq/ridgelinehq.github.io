@@ -542,14 +542,54 @@ test('changing your own PIN starts the count of wrong tries again, like a reset 
   eq(w.db().notices, []);
 });
 
-test('a removed person cannot sign in and their phone is signed out at once', () => {
+const REMOVED_WORDS = 'You are no longer on the team. Ask the owner if that is a mistake.';
+
+test('a removed person cannot sign in, and their phone is signed out at once and told why', () => {
   const w = world();
+  const second = w.tryLogin('mason', '271845').result.token;   /* Mason has two phones */
   ok(w.call('mason', 'sync').ok);
   w.must('owner', 'removeMember', { id: w.ids.mason });
-  eq(w.call('mason', 'sync').error.code, 'auth');
-  eq(w.call('mason', 'createSale', { client: { name: 'Ghost' }, service: 'House wash', priceCents: 100 }).error.code, 'auth');
-  eq(w.tryLogin('Mason Reed', '271845').error.code, 'auth'); eq(w.tryLogin('mason', '271845').error.code, 'auth');
-  eq(w.db().sessions.filter((s) => s.memberId === w.ids.mason).length, 0, 'their sessions are gone from the data');
+  [w.tokens.mason, second].forEach((token) => {
+    const r = w.raw({ action: 'sync', token: token });
+    eq([r.ok, r.error.code, r.error.message, r.sync, r.result], [false, 'auth', REMOVED_WORDS, undefined, undefined], 'the phone hears why, and gets no data with it');
+  });
+  /* Whatever the phone asks for, it is told the same thing and nothing is done or saved. */
+  const before = JSON.stringify(w.store.dump());
+  ACTIONS.concat(['dumpEverything']).forEach((a) => {
+    const r = w.call('mason', a, { client: { name: 'Ghost' }, service: 'House wash', priceCents: 100, oldPin: '271845', newPin: '517293', since: w.rev(), day: w.today(), opId: 'removed-op-0001' });
+    eq([r.error.code, r.error.message, r.sync], ['auth', REMOVED_WORDS, undefined], a);
+  });
+  eq(JSON.stringify(w.store.dump()), before);
+  eq(w.raw({ action: 'sync', token: second }).error.message, REMOVED_WORDS, 'and it is told again the next time, not just once');
+  /* Signing in under that name is the same plain "no match" a stranger gets: nothing says the name was ever real. */
+  const stranger = w.tryLogin('nobody', '271845').error;
+  ['Mason Reed', 'mason'].forEach((n) => eq(w.tryLogin(n, '271845').error, stranger));
+  eq(w.raw({ action: 'sync', token: 'x'.repeat(40) }).error.message, 'Please sign in again.', 'a phone that never was signed in is not told about the team');
+  ok(w.call('jake', 'sync').ok && w.call('owner', 'sync').ok, 'nobody else is signed out');
+});
+
+test('a removed person\'s sign-ins are kept only to tell their phone why, and are cleared away at 90 days like any other', () => {
+  const w = world();
+  w.must('owner', 'removeMember', { id: w.ids.mason });
+  eq(w.db().sessions.filter((s) => s.memberId === w.ids.mason).length, 1, 'the stored sign-in stays');
+  w.wait(89 * DAY);
+  w.login('jake', 'Jake Miller', '604417');
+  eq(w.call('mason', 'sync').error.message, REMOVED_WORDS, 'still told why after 89 days');
+  w.wait(DAY + HOUR);
+  eq(w.call('mason', 'sync').error.message, 'Please sign in again.', 'after 90 days it is an expired sign-in like any other');
+  w.login('jake', 'Jake Miller', '604417');   /* the next sign-in by anyone clears expired ones away */
+  eq(w.db().sessions.filter((s) => s.memberId === w.ids.mason).length, 0);
+  eq(w.call('mason', 'sync').error.message, 'Please sign in again.');
+  /* Signing out, a role change and a PIN reset still end a sign-in the ordinary way. */
+  w.login('owner', 'Grayson', '482913'); w.login('cole', 'Cole', '906132'); w.login('tess', 'Tess Hart', '358206');
+  w.must('owner', 'resetPin', { id: w.ids.cole });
+  w.must('owner', 'saveMember', { member: { id: w.ids.tess, name: 'Tess Hart', role: 'rep' } });
+  eq([w.call('cole', 'sync').error.message, w.call('tess', 'sync').error.message], ['Please sign in again.', 'Please sign in again.']);
+  /* Someone removed and then added again under the same name is a new person: the old phone is told, the new PIN works. */
+  w.must('owner', 'removeMember', { id: w.ids.jake });
+  const again = w.must('owner', 'saveMember', { member: { name: 'Jake Miller', role: 'rep', pin: '730526' } }).result;
+  eq(w.call('jake', 'sync').error.message, REMOVED_WORDS);
+  eq(w.tryLogin('jake miller', '730526').sync.me.id, again.id);
 });
 
 test('resetting a PIN signs that person out everywhere and only the new PIN works', () => {
@@ -1110,6 +1150,7 @@ function secretsFor(w, who) {
   const bravo = ['Bravo Marker', 'Bob Bravo', '615-555-0002', 'bob@bravo.example', '2 Bravo Road', 'bravo-secret', 'pay.example/bravo', w.ids.clientB, w.ids.saleB, w.ids.jobB];
   if (who === 'mason') out.push.apply(out, bravo);
   if (who === 'jake') out.push.apply(out, alpha);
+  if (who === 'cole' || who === 'tess') out.push('"firstPct"', '"monthlyPct"', '"services"', '"priceCents"');   /* no rates, no price list, no prices */
   if (who === 'cole') out.push.apply(out, bravo.concat(['ann@alpha.example', 'alpha-secret-sale-note', 'alpha-secret-client-note', 'pay.example', '"priceCents":15000', '"stripeLink"', '"payStatus"']));
   if (who === 'tess') out.push.apply(out, alpha.concat(['bob@bravo.example', 'bravo-secret-sale-note', 'bravo-secret-client-note', 'pay.example', '"priceCents":30000', '"stripeLink"', '"payStatus"']));
   return out;
@@ -1157,9 +1198,47 @@ test('a tech receives only the jobs given to them, with no money and no client l
   eq(keys(s.jobs[0]), 'assignedTo,client,clientId,createdAt,createdBy,date,doneAt,doneBy,id,notes,saleId,status,time,what');
   eq(keys(s.jobs[0].client), 'address,contact,name,phone');
   s.team.forEach((m) => eq(keys(m), 'active,id,name,role'));
-  eq(keys(s.settings), 'businessName,firstPct,monthlyPct,services,standards,standardsUpdatedAt');
+  eq(keys(s.settings), 'businessName,standards,standardsUpdatedAt', 'a tech is sent the standards, and neither the commission rates nor the price list');
+  eq([s.settings.businessName, s.settings.standards, s.settings.standardsUpdatedAt], ['Ridgeline Wash Co.', C.DEFAULT_SETTINGS.standards, 0]);
   assertNoLeak(w, 'cole', s, 'sync');
   assertNoLeak(w, 'tess', w.full('tess'), 'sync');
+});
+
+test('a tech\'s phone is sent their jobs from 30 days ago onward; older ones only while they still need doing', () => {
+  const w = world({ day: '2026-11-17' });
+  const job = (name, date, time) => {
+    const r = w.must('mason', 'createSale', { client: { name: name, phone: '615-555-0100', address: '5 Oak St' }, service: 'House wash', priceCents: 10000, appointment: { date: date, time: time } }).result;
+    w.must('owner', 'updateJob', { jobId: r.jobId, patch: { assignedTo: w.ids.cole } });
+    return r.jobId;
+  };
+  const done = job('Done On The 18th', '2026-11-18', '08:00'), late = job('Still Waiting', '2026-11-18', '09:30'), later = job('Done On The 20th', '2026-11-20', '08:00');
+  const tessJob = w.must('mason', 'createSale', { client: { name: 'Tess Does This' }, service: 'House wash', priceCents: 10000, appointment: { date: '2026-11-18', time: '12:00' } }).result.jobId;
+  w.must('owner', 'updateJob', { jobId: tessJob, patch: { assignedTo: w.ids.tess } });
+  w.at('2026-11-18', '10:00'); w.must('cole', 'setJobDone', { jobId: done });
+  w.at('2026-11-20', '10:00'); w.must('cole', 'setJobDone', { jobId: later });
+  const coleSees = () => w.full('cole').jobs.map((j) => j.id).sort();
+  const all = [done, late, later].sort();
+  eq(coleSees(), all);
+  w.at('2026-12-18', '09:00'); relog(w);   /* 30 days after the 18th */
+  eq(coleSees(), all, 'a job done 30 days ago is still sent');
+  w.at('2026-12-19', '00:05'); relog(w);   /* 31 days after */
+  eq(coleSees(), [late, later].sort(), 'one from 31 days ago is not, unless it is still waiting to be done');
+  w.at('2026-12-21', '09:00'); relog(w);
+  eq(coleSees(), [late], 'the job from the 20th has gone too; the overdue one never leaves the phone of the person who has to do it');
+  /* Nothing is deleted: the owner and the rep still have every job, and the old job is still there to be put back. */
+  eq(w.full('owner').jobs.length, 4); eq(w.full('mason').jobs.length, 4);
+  w.must('cole', 'setJobDone', { jobId: late });
+  eq(coleSees(), [], 'once the old job is done it is history too');
+  w.must('cole', 'setJobDone', { jobId: late, done: false });
+  eq(coleSees(), [late], 'and marking it not done brings it back');
+  w.must('owner', 'setJobDone', { jobId: done, done: false });
+  eq(coleSees(), [done, late].sort(), 'an old finished job the owner puts back on the schedule is sent again');
+  /* The other tech's phone was never sent any of these, and holds no more than Cole's does. */
+  eq(w.full('tess').jobs.map((j) => j.id), [tessJob]);
+  w.must('tess', 'setJobDone', { jobId: tessJob });
+  eq(w.full('tess').jobs, []);
+  const text = JSON.stringify(w.full('tess'));
+  ['615-555-0100', '5 Oak St', 'Done On The 18th', 'Tess Does This'].forEach((x) => lacks(text, x, 'a phone number, address or name from an old job is still on the tech\'s phone'));
 });
 
 test('a tech stops seeing a job that is cancelled or given to someone else', () => {
@@ -2019,7 +2098,7 @@ test('a New client becomes Active when their first job is finished, and stays Ac
   eq([c.status, c.statusLog], ['Active', [{ day: '2026-11-17', status: 'New' }, { day: '2026-11-18', status: 'Active' }]]);
   eq([j.status, j.doneAt, j.doneBy], ['done', w.t, w.ids.cole]);
   const n = w.full('owner').notices.filter((x) => x.type === 'done');
-  ok(n.length === 1 && n[0].text.indexOf('Cole finished Alpha Marker House') === 0, 'the owner is told');
+  eq(n.map((x) => x.text), ['Cole marked Alpha Marker House done (Window cleaning).'], 'the owner is told, in the app\'s own words');
   w.must('cole', 'setJobDone', { jobId: w.ids.jobA, done: false });
   const j2 = byId(w.db().jobs, w.ids.jobA);
   eq([j2.status, j2.doneAt, j2.doneBy, byId(w.db().clients, w.ids.clientA).status], ['scheduled', null, null, 'Active']);
@@ -2106,6 +2185,43 @@ test('a payment link must be a plain https link', () => {
   w.db().clients.forEach((c) => ok(c.stripeLink === '' || /^https:\/\//i.test(c.stripeLink), 'a stored link is not https: ' + c.stripeLink));
 });
 
+test('a payment link has to go where it looks like it goes: no "@" trick, no bare word, no spaces', () => {
+  const w = seeded(), words = 'That payment link does not look right. Paste the whole link from your payment page.';
+  const tricks = [
+    'https://buy.stripe.com@evil.example/pay/abc', 'HTTPS://buy.stripe.com@evil.example/p', 'https://buy.stripe.com:443@evil.example/', 'https://grayson:pin@pay.example/x', 'https://@pay.example/x',
+    'https://buy.stripe.com%40evil.example/x', 'https://buy.stripe.com\\@evil.example/x', 'https://evil.example\\.buy.stripe.com/x', 'https://pay.example?to=@evil.example/x', 'https://pay.example#@evil.example/x',
+    'https://localhost/pay', 'https://stripe/pay', 'https://pay', 'https://12345/x', 'https://', 'https:///pay.example/x', 'https://./x', 'https://.pay.example/x', 'https://pay.example./x', 'https://pay..example/x',
+    'https://pay.example:/x', 'https://pay.example:80a/x', 'https://[::1]/x', 'https://pаy.example/x', 'https://pay_me.example/x', 'https://pay.example,evil.example/x',
+    'https://pay.example/a b', 'https://pay. example/x', 'https://pay.example/a\tb', 'https://pay.example/a\nb', 'https://pay.example/a\u0000b', 'https://pay.example/a b', 'https://pay.example/a\u007fb',
+    'https://pay.example/"x', "https://pay.example/'x", 'https://pay.example/<x>', 'https://pay.example/`x`', 'https://pay.example/a\\b'];
+  tricks.forEach((link) => {
+    const tag = JSON.stringify(link);
+    eq(w.refuse('mason', 'createSale', { client: { name: 'Trick Link' }, service: 'House wash', priceCents: 100, stripeLink: link }, 'invalid').error.message, words, 'createSale with ' + tag);
+    eq(w.refuse('owner', 'updateClient', { clientId: w.ids.clientA, patch: { phone: 'changed with a trick link', stripeLink: link } }, 'invalid').error.message, words, 'updateClient with ' + tag);
+    eq(C.check.payLink(link), words, 'check.payLink(' + tag + ')');
+  });
+  eq(byId(w.db().clients, w.ids.clientA).stripeLink, 'https://pay.example/alpha', 'nothing was saved');
+  /* The older messages still say what they always said. */
+  ['http://pay.example/x', 'javascript:alert(1)', 'pay.example/x', 'x https://pay.example', 'https:/pay.example'].forEach((link) => {
+    eq(w.refuse('owner', 'updateClient', { clientId: w.ids.clientA, patch: { stripeLink: link } }, 'invalid').error.message, 'A payment link must start with https://');
+    eq(C.check.payLink(link), 'A payment link must start with https://');
+  });
+  eq(C.check.payLink('https://pay.example/' + 'k'.repeat(281)), 'That payment link is too long.');
+  /* Real payment pages, and an "@" where it is harmless (after the first "/"), are all fine. */
+  const fine = ['https://buy.stripe.com/test_abc123', 'https://BUY.Stripe.com/4gw5kC', 'https://checkout.square.site/merchant/ML7/checkout/ABC', 'https://www.paypal.com/paypalme/ridgelinewash/150',
+    'https://venmo.com/u/Ridgeline-Wash', 'https://cash.app/$ridgelinewash', 'https://pay.example:8443/x', 'https://pay.example', 'https://pay.example/', 'https://pay.example?x=1', 'https://pay.example#top',
+    'https://pay.example/x?email=ann@alpha.example&y=2#frag', 'https://pay.example/@ridgeline', 'https://xn--pay-9la.example/x', 'https://a-b.c-d.example/%20x', 'https://192.0.2.7/pay', '  https://pay.example/trim \n'];
+  fine.forEach((link) => {
+    eq(C.check.payLink(link), '', 'check.payLink(' + JSON.stringify(link) + ')');
+    w.must('owner', 'updateClient', { clientId: w.ids.clientA, patch: { stripeLink: link } });
+    eq(byId(w.db().clients, w.ids.clientA).stripeLink, link.trim());
+    const c = w.must('mason', 'createSale', { client: { name: 'Fine Link' }, service: 'House wash', priceCents: 100, stripeLink: link }).result;
+    eq(byId(w.db().clients, c.clientId).stripeLink, link.trim());
+  });
+  ['', '   ', null, undefined, {}, []].forEach((v) => eq(C.check.payLink(v), '', 'no link at all is fine'));
+  checkData(w);
+});
+
 test('a payment link too long to keep whole is refused, never saved cut short', () => {
   const w = seeded();   /* a cut link still looks like a link, but it takes the customer nowhere */
   [301, 420, 5000].forEach((n) => {
@@ -2155,6 +2271,10 @@ test('a sale needs a customer name and a service', () => {
   [{ client: {}, service: 'House wash' }, { client: { name: '  ' }, service: 'House wash' }, { service: 'House wash' }, { client: 'Just A String', service: 'House wash' }, { client: null, service: 'House wash' },
     { client: { name: 'No Service' } }, { client: { name: 'No Service' }, service: '' }, { client: { name: 'No Service' }, service: ' \n ' }]
     .forEach((f) => w.refuse('mason', 'createSale', Object.assign({ priceCents: 100, appointment: { date: '2026-11-18', time: '09:30' } }, f), 'invalid'));
+  /* The words say "client", like the rest of the app. */
+  eq(w.refuse('mason', 'createSale', { client: { name: ' ' }, service: 'House wash', priceCents: 100 }, 'invalid').error.message, 'Add the client\'s name.');
+  const s = plain(w, 'mason', 'Named', 100);
+  eq(w.refuse('mason', 'updateClient', { clientId: s.clientId, patch: { name: '' } }, 'invalid').error.message, 'Add the client\'s name.');
 });
 
 test('a sale says one-time or monthly; anything else is refused, and saying nothing means one-time', () => {
@@ -2185,6 +2305,49 @@ test('deleting a client removes their sales and visits and nobody else\'s', () =
   eq(byId(s.board, w.ids.mason).all, { count: 0, cents: 0 });
   w.refuse('owner', 'deleteClient', { clientId: w.ids.clientA }, 'not_found');
   w.refuse('mason', 'addNote', { kind: 'job', id: w.ids.jobA, text: 'gone' }, 'not_found');
+});
+
+test('removing a sale puts the client back to what their newest remaining sale says', () => {
+  const w = world({ day: '2027-01-10' });
+  const what = (id) => { const c = byId(w.db().clients, id); return [c.service, c.priceCents, c.billing]; };
+  const first = w.must('mason', 'createSale', { client: { name: 'Bought Three Times' }, service: 'Window cleaning', priceCents: 15000, billing: 'monthly' }).result;
+  w.at('2027-02-12', '10:00'); relog(w);
+  const second = w.must('mason', 'createSale', { clientId: first.clientId, service: 'House wash', priceCents: 30000, billing: 'once' }).result;
+  w.at('2027-03-05', '10:00'); relog(w);
+  const third = w.must('mason', 'createSale', { clientId: first.clientId, service: 'Pressure wash', priceCents: 9900, billing: 'once' }).result;
+  eq(what(first.clientId), ['Pressure wash', 9900, 'once'], 'each sale to a client who is already here rewrites what they buy');
+
+  /* An older sale goes: the client is as the newest one left them. */
+  w.must('owner', 'deleteSale', { saleId: second.saleId });
+  eq(what(first.clientId), ['Pressure wash', 9900, 'once']);
+  /* The newest sale goes: back to the one before it, how often included. */
+  w.must('owner', 'deleteSale', { saleId: third.saleId });
+  eq(what(first.clientId), ['Window cleaning', 15000, 'monthly'], 'entered by mistake, removed, and the client is a monthly window client again');
+  const c = byId(w.db().clients, first.clientId);
+  eq([c.name, c.status, c.repId, c.startDate, c.payStatus], ['Bought Three Times', 'New', w.ids.mason, '2027-01-10', 'unpaid'], 'nothing else about the client moves');
+  eq(byId(w.full('mason').clients, first.clientId).service, 'Window cleaning', 'and the rep\'s phone shows it');
+  /* The last sale goes: there is nothing to go back to, so the client is left as they are. */
+  w.must('owner', 'deleteSale', { saleId: first.saleId });
+  eq(what(first.clientId), ['Window cleaning', 15000, 'monthly']);
+  eq(w.db().sales.filter((x) => x.clientId === first.clientId), []);
+  checkData(w);
+});
+
+test('removing a sale that was not the client\'s newest leaves what the owner set by hand', () => {
+  const w = world({ day: '2027-01-10' });
+  const first = w.must('mason', 'createSale', { client: { name: 'Price Went Up' }, service: 'Window cleaning', priceCents: 15000, billing: 'monthly' }).result;
+  w.at('2027-02-12', '10:00'); relog(w);
+  const second = w.must('mason', 'createSale', { clientId: first.clientId, service: 'Window cleaning', priceCents: 16000, billing: 'monthly' }).result;
+  w.must('owner', 'updateClient', { clientId: first.clientId, patch: { priceCents: 17500, service: 'Windows and screens' } });
+  w.must('owner', 'deleteSale', { saleId: first.saleId });
+  const c = byId(w.db().clients, first.clientId);
+  eq([c.service, c.priceCents, c.billing], ['Windows and screens', 17500, 'monthly'], 'the older sale never set these, so removing it does not touch them');
+  /* A different client's sale has no say at all. */
+  const other = w.must('jake', 'createSale', { client: { name: 'Someone Else' }, service: 'House wash', priceCents: 22000, billing: 'once' }).result;
+  w.must('owner', 'deleteSale', { saleId: second.saleId });
+  eq([byId(w.db().clients, first.clientId).service, byId(w.db().clients, first.clientId).priceCents], ['Windows and screens', 17500], 'no sale of theirs is left: left alone');
+  eq(byId(w.db().clients, other.clientId).service, 'House wash');
+  checkData(w);
 });
 
 test('deleting a sale removes a visit that has not happened, and keeps one that has', () => {
@@ -2363,17 +2526,19 @@ test('the owner is told about what reps and techs do, and not about their own wo
   const a = sellOk(w, 'mason', 'Told Home', '2026-11-18', '09:30', { client: { name: 'Told Home', phone: '615-555-0100', address: '5 Oak St' } });
   let n = w.db().notices;
   eq([n.length, n[0].type, n[0].at], [1, 'booking', w.t]);
-  eq(n[0].text, 'Mason Reed sold House wash to Told Home for $100.00. Booked Wed Nov 18, 9:30 AM.');
-  eq([w.emails.length, w.emails[0].to, w.emails[0].subject], [1, 'boss@ridgeline.example', 'Appointment booked: Told Home, Wed Nov 18, 9:30 AM']);
+  eq(n[0].text, 'Mason Reed sold House wash to Told Home for $100.00. Booked for Wed, Nov 18 at 9:30 AM.');
+  eq([w.emails.length, w.emails[0].to, w.emails[0].subject], [1, 'boss@ridgeline.example', 'Appointment booked: Told Home, Wed, Nov 18 at 9:30 AM']);
   has(w.emails[0].body, '5 Oak St'); has(w.emails[0].body, '615-555-0100'); has(w.emails[0].body, 'Nobody is assigned');
   plain(w, 'mason', 'No Visit Yet', 20000, 'monthly');
   n = w.db().notices.sort((x, y) => x.text < y.text ? -1 : 1);
   ok(w.db().notices.some((x) => x.type === 'sale' && x.text === 'Mason Reed sold Window cleaning to No Visit Yet for $200.00 a month. No appointment booked yet.'));
   eq(w.emails.length, 2);
   w.must('mason', 'moveJob', { jobId: a.jobId, date: '2026-11-19', time: '14:00' });
-  ok(w.db().notices.some((x) => x.text === 'Mason Reed moved Told Home to Thu Nov 19, 2:00 PM.')); eq(w.emails.length, 3);
+  ok(w.db().notices.some((x) => x.text === 'Mason Reed moved Told Home to Thu, Nov 19 at 2:00 PM.')); eq(w.emails.length, 3);
+  eq([w.emails[2].subject, w.emails[2].body], ['Appointment moved: Told Home, Thu, Nov 19 at 2:00 PM', 'Mason Reed moved Told Home to Thu, Nov 19 at 2:00 PM.']);
   w.must('mason', 'bookJob', { clientId: a.clientId, date: '2026-11-20', time: '12:00' });
-  ok(w.db().notices.some((x) => x.text === 'Mason Reed booked Told Home for Fri Nov 20, 12:00 PM.')); eq(w.emails.length, 4);
+  ok(w.db().notices.some((x) => x.text === 'Mason Reed booked Told Home for Fri, Nov 20 at 12:00 PM.')); eq(w.emails.length, 4);
+  eq(w.emails[3].subject, 'Appointment booked: Told Home, Fri, Nov 20 at 12:00 PM');
   const count = w.db().notices.length;
   sellOk(w, 'owner', 'Owner Did It', '2026-11-21', '08:00'); w.must('owner', 'moveJob', { jobId: a.jobId, date: '2026-11-19', time: '08:00' });
   w.must('owner', 'bookJob', { clientId: a.clientId, date: '2026-11-22', time: '08:00' }); w.must('owner', 'setJobDone', { jobId: a.jobId }); w.must('owner', 'ackStandards');
@@ -2382,6 +2547,48 @@ test('the owner is told about what reps and techs do, and not about their own wo
   plain(w, 'jake', 'Quiet Sale', 100);
   eq([w.db().notices.length, w.emails.length], [count + 1, 4], 'a notice but no email when emails are off');
   w.emails.forEach((m) => ok(!/[\r\n]/.test(m.subject), 'an email subject has a line break in it'));
+});
+
+test('notices and emails write a day, a time and money the way every screen does', () => {
+  const w = world({ day: '2026-12-28', time: '09:00' });
+  w.must('owner', 'saveSettings', { settings: { notifyEmail: 'boss@ridgeline.example' } });
+  w.must('owner', 'setDays', { days: [{ date: '2026-12-30', open: true, slots: ['00:00', '08:05', '12:00', '12:30', '23:59'] }, { date: '2027-01-07', open: true, slots: ['08:00', '13:15'] }] });
+  const texts = () => w.db().notices.map((n) => n.text);
+  const a = sellOk(w, 'mason', 'Big Job', '2026-12-30', '08:05', { priceCents: 125000, billing: 'monthly' });
+  eq(texts(), ['Mason Reed sold House wash to Big Job for $1,250.00 a month. Booked for Wed, Dec 30 at 8:05 AM.'], 'comma after the weekday, "at" before the time, commas in the thousands');
+  eq([w.emails[0].subject, w.emails[0].body.split('\n')[0]], ['Appointment booked: Big Job, Wed, Dec 30 at 8:05 AM', 'Mason Reed sold House wash to Big Job for $1,250.00 a month. Booked for Wed, Dec 30 at 8:05 AM.']);
+  const times = { '00:00': '12:00 AM', '12:00': '12:00 PM', '12:30': '12:30 PM', '23:59': '11:59 PM' };
+  Object.keys(times).forEach((t) => {
+    w.must('mason', 'moveJob', { jobId: a.jobId, date: '2026-12-30', time: t });
+    eq(texts().slice(-1)[0], 'Mason Reed moved Big Job to Wed, Dec 30 at ' + times[t] + '.');
+  });
+  /* A day in another year carries the year, like the app's own dates. */
+  w.must('mason', 'bookJob', { clientId: a.clientId, date: '2027-01-07', time: '13:15' });
+  eq(texts().slice(-1)[0], 'Mason Reed booked Big Job for Thu, Jan 7, 2027 at 1:15 PM.');
+  eq(w.emails.slice(-1)[0].subject, 'Appointment booked: Big Job, Thu, Jan 7, 2027 at 1:15 PM');
+  w.at('2027-01-02', '09:00'); relog(w);
+  w.must('mason', 'moveJob', { jobId: a.jobId, date: '2027-01-07', time: '08:00' });
+  eq(texts().slice(-1)[0], 'Mason Reed moved Big Job to Thu, Jan 7 at 8:00 AM.', 'once it is that year, no year');
+  /* Money: whole dollars, cents, thousands and millions. */
+  [[0, '$0.00'], [5, '$0.05'], [99999, '$999.99'], [100000, '$1,000.00'], [123456789 - 23456789, '$1,000,000.00'], [9876543, '$98,765.43']].forEach((x, i) => {
+    plain(w, 'jake', 'Money ' + i, x[0]);
+    eq(texts().slice(-1)[0], 'Jake Miller sold Window cleaning to Money ' + i + ' for ' + x[1] + '. No appointment booked yet.');
+  });
+  w.db().notices.forEach((n) => { lacks(n.text, 'undefined'); ok(!/\b(Sun|Mon|Tue|Wed|Thu|Fri|Sat) (Jan|Dec)/.test(n.text), 'a weekday with no comma after it: ' + n.text); });
+});
+
+test('a notice about a client says which client, so the page can open them from it', () => {
+  const w = seeded();
+  w.must('mason', 'moveJob', { jobId: w.ids.jobA, date: '2026-11-19', time: '08:00' });
+  w.must('mason', 'bookJob', { clientId: w.ids.clientA, date: '2026-11-20', time: '08:00' });
+  w.at('2026-11-18', '13:00');
+  w.must('tess', 'setJobDone', { jobId: w.ids.jobB });
+  w.must('cole', 'ackStandards');
+  for (let i = 0; i < 20; i++) { if (i % 4 === 0) w.wait(16 * MIN); w.tryLogin('mason', '000000'); }
+  const about = w.full('owner').notices.map((n) => [n.type, n.clientId]);
+  eq(about, [['booking', w.ids.clientA], ['booking', w.ids.clientB], ['booking', w.ids.clientA], ['booking', w.ids.clientA], ['done', w.ids.clientB], ['standards', undefined], ['signin', undefined]]);
+  w.full('owner').notices.forEach((n) => eq(keys(n), n.clientId ? 'at,clientId,id,text,type' : 'at,id,text,type'));
+  eq(w.full('mason').notices, [], 'and they still go to the owner only');
 });
 
 test('when the email cannot be sent the sale is still saved and the owner sees a problem', () => {
@@ -2605,7 +2812,7 @@ test('the services list: one to twenty, each with a name and a real price, no do
   [[], twentyOne, 'windows', null, {}, [null], [{}], [{ name: '' }], [{ name: 'A' }, { name: ' a ' }], [{ name: 'A', priceCents: -1 }], [{ name: 'A', priceCents: 9.99 }], [{ name: 'A', priceCents: '5' }], [{ name: 'A', priceCents: NaN }]]
     .forEach((v) => w.refuse('owner', 'saveSettings', { settings: { services: v } }, 'invalid'));
   w.must('owner', 'saveSettings', { settings: { services: [{ id: 'windows', name: '  Window   cleaning ', priceCents: 14900 }, { name: 'Gutter cleaning' }] } });
-  const sv = w.full('cole').settings.services;
+  const sv = w.full('mason').settings.services;
   eq([sv[0], sv[1].name, sv[1].priceCents], [{ id: 'windows', name: 'Window cleaning', priceCents: 14900 }, 'Gutter cleaning', 0]);
   ok(/^s_[a-zA-Z0-9]+$/.test(sv[1].id));
   w.must('owner', 'saveSettings', { settings: { services: twentyOne.slice(0, 20) } });
@@ -2618,7 +2825,7 @@ test('two services, or two sections of the standards, never end up with the same
     services: [{ id: 'windows', name: 'Windows' }, { id: 'windows', name: 'Doors' }, { id: ' windows ', name: 'Gutters' }, { id: long + 'A', name: 'Long A' }, { id: long + 'B', name: 'Long B' }, { name: 'No Id' }, { id: '__proto__', name: 'Proto One' }, { id: '__proto__', name: 'Proto Two' }],
     standards: [{ id: 'job', title: 'One', items: ['A rule.'] }, { id: 'job', title: 'Two', items: ['A rule.'] }, { id: 'job', title: 'Three', items: ['A rule.'] }, { id: 'show', title: 'Four' }]
   } });
-  const st = w.full('cole').settings, unique = (list) => new Set(list.map((x) => x.id)).size === list.length;
+  const st = w.full('mason').settings, unique = (list) => new Set(list.map((x) => x.id)).size === list.length;
   ok(unique(st.services), 'service ids: ' + st.services.map((s) => s.id).join(', '));
   ok(unique(st.standards), 'section ids: ' + st.standards.map((s) => s.id).join(', '));
   eq([st.services[0].id, st.services[3].id, st.services[6].id, st.standards[0].id, st.standards[3].id], ['windows', long, '__proto__', 'job', 'show'], 'the first to use an id keeps it');
@@ -2640,7 +2847,7 @@ test('the owner email and time slots are checked before they are saved', () => {
   w.must('owner', 'saveSettings', { settings: { notifyEmail: '  grayson@ridgeline.example ' } });
   eq(w.full('owner').settings.notifyEmail, 'grayson@ridgeline.example');
   w.must('owner', 'saveSettings', { settings: { notifyEmail: '' } }); eq(w.full('owner').settings.notifyEmail, '');
-  [[], ['25:00'], 'all day', null, [null], ['8am']].forEach((s) => w.refuse('owner', 'saveSettings', { settings: { defaultSlots: s } }, 'invalid'));
+  [[], ['25:00'], 'all day', null, [null], ['8am']].forEach((s) => eq(w.refuse('owner', 'saveSettings', { settings: { defaultSlots: s } }, 'invalid').error.message, 'Keep at least one time.'));
   w.must('owner', 'saveSettings', { settings: { defaultSlots: ['13:00', '07:30', '07:30', 'x'] } });
   eq(w.full('owner').settings.defaultSlots, ['07:30', '13:00']);
   w.must('owner', 'saveSettings', { settings: { businessName: 'Evil Corp', id: 'other', bogus: 1 } });
@@ -2667,7 +2874,8 @@ test('HTML, script and other odd text in every text field is stored exactly as t
     w.must('cole', 'setJobDone', { jobId: j.id });
     w.must('owner', 'saveSettings', { settings: { services: [{ id: x, name: x, priceCents: 1 }], standards: [{ id: x, title: x, items: [x, x + ' two'] }] } });
     const t = w.full('cole'), o = w.full('owner');
-    eq([t.jobs[0].what, t.jobs[0].notes[0].text, t.jobs[0].client.name, t.settings.services[0].name, t.settings.standards[0].title, t.settings.standards[0].items], [x + ' again', x, x + ' 2', x, x, [x, x + ' two']], 'what the tech receives');
+    eq([t.jobs[0].what, t.jobs[0].notes[0].text, t.jobs[0].client.name, t.settings.standards[0].title, t.settings.standards[0].items], [x + ' again', x, x + ' 2', x, [x, x + ' two']], 'what the tech receives');
+    eq(w.full('mason').settings.services[0].name, x, 'what a rep receives');
     ok(o.notices.some((n) => n.text.indexOf(x) >= 0), 'the notice carries the text as typed');
     ok(w.emails.length >= 1 && w.emails[0].subject.indexOf(x) >= 0 && !/[\r\n]/.test(w.emails[0].subject), 'the email subject');
     eq(o.problems, [], 'case ' + i + ' recorded a problem');
@@ -2786,7 +2994,7 @@ function checkData(w, snapshot) {
   ok(Array.isArray(st.standards) && st.standards.length <= 12 && st.standards.every((s) => s.id && s.title && s.title.length <= 60 && typeof s.ordered === 'boolean' &&
     s.items.length <= 20 && s.items.every((it) => typeof it === 'string' && it.length >= 1 && it.length <= 240)), 'bad standards');
   ok(db.notices.length <= 60 && db.problems.length <= 30, 'notices or problems were not trimmed');
-  db.sessions.forEach((s) => ok(team[s.memberId] && team[s.memberId].active, 'a session belongs to someone who is gone'));
+  db.sessions.forEach((s) => ok(team[s.memberId], 'a session belongs to nobody we know'));   /* a removed person's stay, so their phone can be told why */
   Object.keys(db).forEach((coll) => db[coll].forEach((d) => ok(JSON.stringify(d).length < 50000, 'a record in ' + coll + ' is too big for one cell of the sheet')));
 }
 
@@ -2796,7 +3004,7 @@ function checkView(s) {
   const mine = {};
   if (s.me.role !== 'owner') {
     eq([s.notices, s.problems], [[], []], 'owner-only lists');
-    eq(keys(s.settings), 'businessName,firstPct,monthlyPct,services,standards,standardsUpdatedAt');
+    eq(keys(s.settings), s.me.role === 'tech' ? 'businessName,standards,standardsUpdatedAt' : 'businessName,firstPct,monthlyPct,services,standards,standardsUpdatedAt');
     s.team.forEach((m) => eq(keys(m), 'active,id,name,role'));
   }
   if (s.me.role === 'rep') {
@@ -2807,6 +3015,7 @@ function checkView(s) {
   if (s.me.role === 'tech') {
     eq([s.clients, s.sales, s.days, s.taken, s.board], [[], [], [], [], []], 'a tech received more than jobs');
     s.jobs.forEach((j) => ok(j.assignedTo === s.me.id && j.status !== 'cancelled', 'a tech received a job that is not theirs'));
+    s.jobs.forEach((j) => ok(j.status === 'scheduled' || j.date >= C.dates.addDays(s.today, -30), 'a tech received a finished job from more than 30 days ago: ' + j.date));
   }
   s.taken.forEach((t) => ok(t.date >= s.today && keys(t) === 'date,time', 'bad taken entry'));
   s.sales.forEach((x) => ok(x.events.length >= 1 && x.events[0].kind === 'first' && x.events.every((e) => Number.isInteger(e.cents) && e.cents >= 0 && e.day <= s.today), 'bad commission events'));
@@ -2961,7 +3170,7 @@ test('a sale note, a job note and a job description are refused the same way, an
   const n = w.refuse('cole', 'addNote', { kind: 'job', id: w.ids.jobA, text: 'The gate was locked so I could not reach the back.' }, 'invalid');
   eq(n.error.message, 'There is no room left in this job\'s notes. Shorten the note and try again.');
   const u = w.refuse('owner', 'updateJob', { jobId: w.ids.jobA, patch: { assignedTo: w.ids.tess, what: 'Windows inside and out, plus the two skylights over the kitchen' } }, 'invalid');
-  eq(u.error.message, 'This job\'s record is full. Shorten what needs to be done, then try again.');
+  eq(u.error.message, 'There is no room to save more on this job. Shorten what needs to be done, then try again.');
   w.must('owner', 'updateJob', { jobId: w.ids.jobA, patch: { assignedTo: w.ids.tess, what: 'Windows' } });
   w.must('tess', 'setJobDone', { jobId: w.ids.jobA });
   w.db().clients.concat(w.db().jobs).forEach((d) => ok(size(d) < 50000, 'a record got past the cell limit'));
@@ -2975,7 +3184,7 @@ test('an edit that would push a full client record over is refused whole; shorte
   [[{ address: full.address + ', Apt 2' }, 'owner'], [{ name: full.name + 's' }, 'mason'], [{ status: 'Cancelled' }, 'owner'], [{ status: 'Paused', phone: '1' }, 'owner'], [{ repId: w.ids.jake, email: 'a-much-longer-address@alpha.example' }, 'owner']]
     .forEach((x) => {
       const r = w.refuse(x[1], 'updateClient', { clientId: w.ids.clientA, patch: x[0] }, 'invalid');
-      eq(r.error.message, 'This client\'s record is full. Shorten the name, the address or another detail, then try again.');
+      eq(r.error.message, 'There is no room to save more on this client. Shorten the name, the address or another detail, then try again.');
     });
   eq(byId(w.db().sales, w.ids.saleA).endDay, undefined, 'a refused cancel ends no monthly pay');
   w.refuse('mason', 'createSale', { clientId: w.ids.clientA, service: 'Window cleaning and screens', priceCents: 15000 }, 'invalid');
@@ -2983,6 +3192,26 @@ test('an edit that would push a full client record over is refused whole; shorte
   const now = byId(w.db().clients, w.ids.clientA);
   ok(now.status === 'Cancelled' && size(now) === CEILING - 1, 'the record is now ' + size(now) + ' characters');
   eq(byId(w.db().sales, w.ids.saleA).endDay, '2026-11-17');
+});
+
+test('on a client whose record is full, a fix to a sale that needs more room is refused whole, and removing a sale always goes through', () => {
+  const w = seeded();
+  const extra = w.must('mason', 'createSale', { clientId: w.ids.clientA, service: 'Gutters', priceCents: 100, billing: 'once' }).result;
+  grown(w, 'clients', w.ids.clientA, CEILING);
+  const sale = byId(w.db().sales, extra.saleId);
+  const r = w.refuse('owner', 'updateSale', { saleId: extra.saleId, patch: { priceCents: 12345, service: 'Gutter cleaning and downspouts, front and back' } }, 'invalid');
+  eq(r.error.message, 'There is no room to save more on this client. Shorten the name, the address or another detail, then try again.');
+  eq(byId(w.db().sales, extra.saleId), sale, 'the sale was not half fixed');
+  w.must('owner', 'updateSale', { saleId: extra.saleId, patch: { priceCents: 200, service: 'Gutter' } });   /* no longer than before: fits */
+  eq([byId(w.db().clients, w.ids.clientA).service, byId(w.db().clients, w.ids.clientA).priceCents], ['Gutter', 200]);
+  /* An older sale's fix never touches the client, so it has all the room it needs. */
+  w.must('owner', 'updateSale', { saleId: w.ids.saleA, patch: { service: 'Window cleaning, inside and out, every single pane of it' } });
+  /* Removing the newest sale puts the longer service and price back. That is never refused: the sale must go. */
+  w.must('owner', 'deleteSale', { saleId: extra.saleId });
+  const c = byId(w.db().clients, w.ids.clientA);
+  eq([c.service, c.priceCents, c.billing], ['Window cleaning, inside and out, every single pane of it', 15000, 'monthly']);
+  ok(size(c) > CEILING && size(c) < 50000, 'the client is ' + size(c) + ' characters: over the usual limit by a little, and well inside what one cell holds');
+  eq(byId(w.db().sales, extra.saleId), null);
 });
 
 test('a team record somebody padded by hand in the sheet cannot be pushed over by a longer name', () => {
@@ -3091,7 +3320,7 @@ function playRandomly(seed, steps) {
   };
   const USUAL = {
     owner: ['createSale', 'createSale', 'bookJob', 'moveJob', 'moveJob', 'updateJob', 'updateJob', 'updateJob', 'updateJob', 'updateJob', 'setJobDone', 'setJobDone', 'addNote', 'updateClient', 'updateClient',
-      'setDays', 'saveSettings', 'saveSettings', 'saveMember', 'saveMember', 'removeMember', 'deleteClient', 'deleteSale', 'resetPin', 'sync', 'ackStandards', 'readNotices', 'clearProblems', 'changePin'],
+      'setDays', 'saveSettings', 'saveSettings', 'saveMember', 'saveMember', 'removeMember', 'deleteClient', 'deleteSale', 'updateSale', 'updateSale', 'resetPin', 'sync', 'ackStandards', 'readNotices', 'clearProblems', 'changePin'],
     rep: ['createSale', 'createSale', 'createSale', 'createSale', 'createSale', 'bookJob', 'bookJob', 'moveJob', 'moveJob', 'addNote', 'updateClient', 'sync', 'ackStandards', 'changePin', 'logout'],
     tech: ['setJobDone', 'setJobDone', 'setJobDone', 'setJobDone', 'addNote', 'addNote', 'sync', 'ackStandards', 'changePin', 'logout']
   };
@@ -3120,6 +3349,8 @@ function playRandomly(seed, steps) {
     updateJob: () => ({ jobId: anyId('jobs'), patch: pick([{ status: 'cancelled' }, { status: 'scheduled' }, { status: 'scheduled' }, { assignedTo: pick(people).id }, { assignedTo: null }, { what: pick(texts) }, { status: 'done' }]) }),
     deleteClient: () => ({ clientId: anyId('clients') }),
     deleteSale: () => ({ saleId: anyId('sales') }),
+    updateSale: () => ({ saleId: anyId('sales'), patch: pick([{ priceCents: price() }, { service: pick(['Window cleaning', 'House wash', '', NASTY[4]]) }, { repId: pick(people).id }, { repId: pick(people).id, priceCents: price() },
+      { billing: pick(['once', 'monthly']) }, 'nothing', null]) }),
     removeMember: () => ({ id: pick(people).id }),
     resetPin: () => ({ id: pick(people).id, pin: '6' + (10000 + Math.floor(r() * 89999)) }),
     saveMember: () => chance(0.5) ? { member: { name: pick(['Rep ', 'Tech ', 'Sam ']) + Math.floor(r() * 30), role: pick(['rep', 'tech', 'boss']), pin: '7' + (10000 + Math.floor(r() * 89999)) } }
@@ -3158,13 +3389,16 @@ function playRandomly(seed, steps) {
       const after = w.db();
       checkData(w, after); checkView(res.sync);
       eq(after.problems, [], 'a problem was recorded');
+      /* Grayson is the only owner all through the play, so every sale that is his must be one that pays no commission. */
+      after.sales.forEach((x) => { if (x.repId === people[0].id) ok(x.firstPct === 0 && x.monthlyPct === 0, 'a sale by the owner is set to pay commission'); });
+      after.team.forEach((m) => { if (!m.active && !db.team.some((b) => b.id === m.id && !b.active)) ok(!w.call(people.filter((x) => x.id === m.id).map((x) => x.key)[0] || 'nobody', 'sync').ok, 'someone who was just removed is still signed in'); });
       if (step % 40 === 0) people.forEach((x) => { if (w.tokens[x.key]) { const s = w.call(x.key, 'sync'); if (s.ok) { checkView(s.sync); ok(s.sync.me.id === x.id, 'a token answered as someone else'); } } });
     } catch (e) { throw new Error(where + ': ' + e.message); }
   }
   return tally;
 }
 
-[11, 2026, 90210, 424242].forEach((seed) => {
+[11, 2026, 90211, 424242].forEach((seed) => {
   test('2500 random actions by everyone (seed ' + seed + ') never break a rule', () => {
     const t = playRandomly(seed, 2500);
     if (process.env.SHOW_ALL) console.log('      ' + JSON.stringify(t));

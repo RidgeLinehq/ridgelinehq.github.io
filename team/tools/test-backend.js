@@ -511,7 +511,7 @@ const fails = (r, code) => {
 };
 const pinIn = (text, label) => {
   const m = new RegExp('^' + label + ': (\\d{6})$', 'm').exec(text);
-  assert(m, 'no "' + label + ': 1234" line in:\n' + text);
+  assert(m, 'no "' + label + ': 482913" line (a 6 digit PIN) in:\n' + text);
   return m[1];
 };
 
@@ -636,7 +636,9 @@ test('setup makes the sheet, the tabs, the owner, and emails the sign-in', () =>
   assert.strictEqual(G.mail[0].to, G.ownerEmail);
   assert.strictEqual(G.mail[0].subject, 'Ridgeline Wash Co.: your team system is ready');
   const body = G.mail[0].body, pin = pinIn(body, 'PIN');
+  assert.strictEqual(core.check.pin(pin), '', 'the owner\'s first PIN is 6 digits and not one that is easy to guess: ' + pin);
   assert(/^Sign-in name: Grayson$/m.test(body));
+  assert(/never share this sheet with anyone/.test(body) && /everyone's PIN/.test(body), 'the email says to keep the data sheet private, and why');
   assert(body.indexOf('https://docs.google.com/spreadsheets/d/' + G.props.SHEET_ID) >= 0, 'the email links to the data sheet');
   assert(/Deploy/.test(body) && /Web app/.test(body) && /Anyone/.test(body), 'the email says what to do next');
   assert(G.logs.some((l) => l.indexOf('PIN: ' + pin) >= 0 && l.indexOf('Sign-in name: Grayson') >= 0), 'the same text is in the log');
@@ -1532,6 +1534,85 @@ test('sign-ins older than 90 days leave the sheet when somebody signs in, and a 
   G.cacheNow += 21599;
   assert.strictEqual(must(w.post(body)).replay, true);
   assert.strictEqual(w.docs('sales').length, 1);
+});
+
+test('a body over 100,000 characters is turned away as a bad request before it is read; one of exactly 100,000 is answered', () => {
+  const x = ready(), w = x.w, before = w.snapshot();
+  const bad = { ok: false, error: { code: 'invalid', message: 'Bad request.' } };
+  /* A real request from a signed-in phone, padded with a field the app never sends until it is exactly n characters long. */
+  const sized = (req, n) => {
+    const bare = JSON.stringify(Object.assign({}, req, { pad: '' }));
+    const text = JSON.stringify(Object.assign({}, req, { pad: 'x'.repeat(n - bare.length) }));
+    assert.strictEqual(text.length, n);
+    return text;
+  };
+  const sync = { action: 'sync', token: x.mason };
+  assert.strictEqual(w.post(sized(sync, 100000)).res.ok, true, 'exactly 100,000 characters is still read and answered');
+  const touched = (r) => r.calls.filter((c) => /^(lock|sheet|ss|props|cache|mail)/.test(c));
+  [100001, 100002, 250000, 4000000].forEach((n) => {
+    const r = w.post(sized(sync, n));
+    assert.deepStrictEqual(r.res, bad, 'a ' + n + ' character body from a signed-in phone');
+    assert.deepStrictEqual(touched(r), [], 'it never got as far as the lock, the cache, the properties or the sheet');
+  });
+  /* The same for a stranger, for a save, and for text that is not a request at all. */
+  [sized({ action: 'login', name: 'Grayson', pin: x.pin }, 100001), sized({ action: 'ping' }, 100001), 'z'.repeat(100001), ' '.repeat(100001) + '{"action":"ping"}', '['.repeat(300000),
+    JSON.stringify(Object.assign(saleBody(x.mason, 'Too Big', x.days[0], '08:00'), { notes: 'n'.repeat(150000) }))].forEach((text) => {
+    const r = w.post(text);
+    assert.deepStrictEqual(r.res, bad);
+    assert.deepStrictEqual(touched(r), []);
+  });
+  assert.strictEqual(w.snapshot(), before, 'none of that changed the sheet');
+  /* Long but honest requests are nowhere near the limit and still go through. */
+  must(w.post(Object.assign(saleBody(x.mason, 'Long Note', x.days[0], '08:00'), { notes: 'n'.repeat(5000) })));
+  assert.strictEqual(w.docs('sales').length, 1);
+});
+
+test('someone removed from the team: their phone is told why, from the sheet as well as from the cache, and their name no longer signs in', () => {
+  const x = ready(), w = x.w, G = x.G;
+  const words = 'You are no longer on the team. Ask the owner if that is a mistake.';
+  must(w.post({ action: 'sync', token: x.cole }));   /* Cole's sign-in is in the cache now */
+  const sessions = w.docs('sessions').length;
+  must(w.post({ action: 'removeMember', token: x.owner, opId: uid(), id: x.ids.cole }));
+  assert.strictEqual(w.docs('sessions').length, sessions, 'the stored sign-in stays in the sheet');
+  assert(!Array.from(G.cache.keys()).some((k) => k.indexOf('sess:') === 0 && JSON.parse(G.cache.get(k).value).id === x.ids.cole), 'the quick copy of it is gone');
+  const told = w.post({ action: 'sync', token: x.cole, since: +G.props.REV - 1, day: x.today });   /* what his phone last knew: it was removed since */
+  assert.deepStrictEqual(told.res, { ok: false, error: { code: 'auth', message: words } }, 'the reason, and no data with it');
+  assert.deepStrictEqual(fails(w.post({ action: 'setJobDone', token: x.cole, opId: uid(), jobId: 'j_any' }), 'auth').error.message, words);
+  G.cacheNow += 7 * 3600;   /* long after the cache has forgotten everybody */
+  assert.strictEqual(fails(w.post({ action: 'sync', token: x.cole }), 'auth').error.message, words);
+  assert(!Array.from(G.cache.keys()).some((k) => k.indexOf('sess:') === 0 && G.cache.get(k).until > G.cacheNow && JSON.parse(G.cache.get(k).value).id === x.ids.cole), 'and being told does not sign them back in');
+  /* Their name and PIN get the same answer as a name nobody ever had, and store nothing. */
+  const liveKeys = () => Array.from(G.cache.keys()).filter((k) => G.cache.get(k).until > G.cacheNow).sort().join();
+  const snap = w.snapshot(), keys = liveKeys();
+  const stranger = fails(w.post({ action: 'login', name: 'Nobody', pin: '906132' }), 'auth').error.message;
+  for (let i = 0; i < 8; i++) assert.strictEqual(fails(w.post({ action: 'login', name: 'Cole', pin: '906132' }), 'auth').error.message, stranger);
+  for (let i = 0; i < 60; i++) fails(w.post({ action: 'login', name: 'Stranger ' + i, pin: i % 2 ? '000000' : '1234' }), 'auth');
+  assert.strictEqual(w.snapshot(), snap);
+  assert.strictEqual(liveKeys(), keys, 'no counter was started for a name that is not on the team');
+  /* 69 wrong tries by strangers and nobody is paused: the people who are on the team still sign in. */
+  x.login('Mason', '271845'); x.login('Grayson', x.pin);
+  must(w.post({ action: 'sync', token: x.mason }));
+});
+
+test('the local stand-in (tools/dev-server.js) keeps the same rules: 6 digit PINs for its three people, and the same size limit', () => {
+  const dev = require(path.join(__dirname, 'dev-server.js'));   /* loaded, not started: it listens on no port */
+  assert.deepStrictEqual(dev.PEOPLE.map((p) => [p.name, p.role, p.pin]), [['Grayson', 'owner', '482913'], ['Mason', 'rep', '271845'], ['Cole', 'tech', '906132']]);
+  dev.PEOPLE.forEach((p) => {
+    assert.strictEqual(core.check.pin(p.pin), '', p.name + '\'s PIN would be refused by the real system');
+    const r = dev.answerPost(JSON.stringify({ action: 'login', name: p.name, pin: p.pin }));
+    assert(r.ok && r.sync.me.name === p.name && r.sync.me.role === p.role, p.name + ' cannot sign in to the stand-in with PIN ' + p.pin);
+  });
+  ['1234', '2222', '3333'].forEach((old) => assert.strictEqual(dev.answerPost(JSON.stringify({ action: 'login', name: 'Grayson', pin: old })).error.code, 'auth'));
+  const source = fs.readFileSync(path.join(__dirname, 'dev-server.js'), 'utf8'), gas = fs.readFileSync(path.join(root, 'src', 'gas.js'), 'utf8');
+  dev.PEOPLE.forEach((p) => assert(source.indexOf('PIN ' + p.pin) > 0, 'the note at the top of dev-server.js does not give ' + p.name + '\'s PIN'));
+  assert.strictEqual(dev.MAX_BODY_CHARS, 100000);
+  assert(/var MAX_BODY_CHARS = 100000;/.test(gas), 'gas.js and the stand-in disagree about the size limit');
+  const bad = { ok: false, error: { code: 'invalid', message: 'Bad request.' } };
+  const padded = (n) => { const head = '{"action":"ping","pad":"', tail = '"}'; return head + 'x'.repeat(n - head.length - tail.length) + tail; };
+  assert.strictEqual(dev.answerPost(padded(100000)).ok, true, 'exactly 100,000 characters is answered');
+  assert.deepStrictEqual(dev.answerPost(padded(100001)), bad, 'one more is not');
+  assert.deepStrictEqual(dev.answerPost('z'.repeat(3000000)), bad);
+  assert.deepStrictEqual(dev.answerPost('not json'), bad);
 });
 
 console.log('\n' + (count - failed.length) + ' of ' + count + ' backend tests passed.');
