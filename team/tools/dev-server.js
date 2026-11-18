@@ -1,0 +1,237 @@
+#!/usr/bin/env node
+/*
+ * A local stand-in for the Google Apps Script web app, for trying the page's real mode on this
+ * computer. It runs the same core (src/core.js) on data kept in memory, so everything is gone
+ * when the server stops.
+ *
+ *   node tools/dev-server.js [port]          default port 8787
+ *
+ * It starts with three people and the next 14 days open:
+ *   Grayson (owner) PIN 482913     Mason (sales rep) PIN 271845     Cole (tech) PIN 906132
+ *
+ * POST /   body: the request as JSON text (the page sends it as text/plain)  ->  the core's answer as JSON
+ * GET  /   -> { ok: true, service: 'ridgeline-wash-team', version }   (same as opening the real link)
+ *
+ * Three test knobs, as a query string on the POST address. They can be combined (?delay=3000&drop=1):
+ *   ?delay=1500   wait that many milliseconds before answering (a slow connection). If the phone
+ *                 hangs up before the wait is over, the request is not run, unless drop=1 is there too.
+ *   ?fail=1       answer HTTP 500 with an HTML page, the way Google does when a script crashes.
+ *                 The request is not run, so nothing is saved. With fail=1, drop=1 does nothing.
+ *   ?drop=1       a lost answer: the request is run and whatever it does is saved, then the
+ *                 connection is closed without a word. The phone sees a network failure for
+ *                 something that did save. Send the same request again without the knob to see the
+ *                 retry answered from memory (replay: true), or with a changed field to see
+ *                 'already_saved'. With delay, the request runs after the wait even if the phone
+ *                 has stopped waiting by then, like a backend that carries on after the app gave up.
+ *
+ * Like the real web app, it does not answer a preflight (OPTIONS). If the page ever sends one,
+ * the page is sending something other than a plain text body and would fail against Google too.
+ * And like the real web app, a body over 100,000 characters gets "Bad request." without being read.
+ *
+ * The tests load this file with require() to check it against the real backend's rules. Loaded
+ * that way it makes its starting data but does not listen on any port.
+ */
+'use strict';
+const http = require('http');
+const path = require('path');
+const crypto = require('crypto');
+const RidgelineCore = require(path.join(__dirname, '..', 'src', 'core.js'));
+
+const TIME_ZONE = 'America/Chicago';
+const DEFAULT_PORT = 8787;
+const MAX_BODY_CHARS = 100000;        /* the same limit as MAX_BODY_CHARS in src/gas.js */
+const MAX_BODY = 4 * MAX_BODY_CHARS;  /* bytes: where this server stops keeping what it is sent (a character is at most 4 bytes) */
+const MAX_DELAY = 60000;
+const PEOPLE = [
+  { name: 'Grayson', role: 'owner', pin: '482913' },
+  { name: 'Mason', role: 'rep', pin: '271845' },
+  { name: 'Cole', role: 'tech', pin: '906132' }
+];
+const OPEN_DAYS = 14;
+
+const asProgram = require.main === module;
+const portArg = asProgram ? process.argv[2] : undefined;
+const port = portArg === undefined ? DEFAULT_PORT : Number(portArg);
+if (!Number.isInteger(port) || port < 1 || port > 65535) {
+  console.error('Usage: node tools/dev-server.js [port]   (the port must be a number from 1 to 65535)');
+  process.exit(1);
+}
+
+/* ---------- the same env the real backend gives the core ---------- */
+
+const clock = new Intl.DateTimeFormat('en-US', {
+  timeZone: TIME_ZONE, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+});
+function clockParts(ms) {
+  const out = {};
+  clock.formatToParts(new Date(ms)).forEach((p) => { out[p.type] = p.value; });
+  return out;
+}
+/* Like the real backend, an alert email is only kept while the action runs. It "goes out" (here:
+   one line in this window) once the core has answered that the action was saved. */
+let outbox = [];
+const env = {
+  now: () => Date.now(),
+  dayKey: (ms) => { const p = clockParts(ms); return p.year + '-' + p.month + '-' + p.day; },
+  hm: (ms) => { const p = clockParts(ms); return p.hour + ':' + p.minute; },
+  uuid: () => crypto.randomUUID(),
+  notify: (m) => { outbox.push(m); }
+};
+function sendOutbox(saved) {
+  const mail = outbox;
+  outbox = [];
+  if (saved) mail.forEach((m) => log('email to ' + (m.to || 'the owner') + ': ' + m.subject));
+}
+
+function log(text) { if (asProgram) console.log(new Date().toTimeString().slice(0, 8) + '  ' + text); }
+
+/* ---------- starting data ---------- */
+
+const store = RidgelineCore.memoryStore();
+const core = RidgelineCore.create(store, env);
+
+function must(res, what) {
+  if (!res || !res.ok) throw new Error(what + ' failed: ' + (res && res.error ? res.error.message : 'no answer'));
+  return res;
+}
+
+function seed() {
+  const owner = PEOPLE[0];
+  const boot = core.bootstrap({ name: owner.name, pin: owner.pin });
+  if (!boot.created || boot.pin !== owner.pin) throw new Error('Could not make the owner.');
+  const token = must(core.handle({ action: 'login', name: owner.name, pin: owner.pin }), 'Owner sign-in').result.token;
+  PEOPLE.slice(1).forEach((p) => {
+    must(core.handle({ action: 'saveMember', token: token, member: { name: p.name, role: p.role, pin: p.pin } }), 'Adding ' + p.name);
+  });
+  const today = env.dayKey(env.now()), days = [];
+  for (let i = 0; i < OPEN_DAYS; i++) days.push({ date: RidgelineCore.dates.addDays(today, i), open: true });
+  must(core.handle({ action: 'setDays', token: token, days: days }), 'Opening days');
+  must(core.handle({ action: 'logout', token: token }), 'Owner sign-out');
+  sendOutbox(false);
+  return { first: days[0].date, last: days[days.length - 1].date };
+}
+
+/* ---------- answering ---------- */
+
+const JSON_TYPE = 'application/json; charset=utf-8';
+const CRASH_PAGE = '<!DOCTYPE html><html><head><title>Error</title></head><body>' +
+  '<div style="text-align:center;font-family:monospace;margin:50px auto 0;max-width:600px">' +
+  'Exception: Service error (dev-server ?fail=1). The script completed but did not return anything.</div></body></html>';
+
+function send(res, status, type, body, cors) {
+  const headers = { 'Content-Type': type, 'Content-Length': Buffer.byteLength(body), 'Cache-Control': 'no-store' };
+  if (cors) headers['Access-Control-Allow-Origin'] = '*';
+  res.writeHead(status, headers);
+  res.end(body);
+}
+
+/* Mirrors doPost in src/gas.js: whatever arrives, the answer is JSON the phone can read. */
+function answerPost(text) {
+  const bad = { ok: false, error: { code: 'invalid', message: 'Bad request.' } };
+  if (typeof text !== 'string' || text.length > MAX_BODY_CHARS) return bad;   /* too big: refused before it is read */
+  let req = null;
+  try { req = JSON.parse(text); } catch (e) { req = null; }
+  if (!req || typeof req !== 'object' || Array.isArray(req) || typeof req.action !== 'string') return bad;
+  try {
+    const answer = core.handle(req);
+    sendOutbox(!!answer && answer.ok === true);
+    return answer;
+  } catch (e) {
+    sendOutbox(false);
+    log('the core threw: ' + (e && e.stack ? e.stack : e));
+    return { ok: false, error: { code: 'server', message: 'Something went wrong on our side. Nothing was saved. Try again.' } };
+  }
+}
+
+function outcome(answer) {
+  if (!answer.ok) return 'refused (' + answer.error.code + ': ' + answer.error.message + ')';
+  if (answer.replay) return 'ok (a retry of something already saved)';
+  if (answer.sync && answer.sync.same) return 'ok (nothing new)';
+  return 'ok';
+}
+
+function actionOf(text) {
+  if (text.length > MAX_BODY_CHARS) return '(too big)';
+  try { const a = JSON.parse(text).action; return typeof a === 'string' ? a.slice(0, 40) : '(no action)'; } catch (e) { return '(not JSON)'; }
+}
+
+const server = http.createServer((req, res) => {
+  let url;
+  try { url = new URL(req.url, 'http://localhost'); } catch (e) { return send(res, 400, 'text/plain; charset=utf-8', 'Bad address.', true); }
+
+  if (req.method === 'OPTIONS') {
+    log('OPTIONS (a preflight). The real web app cannot answer this. Send the body as text/plain with no extra headers.');
+    return send(res, 405, 'text/plain; charset=utf-8', 'Preflight requests are not answered, the same as the real web app.', false);
+  }
+  if (req.method === 'GET') {
+    return send(res, 200, JSON_TYPE, JSON.stringify({ ok: true, service: 'ridgeline-wash-team', version: RidgelineCore.VERSION }), true);
+  }
+  if (req.method !== 'POST') return send(res, 405, 'text/plain; charset=utf-8', 'Use POST.', true);
+
+  const chunks = [];
+  let size = 0, tooBig = false;
+  req.on('data', (c) => {
+    size += c.length;
+    if (size > MAX_BODY) tooBig = true; else chunks.push(c);
+  });
+  req.on('error', () => { /* the phone hung up */ });
+  req.on('end', () => {
+    /* Over the limit: what was kept is thrown away and one character too many stands in for it, so it is refused as too big. */
+    const text = tooBig ? ' '.repeat(MAX_BODY_CHARS + 1) : Buffer.concat(chunks).toString('utf8');
+    const delay = Math.min(MAX_DELAY, Math.max(0, parseInt(url.searchParams.get('delay'), 10) || 0));
+    const fail = url.searchParams.get('fail') === '1';
+    const drop = url.searchParams.get('drop') === '1' && !fail;
+    const started = Date.now();
+    setTimeout(() => {
+      const after = delay ? '  after ' + (Date.now() - started) + ' ms' : '';
+      /* A lost answer (?drop=1) is run whether or not the phone is still waiting for it. */
+      if (res.destroyed && !drop) return log(actionOf(text) + '  the phone gave up before the answer, nothing was run');
+      if (fail) {
+        log(actionOf(text) + '  answered HTTP 500 with an error page (?fail=1), nothing was run');
+        return send(res, 500, 'text/html; charset=utf-8', CRASH_PAGE, true);
+      }
+      const answer = answerPost(text);
+      if (drop) {
+        log(actionOf(text) + '  ' + outcome(answer) + after + ', then the answer was dropped (?drop=1)');
+        return req.socket.destroy();
+      }
+      log(actionOf(text) + '  ' + outcome(answer) + after);
+      send(res, 200, JSON_TYPE, JSON.stringify(answer), true);
+    }, delay);
+  });
+});
+
+server.on('error', (e) => {
+  if (e && e.code === 'EADDRINUSE') console.error('Port ' + port + ' is already in use. Stop the other server or pick another port: node tools/dev-server.js ' + (port + 1));
+  else console.error('The server could not start: ' + (e && e.message ? e.message : e));
+  process.exit(1);
+});
+
+let opened;
+try { opened = seed(); } catch (e) { if (!asProgram) throw e; console.error(e.message); process.exit(1); }
+
+if (!asProgram) {
+  /* server: not listening. A test can start it on a port of its own with server.listen(0). */
+  module.exports = { answerPost: answerPost, PEOPLE: PEOPLE, MAX_BODY_CHARS: MAX_BODY_CHARS, opened: opened, server: server };
+} else server.listen(port, () => {
+  const at = 'http://localhost:' + port + '/';
+  console.log('Ridgeline team backend (local stand-in, core ' + RidgelineCore.VERSION + ') is listening on ' + at);
+  console.log('');
+  PEOPLE.forEach((p) => console.log('  ' + (p.name + '        ').slice(0, 9) + (p.role + '      ').slice(0, 6) + 'PIN ' + p.pin));
+  console.log('  Open days: ' + opened.first + ' to ' + opened.last + ' (' + TIME_ZONE + ')');
+  console.log('');
+  console.log('Point the page at it by adding this to the end of its address (works on localhost or a file):');
+  console.log('  ?backend=' + encodeURIComponent(at));
+  console.log('Slow connection:  ?backend=' + encodeURIComponent(at + '?delay=1500'));
+  console.log('Crashing backend: ?backend=' + encodeURIComponent(at + '?fail=1'));
+  console.log('A lost answer:    add ?drop=1 to the address of the one request whose answer should be lost');
+  console.log('                  (it is run and saved, then the connection is closed). See the top of this file.');
+  console.log('');
+  console.log('Data is kept in memory only. Press Ctrl+C to stop.');
+});
+
+function stop() { server.close(() => process.exit(0)); setTimeout(() => process.exit(0), 500).unref(); }
+if (asProgram) {
+  process.on('SIGINT', stop);
+  process.on('SIGTERM', stop);
+}

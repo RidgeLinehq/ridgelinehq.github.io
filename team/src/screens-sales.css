@@ -1,0 +1,25 @@
+/*
+ * Sales, the New sale sheet and the Leaderboard: the few pieces app.css does not already have.
+ * Everything else on these screens is a shared class from app.css.
+ */
+
+/* .nums: the numbers card. Two totals side by side, then one big number with small lines under it.
+   Sits on .card.card-flush. The numbers themselves reuse .stat-num, .stat-label and .big-num. */
+.nums-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border-bottom: 1px solid var(--line); }
+.nums-cell { display: flex; flex-direction: column; gap: 4px; min-width: 0; padding: 14px 16px 12px; }
+.nums-cell + .nums-cell { border-left: 1px solid var(--line); }
+.nums-cell .stat-num { white-space: normal; overflow-wrap: anywhere; }   /* a very large total wraps instead of running out of its cell */
+.nums-main { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px 16px; }
+.nums-label { font-size: 14px; line-height: 1.25; color: var(--ink-2); }
+/* .nums-more: a quiet third line in a cell ("2 new sales" under "Revenue this week"). */
+.nums-more { font-size: 14px; line-height: 1.25; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.nums-lines { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 14px; }
+
+/* .amt: the money figure on the right of a row, in full ink (the line under it stays quiet). */
+.amt { color: var(--ink); font-weight: 600; }
+
+/* .btn-start: a text button that sits at the left edge of a column instead of stretching across it
+   ("Book later" here, "Use my usual times" in the Calendar's Day sheet). */
+.btn-start { align-self: flex-start; margin-left: -6px; }
+.callout .btn-start { margin-top: 2px; margin-bottom: -10px; }
+

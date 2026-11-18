@@ -1,0 +1,52 @@
+/*
+ * Dashboard, Notifications, Team, Settings, Edit standards, Schedule.
+ * Almost everything on these screens is a shared component from app.css; this is the little that is not.
+ */
+
+/* .dash-nums: the Dashboard numbers. Plain stat blocks in two columns: nothing drawn beside them, and every row
+   the same height whatever a label does. Goes with .stat-grid. */
+.dash-nums { grid-auto-rows: 1fr; }
+.dash-nums .stat { padding: 0; border-left: 0; }
+
+/* .row-top: a tall row (several lines under the title) keeps its lead and its button level with the title. */
+.row-top { align-items: flex-start; }
+.row-top .rank { line-height: 23px; }
+.row-top .row-right { margin: -10px -6px 0 0; }
+
+/* .problem-say / .problem-raw: one system problem. Plain words first, then what the system itself reported, small. */
+.problem-say { color: var(--ink); }
+.problem-raw { font-size: 12px; line-height: 1.4; color: var(--ink-2); overflow-wrap: anywhere; }
+
+/* .notice: one line in Notifications. New ones carry an ice dot and heavier words. One that opens something is a
+   button with the usual chevron, level with the middle of its words. */
+.notice { align-items: flex-start; }
+.notice .row-title { font-weight: 400; }
+.notice.is-new .row-title { font-weight: 600; }
+.notice-dot { width: 8px; height: 8px; margin-top: 8px; border-radius: 50%; }
+.notice-dot.is-new { background: var(--ice); }
+.notice .row-chev { align-self: center; }
+
+/* .pin-shown: a new PIN in its box. Six digits read out more easily as two threes, so the halves sit a little apart. */
+.pin-shown > span + span { margin-left: .3em; }
+
+/* .input-suffix: something inside the right edge of a control (the "%" in Commission). */
+.input-suffix { position: absolute; right: 14px; top: 0; height: var(--tap); display: flex; align-items: center; color: var(--ink-2); pointer-events: none; }
+.input-wrap.has-suffix .input { padding-right: 36px; }
+
+/* .svc-row: one service on one line: name, usual price, remove. .svc-head is the line of column names above. */
+.svc-row { display: grid; grid-template-columns: minmax(0, 1fr) 108px 44px; gap: 8px; align-items: start; }
+.svc-row > .iconbtn { margin-top: 4px; color: var(--ink-2); }
+.svc-head { font-weight: 600; font-size: 14px; color: var(--ink-2); }
+
+/* .add-row: a field with its button beside it, level with the control. */
+.add-row { display: flex; align-items: flex-end; gap: 8px; }
+.add-row > .field { flex: 1 1 auto; }
+
+/* .std-row: one standard in the editor: its own box, and the button that removes it. */
+.std-row { display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 8px; align-items: start; }
+.std-row > .iconbtn { margin-top: 4px; color: var(--ink-2); }
+/* .std-line: the box starts one line tall and grows with what is typed, so the sheet is the only thing that scrolls. */
+textarea.std-line { height: var(--tap); min-height: var(--tap); padding: 13px 14px; resize: none; overflow: hidden; }
+
+/* .std-remove: holds the "Remove section" words level with the labels above them, at the foot of a section's block. */
+.std-remove { margin: -4px 0 -8px -14px; }

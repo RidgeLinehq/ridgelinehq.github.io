@@ -1,5 +1,12 @@
 # SETUP NEEDED (phone only, in order of importance)
 
+## Ridgeline Wash Co. team app (Nov 17, 2026; about 10 minutes, once)
+The team app for Ridgeline Wash Co. (sign-in for you, your sales reps and your techs; today's
+jobs, sales and appointments, clients, your calendar, the dashboard, company standards) lives at
+`ridgelinehq.github.io/team/`. It shows made-up sample data until you turn on its data sheet. The
+steps, all on your phone, are in **`team/SETUP.md`**. It is a separate system from the Ridgeline
+Office below: its own Google Sheet, its own sign-ins, nothing shared.
+
 ## New on Nov 3, 2026 (nothing to tap)
 Starter is now **"Leads + Reviews"** at the same $39.99 price and the same Stripe link, so no
 Stripe tap is needed. If you ever want a different Starter price: edit `PLANS` in

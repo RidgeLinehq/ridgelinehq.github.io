@@ -1,0 +1,4 @@
+/* ---------- CALENDAR ---------- */
+/* .day.is-spent: an open day with nothing left to book because its times have gone by (not because it is
+   booked up: that is the amber .is-full). No tint, quiet words. */
+.day.is-spent, .day.is-spent .day-label { color: var(--ink-2); }
