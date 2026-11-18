@@ -134,7 +134,7 @@ button.avatar:active { opacity: .7; }
 .screen {
   flex: 1 0 auto; width: 100%; max-width: 560px; margin: 0 auto;
   display: flex; flex-direction: column; gap: 16px;
-  padding-top: 20px; padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  padding-top: 20px; padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px) + var(--toast-room, 0px));   /* --toast-room: see toastRoom in app.js */
 }
 .screen > * { min-width: 0; }
 
@@ -412,7 +412,8 @@ select.input { padding-right: 40px; text-overflow: ellipsis; }
 .sheet-head { flex: none; display: flex; align-items: center; gap: 12px; min-height: 64px; padding-top: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
 .sheet-title { flex: 1 1 auto; min-width: 0; font: 700 18px/1.25 var(--display); overflow-wrap: anywhere; }
 .sheet-close { margin-right: -6px; background: var(--raised); border: 1px solid var(--line); }
-.sheet-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; display: flex; flex-direction: column; gap: 16px; padding-top: 20px; padding-bottom: 28px; }
+/* --toast-room: a message that stays sits under the sheet's header, and the body starts below it (toastRoom in app.js). */
+.sheet-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; display: flex; flex-direction: column; gap: 16px; margin-top: var(--toast-room, 0px); padding-top: 20px; padding-bottom: 28px; }
 .sheet-body > * { flex: none; min-width: 0; }
 .sheet-small .sheet-body { padding-bottom: 20px; }
 /* .is-saving: while the sheet's save is on its way nothing in its body can be typed or tapped (app.js also sets `inert`). */
@@ -2540,7 +2541,8 @@ var RidgelineSample = (function () {
  *       sheet's header (just above a short sheet when there is room), so it never covers the sheet's button,
  *       the words by it, or the thing it confirms. Do not toast what the screen already shows in the same spot.
  *       sticky: it stays until its button is tapped (Retry, your action, or OK): for a failure that has nowhere
- *       else to be said. hold: it stays, with no button, until you call remove() ("Saving...").
+ *       else to be said. While it is there it hides nothing for good: a screen gets that much more room at its
+ *       foot, and a sheet's body starts below it. hold: it stays, with no button, until you call remove() ("Saving...").
  *       App.toast('Sale saved.');     App.toast(res.error.message, { bad: true, sticky: true });
  *   App.confirm({ title, text, yes, no, danger }) -> Promise of true or false. In-page, never the browser's own.
  *       App.confirm({ title: 'Delete this client?', text: 'Their sales and jobs go too.', yes: 'Delete client', danger: true }).then(function (ok) { ... });
@@ -3342,7 +3344,7 @@ var App = (function () {
     if (!els.toasts) return;
     var st = els.toasts.style, sh = null, i;
     for (i = layers.length - 1; i >= 0 && !sh; i--) if (layers[i].kind === 'sheet') sh = layers[i];
-    if (!sh) { st.top = ''; st.bottom = ''; return; }
+    if (!sh) { st.top = ''; st.bottom = ''; toastRoom(); return; }
     var edge = sh.wrap.getBoundingClientRect().top + sh.el.offsetTop;   /* the sheet's top edge (where it rests, not where its slide-up is) */
     if (sh.el.classList.contains('sheet-small') && edge >= 72) {
       st.top = 'auto';
@@ -3351,6 +3353,7 @@ var App = (function () {
       st.top = Math.round(edge + sh.head.offsetHeight + 8) + 'px';
       st.bottom = 'auto';
     }
+    toastRoom();      /* a message that stays keeps its room, wherever it has just been put */
   }
 
   /* Close layers until `depth` are left. Returns true when a history step back is on its way. */
@@ -3527,6 +3530,35 @@ var App = (function () {
 
   /* ----- toasts ----- */
 
+  /* A message that stays (it has a button, and goes when that is tapped) must not hide what is under it for
+     as long as it is there. Over a screen it sits just above the tab bar: the screen gets that much more room
+     at its foot, so the last thing on the page (a job's "Mark done", its red "Not saved" line) can be scrolled
+     clear of it. Over a sheet it sits under the sheet's header: the sheet's body starts below it, so no line of
+     the sheet is under the message. Both are --toast-room in app.css. Messages that go away by themselves, and
+     the "Saving..." line, take no room. */
+  function toastRoom() {
+    if (!els.screen || !els.toasts) return;
+    var first = null, last = null, sh = null, i;
+    Array.prototype.forEach.call(els.toasts.children, function (t) {
+      if (!t.classList.contains('is-sticky') || !t.querySelector('.toast-btn')) return;
+      first = first || t;
+      last = t;
+    });
+    for (i = layers.length - 1; i >= 0 && !sh; i--) if (layers[i].kind === 'sheet') sh = layers[i];
+    var box = els.toasts.getBoundingClientRect();
+    var onBody = !!sh && els.toasts.style.bottom === 'auto';      /* placeToasts put them under that sheet's header */
+    layers.forEach(function (l) {
+      if (l.kind === 'sheet') setRoom(l.body, last && onBody && l === sh ? last.getBoundingClientRect().bottom - box.top + 16 : 0);
+    });
+    setRoom(els.screen, first && !sh ? box.bottom - first.getBoundingClientRect().top + 8 : 0);
+  }
+  function setRoom(el, px) {
+    var want = px > 0 ? Math.round(px) + 'px' : '';
+    if (el.style.getPropertyValue('--toast-room') === want) return;
+    if (want) el.style.setProperty('--toast-room', want);
+    else el.style.removeProperty('--toast-room');
+  }
+
   /* Timed toasts come and go, at most two at a time. A sticky one is a message that must not be missed (a save
      that failed after its sheet was closed): it stays until its button is tapped, and nothing pushes it out. */
   App.toast = function (text, o) {
@@ -3538,6 +3570,7 @@ var App = (function () {
       gone = true;
       clearTimeout(timer);
       if (el.parentNode) el.parentNode.removeChild(el);
+      toastRoom();
     }
     var action = o.retry ? { label: 'Retry', onTap: o.retry } : o.action || (o.sticky ? { label: 'OK', onTap: function () {} } : null);
     if (action && !o.hold) {
@@ -3547,6 +3580,7 @@ var App = (function () {
     while (!stays && timed.length >= 2) els.toasts.removeChild(timed.shift());
     placeToasts();
     els.toasts.appendChild(el);
+    toastRoom();
     if (!stays) timer = setTimeout(remove, o.ms || (action ? 8000 : o.bad ? 5000 : 2600));
     return remove;
   };
@@ -4683,6 +4717,7 @@ var App = (function () {
     stopLive();
     dropTo(0, false);
     clear(els.toasts);        /* nothing left over from whoever was signed in: no message... */
+    toastRoom();
     clear(els.screen);        /* ...and not their last screen either, sitting in the hidden page */
     els.screen._drawn = '';
     els.app.hidden = true;
@@ -8624,7 +8659,7 @@ var App = (function () {
       restored = false;
       storeDraft(me, null);
       if (closed) {
-        if (changedSince) App.toast('This sale went through on your first try, before your last changes. Check it in Sales.', { sticky: true });
+        if (changedSince) App.toast('Your first try was saved, before your last changes. Check it in Sales.', { sticky: true });
         else App.toast('Sale saved.');
         return;
       }
@@ -8641,7 +8676,7 @@ var App = (function () {
       el.appendChild(ui.savedHead('Sale saved'));
       if (done.early) {
         el.appendChild(h('div', { class: 'callout callout-warn' },
-          h('p', { class: 'callout-title' }, 'This went through on your first try'),
+          h('p', { class: 'callout-title' }, 'Your first try was saved.'),      /* the words the system uses for the same thing */
           h('p', { class: 'small' }, 'It was saved before your last changes, so those are not in it. Check the details below.')));
       }
       var kvs = h('div', { class: 'kvs' });

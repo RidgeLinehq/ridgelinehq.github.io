@@ -129,7 +129,8 @@
  *       sheet's header (just above a short sheet when there is room), so it never covers the sheet's button,
  *       the words by it, or the thing it confirms. Do not toast what the screen already shows in the same spot.
  *       sticky: it stays until its button is tapped (Retry, your action, or OK): for a failure that has nowhere
- *       else to be said. hold: it stays, with no button, until you call remove() ("Saving...").
+ *       else to be said. While it is there it hides nothing for good: a screen gets that much more room at its
+ *       foot, and a sheet's body starts below it. hold: it stays, with no button, until you call remove() ("Saving...").
  *       App.toast('Sale saved.');     App.toast(res.error.message, { bad: true, sticky: true });
  *   App.confirm({ title, text, yes, no, danger }) -> Promise of true or false. In-page, never the browser's own.
  *       App.confirm({ title: 'Delete this client?', text: 'Their sales and jobs go too.', yes: 'Delete client', danger: true }).then(function (ok) { ... });
@@ -931,7 +932,7 @@ var App = (function () {
     if (!els.toasts) return;
     var st = els.toasts.style, sh = null, i;
     for (i = layers.length - 1; i >= 0 && !sh; i--) if (layers[i].kind === 'sheet') sh = layers[i];
-    if (!sh) { st.top = ''; st.bottom = ''; return; }
+    if (!sh) { st.top = ''; st.bottom = ''; toastRoom(); return; }
     var edge = sh.wrap.getBoundingClientRect().top + sh.el.offsetTop;   /* the sheet's top edge (where it rests, not where its slide-up is) */
     if (sh.el.classList.contains('sheet-small') && edge >= 72) {
       st.top = 'auto';
@@ -940,6 +941,7 @@ var App = (function () {
       st.top = Math.round(edge + sh.head.offsetHeight + 8) + 'px';
       st.bottom = 'auto';
     }
+    toastRoom();      /* a message that stays keeps its room, wherever it has just been put */
   }
 
   /* Close layers until `depth` are left. Returns true when a history step back is on its way. */
@@ -1116,6 +1118,35 @@ var App = (function () {
 
   /* ----- toasts ----- */
 
+  /* A message that stays (it has a button, and goes when that is tapped) must not hide what is under it for
+     as long as it is there. Over a screen it sits just above the tab bar: the screen gets that much more room
+     at its foot, so the last thing on the page (a job's "Mark done", its red "Not saved" line) can be scrolled
+     clear of it. Over a sheet it sits under the sheet's header: the sheet's body starts below it, so no line of
+     the sheet is under the message. Both are --toast-room in app.css. Messages that go away by themselves, and
+     the "Saving..." line, take no room. */
+  function toastRoom() {
+    if (!els.screen || !els.toasts) return;
+    var first = null, last = null, sh = null, i;
+    Array.prototype.forEach.call(els.toasts.children, function (t) {
+      if (!t.classList.contains('is-sticky') || !t.querySelector('.toast-btn')) return;
+      first = first || t;
+      last = t;
+    });
+    for (i = layers.length - 1; i >= 0 && !sh; i--) if (layers[i].kind === 'sheet') sh = layers[i];
+    var box = els.toasts.getBoundingClientRect();
+    var onBody = !!sh && els.toasts.style.bottom === 'auto';      /* placeToasts put them under that sheet's header */
+    layers.forEach(function (l) {
+      if (l.kind === 'sheet') setRoom(l.body, last && onBody && l === sh ? last.getBoundingClientRect().bottom - box.top + 16 : 0);
+    });
+    setRoom(els.screen, first && !sh ? box.bottom - first.getBoundingClientRect().top + 8 : 0);
+  }
+  function setRoom(el, px) {
+    var want = px > 0 ? Math.round(px) + 'px' : '';
+    if (el.style.getPropertyValue('--toast-room') === want) return;
+    if (want) el.style.setProperty('--toast-room', want);
+    else el.style.removeProperty('--toast-room');
+  }
+
   /* Timed toasts come and go, at most two at a time. A sticky one is a message that must not be missed (a save
      that failed after its sheet was closed): it stays until its button is tapped, and nothing pushes it out. */
   App.toast = function (text, o) {
@@ -1127,6 +1158,7 @@ var App = (function () {
       gone = true;
       clearTimeout(timer);
       if (el.parentNode) el.parentNode.removeChild(el);
+      toastRoom();
     }
     var action = o.retry ? { label: 'Retry', onTap: o.retry } : o.action || (o.sticky ? { label: 'OK', onTap: function () {} } : null);
     if (action && !o.hold) {
@@ -1136,6 +1168,7 @@ var App = (function () {
     while (!stays && timed.length >= 2) els.toasts.removeChild(timed.shift());
     placeToasts();
     els.toasts.appendChild(el);
+    toastRoom();
     if (!stays) timer = setTimeout(remove, o.ms || (action ? 8000 : o.bad ? 5000 : 2600));
     return remove;
   };
@@ -2272,6 +2305,7 @@ var App = (function () {
     stopLive();
     dropTo(0, false);
     clear(els.toasts);        /* nothing left over from whoever was signed in: no message... */
+    toastRoom();
     clear(els.screen);        /* ...and not their last screen either, sitting in the hidden page */
     els.screen._drawn = '';
     els.app.hidden = true;

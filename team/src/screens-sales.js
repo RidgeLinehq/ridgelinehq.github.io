@@ -1145,7 +1145,7 @@
       restored = false;
       storeDraft(me, null);
       if (closed) {
-        if (changedSince) App.toast('This sale went through on your first try, before your last changes. Check it in Sales.', { sticky: true });
+        if (changedSince) App.toast('Your first try was saved, before your last changes. Check it in Sales.', { sticky: true });
         else App.toast('Sale saved.');
         return;
       }
@@ -1162,7 +1162,7 @@
       el.appendChild(ui.savedHead('Sale saved'));
       if (done.early) {
         el.appendChild(h('div', { class: 'callout callout-warn' },
-          h('p', { class: 'callout-title' }, 'This went through on your first try'),
+          h('p', { class: 'callout-title' }, 'Your first try was saved.'),      /* the words the system uses for the same thing */
           h('p', { class: 'small' }, 'It was saved before your last changes, so those are not in it. Check the details below.')));
       }
       var kvs = h('div', { class: 'kvs' });
